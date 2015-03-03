@@ -10,6 +10,18 @@
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
+    <developers>
+        <developer>
+            <id>whf</id>
+            <name>wanghongfei</name>
+            <email>brucewhf@gmail.com</email>
+            <url>http://blog.csdn.net/neosmith</url>
+        </developer>
+        <developer>
+            <name>wangfucheng</name>
+        </developer>
+    </developers>
+
     <properties>
         <java-version>1.8</java-version>
         <java-mail-version>1.4.7</java-mail-version>
