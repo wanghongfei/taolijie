@@ -34,7 +34,7 @@
                 class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <beans:property name="dataSource" ref="dataSource" />
         <beans:property name="jpaVendorAdapter" ref="jpaAdapter" />
-        <beans:property name="packagesToScan" value="com.fh.taoljie.domain" />
+        <beans:property name="packagesToScan" value="com.fh.taolijie.domain" />
         <beans:property name="jpaPropertyMap">
             <beans:props>
                 <beans:prop key="hibernate.show_sql">true</beans:prop>
@@ -53,7 +53,7 @@
         <beans:property name="database" value="MYSQL" />
     </beans:bean>
 
-    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taoljie"
+    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"
                      resource-ref="true" />
 
     <beans:bean
@@ -75,7 +75,7 @@
 
 
 
-    <context:component-scan base-package="com.fh.taoljie.controller com.fh.taoljie.service" />
+    <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service" />
 
 
 
