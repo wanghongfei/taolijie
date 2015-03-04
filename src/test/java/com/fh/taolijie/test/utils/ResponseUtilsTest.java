@@ -1,6 +1,6 @@
-package com.fh.taoljie.test.utils;
+package com.fh.taolijie.test.utils;
 
-import com.fh.taoljie.utils.ResponseUtils;
+import com.fh.taolijie.utils.ResponseUtils;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;

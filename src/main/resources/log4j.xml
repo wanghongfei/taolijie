@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.fh.taoljie">
+	<logger name="com.fh.taolijie">
 		<level value="info" />
 	</logger>
 	
