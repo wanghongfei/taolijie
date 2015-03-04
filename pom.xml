@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.fh</groupId>
-	<artifactId>taoljie</artifactId>
+	<artifactId>taolijie</artifactId>
 	<name>taolijie</name>
 
 	<packaging>war</packaging>
@@ -249,7 +249,7 @@
 
     </dependencies>
     <build>
-        <finalName>taoljie</finalName>
+        <finalName>taolijie</finalName>
         <plugins>
             <!--<plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>

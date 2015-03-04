@@ -53,7 +53,7 @@
         <beans:property name="database" value="MYSQL" />
     </beans:bean>
 
-    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taoljie"
+    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"
                      resource-ref="true" />
 
     <beans:bean
