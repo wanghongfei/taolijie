@@ -3,6 +3,8 @@ package com.fh.taolijie.test.service;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
+import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.DefaultAccountService;
 import com.fh.taolijie.test.BaseDatabaseTestClass;
@@ -34,7 +36,8 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
     public void initData() {
         Print.print("准备数据");
 
-        member = new MemberEntity("Bruce", "111111", "", "Neo", "", "", "", "", "", "", 20, "", "");
+        // password is 111111
+        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
         em.persist(member);
     }
 
@@ -59,6 +62,8 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         Assert.assertEquals(1, tot.intValue());
     }
 
+    @Test
+    @Transactional(readOnly = false)
     public void testRegisterStudentDuplicatesName() {
         StudentDto stuDto = new StudentDto();
         stuDto.setUsername("Bruce");
@@ -72,5 +77,41 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         }
 
         Assert.assertTrue(false);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testLogin() {
+        boolean res = false;
+        try {
+            res = accService.login("Bruce", "111111");
+        } catch (UserNotExistsException e) {
+            Assert.assertTrue(false);
+        } catch (PasswordIncorrectException e) {
+            Assert.assertTrue(false);
+        }
+        Assert.assertTrue(res);
+
+        // 用户名错误
+        res = false;
+        try {
+            accService.login("Neo", "111111");
+        } catch (UserNotExistsException e) {
+            res = true;
+        } catch (PasswordIncorrectException e) {
+            res = false;
+        }
+        Assert.assertTrue(res);
+
+        // 密码错误
+        res = false;
+        try {
+            accService.login("Bruce", "222");
+        } catch (UserNotExistsException e) {
+            res = false;
+        } catch (PasswordIncorrectException e) {
+            res = true;
+        }
+        Assert.assertTrue(res);
     }
 }
