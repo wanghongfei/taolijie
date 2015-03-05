@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "job_post", schema = "", catalog = "taolijie")
+@Table(name = "job_post")
 public class JobPostEntity {
     private Integer id;
     private String title;

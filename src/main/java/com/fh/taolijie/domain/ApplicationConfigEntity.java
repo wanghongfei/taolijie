@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "application_config", schema = "", catalog = "taolijie")
+@Table(name = "application_config")
 public class ApplicationConfigEntity {
     private Integer id;
     private String applicationConfig;

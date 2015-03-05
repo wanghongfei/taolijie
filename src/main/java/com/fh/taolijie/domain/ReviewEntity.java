@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "review", schema = "", catalog = "taolijie")
+@Table(name = "review")
 public class ReviewEntity {
     private Integer id;
     private String content;

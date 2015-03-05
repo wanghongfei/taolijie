@@ -7,7 +7,13 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "member", schema = "", catalog = "taolijie")
+@Table(name = "member")
+
+@NamedQueries(
+         // 查询用户名是否存在
+        @NamedQuery(name = "memberEntity.isExisted",
+        query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username")
+)
 public class MemberEntity {
     private Integer id;
     private String username;

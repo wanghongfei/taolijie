@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "second_hand_post", schema = "", catalog = "taolijie")
+@Table(name = "second_hand_post")
 public class SecondHandPostEntity {
     private Integer id;
     private String title;
