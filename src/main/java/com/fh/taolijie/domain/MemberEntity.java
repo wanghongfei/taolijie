@@ -33,6 +33,26 @@ public class MemberEntity {
     private Collection<ReviewEntity> reviewCollection;
     private Collection<SecondHandPostEntity> secondHandPostCollection;
 
+    public MemberEntity() {
+
+    }
+
+    public MemberEntity(String username, String password, String email, String name, String studentId, String gender, String verified, String profilePhotoPath, String phone, String qq, Integer age, String companyName, String blockList) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.studentId = studentId;
+        this.gender = gender;
+        this.verified = verified;
+        this.profilePhotoPath = profilePhotoPath;
+        this.phone = phone;
+        this.qq = qq;
+        this.age = age;
+        this.companyName = companyName;
+        this.blockList = blockList;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

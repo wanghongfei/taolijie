@@ -15,6 +15,14 @@ public class ReviewEntity {
     private JobPostEntity jobPost;
     private MemberEntity member;
 
+    public ReviewEntity() {}
+    public ReviewEntity(String content, Date time, JobPostEntity jobPost, MemberEntity member) {
+        this.content = content;
+        this.time = time;
+        this.jobPost = jobPost;
+        this.member = member;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

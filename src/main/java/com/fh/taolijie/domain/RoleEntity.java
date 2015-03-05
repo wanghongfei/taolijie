@@ -14,6 +14,15 @@ public class RoleEntity {
     private String memo;
     private Collection<MemberRoleEntity> memberRoleCollection;
 
+    public RoleEntity() {
+
+    }
+
+    public RoleEntity(String roleName, String memo) {
+        this.memo = memo;
+        this.rolename = roleName;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "rid")

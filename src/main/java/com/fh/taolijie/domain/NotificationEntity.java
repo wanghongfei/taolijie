@@ -16,6 +16,15 @@ public class NotificationEntity {
     private Date time;
     private MemberEntity member;
 
+    public NotificationEntity() {}
+    public NotificationEntity(String title, String content, Integer isRead, Date time, MemberEntity member) {
+        this.title = title;
+        this.content = content;
+        this.isRead = isRead;
+        this.time = time;
+        this.member = member;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

@@ -54,4 +54,11 @@ public class Constants {
         DEBUG,
         PRODUCT,
     }
+
+    public static enum RoleType {
+        SUPER,
+        ADMIN,
+        STUDENT,
+        EMPLOYER
+    }
 }

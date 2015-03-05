@@ -12,6 +12,12 @@ public class MemberRoleEntity {
     private MemberEntity member;
     private RoleEntity role;
 
+    public MemberRoleEntity() {}
+    public MemberRoleEntity(MemberEntity member, RoleEntity role) {
+        this.member = member;
+        this.role = role;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

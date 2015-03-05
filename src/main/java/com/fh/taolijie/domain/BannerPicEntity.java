@@ -13,6 +13,12 @@ public class BannerPicEntity {
     private String picturePath;
     private Date time;
 
+    public BannerPicEntity() {}
+    public BannerPicEntity(String picturePath, Date time) {
+        this.picturePath = picturePath;
+        this.time = time;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

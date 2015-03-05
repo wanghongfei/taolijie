@@ -17,6 +17,14 @@ public class AcademyEntity {
      */
     private SchoolEntity school;
 
+    public AcademyEntity() {}
+
+    public AcademyEntity(String shortName, String fullName, SchoolEntity school) {
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.school = school;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

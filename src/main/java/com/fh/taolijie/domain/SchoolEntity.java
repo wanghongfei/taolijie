@@ -17,6 +17,14 @@ public class SchoolEntity {
     private Collection<AcademyEntity> academyCollection;
     private Collection<EducationExperienceEntity> educationExperienceCollection;
 
+    public SchoolEntity() {}
+    public SchoolEntity(String shortName, String fullName, String province, String type) {
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.province = province;
+        this.type = type;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

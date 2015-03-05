@@ -11,6 +11,10 @@ public class ApplicationConfigEntity {
     private Integer id;
     private String applicationConfig;
 
+    public ApplicationConfigEntity(String applicationConfig) {
+        this.applicationConfig = applicationConfig;
+    }
+
     @Id
     @Column(name = "id")
     public Integer getId() {
