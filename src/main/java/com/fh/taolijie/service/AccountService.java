@@ -8,6 +8,8 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 
+import java.util.List;
+
 /**
  * 本接口规定了与用户帐户操作有关的业务逻辑。
  * Created by wanghongfei on 15-3-4.
@@ -52,6 +54,20 @@ public interface AccountService {
      *          或{@link EmployerDto}中的一种。
      */
     public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType);
+
+    /**
+     * 得到所有用户信息
+     * @param firstResult
+     * @param capacity
+     * @return
+     */
+    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity);
+
+    /**
+     * 得到当前已注册用户的数量
+     * @return
+     */
+    public Long getMemberAmount();
 
     /**
      * 更新用户信息.
