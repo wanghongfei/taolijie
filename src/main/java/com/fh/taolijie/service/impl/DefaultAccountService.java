@@ -15,6 +15,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.Print;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import java.util.List;
 /**
  * Created by wanghongfei on 15-3-5.
  */
+@Repository
 public class DefaultAccountService implements AccountService {
     private Logger logger = LoggerFactory.getLogger(DefaultAccountService.class);
 
@@ -91,6 +93,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType) {
         MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
                 .getSingleResult();
@@ -165,18 +168,50 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<GeneralMemberDto> getMemberList(int firstResult, int capacity) {
-        return null;
+        int cap = capacity;
+        if (0 == capacity) {
+            cap = Constants.PAGE_CAPACITY;
+        }
+
+        List<MemberEntity> memList = em.createNamedQuery("memberEntity.findAll", MemberEntity.class)
+                .setFirstResult(firstResult)
+                .setMaxResults(cap * firstResult)
+                .getResultList();
+
+        List<GeneralMemberDto> dtoList = new ArrayList<>();
+        for (MemberEntity m : memList) {
+            dtoList.add(makeEmployerDto(m));
+        }
+
+        return dtoList;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long getMemberAmount() {
-        return null;
+        return em.createNamedQuery("memberEntity.count", Long.class)
+                .getSingleResult();
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public <T extends GeneralMemberDto> boolean updateMember(T memDto) {
+        MemberEntity mem = getMemberByUsername(memDto.getUsername());
+
+        if (memDto instanceof StudentDto) {
+            StudentDto dto = (StudentDto) memDto;
+            // TODO
+        }
         return false;
+    }
+
+    @Transactional(readOnly = true)
+    private MemberEntity getMemberByUsername(String username) {
+        return em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 
     @Override

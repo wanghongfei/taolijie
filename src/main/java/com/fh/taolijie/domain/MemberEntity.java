@@ -15,7 +15,11 @@ import java.util.Collection;
                 query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username"),
         // 根据用户名查找member实体
         @NamedQuery(name = "memberEntity.findMemberByUsername",
-                query = "SELECT m FROM MemberEntity m WHERE m.username = :username")
+                query = "SELECT m FROM MemberEntity m WHERE m.username = :username"),
+        @NamedQuery(name = "memberEntity.findAll",
+                query = "SELECT m FROM MemberEntity m"),
+        @NamedQuery(name = "memberEntity.amount",
+                query = "SELECT COUNT(m) FROM MemberEntity m")
 })
 public class MemberEntity {
     private Integer id;
