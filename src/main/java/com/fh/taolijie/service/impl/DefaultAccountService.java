@@ -7,6 +7,7 @@ import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.EducationExperienceEntity;
 import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -247,7 +248,7 @@ public class DefaultAccountService implements AccountService {
             EmployerDto dto = (EmployerDto) memDto;
             updateMemberEntity(mem, dto);
         }
-        
+
         em.merge(mem);
 
         return true;
@@ -271,8 +272,12 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addRole(RoleDto roleDto) {
-        return false;
+        RoleEntity role = new RoleEntity(roleDto.getRolename(), roleDto.getMemo());
+        em.persist(role);
+
+        return true;
     }
 
     @Override
