@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "second_hand_post", schema = "", catalog = "taolijie")
+@Table(name = "second_hand_post")
 public class SecondHandPostEntity {
     private Integer id;
     private String title;
@@ -22,6 +22,22 @@ public class SecondHandPostEntity {
     private Integer dislikes;
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
+
+    public SecondHandPostEntity() {}
+    public SecondHandPostEntity(String title, Date expiredTime, Date postTime, String depreciationRate, Double originalPrice, Double sellPrice, String picturePath, String description, Integer likes, Integer dislikes, MemberEntity member, SecondHandPostCategoryEntity category) {
+        this.title = title;
+        this.expiredTime = expiredTime;
+        this.postTime = postTime;
+        this.depreciationRate = depreciationRate;
+        this.originalPrice = originalPrice;
+        this.sellPrice = sellPrice;
+        this.picturePath = picturePath;
+        this.description = description;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.member = member;
+        this.category = category;
+    }
 
     @Id
     @GeneratedValue

@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "notification", schema = "", catalog = "taolijie")
+@Table(name = "notification")
 public class NotificationEntity {
     private Integer id;
     private String title;
@@ -15,6 +15,15 @@ public class NotificationEntity {
     private Integer isRead;
     private Date time;
     private MemberEntity member;
+
+    public NotificationEntity() {}
+    public NotificationEntity(String title, String content, Integer isRead, Date time, MemberEntity member) {
+        this.title = title;
+        this.content = content;
+        this.isRead = isRead;
+        this.time = time;
+        this.member = member;
+    }
 
     @Id
     @GeneratedValue

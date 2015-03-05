@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "academy", schema = "", catalog = "taolijie")
+@Table(name = "academy")
 public class AcademyEntity {
     private Integer id;
     private String shortName;
@@ -16,6 +16,14 @@ public class AcademyEntity {
      * 学院所在的学校
      */
     private SchoolEntity school;
+
+    public AcademyEntity() {}
+
+    public AcademyEntity(String shortName, String fullName, SchoolEntity school) {
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.school = school;
+    }
 
     @Id
     @GeneratedValue

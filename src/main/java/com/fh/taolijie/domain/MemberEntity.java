@@ -7,7 +7,13 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "member", schema = "", catalog = "taolijie")
+@Table(name = "member")
+
+@NamedQueries(
+         // 查询用户名是否存在
+        @NamedQuery(name = "memberEntity.isExisted",
+        query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username")
+)
 public class MemberEntity {
     private Integer id;
     private String username;
@@ -32,6 +38,26 @@ public class MemberEntity {
     private Collection<ResumeEntity> resumeCollection;
     private Collection<ReviewEntity> reviewCollection;
     private Collection<SecondHandPostEntity> secondHandPostCollection;
+
+    public MemberEntity() {
+
+    }
+
+    public MemberEntity(String username, String password, String email, String name, String studentId, String gender, String verified, String profilePhotoPath, String phone, String qq, Integer age, String companyName, String blockList) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.studentId = studentId;
+        this.gender = gender;
+        this.verified = verified;
+        this.profilePhotoPath = profilePhotoPath;
+        this.phone = phone;
+        this.qq = qq;
+        this.age = age;
+        this.companyName = companyName;
+        this.blockList = blockList;
+    }
 
     @Id
     @GeneratedValue

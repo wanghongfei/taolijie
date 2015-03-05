@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "job_post", schema = "", catalog = "taolijie")
+@Table(name = "job_post")
 public class JobPostEntity {
     private Integer id;
     private String title;
@@ -30,6 +30,28 @@ public class JobPostEntity {
     private JobPostCategoryEntity category;
     private MemberEntity member;
     private Collection<ReviewEntity> reviewCollection;
+
+    public JobPostEntity() {}
+    public JobPostEntity(String title, Date expiredTime, Date postTime, String workPlace, Double wage, String timeToPay, String jobDescription, String contact, String contactPhone, String contactEmail, String contactQq, String jobDetail, String introduce, Integer likes, Integer dislikes, String educationLevel, JobPostCategoryEntity category, MemberEntity member) {
+        this.title = title;
+        this.expiredTime = expiredTime;
+        this.postTime = postTime;
+        this.workPlace = workPlace;
+        this.wage = wage;
+        this.timeToPay = timeToPay;
+        this.jobDescription = jobDescription;
+        this.contact = contact;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+        this.contactQq = contactQq;
+        this.jobDetail = jobDetail;
+        this.introduce = introduce;
+        this.likes = likes;
+        this.dislikes = dislikes;
+        this.educationLevel = educationLevel;
+        this.category = category;
+        this.member = member;
+    }
 
     @Id
     @GeneratedValue

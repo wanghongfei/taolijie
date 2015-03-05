@@ -4,91 +4,91 @@ package com.fh.taolijie.controller.dto;
  * 此类为所有用户Dto类的父类，包含了所有用户都应该具有的field
  */
 public class GeneralMemberDto {
-    protected String username;
-    protected String password;
+    public String username;
+    public String password;
 
-    protected String email;
-    protected String name;
+    public String email;
+    public String name;
 
     //private String studentId;
-    protected String gender;
+    public String gender;
     //private String verified;
-    protected String profilePhotoPath;
-    protected String phone;
-    protected String qq;
-    protected Integer age;
+    public String profilePhotoPath;
+    public String phone;
+    public String qq;
+    public Integer age;
     //private String companyName;
     //private String blockList;
 
-    protected String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    protected void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    protected String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    protected void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    protected String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    protected void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    protected String getName() {
+    public String getName() {
         return name;
     }
 
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    protected String getGender() {
+    public String getGender() {
         return gender;
     }
 
-    protected void setGender(String gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    protected String getProfilePhotoPath() {
+    public String getProfilePhotoPath() {
         return profilePhotoPath;
     }
 
-    protected void setProfilePhotoPath(String profilePhotoPath) {
+    public void setProfilePhotoPath(String profilePhotoPath) {
         this.profilePhotoPath = profilePhotoPath;
     }
 
-    protected String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    protected void setPhone(String phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    protected String getQq() {
+    public String getQq() {
         return qq;
     }
 
-    protected void setQq(String qq) {
+    public void setQq(String qq) {
         this.qq = qq;
     }
 
-    protected Integer getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    protected void setAge(Integer age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

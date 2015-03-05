@@ -17,6 +17,16 @@ public class NewsEntity {
     private String headPicturePath;
     private MemberEntity member;
 
+    public NewsEntity() {}
+    public NewsEntity(String title, String content, String picturePath, Date time, String headPicturePath, MemberEntity member) {
+        this.title = title;
+        this.content = content;
+        this.picturePath = picturePath;
+        this.time = time;
+        this.headPicturePath = headPicturePath;
+        this.member = member;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

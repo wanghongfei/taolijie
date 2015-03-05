@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "education_experience", schema = "", catalog = "taolijie")
+@Table(name = "education_experience")
 public class EducationExperienceEntity {
     private Integer id;
     private Date admissionTime;
