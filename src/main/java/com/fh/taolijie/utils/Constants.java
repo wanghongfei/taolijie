@@ -9,6 +9,10 @@ public class Constants {
      * 分隔path的定界符
      */
     public static final String DELIMITER = ";";
+    /**
+     * 默认一面显示8条结果
+     */
+    public static final int PAGE_CAPACITY = 8;
 
     /**
      * 数据库member表中verified字段的取值
