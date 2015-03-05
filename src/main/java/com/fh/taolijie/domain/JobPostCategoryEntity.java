@@ -16,6 +16,13 @@ public class JobPostCategoryEntity {
 
     private Collection<JobPostEntity> jobPostCollection;
 
+    public JobPostCategoryEntity() {}
+    public JobPostCategoryEntity(String name, String memo, Integer level) {
+        this.name = name;
+        this.memo = memo;
+        this.level = level;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

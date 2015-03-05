@@ -6,11 +6,17 @@ import javax.persistence.*;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "member_role", schema = "", catalog = "taolijie")
+@Table(name = "member_role")
 public class MemberRoleEntity {
     private Integer id;
     private MemberEntity member;
     private RoleEntity role;
+
+    public MemberRoleEntity() {}
+    public MemberRoleEntity(MemberEntity member, RoleEntity role) {
+        this.member = member;
+        this.role = role;
+    }
 
     @Id
     @GeneratedValue

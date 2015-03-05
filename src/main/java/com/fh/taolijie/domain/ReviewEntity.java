@@ -7,13 +7,21 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "review", schema = "", catalog = "taolijie")
+@Table(name = "review")
 public class ReviewEntity {
     private Integer id;
     private String content;
     private Date time;
     private JobPostEntity jobPost;
     private MemberEntity member;
+
+    public ReviewEntity() {}
+    public ReviewEntity(String content, Date time, JobPostEntity jobPost, MemberEntity member) {
+        this.content = content;
+        this.time = time;
+        this.jobPost = jobPost;
+        this.member = member;
+    }
 
     @Id
     @GeneratedValue

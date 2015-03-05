@@ -7,7 +7,7 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "school", schema = "", catalog = "taolijie")
+@Table(name = "school")
 public class SchoolEntity {
     private Integer id;
     private String shortName;
@@ -16,6 +16,14 @@ public class SchoolEntity {
     private String type;
     private Collection<AcademyEntity> academyCollection;
     private Collection<EducationExperienceEntity> educationExperienceCollection;
+
+    public SchoolEntity() {}
+    public SchoolEntity(String shortName, String fullName, String province, String type) {
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.province = province;
+        this.type = type;
+    }
 
     @Id
     @GeneratedValue

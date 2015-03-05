@@ -20,6 +20,20 @@ public class ResumeEntity {
     private String introduce;
     private MemberEntity member;
 
+    public ResumeEntity() {}
+    public ResumeEntity(String name, String gender, Integer age, Integer height, String phonePath, String email, String qq, String experience, String introduce, MemberEntity member) {
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
+        this.height = height;
+        this.phonePath = phonePath;
+        this.email = email;
+        this.qq = qq;
+        this.experience = experience;
+        this.introduce = introduce;
+        this.member = member;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")

@@ -15,6 +15,13 @@ public class SecondHandPostCategoryEntity {
     private Integer level;
     private Collection<SecondHandPostEntity> secondHandPostsById;
 
+    public SecondHandPostCategoryEntity() {}
+    public SecondHandPostCategoryEntity(Integer level, String name, String memo) {
+        this.level = level;
+        this.name = name;
+        this.memo = memo;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "id")
