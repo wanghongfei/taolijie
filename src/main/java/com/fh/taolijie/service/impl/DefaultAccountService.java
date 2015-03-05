@@ -7,6 +7,7 @@ import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.EducationExperienceEntity;
 import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.MemberRoleEntity;
 import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -48,9 +49,23 @@ public class DefaultAccountService implements AccountService {
         MemberEntity mem = new MemberEntity(stuDto.getUsername(), CredentialUtils.sha(stuDto.getPassword()), stuDto.getEmail(),
                 stuDto.getName(), stuDto.getStudentId(), stuDto.getGender(), Constants.VerifyStatus.NONE.toString(),
                 stuDto.getProfilePhotoPath(), stuDto.getPhone(), stuDto.getQq(), stuDto.getAge(), "", "");
-
         // 保存实体
         em.persist(mem);
+
+        // 得到角色
+        RoleEntity role = em.getReference(RoleEntity.class, stuDto.getRoleId());
+
+        // 创建角色与用户的关联对象
+        MemberRoleEntity memRole = new MemberRoleEntity();
+        memRole.setMember(mem);
+        memRole.setRole(role);
+        em.persist(memRole);
+
+        // 将关联添加到member实体中
+        Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
+        memRoleCollection.add(memRole);
+        mem.setMemberRoleCollection(memRoleCollection);
+
 
         return true;
     }
@@ -67,8 +82,22 @@ public class DefaultAccountService implements AccountService {
                 empDto.getName(), "", empDto.getGender(), Constants.VerifyStatus.NONE.toString(),
                 empDto.getProfilePhotoPath(), empDto.getPhone(), empDto.getQq(), empDto.getAge(), empDto.getCompanyName(), "");
 
-        // persist entity
+        // 保存用户实体
         em.persist(mem);
+
+        // 创建角色
+        RoleEntity role = em.getReference(RoleEntity.class, empDto.getRoleId());
+
+        // 创建角色与用户的关联对象
+        MemberRoleEntity memRole = new MemberRoleEntity();
+        memRole.setMember(mem);
+        memRole.setRole(role);
+        em.persist(memRole);
+
+        // 将关联添加到member实体中
+        Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
+        memRoleCollection.add(memRole);
+        mem.setMemberRoleCollection(memRoleCollection);
 
         return false;
     }

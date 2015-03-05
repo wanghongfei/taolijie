@@ -2,6 +2,8 @@ package com.fh.taolijie.test.service;
 
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.MemberRoleEntity;
+import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -9,15 +11,18 @@ import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.DefaultAccountService;
 import com.fh.taolijie.test.BaseDatabaseTestClass;
 import com.fh.taolijie.utils.Print;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-5.
@@ -25,6 +30,7 @@ import javax.persistence.PersistenceContext;
 @ContextConfiguration(classes = {DefaultAccountService.class})
 public class AccountServiceTest extends BaseDatabaseTestClass {
     private MemberEntity member;
+    private RoleEntity role;
 
     @Autowired
     private AccountService accService;
@@ -33,12 +39,28 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
     private EntityManager em;
 
     @Before
+    @Transactional(readOnly = false)
     public void initData() {
         Print.print("准备数据");
 
+        // 创建用户
         // password is 111111
         member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
         em.persist(member);
+
+        // 创建role
+        role = new RoleEntity("ADMIN", "");
+        em.persist(role);
+
+        // 创建关联关系
+        MemberRoleEntity memRole = new MemberRoleEntity();
+        memRole.setRole(role);
+        memRole.setMember(member);
+        em.persist(memRole);
+
+        List<MemberRoleEntity> memRoleList = new ArrayList<>();
+        memRoleList.add(memRole);
+        member.setMemberRoleCollection(memRoleList);
     }
 
     @Test
@@ -47,6 +69,7 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         StudentDto stuDto = new StudentDto();
         stuDto.setUsername("Hello");
         stuDto.setPassword("222222");
+        stuDto.setRoleId(role.getRid());
 
         try {
             accService.registerStudent(stuDto);
@@ -55,11 +78,21 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
             Assert.assertTrue(false);
         }
 
-        // test
-        Long tot = em.createQuery("SELECT COUNT(m.username) FROM MemberEntity m WHERE m.username = :username", Long.class)
+        // 验证entity是否存在
+        MemberEntity mem = em.createQuery("SELECT m FROM MemberEntity m WHERE m.username = :username", MemberEntity.class)
                 .setParameter("username", "Hello")
                 .getSingleResult();
-        Assert.assertEquals(1, tot.intValue());
+
+        // 验证role是否指定
+        Collection<MemberRoleEntity> memRoleCollection = mem.getMemberRoleCollection();
+        Assert.assertNotNull(memRoleCollection);
+        Assert.assertEquals(1, memRoleCollection.size());
+
+        // 验证指定的role是否正确
+        Print.print("~~~~~~~~~~~~~~~ id:" + role.getRid() + ", role:" + role.getRolename());
+        List<MemberRoleEntity> memRoleList = new ArrayList<>(memRoleCollection);
+        boolean contains = memRoleList.get(0).getRole().equals(this.role);
+        Assert.assertTrue(contains);
     }
 
     @Test
