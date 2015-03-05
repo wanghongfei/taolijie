@@ -35,4 +35,11 @@ public interface BannerPicService {
      * @return
      */
     boolean addBanner(BannerPicDto banDto);
+
+    /**
+     * 根据id查找banner
+     * @param id
+     * @return
+     */
+    BannerPicDto findBanner(Integer id);
 }
