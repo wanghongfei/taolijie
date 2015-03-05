@@ -1,5 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
+import java.util.List;
+
 /**
  * Created by wanghongfei on 15-3-4.
  */
@@ -9,8 +11,18 @@ public class SchoolDto {
     private String province;
     private String type;
 
+    private List<Integer> academyIdList;
+
     public String getShortName() {
         return shortName;
+    }
+
+    public List<Integer> getAcademyIdList() {
+        return academyIdList;
+    }
+
+    public void setAcademyIdList(List<Integer> academyIdList) {
+        this.academyIdList = academyIdList;
     }
 
     public void setShortName(String shortName) {
