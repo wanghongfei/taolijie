@@ -282,7 +282,10 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     public boolean deleteRole(Integer roleId) {
-        return false;
+        RoleEntity role = em.getReference(RoleEntity.class, roleId);
+        em.remove(role);
+
+        return true;
     }
 
     /**
