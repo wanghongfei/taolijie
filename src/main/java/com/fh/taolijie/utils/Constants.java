@@ -6,6 +6,11 @@ package com.fh.taolijie.utils;
  */
 public class Constants {
     /**
+     * 分隔path的定界符
+     */
+    public static final String DELIMITER = ";";
+
+    /**
      * 数据库member表中verified字段的取值
      */
     public static enum VerifyStatus {
@@ -43,6 +48,6 @@ public class Constants {
 
     public static enum ApplicationConfig {
         DEBUG,
-        PRODUCT
+        PRODUCT,
     }
 }
