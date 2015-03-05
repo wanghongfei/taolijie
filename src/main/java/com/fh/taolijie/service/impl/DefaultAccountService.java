@@ -147,6 +147,7 @@ public class DefaultAccountService implements AccountService {
         dto.setQq(mem.getQq());
 
         dto.setStudentId(mem.getStudentId());
+        dto.setBlockList(mem.getBlockList());
 
         // 设置教育经历
         if (isWired) {
@@ -165,6 +166,45 @@ public class DefaultAccountService implements AccountService {
         }
 
         return dto;
+    }
+
+    /**
+     * 更新实体field，username除外
+     * @param mem
+     * @param dto
+     */
+    private void updateMemberEntity(MemberEntity mem, StudentDto dto) {
+        mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        mem.setEmail(dto.getEmail());
+        mem.setName(dto.getName());
+        mem.setStudentId(dto.getStudentId());
+        mem.setGender(dto.getGender());
+        mem.setVerified(dto.getVerified());
+        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
+        mem.setPhone(dto.getPhone());
+        mem.setQq(dto.getQq());
+        mem.setAge(dto.getAge());
+        mem.setBlockList(dto.getBlockList());
+    }
+    /**
+     * 更新实体field，username除外
+     * @param mem
+     * @param dto
+     */
+    private void updateMemberEntity(MemberEntity mem, EmployerDto dto) {
+        mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        mem.setEmail(dto.getEmail());
+        mem.setName(dto.getName());
+        //mem.setStudentId(dto.getStudentId());
+        mem.setGender(dto.getGender());
+        mem.setVerified(dto.getVerified());
+        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
+        mem.setPhone(dto.getPhone());
+        mem.setQq(dto.getQq());
+        mem.setAge(dto.getAge());
+        mem.setCompanyName(dto.getCompanyName());
+        //mem.setBlockList(dto.getBlockList());
+
     }
 
     @Override
@@ -202,9 +242,15 @@ public class DefaultAccountService implements AccountService {
 
         if (memDto instanceof StudentDto) {
             StudentDto dto = (StudentDto) memDto;
-            // TODO
+            updateMemberEntity(mem, dto);
+        } else if (memDto instanceof EmployerDto) {
+            EmployerDto dto = (EmployerDto) memDto;
+            updateMemberEntity(mem, dto);
         }
-        return false;
+        
+        em.merge(mem);
+
+        return true;
     }
 
     @Transactional(readOnly = true)

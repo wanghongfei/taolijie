@@ -8,6 +8,16 @@ import java.util.List;
  */
 public class StudentDto extends GeneralMemberDto {
     protected String studentId;
+    protected String blockList;
+
+    public String getBlockList() {
+        return blockList;
+    }
+
+    public void setBlockList(String blockList) {
+        this.blockList = blockList;
+    }
+
     protected List<Integer> schoolIdList;
     protected List<Integer> academyIdList;
 
