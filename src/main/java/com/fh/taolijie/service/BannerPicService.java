@@ -13,7 +13,7 @@ public interface BannerPicService {
      * 获取所有banner信息
      * @return
      */
-    List<BannerPicDto> getBannerList();
+    List<BannerPicDto> getBannerList(int firstResult, int capacity);
 
     /**
      * 更新banner信息

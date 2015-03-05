@@ -24,10 +24,10 @@ public interface SHPostService {
      * @param memId 用户id号
      * @param time 从<code>time</code>到现在为止的一段时间. 传递null意为不限时间
      * @param firstResult
-     * @param capcacity
+     * @param capacity
      * @return
      */
-    List<SecondHandPostDto> getPostList(Integer memId, Date time, int firstResult, int capcacity);
+    List<SecondHandPostDto> getPostList(Integer memId, Date time, int firstResult, int capacity);
 
     /**
      * 发布新二手帖子

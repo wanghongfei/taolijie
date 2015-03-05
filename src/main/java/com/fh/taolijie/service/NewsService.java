@@ -11,17 +11,16 @@ import java.util.List;
 public interface NewsService {
     /**
      * 得到所有新闻
-     * @param amount 一次获取的数量. 传递0为获取全部.
      * @return
      */
-    List<NewsDto> getNewsList(int amount);
+    List<NewsDto> getNewsList(int firstResult, int capacity);
 
     /**
      * 获取从<code>uptime</code>到现在的所有新闻
      * @param uptime
      * @return
      */
-    List<NewsDto> getNewsList(Date uptime);
+    List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity);
 
     /**
      * 根据id查找新闻

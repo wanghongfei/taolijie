@@ -14,14 +14,14 @@ public interface SchoolService {
      * 得到所有的学校信息
      * @return
      */
-    List<SchoolDto> getSchoolList();
+    List<SchoolDto> getSchoolList(int firstResult, int capacity);
 
     /**
      * 得到某一省份的所有学校
      * @param province 省名
      * @return
      */
-    List<SchoolDto> getSchoolListByProvince(String province);
+    List<SchoolDto> getSchoolListByProvince(String province, int firstResult, int capacity);
 
     /**
      * 根据id查找学校

@@ -14,14 +14,14 @@ public interface JobPostService {
      * @param username 用户名
      * @return
      */
-    List<JobPostDto> getJobPostList(String username);
+    List<JobPostDto> getJobPostList(String username, int firstResult, int capacity);
 
     /**
      * 获取某分类下所有的兼职帖子
      * @param cateId
      * @return
      */
-    List<JobPostDto> getJobPostList(Integer cateId);
+    List<JobPostDto> getJobPostList(Integer cateId, int firstResult, int capacity);
 
     /**
      * 根据id查找某个兼职帖子

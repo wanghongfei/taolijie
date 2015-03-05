@@ -15,7 +15,7 @@ public interface NotificationService {
      * @param memId
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId);
+    List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity);
 
     /**
      * 获取某一用户已读或未读的所有通知
@@ -23,7 +23,7 @@ public interface NotificationService {
      * @param isRead true为已读, false为未读
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId, boolean isRead);
+    List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity);
 
     /**
      * 获取某个日期之后的所有通知
@@ -31,7 +31,7 @@ public interface NotificationService {
      * @param time
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId, Date time);
+    List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity);
 
     /**
      * 查找一条通知
