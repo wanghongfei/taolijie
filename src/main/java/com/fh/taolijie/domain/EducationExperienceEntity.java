@@ -16,6 +16,8 @@ public class EducationExperienceEntity {
 
     private MemberEntity member;
     private SchoolEntity school;
+    private AcademyEntity academy;
+
 
     @Id
     @GeneratedValue
@@ -26,6 +28,16 @@ public class EducationExperienceEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "academy_id", referencedColumnName = "id")
+    public AcademyEntity getAcademy() {
+        return academy;
+    }
+
+    public void setAcademy(AcademyEntity academy) {
+        this.academy = academy;
     }
 
     @Basic
