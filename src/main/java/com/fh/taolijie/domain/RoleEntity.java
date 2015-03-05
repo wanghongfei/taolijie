@@ -7,7 +7,7 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "role", schema = "", catalog = "taolijie")
+@Table(name = "role")
 public class RoleEntity {
     private Integer rid;
     private String rolename;

@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "banner_pic", schema = "", catalog = "taolijie")
+@Table(name = "banner_pic")
 public class BannerPicEntity {
     private Integer id;
     private String picturePath;
