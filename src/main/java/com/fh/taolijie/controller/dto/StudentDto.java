@@ -18,7 +18,7 @@ public class StudentDto extends GeneralMemberDto {
         this.blockList = blockList;
     }
 
-    protected List<Integer> schoolIdList;
+    //protected List<Integer> schoolIdList;
     protected List<Integer> academyIdList;
 
     public String getStudentId() {
@@ -29,13 +29,13 @@ public class StudentDto extends GeneralMemberDto {
         this.studentId = studentId;
     }
 
-    public List<Integer> getSchoolIdList() {
+   /* public List<Integer> getSchoolIdList() {
         return schoolIdList;
     }
 
     public void setSchoolIdList(List<Integer> schoolIdList) {
         this.schoolIdList = schoolIdList;
-    }
+    }*/
 
     public List<Integer> getAcademyIdList() {
         return academyIdList;

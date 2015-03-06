@@ -2,9 +2,7 @@ package com.fh.taolijie.test.service;
 
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.MemberRoleEntity;
-import com.fh.taolijie.domain.RoleEntity;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -33,6 +31,7 @@ import java.util.List;
 public class AccountServiceTest extends BaseDatabaseTestClass {
     private MemberEntity member;
     private RoleEntity role;
+    private AcademyEntity academy;
 
     @Autowired
     private AccountService accService;
@@ -63,6 +62,20 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         List<MemberRoleEntity> memRoleList = new ArrayList<>();
         memRoleList.add(memRole);
         member.setMemberRoleCollection(memRoleList);
+
+        // 创建教育信息
+        SchoolEntity school = new SchoolEntity();
+        school.setShortName("school");
+        school.setFullName("school");
+        academy = new AcademyEntity();
+        academy.setFullName("academy");
+        academy.setShortName("academy");
+        // 创建从school到academy的关联
+        academy.setSchool(school);
+        school.setAcademyCollection(new ArrayList<>());
+        school.getAcademyCollection().add(academy);
+        em.persist(academy);
+        em.persist(school);
     }
 
     @Test
@@ -203,5 +216,52 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         }
 
         return false;
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testUpdateMember() {
+        StudentDto dto = new StudentDto();
+        dto.setUsername("Bruce");
+        dto.setName("wanghongfei"); // change name field
+        dto.setAge(22); // change age field
+        //dto.set
+
+        accService.updateMember(dto);
+
+        MemberEntity mem = em.createQuery("SELECT m FROM MemberEntity m WHERE m.username = :username", MemberEntity.class)
+                .setParameter("username", "Bruce")
+                .getSingleResult();
+        Assert.assertEquals("wanghongfei", mem.getName());
+        Assert.assertEquals(22, mem.getAge().intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testAddEducation() {
+        accService.addEducation(this.academy.getId(), this.member.getUsername());
+
+
+        // 测试教育经历是否添加成功
+        StudentDto dto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+        List<Integer> idList = dto.getAcademyIdList();
+        boolean contains = contains(idList, this.academy.getId());
+        Assert.assertTrue(contains);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void deleteEducation() {
+        // 先添加一个教育经历
+        accService.addEducation(this.academy.getId(), this.member.getUsername());
+        // 删除教育经历
+        accService.deleteEducation(this.academy.getId(), this.member.getUsername());
+
+        // 测试教育经历是否删除成功
+        StudentDto dto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+
+        List<Integer> idList = dto.getAcademyIdList();
+        boolean contains = contains(idList, this.academy.getId());
+        Assert.assertFalse(contains);
     }
 }

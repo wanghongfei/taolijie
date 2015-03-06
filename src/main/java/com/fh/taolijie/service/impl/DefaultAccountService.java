@@ -23,6 +23,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -322,22 +323,51 @@ public class DefaultAccountService implements AccountService {
         return true;
     }
 
-   /* @Override
-    public <T extends GeneralMemberDto> boolean updateEducation(Integer schoolId, Integer academyId, String username) {
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean addEducation(Integer academyId, String username) {
         MemberEntity mem = getMemberByUsername(username);
-        AcademyEntity academy = em.find(AcademyEntity.class, academyId);
-        SchoolEntity school = em.find(SchoolEntity.class, schoolId);
+        AcademyEntity academy = em.getReference(AcademyEntity.class, academyId);
 
-        // 创建新教育信息
+        // 创建关联实体
         EducationExperienceEntity ee = new EducationExperienceEntity();
         ee.setMember(mem);
-        ee.setAcademy(ass, academyId));
-        ee.setSchool(em.find(SchoolEntity.class, schoolId));
+        ee.setAcademy(academy);
+        em.persist(ee);
 
-
+        // 创建关联
+        Collection<EducationExperienceEntity> eeCollection = mem.getEducationExperienceCollection();
+        if (null == eeCollection) {
+            eeCollection = new ArrayList<>();
+            mem.setEducationExperienceCollection(eeCollection);
+        }
+        eeCollection.add(ee);
 
         return true;
-    }*/
+    }
+
+    @Override
+    public boolean deleteEducation(Integer academyId, String username) {
+        MemberEntity mem = getMemberByUsername(username);
+        Collection<EducationExperienceEntity> eeCollection = mem.getEducationExperienceCollection();
+
+        // 删除关联关系
+        EducationExperienceEntity eeToDelete = null;
+        Iterator<EducationExperienceEntity> it = eeCollection.iterator();
+        while (it.hasNext()) {
+            EducationExperienceEntity ee = it.next();
+            if (ee.getAcademy().getId().equals(academyId)) {
+                eeToDelete = ee;
+                it.remove();
+                break;
+            }
+        }
+
+        // 删除关系实体
+        em.remove(eeToDelete);
+
+        return true;
+    }
 
     @Transactional(readOnly = true)
     private MemberEntity getMemberByUsername(String username) {

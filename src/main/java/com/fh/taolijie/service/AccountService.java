@@ -72,11 +72,27 @@ public interface AccountService {
 
     /**
      * 更新用户信息.
-     * @param memDto 表示用户的dto对象
+     * @param memDto 表示用户的dto对象.
      * @param <T>
      * @return 更新成功返回true, 失败返回false
      */
     public <T extends GeneralMemberDto> boolean updateMember(T memDto);
+
+    /**
+     * 添加一个教育经历
+     * @param academyId 学院实体的id
+     * @param username
+     * @return
+     */
+    public boolean addEducation(Integer academyId, String username);
+
+    /**
+     * 删除一个教育经历
+     * @param academyId 学院实体的id
+     * @param username
+     * @return
+     */
+    public boolean deleteEducation(Integer academyId, String username);
 
     /**
      * 删除一个用户
