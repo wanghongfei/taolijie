@@ -8,9 +8,9 @@ import java.util.Date;
  */
 @NamedQueries( {
         @NamedQuery(name = "newsEntity.findAll",
-            query = "SELECT news FROM NewsEntity news"),
+            query = "SELECT news FROM NewsEntity news ORDER BY news.time DESC"),
         @NamedQuery(name = "newsEntity.findByDate",
-            query = "SELECT news FROM NewsEntity news WHERE news.time > :date")
+            query = "SELECT news FROM NewsEntity news WHERE news.time > :date ORDER BY news.time DESC")
 })
 
 @Entity

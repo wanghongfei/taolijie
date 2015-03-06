@@ -14,6 +14,8 @@ public class NewsDto {
 
     private Integer memberId;
 
+    public NewsDto() {}
+
     public NewsDto(String title, String content, String picturePath, Date time, String headPicturePath, Integer memberId) {
         this.title = title;
         this.content = content;

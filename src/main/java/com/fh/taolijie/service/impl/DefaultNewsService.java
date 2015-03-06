@@ -30,10 +30,17 @@ public class DefaultNewsService implements NewsService {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        em.createNamedQuery("newsEntity.findAll")
+        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findAll")
                 .setFirstResult(firstResult)
-                .setMaxResults(cap);
-        return null;
+                .setMaxResults(cap)
+                .getResultList();
+
+        List<NewsDto> dtoList = new ArrayList<>();
+        for (NewsEntity news : newsList) {
+            dtoList.add(makeNewsDto(news));
+        }
+
+        return dtoList;
     }
 
     @Override
@@ -72,10 +79,11 @@ public class DefaultNewsService implements NewsService {
      * @param dto
      */
     private void updateNewsDto(NewsEntity news, NewsDto dto) {
-        dto.setTitle(news.getTitle());
-        dto.setContent(news.getContent());
-        dto.setPicturePath(news.getPicturePath());
-        dto.setHeadPicturePath(news.getHeadPicturePath());
+        news.setTitle(dto.getTitle());
+        news.setTime(dto.getTime());
+        news.setContent(dto.getContent());
+        news.setPicturePath(dto.getPicturePath());
+        news.setHeadPicturePath(dto.getHeadPicturePath());
     }
 
     @Override
