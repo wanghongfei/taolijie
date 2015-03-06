@@ -1,5 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
+import java.util.List;
+
 /**
  * 此类为所有用户Dto类的父类，包含了所有用户都应该具有的field
  */
@@ -19,15 +21,20 @@ public class GeneralMemberDto {
     private Integer age;
     //private String companyName;
     //private String blockList;
-    private Integer roleId;
+    /**
+     * 保存了{@link com.sun.javafx.scene.accessibility.Role}实体的主键.
+     * <p> 这些{@code Role}实体都会被关联到{@code MemberEntity}中
+     */
+    private List<Integer> roleIdList;
 
-    public Integer getRoleId() {
-        return roleId;
+    public List<Integer> getRoleIdList() {
+        return roleIdList;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRoleIdList(List<Integer> roleIdList) {
+        this.roleIdList = roleIdList;
     }
+
 
     public String getVerified() {
         return verified;

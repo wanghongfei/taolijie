@@ -53,19 +53,20 @@ public class DefaultAccountService implements AccountService {
         em.persist(mem);
 
         // 得到角色
-        RoleEntity role = em.getReference(RoleEntity.class, stuDto.getRoleId());
-
-        // 创建角色与用户的关联对象
-        MemberRoleEntity memRole = new MemberRoleEntity();
-        memRole.setMember(mem);
-        memRole.setRole(role);
-        em.persist(memRole);
-
-        // 将关联添加到member实体中
         Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
-        memRoleCollection.add(memRole);
-        mem.setMemberRoleCollection(memRoleCollection);
+        List<Integer> idList = stuDto.getRoleIdList();
+        for (Integer id : idList) {
+            RoleEntity role = em.getReference(RoleEntity.class, id);
+            // 创建关联实体
+            MemberRoleEntity mr = new MemberRoleEntity();
+            mr.setRole(role);
+            mr.setMember(mem);
+            em.persist(mr);
 
+            // 将关联添加到member实体中
+            memRoleCollection.add(mr);
+        }
+        mem.setMemberRoleCollection(memRoleCollection);
 
         return true;
     }
@@ -85,21 +86,23 @@ public class DefaultAccountService implements AccountService {
         // 保存用户实体
         em.persist(mem);
 
-        // 创建角色
-        RoleEntity role = em.getReference(RoleEntity.class, empDto.getRoleId());
-
-        // 创建角色与用户的关联对象
-        MemberRoleEntity memRole = new MemberRoleEntity();
-        memRole.setMember(mem);
-        memRole.setRole(role);
-        em.persist(memRole);
-
-        // 将关联添加到member实体中
+        // 得到角色
         Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
-        memRoleCollection.add(memRole);
+        List<Integer> idList = empDto.getRoleIdList();
+        for (Integer id : idList) {
+            RoleEntity role = em.getReference(RoleEntity.class, id);
+            // 创建关联实体
+            MemberRoleEntity mr = new MemberRoleEntity();
+            mr.setRole(role);
+            mr.setMember(mem);
+            em.persist(mr);
+
+            // 将关联添加到member实体中
+            memRoleCollection.add(mr);
+        }
         mem.setMemberRoleCollection(memRoleCollection);
 
-        return false;
+        return true;
     }
 
     @Override

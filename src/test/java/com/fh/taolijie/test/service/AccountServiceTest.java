@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         StudentDto stuDto = new StudentDto();
         stuDto.setUsername("Hello");
         stuDto.setPassword("222222");
-        stuDto.setRoleId(role.getRid());
+        stuDto.setRoleIdList(Arrays.asList(this.role.getRid()));
 
         try {
             accService.registerStudent(stuDto);
