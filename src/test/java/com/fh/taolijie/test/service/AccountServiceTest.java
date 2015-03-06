@@ -324,4 +324,22 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         boolean contains = contains(idList, role.getRid());
         Assert.assertTrue(contains);
     }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testDeassignRole() {
+        accService.deassignRole(this.role.getRid(), this.member.getUsername());
+
+        // 测试是否删除了关联
+        StudentDto stuDto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+        List<Integer> idList = stuDto.getRoleIdList();
+        boolean contains = contains(idList, role.getRid());
+        Assert.assertFalse(contains);
+
+        // 测试是否删除了Role实体(不应该删除)
+        RoleEntity role = em.createQuery("SELECT r FROM RoleEntity r WHERE r.rolename = :rolename", RoleEntity.class)
+                .setParameter("rolename", "ADMIN")
+                .getSingleResult();
+
+    }
 }

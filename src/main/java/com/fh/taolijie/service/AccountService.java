@@ -130,4 +130,11 @@ public interface AccountService {
      * @param username
      */
     public void assignRole(Integer roleId, String username);
+
+    /**
+     * 去年用户的一个已有role
+     * @param roleId
+     * @param username
+     */
+    public void deassignRole(Integer roleId, String username);
 }

@@ -424,6 +424,28 @@ public class DefaultAccountService implements AccountService {
         return true;
     }
 
+    @Override
+    public void deassignRole(Integer roleId, String username) {
+        RoleEntity role = em.getReference(RoleEntity.class, roleId);
+        MemberEntity mem = getMemberByUsername(username);
+
+        // 删除关联对象
+        MemberRoleEntity targetToDelete = null;
+        Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+        Iterator<MemberRoleEntity> it = mrCollection.iterator();
+        while (it.hasNext()) {
+            MemberRoleEntity mr = it.next();
+            if (mr.getRole().getRid().equals(roleId)) {
+                targetToDelete = mr;
+                it.remove();
+                break;
+            }
+        }
+
+        em.remove(targetToDelete);
+
+    }
+
     /**
      * 判断用户名在数据库是是否存在
      * @param username
