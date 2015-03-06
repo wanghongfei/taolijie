@@ -1,6 +1,7 @@
 package com.fh.taolijie.test.service;
 
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -263,5 +265,42 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         List<Integer> idList = dto.getAcademyIdList();
         boolean contains = contains(idList, this.academy.getId());
         Assert.assertFalse(contains);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testAddRole() {
+        RoleDto dto = new RoleDto();
+        dto.setRolename("USER");
+        accService.addRole(dto);
+
+        // 测试是否添加成功
+        em.createQuery("SELECT r FROM RoleEntity r WHERE r.rolename = :rolename", RoleEntity.class)
+                .setParameter("rolename", "USER")
+                .getSingleResult();
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testDeleteRole() {
+        RoleDto dto = new RoleDto();
+        dto.setRolename("USER");
+        accService.addRole(dto);
+        RoleEntity role = em.createQuery("SELECT r FROM RoleEntity r WHERE r.rolename = :rolename", RoleEntity.class)
+                .setParameter("rolename", "USER")
+                .getSingleResult();
+
+        accService.deleteRole(role.getRid());
+        // 测试是否删除
+        try {
+            role = em.createQuery("SELECT r FROM RoleEntity r WHERE r.rolename = :rolename", RoleEntity.class)
+                    .setParameter("rolename", "USER")
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return;
+        }
+
+        Assert.assertTrue(false);
+
     }
 }
