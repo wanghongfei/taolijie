@@ -7,7 +7,7 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "job_post_category", schema = "", catalog = "taolijie")
+@Table(name = "job_post_category")
 public class JobPostCategoryEntity {
     private Integer id;
     private String name;

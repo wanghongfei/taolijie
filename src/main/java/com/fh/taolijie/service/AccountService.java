@@ -48,15 +48,16 @@ public interface AccountService {
      * 查询用户所有基本信息.
      * @param username 要查询的用户的用户名
      * @param memberType 用户实体dto对象的{@code Class}对象. 如, {@link StudentDto}.class
+     * @param isWired 指定是否查询关联表内的信息
      * @param <T> 用户实体有3类，该方法会根据泛型参数的实际类型返回对应的对象。一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *             或{@link EmployerDto}中的一种。
      * @return 返回类型由泛型参数{@code T}决定. 一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *          或{@link EmployerDto}中的一种。
      */
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType);
+    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired);
 
     /**
-     * 得到所有用户信息
+     * 得到所有用户信息. 不包含关联表内的信息
      * @param firstResult
      * @param capacity
      * @return
@@ -71,11 +72,27 @@ public interface AccountService {
 
     /**
      * 更新用户信息.
-     * @param memDto 表示用户的dto对象
+     * @param memDto 表示用户的dto对象.
      * @param <T>
      * @return 更新成功返回true, 失败返回false
      */
     public <T extends GeneralMemberDto> boolean updateMember(T memDto);
+
+    /**
+     * 添加一个教育经历
+     * @param academyId 学院实体的id
+     * @param username
+     * @return
+     */
+    public boolean addEducation(Integer academyId, String username);
+
+    /**
+     * 删除一个教育经历
+     * @param academyId 学院实体的id
+     * @param username
+     * @return
+     */
+    public boolean deleteEducation(Integer academyId, String username);
 
     /**
      * 删除一个用户
@@ -106,4 +123,18 @@ public interface AccountService {
      * @return 删除成功返回true, 失败返回false
      */
     public boolean deleteRole(Integer roleId);
+
+    /**
+     * 为指定用户添加一个新role
+     * @param roleId
+     * @param username
+     */
+    public void assignRole(Integer roleId, String username);
+
+    /**
+     * 去年用户的一个已有role
+     * @param roleId
+     * @param username
+     */
+    public void deassignRole(Integer roleId, String username);
 }

@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "news", schema = "", catalog = "taolijie")
+@Table(name = "news")
 public class NewsEntity {
     private Integer id;
     private String title;

@@ -9,11 +9,18 @@ import java.util.Collection;
 @Entity
 @Table(name = "member")
 
-@NamedQueries(
-         // 查询用户名是否存在
+@NamedQueries({
+        // 查询用户名是否存在
         @NamedQuery(name = "memberEntity.isExisted",
-        query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username")
-)
+                query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username"),
+        // 根据用户名查找member实体
+        @NamedQuery(name = "memberEntity.findMemberByUsername",
+                query = "SELECT m FROM MemberEntity m WHERE m.username = :username"),
+        @NamedQuery(name = "memberEntity.findAll",
+                query = "SELECT m FROM MemberEntity m"),
+        @NamedQuery(name = "memberEntity.amount",
+                query = "SELECT COUNT(m) FROM MemberEntity m")
+})
 public class MemberEntity {
     private Integer id;
     private String username;

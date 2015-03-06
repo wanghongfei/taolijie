@@ -7,7 +7,7 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 @Entity
-@Table(name = "second_hand_post_category", schema = "", catalog = "taolijie")
+@Table(name = "second_hand_post_category")
 public class SecondHandPostCategoryEntity {
     private Integer id;
     private String name;
