@@ -148,4 +148,30 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         }
         Assert.assertTrue(res);
     }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testFindMember() {
+        Print.print("-------- testFindMember");
+        StudentDto dto = accService.findMember("Bruce", StudentDto.class, true);
+        Assert.assertNotNull(dto);
+
+        // 测试是不是Bruce用户
+        Assert.assertEquals("Bruce", dto.getUsername());
+
+        // 测试role是否正确
+        List<Integer> idList = dto.getRoleIdList();
+        Assert.assertNotNull(idList);
+        Assert.assertTrue(contains(idList, this.role.getRid()));
+    }
+
+    private <T> boolean contains(Collection<T> collection, T target) {
+        for (T obj : collection) {
+            if (target.equals(obj)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

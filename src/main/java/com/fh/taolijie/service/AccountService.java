@@ -53,7 +53,7 @@ public interface AccountService {
      * @return 返回类型由泛型参数{@code T}决定. 一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *          或{@link EmployerDto}中的一种。
      */
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType);
+    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired);
 
     /**
      * 得到所有用户信息

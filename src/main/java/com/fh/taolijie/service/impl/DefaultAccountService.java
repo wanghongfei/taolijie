@@ -127,17 +127,17 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType) {
+    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired) {
         MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                .setParameter("username", username)
                 .getSingleResult();
-
 
         if (isStudentType(memberType)) {
             // 是StudentDto对象
-            return (T) makeStudentDto(mem, true);
+            return (T) makeStudentDto(mem, isWired);
         } else if (isEmployerType(memberType)) {
             // 是EmployerDto对象
-            return (T) makeEmployerDto(mem);
+            return (T) makeEmployerDto(mem, isWired);
         }
 
         return null;
@@ -150,7 +150,7 @@ public class DefaultAccountService implements AccountService {
         return clazz.getName().equals(EmployerDto.class.getName());
     }
 
-    private EmployerDto makeEmployerDto(MemberEntity mem) {
+    private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
         EmployerDto dto = new EmployerDto();
         dto.setUsername(mem.getUsername());
         dto.setEmail(mem.getEmail());
@@ -163,6 +163,20 @@ public class DefaultAccountService implements AccountService {
         dto.setQq(mem.getQq());
 
         dto.setCompanyName(mem.getCompanyName());
+
+        if (isWired) {
+            // 设置role信息
+            // 得到MemberEntity关联的Role对象的id
+            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+            if (null != mrCollection) {
+                List<Integer> roleIdList = new ArrayList<>();
+                for (MemberRoleEntity mr : mrCollection) {
+                    roleIdList.add(mr.getRole().getRid());
+                }
+
+                dto.setRoleIdList(roleIdList);
+            }
+        }
 
         return dto;
     }
@@ -185,6 +199,10 @@ public class DefaultAccountService implements AccountService {
         // 设置教育经历
         if (isWired) {
             Collection<EducationExperienceEntity> eduCollection = mem.getEducationExperienceCollection();
+            if (null == eduCollection) {
+                eduCollection = new ArrayList<>();
+            }
+
             List<Integer> schoolIdList = new ArrayList<>();
             List<Integer> academyIdList = new ArrayList<>();
             for (EducationExperienceEntity ee : eduCollection) {
@@ -196,6 +214,18 @@ public class DefaultAccountService implements AccountService {
             }
             dto.setSchoolIdList(schoolIdList);
             dto.setAcademyIdList(academyIdList);
+
+            // 设置role信息
+            // 得到MemberEntity关联的Role对象的id
+            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+            if (null != mrCollection) {
+                List<Integer> roleIdList = new ArrayList<>();
+                for (MemberRoleEntity mr : mrCollection) {
+                    roleIdList.add(mr.getRole().getRid());
+                }
+
+                dto.setRoleIdList(roleIdList);
+            }
         }
 
         return dto;
@@ -255,7 +285,7 @@ public class DefaultAccountService implements AccountService {
 
         List<GeneralMemberDto> dtoList = new ArrayList<>();
         for (MemberEntity m : memList) {
-            dtoList.add(makeEmployerDto(m));
+            dtoList.add(makeEmployerDto(m, false));
         }
 
         return dtoList;
