@@ -14,7 +14,7 @@ public interface JobPostCateService {
      * 获取所有分类
      * @return
      */
-    List<JobPostDto> getCategoryList(int firstResult, int capacity);
+    List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity);
 
     /**
      * 删除一个分类.
