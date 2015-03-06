@@ -287,7 +287,7 @@ public class DefaultAccountService implements AccountService {
 
         List<MemberEntity> memList = em.createNamedQuery("memberEntity.findAll", MemberEntity.class)
                 .setFirstResult(firstResult)
-                .setMaxResults(cap * firstResult)
+                .setMaxResults(cap)
                 .getResultList();
 
         List<GeneralMemberDto> dtoList = new ArrayList<>();
