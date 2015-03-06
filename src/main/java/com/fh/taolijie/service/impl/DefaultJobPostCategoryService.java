@@ -1,14 +1,17 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.controller.dto.JobPostCategoryDto;
-import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
+import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +23,7 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     private EntityManager em;
 
     @Override
+    @Transactional(readOnly = true)
     public List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity) {
         int cap = capacity;
         if (0 == cap) {
@@ -31,23 +35,50 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
                 .setMaxResults(cap)
                 .getResultList();
 
-        return null;
+        List<JobPostCategoryDto> dtoList = new ArrayList<>();
+        for (JobPostCategoryEntity cate : cateList) {
+            dtoList.add(makeCategory(cate));
+        }
+
+        return dtoList;
     }
 
     @Override
-    public boolean deleteCategory(Integer cateId) {
-        return false;
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException{
+        // 判断分类下是否为空
+        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+        if (null != cate.getJobPostCollection() && false == cate.getJobPostCollection().isEmpty()) {
+            throw new CategoryNotEmptyException("分类" + cate.getName() + "不是空的");
+        }
+
+        // 删除分类
+        em.remove(cate);
+
+        return true;
     }
 
     @Override
-    public boolean updateCategory(Integer cateId, JobPostDto jobPostDto) {
-        return false;
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean updateCategory(Integer cateId, JobPostCategoryDto dto) {
+        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+        updateCategory(cate, dto);
+
+        return true;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public JobPostCategoryDto findCategory(Integer cateId) {
-        return null;
+        return makeCategory(em.find(JobPostCategoryEntity.class, cateId));
     }
 
-    //private JobPostDto make
+    private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
+        return new JobPostCategoryDto(cate.getName(), cate.getMemo(), cate.getLevel());
+    }
+    private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
+        cate.setName(dto.getName());
+        cate.setMemo(dto.getMemo());
+        cate.setLevel(dto.getLevel());
+    }
 }

@@ -6,6 +6,12 @@ import java.util.Collection;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+
+@NamedQueries(
+        @NamedQuery(name = "jobPostCategoryEntity.findAll",
+            query = "SELECT j FROM JobPostCategoryEntity j")
+)
+
 @Entity
 @Table(name = "job_post_category")
 public class JobPostCategoryEntity {

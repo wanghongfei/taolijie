@@ -1,7 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.JobPostCategoryDto;
-import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 
 import java.util.List;
 
@@ -18,19 +18,19 @@ public interface JobPostCateService {
 
     /**
      * 删除一个分类.
-     * <p> 同时也会删除分类下的所有实体
+     * <p> 只有分类下没有数据时才能成功删除分类
      * @param cateId
      * @return
      */
-    boolean deleteCategory(Integer cateId);
+    boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException;
 
     /**
      * 修改一个兼职分类信息
      * @param cateId
-     * @param jobPostDto
+     * @param dto
      * @return
      */
-    boolean updateCategory(Integer cateId, JobPostDto jobPostDto);
+    boolean updateCategory(Integer cateId, JobPostCategoryDto dto);
 
     /**
      * 根据id查找兼职分类

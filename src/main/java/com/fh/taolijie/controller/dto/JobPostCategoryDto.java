@@ -8,6 +8,13 @@ public class JobPostCategoryDto {
     private String memo;
     private Integer level;
 
+    public JobPostCategoryDto (){}
+    public JobPostCategoryDto(String name, String memo, Integer level) {
+        this.name = name;
+        this.memo = memo;
+        this.level = level;
+    }
+
     public String getName() {
         return name;
     }
