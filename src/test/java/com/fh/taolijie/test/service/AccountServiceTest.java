@@ -303,4 +303,25 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         Assert.assertTrue(false);
 
     }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testAssignRole() {
+        // 添加USER角色
+        RoleDto dto = new RoleDto();
+        dto.setRolename("USER");
+        accService.addRole(dto);
+
+        RoleEntity role = em.createQuery("SELECT r FROM RoleEntity r WHERE r.rolename = :rolename", RoleEntity.class)
+                .setParameter("rolename", "USER")
+                .getSingleResult();
+
+        accService.assignRole(role.getRid(), this.member.getUsername());
+
+        // 测试是否添加成功
+        StudentDto stuDto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+        List<Integer> idList = stuDto.getRoleIdList();
+        boolean contains = contains(idList, role.getRid());
+        Assert.assertTrue(contains);
+    }
 }

@@ -123,4 +123,11 @@ public interface AccountService {
      * @return 删除成功返回true, 失败返回false
      */
     public boolean deleteRole(Integer roleId);
+
+    /**
+     * 为指定用户添加一个新role
+     * @param roleId
+     * @param username
+     */
+    public void assignRole(Integer roleId, String username);
 }

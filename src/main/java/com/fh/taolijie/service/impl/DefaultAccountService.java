@@ -396,6 +396,27 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void assignRole(Integer roleId, String username) {
+        RoleEntity role = em.getReference(RoleEntity.class, roleId);
+        MemberEntity mem = getMemberByUsername(username);
+
+        // 创建关联对象
+        MemberRoleEntity mr = new MemberRoleEntity();
+        mr.setRole(role);
+        mr.setMember(mem);
+        em.persist(mr);
+
+        // 创建关联关系
+        Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+        if (null == mrCollection) {
+            mrCollection = new ArrayList<>();
+            mem.setMemberRoleCollection(mrCollection);
+        }
+        mrCollection.add(mr);
+    }
+
+    @Override
     public boolean deleteRole(Integer roleId) {
         RoleEntity role = em.getReference(RoleEntity.class, roleId);
         em.remove(role);
