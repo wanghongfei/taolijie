@@ -87,13 +87,23 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         // 验证role是否指定
         Collection<MemberRoleEntity> memRoleCollection = mem.getMemberRoleCollection();
         Assert.assertNotNull(memRoleCollection);
-        Assert.assertEquals(1, memRoleCollection.size());
+        //Assert.assertEquals(1, memRoleCollection.size());
+        Assert.assertFalse(memRoleCollection.isEmpty());
 
         // 验证指定的role是否正确
         Print.print("~~~~~~~~~~~~~~~ id:" + role.getRid() + ", role:" + role.getRolename());
-        List<MemberRoleEntity> memRoleList = new ArrayList<>(memRoleCollection);
-        boolean contains = memRoleList.get(0).getRole().equals(this.role);
+        boolean contains = containsRole(memRoleCollection, this.role);
         Assert.assertTrue(contains);
+    }
+
+    private boolean containsRole(Collection<MemberRoleEntity> mrCollection, RoleEntity role) {
+        for (MemberRoleEntity mr : mrCollection) {
+            if (role.equals(mr.getRole())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Test
