@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.service;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.MemberRoleEntity;
@@ -178,6 +179,25 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
     private <T> boolean contains(Collection<T> collection, T target) {
         for (T obj : collection) {
             if (target.equals(obj)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetMemberList() {
+        List<GeneralMemberDto> dtoList = accService.getMemberList(0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertTrue(containsUsername(dtoList, "Bruce"));
+    }
+
+    private boolean containsUsername(Collection<GeneralMemberDto> dtoCollection, String username) {
+        for (GeneralMemberDto gm : dtoCollection) {
+            if (gm.getUsername().equals(username)) {
                 return true;
             }
         }
