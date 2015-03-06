@@ -15,7 +15,7 @@ public class EducationExperienceEntity {
     private String major;
 
     private MemberEntity member;
-    private SchoolEntity school;
+    //private SchoolEntity school;
     private AcademyEntity academy;
 
 
@@ -106,7 +106,7 @@ public class EducationExperienceEntity {
         this.member = member;
     }
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "college_id", referencedColumnName = "id")
     public SchoolEntity getSchool() {
         return school;
@@ -114,5 +114,5 @@ public class EducationExperienceEntity {
 
     public void setSchool(SchoolEntity school) {
         this.school = school;
-    }
+    }*/
 }

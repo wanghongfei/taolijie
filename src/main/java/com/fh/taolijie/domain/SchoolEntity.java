@@ -15,7 +15,7 @@ public class SchoolEntity {
     private String province;
     private String type;
     private Collection<AcademyEntity> academyCollection;
-    private Collection<EducationExperienceEntity> educationExperienceCollection;
+    //private Collection<EducationExperienceEntity> educationExperienceCollection;
 
     public SchoolEntity() {}
     public SchoolEntity(String shortName, String fullName, String province, String type) {
@@ -111,12 +111,12 @@ public class SchoolEntity {
         this.academyCollection = academyCollection;
     }
 
-    @OneToMany(mappedBy = "school")
+    /*@OneToMany(mappedBy = "school")
     public Collection<EducationExperienceEntity> getEducationExperienceCollection() {
         return educationExperienceCollection;
     }
 
     public void setEducationExperienceCollection(Collection<EducationExperienceEntity> educationExperienceCollection) {
         this.educationExperienceCollection = educationExperienceCollection;
-    }
+    }*/
 }

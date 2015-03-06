@@ -5,10 +5,7 @@ import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.EducationExperienceEntity;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.MemberRoleEntity;
-import com.fh.taolijie.domain.RoleEntity;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -203,16 +200,16 @@ public class DefaultAccountService implements AccountService {
                 eduCollection = new ArrayList<>();
             }
 
-            List<Integer> schoolIdList = new ArrayList<>();
+            //List<Integer> schoolIdList = new ArrayList<>();
             List<Integer> academyIdList = new ArrayList<>();
             for (EducationExperienceEntity ee : eduCollection) {
-                Integer schoolId = ee.getSchool().getId();
+                //Integer schoolId = ee.getSchool().getId();
                 Integer academyId = ee.getAcademy().getId();
 
-                schoolIdList.add(schoolId);
+                //schoolIdList.add(schoolId);
                 academyIdList.add(academyId);
             }
-            dto.setSchoolIdList(schoolIdList);
+            //dto.setSchoolIdList(schoolIdList);
             dto.setAcademyIdList(academyIdList);
 
             // 设置role信息
@@ -237,7 +234,11 @@ public class DefaultAccountService implements AccountService {
      * @param dto
      */
     private void updateMemberEntity(MemberEntity mem, StudentDto dto) {
-        mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
+        // 这是web-security的一个小bug, 日后修复
+        if (dto.getPassword() != null) {
+            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        }
         mem.setEmail(dto.getEmail());
         mem.setName(dto.getName());
         mem.setStudentId(dto.getStudentId());
@@ -255,7 +256,12 @@ public class DefaultAccountService implements AccountService {
      * @param dto
      */
     private void updateMemberEntity(MemberEntity mem, EmployerDto dto) {
-        mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
+        // 这是web-security的一个小bug, 日后修复
+        if (dto.getPassword() != null) {
+            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        }
+
         mem.setEmail(dto.getEmail());
         mem.setName(dto.getName());
         //mem.setStudentId(dto.getStudentId());
@@ -315,6 +321,23 @@ public class DefaultAccountService implements AccountService {
 
         return true;
     }
+
+   /* @Override
+    public <T extends GeneralMemberDto> boolean updateEducation(Integer schoolId, Integer academyId, String username) {
+        MemberEntity mem = getMemberByUsername(username);
+        AcademyEntity academy = em.find(AcademyEntity.class, academyId);
+        SchoolEntity school = em.find(SchoolEntity.class, schoolId);
+
+        // 创建新教育信息
+        EducationExperienceEntity ee = new EducationExperienceEntity();
+        ee.setMember(mem);
+        ee.setAcademy(ass, academyId));
+        ee.setSchool(em.find(SchoolEntity.class, schoolId));
+
+
+
+        return true;
+    }*/
 
     @Transactional(readOnly = true)
     private MemberEntity getMemberByUsername(String username) {
