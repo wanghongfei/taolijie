@@ -5,6 +5,10 @@ import javax.persistence.*;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+@NamedQueries({
+        @NamedQuery(name = "resumeEntity.findByMember",
+            query = "SELECT r FROM ResumeEntity r WHERE r.member = :member")
+})
 @Entity
 @Table(name = "resume")
 public class ResumeEntity {
