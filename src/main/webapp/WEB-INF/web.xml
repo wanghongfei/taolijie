@@ -20,6 +20,21 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+    <!-- 配置web-security监听器 -->
+    <listener>
+        <listener-class>cn.fh.security.servlet.PageProtectionContextListener</listener-class>
+    </listener>
+
+    <!-- 配置web-security过滤器 -->
+    <filter>
+        <filter-name>Page Protection Filter</filter-name>
+        <filter-class>cn.fh.security.servlet.PageProtectionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Page Protection Filter</filter-name>
+        <url-pattern>/</url-pattern>
+    </filter-mapping>
+
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
@@ -35,5 +50,6 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
 
 </web-app>
