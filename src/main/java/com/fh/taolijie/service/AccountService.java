@@ -16,6 +16,14 @@ import java.util.List;
  */
 public interface AccountService {
     /**
+     * 注册一个普通用户
+     * @param dto
+     * @throws DuplicatedUsernameException
+     */
+    public void register(GeneralMemberDto dto) throws DuplicatedUsernameException;
+
+    /**
+     * @deprecated
      * 注册一个学生用户.
      *
      * @param stuDto 封装了学生信息的{@link StudentDto}对象
@@ -25,6 +33,7 @@ public interface AccountService {
     public boolean registerStudent(StudentDto stuDto) throws DuplicatedUsernameException;
 
     /**
+     * @deprecated
      * 注册一个商家用户.
      *
      * @param empDto 封装了商家信息的dto对象

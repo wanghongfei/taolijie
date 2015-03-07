@@ -70,6 +70,36 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    public void register(GeneralMemberDto dto) throws DuplicatedUsernameException {
+        if (true == isUserExists(dto.getUsername())) {
+            throw new DuplicatedUsernameException("用户名[" + dto.getUsername() + "]已存在");
+        }
+
+        // 创建实体
+        MemberEntity mem = new MemberEntity(dto.getUsername(), CredentialUtils.sha(dto.getPassword()), dto.getEmail(),
+                dto.getName(), "", dto.getGender(), Constants.VerifyStatus.NONE.toString(),
+                dto.getProfilePhotoPath(), dto.getPhone(), dto.getQq(), dto.getAge(), "", "");
+        // 保存实体
+        em.persist(mem);
+
+        // 得到角色
+        /*Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
+        List<Integer> idList = stuDto.getRoleIdList();
+        for (Integer id : idList) {
+            RoleEntity role = em.getReference(RoleEntity.class, id);
+            // 创建关联实体
+            MemberRoleEntity mr = new MemberRoleEntity();
+            mr.setRole(role);
+            mr.setMember(mem);
+            em.persist(mr);
+
+            // 将关联添加到member实体中
+            memRoleCollection.add(mr);
+        }
+        mem.setMemberRoleCollection(memRoleCollection); */
+    }
+
+    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean registerEmployer(EmployerDto empDto) throws DuplicatedUsernameException {
         if (true == isUserExists(empDto.getUsername())) {
