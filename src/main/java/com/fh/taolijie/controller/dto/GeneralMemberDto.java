@@ -1,15 +1,27 @@
 package com.fh.taolijie.controller.dto;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.List;
 
 /**
  * 此类为所有用户Dto类的父类，包含了所有用户都应该具有的field
  */
 public class GeneralMemberDto {
+
+    @NotEmpty(message = "用户名不能为空")
+    @Length(min = 6,max =25,message = "长度不合法")
     private String username;
+
+    @NotEmpty(message = "用户名密码错误")
+    @Length(min = 6,max =25,message = "长度不合法")
     private String password;
 
+    @NotEmpty(message = "邮箱不能为空")
+    @Length(min = 6,max =30,message = "长度不合法")
     private String email;
+
     private String name;
 
     //private String studentId;
