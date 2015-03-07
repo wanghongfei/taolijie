@@ -6,6 +6,10 @@ import java.util.Date;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+@NamedQueries({
+        @NamedQuery(name = "reviewEntity.findByPost",
+                query = "SELECT r FROM ReviewEntity r WHERE r.jobPost = :jobPost ORDER BY r.time ASC")
+})
 @Entity
 @Table(name = "review")
 public class ReviewEntity {
