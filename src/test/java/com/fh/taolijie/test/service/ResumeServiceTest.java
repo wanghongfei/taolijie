@@ -100,6 +100,18 @@ public class ResumeServiceTest extends BaseDatabaseTestClass {
         Assert.assertTrue(false);
     }
 
+    @Test
+    @Transactional(readOnly = false)
+    public void testAddResume() {
+        ResumeDto dto = new ResumeDto();
+        dto.setMemberId(member.getId());
+        dto.setQq("1");
+        rService.addResume(dto);
+
+        em.createQuery("SELECT r FROM ResumeEntity r WHERE r.qq = '1'", ResumeEntity.class)
+                .getSingleResult();
+    }
+
     private boolean containsName(Collection<ResumeDto> co, String name) {
         for (ResumeDto dto : co) {
             if (dto.getName().equals(name)) {

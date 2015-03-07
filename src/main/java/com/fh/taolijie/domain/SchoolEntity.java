@@ -6,6 +6,12 @@ import java.util.Collection;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+@NamedQueries({
+        @NamedQuery(name = "schoolEntity.findAll",
+            query = "SELECT s FROM SchoolEntity s"),
+        @NamedQuery(name = "schoolEntity.findByProvince",
+            query = "SELECT s FROM SchoolEntity s WHERE s.province = :province")
+})
 @Entity
 @Table(name = "school")
 public class SchoolEntity {
