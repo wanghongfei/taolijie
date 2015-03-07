@@ -6,6 +6,13 @@ import java.util.Date;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+@NamedQueries( {
+        @NamedQuery(name = "newsEntity.findAll",
+            query = "SELECT news FROM NewsEntity news ORDER BY news.time DESC"),
+        @NamedQuery(name = "newsEntity.findByDate",
+            query = "SELECT news FROM NewsEntity news WHERE news.time > :date ORDER BY news.time DESC")
+})
+
 @Entity
 @Table(name = "news")
 public class NewsEntity {

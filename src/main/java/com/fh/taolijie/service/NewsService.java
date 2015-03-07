@@ -30,7 +30,7 @@ public interface NewsService {
     NewsDto findNews(Integer newsId);
 
     /**
-     * 修改新闻信息
+     * 修改新闻信息. 只修改新闻本身,无法修改所属用户和创建时间
      * @param newsId
      * @param newsDto
      * @return
@@ -44,9 +44,5 @@ public interface NewsService {
      */
     boolean deleteNews(Integer newsId);
 
-    /**
-     * 将新闻在发布时间的基础上按优先级排序
-     * @param newsList 要排序的新闻
-     */
-    void sortByPriority(List<NewsDto> newsList);
+    //void sortByPriority(List<NewsDto> newsList);
 }
