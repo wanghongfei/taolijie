@@ -17,6 +17,12 @@ public interface JobPostCateService {
     List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity);
 
     /**
+     * 添加一个分类
+     * @param dto
+     */
+    void addCategory(JobPostCategoryDto dto);
+
+    /**
      * 删除一个分类.
      * <p> 只有分类下没有数据时才能成功删除分类
      * @param cateId

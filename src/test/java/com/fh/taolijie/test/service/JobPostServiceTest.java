@@ -128,6 +128,21 @@ public class JobPostServiceTest extends BaseDatabaseTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testAddPost() {
+        JobPostDto dto = new JobPostDto();
+        dto.setMemberId(member.getId());
+        dto.setCategoryId(cate1.getId());
+        dto.setTitle("new post");
+
+        postService.addJobPost(dto);
+
+        JobPostEntity p = em.createQuery("SELECT j FROM JobPostEntity j WHERE j.title = 'new post'", JobPostEntity.class)
+                .getSingleResult();
+        Assert.assertNotNull(p.getMember());
+        Assert.assertNotNull(p.getCategory());
+    }
+    @Test
+    @Transactional(readOnly = false)
     public void testDeletePost() {
         postService.deleteJobPost(this.post.getId());
 

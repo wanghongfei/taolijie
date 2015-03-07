@@ -118,6 +118,24 @@ public class DefaultJobPostService implements JobPostService {
         return true;
     }
 
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addJobPost(JobPostDto dto) {
+        em.persist(makeJobPost(dto));
+    }
+
+    private JobPostEntity makeJobPost(JobPostDto dto) {
+        JobPostEntity post = new JobPostEntity(dto.getTitle(), dto.getExpiredTime(), dto.getPostTime(),
+                dto.getWorkPlace(), dto.getWage(), dto.getTimeToPay(), dto.getJobDescription(),
+                dto.getContact(), dto.getContactPhone(), dto.getContactEmail(), dto.getContactQq(),
+                dto.getJobDetail(), dto.getIntroduce(), dto.getLikes(), dto.getDislikes(), dto.getEducationLevel(),
+                null, null);
+
+        post.setCategory(em.getReference(JobPostCategoryEntity.class, dto.getCategoryId()));
+        post.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
+
+        return post;
+    }
     /**
      * 不更新关联信息
      * @param post

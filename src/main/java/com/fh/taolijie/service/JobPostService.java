@@ -31,6 +31,12 @@ public interface JobPostService {
     JobPostDto findJobPost(Integer postId);
 
     /**
+     * 发布帖子
+     * @param dto
+     */
+    void addJobPost(JobPostDto dto);
+
+    /**
      * 修改兼职帖子, 无法修改评论信息
      * @param postId
      * @param postDto

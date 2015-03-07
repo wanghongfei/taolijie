@@ -73,6 +73,19 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
         return makeCategory(em.find(JobPostCategoryEntity.class, cateId));
     }
 
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addCategory(JobPostCategoryDto dto) {
+        JobPostCategoryEntity cate = makeCategory(dto);
+        em.persist(cate);
+    }
+
+    private JobPostCategoryEntity makeCategory(JobPostCategoryDto dto) {
+        JobPostCategoryEntity cate = new JobPostCategoryEntity(dto.getName(), dto.getMemo(),
+                dto.getLevel());
+
+        return cate;
+    }
     private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
         return new JobPostCategoryDto(cate.getName(), cate.getMemo(), cate.getLevel());
     }

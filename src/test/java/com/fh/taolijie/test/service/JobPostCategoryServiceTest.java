@@ -86,6 +86,16 @@ public class JobPostCategoryServiceTest extends BaseDatabaseTestClass {
     }
 
     @Test
+    @Transactional(readOnly = false)
+    public void testAdd() {
+        JobPostCategoryDto dto = new JobPostCategoryDto();
+        dto.setName("new category");
+        cateService.addCategory(dto);
+
+        em.createQuery("SELECT c FROM JobPostCategoryEntity c WHERE c.name = 'new category'", JobPostCategoryEntity.class)
+                .getSingleResult();
+    }
+    @Test
     public void testFindCategory() {
         JobPostCategoryDto dto = cateService.findCategory(this.cate1.getId());
         Assert.assertNotNull(dto);
