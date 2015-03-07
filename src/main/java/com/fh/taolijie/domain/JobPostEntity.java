@@ -7,6 +7,17 @@ import java.util.Date;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+@NamedQueries({
+        @NamedQuery(name = "jobPostEntity.findAllOrderByPostTime",
+                query = "SELECT j FROM JobPostEntity j ORDER BY j.postTime DESC "),
+        @NamedQuery(name = "jobPostEntity.findAllOrderByExpiredTime",
+                query = "SELECT j FROM JobPostEntity j ORDER BY j.expiredTime DESC "),
+        @NamedQuery(name = "jobPostEntity.findByMember",
+                query = "SELECT j FROM JobPostEntity j WHERE j.member = :member ORDER BY j.postTime DESC"),
+        @NamedQuery(name = "jobPostEntity.findByCategory",
+                query = "SELECT j FROM JobPostEntity j WHERE j.category = :category ORDER BY j.postTime DESC")
+})
+
 @Entity
 @Table(name = "job_post")
 public class JobPostEntity {
