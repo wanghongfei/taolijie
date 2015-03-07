@@ -11,27 +11,24 @@ import java.util.List;
 public interface JobPostService {
     /**
      * 获取某个用户发的所有兼职帖子
-     * @param username 用户名
-     * @param isWired 是否同时获取帖子评论
+     * @param memId 用户id
      * @return
      */
-    List<JobPostDto> getJobPostList(String username, boolean isWired, int firstResult, int capacity);
+    List<JobPostDto> getJobPostListByMember(Integer memId , int firstResult, int capacity);
 
     /**
      * 获取某分类下所有的兼职帖子
      * @param cateId
-     * @param isWired 是否同时获取帖子评论
      * @return
      */
-    List<JobPostDto> getJobPostList(Integer cateId, boolean isWired, int firstResult, int capacity);
+    List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
 
     /**
      * 根据id查找某个兼职帖子
      * @param postId
-     * @param isWired 是否同时获取帖子评论
      * @return
      */
-    JobPostDto findJobPost(Integer postId, boolean isWired);
+    JobPostDto findJobPost(Integer postId);
 
     /**
      * 修改兼职帖子, 无法修改评论信息

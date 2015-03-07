@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by wanghongfei on 15-3-7.
  */
+@Repository
 public class DefaultReviewService implements ReviewService {
     @PersistenceContext
     private EntityManager em;
