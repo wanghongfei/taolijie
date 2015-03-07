@@ -78,6 +78,23 @@ public class DefaultResumeService implements ResumeService {
         return true;
     }
 
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addResume(ResumeDto dto) {
+        ResumeEntity r = makeResume(dto);
+        em.persist(r);
+    }
+
+    private ResumeEntity makeResume(ResumeDto dto) {
+        ResumeEntity r = new ResumeEntity(dto.getName(), dto.getGender(), dto.getAge(), dto.getHeight(),
+                dto.getPhonePath(), dto.getEmail(), dto.getQq(), dto.getExperience(), dto.getIntroduce(),
+                null);
+
+        r.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
+
+        return r;
+    }
+
     /**
      * 不更新关联信息
      * @param resume

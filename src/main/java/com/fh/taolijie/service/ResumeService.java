@@ -28,6 +28,12 @@ public interface ResumeService {
     boolean updateResume(Integer resumeId, ResumeDto resumeDto);
 
     /**
+     * 创建新简历
+     * @param dto
+     */
+    void addResume(ResumeDto dto);
+
+    /**
      * 根据id查找简历
      * @param resumeId
      * @return
