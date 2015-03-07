@@ -28,10 +28,9 @@ public interface ReviewService {
     /**
      * 删除一条评论
      * @param reviewId
-     * @param memId 当前已登陆用户的id, 用来判断是否有删除权限
      * @return
      */
-    boolean deleteReview(Integer reviewId, Integer memId);
+    boolean deleteReview(Integer reviewId);
 
     /**
      * 修改一条评论

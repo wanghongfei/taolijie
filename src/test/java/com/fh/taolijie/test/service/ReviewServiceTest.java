@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,8 +83,8 @@ public class ReviewServiceTest extends BaseDatabaseTestClass {
         member.setReviewCollection(new ArrayList<>());
         member.getReviewCollection().add(review);
 
-        em.persist(member);
         em.persist(cate);
+        em.persist(member);
         em.persist(post);
         em.persist(review);
         //em.flush();
@@ -96,6 +97,49 @@ public class ReviewServiceTest extends BaseDatabaseTestClass {
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = containsReviewContent(dtoList, "OK");
         Assert.assertTrue(contains);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testAddReview() {
+        ReviewDto dto = new ReviewDto();
+        dto.setContent("review");
+        dto.setJobPostId(post.getId());
+        dto.setMemberId(member.getId());
+
+        rService.addReview(dto);
+
+        ReviewEntity r = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.content = 'review'", ReviewEntity.class)
+                .getSingleResult();
+        Assert.assertNotNull(r.getMember());
+        Assert.assertNotNull(r.getJobPost());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testDeleteReview() {
+        rService.deleteReview(review.getId());
+
+        try {
+            ReviewEntity r = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.content = 'OK'", ReviewEntity.class)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return;
+        }
+
+        Assert.assertTrue(false);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testUpdateReview() {
+        ReviewDto dto = new ReviewDto();
+        dto.setContent("NO");
+
+        rService.updateReview(review.getId(), dto);
+
+        em.createQuery("SELECT r FROM ReviewEntity r WHERE r.content = 'NO'", ReviewEntity.class)
+                .getSingleResult();
     }
 
     private boolean containsReviewContent(Collection<ReviewDto> dtoCollection, String content) {

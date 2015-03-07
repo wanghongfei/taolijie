@@ -28,8 +28,6 @@ public class DefaultReviewService implements ReviewService {
     public List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity) {
         JobPostEntity jobPost = em.getReference(JobPostEntity.class, postId);
 
-        System.out.println("post id:" + jobPost.getId());
-
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
@@ -40,8 +38,6 @@ public class DefaultReviewService implements ReviewService {
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
                 .getResultList();
-
-        System.out.println("~~~~~~~~~" + reviewList.size());
 
         List<ReviewDto> dtoList = new ArrayList<>();
         for (ReviewEntity r : reviewList) {
@@ -63,14 +59,16 @@ public class DefaultReviewService implements ReviewService {
         review.setMember(mem);
         review.setJobPost(post);
 
+        em.persist(review);
+
         return true;
     }
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean deleteReview(Integer reviewId, Integer memId) {
+    public boolean deleteReview(Integer reviewId) {
         // 删除与member的关联
-        MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        MemberEntity mem = em.getReference(MemberEntity.class, em.getReference(ReviewEntity.class, reviewId).getMember().getId());
         Collection<ReviewEntity> reCollection = mem.getReviewCollection();
         reCollection.size();
 
