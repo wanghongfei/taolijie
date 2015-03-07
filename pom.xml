@@ -28,6 +28,7 @@
 
         <org.aspectj-version>1.7.3</org.aspectj-version>
         <spring.version>4.0.1.RELEASE</spring.version>
+        <spring-data-jpa-version>1.7.1.RELEASE</spring-data-jpa-version>
 
         <slf4j-version>1.7.7</slf4j-version>
         <log4j-version>1.2.16</log4j-version>
@@ -124,6 +125,14 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
         </dependency>
+
+        <!-- Spring data -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa-version}</version>
+        </dependency>
+
 
         <!-- 支持文件上传 -->
         <dependency>
