@@ -125,6 +125,13 @@ public interface AccountService {
     public boolean deleteRole(Integer roleId);
 
     /**
+     * 根据id查找Role实体
+     * @param roleId
+     * @return
+     */
+    public RoleDto findRole(Integer roleId);
+
+    /**
      * 为指定用户添加一个新role
      * @param roleId
      * @param username

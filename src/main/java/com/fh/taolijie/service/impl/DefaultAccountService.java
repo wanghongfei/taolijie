@@ -446,6 +446,22 @@ public class DefaultAccountService implements AccountService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public RoleDto findRole(Integer roleId) {
+        RoleEntity role = em.find(RoleEntity.class, roleId);
+
+        return makeRoleDto(role);
+    }
+
+    private RoleDto makeRoleDto(RoleEntity role) {
+        RoleDto dto = new RoleDto();
+        dto.setRolename(role.getRolename());
+        dto.setMemo(role.getMemo());
+
+        return dto;
+    }
+
     /**
      * 判断用户名在数据库是是否存在
      * @param username
