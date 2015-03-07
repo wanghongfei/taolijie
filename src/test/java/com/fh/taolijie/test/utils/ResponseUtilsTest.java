@@ -52,4 +52,14 @@ public class ResponseUtilsTest {
         String resultPage = ResponseUtils.determinePage(mockRequest, jspPage);
         Assert.assertEquals("pc/home", resultPage);
     }
+
+    @Test
+    public void testDeterminePage4Null(){
+        Mockito.when(mockRequest.getHeader("User-Agent"))
+                .thenReturn(null);
+
+        String jspPage = "home";
+        String resultPage = ResponseUtils.determinePage(mockRequest, jspPage);
+        Assert.assertEquals("pc/home", resultPage);
+    }
 }

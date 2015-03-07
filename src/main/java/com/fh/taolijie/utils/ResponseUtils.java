@@ -26,7 +26,7 @@ public class ResponseUtils {
 
         StringBuilder sb = new StringBuilder();
 
-        if (agent.contains(DeviceToken.Android.toString()) || agent.contains(DeviceToken.iPhone.toString()) || agent.contains(DeviceToken.iPad.toString())) {
+        if (agent!=null&&(agent.contains(DeviceToken.Android.toString()) || agent.contains(DeviceToken.iPhone.toString()) || agent.contains(DeviceToken.iPad.toString()))) {
             sb.append("mobile/");
         } else {
             sb.append("pc/");
