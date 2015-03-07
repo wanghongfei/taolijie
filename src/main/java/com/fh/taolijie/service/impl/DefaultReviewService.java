@@ -28,15 +28,20 @@ public class DefaultReviewService implements ReviewService {
     public List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity) {
         JobPostEntity jobPost = em.getReference(JobPostEntity.class, postId);
 
+        System.out.println("post id:" + jobPost.getId());
+
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
+
         List<ReviewEntity> reviewList = em.createNamedQuery("reviewEntity.findByPost", ReviewEntity.class)
                 .setParameter("jobPost", jobPost)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
                 .getResultList();
+
+        System.out.println("~~~~~~~~~" + reviewList.size());
 
         List<ReviewDto> dtoList = new ArrayList<>();
         for (ReviewEntity r : reviewList) {
