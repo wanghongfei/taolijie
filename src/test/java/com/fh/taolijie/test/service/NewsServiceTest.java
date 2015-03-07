@@ -118,6 +118,19 @@ public class NewsServiceTest extends BaseDatabaseTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testAddNews() {
+        NewsDto dto = new NewsDto();
+        dto.setTitle("one news");
+        dto.setMemberId(member.getId());
+        newsService.addNews(dto);
+
+        em.createQuery("SELECT news FROM NewsEntity news WHERE news.title = :title", NewsEntity.class)
+                .setParameter("title", "one news")
+                .getSingleResult();
+    }
+
+    @Test
+    @Transactional(readOnly = false)
     public void testDeleteNews() {
         newsService.deleteNews(this.newsBefore.getId());
 

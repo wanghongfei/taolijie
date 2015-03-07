@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.controller.dto.NewsDto;
+import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.NewsEntity;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.Constants;
@@ -65,6 +66,47 @@ public class DefaultNewsService implements NewsService {
         return dtoList;
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public NewsDto findNews(Integer newsId) {
+        NewsEntity news = em.find(NewsEntity.class, newsId);
+        return makeNewsDto(news);
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean updateNews(Integer newsId, NewsDto newsDto) {
+        NewsEntity news = em.find(NewsEntity.class, newsId);
+        updateNewsDto(news, newsDto);
+
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addNews(NewsDto dto) {
+        em.persist(makeNews(dto));
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean deleteNews(Integer newsId) {
+        NewsEntity news = em.getReference(NewsEntity.class, newsId);
+        em.remove(news);
+
+        return true;
+    }
+
+    private NewsEntity makeNews(NewsDto dto) {
+        NewsEntity news = new NewsEntity(dto.getTitle(), dto.getContent(), dto.getPicturePath(),
+                dto.getTime(), dto.getHeadPicturePath(), null);
+
+        news.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
+
+        return news;
+    }
+
     private NewsDto makeNewsDto(NewsEntity news) {
         NewsDto dto = new NewsDto(news.getTitle(), news.getContent(), news.getPicturePath(),
                 news.getTime(), news.getHeadPicturePath(), null);
@@ -85,29 +127,4 @@ public class DefaultNewsService implements NewsService {
         news.setPicturePath(dto.getPicturePath());
         news.setHeadPicturePath(dto.getHeadPicturePath());
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public NewsDto findNews(Integer newsId) {
-        NewsEntity news = em.find(NewsEntity.class, newsId);
-        return makeNewsDto(news);
-    }
-
-    @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean updateNews(Integer newsId, NewsDto newsDto) {
-        NewsEntity news = em.find(NewsEntity.class, newsId);
-        updateNewsDto(news, newsDto);
-
-        return true;
-    }
-
-    @Override
-    public boolean deleteNews(Integer newsId) {
-        NewsEntity news = em.getReference(NewsEntity.class, newsId);
-        em.remove(news);
-
-        return true;
-    }
-
 }
