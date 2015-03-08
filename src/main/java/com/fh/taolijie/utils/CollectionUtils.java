@@ -1,8 +1,6 @@
 package com.fh.taolijie.utils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -32,6 +30,26 @@ public class CollectionUtils {
         }
 
         return resultList;
+    }
+
+    /**
+     * 将一个元素添加到集合类中.
+     * @param collection
+     * @param obj
+     * @param <T>
+     * @return 如果集合类为空，则返回一个包含了该元素的新集合
+     */
+    public static <T> List<T> addToCollection(Collection<T> collection, T obj) {
+        List<T> list = null;
+
+        if (null == collection) {
+            list = new ArrayList<>();
+            list.add(obj);
+        } else {
+            collection.add(obj);
+        }
+
+        return list;
     }
 
     /**

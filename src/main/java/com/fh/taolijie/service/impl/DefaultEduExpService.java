@@ -62,6 +62,12 @@ public class DefaultEduExpService implements EduExpService {
         ee.setMember(mem);
         ee.setAcademy(aca);
 
+        // add experience to member
+        List<EducationExperienceEntity> list = CollectionUtils.addToCollection(mem.getEducationExperienceCollection(), ee);
+        if (null != null) {
+            mem.setEducationExperienceCollection(list);
+        }
+
         eduRepo.save(ee);
 
         return true;
