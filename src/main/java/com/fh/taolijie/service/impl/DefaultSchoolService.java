@@ -8,6 +8,7 @@ import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.SchoolService;
 import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -111,7 +112,7 @@ public class DefaultSchoolService implements SchoolService {
     public boolean deleteSchool(Integer schoolId) throws CascadeDeleteException {
         SchoolEntity school = schoolRepo.findOne(schoolId);
         // 检查对应的学院是否为空
-        if (school.getAcademyCollection() != null && true == school.getAcademyCollection().isEmpty()) {
+        if (school.getAcademyCollection() != null && false == school.getAcademyCollection().isEmpty()) {
             throw new CascadeDeleteException("学校下的学院不为空");
         }
 
@@ -123,7 +124,7 @@ public class DefaultSchoolService implements SchoolService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AcademyDto> getAcademyList(Integer schoolId, int firstResult, int capacity) {
+    public List<AcademyDto> getAcademyList(Integer schoolId) {
         SchoolEntity school = schoolRepo.getOne(schoolId);
         List<AcademyEntity> aList = academyRepo.findBySchool(school);
 
@@ -154,6 +155,13 @@ public class DefaultSchoolService implements SchoolService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteAcademy(Integer academyId) {
+        // 从school中解除关系
+        AcademyEntity academy = academyRepo.findOne(academyId);
+        CollectionUtils.removeFromCollection(academy.getSchool().getAcademyCollection(), (aca) -> {
+            return aca.getId().equals(academyId);
+        });
+
+        // 删除实体本身
         academyRepo.delete(academyId);
 
         return true;

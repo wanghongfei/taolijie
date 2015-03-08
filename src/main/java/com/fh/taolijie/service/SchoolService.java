@@ -60,7 +60,7 @@ public interface SchoolService {
      * 查询指定学校所有的学院信息
      * @return
      */
-    List<AcademyDto> getAcademyList(Integer schoolId, int firstResult, int capacity);
+    List<AcademyDto> getAcademyList(Integer schoolId);
     /**
      * 根据id查找学院
      * @param academyId {@link com.fh.taolijie.domain.AcademyEntity}实体的主键值
