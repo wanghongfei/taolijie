@@ -40,7 +40,7 @@ public class SpringDataConfigBean {
 
         Properties prop = new Properties();
         prop.put("hibernate.hbm2ddl.auto", "update");
-        prop.put("hibernate.show_sql", "false");
+        prop.put("hibernate.show_sql", "true");
         prop.put("hibernate.format_sql", "true");
         prop.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 
