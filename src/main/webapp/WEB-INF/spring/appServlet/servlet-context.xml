@@ -69,7 +69,7 @@
     </beans:bean>
 
     <!-- Spring data -->
-    <jpa:repositories base-package="com.fh.taolijie.service.impl.repository"
+    <jpa:repositories base-package="com.fh.taolijie.service.repository"
                       entity-manager-factory-ref="emf"
                       transaction-manager-ref="transactionManager" />
 
