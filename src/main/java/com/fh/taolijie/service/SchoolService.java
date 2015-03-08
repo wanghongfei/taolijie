@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.AcademyDto;
 import com.fh.taolijie.controller.dto.SchoolDto;
+import com.fh.taolijie.exception.checked.CascadeDeleteException;
 
 import java.util.List;
 
@@ -46,12 +47,11 @@ public interface SchoolService {
     boolean updateSchoolInfo(Integer schoolId, SchoolDto schoolDto);
 
     /**
-     * 删除一所学校.
-     * <p> 删除学校信息时，其对应的学院信息不会被删除.
+     * 删除一所学校. 只有当对应的学院为空时才允许删除
      * @param schoolId {@link com.fh.taolijie.domain.SchoolEntity}实体的主键值.
      * @return 删除成功返回true, 失败返回false
      */
-    boolean deleteSchool(Integer schoolId);
+    boolean deleteSchool(Integer schoolId) throws CascadeDeleteException;
 
 
 
