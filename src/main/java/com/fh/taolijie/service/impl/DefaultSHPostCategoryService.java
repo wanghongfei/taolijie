@@ -63,7 +63,7 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
         SecondHandPostCategoryEntity cate = cateRepo.findOne(cateId);
 
         // 检查分类是否为空
-        if (cate.getGetPostCollection() != null && false == cate.getGetPostCollection().isEmpty()) {
+        if (cate.getPostCollection() != null && false == cate.getPostCollection().isEmpty()) {
             throw new CascadeDeleteException("分类" + cate.getName() + "不为空");
         }
 
