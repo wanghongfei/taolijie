@@ -45,10 +45,9 @@ public interface SHPostService {
     /**
      * 删除一个帖子
      * @param postId {@link com.fh.taolijie.domain.SecondHandPostEntity}实体的主键值
-     * @param roleNameList 当前用户具有的所有角色，用来判断是否有权限删除
      * @return
      */
-    boolean deletePost(Integer postId, List<String> roleNameList);
+    boolean deletePost(Integer postId);
 
     /**
      * 修改帖子

@@ -109,7 +109,7 @@ public class DefaultSHPostService implements SHPostService {
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean deletePost(Integer postId, List<String> roleNameList) {
+    public boolean deletePost(Integer postId) {
         // 从分类中删除关联
         SecondHandPostEntity post = postRepo.findOne(postId);
         CollectionUtils.removeFromCollection(post.getCategory().getPostCollection(), (po) -> {
