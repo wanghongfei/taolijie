@@ -64,7 +64,7 @@ public class DefaultEduExpService implements EduExpService {
 
         // add experience to member
         List<EducationExperienceEntity> list = CollectionUtils.addToCollection(mem.getEducationExperienceCollection(), ee);
-        if (null != null) {
+        if (null != list) {
             mem.setEducationExperienceCollection(list);
         }
 

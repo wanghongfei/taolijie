@@ -103,7 +103,7 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
     public void testDelete() {
         noService.deleteNotification(no1.getId());
 
-        Assert.assertNull(noRepo.getOne(no1.getId()));
+        Assert.assertNull(noRepo.findOne(no1.getId()));
     }
 
     @Test
