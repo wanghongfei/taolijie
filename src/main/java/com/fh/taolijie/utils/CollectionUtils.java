@@ -1,7 +1,10 @@
 package com.fh.taolijie.utils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -10,6 +13,25 @@ import java.util.function.Predicate;
 public class CollectionUtils {
     private CollectionUtils() {
 
+    }
+
+    /**
+     * 将一种集合类型经过处理后转换成另一种集合类型
+     * @param apply
+     * @param <T> 要返回的最终结果的类型
+     * @param <E> 要处理的类型
+     * @return
+     */
+    public static <T, E> List<T> transformCollection(Iterable<E> collection, Class<T> resultType, Function<E, T> apply) {
+        Iterator<E> it =  collection.iterator();
+
+        List<T> resultList = new ArrayList<>();
+        while (it.hasNext()) {
+            T resultObj = apply.apply(it.next());
+            resultList.add(resultObj);
+        }
+
+        return resultList;
     }
 
     /**
