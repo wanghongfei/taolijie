@@ -13,7 +13,7 @@ public class SecondHandPostCategoryEntity {
     private String name;
     private String memo;
     private Integer level;
-    private Collection<SecondHandPostEntity> secondHandPostsById;
+    private Collection<SecondHandPostEntity> getPostCollection;
 
     public SecondHandPostCategoryEntity() {}
     public SecondHandPostCategoryEntity(Integer level, String name, String memo) {
@@ -88,11 +88,11 @@ public class SecondHandPostCategoryEntity {
     }
 
     @OneToMany(mappedBy = "category")
-    public Collection<SecondHandPostEntity> getSecondHandPostsById() {
-        return secondHandPostsById;
+    public Collection<SecondHandPostEntity> getGetPostCollection() {
+        return getPostCollection;
     }
 
-    public void setSecondHandPostsById(Collection<SecondHandPostEntity> secondHandPostsById) {
-        this.secondHandPostsById = secondHandPostsById;
+    public void setGetPostCollection(Collection<SecondHandPostEntity> secondHandPostsById) {
+        this.getPostCollection = secondHandPostsById;
     }
 }

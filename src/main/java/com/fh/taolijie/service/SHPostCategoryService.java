@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostCategoryDto;
+import com.fh.taolijie.exception.checked.CascadeDeleteException;
 
 import java.util.List;
 
@@ -37,5 +38,5 @@ public interface SHPostCategoryService {
      * @param cateId
      * @return
      */
-    boolean deleteCategory(Integer cateId);
+    boolean deleteCategory(Integer cateId) throws CascadeDeleteException;
 }
