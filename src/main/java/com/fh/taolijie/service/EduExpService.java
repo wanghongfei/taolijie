@@ -12,7 +12,7 @@ public interface EduExpService {
      * 得到所有教育经历信息
      * @return
      */
-    List<EducationExperienceDto> getEduExpList(int firstResult, int capacity);
+    List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity);
 
     /**
      * 新建教育信息

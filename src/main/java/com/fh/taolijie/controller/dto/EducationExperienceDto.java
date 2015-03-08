@@ -10,7 +10,7 @@ public class EducationExperienceDto {
     private Integer lengthOfSchooling;
     private String major;
 
-    private Integer schoolId;
+    private Integer academyId;
     private Integer memberId;
 
     public Date getAdmissionTime() {
@@ -37,12 +37,12 @@ public class EducationExperienceDto {
         this.major = major;
     }
 
-    public Integer getSchoolId() {
-        return schoolId;
+    public Integer getAcademyId() {
+        return academyId;
     }
 
-    public void setSchoolId(Integer schoolId) {
-        this.schoolId = schoolId;
+    public void setAcademyId(Integer academyId) {
+        this.academyId = academyId;
     }
 
     public Integer getMemberId() {
