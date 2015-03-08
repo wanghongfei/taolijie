@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.controller.dto.NotificationDto;
+import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.NotificationEntity;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.repository.MemberRepo;
@@ -81,7 +82,14 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteNotification(Integer notificationId) {
-        notRepo.delete(notificationId);
+        NotificationEntity no = notRepo.getOne(notificationId);
+
+        // remove connection to member
+        CollectionUtils.removeFromCollection(no.getMember().getNotificationCollection(), (entity) -> {
+            return entity.getId().equals(notificationId);
+        });
+
+        notRepo.delete(no);
 
         return true;
     }
@@ -93,6 +101,24 @@ public class DefaultNotificationService implements NotificationService {
         no.setIsRead(1);
 
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addNotification(NotificationDto dto) {
+        NotificationEntity no = new NotificationEntity(dto.getTitle(), dto.getContent(), dto.getIsRead(),
+                dto.getTime(), null);
+
+        MemberEntity mem = memRepo.getOne(dto.getMemberId());
+        no.setMember(mem);
+
+        // add to member collection
+        List<NotificationEntity> list = CollectionUtils.addToCollection(mem.getNotificationCollection(), no);
+        if (null != list) {
+            mem.setNotificationCollection(list);
+        }
+
+        notRepo.save(no);
     }
 
     private NotificationDto makeDto(NotificationEntity no) {

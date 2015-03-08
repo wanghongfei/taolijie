@@ -41,6 +41,12 @@ public interface NotificationService {
     NotificationDto findNotification(Integer notificationId);
 
     /**
+     * 创建一条通知
+     * @param dto
+     */
+    void addNotification(NotificationDto dto);
+
+    /**
      * 删除一条通知
      * @param notificationId
      * @return
