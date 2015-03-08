@@ -1,10 +1,10 @@
 package com.fh.taolijie.service.repository;
 
 import com.fh.taolijie.domain.RoleEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by wanghongfei on 15-3-8.
  */
-public interface RoleRepo extends CrudRepository<RoleEntity, Integer> {
+public interface RoleRepo extends JpaRepository<RoleEntity, Integer> {
 }

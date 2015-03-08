@@ -1,10 +1,10 @@
 package com.fh.taolijie.service.repository;
 
 import com.fh.taolijie.domain.NotificationEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by wanghongfei on 15-3-8.
  */
-public interface NotificationRepo extends CrudRepository<NotificationEntity, Integer> {
+public interface NotificationRepo extends JpaRepository<NotificationEntity, Integer> {
 }
