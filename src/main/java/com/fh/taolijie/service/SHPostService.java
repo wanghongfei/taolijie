@@ -2,7 +2,6 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,12 +21,12 @@ public interface SHPostService {
     /**
      * 得到某个用户发的二手帖子信息
      * @param memId 用户id号
-     * @param time 从<code>time</code>到现在为止的一段时间. 传递null意为不限时间
+     * @param filtered 是否过滤掉已经过期信息
      * @param firstResult
      * @param capacity
      * @return
      */
-    List<SecondHandPostDto> getPostList(Integer memId, Date time, int firstResult, int capacity);
+    List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity);
 
     /**
      * 发布新二手帖子
@@ -58,4 +57,11 @@ public interface SHPostService {
      * @return
      */
     boolean updatePost(Integer postId, SecondHandPostDto postDto);
+
+    /**
+     * 修改帖子分类
+     * @param postId
+     * @param cateId
+     */
+    void changeCategory(Integer postId, Integer cateId);
 }
