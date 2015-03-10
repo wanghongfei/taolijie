@@ -19,8 +19,9 @@ public interface AccountService {
      * 注册一个普通用户
      * @param dto
      * @throws DuplicatedUsernameException
+     * @return 如果注册成功，返回用户主键
      */
-    public void register(GeneralMemberDto dto) throws DuplicatedUsernameException;
+    public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException;
 
     /**
      * @deprecated

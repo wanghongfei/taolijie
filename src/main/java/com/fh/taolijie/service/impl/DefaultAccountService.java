@@ -70,7 +70,8 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public void register(GeneralMemberDto dto) throws DuplicatedUsernameException {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException {
         if (true == isUserExists(dto.getUsername())) {
             throw new DuplicatedUsernameException("用户名[" + dto.getUsername() + "]已存在");
         }
@@ -83,8 +84,8 @@ public class DefaultAccountService implements AccountService {
         em.persist(mem);
 
         // 得到角色
-        /*Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
-        List<Integer> idList = stuDto.getRoleIdList();
+        Collection<MemberRoleEntity> memRoleCollection = new ArrayList<>();
+        List<Integer> idList = dto.getRoleIdList();
         for (Integer id : idList) {
             RoleEntity role = em.getReference(RoleEntity.class, id);
             // 创建关联实体
@@ -96,7 +97,10 @@ public class DefaultAccountService implements AccountService {
             // 将关联添加到member实体中
             memRoleCollection.add(mr);
         }
-        mem.setMemberRoleCollection(memRoleCollection); */
+        mem.setMemberRoleCollection(memRoleCollection);
+
+        em.flush();
+        return mem.getId();
     }
 
     @Override
