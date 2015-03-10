@@ -170,20 +170,24 @@ public class DefaultAccountService implements AccountService {
         } else if (isEmployerType(memberType)) {
             // 是EmployerDto对象
             return (T) makeEmployerDto(mem, isWired);
+        } else if (isGeneralMemberType(memberType)) {
+            return (T) makeGeneralDto(mem, isWired);
         }
 
         return null;
     }
 
     private boolean isStudentType(Class clazz) {
-        return clazz.getName().equals(StudentDto.class.getName());
+        return clazz == StudentDto.class;
     }
     private boolean isEmployerType(Class clazz) {
-        return clazz.getName().equals(EmployerDto.class.getName());
+        return clazz == EmployerDto.class;
+    }
+    private boolean isGeneralMemberType(Class clazz) {
+        return clazz == GeneralMemberDto.class;
     }
 
-    private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
-        EmployerDto dto = new EmployerDto();
+    private void setGeneralField(MemberEntity mem, GeneralMemberDto dto) {
         dto.setId(mem.getId());
         dto.setUsername(mem.getUsername());
         dto.setEmail(mem.getEmail());
@@ -194,6 +198,32 @@ public class DefaultAccountService implements AccountService {
         dto.setPhone(mem.getPhone());
         dto.setAge(mem.getAge());
         dto.setQq(mem.getQq());
+    }
+
+    private GeneralMemberDto makeGeneralDto(MemberEntity mem, boolean isWired) {
+        GeneralMemberDto dto = new GeneralMemberDto();
+        setGeneralField(mem, dto);
+
+        if (isWired) {
+            // 设置role信息
+            // 得到MemberEntity关联的Role对象的id
+            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+            if (null != mrCollection) {
+                List<Integer> roleIdList = new ArrayList<>();
+                for (MemberRoleEntity mr : mrCollection) {
+                    roleIdList.add(mr.getRole().getRid());
+                }
+
+                dto.setRoleIdList(roleIdList);
+            }
+        }
+
+        return dto;
+    }
+
+    private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
+        EmployerDto dto = new EmployerDto();
+        setGeneralField(mem, dto);
 
         dto.setCompanyName(mem.getCompanyName());
 
@@ -217,16 +247,7 @@ public class DefaultAccountService implements AccountService {
     private StudentDto makeStudentDto(MemberEntity mem, boolean isWired) {
         StudentDto dto = new StudentDto();
 
-        dto.setId(mem.getId());
-        dto.setUsername(mem.getUsername());
-        dto.setEmail(mem.getEmail());
-        dto.setName(mem.getName());
-        dto.setGender(mem.getGender());
-        dto.setVerified(mem.getVerified());
-        dto.setProfilePhotoPath(mem.getProfilePhotoPath());
-        dto.setPhone(mem.getPhone());
-        dto.setAge(mem.getAge());
-        dto.setQq(mem.getQq());
+        setGeneralField(mem, dto);
 
         dto.setStudentId(mem.getStudentId());
         dto.setBlockList(mem.getBlockList());
