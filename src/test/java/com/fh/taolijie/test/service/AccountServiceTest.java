@@ -179,7 +179,7 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
     @Transactional(readOnly = true)
     public void testFindMember() {
         Print.print("-------- testFindMember");
-        StudentDto dto = accService.findMember("Bruce", StudentDto.class, true);
+        StudentDto dto = accService.findMember("Bruce", new StudentDto[0], true);
         Assert.assertNotNull(dto);
 
         // 测试是不是Bruce用户
@@ -290,7 +290,7 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         accService.assignRole(role.getRid(), this.member.getUsername());
 
         // 测试是否添加成功
-        StudentDto stuDto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+        StudentDto stuDto = accService.findMember(this.member.getUsername(), new StudentDto[0], true);
         List<Integer> idList = stuDto.getRoleIdList();
         boolean contains = contains(idList, role.getRid());
         Assert.assertTrue(contains);
@@ -302,7 +302,7 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         accService.deassignRole(this.role.getRid(), this.member.getUsername());
 
         // 测试是否删除了关联
-        StudentDto stuDto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
+        StudentDto stuDto = accService.findMember(this.member.getUsername(), new StudentDto[0], true);
         List<Integer> idList = stuDto.getRoleIdList();
         boolean contains = contains(idList, role.getRid());
         Assert.assertFalse(contains);
