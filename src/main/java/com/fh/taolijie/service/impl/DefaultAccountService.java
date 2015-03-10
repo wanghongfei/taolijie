@@ -387,7 +387,7 @@ public class DefaultAccountService implements AccountService {
      * @param dto
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    private void fillRoleField(MemberEntity mem, GeneralMemberDto dto) {
+    private void loadRoleField(MemberEntity mem, GeneralMemberDto dto) {
         // 设置role信息
         // 得到MemberEntity关联的Role对象的id
         Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
@@ -419,7 +419,7 @@ public class DefaultAccountService implements AccountService {
         setGeneralField(mem, dto);
 
         if (isWired) {
-            fillRoleField(mem, dto);
+            loadRoleField(mem, dto);
         }
 
         return dto;
@@ -432,7 +432,7 @@ public class DefaultAccountService implements AccountService {
         dto.setCompanyName(mem.getCompanyName());
 
         if (isWired) {
-            fillRoleField(mem, dto);
+            loadRoleField(mem, dto);
         }
 
         return dto;
@@ -466,7 +466,7 @@ public class DefaultAccountService implements AccountService {
             //dto.setSchoolIdList(schoolIdList);
             dto.setAcademyIdList(academyIdList);
 
-            fillRoleField(mem, dto);
+            loadRoleField(mem, dto);
         }
 
         return dto;
