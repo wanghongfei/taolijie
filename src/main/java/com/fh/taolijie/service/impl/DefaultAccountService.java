@@ -177,163 +177,7 @@ public class DefaultAccountService implements AccountService {
         return null;
     }
 
-    private boolean isStudentType(Class clazz) {
-        return clazz == StudentDto.class;
-    }
-    private boolean isEmployerType(Class clazz) {
-        return clazz == EmployerDto.class;
-    }
-    private boolean isGeneralMemberType(Class clazz) {
-        return clazz == GeneralMemberDto.class;
-    }
 
-    private void setGeneralField(MemberEntity mem, GeneralMemberDto dto) {
-        dto.setId(mem.getId());
-        dto.setUsername(mem.getUsername());
-        dto.setEmail(mem.getEmail());
-        dto.setName(mem.getName());
-        dto.setGender(mem.getGender());
-        dto.setVerified(mem.getVerified());
-        dto.setProfilePhotoPath(mem.getProfilePhotoPath());
-        dto.setPhone(mem.getPhone());
-        dto.setAge(mem.getAge());
-        dto.setQq(mem.getQq());
-    }
-
-    private GeneralMemberDto makeGeneralDto(MemberEntity mem, boolean isWired) {
-        GeneralMemberDto dto = new GeneralMemberDto();
-        setGeneralField(mem, dto);
-
-        if (isWired) {
-            // 设置role信息
-            // 得到MemberEntity关联的Role对象的id
-            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
-            if (null != mrCollection) {
-                List<Integer> roleIdList = new ArrayList<>();
-                for (MemberRoleEntity mr : mrCollection) {
-                    roleIdList.add(mr.getRole().getRid());
-                }
-
-                dto.setRoleIdList(roleIdList);
-            }
-        }
-
-        return dto;
-    }
-
-    private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
-        EmployerDto dto = new EmployerDto();
-        setGeneralField(mem, dto);
-
-        dto.setCompanyName(mem.getCompanyName());
-
-        if (isWired) {
-            // 设置role信息
-            // 得到MemberEntity关联的Role对象的id
-            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
-            if (null != mrCollection) {
-                List<Integer> roleIdList = new ArrayList<>();
-                for (MemberRoleEntity mr : mrCollection) {
-                    roleIdList.add(mr.getRole().getRid());
-                }
-
-                dto.setRoleIdList(roleIdList);
-            }
-        }
-
-        return dto;
-    }
-
-    private StudentDto makeStudentDto(MemberEntity mem, boolean isWired) {
-        StudentDto dto = new StudentDto();
-
-        setGeneralField(mem, dto);
-
-        dto.setStudentId(mem.getStudentId());
-        dto.setBlockList(mem.getBlockList());
-
-        // 设置教育经历
-        if (isWired) {
-            Collection<EducationExperienceEntity> eduCollection = mem.getEducationExperienceCollection();
-            if (null == eduCollection) {
-                eduCollection = new ArrayList<>();
-            }
-
-            //List<Integer> schoolIdList = new ArrayList<>();
-            List<Integer> academyIdList = new ArrayList<>();
-            for (EducationExperienceEntity ee : eduCollection) {
-                //Integer schoolId = ee.getSchool().getId();
-                Integer academyId = ee.getAcademy().getId();
-
-                //schoolIdList.add(schoolId);
-                academyIdList.add(academyId);
-            }
-            //dto.setSchoolIdList(schoolIdList);
-            dto.setAcademyIdList(academyIdList);
-
-            // 设置role信息
-            // 得到MemberEntity关联的Role对象的id
-            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
-            if (null != mrCollection) {
-                List<Integer> roleIdList = new ArrayList<>();
-                for (MemberRoleEntity mr : mrCollection) {
-                    roleIdList.add(mr.getRole().getRid());
-                }
-
-                dto.setRoleIdList(roleIdList);
-            }
-        }
-
-        return dto;
-    }
-
-    /**
-     * 更新实体field，username除外
-     * @param mem
-     * @param dto
-     */
-    private void updateMemberEntity(MemberEntity mem, StudentDto dto) {
-        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
-        // 这是web-security的一个小bug, 日后修复
-        if (dto.getPassword() != null) {
-            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
-        }
-        mem.setEmail(dto.getEmail());
-        mem.setName(dto.getName());
-        mem.setStudentId(dto.getStudentId());
-        mem.setGender(dto.getGender());
-        mem.setVerified(dto.getVerified());
-        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
-        mem.setPhone(dto.getPhone());
-        mem.setQq(dto.getQq());
-        mem.setAge(dto.getAge());
-        mem.setBlockList(dto.getBlockList());
-    }
-    /**
-     * 更新实体field，username除外
-     * @param mem
-     * @param dto
-     */
-    private void updateMemberEntity(MemberEntity mem, EmployerDto dto) {
-        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
-        // 这是web-security的一个小bug, 日后修复
-        if (dto.getPassword() != null) {
-            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
-        }
-
-        mem.setEmail(dto.getEmail());
-        mem.setName(dto.getName());
-        //mem.setStudentId(dto.getStudentId());
-        mem.setGender(dto.getGender());
-        mem.setVerified(dto.getVerified());
-        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
-        mem.setPhone(dto.getPhone());
-        mem.setQq(dto.getQq());
-        mem.setAge(dto.getAge());
-        mem.setCompanyName(dto.getCompanyName());
-        //mem.setBlockList(dto.getBlockList());
-
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -427,12 +271,6 @@ public class DefaultAccountService implements AccountService {
         return true;
     }
 
-    @Transactional(readOnly = true)
-    private MemberEntity getMemberByUsername(String username) {
-        return em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
-                .setParameter("username", username)
-                .getSingleResult();
-    }
 
     @Override
     public boolean deleteMember(Integer memberId) throws UserNotExistsException {
@@ -531,6 +369,162 @@ public class DefaultAccountService implements AccountService {
                 .getSingleResult();
 
         return amount.intValue() == 0 ? false : true;
+    }
+
+    private boolean isStudentType(Class clazz) {
+        return clazz == StudentDto.class;
+    }
+    private boolean isEmployerType(Class clazz) {
+        return clazz == EmployerDto.class;
+    }
+    private boolean isGeneralMemberType(Class clazz) {
+        return clazz == GeneralMemberDto.class;
+    }
+
+    /**
+     * 触发role信息的加载
+     * @param mem
+     * @param dto
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    private void fillRoleField(MemberEntity mem, GeneralMemberDto dto) {
+        // 设置role信息
+        // 得到MemberEntity关联的Role对象的id
+        Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+        if (null != mrCollection) {
+            List<Integer> roleIdList = new ArrayList<>();
+            for (MemberRoleEntity mr : mrCollection) {
+                roleIdList.add(mr.getRole().getRid());
+            }
+
+            dto.setRoleIdList(roleIdList);
+        }
+    }
+
+    private void setGeneralField(MemberEntity mem, GeneralMemberDto dto) {
+        dto.setId(mem.getId());
+        dto.setUsername(mem.getUsername());
+        dto.setEmail(mem.getEmail());
+        dto.setName(mem.getName());
+        dto.setGender(mem.getGender());
+        dto.setVerified(mem.getVerified());
+        dto.setProfilePhotoPath(mem.getProfilePhotoPath());
+        dto.setPhone(mem.getPhone());
+        dto.setAge(mem.getAge());
+        dto.setQq(mem.getQq());
+    }
+
+    private GeneralMemberDto makeGeneralDto(MemberEntity mem, boolean isWired) {
+        GeneralMemberDto dto = new GeneralMemberDto();
+        setGeneralField(mem, dto);
+
+        if (isWired) {
+            fillRoleField(mem, dto);
+        }
+
+        return dto;
+    }
+
+    private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
+        EmployerDto dto = new EmployerDto();
+        setGeneralField(mem, dto);
+
+        dto.setCompanyName(mem.getCompanyName());
+
+        if (isWired) {
+            fillRoleField(mem, dto);
+        }
+
+        return dto;
+    }
+
+    private StudentDto makeStudentDto(MemberEntity mem, boolean isWired) {
+        StudentDto dto = new StudentDto();
+
+        setGeneralField(mem, dto);
+
+        dto.setStudentId(mem.getStudentId());
+        dto.setBlockList(mem.getBlockList());
+
+        // 设置教育经历
+        // 设置role信息
+        if (isWired) {
+            Collection<EducationExperienceEntity> eduCollection = mem.getEducationExperienceCollection();
+            if (null == eduCollection) {
+                eduCollection = new ArrayList<>();
+            }
+
+            //List<Integer> schoolIdList = new ArrayList<>();
+            List<Integer> academyIdList = new ArrayList<>();
+            for (EducationExperienceEntity ee : eduCollection) {
+                //Integer schoolId = ee.getSchool().getId();
+                Integer academyId = ee.getAcademy().getId();
+
+                //schoolIdList.add(schoolId);
+                academyIdList.add(academyId);
+            }
+            //dto.setSchoolIdList(schoolIdList);
+            dto.setAcademyIdList(academyIdList);
+
+            fillRoleField(mem, dto);
+        }
+
+        return dto;
+    }
+
+    /**
+     * 更新实体field，username除外
+     * @param mem
+     * @param dto
+     */
+    private void updateMemberEntity(MemberEntity mem, StudentDto dto) {
+        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
+        // 这是web-security的一个小bug, 日后修复
+        if (dto.getPassword() != null) {
+            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        }
+        mem.setEmail(dto.getEmail());
+        mem.setName(dto.getName());
+        mem.setStudentId(dto.getStudentId());
+        mem.setGender(dto.getGender());
+        mem.setVerified(dto.getVerified());
+        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
+        mem.setPhone(dto.getPhone());
+        mem.setQq(dto.getQq());
+        mem.setAge(dto.getAge());
+        mem.setBlockList(dto.getBlockList());
+    }
+    /**
+     * 更新实体field，username除外
+     * @param mem
+     * @param dto
+     */
+    private void updateMemberEntity(MemberEntity mem, EmployerDto dto) {
+        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
+        // 这是web-security的一个小bug, 日后修复
+        if (dto.getPassword() != null) {
+            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        }
+
+        mem.setEmail(dto.getEmail());
+        mem.setName(dto.getName());
+        //mem.setStudentId(dto.getStudentId());
+        mem.setGender(dto.getGender());
+        mem.setVerified(dto.getVerified());
+        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
+        mem.setPhone(dto.getPhone());
+        mem.setQq(dto.getQq());
+        mem.setAge(dto.getAge());
+        mem.setCompanyName(dto.getCompanyName());
+        //mem.setBlockList(dto.getBlockList());
+
+    }
+
+    @Transactional(readOnly = true)
+    private MemberEntity getMemberByUsername(String username) {
+        return em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 
     /**
