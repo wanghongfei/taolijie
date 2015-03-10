@@ -88,21 +88,9 @@ public interface AccountService {
      */
     public <T extends GeneralMemberDto> boolean updateMember(T memDto);
 
-    /**
-     * 添加一个教育经历
-     * @param academyId 学院实体的id
-     * @param username
-     * @return
-     */
-    public boolean addEducation(Integer academyId, String username);
+    //public boolean addEducation(Integer academyId, String username);
 
-    /**
-     * 删除一个教育经历
-     * @param academyId 学院实体的id
-     * @param username
-     * @return
-     */
-    public boolean deleteEducation(Integer academyId, String username);
+    //public boolean deleteEducation(Integer academyId, String username);
 
     /**
      * 删除一个用户

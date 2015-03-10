@@ -240,35 +240,6 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
 
     @Test
     @Transactional(readOnly = false)
-    public void testAddEducation() {
-        accService.addEducation(this.academy.getId(), this.member.getUsername());
-
-
-        // 测试教育经历是否添加成功
-        StudentDto dto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
-        List<Integer> idList = dto.getAcademyIdList();
-        boolean contains = contains(idList, this.academy.getId());
-        Assert.assertTrue(contains);
-    }
-
-    @Test
-    @Transactional(readOnly = false)
-    public void deleteEducation() {
-        // 先添加一个教育经历
-        accService.addEducation(this.academy.getId(), this.member.getUsername());
-        // 删除教育经历
-        accService.deleteEducation(this.academy.getId(), this.member.getUsername());
-
-        // 测试教育经历是否删除成功
-        StudentDto dto = accService.findMember(this.member.getUsername(), StudentDto.class, true);
-
-        List<Integer> idList = dto.getAcademyIdList();
-        boolean contains = contains(idList, this.academy.getId());
-        Assert.assertFalse(contains);
-    }
-
-    @Test
-    @Transactional(readOnly = false)
     public void testAddRole() {
         RoleDto dto = new RoleDto();
         dto.setRolename("USER");

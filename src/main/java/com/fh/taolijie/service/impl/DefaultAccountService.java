@@ -5,7 +5,10 @@ import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.domain.EducationExperienceEntity;
+import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.MemberRoleEntity;
+import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -224,53 +227,6 @@ public class DefaultAccountService implements AccountService {
 
         return true;
     }
-
-    @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean addEducation(Integer academyId, String username) {
-        MemberEntity mem = getMemberByUsername(username);
-        AcademyEntity academy = em.getReference(AcademyEntity.class, academyId);
-
-        // 创建关联实体
-        EducationExperienceEntity ee = new EducationExperienceEntity();
-        ee.setMember(mem);
-        ee.setAcademy(academy);
-        em.persist(ee);
-
-        // 创建关联
-        Collection<EducationExperienceEntity> eeCollection = mem.getEducationExperienceCollection();
-        if (null == eeCollection) {
-            eeCollection = new ArrayList<>();
-            mem.setEducationExperienceCollection(eeCollection);
-        }
-        eeCollection.add(ee);
-
-        return true;
-    }
-
-    @Override
-    public boolean deleteEducation(Integer academyId, String username) {
-        MemberEntity mem = getMemberByUsername(username);
-        Collection<EducationExperienceEntity> eeCollection = mem.getEducationExperienceCollection();
-
-        // 删除关联关系
-        EducationExperienceEntity eeToDelete = null;
-        Iterator<EducationExperienceEntity> it = eeCollection.iterator();
-        while (it.hasNext()) {
-            EducationExperienceEntity ee = it.next();
-            if (ee.getAcademy().getId().equals(academyId)) {
-                eeToDelete = ee;
-                it.remove();
-                break;
-            }
-        }
-
-        // 删除关系实体
-        em.remove(eeToDelete);
-
-        return true;
-    }
-
 
     @Override
     public boolean deleteMember(Integer memberId) throws UserNotExistsException {
