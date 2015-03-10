@@ -180,6 +180,7 @@ public class DefaultSHPostService implements SHPostService {
 
     private SecondHandPostDto makePostDto(SecondHandPostEntity post) {
         SecondHandPostDto dto = new SecondHandPostDto();
+        dto.setId(post.getId());
         dto.setTitle(post.getTitle());
         dto.setExpiredTime(post.getExpiredTime());
         dto.setPostTime(post.getPostTime());

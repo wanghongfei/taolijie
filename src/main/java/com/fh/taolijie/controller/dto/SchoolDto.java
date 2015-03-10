@@ -6,12 +6,21 @@ import java.util.List;
  * Created by wanghongfei on 15-3-4.
  */
 public class SchoolDto {
+    private Integer id;
     private String shortName;
     private String fullName;
     private String province;
     private String type;
 
     private List<Integer> academyIdList;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getShortName() {
         return shortName;

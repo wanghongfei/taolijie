@@ -103,6 +103,7 @@ public class DefaultReviewService implements ReviewService {
 
     private ReviewDto makeReviewDto(ReviewEntity review) {
         ReviewDto dto = new ReviewDto();
+        dto.setId(review.getId());
         dto.setContent(review.getContent());
         dto.setTime(review.getTime());
 

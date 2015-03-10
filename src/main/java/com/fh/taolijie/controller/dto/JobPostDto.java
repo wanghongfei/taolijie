@@ -6,6 +6,7 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 public class JobPostDto {
+    private Integer id;
     private String title;
     private Date expiredTime;
     private Date postTime;
@@ -25,6 +26,14 @@ public class JobPostDto {
 
     private Integer categoryId;
     private Integer memberId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

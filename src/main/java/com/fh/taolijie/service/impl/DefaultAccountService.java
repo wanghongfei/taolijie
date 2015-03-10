@@ -184,6 +184,7 @@ public class DefaultAccountService implements AccountService {
 
     private EmployerDto makeEmployerDto(MemberEntity mem, boolean isWired) {
         EmployerDto dto = new EmployerDto();
+        dto.setId(mem.getId());
         dto.setUsername(mem.getUsername());
         dto.setEmail(mem.getEmail());
         dto.setName(mem.getName());
@@ -215,6 +216,8 @@ public class DefaultAccountService implements AccountService {
 
     private StudentDto makeStudentDto(MemberEntity mem, boolean isWired) {
         StudentDto dto = new StudentDto();
+
+        dto.setId(mem.getId());
         dto.setUsername(mem.getUsername());
         dto.setEmail(mem.getEmail());
         dto.setName(mem.getName());

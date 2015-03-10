@@ -6,12 +6,21 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 public class EducationExperienceDto {
+    private Integer id;
     private Date admissionTime;
     private Integer lengthOfSchooling;
     private String major;
 
     private Integer academyId;
     private Integer memberId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Date getAdmissionTime() {
         return admissionTime;
