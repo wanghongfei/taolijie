@@ -57,14 +57,14 @@ public interface AccountService {
     /**
      * 查询用户所有基本信息.
      * @param username 要查询的用户的用户名
-     * @param memberType 用户实体dto对象的{@code Class}对象. 如, {@link StudentDto}.class
+     * @param type new StudentDto[0]
      * @param isWired 指定是否查询关联表内的信息
      * @param <T> 用户实体有3类，该方法会根据泛型参数的实际类型返回对应的对象。一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *             或{@link EmployerDto}中的一种。
      * @return 返回类型由泛型参数{@code T}决定. 一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *          或{@link EmployerDto}中的一种。
      */
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired);
+    public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired);
 
     /**
      * 得到所有用户信息. 不包含关联表内的信息

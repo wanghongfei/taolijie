@@ -162,18 +162,18 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired) {
+    public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired) {
         MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
                 .setParameter("username", username)
                 .getSingleResult();
 
-        if (isStudentType(memberType)) {
+        if (type instanceof StudentDto[]) {
             // 是StudentDto对象
             return (T) makeStudentDto(mem, isWired);
-        } else if (isEmployerType(memberType)) {
+        } else if (type instanceof EmployerDto[]) {
             // 是EmployerDto对象
             return (T) makeEmployerDto(mem, isWired);
-        } else if (isGeneralMemberType(memberType)) {
+        } else if (type instanceof GeneralMemberDto[]) {
             return (T) makeGeneralDto(mem, isWired);
         }
 
@@ -327,12 +327,21 @@ public class DefaultAccountService implements AccountService {
         return amount.intValue() == 0 ? false : true;
     }
 
+    /**
+     * @deprecated
+     */
     private boolean isStudentType(Class clazz) {
         return clazz == StudentDto.class;
     }
+    /**
+     * @deprecated
+     */
     private boolean isEmployerType(Class clazz) {
         return clazz == EmployerDto.class;
     }
+    /**
+     * @deprecated
+     */
     private boolean isGeneralMemberType(Class clazz) {
         return clazz == GeneralMemberDto.class;
     }
