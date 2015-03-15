@@ -4,14 +4,18 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.utils.ResponseUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -58,7 +62,7 @@ public class TestController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/test/admin")
+   @RequestMapping(value = "/test/admin")
    public String admin(HttpSession session,Model model) {
         System.out.println(session);
         System.out.println(model);
@@ -71,5 +75,15 @@ public class TestController {
             System.out.println("session为空?");
         }
        return "test/admin";
+   }
+
+    @RequestMapping(value = "/hello/{id}")
+   public String hello(@PathVariable String id,
+                             HttpServletRequest req,
+                             Model model){
+       System.out.println("");
+        model.addAttribute(id);
+
+        return  "test/hello";
    }
 }

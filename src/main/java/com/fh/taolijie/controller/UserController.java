@@ -8,6 +8,9 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.SHPostService;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -26,17 +29,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
  * Created by wynfrith on 15-3-5.
  */
 @Controller
-@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    JobPostService jobPostService;
+
+    @Autowired
+    ResumeService resumeService;
+
+    @Autowired
+    SHPostService shPostService;
 
     /*日志*/
     private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -46,6 +60,7 @@ public class UserController {
      */
     @RequestMapping(value = "/user/register",method = RequestMethod.GET)
     public String register(HttpServletRequest req){
+        System.out.println(ResponseUtils.determinePage(req,"register"));
         return ResponseUtils.determinePage(req,"register");
     }
 
@@ -71,8 +86,9 @@ public class UserController {
     @RequestMapping(value = "/user/messages", method = RequestMethod.GET)
     public String messages(GeneralMemberDto mem,
                            NotificationDto notification,
-                           HttpSession session){
-        return "pc/user/messages";
+                           HttpSession session,
+                           HttpServletRequest req){
+        return ResponseUtils.determinePage(req,"messages");
     }
 
 
@@ -99,10 +115,30 @@ public class UserController {
         /*查询各种表*/
 
         /*绑定model*/
-
-
         return ResponseUtils.determinePage(req,"user/posts");
     }
+//
+//    @RequestMapping(value = "user/job",method = RequestMethod.GET)
+//    public @ResponseBody String getjob(JobPostDto job,
+//                                    HttpSession session){
+//
+//        List<JobPostDto> jobs =null;
+//
+//        String username = CredentialUtils.getCredential(session).getUsername();
+//
+//        GeneralMemberDto mem =accountService.findMember(username,StudentDto.class,false);
+//
+//        /*获取id!!*/
+//        jobs = jobPostService.getJobPostListByMember(5, 0, 0);
+//
+//        /*
+//        * json数组
+//        * {id:job.}
+//        *
+//        * */
+//
+//        return "{id:'1'}";
+//     }
 
 
     /**
@@ -176,7 +212,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/user/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public String register(@Valid GeneralMemberDto mem,
+    public @ResponseBody String register(@Valid StudentDto mem,
                            BindingResult result,
                            HttpSession session,
                            HttpServletResponse res){
@@ -191,16 +227,24 @@ public class UserController {
         if(result.hasErrors()){
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
+        System.out.println("email"+mem.getEmail());
+        if(logger.isDebugEnabled()){
+            logger.debug("email:{}",mem.getEmail());
+            logger.debug("username:{}",mem.getUsername());
+            logger.debug("password:{}",mem.getPassword());
+        }
+        mem.setRoleIdList(Arrays.asList(1));
 
         /*注册*/
         try {
-            accountService.register(mem);
+//            accountService.register(mem);
+            accountService.registerStudent(mem);
         } catch (DuplicatedUsernameException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 
         /*注册完成后自动登陆*/
-        return login(mem,result,session,res);
+        return new JsonWrapper(true,"success").getAjaxMessage();
 
 
     }
@@ -213,10 +257,11 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/user/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String login(@Valid GeneralMemberDto mem,
+    public @ResponseBody String login(@Valid LoginDto mem,
                                       BindingResult result,
                                       HttpSession session,
                                       HttpServletResponse res){
+        System.out.println(mem.getUsername());
         GeneralMemberDto memDto = null;
         RoleDto role = null;
         int cookieExpireTime = 1*24*60*60;//1天
@@ -230,14 +275,14 @@ public class UserController {
         try {
             accountService.login(mem.getUsername(),mem.getPassword());
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false,e.getMessage()).toString();
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false,e.getMessage()).toString();
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 
         /*获取用户信息和用户权限*/
         Credential credential = new TaolijieCredential(mem.getUsername());
-        memDto = accountService.findMember(mem.getUsername(),GeneralMemberDto.class,true);
+        memDto = accountService.findMember(mem.getUsername(),new StudentDto[0],true);
         for(Integer rid:memDto.getRoleIdList()){
             role = accountService.findRole(rid);
             credential.addRole(role.getRolename());
@@ -274,7 +319,7 @@ public class UserController {
 
         String username = CredentialUtils.getCredential(session).getUsername();
 
-        mem = accountService.findMember(username,GeneralMemberDto.class,false);
+        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         if(!accountService.updateMember(mem)){
             return new JsonWrapper(false,"修改资料失败!").getAjaxMessage();
@@ -294,7 +339,7 @@ public class UserController {
 
         String username = CredentialUtils.getCredential(session).getUsername();
 
-        mem = accountService.findMember(username,GeneralMemberDto.class,false);
+        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         if(!accountService.updateMember(mem)){
             return new JsonWrapper(false,"密码修改失败").getAjaxMessage();
@@ -315,7 +360,7 @@ public class UserController {
                                     HttpSession session){
         GeneralMemberDto mem = null;
         String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,GeneralMemberDto.class,false);
+        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         /*创建兼职信息*/
 
@@ -334,7 +379,7 @@ public class UserController {
                                     HttpSession session){
         GeneralMemberDto mem = null;
         String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,GeneralMemberDto.class,false);
+        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         /*创建二手信息*/
 
@@ -353,7 +398,7 @@ public class UserController {
                                     HttpSession session){
         GeneralMemberDto mem = null;
         String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,GeneralMemberDto.class,false);
+        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         /*创建二手信息*/
 
