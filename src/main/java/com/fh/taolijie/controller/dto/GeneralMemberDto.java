@@ -9,6 +9,7 @@ import java.util.List;
  * 此类为所有用户Dto类的父类，包含了所有用户都应该具有的field
  */
 public class GeneralMemberDto {
+    private Integer id;
 
     @NotEmpty(message = "用户名不能为空")
     @Length(min = 6,max =25,message = "长度不合法")
@@ -38,6 +39,14 @@ public class GeneralMemberDto {
      * <p> 这些{@code Role}实体都会被关联到{@code MemberEntity}中
      */
     private List<Integer> roleIdList;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public List<Integer> getRoleIdList() {
         return roleIdList;

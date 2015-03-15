@@ -123,6 +123,7 @@ public class DefaultNotificationService implements NotificationService {
 
     private NotificationDto makeDto(NotificationEntity no) {
         NotificationDto dto = new NotificationDto();
+        dto.setId(no.getId());
         dto.setTitle(no.getTitle());
         dto.setContent(no.getContent());
         dto.setIsRead(no.getIsRead());

@@ -87,7 +87,7 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
         return cate;
     }
     private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
-        return new JobPostCategoryDto(cate.getName(), cate.getMemo(), cate.getLevel());
+        return new JobPostCategoryDto(cate.getId(), cate.getName(), cate.getMemo(), cate.getLevel());
     }
     private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
         cate.setName(dto.getName());

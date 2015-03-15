@@ -80,6 +80,7 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
     }
     private SecondHandPostCategoryDto makeCateDto(SecondHandPostCategoryEntity cate) {
         SecondHandPostCategoryDto dto = new SecondHandPostCategoryDto();
+        dto.setId(cate.getId());
         dto.setName(cate.getName());
         dto.setLevel(cate.getLevel());
         dto.setMemo(cate.getMemo());

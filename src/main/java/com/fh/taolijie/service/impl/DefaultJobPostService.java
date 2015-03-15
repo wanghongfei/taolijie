@@ -161,6 +161,7 @@ public class DefaultJobPostService implements JobPostService {
 
     private JobPostDto makeJobPostDto(JobPostEntity post) {
         JobPostDto dto = new JobPostDto();
+        dto.setId(post.getId());
         dto.setTitle(post.getTitle());
         dto.setExpiredTime(dto.getExpiredTime());
         dto.setPostTime(dto.getPostTime());

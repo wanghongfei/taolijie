@@ -111,6 +111,7 @@ public class DefaultEduExpService implements EduExpService {
 
     private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
         EducationExperienceDto dto = new EducationExperienceDto();
+        dto.setId(edu.getId());
         dto.setAdmissionTime(edu.getAdmissionTime());
         dto.setLengthOfSchooling(edu.getLengthOfSchooling());
         dto.setMajor(edu.getMajor());

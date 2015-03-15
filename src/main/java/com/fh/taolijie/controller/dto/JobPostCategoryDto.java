@@ -4,15 +4,25 @@ package com.fh.taolijie.controller.dto;
  * Created by wanghongfei on 15-3-4.
  */
 public class JobPostCategoryDto {
+    private Integer id;
     private String name;
     private String memo;
     private Integer level;
 
     public JobPostCategoryDto (){}
-    public JobPostCategoryDto(String name, String memo, Integer level) {
+    public JobPostCategoryDto(Integer id, String name, String memo, Integer level) {
+        this.id = id;
         this.name = name;
         this.memo = memo;
         this.level = level;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

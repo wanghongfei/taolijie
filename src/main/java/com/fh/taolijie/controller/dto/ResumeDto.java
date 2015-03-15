@@ -4,6 +4,7 @@ package com.fh.taolijie.controller.dto;
  * Created by wanghongfei on 15-3-4.
  */
 public class ResumeDto {
+    private Integer id;
     private String name;
     private String gender;
     private Integer age;
@@ -15,6 +16,14 @@ public class ResumeDto {
     private String introduce;
 
     private Integer memberId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

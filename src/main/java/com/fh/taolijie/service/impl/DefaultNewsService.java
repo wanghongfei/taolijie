@@ -110,6 +110,8 @@ public class DefaultNewsService implements NewsService {
     private NewsDto makeNewsDto(NewsEntity news) {
         NewsDto dto = new NewsDto(news.getTitle(), news.getContent(), news.getPicturePath(),
                 news.getTime(), news.getHeadPicturePath(), null);
+
+        dto.setId(news.getId());
         dto.setMemberId(news.getMember().getId());
 
         return dto;

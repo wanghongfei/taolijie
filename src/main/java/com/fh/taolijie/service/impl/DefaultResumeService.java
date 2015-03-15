@@ -112,6 +112,7 @@ public class DefaultResumeService implements ResumeService {
     }
     private ResumeDto makeResumeDto(ResumeEntity resume) {
         ResumeDto dto = new ResumeDto();
+        dto.setId(resume.getId());
         dto.setName(resume.getName());
         dto.setGender(resume.getGender());
         dto.setAge(resume.getAge());

@@ -6,11 +6,20 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 public class ReviewDto {
+    private Integer id;
     private String content;
     private Date time;
 
     private Integer memberId;
     private Integer jobPostId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getContent() {
         return content;

@@ -6,8 +6,17 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 public class BannerPicDto {
+    private Integer id;
     private String picturePath;
     private Date time;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getPicturePath() {
         return picturePath;

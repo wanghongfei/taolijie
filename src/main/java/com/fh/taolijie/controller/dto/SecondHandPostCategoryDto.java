@@ -4,9 +4,18 @@ package com.fh.taolijie.controller.dto;
  * Created by wanghongfei on 15-3-4.
  */
 public class SecondHandPostCategoryDto {
+    private Integer id;
     private String name;
     private String memo;
     private Integer level;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -19,8 +19,9 @@ public interface AccountService {
      * 注册一个普通用户
      * @param dto
      * @throws DuplicatedUsernameException
+     * @return 如果注册成功，返回用户主键
      */
-    public void register(GeneralMemberDto dto) throws DuplicatedUsernameException;
+    public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException;
 
     /**
      * @deprecated
@@ -56,14 +57,14 @@ public interface AccountService {
     /**
      * 查询用户所有基本信息.
      * @param username 要查询的用户的用户名
-     * @param memberType 用户实体dto对象的{@code Class}对象. 如, {@link StudentDto}.class
+     * @param type new StudentDto[0]
      * @param isWired 指定是否查询关联表内的信息
      * @param <T> 用户实体有3类，该方法会根据泛型参数的实际类型返回对应的对象。一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *             或{@link EmployerDto}中的一种。
      * @return 返回类型由泛型参数{@code T}决定. 一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
      *          或{@link EmployerDto}中的一种。
      */
-    public <T extends GeneralMemberDto> T findMember(String username, Class<T> memberType, boolean isWired);
+    public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired);
 
     /**
      * 得到所有用户信息. 不包含关联表内的信息
@@ -87,21 +88,9 @@ public interface AccountService {
      */
     public <T extends GeneralMemberDto> boolean updateMember(T memDto);
 
-    /**
-     * 添加一个教育经历
-     * @param academyId 学院实体的id
-     * @param username
-     * @return
-     */
-    public boolean addEducation(Integer academyId, String username);
+    //public boolean addEducation(Integer academyId, String username);
 
-    /**
-     * 删除一个教育经历
-     * @param academyId 学院实体的id
-     * @param username
-     * @return
-     */
-    public boolean deleteEducation(Integer academyId, String username);
+    //public boolean deleteEducation(Integer academyId, String username);
 
     /**
      * 删除一个用户
