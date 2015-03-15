@@ -11,6 +11,7 @@ import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.*;
 import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Print;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -39,6 +40,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,10 +54,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         DefaultAccountService.class,
         DefaultJobPostService.class,
         DefaultSHPostService.class,
-        DefaultResumeService.class
+        DefaultResumeService.class,
+        DefaultReviewService.class
         })
 //@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml")
-public class HomeControllerTest extends BaseDatabaseTestClass{
+public class UserControllerTest extends BaseSpringDataTestClass{
     /*
     先测试登陆与注册功能
      */
@@ -110,8 +113,8 @@ public class HomeControllerTest extends BaseDatabaseTestClass{
         String expected = new JsonWrapper(true,"登陆成功").getAjaxMessage();
 
         mockMvc.perform(post("/user/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("username","")
+                        .contentType("application/json;charset=utf-8")
+                        .param("username","yazhou")
                         .param("password","yazhou110")
         ).andExpect(status().isOk())
                 .andExpect(content().string(expected));

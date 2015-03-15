@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +70,7 @@ public class UserController {
      * @param req
      * @return
      */
-    @RequestMapping(value = "/user/login")
+    @RequestMapping(value = "/user/login",method = RequestMethod.GET)
     public String login(HttpServletRequest req){
         return ResponseUtils.determinePage(req,"login");
     }
@@ -248,6 +249,7 @@ public class UserController {
 
 
     }
+
     /**
      * ajax登陆请求
      * @param mem
