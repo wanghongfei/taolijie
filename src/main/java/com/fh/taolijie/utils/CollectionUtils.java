@@ -59,25 +59,24 @@ public class CollectionUtils {
      * @param <T>
      * @return
      */
-    public static <T> boolean removeFromCollection(Iterable<T> collection, Predicate<T> test) {
+    public static <T> T removeFromCollection(Iterable<T> collection, Predicate<T> test) {
         if (null == collection) {
-            return false;
+            return null;
         }
 
-        boolean result = false;
-
+        T target = null;
         Iterator<T> it = collection.iterator();
         while (it.hasNext()) {
             T obj = it.next();
             if (test.test(obj)) {
+                target = obj;
                 it.remove();
-                result = true;
 
                 break;
             }
         }
 
-        return result;
+        return target;
     }
 
     /**

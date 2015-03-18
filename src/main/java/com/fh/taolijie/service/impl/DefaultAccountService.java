@@ -13,6 +13,7 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.Print;
 import org.slf4j.Logger;
@@ -26,8 +27,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-3-5.
@@ -282,7 +283,8 @@ public class DefaultAccountService implements AccountService {
         MemberEntity mem = getMemberByUsername(username);
 
         // 删除关联对象
-        MemberRoleEntity targetToDelete = null;
+        MemberRoleEntity target = CollectionUtils.removeFromCollection(mem.getMemberRoleCollection(), (mre) -> mre.getRole().getRid().equals(roleId));
+/*        MemberRoleEntity targetToDelete = null;
         Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
         Iterator<MemberRoleEntity> it = mrCollection.iterator();
         while (it.hasNext()) {
@@ -292,9 +294,10 @@ public class DefaultAccountService implements AccountService {
                 it.remove();
                 break;
             }
-        }
+        }*/
 
-        em.remove(targetToDelete);
+        em.remove(target);
+        //em.remove(targetToDelete);
 
     }
 
@@ -357,10 +360,9 @@ public class DefaultAccountService implements AccountService {
         // 得到MemberEntity关联的Role对象的id
         Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
         if (null != mrCollection) {
-            List<Integer> roleIdList = new ArrayList<>();
-            for (MemberRoleEntity mr : mrCollection) {
-                roleIdList.add(mr.getRole().getRid());
-            }
+            List<Integer> roleIdList = mrCollection.stream()
+                    .map((MemberRoleEntity mre) -> mre.getRole().getRid())
+                    .collect(Collectors.toList());
 
             dto.setRoleIdList(roleIdList);
         }
