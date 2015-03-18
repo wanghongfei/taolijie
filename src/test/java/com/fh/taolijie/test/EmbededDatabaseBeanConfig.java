@@ -20,7 +20,7 @@ import java.util.Properties;
  * Created by wanghongfei on 15-3-5.
  */
 @Configuration
-public class DatabaseBeanConfig {
+public class EmbededDatabaseBeanConfig {
     @Autowired
     private DataSource dataSource;
 
