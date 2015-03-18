@@ -78,6 +78,9 @@ public class AccountServiceTest extends BaseDatabaseTestClass {
         school.getAcademyCollection().add(academy);
         em.persist(academy);
         em.persist(school);
+
+        em.flush();
+        em.clear();
     }
 
     @Test

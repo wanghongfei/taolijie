@@ -17,8 +17,9 @@ import java.util.Collection;
 
         // 根据用户名查找member实体
         @NamedQuery(name = "memberEntity.findMemberByUsername",
-                query = "SELECT m FROM MemberEntity m " +
-                       // "JOIN FETCH m.memberRoleCollection " +
+                query = "SELECT m " +
+                        "FROM MemberEntity m " +
+                        "JOIN FETCH m.memberRoleCollection " +
                         "WHERE m.username = :username"),
 
         @NamedQuery(name = "memberEntity.findAll",
