@@ -284,20 +284,8 @@ public class DefaultAccountService implements AccountService {
 
         // 删除关联对象
         MemberRoleEntity target = CollectionUtils.removeFromCollection(mem.getMemberRoleCollection(), (mre) -> mre.getRole().getRid().equals(roleId));
-/*        MemberRoleEntity targetToDelete = null;
-        Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
-        Iterator<MemberRoleEntity> it = mrCollection.iterator();
-        while (it.hasNext()) {
-            MemberRoleEntity mr = it.next();
-            if (mr.getRole().getRid().equals(roleId)) {
-                targetToDelete = mr;
-                it.remove();
-                break;
-            }
-        }*/
 
         em.remove(target);
-        //em.remove(targetToDelete);
 
     }
 
@@ -421,16 +409,10 @@ public class DefaultAccountService implements AccountService {
                 eduCollection = new ArrayList<>();
             }
 
-            //List<Integer> schoolIdList = new ArrayList<>();
-            List<Integer> academyIdList = new ArrayList<>();
-            for (EducationExperienceEntity ee : eduCollection) {
-                //Integer schoolId = ee.getSchool().getId();
-                Integer academyId = ee.getAcademy().getId();
+            List<Integer> academyIdList = eduCollection.stream()
+                    .map( (eduEntity) -> eduEntity.getAcademy().getId() )
+                    .collect(Collectors.toList());
 
-                //schoolIdList.add(schoolId);
-                academyIdList.add(academyId);
-            }
-            //dto.setSchoolIdList(schoolIdList);
             dto.setAcademyIdList(academyIdList);
 
             loadRoleField(mem, dto);

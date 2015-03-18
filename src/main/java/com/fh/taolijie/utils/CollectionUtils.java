@@ -57,7 +57,7 @@ public class CollectionUtils {
      * @param collection
      * @param test
      * @param <T>
-     * @return
+     * @return 被从Collection中移除的实体引用
      */
     public static <T> T removeFromCollection(Iterable<T> collection, Predicate<T> test) {
         if (null == collection) {
