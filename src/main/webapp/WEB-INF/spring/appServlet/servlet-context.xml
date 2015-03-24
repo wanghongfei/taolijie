@@ -86,5 +86,22 @@
     <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service" />
 
 
+    <!-- Email -->
+    <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <beans:property name="host" value="smtp.126.com"/>
+        <beans:property name="port" value="25"/>
+        <beans:property name="username" value="wfc5582563@126.com"/>
+        <beans:property name="password" value="wang700327"/>
+        <beans:property name="javaMailProperties">
+            <beans:props>
+                <beans:prop key="mail.transport.protocol">smtp</beans:prop>
+                <beans:prop key="mail.smtp.auth">true</beans:prop>
+                <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+                <beans:prop key="mail.debug">true</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+
 
 </beans:beans>
