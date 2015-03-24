@@ -21,6 +21,7 @@ public class Mail {
      */
     public void sendMail(String content, String... toAddresses) {
         SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setSubject("taolijie: 服务器内部错误");
         msg.setFrom(Constants.SENDER_EMAIL);
         msg.setTo(toAddresses);
         msg.setText(content);
@@ -39,12 +40,7 @@ public class Mail {
      */
     public void sendMailAsync(String content, String... toAddresses) {
         new Thread( () -> {
-            SimpleMailMessage msg = new SimpleMailMessage();
-            msg.setFrom(Constants.SENDER_EMAIL);
-            msg.setTo(toAddresses);
-            msg.setText(content);
-
-            sender.send(msg);
+            sendMail(content, toAddresses);
         }).start();
     }
 }
