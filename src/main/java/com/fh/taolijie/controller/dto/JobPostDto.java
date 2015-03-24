@@ -1,5 +1,8 @@
 package com.fh.taolijie.controller.dto;
 
+import com.fh.taolijie.utils.Constants;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 /**
@@ -7,18 +10,31 @@ import java.util.Date;
  */
 public class JobPostDto {
     private Integer id;
+
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String title;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private Date expiredTime;
     private Date postTime;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String workPlace;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private Double wage;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String timeToPay;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String jobDescription;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String contact;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String contactPhone;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String contactEmail;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String contactQq;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String jobDetail;
+    @NotEmpty(message = Constants.ErrorType.NOT_EMPTY)
     private String introduce;
     private Integer likes;
     private Integer dislikes;

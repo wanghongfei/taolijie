@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.dto;
 
+import com.fh.taolijie.utils.Constants;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,16 +12,16 @@ import java.util.List;
 public class GeneralMemberDto {
     private Integer id;
 
-    @NotEmpty(message = "用户名不能为空")
-    @Length(min = 6,max =25,message = "长度不合法")
+    @NotEmpty(message = Constants.ErrorType.USERNAME_ILLEGAL)
+    @Length(min = 6,max =25,message = Constants.ErrorType.USERNAME_ILLEGAL)
     private String username;
 
-    @NotEmpty(message = "用户名密码错误")
-    @Length(min = 6,max =25,message = "长度不合法")
+    @NotEmpty(message = Constants.ErrorType.PASSWORD_ILLEGAL)
+    @Length(min = 6,max =25,message = Constants.ErrorType.PASSWORD_ILLEGAL)
     private String password;
 
-    @NotEmpty(message = "邮箱不能为空")
-    @Length(min = 6,max =30,message = "长度不合法")
+    @NotEmpty(message = Constants.ErrorType.EMAIL_ILLEGAL)
+    @Length(min = 6,max =30,message = Constants.ErrorType.EMAIL_ILLEGAL)
     private String email;
 
     private String name;

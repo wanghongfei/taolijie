@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>
-    pc
+    我是index
 </h1>
 
 <P>  wynfrith</P>
