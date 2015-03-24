@@ -1,17 +1,19 @@
 package com.fh.taolijie.controller.dto;
 
+import com.fh.taolijie.utils.Constants;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Created by wynfrith on 15-3-10.
  */
 public class LoginDto {
-    @NotEmpty(message = "用户名不能为空")
+    @NotEmpty(message = Constants.ErrorType.USERNAME_ILLEGAL)
     private String username;
-    @NotEmpty(message = "密码不能为空")
+    @NotEmpty(message = Constants.ErrorType.PASSWORD_ILLEGAL)
     private String password;
 
-    private Boolean rememberMe;
+
+    private String rememberMe = "false";
 
     public String getUsername() {
         return username;
@@ -25,10 +27,12 @@ public class LoginDto {
     public void setPassword(String password) {
         this.password = password;
     }
-    public Boolean getRememberMe() {
+
+    public String getRememberMe() {
         return rememberMe;
     }
-    public void setRememberMe(Boolean rememberMe) {
+
+    public void setRememberMe(String rememberMe) {
         this.rememberMe = rememberMe;
     }
 }

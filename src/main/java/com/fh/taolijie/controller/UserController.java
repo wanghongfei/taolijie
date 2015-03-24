@@ -7,10 +7,8 @@ import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ResumeService;
-import com.fh.taolijie.service.SHPostService;
+import com.fh.taolijie.service.*;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -24,6 +22,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +32,7 @@ import javax.validation.Valid;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,6 +47,9 @@ public class UserController {
 
     @Autowired
     JobPostService jobPostService;
+
+    @Autowired
+    JobPostCateService jobPostCateService;
 
     @Autowired
     ResumeService resumeService;
@@ -213,7 +217,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/user/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String register(@Valid StudentDto mem,
+    public @ResponseBody String register(@Valid GeneralMemberDto mem,
                            BindingResult result,
                            HttpSession session,
                            HttpServletResponse res){
@@ -238,14 +242,13 @@ public class UserController {
 
         /*注册*/
         try {
-//            accountService.register(mem);
-            accountService.registerStudent(mem);
+            accountService.register(mem);
         } catch (DuplicatedUsernameException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 
         /*注册完成后自动登陆*/
-        return new JsonWrapper(true,"success").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
 
     }
@@ -284,7 +287,7 @@ public class UserController {
 
         /*获取用户信息和用户权限*/
         Credential credential = new TaolijieCredential(mem.getUsername());
-        memDto = accountService.findMember(mem.getUsername(),new StudentDto[0],true);
+        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
         for(Integer rid:memDto.getRoleIdList()){
             role = accountService.findRole(rid);
             credential.addRole(role.getRolename());
@@ -299,14 +302,18 @@ public class UserController {
 
 
         /*如果选择自动登陆,加入cookie*/
-        Cookie usernameCookie = new Cookie("username", mem.getUsername());
-        usernameCookie.setMaxAge(cookieExpireTime);
-        Cookie passwordCookie = new Cookie("password", mem.getPassword());
-        res.addCookie(usernameCookie);
-        res.addCookie(passwordCookie);
+        if(mem.getRememberMe().equals("true")){
+            Cookie usernameCookie = new Cookie("username", mem.getUsername());
+            usernameCookie.setMaxAge(cookieExpireTime);
+            Cookie passwordCookie = new Cookie("password", mem.getPassword());
+            passwordCookie.setMaxAge(cookieExpireTime);
+            res.addCookie(usernameCookie);
+            res.addCookie(passwordCookie);
+        }
+
 
         /*如果自动登陆为true ,返回cookie*/
-        return new JsonWrapper(true,"登陆成功").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
     /**
@@ -316,17 +323,24 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/setting/profile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String profile(HttpSession session){
+    public @ResponseBody String profile(GeneralMemberDto gmem, HttpSession session){
         GeneralMemberDto mem = null;
 
         String username = CredentialUtils.getCredential(session).getUsername();
 
         mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
+        mem.setAge(gmem.getAge());
+        mem.setGender(gmem.getGender());
+        mem.setName(gmem.getName());
+        mem.setProfilePhotoPath(gmem.getProfilePhotoPath());
+        mem.setQq(gmem.getQq());
+        mem.setPhone(gmem.getPhone());
+
         if(!accountService.updateMember(mem)){
-            return new JsonWrapper(false,"修改资料失败!").getAjaxMessage();
+            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true,"修改成功!").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 
@@ -336,20 +350,48 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/setting/security",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String security(HttpSession session){
+    public @ResponseBody String security(@RequestParam String password,HttpSession session){
+
+        if(password.length()<6||password.length()>25)
+            return new JsonWrapper(false, Constants.ErrorType.PASSWORD_ILLEGAL).getAjaxMessage();
+
         GeneralMemberDto mem = null;
 
         String username = CredentialUtils.getCredential(session).getUsername();
 
         mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
+        mem.setPassword(password);
+
         if(!accountService.updateMember(mem)){
-            return new JsonWrapper(false,"密码修改失败").getAjaxMessage();
+            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true,"success").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+
+    /**
+     * 获取兼职分类
+     */
+    @RequestMapping(value = "user/post/jobcategory",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String jobCategory(HttpSession session){
+
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        List<JobPostCategoryDto> jobList =  jobPostCateService.getCategoryList(0, 0);
+
+        for(JobPostCategoryDto jobPostCategoryDto:jobList)
+        {
+            jsonArrayBuilder.add(jobPostCategoryDto.getId());
+            jsonArrayBuilder.add(jobPostCategoryDto.getName());
+        }
+
+        JsonObject obj = Json.createObjectBuilder()
+                .add("result", "true")
+                .add("parm",jsonArrayBuilder)
+                .build();
+        return obj.toString();
+    }
 
     /**
      * 发布兼职信息
@@ -358,17 +400,28 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/post/job", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(JobPostDto  job,
+    public @ResponseBody String job(@Valid JobPostDto  job,
+                                    BindingResult result,
                                     HttpSession session){
         GeneralMemberDto mem = null;
+
+        if(result.hasErrors()){
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+        }
+
         String username = CredentialUtils.getCredential(session).getUsername();
         mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
         /*创建兼职信息*/
+        job.setMemberId(mem.getId());
+        job.setPostTime(new Date());
+        jobPostService.addJobPost(job);
 
 
-        return new JsonWrapper(true,"success").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+
 
     /**
      * 发布二手信息
@@ -377,16 +430,23 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/post/sechand", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(SecondHandPostDto sechand,
+    public @ResponseBody String job(@Valid SecondHandPostDto sechand,
+                                    BindingResult result,
                                     HttpSession session){
         GeneralMemberDto mem = null;
+
+        if(result.hasErrors())
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+
         String username = CredentialUtils.getCredential(session).getUsername();
         mem = accountService.findMember(username,new GeneralMemberDto[0],false);
+
+
 
         /*创建二手信息*/
 
 
-        return new JsonWrapper(true,"success").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -410,20 +470,22 @@ public class UserController {
 
 
     /**
-     * 发送消息,留言或回复会触发该方法
+     * 消息提醒,留言或回复会触发该方法
      * @param session
-     * @param accecptor 接受人
+     * @param acceptor 接受人
      * @param content 回复的内容
      * @return
      */
     @RequestMapping(value = "/user/messages", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public String messages(HttpSession session,GeneralMemberDto accecptor,@RequestParam String content){
+    public String messages(HttpSession session,@RequestParam String acceptor,@RequestParam String content){
 
         /*获取接收人的dto实体*/
+        String username = CredentialUtils.getCredential(session).getUsername();
+        GeneralMemberDto acceptorDto = accountService.findMember(acceptor,new GeneralMemberDto[0],false);
 
         /*发送消息*/
 
-        return new JsonWrapper(true,"success").getAjaxMessage();
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 

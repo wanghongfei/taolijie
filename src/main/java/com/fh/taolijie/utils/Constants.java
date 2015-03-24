@@ -63,4 +63,28 @@ public class Constants {
         STUDENT,
         EMPLOYER
     }
+
+    public static class ErrorType{
+
+        public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
+
+        public static final String USERNAME_ILLEGAL = "用户名不合法";
+        public static final String USERNAME_ERROR = "用户名错误";
+        public static final String USERNAME_EXISTS = "用户名已存在";
+        public static final String USERNAME_NOT_EXISTS = "用户名不存在";
+
+        public static final String PASSWORD_ILLEGAL = "密码不合法";
+        public static final String PASSWORD_ERROR = "密码错误";
+
+        public static final String EMAIL_ILLEGAL = "邮箱不合法";
+        public static final String EMAIL_ERROR = "邮箱错误";
+
+        public static final String NOT_EMPTY = "字段不为空";
+
+        public static final String SUCCESS = "操作成功";
+        public static final String FAILED = "操作失败";
+
+
+    }
+
 }
