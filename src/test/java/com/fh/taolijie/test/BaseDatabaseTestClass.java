@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by wanghongfei on 15-3-5.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { DatabaseBeanConfig.class })
+@ContextConfiguration(classes = { EmbededDatabaseBeanConfig.class })
 @TransactionConfiguration
 @Transactional(readOnly = true)
 public class BaseDatabaseTestClass {

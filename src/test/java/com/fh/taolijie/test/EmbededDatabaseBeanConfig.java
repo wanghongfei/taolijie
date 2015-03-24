@@ -20,7 +20,7 @@ import java.util.Properties;
  * Created by wanghongfei on 15-3-5.
  */
 @Configuration
-public class DatabaseBeanConfig {
+public class EmbededDatabaseBeanConfig {
     @Autowired
     private DataSource dataSource;
 
@@ -38,7 +38,7 @@ public class DatabaseBeanConfig {
 
         Properties prop = new Properties();
         prop.put("hibernate.hbm2ddl.auto", "update");
-        prop.put("hibernate.show_sql", "false");
+        prop.put("hibernate.show_sql", "true");
         prop.put("hibernate.format_sql", "true");
         prop.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
 

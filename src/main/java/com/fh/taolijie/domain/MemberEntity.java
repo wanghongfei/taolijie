@@ -12,12 +12,19 @@ import java.util.Collection;
 @NamedQueries({
         // 查询用户名是否存在
         @NamedQuery(name = "memberEntity.isExisted",
-                query = "SELECT COUNT(mem) FROM MemberEntity mem WHERE mem.username = :username"),
+                query = "SELECT COUNT(mem) FROM MemberEntity mem " +
+                        "WHERE mem.username = :username"),
+
         // 根据用户名查找member实体
         @NamedQuery(name = "memberEntity.findMemberByUsername",
-                query = "SELECT m FROM MemberEntity m WHERE m.username = :username"),
+                query = "SELECT m " +
+                        "FROM MemberEntity m " +
+                        "JOIN FETCH m.memberRoleCollection " +
+                        "WHERE m.username = :username"),
+
         @NamedQuery(name = "memberEntity.findAll",
-                query = "SELECT m FROM MemberEntity m"),
+                query = "SELECT m FROM MemberEntity m "),
+
         @NamedQuery(name = "memberEntity.amount",
                 query = "SELECT COUNT(m) FROM MemberEntity m")
 })
