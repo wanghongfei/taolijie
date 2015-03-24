@@ -4,14 +4,15 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.utils.ResponseUtils;
+import com.fh.taolijie.utils.ExceptionUtils;
+import com.fh.taolijie.service.impl.Mail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class TestController {
+    @Autowired
+    Mail mail;
 
     /**
      * 用户登陆页面
@@ -83,6 +86,14 @@ public class TestController {
                              Model model){
        System.out.println("");
         model.addAttribute(id);
+
+        try {
+            String str = null;
+            str.toString();
+        } catch (Exception ex) {
+            String err = ExceptionUtils.convertToString(ex);
+            mail.sendMailAsync(err, "brucewhf@gmail.com", "wangfucheng56@gmail.com");
+        }
 
         return  "test/hello";
    }

@@ -1,5 +1,6 @@
-package com.fh.taolijie.utils;
+package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
