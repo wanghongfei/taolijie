@@ -22,7 +22,7 @@ public class CollectionUtilsTest {
     }
 
     @Test
-    public void testEntity2Dto() {
+    public void testEntity2Dto() throws Exception {
         MemberEntity m = new MemberEntity();
         m.setUsername("Bruce");
         m.setAge(100);

@@ -23,8 +23,22 @@ public class CollectionUtils {
         
         Class dtoClass = dto.getClass();
 
-        Field[] dtoFields = dtoClass.getDeclaredFields();
-        Field[] entityFields = entityClass.getDeclaredFields();
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> entityFields = getFieldsFromCache(entityClass.getName());
+        if (null == entityFields) {
+            entityFields = cacheFields(entityClass);
+        }
+
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> dtoFields = getFieldsFromCache(dtoClass.getName());
+        if (null == dtoFields) {
+            dtoFields = cacheFields(dtoClass);
+        }
+
+        //Field[] dtoFields = dtoClass.getDeclaredFields();
+        //Field[] entityFields = entityClass.getDeclaredFields();
 
 
         // construct entity instance
@@ -35,7 +49,14 @@ public class CollectionUtils {
             if (false == dto.getClass().getSuperclass().getName().equals("java.lang.Object")) {
                 // 该dto父类也是DTO
                 // 将dto对象的父对象本身field的值取出赋给entity
-                Field[] superFields = dto.getClass().getSuperclass().getDeclaredFields();
+
+                List<Field> superFields = getFieldsFromCache(dtoClass.getSuperclass().getName());
+                if (null == superFields) {
+                    superFields = cacheFields(dtoClass.getSuperclass());
+                }
+
+                //Field[] superFields = dto.getClass().getSuperclass().getDeclaredFields();
+
                 for (Field f : superFields) {
                     setField(dto, entity, f, entityFields);
                 }
@@ -54,7 +75,7 @@ public class CollectionUtils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
-            
+
         }
 
         return entity;
@@ -66,8 +87,22 @@ public class CollectionUtils {
     public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass) throws ObjectGenerationException{
         DTO_TYPE dto = null;
 
-        Field[] entityFields = entity.getClass().getDeclaredFields();
-        Field[] dtoFields = dtoClass.getDeclaredFields();
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> entityFields = getFieldsFromCache(entity.getClass().getName());
+        if (null == entityFields) {
+            entityFields = cacheFields(entity.getClass());
+        }
+
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> dtoFields = getFieldsFromCache(dtoClass.getName());
+        if (null == dtoFields) {
+            dtoFields = cacheFields(dtoClass);
+        }
+
+/*        Field[] entityFields = entity.getClass().getDeclaredFields();
+        Field[] dtoFields = dtoClass.getDeclaredFields();*/
 
         try {
             dto = dtoClass.newInstance();
@@ -75,10 +110,15 @@ public class CollectionUtils {
             // 判断dto的父类是否也是DTO对象
             if (false == dtoClass.getSuperclass().getName().equals("java.lang.Object")) {
                 // 先给父dto对象赋值
-                Field[] superFileds = dtoClass.getSuperclass().getDeclaredFields();
+                List<Field> superFields = getFieldsFromCache(dtoClass.getName());
+                if (null == superFields) {
+                    superFields = cacheFields(dtoClass);
+                }
+
+                //Field[] superFileds = dtoClass.getSuperclass().getDeclaredFields();
 
                 for (Field f : entityFields) {
-                    setField(entity, dto, f, superFileds);
+                    setField(entity, dto, f, superFields);
                 }
             }
 
@@ -99,6 +139,19 @@ public class CollectionUtils {
         return dto;
     }
 
+    private static List<Field> getFieldsFromCache(String className) {
+        return FieldCache.cacheMap.get(className);
+    }
+
+    private static List<Field> cacheFields(Class clazz) {
+        Field[] f = clazz.getDeclaredFields();
+        List<Field> fields = Arrays.asList(f);
+
+        FieldCache.cacheMap.put(clazz.getName(), fields);
+
+        return fields;
+    }
+
     /**
      * 将{@code valueField}域的值赋给{@code targetFields}中对应的Field
      * @param sourceObj
@@ -106,7 +159,7 @@ public class CollectionUtils {
      * @param valueField
      * @param targetFields
      */
-    private static void setField(Object sourceObj, Object targetObj, Field valueField, Field[] targetFields) {
+    private static void setField(Object sourceObj, Object targetObj, Field valueField, List<Field> targetFields) {
         valueField.setAccessible(true);
 
         for (Field target : targetFields) {
