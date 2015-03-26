@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js">
 <head>
@@ -8,7 +11,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-	
+	<link rel="stylesheet" href="/assets/styles/vendor.css">
 
 	<link rel="stylesheet" href="/assets/styles/main.css">
 
@@ -23,7 +26,7 @@
 			<ul class="nav pull-right">
 
 				<li>
-					<a href="#"><span class="glyphicon glyphicon-map-marker"></span>山东理工大学
+					<a href="/user/"><span class="glyphicon glyphicon-map-marker"></span>${username}
 						<span class="caret"></span></a>
 					</li>
 				</ul>
@@ -31,21 +34,21 @@
 			</div>
 			<ul class="info">
 				<li>
-					<a href="">
+					<a href="/user/register">
 						<span class="icon-circle gray fa fa-file-text"></span>
 						<span class="icon-desc">注册</span>
 					</a>
 				</li>
 				<li>
-					<a href="">
+					<a href="/user/login">
 						<span class="icon-circle  green fa fa-user"></span>
 						<span class="icon-desc">登陆</span>
 					</a>
 				</li>
 				<li>
-					<a href="">
+					<a href="/user/post/job">
 						<span class="icon-circle  red fa fa-check-square-o"></span>
-						<span class="icon-desc">发布信息</span>
+						<span class="icon-desc">发布兼职</span>
 					</a>
 				</li>
 			</ul>
@@ -62,13 +65,13 @@
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner" role="listbox">
 					<div class="item active">
-						<img src="images/pic.jpg" alt="..." height="200px">
+						<img src="/assets/images/pic.jpg" alt="..." height="200px">
 					</div>
 					<div class="item">
-						<img src="images/pic.jpg" alt="...">
+						<img src="/assets/images/pic.jpg" alt="...">
 					</div>
 					<div class="item">
-						<img src="images/pic.jpg" alt="...">
+						<img src="/assets/images/pic.jpg" alt="...">
 					</div>  
 				</div>
 
@@ -84,17 +87,31 @@
 			</div>
 			<ul class="icons">
 				<li class="icon">
-					<a href="/second.html">
+					<a href="/joblist">
 						<span class="icon-circle bg-green fa fa-clock-o"></span>
 						<span class="icon-desc">学生兼职</span>
 					</a>
 				</li>
 				<li class="icon">
-					<a href="">
+					<a href="/resumelist">
 						<span class="icon-circle bg-blue fa fa-user"></span>
 						<span class="icon-desc">求职简历</span>
 					</a>
 				</li>
+
+				<li class="icon">
+					<a href="">
+						<span class="icon-circle bg-grown fa fa-shopping-cart"></span>
+						<span class="icon-desc">二手物品</span>
+					</a>
+				</li>
+				<li class="icon">
+					<a href="user/jobpos">
+						 <span class="icon-circle bg-orange fa fa-check-square" style=></span>
+						<span class="icon-desc">发布兼职</span>
+					</a>
+				</li>
+
 				<li class="icon">
 					<a href="">
 						<span class="icon-circle bg-red fa fa-mortar-board"></span>
@@ -115,23 +132,14 @@
 				</li>
 				<li class="icon">
 					<a href="">
-						<span class="icon-circle bg-grown fa fa-shopping-cart"></span>
-						<span class="icon-desc">二手物品</span>
-					</a>
-				</li>
-				<li class="icon">
-					<a href="">
-						 <span class="icon-circle bg-orange fa fa-check-square" style=></span>
-						<span class="icon-desc">发布信息</span>
-					</a>
-				</li>
-				<li class="icon">
-					<a href="">
 						<span class="icon-circle bg-gray fa fa-angle-double-down"></span>
 						<span class="icon-desc">更多</span>
 					</a>
 				</li>
 			</ul>
+
+
+
 
 			<!-- 校园聚焦点 -->
 			<div class="section news">
@@ -139,28 +147,18 @@
 					<a href=""><p class="more">>>更多</p></a>
 					<p>校园聚焦点</p>	
 				</div>
-				<a href="">
-					<div class="content bg-blue">
+                <c:set var="newColorStr" value="blue,red,green"/>
+                <c:set var="newColor" value="${fn:split(newColorStr, ',')}"></c:set>
 
-						<img src="images/info.jpg" alt="">
-						<span>桃李街,中国大学生自己</span>
-						</div>
-				</a>
-				<a href="">
-					<div class="content bg-red">
+                <c:forEach var="news" items="${newsList}" varStatus="var">
+                  <a href="">
+                    <div class="content bg-${newColor[var.count-1]}">
 
-						<img src="images/info.jpg" alt="">
-						<span>桃李街,中国大学生自己</span>
-						</div>
-				</a>
-				<a href="">
-					<div class="content bg-green">
-
-						<img src="images/info.jpg" alt="">
-						<span>桃李街,中国大学生自己</span>
-						</div>
-				</a>
-			</div>
+                        <img src="/assets/images/info.jpg" alt="">
+                        <span>${news.title}</span>
+                    </div>
+                  </a
+                </c:forEach>
 
 			<div class="section">
 				<div class="title">
@@ -194,8 +192,7 @@
 
 		<script src="/assets/scripts/plugins.js"></script>
 
-		<script src="/assets/scripts/main.js"></script>
-		<script src="/assets/scripts/hammer.js"></script>
+		 <script src="/assets/scripts/hammer.js"></script>
 
 		<script>
 			'use strict';
