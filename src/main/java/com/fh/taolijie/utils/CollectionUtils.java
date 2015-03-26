@@ -50,16 +50,53 @@ public class CollectionUtils {
         } catch (InstantiationException e) {
             e.printStackTrace();
             throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+            
         }
 
         return entity;
     }
 
-    public static <T> T entity2Dto() {
-        return null;
+    /**
+     * 将entity转换成dto
+     */
+    public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass) throws ObjectGenerationException{
+        DTO_TYPE dto = null;
+
+        Field[] entityFields = entity.getClass().getDeclaredFields();
+        Field[] dtoFields = dtoClass.getDeclaredFields();
+
+        try {
+            dto = dtoClass.newInstance();
+
+            // 判断dto的父类是否也是DTO对象
+            if (false == dtoClass.getSuperclass().getName().equals("java.lang.Object")) {
+                // 先给父dto对象赋值
+                Field[] superFileds = dtoClass.getSuperclass().getDeclaredFields();
+
+                for (Field f : entityFields) {
+                    setField(entity, dto, f, superFileds);
+                }
+            }
+
+            for (Field f : entityFields) {
+                setField(entity, dto, f, dtoFields);
+            }
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
+
+        }
+
+        return dto;
     }
 
     /**
@@ -76,7 +113,7 @@ public class CollectionUtils {
             if (target.getName().equals(valueField.getName())) {
                 target.setAccessible(true);
 
-                System.out.println("setting field -> dto:" + valueField.getName() + ", entity:" + target.getName());
+                //System.out.println("setting field -> dto:" + valueField.getName() + ", entity:" + target.getName());
 
                 try {
                     target.set(targetObj, valueField.get(sourceObj));

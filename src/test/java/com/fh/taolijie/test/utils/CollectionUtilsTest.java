@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class CollectionUtilsTest {
     @Test
-    public void testDto2Entity() {
+    public void testDto2Entity() throws Exception {
         StudentDto dto = new StudentDto();
         dto.setUsername("Neo");
         dto.setAge(20);
@@ -19,5 +19,17 @@ public class CollectionUtilsTest {
         MemberEntity entity = CollectionUtils.dto2Entity(dto, MemberEntity.class);
 
         Assert.assertEquals("Neo", entity.getUsername());
+    }
+
+    @Test
+    public void testEntity2Dto() {
+        MemberEntity m = new MemberEntity();
+        m.setUsername("Bruce");
+        m.setAge(100);
+        m.setStudentId("121105");
+
+        StudentDto dto = CollectionUtils.entity2Dto(m, StudentDto.class);
+        Assert.assertEquals("121105", dto.getStudentId());
+
     }
 }
