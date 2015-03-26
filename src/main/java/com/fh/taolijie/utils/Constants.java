@@ -76,6 +76,8 @@ public class Constants {
         public static final String PASSWORD_ILLEGAL = "密码不合法";
         public static final String PASSWORD_ERROR = "密码错误";
 
+        public static final String REPASSWORD_ERROR = "密码不一致";
+
         public static final String EMAIL_ILLEGAL = "邮箱不合法";
         public static final String EMAIL_ERROR = "邮箱错误";
 

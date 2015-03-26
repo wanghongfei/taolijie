@@ -61,12 +61,26 @@ public class UserController {
     private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     /**
+     * 个人中心
+     */
+    @RequestMapping(value = "/user",method = RequestMethod.GET)
+    public String user(HttpSession session,Model model,HttpServletRequest req){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
+
+        return "mobile/user/user";
+
+    }
+
+    /**
      * 注册页面
      */
     @RequestMapping(value = "/user/register",method = RequestMethod.GET)
     public String register(HttpServletRequest req){
         System.out.println(ResponseUtils.determinePage(req,"register"));
-        return ResponseUtils.determinePage(req,"register");
+        return ResponseUtils.determinePage(req,"user/register");
     }
 
     /**
@@ -76,7 +90,7 @@ public class UserController {
      */
     @RequestMapping(value = "/user/login",method = RequestMethod.GET)
     public String login(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"login");
+        return ResponseUtils.determinePage(req,"user/login");
     }
 
 
@@ -153,9 +167,14 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/job" ,method = RequestMethod.GET)
-    public String job(JobPostDto job,
+    public String job(HttpSession session,
+                      JobPostDto job,
                       JobPostCategoryDto cate,
                       HttpServletRequest req){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
         return ResponseUtils.determinePage(req,"job");
     }
 
@@ -167,7 +186,12 @@ public class UserController {
      */
     @RequestMapping(value = "user/resume" ,method = RequestMethod.GET)
     public String job(ResumeDto resume,
+                      HttpSession session,
                       HttpServletRequest req){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
         return ResponseUtils.determinePage(req,"user/resume");
     }
 
@@ -182,6 +206,10 @@ public class UserController {
     public String job(SecondHandPostDto secondhand,
                       HttpSession session,
                       HttpServletRequest req){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
         return ResponseUtils.determinePage(req,"user/secondhand");
     }
 
@@ -217,10 +245,11 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/user/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String register(@Valid GeneralMemberDto mem,
+    public @ResponseBody String register(@Valid RegisterDto mem,
                            BindingResult result,
                            HttpSession session,
                            HttpServletResponse res){
+        GeneralMemberDto member = null;
 
         /*
          * 注册需要的表单内容
@@ -232,20 +261,35 @@ public class UserController {
         if(result.hasErrors()){
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
+        /*用户名重复*/
+//        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
+//            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
+//        }
+        /*两次密码不一致*/
+        if(!mem.getPassword().equals(mem.getRepassword())){
+            return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
+        }
+
+        member = new GeneralMemberDto();
+        member.setUsername(mem.getUsername());
+        member.setPassword(mem.getPassword());
+        member.setRoleIdList(Arrays.asList(1));
+
         System.out.println("email"+mem.getEmail());
         if(logger.isDebugEnabled()){
             logger.debug("email:{}",mem.getEmail());
             logger.debug("username:{}",mem.getUsername());
             logger.debug("password:{}",mem.getPassword());
         }
-        mem.setRoleIdList(Arrays.asList(1));
+
 
         /*注册*/
         try {
-            accountService.register(mem);
+            accountService.register(member);
         } catch (DuplicatedUsernameException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
+
 
         /*注册完成后自动登陆*/
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -266,6 +310,7 @@ public class UserController {
                                       BindingResult result,
                                       HttpSession session,
                                       HttpServletResponse res){
+
         System.out.println(mem.getUsername());
         GeneralMemberDto memDto = null;
         RoleDto role = null;
@@ -316,6 +361,17 @@ public class UserController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
+
+    /**
+     * 用户注销
+     */
+
+    @RequestMapping(value = "user/logout",method = RequestMethod.GET)
+    public String logout(HttpSession session){
+        session.setAttribute("CURRENT_USER_CREDENTIAL",null);
+        return "redirect:/index";
+    }
+
     /**
      * 修改个人资料
      * @param session
