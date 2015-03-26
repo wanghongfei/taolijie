@@ -36,6 +36,19 @@ public class DefaultSHPostService implements SHPostService {
     @Autowired
     MemberRepo memberRepo;
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SecondHandPostDto> getAllPostList(int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<SecondHandPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class);
+        });
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<SecondHandPostDto> getPostList(Integer cateId, int firstResult, int capacity) {

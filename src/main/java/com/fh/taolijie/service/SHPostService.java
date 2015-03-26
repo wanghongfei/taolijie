@@ -10,6 +10,12 @@ import java.util.List;
  */
 public interface SHPostService {
     /**
+     * 查找所有二手帖子
+     * @return
+     */
+    List<SecondHandPostDto> getAllPostList(int firstResult, int capacity);
+
+    /**
      * 得到某分类下的二手帖子
      * @param cateId {@link com.fh.taolijie.domain.SecondHandPostCategoryEntity}实体的主键值
      * @param firstResult See {@link com.fh.taolijie.service.ResumeService#getResumeList}
