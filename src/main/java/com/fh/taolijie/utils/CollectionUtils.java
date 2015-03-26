@@ -1,7 +1,5 @@
 package com.fh.taolijie.utils;
 
-import com.fh.taolijie.exception.checked.ObjectGenerationException;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
@@ -15,10 +13,18 @@ public class CollectionUtils {
     private CollectionUtils() {
     }
 
+    public static int determineCapacity(int cap) {
+        if (cap <= 0) {
+            return Constants.PAGE_CAPACITY;
+        }
+
+        return cap;
+    }
+
     /**
      * 把一个DTO对象转换成对应的Entity对象
      */
-    public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass) throws ObjectGenerationException {
+    public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass) {
         ENTITY_TYPE entity = null;
         
         Class dtoClass = dto.getClass();
@@ -70,11 +76,11 @@ public class CollectionUtils {
 
         } catch (InstantiationException e) {
             e.printStackTrace();
-            throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+            //throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+            //throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
 
         }
 
@@ -84,7 +90,7 @@ public class CollectionUtils {
     /**
      * 将entity转换成dto
      */
-    public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass) throws ObjectGenerationException{
+    public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass) {
         DTO_TYPE dto = null;
 
         // 先从cache中查找
@@ -128,11 +134,11 @@ public class CollectionUtils {
 
         } catch (InstantiationException e) {
             e.printStackTrace();
-            throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
+            //throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-            throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
+            //throw new ObjectGenerationException("generate entity for " + entity.getClass().getName() + " failed");
 
         }
 
@@ -261,4 +267,6 @@ public class CollectionUtils {
             action.accept(obj);
         }
     }
+
+
 }

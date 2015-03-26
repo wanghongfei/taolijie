@@ -5,7 +5,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.impl.DefaultResumeService;
-import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import java.util.List;
 @ContextConfiguration(classes = {
         DefaultResumeService.class
 })
-public class ResumeServiceTest extends BaseDatabaseTestClass {
+public class ResumeServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
     ResumeEntity resume;
 
@@ -52,7 +52,20 @@ public class ResumeServiceTest extends BaseDatabaseTestClass {
         // build connection
         member.setResumeCollection(new ArrayList<>());
         member.getResumeCollection().add(resume);
+
+        em.flush();
+        em.clear();
     }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetAll() {
+        List<ResumeDto> dtoList = rService.getAllResumeList(0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertTrue(containsName(dtoList, "resume"));
+    }
+
 
     @Test
     @Transactional(readOnly = true)

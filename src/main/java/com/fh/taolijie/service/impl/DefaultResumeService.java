@@ -4,8 +4,12 @@ import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,21 @@ import java.util.List;
 public class DefaultResumeService implements ResumeService {
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private ResumeRepo resumeRepo;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResumeDto> getAllResumeList(int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<ResumeEntity> entityList = resumeRepo.findAll(new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class);
+        });
+    }
 
     @Override
     @Transactional(readOnly = true)

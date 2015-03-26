@@ -9,6 +9,12 @@ import java.util.List;
  */
 public interface ResumeService {
     /**
+     * 查找所有简历
+     * @return
+     */
+    List<ResumeDto> getAllResumeList(int firstResult, int capacity);
+
+    /**
      * 获取某个用户的部分简历.
      *
      * @param memId 用户的id号
