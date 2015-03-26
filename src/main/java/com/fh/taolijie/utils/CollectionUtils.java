@@ -1,5 +1,8 @@
 package com.fh.taolijie.utils;
 
+import com.fh.taolijie.exception.checked.ObjectGenerationException;
+
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,7 +13,79 @@ import java.util.function.Predicate;
  */
 public class CollectionUtils {
     private CollectionUtils() {
+    }
 
+    /**
+     * 把一个DTO对象转换成对应的Entity对象
+     */
+    public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass) throws ObjectGenerationException {
+        ENTITY_TYPE entity = null;
+        
+        Class dtoClass = dto.getClass();
+
+        Field[] dtoFields = dtoClass.getDeclaredFields();
+        Field[] entityFields = entityClass.getDeclaredFields();
+
+
+        // construct entity instance
+        try {
+            entity = entityClass.newInstance();
+
+            // 判断dto的父类是否也是Dto对象
+            if (false == dto.getClass().getSuperclass().getName().equals("java.lang.Object")) {
+                // 该dto父类也是DTO
+                // 将dto对象的父对象本身field的值取出赋给entity
+                Field[] superFields = dto.getClass().getSuperclass().getDeclaredFields();
+                for (Field f : superFields) {
+                    setField(dto, entity, f, entityFields);
+                }
+            }
+
+            // 将dto对象本身field的值取出赋给entity
+            for (Field f : dtoFields) {
+                setField(dto, entity, f, entityFields);
+            }
+
+
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new ObjectGenerationException("generate dto for " + dto.getClass().getName() + "failed");
+        }
+
+        return entity;
+    }
+
+    public static <T> T entity2Dto() {
+        return null;
+    }
+
+    /**
+     * 将{@code valueField}域的值赋给{@code targetFields}中对应的Field
+     * @param sourceObj
+     * @param targetObj
+     * @param valueField
+     * @param targetFields
+     */
+    private static void setField(Object sourceObj, Object targetObj, Field valueField, Field[] targetFields) {
+        valueField.setAccessible(true);
+
+        for (Field target : targetFields) {
+            if (target.getName().equals(valueField.getName())) {
+                target.setAccessible(true);
+
+                System.out.println("setting field -> dto:" + valueField.getName() + ", entity:" + target.getName());
+
+                try {
+                    target.set(targetObj, valueField.get(sourceObj));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
     }
 
     /**
