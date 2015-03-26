@@ -6,9 +6,12 @@ import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,21 @@ public class DefaultJobPostService implements JobPostService {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private JobPostRepo postRepo;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<JobPostDto> getAllJobPostList(int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<JobPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class);
+        });
+    }
 
     @Override
     @Transactional(readOnly = true)

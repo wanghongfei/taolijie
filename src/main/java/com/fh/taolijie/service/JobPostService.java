@@ -10,6 +10,12 @@ import java.util.List;
  */
 public interface JobPostService {
     /**
+     * 查找所有兼职
+     * @return
+     */
+    List<JobPostDto> getAllJobPostList(int firstResult, int capacity);
+
+    /**
      * 获取某个用户发的所有兼职帖子
      * @param memId 用户id
      * @return

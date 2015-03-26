@@ -8,7 +8,7 @@ import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.impl.DefaultJobPostService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
-import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,7 +32,7 @@ import java.util.List;
         DefaultJobPostService.class,
         DefaultReviewService.class
 })
-public class JobPostServiceTest extends BaseDatabaseTestClass {
+public class JobPostServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
     JobPostCategoryEntity cate1;
     JobPostCategoryEntity cate2;
@@ -85,6 +85,19 @@ public class JobPostServiceTest extends BaseDatabaseTestClass {
         member.getReviewCollection().add(review);
         em.persist(review);
 
+
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testFindAll() {
+        List<JobPostDto> dtoList = postService.getAllJobPostList(0 ,0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        boolean contains = containsPostTitle(dtoList, "a post");
+        Assert.assertTrue(contains);
     }
 
     @Test
