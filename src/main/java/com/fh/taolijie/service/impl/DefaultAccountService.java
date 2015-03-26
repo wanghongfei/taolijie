@@ -164,9 +164,15 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = true)
     public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired) {
-        MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
-                .setParameter("username", username)
-                .getSingleResult();
+        MemberEntity mem = null;
+
+        try {
+            mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
 
         if (type instanceof StudentDto[]) {
             // 是StudentDto对象
