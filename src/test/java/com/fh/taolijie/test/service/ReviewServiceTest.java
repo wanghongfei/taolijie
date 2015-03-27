@@ -7,7 +7,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
-import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -28,7 +28,7 @@ import java.util.List;
  * Created by wanghongfei on 15-3-7.
  */
 @ContextConfiguration(classes = {DefaultReviewService.class})
-public class ReviewServiceTest extends BaseDatabaseTestClass {
+public class ReviewServiceTest extends BaseSpringDataTestClass {
     private JobPostEntity post;
     private MemberEntity member;
     private JobPostCategoryEntity cate;

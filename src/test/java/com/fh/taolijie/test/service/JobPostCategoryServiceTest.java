@@ -4,7 +4,7 @@ import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.impl.DefaultJobPostCategoryService;
-import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wanghongfei on 15-3-6.
  */
 @ContextConfiguration(classes = {DefaultJobPostCategoryService.class})
-public class JobPostCategoryServiceTest extends BaseDatabaseTestClass {
+public class JobPostCategoryServiceTest extends BaseSpringDataTestClass {
     private JobPostCategoryEntity cate1;
     private JobPostCategoryEntity cate2;
 

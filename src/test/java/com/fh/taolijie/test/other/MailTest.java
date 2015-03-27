@@ -26,7 +26,7 @@ public class MailTest {
 
     @Test
     public void testSendMail() {
-        mail.sendMail("brucewhf@gmail.com", "ERROR!!!!!");
+        //mail.sendMail("brucewhf@gmail.com", "ERROR!!!!!");
     }
 
     @Configuration

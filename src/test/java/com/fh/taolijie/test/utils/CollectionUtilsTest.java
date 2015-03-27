@@ -1,6 +1,8 @@
 package com.fh.taolijie.test.utils;
 
+import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.StudentDto;
+import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.utils.CollectionUtils;
 import org.junit.Assert;
@@ -31,5 +33,11 @@ public class CollectionUtilsTest {
         StudentDto dto = CollectionUtils.entity2Dto(m, StudentDto.class);
         Assert.assertEquals("121105", dto.getStudentId());
 
+
+        JobPostEntity jobPostEntity = new JobPostEntity();
+        jobPostEntity.setTitle("title");
+
+        JobPostDto jobPostDto = CollectionUtils.entity2Dto(jobPostEntity, JobPostDto.class);
+        Assert.assertEquals("title", jobPostDto.getTitle());
     }
 }

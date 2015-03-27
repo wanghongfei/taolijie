@@ -5,7 +5,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.NewsEntity;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.impl.DefaultNewsService;
-import com.fh.taolijie.test.BaseDatabaseTestClass;
+import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import java.util.List;
  * Created by wanghongfei on 15-3-6.
  */
 @ContextConfiguration(classes = {DefaultNewsService.class})
-public class NewsServiceTest extends BaseDatabaseTestClass {
+public class NewsServiceTest extends BaseSpringDataTestClass {
     private NewsEntity newsBefore;
     private NewsEntity newsLater;
     private MemberEntity member;
