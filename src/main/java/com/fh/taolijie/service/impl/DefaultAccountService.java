@@ -276,6 +276,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean deleteRole(Integer roleId) {
         RoleEntity role = em.getReference(RoleEntity.class, roleId);
         em.remove(role);
@@ -284,6 +285,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deassignRole(Integer roleId, String username) {
         RoleEntity role = em.getReference(RoleEntity.class, roleId);
         MemberEntity mem = getMemberByUsername(username);

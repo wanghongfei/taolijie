@@ -19,7 +19,7 @@ import java.util.Collection;
         @NamedQuery(name = "memberEntity.findMemberByUsername",
                 query = "SELECT m " +
                         "FROM MemberEntity m " +
-                        "JOIN FETCH m.memberRoleCollection " +
+                        //"JOIN FETCH m.memberRoleCollection " +
                         "WHERE m.username = :username"),
 
         @NamedQuery(name = "memberEntity.findAll",
