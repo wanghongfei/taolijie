@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,14 +41,24 @@ public class DefaultJobPostService implements JobPostService {
 
         Page<JobPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
 
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            JobPostDto dto =  CollectionUtils.entity2Dto(entity, JobPostDto.class);
+/*        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+            JobPostDto dto =  CollectionUtils.entity2Dto(entity, JobPostDto.class, null);
             dto.setCategoryId(entity.getCategory().getId());
             dto.setCategoryName(entity.getCategory().getName());
             dto.setMemberId(entity.getMember().getId());
 
             return dto;
+        });*/
+
+
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
+                postDto.setCategoryName(entity.getCategory().getName());
+                postDto.setCategoryId(entity.getCategory().getId());
+                postDto.setMemberId(entity.getMember().getId());
+            });
         });
+
     }
 
     @Override
@@ -67,12 +76,13 @@ public class DefaultJobPostService implements JobPostService {
                 .setMaxResults(cap)
                 .getResultList();
 
-        List<JobPostDto> dtoList = new ArrayList<>();
-        for (JobPostEntity post : postList) {
-            dtoList.add(makeJobPostDto(post));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
+                postDto.setCategoryName(entity.getCategory().getName());
+                postDto.setCategoryId(entity.getCategory().getId());
+                postDto.setMemberId(entity.getMember().getId());
+            });
+        });
     }
 
     @Override
@@ -90,19 +100,24 @@ public class DefaultJobPostService implements JobPostService {
                 .setMaxResults(cap)
                 .getResultList();
 
-        List<JobPostDto> dtoList = new ArrayList<>();
-        for (JobPostEntity post : postList) {
-            dtoList.add(makeJobPostDto(post));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
+                postDto.setCategoryName(entity.getCategory().getName());
+                postDto.setCategoryId(entity.getCategory().getId());
+                postDto.setMemberId(entity.getMember().getId());
+            });
+        });
     }
 
     @Override
     @Transactional(readOnly = true)
     public JobPostDto findJobPost(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
-        return makeJobPostDto(post);
+        return CollectionUtils.entity2Dto(post, JobPostDto.class, (dto) -> {
+            dto.setCategoryName(post.getCategory().getName());
+            dto.setCategoryId(post.getCategory().getId());
+            dto.setMemberId(post.getMember().getId());
+        });
     }
 
     @Override
@@ -182,7 +197,7 @@ public class DefaultJobPostService implements JobPostService {
         post.setEducationLevel(dto.getEducationLevel());
     }
 
-    private JobPostDto makeJobPostDto(JobPostEntity post) {
+   /* private JobPostDto makeJobPostDto(JobPostEntity post) {
         JobPostDto dto = new JobPostDto();
         dto.setId(post.getId());
         dto.setTitle(post.getTitle());
@@ -207,5 +222,5 @@ public class DefaultJobPostService implements JobPostService {
 
 
         return dto;
-    }
+    }*/
 }

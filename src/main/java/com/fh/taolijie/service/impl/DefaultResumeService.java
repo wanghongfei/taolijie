@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,10 +37,9 @@ public class DefaultResumeService implements ResumeService {
         Page<ResumeEntity> entityList = resumeRepo.findAll(new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            ResumeDto dto =  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class);
-            dto.setMemberId(resumeEntity.getMember().getId());
-
-            return dto;
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
         });
     }
 
@@ -61,12 +59,11 @@ public class DefaultResumeService implements ResumeService {
                 .setMaxResults(cap)
                 .getResultList();
 
-        List<ResumeDto> dtoList = new ArrayList<>();
-        for (ResumeEntity r : rList) {
-            dtoList.add(makeResumeDto(r));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
     }
 
     @Override
@@ -81,7 +78,11 @@ public class DefaultResumeService implements ResumeService {
     @Override
     @Transactional(readOnly = true)
     public ResumeDto findResume(Integer resumeId) {
-        return makeResumeDto(em.find(ResumeEntity.class, resumeId));
+        ResumeEntity entity = em.find(ResumeEntity.class, resumeId);
+
+        return CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
+            dto.setMemberId(entity.getMember().getId());
+        });
     }
 
     @Override
@@ -132,7 +133,7 @@ public class DefaultResumeService implements ResumeService {
         resume.setQq(dto.getQq());
         resume.setIntroduce(dto.getIntroduce());
     }
-    private ResumeDto makeResumeDto(ResumeEntity resume) {
+    /*private ResumeDto makeResumeDto(ResumeEntity resume) {
         ResumeDto dto = new ResumeDto();
         dto.setId(resume.getId());
         dto.setName(resume.getName());
@@ -149,5 +150,5 @@ public class DefaultResumeService implements ResumeService {
         dto.setMemberId(resume.getMember().getId());
 
         return dto;
-    }
+    }*/
 }

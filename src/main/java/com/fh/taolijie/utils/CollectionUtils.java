@@ -90,7 +90,7 @@ public class CollectionUtils {
     /**
      * 将entity转换成dto
      */
-    public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass) {
+    public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass, Consumer<DTO_TYPE> apply) {
         DTO_TYPE dto = null;
 
         // 先从cache中查找
@@ -130,6 +130,11 @@ public class CollectionUtils {
 
             for (Field f : entityFields) {
                 setField(entity, dto, f, dtoFields);
+            }
+
+            // 执行自定义的创建过程
+            if (null != apply) {
+                apply.accept(dto);
             }
 
         } catch (InstantiationException e) {

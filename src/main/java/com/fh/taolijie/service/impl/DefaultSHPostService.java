@@ -45,12 +45,11 @@ public class DefaultSHPostService implements SHPostService {
         Page<SecondHandPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
-            SecondHandPostDto dto = CollectionUtils.entity2Dto(entity, SecondHandPostDto.class);
-            dto.setMemberId(entity.getMember().getId());
-            dto.setCategoryId(entity.getCategory().getId());
-            dto.setCategoryName(entity.getCategory().getName());
-
-            return dto;
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+            });
         });
     }
 
@@ -66,12 +65,13 @@ public class DefaultSHPostService implements SHPostService {
 
         Page<SecondHandPostEntity> postPages = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
 
-        List<SecondHandPostDto> dtoList = new ArrayList<>();
-        for (SecondHandPostEntity post : postPages) {
-            dtoList.add(makePostDto(post));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(postPages, SecondHandPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+            });
+        });
     }
 
     @Override
@@ -91,7 +91,11 @@ public class DefaultSHPostService implements SHPostService {
 
         List<SecondHandPostDto> dtoList = new ArrayList<>();
         for (SecondHandPostEntity post : postList) {
-            dtoList.add(makePostDto(post));
+            dtoList.add(CollectionUtils.entity2Dto(post, SecondHandPostDto.class, (dto) -> {
+                dto.setMemberId(post.getMember().getId());
+                dto.setCategoryId(post.getCategory().getId());
+                dto.setCategoryName(post.getCategory().getName());
+            }));
         }
 
         return dtoList;
@@ -122,7 +126,13 @@ public class DefaultSHPostService implements SHPostService {
     @Override
     @Transactional(readOnly = true)
     public SecondHandPostDto findPost(Integer postId) {
-        return makePostDto(postRepo.getOne(postId));
+        SecondHandPostEntity entity = postRepo.getOne(postId);
+
+        return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+            dto.setMemberId(entity.getMember().getId());
+            dto.setCategoryId(entity.getCategory().getId());
+            dto.setCategoryName(entity.getCategory().getName());
+        });
     }
 
     @Override
@@ -196,7 +206,7 @@ public class DefaultSHPostService implements SHPostService {
         return post;
     }
 
-    private SecondHandPostDto makePostDto(SecondHandPostEntity post) {
+   /* private SecondHandPostDto makePostDto(SecondHandPostEntity post) {
         SecondHandPostDto dto = new SecondHandPostDto();
         dto.setId(post.getId());
         dto.setTitle(post.getTitle());
@@ -216,5 +226,5 @@ public class DefaultSHPostService implements SHPostService {
 
 
         return dto;
-    }
+    }*/
 }

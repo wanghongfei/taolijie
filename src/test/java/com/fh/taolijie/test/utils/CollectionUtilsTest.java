@@ -30,14 +30,14 @@ public class CollectionUtilsTest {
         m.setAge(100);
         m.setStudentId("121105");
 
-        StudentDto dto = CollectionUtils.entity2Dto(m, StudentDto.class);
+        StudentDto dto = CollectionUtils.entity2Dto(m, StudentDto.class, null);
         Assert.assertEquals("121105", dto.getStudentId());
 
 
         JobPostEntity jobPostEntity = new JobPostEntity();
         jobPostEntity.setTitle("title");
 
-        JobPostDto jobPostDto = CollectionUtils.entity2Dto(jobPostEntity, JobPostDto.class);
+        JobPostDto jobPostDto = CollectionUtils.entity2Dto(jobPostEntity, JobPostDto.class, null);
         Assert.assertEquals("title", jobPostDto.getTitle());
     }
 }
