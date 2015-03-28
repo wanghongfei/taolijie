@@ -1,5 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
+import java.util.Date;
+
 /**
  * Created by wanghongfei on 15-3-4.
  */
@@ -15,6 +17,8 @@ public class ResumeDto {
     private String experience;
     private String introduce;
 
+    private Date createdTime;
+
     private Integer memberId;
 
     public Integer getId() {
@@ -23,6 +27,14 @@ public class ResumeDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getName() {

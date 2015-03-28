@@ -1,6 +1,7 @@
 package com.fh.taolijie.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -23,6 +24,8 @@ public class ResumeEntity {
     private String experience;
     private String introduce;
     private MemberEntity member;
+
+    private Date createdTime;
 
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String phonePath, String email, String qq, String experience, String introduce, MemberEntity member) {
@@ -87,6 +90,15 @@ public class ResumeEntity {
 
     public void setHeight(Integer height) {
         this.height = height;
+    }
+
+    @Column(name = "created_time")
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     @Basic

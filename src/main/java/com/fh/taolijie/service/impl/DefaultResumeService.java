@@ -144,6 +144,7 @@ public class DefaultResumeService implements ResumeService {
         dto.setQq(resume.getQq());
         dto.setExperience(resume.getExperience());
         dto.setIntroduce(resume.getIntroduce());
+        dto.setCreatedTime(resume.getCreatedTime());
 
         dto.setMemberId(resume.getMember().getId());
 
