@@ -228,6 +228,9 @@ public class DefaultAccountService implements AccountService {
         } else if (memDto instanceof EmployerDto) {
             EmployerDto dto = (EmployerDto) memDto;
             updateMemberEntity(mem, dto);
+        } else if (memDto instanceof GeneralMemberDto) {
+            GeneralMemberDto dto = (EmployerDto) memDto;
+            updateMemberEntity(mem, dto);
         }
 
         em.merge(mem);
@@ -428,6 +431,24 @@ public class DefaultAccountService implements AccountService {
         }
 
         return dto;
+    }
+
+    private void updateMemberEntity(MemberEntity mem, GeneralMemberDto dto) {
+        // 当dto对象中密码为null时，sha()方法会扔NullPointerException.
+        // 这是web-security的一个小bug, 日后修复
+        if (dto.getPassword() != null) {
+            mem.setPassword(CredentialUtils.sha(dto.getPassword()));
+        }
+        mem.setEmail(dto.getEmail());
+        mem.setName(dto.getName());
+        //mem.setStudentId(dto.getStudentId());
+        mem.setGender(dto.getGender());
+        mem.setVerified(dto.getVerified());
+        mem.setProfilePhotoPath(dto.getProfilePhotoPath());
+        mem.setPhone(dto.getPhone());
+        mem.setQq(dto.getQq());
+        mem.setAge(dto.getAge());
+        //mem.setBlockList(dto.getBlockList());
     }
 
     /**
