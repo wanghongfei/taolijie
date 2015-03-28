@@ -367,6 +367,7 @@ public class DefaultAccountService implements AccountService {
     private void setGeneralField(MemberEntity mem, GeneralMemberDto dto) {
         dto.setId(mem.getId());
         dto.setUsername(mem.getUsername());
+        dto.setPassword(mem.getPassword());
         dto.setEmail(mem.getEmail());
         dto.setName(mem.getName());
         dto.setGender(mem.getGender());
