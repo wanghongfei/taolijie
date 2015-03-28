@@ -49,9 +49,7 @@
                 </div>
             </form>
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+            <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
        </div>
 

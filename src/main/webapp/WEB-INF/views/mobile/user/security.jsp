@@ -26,32 +26,51 @@
 				</h3>
 			</div>
 			<div class="input-group no-border-bottom" style="margin-top:4rem;">
-				<label for=""> 原密码</label>
-				<input class="input" type="text" placeholder="请输入原密码"  maxlength="30">
+				<label for="oldPassword"> 原密码</label>
+				<input class="input" type="password" id="oldPassword" placeholder="请输入原密码"  maxlength="30">
 				<br>
 			</div>
 			<div class="input-group no-border-bottom">
-				<label for="">新密码</label>
-				<input class="input" type="password" placeholder="请输入6-20位字母和字符"  maxlength="30">
+				<label for="newPassword">新密码</label>
+				<input class="input" id="newPassword" type="password" placeholder="请输入6-20位字母和字符"  maxlength="30">
 				<br>
 			</div>
 			<div class="input-group">
-				<label for="">再确认</label>
-				<input class="input" type="password" placeholder="请确认密码"  maxlength="30">
+				<label for="rePassword">再确认</label>
+				<input class="input" id="rePassword" type="password" placeholder="请确认密码"  maxlength="30">
 				<br>
 			</div>
-			<div class="sub-button">
-				<button id="sub-button">提交</button>
-			</div>
+            <div class="sub-button">
+                <input id="sub-button" type="button" class="button" value="提交">
+            </div>
 
 
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+            <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
 
 		<script src="/assets/scripts/vendor.js"></script>
+         <script>
+                $("#sub-button").click(function(){
+                    var oldPassword = $("#oldPassword").val();
+                    var newPassword = $("#newPassword").val();
+                    var rePassword = $("#rePassword").val();
+                    $.ajax({
+                        type:'post',
+                        url:"/user/setting/security",
+                        data:{oldPassword:oldPassword,newPassword:newPassword,rePassword:rePassword},
+                        dataType:"json",
+                        success:function(data){
+                            if(data.result == true){
+                                location.assign('/index')
+                            }
+                        },
+                        error:function(data){
+                            console.log(data);
+                        }
+                    });
+                });
+          </script>
 
 
 	</body>

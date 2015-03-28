@@ -46,7 +46,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="/user/post/job">
+					<a href="/user/job">
 						<span class="icon-circle  red fa fa-check-square-o"></span>
 						<span class="icon-desc">发布兼职</span>
 					</a>
@@ -106,7 +106,7 @@
 					</a>
 				</li>
 				<li class="icon">
-					<a href="user/jobpos">
+					<a href="user/jobpost">
 						 <span class="icon-circle bg-orange fa fa-check-square" style=></span>
 						<span class="icon-desc">发布兼职</span>
 					</a>
@@ -182,11 +182,9 @@
 					</li>
 				</ul>
 			</div>
+                <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
-
-			<div class="footer">
-				<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-			</div>
+                </div>
 		</div>
 		<script src="/assets/scripts/vendor.js"></script>
 

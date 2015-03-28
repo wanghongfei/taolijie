@@ -38,56 +38,56 @@
 				</li>
 			</ul>
 			<div class="menu type-menu">
-				<ul class="icons">
-					<li class="icon">
-						<span class="icon-circle icon-circle-small bg-green">家教</span>
-					</li>
-					<li class="icon">
-						<span class="icon-circle icon-circle-small bg-blue">派单</span>
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-red">代理</span>
-						
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-yellow">促销</span>
-						
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-purple">服务员</span>
-						
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-grown">送餐</span>
-						
-					</li>
-					<li class="icon">
-						<span class="icon-circle icon-circle-small bg-orange">礼仪</span>
-						
-					</li>
-					<li class="icon">
-						<span class="icon-circle icon-circle-small bg-gray">家政</span>
-						
-					</li>
-					<li class="icon">
-						<span class="icon-circle icon-circle-small bg-gray">家政</span>
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-green">家教</span>
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-blue">派单</span>
-					</li>
-					<li class="icon">
-						
-						<span class="icon-circle icon-circle-small bg-red">代理</span>
-					</li>
+				<ul class="icons" id="categorys">
+					<%--<li class="icon">--%>
+						<%--<span class="icon-circle icon-circle-small bg-green">家教</span>--%>
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+						<%--<span class="icon-circle icon-circle-small bg-blue">派单</span>--%>
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-red">代理</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-yellow">促销</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-purple">服务员</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-grown">送餐</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+						<%--<span class="icon-circle icon-circle-small bg-orange">礼仪</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+						<%--<span class="icon-circle icon-circle-small bg-gray">家政</span>--%>
+
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+						<%--<span class="icon-circle icon-circle-small bg-gray">家政</span>--%>
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-green">家教</span>--%>
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-blue">派单</span>--%>
+					<%--</li>--%>
+					<%--<li class="icon">--%>
+
+						<%--<span class="icon-circle icon-circle-small bg-red">代理</span>--%>
+					<%--</li>--%>
 				</ul>
 			</div>
 			<div class="menu method-menu no-border">
@@ -105,109 +105,81 @@
 			</div>
 		</div>
 		<div id="deals" class="deal-list">
-			<div class="deal">
-				<div class="deal-type bg-gray">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-
-			<div class="deal">
-				<div class="deal-type bg-gray">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-green">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-blue">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-blue">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-blue">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-blue">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-blue">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal">
-				<div class="deal-type bg-gray">
-					<span>美工</span>
-				</div>
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
 
 		</div>
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+
+
+        <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
 		<!-- 遮罩 -->
 		<div id="cover" class="cover"></div>
 	</div>
 	<script src="/assets/scripts/vendor.js"></script>
+    <script src="/assets/scripts/template.js"></script>
+    <script src="/assets/scripts/main.js"></script>
 
+
+    <script id="list" type="text/html">
+        {{each list as value i}}
+        <div class="deal">
+            <div class="deal-type bg-blue">
+                <span>{{value.categoryName}}</span>
+            </div>
+            <div class="title">{{value.title}}</div>
+            <span>{{value.workPlace}}</span>&nbsp;&nbsp;
+            <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
+            <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
+            <span>{{value.timeToPay}}</span>
+        </div>
+        {{/each}}
+    </script>
+    <script id="category" type="text/html">
+        {{each category as value i}}
+        <li class="icon">
+            <span class="icon-circle icon-circle-small bg-green">{{value.name}}</span>
+        </li>
+        {{/each}}
+    </script>
+
+    <script>
+        $(function(){
+
+
+            /*获取列表*/
+            $.ajax({
+                type:"GET",
+                url:"/api/joblist",
+                dataType:"json",
+                success:function(data){
+                    var datas = {
+                        list:data
+                    }
+                    var html = template('list', datas);
+                    $("#deals").append(html);
+                }
+            });
+
+            /*获取分类*/
+            $.ajax({
+                type:"GET",
+                url:"/api/jobcate",
+                dataType:"json",
+                success:function(data){
+                    var datas = {
+                        category:data
+                    }
+                    var html = template('category', datas);
+                    $("#categorys").append(html);
+                }
+
+            });
+        });
+    </script>
+
+
+
+    <%--下拉框--%>
 	<script>
 		'use strict';
 
@@ -217,17 +189,17 @@
 		console.log(event);
 
 		//选择分类
-		function stopPropagation(e) { 
-			if (e.stopPropagation) 
-				e.stopPropagation(); 
-			else 
-				e.cancelBubble = true; 
-		} 
+		function stopPropagation(e) {
+			if (e.stopPropagation)
+				e.stopPropagation();
+			else
+				e.cancelBubble = true;
+		}
 		//alert($(document));
-		$(document).on(event,function(){ 
+		$(document).on(event,function(){
 			$('.menu').slideUp(200);
 			$('#cover').hide();
-		}); 
+		});
 
 
 		var tigger = $('.dropdown');
