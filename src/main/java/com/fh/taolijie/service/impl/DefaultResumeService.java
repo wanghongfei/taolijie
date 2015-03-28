@@ -38,7 +38,10 @@ public class DefaultResumeService implements ResumeService {
         Page<ResumeEntity> entityList = resumeRepo.findAll(new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class);
+            ResumeDto dto =  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class);
+            dto.setMemberId(resumeEntity.getMember().getId());
+
+            return dto;
         });
     }
 

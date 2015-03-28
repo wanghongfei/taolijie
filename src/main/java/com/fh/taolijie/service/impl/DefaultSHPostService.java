@@ -45,7 +45,12 @@ public class DefaultSHPostService implements SHPostService {
         Page<SecondHandPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class);
+            SecondHandPostDto dto = CollectionUtils.entity2Dto(entity, SecondHandPostDto.class);
+            dto.setMemberId(entity.getMember().getId());
+            dto.setCategoryId(entity.getCategory().getId());
+            dto.setCategoryName(entity.getCategory().getName());
+
+            return dto;
         });
     }
 
@@ -206,6 +211,7 @@ public class DefaultSHPostService implements SHPostService {
         dto.setDislikes(post.getDislikes());
 
         dto.setMemberId(post.getMember().getId());
+        dto.setCategoryName(post.getCategory().getName());
         dto.setCategoryId(post.getCategory().getId());
 
 

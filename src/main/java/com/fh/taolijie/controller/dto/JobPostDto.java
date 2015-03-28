@@ -41,6 +41,7 @@ public class JobPostDto {
     private String educationLevel;
 
     private Integer categoryId;
+    private String categoryName;
     private Integer memberId;
 
     public Integer getId() {
@@ -153,6 +154,14 @@ public class JobPostDto {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public Integer getLikes() {

@@ -19,6 +19,7 @@ public class SecondHandPostDto {
     private Integer dislikes;
 
     private Integer memberId;
+    private String categoryName;
     private Integer categoryId;
 
     public Integer getId() {
@@ -75,6 +76,14 @@ public class SecondHandPostDto {
 
     public void setSellPrice(Double sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getPicturePath() {

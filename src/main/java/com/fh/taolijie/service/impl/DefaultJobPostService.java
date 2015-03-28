@@ -43,7 +43,12 @@ public class DefaultJobPostService implements JobPostService {
         Page<JobPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class);
+            JobPostDto dto =  CollectionUtils.entity2Dto(entity, JobPostDto.class);
+            dto.setCategoryId(entity.getCategory().getId());
+            dto.setCategoryName(entity.getCategory().getName());
+            dto.setMemberId(entity.getMember().getId());
+
+            return dto;
         });
     }
 
@@ -197,6 +202,7 @@ public class DefaultJobPostService implements JobPostService {
         dto.setEducationLevel(dto.getEducationLevel());
 
         dto.setMemberId(post.getMember().getId());
+        dto.setCategoryName(post.getCategory().getName());
         dto.setCategoryId(post.getCategory().getId());
 
 

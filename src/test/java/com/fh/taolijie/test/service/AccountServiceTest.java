@@ -117,7 +117,9 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
     private boolean containsRole(Collection<MemberRoleEntity> mrCollection, RoleEntity role) {
         for (MemberRoleEntity mr : mrCollection) {
-            if (role.equals(mr.getRole())) {
+            //System.out.println(mr.getRole().getRid() + " " + mr.getRole().getRolename() + ", " + role.getRolename() + " " + role.getRid());
+            //System.out.println(role.equals(mr.getRole()));
+            if (role.getRid().equals(mr.getRole().getRid())) {
                 return true;
             }
         }
