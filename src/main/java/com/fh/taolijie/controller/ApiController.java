@@ -3,13 +3,11 @@ package com.fh.taolijie.controller;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.controller.dto.JobPostCategoryDto;
-import com.fh.taolijie.controller.dto.JobPostDto;
-import com.fh.taolijie.controller.dto.MemberRoleDto;
+import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,8 @@ public class ApiController {
     JobPostCateService jobPostCateService;
     @Autowired
     JobPostService jobPostService;
+    @Autowired
+    ResumeService resumeService;
     @Autowired
     AccountService accountService;
 
@@ -152,5 +152,16 @@ public class ApiController {
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+    /**
+     * 查询所有简历
+     */
+    @RequestMapping(value = {"joblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String resumelist(){
+        List<ResumeDto> list = resumeService.getAllResumeList(0,0);
+        return JSON.toJSONString(list);
+    }
+
+
 
 }

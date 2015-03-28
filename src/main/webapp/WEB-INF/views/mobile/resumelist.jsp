@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js">
 <head>
@@ -6,7 +7,6 @@
 	<meta name="description" content="">
 
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 	<link rel="stylesheet" href="/assets/styles/vendor.css">
 
@@ -129,16 +129,31 @@
 
 		</div>
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+        <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
+
 
 		<!-- 遮罩 -->
 		<div id="cover" class="cover"></div>
 	</div>
 	<script src="/assets/scripts/vendor.js"></script>
-
 	<script src="/assets/scripts/hammer.js"></script>
+    <script src="/assets/scripts/template.js"></script>
+    <script src="/assets/scripts/main.js"></script>
+
+
+    <script id="list" type="text/html">
+        {{each list as value i}}
+        <div class="deal">
+            <div class="deal-right">
+                <p class="title2">山东理工大学</p>
+                <i class="fa fa-eye red"></i> 30
+            </div>
+            <img src="/assets/images/miao.jpg" class="deal-type deal-img" alt="">
+            <p class="title2">喵帕斯</p>
+            <p>家教、促销、礼仪</p>
+        </div>
+        {{/each}}
+    </script>
 
 	<script>
 		'use strict';
