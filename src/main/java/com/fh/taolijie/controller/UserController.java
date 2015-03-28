@@ -3,6 +3,7 @@ package com.fh.taolijie.controller;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -12,13 +13,15 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
-import org.hibernate.annotations.Parameter;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.json.Json;
@@ -30,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -44,21 +49,25 @@ public class UserController {
 
     @Autowired
     AccountService accountService;
-
     @Autowired
     JobPostService jobPostService;
-
     @Autowired
     JobPostCateService jobPostCateService;
-
     @Autowired
     ResumeService resumeService;
-
     @Autowired
     SHPostService shPostService;
 
+
     /*日志*/
     private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    /*针对date类型的绑定*/
+//    @InitBinder
+//    protected void initBinder(WebDataBinder binder) {
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+//    }
 
     /**
      * 个人中心
@@ -79,7 +88,6 @@ public class UserController {
      */
     @RequestMapping(value = "/user/register",method = RequestMethod.GET)
     public String register(HttpServletRequest req){
-        System.out.println(ResponseUtils.determinePage(req,"register"));
         return ResponseUtils.determinePage(req,"user/register");
     }
 
@@ -136,28 +144,6 @@ public class UserController {
         /*绑定model*/
         return ResponseUtils.determinePage(req,"user/posts");
     }
-//
-//    @RequestMapping(value = "user/job",method = RequestMethod.GET)
-//    public @ResponseBody String getjob(JobPostDto job,
-//                                    HttpSession session){
-//
-//        List<JobPostDto> jobs =null;
-//
-//        String username = CredentialUtils.getCredential(session).getUsername();
-//
-//        GeneralMemberDto mem =accountService.findMember(username,StudentDto.class,false);
-//
-//        /*获取id!!*/
-//        jobs = jobPostService.getJobPostListByMember(5, 0, 0);
-//
-//        /*
-//        * json数组
-//        * {id:job.}
-//        *
-//        * */
-//
-//        return "{id:'1'}";
-//     }
 
 
     /**
@@ -175,7 +161,7 @@ public class UserController {
         if(credential==null){
             return "redirect:/user/login";
         }
-        return ResponseUtils.determinePage(req,"job");
+        return ResponseUtils.determinePage(req,"user/jobpost");
     }
 
     /**
@@ -220,7 +206,7 @@ public class UserController {
      */
     @RequestMapping(value = "user/setting/profile", method = RequestMethod.GET)
     public String profile(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"profile");
+        return ResponseUtils.determinePage(req,"user/profile");
     }
 
 
@@ -231,7 +217,7 @@ public class UserController {
      */
     @RequestMapping(value = "user/setting/security", method = RequestMethod.GET)
     public String security(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"security");
+        return ResponseUtils.determinePage(req,"user/security");
     }
 
 
@@ -250,6 +236,9 @@ public class UserController {
                            HttpSession session,
                            HttpServletResponse res){
         GeneralMemberDto member = null;
+        GeneralMemberDto memDto = null;
+        RoleDto role = null;
+        int cookieExpireTime = 1*24*60*60;//1天
 
         /*
          * 注册需要的表单内容
@@ -262,9 +251,9 @@ public class UserController {
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
         /*用户名重复*/
-//        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
-//            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
-//        }
+        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
+            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
+        }
         /*两次密码不一致*/
         if(!mem.getPassword().equals(mem.getRepassword())){
             return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
@@ -275,12 +264,7 @@ public class UserController {
         member.setPassword(mem.getPassword());
         member.setRoleIdList(Arrays.asList(1));
 
-        System.out.println("email"+mem.getEmail());
-        if(logger.isDebugEnabled()){
-            logger.debug("email:{}",mem.getEmail());
-            logger.debug("username:{}",mem.getUsername());
-            logger.debug("password:{}",mem.getPassword());
-        }
+
 
 
         /*注册*/
@@ -291,7 +275,18 @@ public class UserController {
         }
 
 
-        /*注册完成后自动登陆*/
+        /*用户登陆*/
+        Credential credential = new TaolijieCredential(mem.getUsername());
+        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
+        for(Integer rid:memDto.getRoleIdList()){
+            role = accountService.findRole(rid);
+            credential.addRole(role.getRolename());
+
+        }
+        CredentialUtils.createCredential(session,credential);
+
+
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
 
@@ -311,7 +306,6 @@ public class UserController {
                                       HttpSession session,
                                       HttpServletResponse res){
 
-        System.out.println(mem.getUsername());
         GeneralMemberDto memDto = null;
         RoleDto role = null;
         int cookieExpireTime = 1*24*60*60;//1天
@@ -368,7 +362,7 @@ public class UserController {
 
     @RequestMapping(value = "user/logout",method = RequestMethod.GET)
     public String logout(HttpSession session){
-        session.setAttribute("CURRENT_USER_CREDENTIAL",null);
+        session.invalidate();
         return "redirect:/index";
     }
 
@@ -406,19 +400,35 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "user/setting/security",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String security(@RequestParam String password,HttpSession session){
+    public @ResponseBody String security(@Valid ChangePasswordDto dto,
+                                         BindingResult result,
+                                         HttpSession session){
 
-        if(password.length()<6||password.length()>25)
-            return new JsonWrapper(false, Constants.ErrorType.PASSWORD_ILLEGAL).getAjaxMessage();
+        if(result.hasErrors()){
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+        }
 
         GeneralMemberDto mem = null;
 
         String username = CredentialUtils.getCredential(session).getUsername();
 
+
         mem = accountService.findMember(username,new GeneralMemberDto[0],false);
 
-        mem.setPassword(password);
 
+
+        if(!mem.getPassword().equals(CredentialUtils.sha(dto.getOldPassword()))){
+            System.out.println("用户的密码:"+mem.getPassword());
+            System.out.println("输入的原密码:"+CredentialUtils.sha(dto.getOldPassword()));
+            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+        }else if(!dto.getNewPassword().equals(dto.getRePassword())){
+            return  new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+        }
+
+        mem.setPassword(dto.getNewPassword());
+
+        System.out.println("更新后的密码"+mem.getPassword());
+        System.out.println(CredentialUtils.sha(mem.getPassword()));
         if(!accountService.updateMember(mem)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
@@ -427,27 +437,6 @@ public class UserController {
     }
 
 
-    /**
-     * 获取兼职分类
-     */
-    @RequestMapping(value = "user/post/jobcategory",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String jobCategory(HttpSession session){
-
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        List<JobPostCategoryDto> jobList =  jobPostCateService.getCategoryList(0, 0);
-
-        for(JobPostCategoryDto jobPostCategoryDto:jobList)
-        {
-            jsonArrayBuilder.add(jobPostCategoryDto.getId());
-            jsonArrayBuilder.add(jobPostCategoryDto.getName());
-        }
-
-        JsonObject obj = Json.createObjectBuilder()
-                .add("result", "true")
-                .add("parm",jsonArrayBuilder)
-                .build();
-        return obj.toString();
-    }
 
     /**
      * 发布兼职信息
@@ -543,6 +532,23 @@ public class UserController {
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+    /**
+     * 用户的兼职
+     */
+    @RequestMapping(value="/user/joblistbymember",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String joblistbymember(HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
+
+        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
+
+        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(), 0, 0);
+        return JSON.toJSONString(list);
+    }
+
 
 
 }

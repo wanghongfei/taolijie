@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,13 +68,10 @@ public class HomeController {
 
 
     /**
-     * 兼职列表
+     * 兼职列表页面
      */
     @RequestMapping(value = {"joblist"},method = RequestMethod.GET)
-    public String joblist(Model model){
-        List<JobPostDto> list = null;
-       /*list = jobPostService.getJobPostList()*/
-        model.addAttribute("joblist",list);
+    public String joblist(){
         return "mobile/joblist";
     }
 
