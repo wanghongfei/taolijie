@@ -379,6 +379,9 @@ public class DefaultAccountService implements AccountService {
         dto.setPhone(mem.getPhone());
         dto.setAge(mem.getAge());
         dto.setQq(mem.getQq());
+
+        dto.setCreated_time(mem.getCreatedTime());
+        dto.setValid(mem.getValid());
     }
 
     private GeneralMemberDto makeGeneralDto(MemberEntity mem, boolean isWired) {

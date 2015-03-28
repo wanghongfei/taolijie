@@ -2,6 +2,7 @@ package com.fh.taolijie.domain;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -43,6 +44,9 @@ public class MemberEntity {
     private Integer age;
     private String companyName;
     private String blockList;
+
+    private Date createdTime;
+    private Boolean valid;
 
     private Collection<EducationExperienceEntity> educationExperienceCollection;
     private Collection<JobPostEntity> jobPostCollection;
@@ -122,6 +126,24 @@ public class MemberEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "created_time")
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    @Column(name = "valid")
+    public Boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
     }
 
     @Basic

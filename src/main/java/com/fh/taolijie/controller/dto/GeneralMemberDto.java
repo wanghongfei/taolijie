@@ -4,6 +4,7 @@ import com.fh.taolijie.utils.Constants;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +36,10 @@ public class GeneralMemberDto {
     private Integer age;
     //private String companyName;
     //private String blockList;
+
+    private Date created_time;
+    private Boolean valid;
+
     /**
      * 保存了{@link com.sun.javafx.scene.accessibility.Role}实体的主键.
      * <p> 这些{@code Role}实体都会被关联到{@code MemberEntity}中
@@ -57,6 +62,21 @@ public class GeneralMemberDto {
         this.roleIdList = roleIdList;
     }
 
+    public Date getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(Date created_time) {
+        this.created_time = created_time;
+    }
+
+    public Boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
+    }
 
     public String getVerified() {
         return verified;
