@@ -6,12 +6,14 @@ $fa-font-path: "../bower_components/font-awesome/fonts" !default;*/
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%; }
+  -webkit-text-size-adjust: 100%;
+    height: 100%;}
 
 body {
-  margin: 0; }
+  margin: 0;
+    height: 100%;}
 
-article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, main, nav, section, summary {
   display: block; }
 
 audio, canvas, progress, video {
@@ -1165,6 +1167,7 @@ pre {
   overflow-y: scroll; }
 
 .container {
+    min-height: 100%;
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
@@ -4539,14 +4542,22 @@ a:hover, a:link, a {
     font-size: 1.7rem; }
 
 /* 页脚 */
+.footerpadding{
+    padding-bottom:8rem;
+}
 .footer {
+    position: absolute;
+    bottom:0;
   width: 100%;
   border-top: 1px solid #e5e5e5;
   background-color: #eaeaea;
   height: 5rem;
   margin: 0px;
   padding: 0px;
-  margin-top: 2rem; }
+  margin-top: 2rem;
+    margin-bottom: 1px;
+    max-width: 640px;
+}
   .footer p {
     margin: 0px;
     line-height: 5rem; }
@@ -4556,8 +4567,10 @@ a:hover, a:link, a {
   padding-right: 0px; }
 
 .container {
+    position: relative;
   max-width: 640px !important;
   min-width: 300px; }
+
 
 /*========== info ============*/
 .info {
@@ -4759,14 +4772,14 @@ a:hover, a:link, a {
     font-size: 1.8rem; }
   .deal .deal-type {
     float: left;
-    width: 4.2rem;
-    height: 4.2rem;
-    border-radius: 4.2rem;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 5rem;
     margin-left: 1rem;
     margin-right: 1rem;
     text-align: center; }
     .deal .deal-type span {
-      line-height: 4.2rem;
+      line-height: 5rem;
       font-size: 1.6rem;
       color: #fff; }
   .deal .deal-img {

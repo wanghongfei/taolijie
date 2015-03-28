@@ -229,7 +229,7 @@ public class DefaultAccountService implements AccountService {
             EmployerDto dto = (EmployerDto) memDto;
             updateMemberEntity(mem, dto);
         } else if (memDto instanceof GeneralMemberDto) {
-            GeneralMemberDto dto = (EmployerDto) memDto;
+            GeneralMemberDto dto = (GeneralMemberDto) memDto;
             updateMemberEntity(mem, dto);
         }
 

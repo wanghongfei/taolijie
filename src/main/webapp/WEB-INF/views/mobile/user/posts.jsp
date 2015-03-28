@@ -39,90 +39,47 @@
 			</ul>
 		</div>
 		<div id="deals" class="deal-list">
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
-			<div class="deal unclassified">
-				<input type="button" id="del-btn" class="del-btn" value="删除">
-				<div class="title">诚聘高中物理老师一名</div>
-				<span>华光路103号</span>&nbsp;&nbsp;
-				<span>2014-1-28</span>&nbsp;&nbsp;
-				<span>200元/天</span>&nbsp;&nbsp;
-				<span>月结</span>
-			</div>
 
 		</div>
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+        <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
 		<!-- 遮罩 -->
 		<div id="cover" class="cover"></div>
 	</div>
 	<script src="/assets/scripts/vendor.js"></script>
+    <script src="/assets/scripts/template.js"></script>
+    <script src="/assets/scripts/main.js"></script>
+
+    <script id="memberlist" type="text/html">
+        {{each list as value i}}
+        <div class="deal unclassified">
+            <input type="button" id="" class="del-btn" value="删除">
+            <div class="title">{{value.title}}</div>
+            <span>{{value.workPlace}}</span>&nbsp;&nbsp;
+            <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
+            <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
+            <span>{{value.timeToPay}}</span>
+        </div>
+        {{/each}}
+    </script>
+
+    <script>
+        $(function(){
+            $.ajax({
+                type:"GET",
+                dataType:"json",
+                url:"/user/joblistbymember",
+                success:function(data){
+                    var datas = {
+                        list:data
+                    }
+                    var html = template('memberlist', datas);
+                    $("#deals").append(html);
+                }
+            });
+        })
+    </script>
 
 
 </body>
