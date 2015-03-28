@@ -11,7 +11,6 @@ import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.SHPostService;
 import com.fh.taolijie.utils.ResponseUtils;
-import com.sun.javafx.sg.prism.NGShape;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 @Controller
@@ -41,7 +36,7 @@ public class HomeController {
     ResumeService resumeService;
     @Autowired
     SHPostService shPostService;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**

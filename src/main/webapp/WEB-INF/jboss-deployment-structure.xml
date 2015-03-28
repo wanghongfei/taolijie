@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+<jboss-deployment-structure>
     <deployment>
         <exclude-subsystems>
             <subsystem name="logging" />
         </exclude-subsystems>
+
+<!--        <exclusions>
+            <module name="org.slf4j" />
+        </exclusions>-->
     </deployment>
 </jboss-deployment-structure>
