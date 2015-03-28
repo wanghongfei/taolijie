@@ -161,7 +161,7 @@
 
                 $.ajax({
                     type:"POST",
-                    url:"/user/post/job",
+                    url:"/api/post/job",
                     data:{
                         title:title,
                         categoryId:categoryId,

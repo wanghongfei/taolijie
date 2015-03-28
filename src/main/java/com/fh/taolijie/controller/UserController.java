@@ -78,6 +78,7 @@ public class UserController {
         if(credential==null){
             return "redirect:/user/login";
         }
+        model.addAttribute("username",credential.getUsername());
 
         return "mobile/user/user";
 
@@ -132,7 +133,6 @@ public class UserController {
                         ResumeDto resume,
                         SecondHandPostCategoryDto secondHand,
                         HttpSession session,
-                        Model model,
                         HttpServletRequest req){
        String username = null;
 
@@ -145,17 +145,34 @@ public class UserController {
         return ResponseUtils.determinePage(req,"user/posts");
     }
 
+    /**
+     * 我的收藏
+     */
+
+    @RequestMapping(value = "user/fav",method = RequestMethod.GET)
+    public String fav(JobPostDto job,
+                      ResumeDto resume,
+                      SecondHandPostCategoryDto secondHand,
+                      HttpSession session,
+                      HttpServletRequest req){
+
+        /*通过session获取当前的用户*/
+        String username = CredentialUtils.getCredential(session).getUsername();
+
+         /*绑定model*/
+        return ResponseUtils.determinePage(req,"user/fav");
+
+    }
+
 
     /**
      * 发布兼职
-     * @param job
+     * @param
      * @param req
      * @return
      */
     @RequestMapping(value = "user/job" ,method = RequestMethod.GET)
     public String job(HttpSession session,
-                      JobPostDto job,
-                      JobPostCategoryDto cate,
                       HttpServletRequest req){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
@@ -163,6 +180,7 @@ public class UserController {
         }
         return ResponseUtils.determinePage(req,"user/jobpost");
     }
+
 
     /**
      * 发布简历
@@ -276,12 +294,17 @@ public class UserController {
 
 
         /*用户登陆*/
-        Credential credential = new TaolijieCredential(mem.getUsername());
+
         memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
+        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
         for(Integer rid:memDto.getRoleIdList()){
             role = accountService.findRole(rid);
             credential.addRole(role.getRolename());
 
+            if(logger.isDebugEnabled()){
+                logger.debug("RoleId:{}",rid);
+                logger.debug("RoleName:{}",role.getRolename());
+            }
         }
         CredentialUtils.createCredential(session,credential);
 
@@ -325,8 +348,9 @@ public class UserController {
         }
 
         /*获取用户信息和用户权限*/
-        Credential credential = new TaolijieCredential(mem.getUsername());
+
         memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
+        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
         for(Integer rid:memDto.getRoleIdList()){
             role = accountService.findRole(rid);
             credential.addRole(role.getRolename());
@@ -436,38 +460,6 @@ public class UserController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
-
-
-    /**
-     * 发布兼职信息
-     * @param job
-     * @param session
-     * @return
-     */
-    @RequestMapping(value = "user/post/job", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(@Valid JobPostDto  job,
-                                    BindingResult result,
-                                    HttpSession session){
-        GeneralMemberDto mem = null;
-
-        if(result.hasErrors()){
-            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
-        }
-
-        String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
-
-        /*创建兼职信息*/
-        job.setMemberId(mem.getId());
-        job.setPostTime(new Date());
-        jobPostService.addJobPost(job);
-
-
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-
-
-
     /**
      * 发布二手信息
      * @param sechand
@@ -533,21 +525,6 @@ public class UserController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
-    /**
-     * 用户的兼职
-     */
-    @RequestMapping(value="/user/joblistbymember",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String joblistbymember(HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
-        if(credential==null){
-            return "redirect:/user/login";
-        }
-
-        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
-
-        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(), 0, 0);
-        return JSON.toJSONString(list);
-    }
 
 
 

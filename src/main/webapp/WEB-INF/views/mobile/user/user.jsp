@@ -23,7 +23,7 @@
 				<div>返回</div>
 			</a>
 			<h3 class="text-center"><a href="">个人中心</a></h3>
-            <a href="/user/logout"><p style="float:right">注销</p></a>
+            <a href="/user/logout"><p style="position: absolute;right: 5rem;top:1.5rem;">注销</p></a>
 		</div>
 		<div class="user-info">
 			<img src="/assets/images/miao.jpg" alt="">

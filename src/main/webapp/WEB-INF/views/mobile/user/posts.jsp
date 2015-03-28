@@ -53,14 +53,18 @@
 
     <script id="memberlist" type="text/html">
         {{each list as value i}}
-        <div class="deal unclassified">
-            <input type="button" id="" class="del-btn" value="删除">
-            <div class="title">{{value.title}}</div>
-            <span>{{value.workPlace}}</span>&nbsp;&nbsp;
-            <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
-            <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
-            <span>{{value.timeToPay}}</span>
-        </div>
+
+        <%--<a href="/jobdetail/{{value.id}}">--%>
+            <div class="deal unclassified">
+                <input type="button" class="del-btn" id="del-{{value.id}}" value="删除" onclick="javascript:del(this);">
+                <div class="title">{{value.title}}</div>
+                <span>{{value.workPlace}}</span>&nbsp;&nbsp;
+                <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
+                <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
+                <span>{{value.timeToPay}}</span>
+            </div>
+        <%--</a>--%>
+
         {{/each}}
     </script>
 
@@ -69,7 +73,7 @@
             $.ajax({
                 type:"GET",
                 dataType:"json",
-                url:"/user/joblistbymember",
+                url:"/api/joblistbymember",
                 success:function(data){
                     var datas = {
                         list:data
@@ -79,6 +83,29 @@
                 }
             });
         })
+
+
+        var del = function(e){
+            var id = $(e).attr('id');
+            var url = "/api/deleteJob/"+id.substring(4);
+            console.log(url);
+            $.ajax({
+                type:"POST",
+                dataType:"json",
+                url:url,
+                success:function(data){
+                    if(data.result==true){
+                        location.assign("/user/posts");
+                    }
+                }
+
+            })
+        }
+        $(".del-btn").click(function(){
+            console.log("heheh");
+            console.log($(this).next('div'));
+
+        });
     </script>
 
 

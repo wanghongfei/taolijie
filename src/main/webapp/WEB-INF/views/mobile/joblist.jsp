@@ -122,16 +122,19 @@
 
     <script id="list" type="text/html">
         {{each list as value i}}
-        <div class="deal">
-            <div class="deal-type bg-blue">
-                <span>{{value.categoryName}}</span>
+        <a href="/jobdetail/{{value.id}}">
+            <div class="deal">
+                <div class="deal-type bg-blue">
+                    <span>{{value.categoryName}}</span>
+                </div>
+                <div class="title">{{value.title}}</div>
+                <span>{{value.workPlace}}</span>&nbsp;&nbsp;
+                <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
+                <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
+                <span>{{value.timeToPay}}</span>
             </div>
-            <div class="title">{{value.title}}</div>
-            <span>{{value.workPlace}}</span>&nbsp;&nbsp;
-            <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
-            <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
-            <span>{{value.timeToPay}}</span>
-        </div>
+        </a>
+
         {{/each}}
     </script>
     <script id="category" type="text/html">
