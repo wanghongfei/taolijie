@@ -84,7 +84,7 @@ public class ReviewEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "baseReview")
+    @OneToMany(mappedBy = "baseReview", fetch = FetchType.EAGER)
     public List<ReviewEntity> getReplyList() {
         return replyList;
     }

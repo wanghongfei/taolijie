@@ -3,6 +3,7 @@ package com.fh.taolijie.domain;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -56,6 +57,8 @@ public class MemberEntity {
     private Collection<ResumeEntity> resumeCollection;
     private Collection<ReviewEntity> reviewCollection;
     private Collection<SecondHandPostEntity> secondHandPostCollection;
+
+    private List<ReviewEntity> replyList;
 
     public MemberEntity() {
 
@@ -306,6 +309,15 @@ public class MemberEntity {
 
     public void setMemberRoleCollection(Collection<MemberRoleEntity> memberRoleCollection) {
         this.memberRoleCollection = memberRoleCollection;
+    }
+
+    @OneToMany(mappedBy = "member")
+    public List<ReviewEntity> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<ReviewEntity> replyList) {
+        this.replyList = replyList;
     }
 
     @OneToMany(mappedBy = "member")

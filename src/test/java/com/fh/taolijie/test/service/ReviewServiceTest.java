@@ -101,6 +101,30 @@ public class ReviewServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testAddComment() {
+        ReviewDto dto = new ReviewDto();
+        dto.setContent("comment");
+        //dto.setJobPostId(post.getId());
+        dto.setMemberId(member.getId());
+
+        rService.addComment(member.getId(), this.review.getId(), dto);
+
+
+        ReviewEntity r = em.createQuery("SELECT r FROM ReviewEntity r WHERE r.content = 'OK'", ReviewEntity.class)
+                .getSingleResult();
+
+        List<ReviewEntity> replyList = r.getReplyList();
+        Assert.assertNotNull(replyList);
+        boolean contains = replyList.stream()
+                .anyMatch( (entity) -> {
+                    return entity.getContent().equals("comment");
+                });
+
+        Assert.assertTrue(contains);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
     public void testAddReview() {
         ReviewDto dto = new ReviewDto();
         dto.setContent("review");

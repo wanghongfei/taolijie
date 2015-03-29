@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -12,6 +13,11 @@ public class ReviewDto {
 
     private Integer memberId;
     private Integer jobPostId;
+
+    /**
+     * Replies to this comment, if any.
+     */
+    private List<ReviewDto> replyList;
 
     public Integer getId() {
         return id;
@@ -35,6 +41,14 @@ public class ReviewDto {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public List<ReviewDto> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<ReviewDto> replyList) {
+        this.replyList = replyList;
     }
 
     public Integer getMemberId() {
