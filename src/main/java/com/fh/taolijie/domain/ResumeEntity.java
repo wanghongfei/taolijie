@@ -8,7 +8,11 @@ import java.util.Date;
  */
 @NamedQueries({
         @NamedQuery(name = "resumeEntity.findByMember",
-            query = "SELECT r FROM ResumeEntity r WHERE r.member = :member")
+            query = "SELECT r FROM ResumeEntity r WHERE r.member = :member"),
+
+        // 查找所有简历，最新的简历在最前
+        @NamedQuery(name = "ResumeEntity.findAll",
+            query = "SELECT r FROM ResumeEntity r ORDER BY r.createdTime DESC")
 })
 @Entity
 @Table(name = "resume")
