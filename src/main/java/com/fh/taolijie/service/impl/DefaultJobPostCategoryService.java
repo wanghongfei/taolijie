@@ -60,7 +60,8 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateCategory(Integer cateId, JobPostCategoryDto dto) {
         JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
-        updateCategory(cate, dto);
+        CollectionUtils.updateEntity(cate, dto, null);
+        //updateCategory(cate, dto);
 
         return true;
     }
@@ -76,22 +77,23 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void addCategory(JobPostCategoryDto dto) {
-        JobPostCategoryEntity cate = makeCategory(dto);
+        //JobPostCategoryEntity cate = makeCategory(dto);
+        JobPostCategoryEntity cate = CollectionUtils.dto2Entity(dto, JobPostCategoryEntity.class, null);
         em.persist(cate);
     }
 
-    private JobPostCategoryEntity makeCategory(JobPostCategoryDto dto) {
+   /* private JobPostCategoryEntity makeCategory(JobPostCategoryDto dto) {
         JobPostCategoryEntity cate = new JobPostCategoryEntity(dto.getName(), dto.getMemo(),
                 dto.getLevel());
 
         return cate;
-    }
+    }*/
 /*    private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
         return new JobPostCategoryDto(cate.getId(), cate.getName(), cate.getMemo(), cate.getLevel());
     }*/
-    private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
+    /*private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
         cate.setName(dto.getName());
         cate.setMemo(dto.getMemo());
         cate.setLevel(dto.getLevel());
-    }
+    }*/
 }
