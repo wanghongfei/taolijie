@@ -124,7 +124,8 @@ public class DefaultJobPostService implements JobPostService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateJobPost(Integer postId, JobPostDto postDto) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
-        updateJobPost(post, postDto);
+        CollectionUtils.updateEntity(post, postDto, null);
+        //updateJobPost(post, postDto);
 
         return true;
     }
@@ -179,7 +180,7 @@ public class DefaultJobPostService implements JobPostService {
      * @param post
      * @param dto
      */
-    private void updateJobPost(JobPostEntity post, JobPostDto dto) {
+    /*private void updateJobPost(JobPostEntity post, JobPostDto dto) {
         post.setTitle(dto.getTitle());
         post.setExpiredTime(dto.getExpiredTime());
         post.setPostTime(dto.getPostTime());
@@ -195,7 +196,7 @@ public class DefaultJobPostService implements JobPostService {
         post.setLikes(dto.getLikes());
         post.setDislikes(dto.getDislikes());
         post.setEducationLevel(dto.getEducationLevel());
-    }
+    }*/
 
    /* private JobPostDto makeJobPostDto(JobPostEntity post) {
         JobPostDto dto = new JobPostDto();

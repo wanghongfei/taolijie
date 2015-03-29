@@ -62,6 +62,8 @@ public class NewsServiceTest extends BaseSpringDataTestClass {
         member.getNewsCollection().add(newsBefore);
         member.getNewsCollection().add(newsLater);
 
+        em.flush();
+        em.clear();
     }
 
     @Test
@@ -127,12 +129,23 @@ public class NewsServiceTest extends BaseSpringDataTestClass {
         em.createQuery("SELECT news FROM NewsEntity news WHERE news.title = :title", NewsEntity.class)
                 .setParameter("title", "one news")
                 .getSingleResult();
+
+        int size = em.find(MemberEntity.class, this.member.getId())
+                .getNewsCollection()
+                .size();
+
+        Assert.assertEquals(3, size);
     }
 
     @Test
     @Transactional(readOnly = false)
     public void testDeleteNews() {
         newsService.deleteNews(this.newsBefore.getId());
+
+        int size = em.find(MemberEntity.class, this.member.getId())
+                .getNewsCollection()
+                .size();
+        Assert.assertEquals(1, size);
 
         try {
             em.createQuery("SELECT news FROM NewsEntity news WHERE news.title = :title", NewsEntity.class)
