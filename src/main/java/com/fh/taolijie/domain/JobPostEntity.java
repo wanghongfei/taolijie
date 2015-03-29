@@ -8,11 +8,11 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @NamedQueries({
-        @NamedQuery(name = "jobPostEntity.findAllOrderByPostTime",
+        @NamedQuery(name = "JobPostEntity.findAllOrderByPostTime",
                 query = "SELECT j FROM JobPostEntity j ORDER BY j.postTime DESC "),
-        @NamedQuery(name = "jobPostEntity.findAllOrderByExpiredTime",
+        @NamedQuery(name = "JobPostEntity.findAllOrderByExpiredTime",
                 query = "SELECT j FROM JobPostEntity j ORDER BY j.expiredTime DESC "),
-        @NamedQuery(name = "jobPostEntity.findByMember",
+        @NamedQuery(name = "JobPostEntity.findByMember",
                 query = "SELECT j FROM JobPostEntity j WHERE j.member = :member ORDER BY j.postTime DESC"),
         @NamedQuery(name = "jobPostEntity.findByCategory",
                 query = "SELECT j FROM JobPostEntity j WHERE j.category = :category ORDER BY j.postTime DESC")

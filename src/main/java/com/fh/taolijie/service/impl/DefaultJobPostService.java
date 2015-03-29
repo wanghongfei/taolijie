@@ -39,7 +39,7 @@ public class DefaultJobPostService implements JobPostService {
     public List<JobPostDto> getAllJobPostList(int firstResult, int capacity) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
-        Page<JobPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
+        Page<JobPostEntity> entityList = postRepo.findAllOrderByPostTime(new PageRequest(firstResult, cap));
 
 /*        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
             JobPostDto dto =  CollectionUtils.entity2Dto(entity, JobPostDto.class, null);
@@ -66,17 +66,16 @@ public class DefaultJobPostService implements JobPostService {
     public List<JobPostDto> getJobPostListByMember(Integer memId, int firstResult, int capacity) {
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
 
-        int cap = capacity;
-        if (capacity <= 0) {
-            cap = Constants.PAGE_CAPACITY;
-        }
-        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByMember", JobPostEntity.class)
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<JobPostEntity> entityList = postRepo.findByMember(mem, new PageRequest(firstResult, cap));
+/*        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByMember", JobPostEntity.class)
                 .setParameter("member", mem)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
-        return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
                 postDto.setCategoryName(entity.getCategory().getName());
                 postDto.setCategoryId(entity.getCategory().getId());
