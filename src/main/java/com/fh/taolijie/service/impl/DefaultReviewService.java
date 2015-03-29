@@ -42,16 +42,60 @@ public class DefaultReviewService implements ReviewService {
                 .setMaxResults(cap)
                 .getResultList();
 
+        // 把Entity List转成DTO List
         List<ReviewDto> dtoList = new ArrayList<>();
         for (ReviewEntity r : reviewList) {
-            //dtoList.add(makeReviewDto(r));
             dtoList.add(CollectionUtils.entity2Dto(r, ReviewDto.class, (dto) -> {
+                // 设置DTO的关联信息
                 dto.setMemberId(r.getMember().getId());
                 dto.setJobPostId(r.getJobPost().getId());
+
+                // 如果有评论回复，则设置回复
+                List<ReviewEntity> replyList = r.getReplyList();
+                if (null != replyList) {
+                    // 把Entity转成DTO
+                    CollectionUtils.transformCollection(replyList, ReviewDto.class, (entity) -> {
+                        return CollectionUtils.entity2Dto(entity, ReviewDto.class, (reviewDto) -> {
+                            reviewDto.setMemberId(entity.getMember().getId());
+                        });
+                    });
+                }
             }));
         }
 
         return dtoList;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void addComment(Integer memId, Integer reviewId, ReviewDto dto) {
+        // TODO untested!!
+        MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        ReviewEntity review = em.getReference(ReviewEntity.class, reviewId);
+
+        // 创建回复Entity对象
+        ReviewEntity reply = CollectionUtils.dto2Entity(dto, ReviewEntity.class, (replyEntity) -> {
+            // 创建回复与用户的关联关系
+            // 设置从回复到用户的关联
+            replyEntity.setMember(mem);
+            // 设置从用户到回复的关联
+            List<ReviewEntity> repList = CollectionUtils.addToCollection(mem.getReplyList(), replyEntity);
+            if (null != repList) {
+                mem.setReplyList(repList);
+            }
+
+            // 创建回复与被回复Review实体的关系
+            // 设置从回复到被回复的关联
+            replyEntity.setBaseReview(review);
+            // 设置从被回复到回复的关联
+            List<ReviewEntity> replyList = CollectionUtils.addToCollection(review.getReplyList(), replyEntity);
+            if (null != replyList) {
+                review.setReplyList(replyList);
+            }
+        });
+
+        // 保存回复
+        em.persist(reply);
     }
 
     @Override

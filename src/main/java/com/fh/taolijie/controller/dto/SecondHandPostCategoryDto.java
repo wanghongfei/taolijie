@@ -9,6 +9,8 @@ public class SecondHandPostCategoryDto {
     private String memo;
     private Integer level;
 
+    private String themeColor;
+
     public Integer getId() {
         return id;
     }
@@ -23,6 +25,14 @@ public class SecondHandPostCategoryDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getThemeColor() {
+        return themeColor;
+    }
+
+    public void setThemeColor(String themeColor) {
+        this.themeColor = themeColor;
     }
 
     public String getMemo() {

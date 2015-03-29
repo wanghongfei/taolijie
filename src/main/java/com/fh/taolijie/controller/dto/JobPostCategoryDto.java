@@ -9,6 +9,8 @@ public class JobPostCategoryDto {
     private String memo;
     private Integer level;
 
+    private String themeColor;
+
     public JobPostCategoryDto (){}
     public JobPostCategoryDto(Integer id, String name, String memo, Integer level) {
         this.id = id;
@@ -23,6 +25,14 @@ public class JobPostCategoryDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getThemeColor() {
+        return themeColor;
+    }
+
+    public void setThemeColor(String themeColor) {
+        this.themeColor = themeColor;
     }
 
     public String getName() {

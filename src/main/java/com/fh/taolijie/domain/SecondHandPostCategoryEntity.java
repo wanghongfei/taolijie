@@ -13,6 +13,9 @@ public class SecondHandPostCategoryEntity {
     private String name;
     private String memo;
     private Integer level;
+
+    private String themeColor;
+
     private Collection<SecondHandPostEntity> postCollection;
 
     public SecondHandPostCategoryEntity() {}
@@ -41,6 +44,15 @@ public class SecondHandPostCategoryEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "theme_color")
+    public String getThemeColor() {
+        return themeColor;
+    }
+
+    public void setThemeColor(String themeColor) {
+        this.themeColor = themeColor;
     }
 
     @Basic

@@ -26,6 +26,13 @@ public interface ReviewService {
     boolean addReview(ReviewDto reviewDto);
 
     /**
+     * 回复一条评论
+     * @param memId
+     * @param reviewId
+     */
+    void addComment(Integer memId, Integer reviewId, ReviewDto dto);
+
+    /**
      * 删除一条评论
      * @param reviewId
      * @return
