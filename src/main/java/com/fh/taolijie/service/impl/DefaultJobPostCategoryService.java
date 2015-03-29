@@ -4,6 +4,7 @@ import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +21,7 @@ import java.util.List;
 public class DefaultJobPostCategoryService implements JobPostCateService {
     @PersistenceContext
     private EntityManager em;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -35,12 +36,9 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
                 .setMaxResults(cap)
                 .getResultList();
 
-        List<JobPostCategoryDto> dtoList = new ArrayList<>();
-        for (JobPostCategoryEntity cate : cateList) {
-            dtoList.add(makeCategory(cate));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(cateList, JobPostCategoryDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostCategoryDto.class, null);
+        });
     }
 
     @Override
@@ -70,7 +68,9 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Override
     @Transactional(readOnly = true)
     public JobPostCategoryDto findCategory(Integer cateId) {
-        return makeCategory(em.find(JobPostCategoryEntity.class, cateId));
+        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+
+        return CollectionUtils.entity2Dto(cate, JobPostCategoryDto.class, null);
     }
 
     @Override
@@ -86,9 +86,9 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
 
         return cate;
     }
-    private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
+/*    private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
         return new JobPostCategoryDto(cate.getId(), cate.getName(), cate.getMemo(), cate.getLevel());
-    }
+    }*/
     private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
         cate.setName(dto.getName());
         cate.setMemo(dto.getMemo());
