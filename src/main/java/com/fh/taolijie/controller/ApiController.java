@@ -27,8 +27,7 @@ import java.util.List;
 
 
 /**
- * api控制器
- * 提供各种接口
+ * 提供各种增删改查接口
  */
 @Controller
 @RequestMapping(value = "api")
@@ -61,7 +60,7 @@ public class ApiController {
      */
     @RequestMapping(value = {"joblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String joblist(){
-        List<JobPostDto> list = jobPostService.getAllJobPostList(0,0);
+        List<JobPostDto> list = jobPostService.getAllJobPostList(0, 0);
         return JSON.toJSONString(list);
     }
 
@@ -100,8 +99,8 @@ public class ApiController {
     /**
      * 删除兼职
      */
-    @RequestMapping(value = "/deleteJob/{jobId}",method = RequestMethod.POST)
-    public @ResponseBody String job(@PathVariable("jobId") int jobId,
+    @RequestMapping(value = "/deletejob/{jobId}",method = RequestMethod.POST)
+    public @ResponseBody String deleteJob(@PathVariable("jobId") int jobId,
                                     HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
@@ -153,14 +152,80 @@ public class ApiController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+
+
+    /*******************************************/
+    /********************简历********************/
+    /*******************************************/
+
     /**
      * 查询所有简历
      */
-    @RequestMapping(value = {"joblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = {"resumelist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String resumelist(){
         List<ResumeDto> list = resumeService.getAllResumeList(0,0);
         return JSON.toJSONString(list);
     }
+
+    /**
+     * 查询用户发布的简历
+     */
+    @RequestMapping(value="/resumelistbymember",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String resumelistbymember(HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null) {
+            return "redirect:/user/login";
+        }
+
+        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
+
+        List<ResumeDto> list = resumeService.getResumeList(mem.getId(), 0, 0);
+        return JSON.toJSONString(list);
+    }
+
+    /**
+     * 查询用户收藏的简历
+     */
+    @RequestMapping(value = "/resumelistbyfav",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String resumelistbyfav(HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
+
+        List<ResumeDto> list = null;
+        /*实现收藏*/
+        return JSON.toJSONString(list);
+    }
+
+    /**
+     * 删除简历
+     */
+    @RequestMapping(value = "/deleteresume/{resumeId}",method = RequestMethod.POST)
+    public @ResponseBody String deleteResume(@PathVariable("resumeId") int resumeId,
+                                    HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
+        ResumeDto resume = resumeService.findResume(resumeId);
+
+        /*判断兼职信息是否有当前用户发布*/
+        if(resume.getMemberId()!=credential.getId()){
+            System.out.println(resume.getMemberId());
+            System.out.println(credential.getId());
+            return new JsonWrapper(false, Constants.ErrorType.USERNAME_ERROR).getAjaxMessage();
+        }
+
+        /*删除*/
+        if(!resumeService.deleteResume(resumeId)){
+            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
+
 
 
 

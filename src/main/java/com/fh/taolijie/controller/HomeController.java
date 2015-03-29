@@ -68,6 +68,8 @@ public class HomeController {
 	}
 
 
+
+
     /**
      * 兼职列表页面
      */
@@ -77,7 +79,7 @@ public class HomeController {
     }
 
     /**
-     * 简历详情页
+     * 兼职详情页
      */
     @RequestMapping(value = "jobdetail/{jobId}",method = RequestMethod.GET)
     public String jobdetail(@PathVariable("jobId") int jobId,Model model){
@@ -88,15 +90,26 @@ public class HomeController {
         return "mobile/jobdetail";
     }
 
+
     /**
      * 简历列表
      */
     @RequestMapping(value = {"resumelist"},method = RequestMethod.GET)
-    public String resumeList(Model model){
-        List<ResumeDto> list = null;
-        model.addAttribute("resumeList",list);
+    public String resumeList(){
         return "mobile/resumelist";
     }
+
+    /**
+     * 简历详情页
+     */
+    @RequestMapping(value = "resumedetail/{resumeId}",method = RequestMethod.GET)
+    public String resumedetail(@PathVariable("resumeId") int resumeId,Model model){
+        ResumeDto resumeDto = resumeService.findResume(resumeId);
+        model.addAttribute("resume",resumeDto);
+        return "mobile/resume";
+    }
+
+
 
     /**
      * 二手列表
@@ -107,6 +120,8 @@ public class HomeController {
         model.addAttribute("shlist",list);
         return "mobile/shlist";
     }
+
+
 
     /**
      * 新闻列表

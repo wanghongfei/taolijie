@@ -106,7 +106,7 @@
 					</a>
 				</li>
 				<li class="icon">
-					<a href="user/jobpost">
+					<a href="user/job">
 						 <span class="icon-circle bg-orange fa fa-check-square" style=></span>
 						<span class="icon-desc">发布兼职</span>
 					</a>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js">
@@ -17,7 +18,7 @@
 
 	<div class="container page">
 		<div class="sec-header" style="postion:relative">
-			<a class="back" href="/index.html">
+			<a class="back" href="/index">
 				<div>&nbsp;&nbsp;</div>
 				<div class="icon-circle fa fa-angle-left" style="font-size:2.4rem;margin-left:0.5rem"></div>
 				<div>返回</div>
@@ -105,28 +106,6 @@
 		</div>
 
 		<div id="deals" class="deal-list">
-
-			<div class="deal">
-				<div class="deal-right">
-					<p class="title2">山东理工大学</p>
-					<i class="fa fa-eye red"></i> 30
-				</div>
-				<img src="images/avatar.png" class="deal-type deal-img" alt="">
-				<p class="title2">王美丽</p>
-				<p>家教、促销、礼仪</p>
-			</div>
-
-			<div class="deal">
-				<div class="deal-right">
-					<p class="title2">山东理工大学</p>
-					<i class="fa fa-eye red"></i> 30
-				</div>
-				<img src="/assets/images/miao.jpg" class="deal-type deal-img" alt="">
-				<p class="title2">喵帕斯</p>
-				<p>家教、促销、礼仪</p>
-			</div>
-
-
 		</div>
 
         <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
@@ -143,17 +122,38 @@
 
     <script id="list" type="text/html">
         {{each list as value i}}
-        <div class="deal">
-            <div class="deal-right">
-                <p class="title2">山东理工大学</p>
-                <i class="fa fa-eye red"></i> 30
-            </div>
-            <img src="/assets/images/miao.jpg" class="deal-type deal-img" alt="">
-            <p class="title2">喵帕斯</p>
-            <p>家教、促销、礼仪</p>
-        </div>
+		<a href="<c:url value="/resumedetail/{{value.id}}"/>">
+			<div class="deal">
+				<div class="deal-right">
+					<p class="title2">山东理工大学</p>
+					<i class="fa fa-eye red"></i> 30
+				</div>
+				<img src="{{value.phonePath}}" class="deal-type deal-img" alt="">
+				<p class="title2">{{value.name}}</p>
+				<p>家教、促销、礼仪</p>
+			</div>
+		</a>
+
         {{/each}}
     </script>
+	<script>
+		$(function(){
+			/*获取列表*/
+			$.ajax({
+				type:"GET",
+				url:"/api/resumelist",
+				dataType:"json",
+				success:function(data){
+					var datas = {
+						list:data
+					}
+					var html = template('list', datas);
+					$("#deals").append(html);
+				}
+			});
+
+		});
+	</script>
 
 	<script>
 		'use strict';
