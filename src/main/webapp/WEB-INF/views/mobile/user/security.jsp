@@ -17,7 +17,7 @@
 
 		<div class="container page login">
 			<div class="sec-header divide" style="postion:relative">
-				<a class="back" href="index">
+				<a class="back" href="/">
 					<div>&nbsp;&nbsp;</div>
 					<div class="icon-circle fa fa-angle-left" style="font-size:2.4rem;margin-left:0.5rem"></div>
 					<div>返回</div>

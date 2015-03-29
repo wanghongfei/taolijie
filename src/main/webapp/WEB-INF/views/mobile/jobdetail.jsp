@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html class="no-js">
 <head>
@@ -6,7 +7,6 @@
 	<meta name="description" content="">
 
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 	<link rel="stylesheet" href="/assets/styles/vendor.css">
 
@@ -14,10 +14,9 @@
 </head>
 <body ontouchstart="">
 
-
 	<div class="container page">
 		<div class="sec-header divide" style="postion:relative">
-			<a class="back" href="index.jsp">
+			<a class="back" href="/">
 				<div>&nbsp;&nbsp;</div>
 				<div class="icon-circle fa fa-angle-left" style="font-size:2.4rem;margin-left:0.5rem"></div>
 				<div>返回</div>
@@ -25,34 +24,32 @@
 			<h3 class="text-center"><a href="">兼职详情</a></h3>
 		</div>
 		<div class="detail-title">
-			<div class="content-title large-title">诚聘高中物理老师一名</div>
+			<div class="content-title large-title">${job.title}</div>
 			<div class="content-body">
-				<span><i class="fa fa-clock-o red"></i>&nbsp;&nbsp;2015-3-1</span>&nbsp;&nbsp;&nbsp;&nbsp;
-				<span><i class="fa fa-eye red"></i>&nbsp;&nbsp;已有888人评论</span>
+				<span><i class="fa fa-clock-o red"></i>&nbsp;&nbsp;${job.postTime}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+				<span><i class="fa fa-eye red"></i>&nbsp;&nbsp;已有0人评论</span>
 			</div>
 		</div>
 		<div class="detail-info detail-bottom">
-			<p><span>120/天</span>&nbsp;&nbsp;月结</p>
+			<p><span>${job.wage}/天</span>&nbsp;&nbsp;${job.timeToPay}</p>
 			<p style="float:left">有效日期 : </p>
 			<table><tr><td>
-				<p>2013-5-2</p>
+				<p>${job.expiredTime}</p>
 			</td></tr></table>
 
 			<p style="float:left">工作时间 : </p>
 			<table ><tr ><td>
-				<p>周一至周六,晚上7:00-9:00(不一定非得每天都来,最少一周来三天)</p>
+				<p>暂无字段</p>
 			</td></tr></table>
 
-			<!-- <div style="display:table;float:left">工作时间 :</div><div style="display:table;float:left;border:1px solid"> 周一至周六,晚上7:00-9:00(不一定非得每天都来,最少一周来三天)</div>
-			<div style="clear:both"></div> -->
 			<p style="float:left">工作地点 :</p>
 			<table ><tr ><td>
-				<p>华光路103号 (彩世界对面)</p>
+				<p>${job.workPlace}</p>
 			</td></tr></table>
 
 			<p style="float:left">发布商家 : </p>
 			<table ><tr ><td>
-				<p>阳光辅导机构</p>
+				<p>暂无字段</p>
 			</td></tr></table>
 
 		</div>
@@ -61,24 +58,24 @@
 
 			<p style="float:left">工作内容 : </p>
 			<table ><tr ><td>
-				<p>辅导初四数理化,并为学生制定相应的复习计划,并纠正学生日常所犯的错误</p>
+				<p>${job.jobDetail}</p>
 			</td></tr></table>
 
 			<p style="float:left">工作要求 :</p>
 			<table ><tr ><td>
-				<p>责任心强,有耐心,细心,最好是大三以上学生</p>
+				<p>${job.jobDescription}</p>
 			</td></tr></table>
 		</div>
 		<div class="detail-contact detail-bottom">
 
 			<p style="float:left">联系人 :</p>
 			<table ><tr ><td>
-				<p>刘经理</p>
+				<p>${job.contact}</p>
 			</td></tr></table>
 
 			<p style="float:left">联系电话 :</p>
 			<table ><tr ><td>
-				<p>15653325871</p>
+				<p>${job.contactPhone}</p>
 			</td></tr></table>
 		</div>
 		<div class="detail-review">
@@ -130,11 +127,10 @@
 		</div>
 
 
-		<div class="footer">
-			<p style="text-align:center">Copyright@2014——山东理工大学桃李街版权所属</p>
-		</div>
+        <jsp:include page="/WEB-INF/views/mobile/common/footer.jsp"></jsp:include>
 
-		<!-- 遮罩 -->
+
+        <!-- 遮罩 -->
 		<div id="cover" class="cover"></div>
 	</div>
 	<script src="/assets/scripts/vendor.js"></script>

@@ -39,55 +39,7 @@
 			</ul>
 			<div class="menu type-menu">
 				<ul class="icons" id="categorys">
-					<%--<li class="icon">--%>
-						<%--<span class="icon-circle icon-circle-small bg-green">家教</span>--%>
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-						<%--<span class="icon-circle icon-circle-small bg-blue">派单</span>--%>
-					<%--</li>--%>
-					<%--<li class="icon">--%>
 
-						<%--<span class="icon-circle icon-circle-small bg-red">代理</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-yellow">促销</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-purple">服务员</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-grown">送餐</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-						<%--<span class="icon-circle icon-circle-small bg-orange">礼仪</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-						<%--<span class="icon-circle icon-circle-small bg-gray">家政</span>--%>
-
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-						<%--<span class="icon-circle icon-circle-small bg-gray">家政</span>--%>
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-green">家教</span>--%>
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-blue">派单</span>--%>
-					<%--</li>--%>
-					<%--<li class="icon">--%>
-
-						<%--<span class="icon-circle icon-circle-small bg-red">代理</span>--%>
-					<%--</li>--%>
 				</ul>
 			</div>
 			<div class="menu method-menu no-border">
@@ -122,16 +74,19 @@
 
     <script id="list" type="text/html">
         {{each list as value i}}
-        <div class="deal">
-            <div class="deal-type bg-blue">
-                <span>{{value.categoryName}}</span>
+        <a href="/jobdetail/{{value.id}}">
+            <div class="deal">
+                <div class="deal-type bg-blue">
+                    <span>{{value.categoryName}}</span>
+                </div>
+                <div class="title">{{value.title}}</div>
+                <span>{{value.workPlace}}</span>&nbsp;&nbsp;
+                <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
+                <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
+                <span>{{value.timeToPay}}</span>
             </div>
-            <div class="title">{{value.title}}</div>
-            <span>{{value.workPlace}}</span>&nbsp;&nbsp;
-            <span>{{value.postTime | dateFormat:'yyyy-MM-dd'}}</span>&nbsp;&nbsp;
-            <span>{{value.wage}} 元/天</span>&nbsp;&nbsp;
-            <span>{{value.timeToPay}}</span>
-        </div>
+        </a>
+
         {{/each}}
     </script>
     <script id="category" type="text/html">

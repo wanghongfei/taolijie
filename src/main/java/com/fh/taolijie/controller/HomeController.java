@@ -2,6 +2,7 @@ package com.fh.taolijie.controller;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.NewsDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
@@ -73,6 +74,18 @@ public class HomeController {
     @RequestMapping(value = {"joblist"},method = RequestMethod.GET)
     public String joblist(){
         return "mobile/joblist";
+    }
+
+    /**
+     * 简历详情页
+     */
+    @RequestMapping(value = "jobdetail/{jobId}",method = RequestMethod.GET)
+    public String jobdetail(@PathVariable("jobId") int jobId,Model model){
+        JobPostDto jobPostDto = jobPostService.findJobPost(jobId);
+        System.out.println("#########################");
+        System.out.println(JSON.toJSONString(jobPostDto));
+        model.addAttribute("job",jobPostDto);
+        return "mobile/jobdetail";
     }
 
     /**
