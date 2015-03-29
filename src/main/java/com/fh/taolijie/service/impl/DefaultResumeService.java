@@ -129,7 +129,7 @@ public class DefaultResumeService implements ResumeService {
         resume.setGender(dto.getGender());
         resume.setAge(dto.getAge());
         resume.setHeight(dto.getHeight());
-        resume.setPhonePath(dto.getPhonePath());
+        resume.setPhotoPath(dto.getPhotoPath());
         resume.setEmail(dto.getEmail());
         resume.setQq(dto.getQq());
         resume.setIntroduce(dto.getIntroduce());
@@ -141,7 +141,7 @@ public class DefaultResumeService implements ResumeService {
         dto.setGender(resume.getGender());
         dto.setAge(resume.getAge());
         dto.setHeight(resume.getHeight());
-        dto.setPhonePath(resume.getPhonePath());
+        dto.setPhotoPath(resume.getPhotoPath());
         dto.setEmail(resume.getEmail());
         dto.setQq(resume.getQq());
         dto.setExperience(resume.getExperience());

@@ -18,7 +18,7 @@ public class ResumeEntity {
     private String gender;
     private Integer age;
     private Integer height;
-    private String phonePath;
+    private String photoPath;
     private String email;
     private String qq;
     private String experience;
@@ -28,12 +28,12 @@ public class ResumeEntity {
     private Date createdTime;
 
     public ResumeEntity() {}
-    public ResumeEntity(String name, String gender, Integer age, Integer height, String phonePath, String email, String qq, String experience, String introduce, MemberEntity member) {
+    public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.height = height;
-        this.phonePath = phonePath;
+        this.photoPath = photoPath;
         this.email = email;
         this.qq = qq;
         this.experience = experience;
@@ -103,12 +103,12 @@ public class ResumeEntity {
 
     @Basic
     @Column(name = "phone_path")
-    public String getPhonePath() {
-        return phonePath;
+    public String getPhotoPath() {
+        return photoPath;
     }
 
-    public void setPhonePath(String phonePath) {
-        this.phonePath = phonePath;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     @Basic
@@ -166,7 +166,7 @@ public class ResumeEntity {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (introduce != null ? !introduce.equals(that.introduce) : that.introduce != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (phonePath != null ? !phonePath.equals(that.phonePath) : that.phonePath != null) return false;
+        if (photoPath != null ? !photoPath.equals(that.photoPath) : that.photoPath != null) return false;
         if (qq != null ? !qq.equals(that.qq) : that.qq != null) return false;
 
         return true;
@@ -179,7 +179,7 @@ public class ResumeEntity {
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
-        result = 31 * result + (phonePath != null ? phonePath.hashCode() : 0);
+        result = 31 * result + (photoPath != null ? photoPath.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (qq != null ? qq.hashCode() : 0);
         result = 31 * result + (experience != null ? experience.hashCode() : 0);
