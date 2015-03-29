@@ -39,7 +39,9 @@ public class DefaultNotificationService implements NotificationService {
         Page<NotificationEntity> noList = notRepo.findByMember(memRepo.getOne(memId), new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
-            return makeDto(entity);
+            return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+            });
         });
     }
 
@@ -54,7 +56,10 @@ public class DefaultNotificationService implements NotificationService {
         Page<NotificationEntity> noList = notRepo.findByMemberAndIsRead(memRepo.getOne(memId), isRead ? 1 : 0, new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
-            return makeDto(entity);
+            return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
+                System.out.println("set title:" + dto.getTitle());
+                dto.setMemberId(entity.getMember().getId());
+            });
         });
     }
 
@@ -69,14 +74,21 @@ public class DefaultNotificationService implements NotificationService {
         Page<NotificationEntity> noList = notRepo.findAfterTheTime(memRepo.getOne(memId), time, new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
-            return makeDto(entity);
+            return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+            });
         });
     }
 
     @Override
     @Transactional(readOnly = true)
     public NotificationDto findNotification(Integer notificationId) {
-        return makeDto(notRepo.findOne(notificationId));
+        NotificationEntity entity = notRepo.findOne(notificationId);
+
+        return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
+            dto.setMemberId(entity.getMember().getId());
+        });
+        //return makeDto(notRepo.findOne(notificationId));
     }
 
     @Override
@@ -121,7 +133,7 @@ public class DefaultNotificationService implements NotificationService {
         notRepo.save(no);
     }
 
-    private NotificationDto makeDto(NotificationEntity no) {
+    /*private NotificationDto makeDto(NotificationEntity no) {
         NotificationDto dto = new NotificationDto();
         dto.setId(no.getId());
         dto.setTitle(no.getTitle());
@@ -132,5 +144,5 @@ public class DefaultNotificationService implements NotificationService {
         dto.setMemberId(no.getMember().getId());
 
         return dto;
-    }
+    }*/
 }

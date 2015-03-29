@@ -70,7 +70,10 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
     public void testGetList() throws Exception {
         // test get by member
         List<NotificationDto> dtoList = noService.getNotificationList(member.getId(), 0, 0);
-        boolean contains = dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a note") );
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        boolean contains = dtoList.stream()
+                .anyMatch((dto) -> dto.getTitle().equals("a note"));
         Assert.assertTrue(contains);
         contains = dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("some notes") );
         Assert.assertTrue(contains);
