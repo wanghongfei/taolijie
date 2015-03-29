@@ -69,8 +69,9 @@ public class DefaultResumeService implements ResumeService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateResume(Integer resumeId, ResumeDto resumeDto) {
-        ResumeEntity r = em.getReference(ResumeEntity.class, resumeId);
-        updateResume(r, resumeDto);
+        ResumeEntity r = em.find(ResumeEntity.class, resumeId);
+        CollectionUtils.updateEntity(r, resumeDto, null);
+        //updateResume(r, resumeDto);
 
         return true;
     }
@@ -123,7 +124,7 @@ public class DefaultResumeService implements ResumeService {
      * @param resume
      * @param dto
      */
-    private void updateResume(ResumeEntity resume, ResumeDto dto) {
+    /*private void updateResume(ResumeEntity resume, ResumeDto dto) {
         resume.setName(dto.getName());
         resume.setGender(dto.getGender());
         resume.setAge(dto.getAge());
@@ -132,7 +133,7 @@ public class DefaultResumeService implements ResumeService {
         resume.setEmail(dto.getEmail());
         resume.setQq(dto.getQq());
         resume.setIntroduce(dto.getIntroduce());
-    }
+    }*/
     /*private ResumeDto makeResumeDto(ResumeEntity resume) {
         ResumeDto dto = new ResumeDto();
         dto.setId(resume.getId());

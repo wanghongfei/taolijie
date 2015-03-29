@@ -105,7 +105,14 @@ public class DefaultSHPostService implements SHPostService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addPost(SecondHandPostDto postDto) {
         // 创建帖子实体
-        SecondHandPostEntity post = makePost(postDto);
+        //SecondHandPostEntity post = makePost(postDto);
+        SecondHandPostEntity post = CollectionUtils.dto2Entity(postDto, SecondHandPostEntity.class, (entity) -> {
+            MemberEntity mem = memberRepo.getOne(postDto.getMemberId());
+            SecondHandPostCategoryEntity cate = cateRepo.getOne(postDto.getCategoryId());
+
+            entity.setMember(mem);
+            entity.setCategory(cate);
+        });
 
         // 从分类中添加此帖子
         Integer cateId = postDto.getCategoryId();
@@ -153,7 +160,9 @@ public class DefaultSHPostService implements SHPostService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updatePost(Integer postId, SecondHandPostDto postDto) {
-        updatePost(postRepo.findOne(postId), postDto);
+        SecondHandPostEntity post = postRepo.findOne(postId);
+        CollectionUtils.updateEntity(post, postDto, null);
+        //updatePost(postRepo.findOne(postId), postDto);
 
         return true;
     }
@@ -180,7 +189,7 @@ public class DefaultSHPostService implements SHPostService {
         postCollection.add(post);
     }
 
-    private void updatePost(SecondHandPostEntity post, SecondHandPostDto dto) {
+   /* private void updatePost(SecondHandPostEntity post, SecondHandPostDto dto) {
         post.setTitle(dto.getTitle());
         post.setExpiredTime(dto.getExpiredTime());
         post.setPostTime(dto.getPostTime());
@@ -191,9 +200,9 @@ public class DefaultSHPostService implements SHPostService {
         post.setDescription(dto.getDescription());
         post.setLikes(dto.getLikes());
         post.setDislikes(dto.getDislikes());
-    }
+    }*/
 
-    private SecondHandPostEntity makePost(SecondHandPostDto dto) {
+    /*private SecondHandPostEntity makePost(SecondHandPostDto dto) {
         SecondHandPostEntity post = new SecondHandPostEntity(dto.getTitle(), dto.getExpiredTime(), dto.getPostTime(),
                 dto.getDepreciationRate(), dto.getOriginalPrice(), dto.getSellPrice(), dto.getPicturePath(),
                 dto.getDescription(), dto.getLikes(), dto.getDislikes(), null, null);
@@ -204,7 +213,7 @@ public class DefaultSHPostService implements SHPostService {
         post.setCategory(cate);
 
         return post;
-    }
+    }*/
 
    /* private SecondHandPostDto makePostDto(SecondHandPostEntity post) {
         SecondHandPostDto dto = new SecondHandPostDto();

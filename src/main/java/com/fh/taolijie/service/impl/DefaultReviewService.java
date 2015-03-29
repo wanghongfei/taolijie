@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,7 +44,11 @@ public class DefaultReviewService implements ReviewService {
 
         List<ReviewDto> dtoList = new ArrayList<>();
         for (ReviewEntity r : reviewList) {
-            dtoList.add(makeReviewDto(r));
+            //dtoList.add(makeReviewDto(r));
+            dtoList.add(CollectionUtils.entity2Dto(r, ReviewDto.class, (dto) -> {
+                dto.setMemberId(r.getMember().getId());
+                dto.setJobPostId(r.getJobPost().getId());
+            }));
         }
 
         return dtoList;
@@ -101,7 +106,7 @@ public class DefaultReviewService implements ReviewService {
         return true;
     }
 
-    private ReviewDto makeReviewDto(ReviewEntity review) {
+    /*private ReviewDto makeReviewDto(ReviewEntity review) {
         ReviewDto dto = new ReviewDto();
         dto.setId(review.getId());
         dto.setContent(review.getContent());
@@ -110,7 +115,7 @@ public class DefaultReviewService implements ReviewService {
         dto.setMemberId(review.getMember().getId());
         dto.setJobPostId(review.getJobPost().getId());
         return dto;
-    }
+    }*/
 
     /**
      * 只修改content

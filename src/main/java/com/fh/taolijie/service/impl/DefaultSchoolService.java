@@ -47,7 +47,8 @@ public class DefaultSchoolService implements SchoolService {
 
         List<SchoolDto> dtoList = new ArrayList<>();
         for (SchoolEntity s : sList) {
-            dtoList.add(makeSchoolDto(s));
+            //dtoList.add(makeSchoolDto(s));
+            dtoList.add(CollectionUtils.entity2Dto(s, SchoolDto.class, null));
         }
 
         return dtoList;
@@ -71,7 +72,8 @@ public class DefaultSchoolService implements SchoolService {
 
         List<SchoolDto> dtoList = new ArrayList<>();
         for (SchoolEntity s : sList) {
-            dtoList.add(makeSchoolDto(s));
+            //dtoList.add(makeSchoolDto(s));
+            dtoList.add(CollectionUtils.entity2Dto(s, SchoolDto.class, null));
         }
 
         return dtoList;
@@ -80,14 +82,19 @@ public class DefaultSchoolService implements SchoolService {
     @Override
     @Transactional(readOnly = true)
     public SchoolDto findSchool(Integer schoolId) {
-        return makeSchoolDto(schoolRepo.findOne(schoolId));
+        SchoolEntity schoolEntity = schoolRepo.findOne(schoolId);
+
+        return CollectionUtils.entity2Dto(schoolEntity, SchoolDto.class, null);
+        //return makeSchoolDto(schoolRepo.findOne(schoolId));
     }
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public boolean addSchool(SchoolDto schoolDto) {
-        SchoolEntity school = new SchoolEntity(schoolDto.getShortName(), schoolDto.getFullName(),
-                schoolDto.getProvince(), schoolDto.getType());
+/*        SchoolEntity school = new SchoolEntity(schoolDto.getShortName(), schoolDto.getFullName(),
+                schoolDto.getProvince(), schoolDto.getType());*/
+
+        SchoolEntity school = CollectionUtils.dto2Entity(schoolDto, SchoolEntity.class, null);
 
         schoolRepo.save(school);
 
@@ -130,7 +137,8 @@ public class DefaultSchoolService implements SchoolService {
 
         List<AcademyDto> dtoList = new ArrayList<>();
         for (AcademyEntity academy : aList) {
-            dtoList.add(makeAcademyDto(academy));
+            //dtoList.add(makeAcademyDto(academy));
+            dtoList.add(CollectionUtils.entity2Dto(academy, AcademyDto.class, null));
         }
 
         return dtoList;
@@ -139,7 +147,10 @@ public class DefaultSchoolService implements SchoolService {
     @Override
     @Transactional(readOnly = true)
     public AcademyDto findAcademy(Integer academyId) {
-        return makeAcademyDto(academyRepo.findOne(academyId));
+        AcademyEntity academyEntity = academyRepo.findOne(academyId);
+
+        return CollectionUtils.entity2Dto(academyEntity, AcademyDto.class, null);
+        //return makeAcademyDto(academyRepo.findOne(academyId));
     }
 
     @Override
@@ -167,14 +178,14 @@ public class DefaultSchoolService implements SchoolService {
         return true;
     }
 
-    private AcademyDto makeAcademyDto(AcademyEntity academy) {
+    /*private AcademyDto makeAcademyDto(AcademyEntity academy) {
         AcademyDto dto = new AcademyDto();
         dto.setShortName(academy.getShortName());
         dto.setFullName(academy.getFullName());
 
         return dto;
-    }
-    private SchoolDto makeSchoolDto(SchoolEntity school) {
+    }*/
+    /*private SchoolDto makeSchoolDto(SchoolEntity school) {
         SchoolDto dto = new SchoolDto();
         dto.setId(school.getId());
         dto.setShortName(school.getShortName());
@@ -183,5 +194,5 @@ public class DefaultSchoolService implements SchoolService {
         dto.setType(school.getType());
 
         return dto;
-    }
+    }*/
 }
