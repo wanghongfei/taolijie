@@ -2,6 +2,7 @@ package com.fh.taolijie.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -18,6 +19,9 @@ public class ReviewEntity {
     private Date time;
     private JobPostEntity jobPost;
     private MemberEntity member;
+
+    private List<ReviewEntity> replyList;
+    private ReviewEntity baseReview;
 
     public ReviewEntity() {}
     public ReviewEntity(String content, Date time, JobPostEntity jobPost, MemberEntity member) {
@@ -78,6 +82,25 @@ public class ReviewEntity {
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "baseReview")
+    public List<ReviewEntity> getReplyList() {
+        return replyList;
+    }
+
+    public void setReplyList(List<ReviewEntity> replyList) {
+        this.replyList = replyList;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "replied_review_id")
+    public ReviewEntity getBaseReview() {
+        return baseReview;
+    }
+
+    public void setBaseReview(ReviewEntity baseReview) {
+        this.baseReview = baseReview;
     }
 
     @ManyToOne
