@@ -49,6 +49,8 @@ public class MemberEntity {
     private Date createdTime;
     private Boolean valid;
 
+    private Integer complaint;
+
     private Collection<EducationExperienceEntity> educationExperienceCollection;
     private Collection<JobPostEntity> jobPostCollection;
     private Collection<MemberRoleEntity> memberRoleCollection;
@@ -119,6 +121,16 @@ public class MemberEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Basic
+    @Column(name = "complaint")
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
     }
 
     @Basic

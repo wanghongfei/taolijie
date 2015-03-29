@@ -40,6 +40,8 @@ public class GeneralMemberDto {
     private Date created_time;
     private Boolean valid;
 
+    private Integer complaint;
+
     /**
      * 保存了{@link com.sun.javafx.scene.accessibility.Role}实体的主键.
      * <p> 这些{@code Role}实体都会被关联到{@code MemberEntity}中
@@ -68,6 +70,14 @@ public class GeneralMemberDto {
 
     public void setCreated_time(Date created_time) {
         this.created_time = created_time;
+    }
+
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
     }
 
     public Boolean getValid() {
