@@ -18,7 +18,7 @@ public class CollectionUtilsTest {
         dto.setUsername("Neo");
         dto.setAge(20);
 
-        MemberEntity entity = CollectionUtils.dto2Entity(dto, MemberEntity.class);
+        MemberEntity entity = CollectionUtils.dto2Entity(dto, MemberEntity.class, null);
 
         Assert.assertEquals("Neo", entity.getUsername());
     }
@@ -39,5 +39,25 @@ public class CollectionUtilsTest {
 
         JobPostDto jobPostDto = CollectionUtils.entity2Dto(jobPostEntity, JobPostDto.class, null);
         Assert.assertEquals("title", jobPostDto.getTitle());
+    }
+
+    @Test
+    public void testUpdateEntity() {
+
+        MemberEntity m = new MemberEntity();
+        m.setUsername("Bruce");
+        m.setAge(100);
+        m.setStudentId("121105");
+
+        StudentDto dto = new StudentDto();
+        dto.setUsername("Neo");
+        dto.setAge(20);
+        dto.setStudentId("2222");
+
+        CollectionUtils.updateEntity(m, dto, null);
+
+        Assert.assertEquals("Neo", m.getUsername());
+        Assert.assertEquals(20, m.getAge().intValue());
+        Assert.assertEquals("2222", m.getStudentId());
     }
 }

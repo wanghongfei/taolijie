@@ -22,9 +22,63 @@ public class CollectionUtils {
     }
 
     /**
+     * 将DTO对象field更新到对应entity对象中。
+     */
+    public static <ENTITY_T, DTO_T> void updateEntity(ENTITY_T entity, DTO_T dto, Consumer<ENTITY_T> apply) {
+        Class dtoClass = dto.getClass();
+        Class entityClass = entity.getClass();
+
+
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> entityFields = getFieldsFromCache(entityClass.getName());
+        if (null == entityFields) {
+            entityFields = cacheFields(entityClass);
+        }
+
+        // 先从cache中查找
+        // 如果没找到，则cache这个Class的全部Fields
+        List<Field> dtoFields = getFieldsFromCache(dtoClass.getName());
+        if (null == dtoFields) {
+            dtoFields = cacheFields(dtoClass);
+        }
+
+
+        // 更新entity field
+        // id除外
+        // 判断dto的父类是否也是Dto对象
+        if (false == dto.getClass().getSuperclass().getName().equals("java.lang.Object")) {
+            // 该dto父类也是DTO
+            // 将dto对象的父对象本身field的值取出赋给entity
+
+            List<Field> superFields = getFieldsFromCache(dtoClass.getSuperclass().getName());
+            if (null == superFields) {
+                superFields = cacheFields(dtoClass.getSuperclass());
+            }
+
+            for (Field f : superFields) {
+                if (false == f.getName().equals("id")) {
+                    setField(dto, entity, f, entityFields);
+                }
+            }
+        }
+
+        for (Field dtoField : dtoFields) {
+            if (false == dtoField.getName().equals("id")) {
+                setField(dto, entity, dtoField, entityFields);
+            }
+        }
+
+        // 执行自定义过程
+        if (null != apply) {
+            apply.accept(entity);
+        }
+    }
+
+    /**
      * 把一个DTO对象转换成对应的Entity对象
      */
-    public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass) {
+    public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass, Consumer<ENTITY_TYPE> apply) {
         ENTITY_TYPE entity = null;
         
         Class dtoClass = dto.getClass();
@@ -73,6 +127,9 @@ public class CollectionUtils {
                 setField(dto, entity, f, entityFields);
             }
 
+            if (null != apply) {
+                apply.accept(entity);
+            }
 
         } catch (InstantiationException e) {
             e.printStackTrace();
