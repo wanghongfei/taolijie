@@ -89,7 +89,6 @@ public class ApiController {
         if(credential==null){
             return "redirect:/user/login";
         }
-
         List<JobPostDto> list = null;
 
         /*实现收藏*/
@@ -204,6 +203,7 @@ public class ApiController {
     @RequestMapping(value = "/deleteresume/{resumeId}",method = RequestMethod.POST)
     public @ResponseBody String deleteResume(@PathVariable("resumeId") int resumeId,
                                     HttpSession session){
+
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
             return "redirect:/user/login";
@@ -225,8 +225,4 @@ public class ApiController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
-
-
-
-
 }

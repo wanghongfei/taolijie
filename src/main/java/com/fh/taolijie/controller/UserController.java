@@ -10,6 +10,7 @@ import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.DefaultAvatarGenerator;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -78,7 +79,9 @@ public class UserController {
         if(credential==null){
             return "redirect:/user/login";
         }
-        model.addAttribute("username",credential.getUsername());
+        GeneralMemberDto memberDto = accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],false);
+        model.addAttribute("user", memberDto);
+
 
         return "mobile/user/user";
 
@@ -280,6 +283,7 @@ public class UserController {
         member = new GeneralMemberDto();
         member.setUsername(mem.getUsername());
         member.setPassword(mem.getPassword());
+        member.setProfilePhotoPath(DefaultAvatarGenerator.getRandomAvatar());
         member.setRoleIdList(Arrays.asList(1));
 
 
