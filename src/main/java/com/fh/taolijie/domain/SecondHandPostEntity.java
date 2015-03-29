@@ -20,6 +20,9 @@ public class SecondHandPostEntity {
     private String description;
     private Integer likes;
     private Integer dislikes;
+
+    private Integer complaint;
+
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
 
@@ -78,6 +81,15 @@ public class SecondHandPostEntity {
 
     public void setPostTime(Date postTime) {
         this.postTime = postTime;
+    }
+
+    @Column(name = "complaint")
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
     }
 
     @Basic

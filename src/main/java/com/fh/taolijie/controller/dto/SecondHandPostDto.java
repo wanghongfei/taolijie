@@ -18,6 +18,8 @@ public class SecondHandPostDto {
     private Integer likes;
     private Integer dislikes;
 
+    private Integer complaint;
+
     private Integer memberId;
     private String categoryName;
     private Integer categoryId;
@@ -36,6 +38,14 @@ public class SecondHandPostDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
     }
 
     public Date getExpiredTime() {
