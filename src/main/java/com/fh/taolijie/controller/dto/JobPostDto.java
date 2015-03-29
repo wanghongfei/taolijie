@@ -1,7 +1,5 @@
 package com.fh.taolijie.controller.dto;
 
-import com.fh.taolijie.utils.Constants;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -30,6 +28,10 @@ public class JobPostDto {
     private Integer likes;
     private Integer dislikes;
     private String educationLevel;
+
+    private Integer complaint;
+    private String workTime;
+    private String salaryUnit;
 
     private Integer categoryId;
     private String categoryName;
@@ -73,6 +75,30 @@ public class JobPostDto {
 
     public void setWorkPlace(String workPlace) {
         this.workPlace = workPlace;
+    }
+
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    public String getSalaryUnit() {
+        return salaryUnit;
+    }
+
+    public void setSalaryUnit(String salaryUnit) {
+        this.salaryUnit = salaryUnit;
     }
 
     public Double getWage() {

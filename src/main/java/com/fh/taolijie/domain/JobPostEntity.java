@@ -38,6 +38,11 @@ public class JobPostEntity {
     private Integer likes;
     private Integer dislikes;
     private String educationLevel;
+
+    private Integer complaint;
+    private String workTime;
+    private String salaryUnit;
+
     private JobPostCategoryEntity category;
     private MemberEntity member;
     private Collection<ReviewEntity> reviewCollection;
@@ -93,6 +98,33 @@ public class JobPostEntity {
 
     public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    @Column(name = "complaint")
+    public Integer getComplaint() {
+        return complaint;
+    }
+
+    public void setComplaint(Integer complaint) {
+        this.complaint = complaint;
+    }
+
+    @Column(name = "work_time")
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    @Column(name = "salary_unit")
+    public String getSalaryUnit() {
+        return salaryUnit;
+    }
+
+    public void setSalaryUnit(String salaryUnit) {
+        this.salaryUnit = salaryUnit;
     }
 
     @Basic

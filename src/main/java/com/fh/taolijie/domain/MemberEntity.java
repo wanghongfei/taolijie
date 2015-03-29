@@ -51,6 +51,7 @@ public class MemberEntity {
 
     private Integer complaint;
 
+
     private Collection<EducationExperienceEntity> educationExperienceCollection;
     private Collection<JobPostEntity> jobPostCollection;
     private Collection<MemberRoleEntity> memberRoleCollection;
