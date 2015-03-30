@@ -12,7 +12,17 @@ import java.util.Date;
 
         // 查找所有简历，最新的简历在最前
         @NamedQuery(name = "ResumeEntity.findAll",
-            query = "SELECT r FROM ResumeEntity r ORDER BY r.createdTime DESC")
+            query = "SELECT r FROM ResumeEntity r ORDER BY r.createdTime DESC"),
+
+        @NamedQuery(name = "ResumeEntity.findByAuthority",
+            query = "SELECT r FROM ResumeEntity r WHERE " +
+                    "r.accessAuthority = :authority " +
+                    "ORDER BY r.createdTime DESC"),
+
+        @NamedQuery(name = "ResumeEntity.findByMemberAndAuthority",
+            query = "SELECT r FROM ResumeEntity r WHERE " +
+                    "r.member = :member AND " +
+                    "r.accessAuthority = :authority")
 })
 @Entity
 @Table(name = "resume")

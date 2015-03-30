@@ -64,7 +64,7 @@ public class Constants {
         EMPLOYER
     }
 
-    public static enum ResumeAuthority {
+    public static enum AccessAuthority {
         ME_ONLY,
         ALL
     }

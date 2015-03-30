@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.impl.DefaultResumeService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.Constants;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,12 +51,14 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         // 创建简历
         resume = new ResumeEntity();
         resume.setName("resume");
+        resume.setAccessAuthority(Constants.AccessAuthority.ME_ONLY.toString());
         resume.setCreatedTime(new Date()); // now
         resume.setMember(member);
         em.persist(resume);
 
         resumeBefore = new ResumeEntity();
         resumeBefore.setName("resumeBefore");
+        resumeBefore.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
         resumeBefore.setCreatedTime(sdf.parse("2011/1/1"));
         resumeBefore.setMember(member);
         em.persist(resumeBefore);
@@ -76,6 +79,38 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         List<ResumeDto> dtoList = rService.getAllResumeList(0, 0);
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertTrue(containsName(dtoList, "resume"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetAllByAuthority() {
+        List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(containsName(dtoList, "resumeBefore"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+
+    }
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetByAuthority() {
+        List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(containsName(dtoList, "resumeBefore"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+
+
+        dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ME_ONLY, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertEquals(1, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resume"));
 
         Assert.assertTrue(isRecentFront(dtoList));

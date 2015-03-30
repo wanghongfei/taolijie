@@ -46,6 +46,19 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    public List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<ResumeEntity> entityList = resumeRepo.findByAuthority(authority.toString(), new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity) {
         int cap = capacity;
@@ -60,6 +73,28 @@ public class DefaultResumeService implements ResumeService {
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
                 .getResultList();
+
+        return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    public List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        MemberEntity mem = em.getReference(MemberEntity.class, memId);
+
+        // TODO
+/*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
+                .setParameter("member", mem)
+                .setFirstResult(firstResult)
+                .setMaxResults(cap)
+                .getResultList();*/
+
+        Page<ResumeEntity> rList = resumeRepo.findByMemberAndAuthority(mem, authority.toString(), new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
             return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {

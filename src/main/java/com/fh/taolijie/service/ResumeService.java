@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.utils.Constants;
 
 import java.util.List;
 
@@ -15,6 +16,12 @@ public interface ResumeService {
     List<ResumeDto> getAllResumeList(int firstResult, int capacity);
 
     /**
+     * 根据权限查找所有简历
+     * @return
+     */
+    List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity);
+
+    /**
      * 获取某个用户的部分简历.
      *
      * @param memId 用户的id号
@@ -24,6 +31,14 @@ public interface ResumeService {
      * @return
      */
     List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity);
+
+    /**
+     *
+     * 获取某个用户的部分简历.
+     * @param authority 设置简历权限类型
+     * @return
+     */
+    List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity);
 
     /**
      * 修改简历信息
