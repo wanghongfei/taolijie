@@ -27,6 +27,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,8 @@ public class DefaultAccountService implements AccountService {
         // 创建实体
         MemberEntity mem = new MemberEntity(stuDto.getUsername(), CredentialUtils.sha(stuDto.getPassword()), stuDto.getEmail(),
                 stuDto.getName(), stuDto.getStudentId(), stuDto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                stuDto.getProfilePhotoPath(), stuDto.getPhone(), stuDto.getQq(), stuDto.getAge(), "", "");
+                stuDto.getProfilePhotoPath(), stuDto.getPhone(), stuDto.getQq(), stuDto.getAge(), "", "",
+                true, new Date());
         // 保存实体
         em.persist(mem);
 
@@ -83,7 +85,8 @@ public class DefaultAccountService implements AccountService {
         // 创建实体
         MemberEntity mem = new MemberEntity(dto.getUsername(), CredentialUtils.sha(dto.getPassword()), dto.getEmail(),
                 dto.getName(), "", dto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                dto.getProfilePhotoPath(), dto.getPhone(), dto.getQq(), dto.getAge(), "", "");
+                dto.getProfilePhotoPath(), dto.getPhone(), dto.getQq(), dto.getAge(), "", "",
+                true, new Date());
         // 保存实体
         em.persist(mem);
 
@@ -117,7 +120,8 @@ public class DefaultAccountService implements AccountService {
         // create entity
         MemberEntity mem = new MemberEntity(empDto.getUsername(), CredentialUtils.sha(empDto.getPassword()), empDto.getEmail(),
                 empDto.getName(), "", empDto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                empDto.getProfilePhotoPath(), empDto.getPhone(), empDto.getQq(), empDto.getAge(), empDto.getCompanyName(), "");
+                empDto.getProfilePhotoPath(), empDto.getPhone(), empDto.getQq(), empDto.getAge(), empDto.getCompanyName(), "",
+                true, new Date());
 
         // 保存用户实体
         em.persist(mem);

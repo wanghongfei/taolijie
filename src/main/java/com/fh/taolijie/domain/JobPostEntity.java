@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.service.PageViewAware;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -8,11 +10,11 @@ import java.util.Date;
  * Created by wanghongfei on 15-3-4.
  */
 @NamedQueries({
-        @NamedQuery(name = "jobPostEntity.findAllOrderByPostTime",
+        @NamedQuery(name = "JobPostEntity.findAllOrderByPostTime",
                 query = "SELECT j FROM JobPostEntity j ORDER BY j.postTime DESC "),
-        @NamedQuery(name = "jobPostEntity.findAllOrderByExpiredTime",
+        @NamedQuery(name = "JobPostEntity.findAllOrderByExpiredTime",
                 query = "SELECT j FROM JobPostEntity j ORDER BY j.expiredTime DESC "),
-        @NamedQuery(name = "jobPostEntity.findByMember",
+        @NamedQuery(name = "JobPostEntity.findByMember",
                 query = "SELECT j FROM JobPostEntity j WHERE j.member = :member ORDER BY j.postTime DESC"),
         @NamedQuery(name = "jobPostEntity.findByCategory",
                 query = "SELECT j FROM JobPostEntity j WHERE j.category = :category ORDER BY j.postTime DESC")
@@ -20,7 +22,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "job_post")
-public class JobPostEntity {
+public class JobPostEntity implements PageViewAware {
     private Integer id;
     private String title;
     private Date expiredTime;
@@ -42,6 +44,8 @@ public class JobPostEntity {
     private Integer complaint;
     private String workTime;
     private String salaryUnit;
+    private Integer pageView;
+    private String verified;
 
     private JobPostCategoryEntity category;
     private MemberEntity member;
@@ -88,6 +92,24 @@ public class JobPostEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
+
+    @Column(name = "page_view")
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     @Basic

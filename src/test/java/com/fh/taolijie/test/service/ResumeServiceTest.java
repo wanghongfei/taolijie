@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.impl.DefaultResumeService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.Constants;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +32,7 @@ import java.util.List;
 public class ResumeServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
     ResumeEntity resume;
+    ResumeEntity resumeBefore;
 
     @Autowired
     ResumeService rService;
@@ -37,21 +41,33 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     EntityManager em;
 
     @Before
-    public void initData() {
+    public void initData() throws Exception {
         // 创建用户
         // password is 111111
-        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
+        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "", true, new Date());
         em.persist(member);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         // 创建简历
         resume = new ResumeEntity();
         resume.setName("resume");
+        resume.setAccessAuthority(Constants.AccessAuthority.ME_ONLY.toString());
+        resume.setCreatedTime(new Date()); // now
         resume.setMember(member);
         em.persist(resume);
+
+        resumeBefore = new ResumeEntity();
+        resumeBefore.setName("resumeBefore");
+        resumeBefore.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
+        resumeBefore.setCreatedTime(sdf.parse("2011/1/1"));
+        resumeBefore.setMember(member);
+        em.persist(resumeBefore);
+
 
         // build connection
         member.setResumeCollection(new ArrayList<>());
         member.getResumeCollection().add(resume);
+        member.getResumeCollection().add(resumeBefore);
 
         em.flush();
         em.clear();
@@ -64,8 +80,59 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertTrue(containsName(dtoList, "resume"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
     }
 
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetAllByAuthority() {
+        List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(containsName(dtoList, "resumeBefore"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+
+    }
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetByAuthority() {
+        List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(containsName(dtoList, "resumeBefore"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+
+
+        dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ME_ONLY, 0, 0);
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(containsName(dtoList, "resume"));
+
+        Assert.assertTrue(isRecentFront(dtoList));
+    }
+
+    private boolean isRecentFront(List<ResumeDto> list) {
+        int len = list.size();
+        if (len <= 1) {
+            return true;
+        }
+
+        for (int ix = 1 ; ix < len ; ++ix) {
+            ResumeDto after = list.get(ix);
+            ResumeDto before = list.get(ix - 1);
+
+            if (before.getCreatedTime().compareTo(after.getCreatedTime()) < 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     @Test
     @Transactional(readOnly = true)

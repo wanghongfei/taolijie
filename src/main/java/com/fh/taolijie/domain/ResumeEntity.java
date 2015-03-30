@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.service.PageViewAware;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,17 +10,31 @@ import java.util.Date;
  */
 @NamedQueries({
         @NamedQuery(name = "resumeEntity.findByMember",
-            query = "SELECT r FROM ResumeEntity r WHERE r.member = :member")
+            query = "SELECT r FROM ResumeEntity r WHERE r.member = :member"),
+
+        // 查找所有简历，最新的简历在最前
+        @NamedQuery(name = "ResumeEntity.findAll",
+            query = "SELECT r FROM ResumeEntity r ORDER BY r.createdTime DESC"),
+
+        @NamedQuery(name = "ResumeEntity.findByAuthority",
+            query = "SELECT r FROM ResumeEntity r WHERE " +
+                    "r.accessAuthority = :authority " +
+                    "ORDER BY r.createdTime DESC"),
+
+        @NamedQuery(name = "ResumeEntity.findByMemberAndAuthority",
+            query = "SELECT r FROM ResumeEntity r WHERE " +
+                    "r.member = :member AND " +
+                    "r.accessAuthority = :authority")
 })
 @Entity
 @Table(name = "resume")
-public class ResumeEntity {
+public class ResumeEntity implements PageViewAware {
     private Integer id;
     private String name;
     private String gender;
     private Integer age;
     private Integer height;
-    private String phonePath;
+    private String photoPath;
     private String email;
     private String qq;
     private String experience;
@@ -26,14 +42,17 @@ public class ResumeEntity {
     private MemberEntity member;
 
     private Date createdTime;
+    private String accessAuthority;
+    private Integer pageView;
+    private String verified;
 
     public ResumeEntity() {}
-    public ResumeEntity(String name, String gender, Integer age, Integer height, String phonePath, String email, String qq, String experience, String introduce, MemberEntity member) {
+    public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.height = height;
-        this.phonePath = phonePath;
+        this.photoPath = photoPath;
         this.email = email;
         this.qq = qq;
         this.experience = experience;
@@ -72,6 +91,15 @@ public class ResumeEntity {
         this.gender = gender;
     }
 
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
+
     @Basic
     @Column(name = "age")
     public Integer getAge() {
@@ -82,6 +110,15 @@ public class ResumeEntity {
         this.age = age;
     }
 
+    @Column(name = "access_authority")
+    public String getAccessAuthority() {
+        return accessAuthority;
+    }
+
+    public void setAccessAuthority(String accessAuthority) {
+        this.accessAuthority = accessAuthority;
+    }
+
     @Basic
     @Column(name = "height")
     public Integer getHeight() {
@@ -90,6 +127,15 @@ public class ResumeEntity {
 
     public void setHeight(Integer height) {
         this.height = height;
+    }
+
+    @Column(name = "page_view")
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     @Column(name = "created_time")
@@ -103,12 +149,12 @@ public class ResumeEntity {
 
     @Basic
     @Column(name = "phone_path")
-    public String getPhonePath() {
-        return phonePath;
+    public String getPhotoPath() {
+        return photoPath;
     }
 
-    public void setPhonePath(String phonePath) {
-        this.phonePath = phonePath;
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     @Basic
@@ -166,7 +212,7 @@ public class ResumeEntity {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (introduce != null ? !introduce.equals(that.introduce) : that.introduce != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (phonePath != null ? !phonePath.equals(that.phonePath) : that.phonePath != null) return false;
+        if (photoPath != null ? !photoPath.equals(that.photoPath) : that.photoPath != null) return false;
         if (qq != null ? !qq.equals(that.qq) : that.qq != null) return false;
 
         return true;
@@ -179,7 +225,7 @@ public class ResumeEntity {
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (height != null ? height.hashCode() : 0);
-        result = 31 * result + (phonePath != null ? phonePath.hashCode() : 0);
+        result = 31 * result + (photoPath != null ? photoPath.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (qq != null ? qq.hashCode() : 0);
         result = 31 * result + (experience != null ? experience.hashCode() : 0);

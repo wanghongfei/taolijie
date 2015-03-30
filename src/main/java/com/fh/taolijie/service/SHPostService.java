@@ -8,7 +8,7 @@ import java.util.List;
  * 规定与二手帖子有关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface SHPostService {
+public interface SHPostService extends PageService {
     /**
      * 查找所有二手帖子
      * @return
@@ -40,6 +40,11 @@ public interface SHPostService {
      * @return
      */
     boolean addPost(SecondHandPostDto postDto);
+
+    /**
+     * 投诉+1
+     */
+    void complaint(Integer postId);
 
     /**
      * 根据id查找帖子

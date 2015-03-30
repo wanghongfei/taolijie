@@ -51,7 +51,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     public void initDate() {
         // 创建用户
         // password is 111111
-        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
+        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "", true, new Date());
         em.persist(member);
 
         // 创建2个分类
@@ -123,6 +123,46 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         JobPostDto dto = postService.findJobPost(post.getId());
         Assert.assertNotNull(dto);
         Assert.assertEquals(post.getTitle(), dto.getTitle());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testAddPageView() {
+        postService.increasePageView(this.post.getId(), this.post.getClass());
+
+        JobPostEntity post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertEquals(1, post.getPageView().intValue());
+
+        em.flush();
+        em.clear();
+
+        postService.increasePageView(this.post.getId(), this.post.getClass());
+        post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertEquals(2, post.getPageView().intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testComplaint() {
+        postService.complaint(post.getId());
+        JobPostDto dto = postService.findJobPost(post.getId());
+        Assert.assertEquals(1, dto.getComplaint().intValue());
+
+
+        MemberEntity mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(1, mem.getComplaint().intValue());
+
+        em.flush();
+        em.clear();
+
+        postService.complaint(post.getId());
+        dto = postService.findJobPost(post.getId());
+        Assert.assertEquals(2, dto.getComplaint().intValue());
+
+
+        mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(2, mem.getComplaint().intValue());
+        Print.print("~~~~" + mem.getComplaint().intValue());
     }
 
     @Test

@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.service.PageViewAware;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "second_hand_post")
-public class SecondHandPostEntity {
+public class SecondHandPostEntity implements PageViewAware {
     private Integer id;
     private String title;
     private Date expiredTime;
@@ -21,7 +23,10 @@ public class SecondHandPostEntity {
     private Integer likes;
     private Integer dislikes;
 
+
     private Integer complaint;
+    private Integer pageView;
+    private String verified;
 
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
@@ -71,6 +76,24 @@ public class SecondHandPostEntity {
 
     public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
+
+    @Column(name = "page_view")
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     @Basic

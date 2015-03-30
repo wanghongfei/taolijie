@@ -9,6 +9,7 @@ import com.fh.taolijie.service.impl.DefaultSHPostService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
+import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,11 +46,14 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Autowired
     SHPostService postService;
 
+    @PersistenceContext
+    EntityManager em;
+
     @Before
     public void initData() throws Exception{
         // 创建用户
         // password is 111111
-        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
+        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "", true, new Date());
         memberRepo.save(member);
 
         // create category
@@ -116,6 +123,32 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
             return dto.getTitle().equals("another post");
         });
         Assert.assertTrue(contains);
+    }
+
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testComplaint() {
+        // TODO
+        postService.complaint(post1.getId());
+        SecondHandPostDto dto = postService.findPost(post1.getId());
+        Assert.assertEquals(1, dto.getComplaint().intValue());
+
+
+        MemberEntity mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(1, mem.getComplaint().intValue());
+
+        em.flush();
+        em.clear();
+
+        postService.complaint(post1.getId());
+        dto = postService.findPost(post1.getId());
+        Assert.assertEquals(2, dto.getComplaint().intValue());
+
+
+        mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(2, mem.getComplaint().intValue());
+        Print.print("~~~~" + mem.getComplaint().intValue());
     }
 
     @Test

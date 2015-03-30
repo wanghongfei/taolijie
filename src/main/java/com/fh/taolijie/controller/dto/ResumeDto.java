@@ -18,6 +18,9 @@ public class ResumeDto {
     private String introduce;
 
     private Date createdTime;
+    private String accessAuthority;
+    private Integer pageView;
+    private String verified;
 
     private Integer memberId;
 
@@ -43,6 +46,22 @@ public class ResumeDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
+
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     public String getGender() {
@@ -91,6 +110,14 @@ public class ResumeDto {
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public String getAccessAuthority() {
+        return accessAuthority;
+    }
+
+    public void setAccessAuthority(String accessAuthority) {
+        this.accessAuthority = accessAuthority;
     }
 
     public String getExperience() {

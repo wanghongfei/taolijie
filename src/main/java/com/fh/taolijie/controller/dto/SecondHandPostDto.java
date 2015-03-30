@@ -19,6 +19,8 @@ public class SecondHandPostDto {
     private Integer dislikes;
 
     private Integer complaint;
+    private Integer pageView;
+    private String verified;
 
     private Integer memberId;
     private String categoryName;
@@ -38,6 +40,22 @@ public class SecondHandPostDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
+
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     public Integer getComplaint() {

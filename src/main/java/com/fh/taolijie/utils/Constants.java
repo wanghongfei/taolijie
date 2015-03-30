@@ -64,6 +64,11 @@ public class Constants {
         BUSINESS
     }
 
+    public static enum AccessAuthority {
+        ME_ONLY,
+        ALL
+    }
+
     public static class ErrorType{
 
         public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";

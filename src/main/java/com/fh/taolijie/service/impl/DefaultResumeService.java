@@ -16,18 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wanghongfei on 15-3-7.
  */
 @Repository
-public class DefaultResumeService implements ResumeService {
+public class DefaultResumeService extends DefaultPageService implements ResumeService {
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
     private ResumeRepo resumeRepo;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -35,6 +38,19 @@ public class DefaultResumeService implements ResumeService {
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<ResumeEntity> entityList = resumeRepo.findAll(new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    public List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<ResumeEntity> entityList = resumeRepo.findByAuthority(authority.toString(), new PageRequest(firstResult, cap));
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
             return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
@@ -64,6 +80,45 @@ public class DefaultResumeService implements ResumeService {
                 dto.setMemberId(resumeEntity.getMember().getId());
             });
         });
+    }
+
+    @Override
+    public List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        MemberEntity mem = em.getReference(MemberEntity.class, memId);
+
+        // TODO
+/*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
+                .setParameter("member", mem)
+                .setFirstResult(firstResult)
+                .setMaxResults(cap)
+                .getResultList();*/
+
+        Page<ResumeEntity> rList = resumeRepo.findByMemberAndAuthority(mem, authority.toString(), new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean refresh(Integer resumeId) {
+        ResumeEntity r = em.find(ResumeEntity.class, resumeId);
+
+        Date original = r.getCreatedTime();
+        Date now = new Date();
+
+
+        if (now.getTime() - original.getTime() >= TimeUnit.DAYS.toSeconds(1)) {
+            r.setCreatedTime(now);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -129,7 +184,7 @@ public class DefaultResumeService implements ResumeService {
         resume.setGender(dto.getGender());
         resume.setAge(dto.getAge());
         resume.setHeight(dto.getHeight());
-        resume.setPhonePath(dto.getPhonePath());
+        resume.setPhotoPath(dto.getPhotoPath());
         resume.setEmail(dto.getEmail());
         resume.setQq(dto.getQq());
         resume.setIntroduce(dto.getIntroduce());
@@ -141,7 +196,7 @@ public class DefaultResumeService implements ResumeService {
         dto.setGender(resume.getGender());
         dto.setAge(resume.getAge());
         dto.setHeight(resume.getHeight());
-        dto.setPhonePath(resume.getPhonePath());
+        dto.setPhotoPath(resume.getPhotoPath());
         dto.setEmail(resume.getEmail());
         dto.setQq(resume.getQq());
         dto.setExperience(resume.getExperience());

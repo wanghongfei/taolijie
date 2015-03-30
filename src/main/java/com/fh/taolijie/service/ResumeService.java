@@ -1,18 +1,25 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.utils.Constants;
 
 import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-5.
  */
-public interface ResumeService {
+public interface ResumeService extends PageService {
     /**
      * 查找所有简历
      * @return
      */
     List<ResumeDto> getAllResumeList(int firstResult, int capacity);
+
+    /**
+     * 根据权限查找所有简历
+     * @return
+     */
+    List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity);
 
     /**
      * 获取某个用户的部分简历.
@@ -26,6 +33,14 @@ public interface ResumeService {
     List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity);
 
     /**
+     *
+     * 获取某个用户的部分简历.
+     * @param authority 设置简历权限类型
+     * @return
+     */
+    List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity);
+
+    /**
      * 修改简历信息
      * @param resumeId
      * @param resumeDto
@@ -34,10 +49,17 @@ public interface ResumeService {
     boolean updateResume(Integer resumeId, ResumeDto resumeDto);
 
     /**
+     * 刷新简历更新时间
+     * @return 一天只能刷一次，刷新失败返回false
+     */
+    boolean refresh(Integer resumeId);
+
+    /**
      * 创建新简历
      * @param dto
      */
     void addResume(ResumeDto dto);
+
 
     /**
      * 根据id查找简历
