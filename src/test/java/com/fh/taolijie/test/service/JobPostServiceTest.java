@@ -51,7 +51,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     public void initDate() {
         // 创建用户
         // password is 111111
-        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "");
+        member = new MemberEntity("Bruce", "3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d", "", "Neo", "", "", "", "", "", "", 20, "", "", true, new Date());
         em.persist(member);
 
         // 创建2个分类

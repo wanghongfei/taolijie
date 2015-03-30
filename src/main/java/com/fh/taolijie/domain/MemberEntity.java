@@ -67,7 +67,9 @@ public class MemberEntity {
 
     }
 
-    public MemberEntity(String username, String password, String email, String name, String studentId, String gender, String verified, String profilePhotoPath, String phone, String qq, Integer age, String companyName, String blockList) {
+    public MemberEntity(String username, String password, String email, String name, String studentId,
+                        String gender, String verified, String profilePhotoPath, String phone, String qq,
+                        Integer age, String companyName, String blockList, Boolean valid, Date createdTime) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -81,6 +83,9 @@ public class MemberEntity {
         this.age = age;
         this.companyName = companyName;
         this.blockList = blockList;
+
+        this.valid = valid;
+        this.createdTime = createdTime;
     }
 
     @Id
