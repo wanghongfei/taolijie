@@ -4,6 +4,7 @@ import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.repository.JobPostRepo;
@@ -11,6 +12,7 @@ import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -129,15 +134,37 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     public void postResume(Integer postId, Integer resumeId) {
         JobPostEntity post = postRepo.findOne(postId);
 
-        // 设置收到的简历id
+        // 记录收到的简历id
+        // 在Member中记录这次投递
         String applicationIds = post.getApplicationResumeIds();
         String newIds = StringUtils.addToString(applicationIds, resumeId.toString());
         post.setApplicationResumeIds(newIds);
+
+
 
         // 增加申请者数量
         Integer original = post.getApplicantAmount();
         Integer newValue = original == null ? 1 : original.intValue() + 1;
         post.setApplicantAmount(newValue);
+
+        // 在Member中记录这次投递
+        ResumeEntity resumeEntity = resumeRepo.getOne(resumeId);
+        MemberEntity mem = resumeEntity.getMember();
+        String applicationJson = mem.getAppliedJobIds();
+
+        Date now = new Date();
+        JsonWrapper js = new JsonWrapper(applicationJson);
+        js.addObjectToArray(Arrays.asList(
+                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_ID, postId.toString()),
+                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_TIME, Long.toString(now.getTime()))
+        ));
+        mem.setAppliedJobIds(js.getAjaxMessage(true));
+
+/*        ResumeEntity resumeEntity = resumeRepo.getOne(resumeId);
+        MemberEntity mem = resumeEntity.getMember();
+        String originalIds = mem.getAppliedJobIds();
+        newIds = StringUtils.addToString(originalIds, postId.toString());
+        mem.setAppliedJobIds(newIds);*/
     }
 
     @Override

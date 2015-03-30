@@ -1,9 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.EmployerDto;
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.controller.dto.RoleDto;
-import com.fh.taolijie.controller.dto.StudentDto;
+import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -80,6 +77,7 @@ public interface AccountService {
      */
     public Long getMemberAmount();
 
+    //List<JobPostDto> getAppliedJobList(Integer memberId, );
     /**
      * 更新用户信息.
      * @param memDto 表示用户的dto对象.

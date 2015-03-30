@@ -185,6 +185,11 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertNotNull(post.getApplicationResumeIds());
         Assert.assertEquals(2, post.getApplicantAmount().intValue());
         Assert.assertEquals(this.resume.getId().toString() + ";" + this.resumeBefore.getId() + ";", post.getApplicationResumeIds());
+
+        // 测试member表中有没有投递记录
+        String json = post.getMember().getAppliedJobIds();
+        Assert.assertNotNull(json);
+        System.out.println(json);
     }
 
     @Test

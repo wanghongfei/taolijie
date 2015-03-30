@@ -26,7 +26,9 @@ public class JsonWrapper extends Wrapper {
 		this.jsonList = new ArrayList<>();
 		this.builder = Json.createArrayBuilder();
 
-		parseJson();
+		if (null != this.jsonString) {
+			parseJson();
+		}
 	}
 	
 	/**

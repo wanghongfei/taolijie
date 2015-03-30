@@ -102,6 +102,17 @@ public class DefaultSchoolService implements SchoolService {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+    public void addAcademy(Integer schoolId, AcademyDto dto) {
+        SchoolEntity school = schoolRepo.getOne(schoolId);
+        AcademyEntity aca = CollectionUtils.dto2Entity(dto, AcademyEntity.class, (entity) -> {
+            entity.setSchool(school);
+        });
+
+        academyRepo.save(aca);
+    }
+
+    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateSchoolInfo(Integer schoolId, SchoolDto schoolDto) {
         SchoolEntity school = schoolRepo.findOne(schoolId);
