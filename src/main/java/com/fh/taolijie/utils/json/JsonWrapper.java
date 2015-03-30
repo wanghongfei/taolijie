@@ -1,22 +1,29 @@
 package com.fh.taolijie.utils.json;
 
+import com.fh.taolijie.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import java.util.List;
-import java.util.Map;
+import javax.json.*;
+import java.io.StringReader;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class JsonWrapper extends Wrapper {
 	public static final Logger logger = LoggerFactory.getLogger(JsonWrapper.class);
 
 	protected String ajaxMessage;
+
+	protected List<Map<String, String>> jsonArray;
+
+	public JsonWrapper(String jsonString) {
+		this.jsonString = jsonString;
+		this.jsonArray = new ArrayList<>();
+
+		parseJson();
+	}
 	
 	/**
 	 * 构造JSON对象.
@@ -139,5 +146,54 @@ public class JsonWrapper extends Wrapper {
 
 	public String getAjaxMessage() {
 		return ajaxMessage;
+	}
+
+	public List<Map<String, String>> getJsonArray() {
+		return jsonArray;
+	}
+
+	private void parseJson() {
+		if (null == jsonString || jsonString.isEmpty()) {
+			throw new IllegalStateException("json string is null or empty");
+		}
+
+		// Convert json string to JsonObject
+		JsonReader reader = Json.createReader(new StringReader(jsonString));
+		JsonArray arr = reader.readArray();
+
+		for (JsonValue jsonVal : arr) {
+			JsonValue.ValueType type = jsonVal.getValueType();
+			if (type == JsonValue.ValueType.OBJECT) {
+				JsonObject obj = (JsonObject) jsonVal;
+
+				Map<String, String> objMap = new HashMap<>();
+				Set<Entry<String, JsonValue>> entrySet = obj.entrySet();
+				for (Entry<String, JsonValue> entry : entrySet) {
+					String name = entry.getKey();
+					String value = StringUtils.trimQuotation(entry.getValue().toString());
+
+					objMap.put(name, value);
+				}
+
+				this.jsonArray.add(objMap);
+			}
+		}
+
+		reader.close();
+
+		// loop value
+/*		Map<String, String> tempJsonMap = new HashMap<String, String>();
+		Set<Entry<String, JsonValue>> entrySet = obj.entrySet();
+		for (Entry<String, JsonValue> entry : entrySet) {
+			String name = entry.getKey();
+			// the value string is surrounded by quotations
+			// so we need to trim them off
+			String value = StringUtils.trimQuotation(entry.getValue().toString());
+
+			tempJsonMap.put(name, value);
+		}
+
+
+		this.jsonMap = tempJsonMap;*/
 	}
 }
