@@ -3,16 +3,36 @@ package com.fh.taolijie.test.utils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
-import junit.framework.Assert;
+import com.fh.taolijie.utils.json.JsonWrapper;
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wynfrith on 15-3-27.
  */
 public class JsonTest {
+    @Test
+    public void testParse() {
+        String json = "[ {\"id\":\"1\", \"time\":\"123\"}, {\"id\":\"2\", \"time\":\"123\"}, {\"id\":\"3\", \"time\":\"123\"} ]";
+        System.out.println(json);
+        JsonWrapper jw = new JsonWrapper(json);
+
+        List<Map<String, String>> list = jw.getJsonList();
+        for (Map<String, String> obj : list) {
+            System.out.println("id: " + obj.get("id") + ", time:" + obj.get("time"));
+        }
+
+        List<Map.Entry<String, String>> objList = new ArrayList<>();
+        objList.add(new AbstractMap.SimpleEntry<String, String>("name", "bruce"));
+        objList.add(new AbstractMap.SimpleEntry<String, String>("age", "20"));
+        jw.addObjectToArray(objList);
+        System.out.println(jw.getAjaxMessage(true));
+    }
 
     /**
      * 测试有数据的list
@@ -30,7 +50,7 @@ public class JsonTest {
         actual = JSON.toJSONString(list);
         System.out.println(actual);
 
-        Assert.assertEquals(expert,actual);
+        Assert.assertEquals(expert, actual);
 
     }
     @Test

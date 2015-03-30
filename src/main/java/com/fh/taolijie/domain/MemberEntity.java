@@ -48,6 +48,7 @@ public class MemberEntity {
 
     private Date createdTime;
     private Boolean valid;
+    private String appliedJobIds;
 
     private Integer complaint;
 
@@ -97,6 +98,15 @@ public class MemberEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "applied_job_ids", columnDefinition = "TEXT")
+    public String getAppliedJobIds() {
+        return appliedJobIds;
+    }
+
+    public void setAppliedJobIds(String appliedJobIds) {
+        this.appliedJobIds = appliedJobIds;
     }
 
     @Basic

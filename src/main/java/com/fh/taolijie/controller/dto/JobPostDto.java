@@ -38,6 +38,8 @@ public class JobPostDto {
     private Integer categoryId;
     private String categoryName;
     private Integer memberId;
+    private String applicationResumeIds;
+    private Integer applicantAmount;
 
     public Integer getId() {
         return id;
@@ -61,6 +63,22 @@ public class JobPostDto {
 
     public void setVerified(Integer verified) {
         this.verified = verified;
+    }
+
+    public String getApplicationResumeIds() {
+        return applicationResumeIds;
+    }
+
+    public void setApplicationResumeIds(String applicationResumeIds) {
+        this.applicationResumeIds = applicationResumeIds;
+    }
+
+    public Integer getApplicantAmount() {
+        return applicantAmount;
+    }
+
+    public void setApplicantAmount(Integer applicantAmount) {
+        this.applicantAmount = applicantAmount;
     }
 
     public Date getExpiredTime() {

@@ -9,6 +9,7 @@ import java.util.List;
 public class StudentDto extends GeneralMemberDto {
     protected String studentId;
     protected String blockList;
+    private String appliedJobIds;
 
     public String getBlockList() {
         return blockList;
@@ -36,6 +37,14 @@ public class StudentDto extends GeneralMemberDto {
     public void setSchoolIdList(List<Integer> schoolIdList) {
         this.schoolIdList = schoolIdList;
     }*/
+
+    public String getAppliedJobIds() {
+        return appliedJobIds;
+    }
+
+    public void setAppliedJobIds(String appliedJobIds) {
+        this.appliedJobIds = appliedJobIds;
+    }
 
     public List<Integer> getAcademyIdList() {
         return academyIdList;

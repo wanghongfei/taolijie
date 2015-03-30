@@ -7,8 +7,10 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.repository.JobPostRepo;
+import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +36,8 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Autowired
     private JobPostRepo postRepo;
 
+    @Autowired
+    private ResumeRepo resumeRepo;
 
     @Override
     @Transactional(readOnly = true)
@@ -120,6 +124,21 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         });
     }
 
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void postResume(Integer postId, Integer resumeId) {
+        JobPostEntity post = postRepo.findOne(postId);
+
+        // 设置收到的简历id
+        String applicationIds = post.getApplicationResumeIds();
+        String newIds = StringUtils.addToString(applicationIds, resumeId.toString());
+        post.setApplicationResumeIds(newIds);
+
+        // 增加申请者数量
+        Integer original = post.getApplicantAmount();
+        Integer newValue = original == null ? 1 : original.intValue() + 1;
+        post.setApplicantAmount(newValue);
+    }
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
