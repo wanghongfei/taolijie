@@ -41,6 +41,7 @@ public class ResumeEntity {
 
     private Date createdTime;
     private String accessAuthority;
+    private Integer pageView;
 
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
@@ -114,6 +115,15 @@ public class ResumeEntity {
 
     public void setHeight(Integer height) {
         this.height = height;
+    }
+
+    @Column(name = "page_view")
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     @Column(name = "created_time")

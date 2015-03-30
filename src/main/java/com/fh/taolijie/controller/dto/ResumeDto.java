@@ -19,6 +19,7 @@ public class ResumeDto {
 
     private Date createdTime;
     private String accessAuthority;
+    private Integer pageView;
 
     private Integer memberId;
 
@@ -44,6 +45,14 @@ public class ResumeDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     public String getGender() {

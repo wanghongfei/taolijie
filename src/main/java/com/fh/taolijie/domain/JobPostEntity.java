@@ -42,6 +42,7 @@ public class JobPostEntity {
     private Integer complaint;
     private String workTime;
     private String salaryUnit;
+    private String pageView;
 
     private JobPostCategoryEntity category;
     private MemberEntity member;
@@ -88,6 +89,15 @@ public class JobPostEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(name = "page_view")
+    public String getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(String pageView) {
+        this.pageView = pageView;
     }
 
     @Basic

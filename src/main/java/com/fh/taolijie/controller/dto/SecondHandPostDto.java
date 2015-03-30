@@ -19,6 +19,7 @@ public class SecondHandPostDto {
     private Integer dislikes;
 
     private Integer complaint;
+    private Integer pageView;
 
     private Integer memberId;
     private String categoryName;
@@ -38,6 +39,14 @@ public class SecondHandPostDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     public Integer getComplaint() {

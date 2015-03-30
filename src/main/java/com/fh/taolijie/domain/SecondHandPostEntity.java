@@ -21,7 +21,9 @@ public class SecondHandPostEntity {
     private Integer likes;
     private Integer dislikes;
 
+
     private Integer complaint;
+    private Integer pageView;
 
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
@@ -71,6 +73,15 @@ public class SecondHandPostEntity {
 
     public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    @Column(name = "page_view")
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     @Basic

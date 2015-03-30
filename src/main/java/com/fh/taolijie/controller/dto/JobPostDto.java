@@ -32,6 +32,7 @@ public class JobPostDto {
     private Integer complaint;
     private String workTime;
     private String salaryUnit;
+    private Integer pageView;
 
     private Integer categoryId;
     private String categoryName;
@@ -59,6 +60,14 @@ public class JobPostDto {
 
     public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    public Integer getPageView() {
+        return pageView;
+    }
+
+    public void setPageView(Integer pageView) {
+        this.pageView = pageView;
     }
 
     public Date getPostTime() {
