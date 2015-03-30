@@ -42,6 +42,11 @@ public interface SHPostService {
     boolean addPost(SecondHandPostDto postDto);
 
     /**
+     * 投诉+1
+     */
+    void complaint(Integer postId);
+
+    /**
      * 根据id查找帖子
      * @param postId {@link com.fh.taolijie.domain.SecondHandPostEntity}实体的主键值
      * @return

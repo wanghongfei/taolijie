@@ -131,6 +131,23 @@ public class DefaultSHPostService implements SHPostService {
     }
 
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void complaint(Integer postId) {
+        SecondHandPostEntity post = postRepo.findOne(postId);
+        Integer original = post.getComplaint();
+
+        // 帖子本身投诉数+1
+        Integer newValue = original == null ? 1 : original.intValue() + 1;
+        post.setComplaint(newValue);
+
+        // 对应用户投诉数+1
+        original = post.getMember().getComplaint();
+        newValue = original == null ? 1 : original.intValue() + 1;
+        post.getMember().setComplaint(newValue);
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public SecondHandPostDto findPost(Integer postId) {
         SecondHandPostEntity entity = postRepo.getOne(postId);
