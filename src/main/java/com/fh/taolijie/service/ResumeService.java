@@ -34,10 +34,17 @@ public interface ResumeService {
     boolean updateResume(Integer resumeId, ResumeDto resumeDto);
 
     /**
+     * 刷新简历更新时间
+     * @return 一天只能刷一次，刷新失败返回false
+     */
+    boolean refresh(Integer resumeId);
+
+    /**
      * 创建新简历
      * @param dto
      */
     void addResume(ResumeDto dto);
+
 
     /**
      * 根据id查找简历

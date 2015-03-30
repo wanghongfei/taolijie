@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -64,6 +66,23 @@ public class DefaultResumeService implements ResumeService {
                 dto.setMemberId(resumeEntity.getMember().getId());
             });
         });
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean refresh(Integer resumeId) {
+        ResumeEntity r = em.find(ResumeEntity.class, resumeId);
+
+        Date original = r.getCreatedTime();
+        Date now = new Date();
+
+
+        if (now.getTime() - original.getTime() >= TimeUnit.DAYS.toSeconds(1)) {
+            r.setCreatedTime(now);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
