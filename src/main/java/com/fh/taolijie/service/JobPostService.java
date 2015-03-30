@@ -37,6 +37,11 @@ public interface JobPostService {
     JobPostDto findJobPost(Integer postId);
 
     /**
+     * 投诉数+1
+     */
+    void complaint(Integer postId);
+
+    /**
      * 发布帖子
      * @param dto
      */

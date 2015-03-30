@@ -121,6 +121,22 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void complaint(Integer postId) {
+        JobPostEntity post = em.find(JobPostEntity.class, postId);
+        Integer original = post.getComplaint();
+
+        // 帖子本身投诉数+1
+        Integer newValue = original == null ? 1 : original.intValue() + 1;
+        post.setComplaint(newValue);
+
+        // 对应用户投诉数+1
+        original = post.getMember().getComplaint();
+        newValue = original == null ? 1 : original.intValue() + 1;
+        post.getMember().setComplaint(newValue);
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateJobPost(Integer postId, JobPostDto postDto) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
         CollectionUtils.updateEntity(post, postDto, null);

@@ -127,6 +127,30 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testComplaint() {
+        postService.complaint(post.getId());
+        JobPostDto dto = postService.findJobPost(post.getId());
+        Assert.assertEquals(1, dto.getComplaint().intValue());
+
+
+        MemberEntity mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(1, mem.getComplaint().intValue());
+
+        em.flush();
+        em.clear();
+
+        postService.complaint(post.getId());
+        dto = postService.findJobPost(post.getId());
+        Assert.assertEquals(2, dto.getComplaint().intValue());
+
+
+        mem = em.find(MemberEntity.class, member.getId());
+        Assert.assertEquals(2, mem.getComplaint().intValue());
+        Print.print("~~~~" + mem.getComplaint().intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
     public void testUpdatePost() {
         JobPostDto dto = new JobPostDto();
         dto.setTitle("no post");
