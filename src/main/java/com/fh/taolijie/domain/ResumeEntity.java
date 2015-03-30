@@ -30,6 +30,7 @@ public class ResumeEntity {
     private MemberEntity member;
 
     private Date createdTime;
+    private String accessAuthority;
 
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
@@ -84,6 +85,15 @@ public class ResumeEntity {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    @Column(name = "access_authority")
+    public String getAccessAuthority() {
+        return accessAuthority;
+    }
+
+    public void setAccessAuthority(String accessAuthority) {
+        this.accessAuthority = accessAuthority;
     }
 
     @Basic

@@ -18,6 +18,7 @@ public class ResumeDto {
     private String introduce;
 
     private Date createdTime;
+    private String accessAuthority;
 
     private Integer memberId;
 
@@ -91,6 +92,14 @@ public class ResumeDto {
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public String getAccessAuthority() {
+        return accessAuthority;
+    }
+
+    public void setAccessAuthority(String accessAuthority) {
+        this.accessAuthority = accessAuthority;
     }
 
     public String getExperience() {
