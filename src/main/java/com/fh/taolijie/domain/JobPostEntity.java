@@ -46,6 +46,7 @@ public class JobPostEntity implements PageViewAware {
     private String salaryUnit;
     private Integer pageView;
     private String verified;
+    private String applicationResumeIds;
 
     private JobPostCategoryEntity category;
     private MemberEntity member;
@@ -101,6 +102,15 @@ public class JobPostEntity implements PageViewAware {
 
     public void setVerified(String verified) {
         this.verified = verified;
+    }
+
+    @Column(name = "application_resume_ids", columnDefinition = "TEXT")
+    public String getApplicationResumeIds() {
+        return applicationResumeIds;
+    }
+
+    public void setApplicationResumeIds(String applicationResumeIds) {
+        this.applicationResumeIds = applicationResumeIds;
     }
 
     @Column(name = "page_view")
