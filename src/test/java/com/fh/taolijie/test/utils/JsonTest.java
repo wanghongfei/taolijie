@@ -7,6 +7,7 @@ import com.fh.taolijie.utils.json.JsonWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,10 +22,16 @@ public class JsonTest {
         System.out.println(json);
         JsonWrapper jw = new JsonWrapper(json);
 
-        List<Map<String, String>> list = jw.getJsonArray();
+        List<Map<String, String>> list = jw.getJsonList();
         for (Map<String, String> obj : list) {
             System.out.println("id: " + obj.get("id") + ", time:" + obj.get("time"));
         }
+
+        List<Map.Entry<String, String>> objList = new ArrayList<>();
+        objList.add(new AbstractMap.SimpleEntry<String, String>("name", "bruce"));
+        objList.add(new AbstractMap.SimpleEntry<String, String>("age", "20"));
+        jw.addObjectToArray(objList);
+        System.out.println(jw.getAjaxMessage(true));
     }
 
     /**

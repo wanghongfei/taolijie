@@ -16,11 +16,15 @@ public class JsonWrapper extends Wrapper {
 
 	protected String ajaxMessage;
 
-	protected List<Map<String, String>> jsonArray;
+	protected List<Map<String, String>> jsonList;
+	// 缓存解析结果
+	protected JsonArrayBuilder builder;
+
 
 	public JsonWrapper(String jsonString) {
 		this.jsonString = jsonString;
-		this.jsonArray = new ArrayList<>();
+		this.jsonList = new ArrayList<>();
+		this.builder = Json.createArrayBuilder();
 
 		parseJson();
 	}
@@ -148,8 +152,26 @@ public class JsonWrapper extends Wrapper {
 		return ajaxMessage;
 	}
 
-	public List<Map<String, String>> getJsonArray() {
-		return jsonArray;
+	public String getAjaxMessage(boolean flush) {
+		if (flush) {
+			this.ajaxMessage = builder.build().toString();
+		}
+
+		return this.ajaxMessage;
+	}
+
+	public List<Map<String, String>> getJsonList() {
+		return jsonList;
+	}
+
+	public void addObjectToArray(List<Map.Entry<String, String>> objList) {
+		JsonObjectBuilder objBuilder = Json.createObjectBuilder();
+
+		for (Entry<String, String> pair : objList) {
+			objBuilder.add(pair.getKey(), pair.getValue());
+		}
+
+		builder.add(objBuilder);
 	}
 
 	private void parseJson() {
@@ -162,6 +184,8 @@ public class JsonWrapper extends Wrapper {
 		JsonArray arr = reader.readArray();
 
 		for (JsonValue jsonVal : arr) {
+			JsonObjectBuilder objBuilder = Json.createObjectBuilder();
+
 			JsonValue.ValueType type = jsonVal.getValueType();
 			if (type == JsonValue.ValueType.OBJECT) {
 				JsonObject obj = (JsonObject) jsonVal;
@@ -172,14 +196,19 @@ public class JsonWrapper extends Wrapper {
 					String name = entry.getKey();
 					String value = StringUtils.trimQuotation(entry.getValue().toString());
 
+					objBuilder.add(name, value);
+
 					objMap.put(name, value);
 				}
 
-				this.jsonArray.add(objMap);
+				this.jsonList.add(objMap);
 			}
+
+			this.builder.add(objBuilder);
 		}
 
 		reader.close();
+		//jsonArray = arr;
 
 		// loop value
 /*		Map<String, String> tempJsonMap = new HashMap<String, String>();
