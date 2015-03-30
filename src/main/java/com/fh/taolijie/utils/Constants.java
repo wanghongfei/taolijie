@@ -58,10 +58,10 @@ public class Constants {
     }
 
     public static enum RoleType {
-        SUPER,
+        USER,
         ADMIN,
         STUDENT,
-        EMPLOYER
+        BUSINESS
     }
 
     public static class ErrorType{
@@ -85,6 +85,10 @@ public class Constants {
 
         public static final String SUCCESS = "操作成功";
         public static final String FAILED = "操作失败";
+        public static final String DELETE_FAILED = "删除失败";
+        public static final String PARAM_ILLEGAL = "参数不合法";
+
+        public static final String CANT_DELETE_CURRENT_USER = "不能删除当前用户";
 
 
     }
