@@ -1,14 +1,12 @@
 package com.fh.taolijie.test.service;
 
 import com.fh.taolijie.controller.dto.JobPostDto;
-import com.fh.taolijie.domain.JobPostCategoryEntity;
-import com.fh.taolijie.domain.JobPostEntity;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.ReviewEntity;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.impl.DefaultJobPostService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,6 +35,8 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     JobPostCategoryEntity cate1;
     JobPostCategoryEntity cate2;
     JobPostEntity post;
+    ResumeEntity resume;
+    ResumeEntity resumeBefore;
     ReviewEntity review;
 
     @Autowired
@@ -85,6 +85,27 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         member.getReviewCollection().add(review);
         em.persist(review);
 
+        resumeBefore = new ResumeEntity();
+        resumeBefore.setName("resumeBefore");
+        resumeBefore.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
+        //resumeBefore.setCreatedTime(sdf.parse("2011/1/1"));
+        resumeBefore.setMember(member);
+        em.persist(resumeBefore);
+
+
+        // 创建简历
+        resume = new ResumeEntity();
+        resume.setName("resume");
+        resume.setAccessAuthority(Constants.AccessAuthority.ME_ONLY.toString());
+        resume.setCreatedTime(new Date()); // now
+        resume.setMember(member);
+        em.persist(resume);
+
+
+        // build connection
+        member.setResumeCollection(new ArrayList<>());
+        member.getResumeCollection().add(resume);
+        member.getResumeCollection().add(resumeBefore);
 
         em.flush();
         em.clear();
@@ -139,6 +160,31 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         postService.increasePageView(this.post.getId(), this.post.getClass());
         post = em.find(JobPostEntity.class, this.post.getId());
         Assert.assertEquals(2, post.getPageView().intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
+    public void testPost() {
+        postService.postResume(this.post.getId(), this.resume.getId());
+
+
+        JobPostEntity post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertNotNull(post.getApplicantAmount());
+        Assert.assertNotNull(post.getApplicationResumeIds());
+        Assert.assertEquals(1, post.getApplicantAmount().intValue());
+        Assert.assertEquals(this.resume.getId().toString() + ";", post.getApplicationResumeIds());
+
+        em.flush();
+        em.clear();
+
+        postService.postResume(this.post.getId(), this.resumeBefore.getId());
+
+
+        post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertNotNull(post.getApplicantAmount());
+        Assert.assertNotNull(post.getApplicationResumeIds());
+        Assert.assertEquals(2, post.getApplicantAmount().intValue());
+        Assert.assertEquals(this.resume.getId().toString() + ";" + this.resumeBefore.getId() + ";", post.getApplicationResumeIds());
     }
 
     @Test

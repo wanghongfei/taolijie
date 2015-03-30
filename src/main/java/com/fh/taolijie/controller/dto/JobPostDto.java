@@ -39,6 +39,7 @@ public class JobPostDto {
     private String categoryName;
     private Integer memberId;
     private String applicationResumeIds;
+    private Integer applicantAmount;
 
     public Integer getId() {
         return id;
@@ -70,6 +71,14 @@ public class JobPostDto {
 
     public void setApplicationResumeIds(String applicationResumeIds) {
         this.applicationResumeIds = applicationResumeIds;
+    }
+
+    public Integer getApplicantAmount() {
+        return applicantAmount;
+    }
+
+    public void setApplicantAmount(Integer applicantAmount) {
+        this.applicantAmount = applicantAmount;
     }
 
     public Date getExpiredTime() {

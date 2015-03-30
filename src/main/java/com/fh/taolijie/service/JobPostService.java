@@ -42,6 +42,13 @@ public interface JobPostService extends PageService {
     void complaint(Integer postId);
 
     /**
+     * 投递简历
+     * @param postId
+     * @param resumeId
+     */
+    void postResume(Integer postId, Integer resumeId);
+
+    /**
      * 发布帖子
      * @param dto
      */
