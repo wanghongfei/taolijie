@@ -26,6 +26,7 @@ public class SecondHandPostEntity implements PageViewAware {
 
     private Integer complaint;
     private Integer pageView;
+    private String verified;
 
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
@@ -75,6 +76,15 @@ public class SecondHandPostEntity implements PageViewAware {
 
     public void setExpiredTime(Date expiredTime) {
         this.expiredTime = expiredTime;
+    }
+
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
 
     @Column(name = "page_view")

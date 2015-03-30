@@ -44,6 +44,7 @@ public class ResumeEntity implements PageViewAware {
     private Date createdTime;
     private String accessAuthority;
     private Integer pageView;
+    private String verified;
 
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
@@ -88,6 +89,15 @@ public class ResumeEntity implements PageViewAware {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
 
     @Basic

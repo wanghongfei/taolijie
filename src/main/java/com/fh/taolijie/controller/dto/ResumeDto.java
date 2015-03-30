@@ -20,6 +20,7 @@ public class ResumeDto {
     private Date createdTime;
     private String accessAuthority;
     private Integer pageView;
+    private String verified;
 
     private Integer memberId;
 
@@ -45,6 +46,14 @@ public class ResumeDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
 
     public Integer getPageView() {

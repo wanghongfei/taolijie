@@ -45,6 +45,7 @@ public class JobPostEntity implements PageViewAware {
     private String workTime;
     private String salaryUnit;
     private Integer pageView;
+    private String verified;
 
     private JobPostCategoryEntity category;
     private MemberEntity member;
@@ -91,6 +92,15 @@ public class JobPostEntity implements PageViewAware {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Column(name = "verified")
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
 
     @Column(name = "page_view")
