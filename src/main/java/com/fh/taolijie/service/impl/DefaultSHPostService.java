@@ -26,7 +26,7 @@ import java.util.List;
  * Created by wanghongfei on 15-3-8.
  */
 @Service
-public class DefaultSHPostService implements SHPostService {
+public class DefaultSHPostService extends DefaultPageService implements SHPostService {
     @Autowired
     SHPostRepo postRepo;
 

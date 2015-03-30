@@ -24,12 +24,13 @@ import java.util.concurrent.TimeUnit;
  * Created by wanghongfei on 15-3-7.
  */
 @Repository
-public class DefaultResumeService implements ResumeService {
+public class DefaultResumeService extends DefaultPageService implements ResumeService {
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
     private ResumeRepo resumeRepo;
+
 
     @Override
     @Transactional(readOnly = true)

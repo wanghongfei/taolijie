@@ -24,7 +24,7 @@ import java.util.List;
  * Created by wanghongfei on 15-3-7.
  */
 @Repository
-public class DefaultJobPostService implements JobPostService {
+public class DefaultJobPostService extends DefaultPageService implements JobPostService {
     @Autowired
     private ReviewService reviewService;
 
@@ -33,6 +33,7 @@ public class DefaultJobPostService implements JobPostService {
 
     @Autowired
     private JobPostRepo postRepo;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -118,6 +119,7 @@ public class DefaultJobPostService implements JobPostService {
             dto.setMemberId(post.getMember().getId());
         });
     }
+
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)

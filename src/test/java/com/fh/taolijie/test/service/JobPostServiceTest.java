@@ -127,6 +127,22 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testAddPageView() {
+        postService.increasePageView(this.post.getId(), this.post.getClass());
+
+        JobPostEntity post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertEquals(1, post.getPageView().intValue());
+
+        em.flush();
+        em.clear();
+
+        postService.increasePageView(this.post.getId(), this.post.getClass());
+        post = em.find(JobPostEntity.class, this.post.getId());
+        Assert.assertEquals(2, post.getPageView().intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = false)
     public void testComplaint() {
         postService.complaint(post.getId());
         JobPostDto dto = postService.findJobPost(post.getId());

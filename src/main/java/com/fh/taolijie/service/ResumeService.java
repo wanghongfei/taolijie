@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by wanghongfei on 15-3-5.
  */
-public interface ResumeService {
+public interface ResumeService extends PageService {
     /**
      * 查找所有简历
      * @return

@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.service.PageViewAware;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -26,7 +28,7 @@ import java.util.Date;
 })
 @Entity
 @Table(name = "resume")
-public class ResumeEntity {
+public class ResumeEntity implements PageViewAware {
     private Integer id;
     private String name;
     private String gender;

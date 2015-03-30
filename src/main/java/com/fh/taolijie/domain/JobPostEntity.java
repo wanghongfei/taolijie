@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.service.PageViewAware;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -20,7 +22,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "job_post")
-public class JobPostEntity {
+public class JobPostEntity implements PageViewAware {
     private Integer id;
     private String title;
     private Date expiredTime;
@@ -42,7 +44,7 @@ public class JobPostEntity {
     private Integer complaint;
     private String workTime;
     private String salaryUnit;
-    private String pageView;
+    private Integer pageView;
 
     private JobPostCategoryEntity category;
     private MemberEntity member;
@@ -92,11 +94,11 @@ public class JobPostEntity {
     }
 
     @Column(name = "page_view")
-    public String getPageView() {
+    public Integer getPageView() {
         return pageView;
     }
 
-    public void setPageView(String pageView) {
+    public void setPageView(Integer pageView) {
         this.pageView = pageView;
     }
 

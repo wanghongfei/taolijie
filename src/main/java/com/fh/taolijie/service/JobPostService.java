@@ -8,7 +8,7 @@ import java.util.List;
  * 规定与兼职信息相关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface JobPostService {
+public interface JobPostService extends PageService {
     /**
      * 查找所有兼职
      * @return
