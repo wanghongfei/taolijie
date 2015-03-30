@@ -134,8 +134,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertEquals(1, dto.getComplaint().intValue());
 
 
-        MemberEntity mem = em.fings
-        d(MemberEntity.class, member.getId());
+        MemberEntity mem = em.find(MemberEntity.class, member.getId());
         Assert.assertEquals(1, mem.getComplaint().intValue());
 
         em.flush();
