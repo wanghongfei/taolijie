@@ -38,6 +38,8 @@ public interface SchoolService {
      */
     boolean addSchool(SchoolDto schoolDto);
 
+    void addAcademy(Integer schoolId, AcademyDto dto);
+
     /**
      * 更新学校信息
      * @param schoolId {@link com.fh.taolijie.domain.SchoolEntity}实体的主键值.

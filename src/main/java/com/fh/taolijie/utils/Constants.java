@@ -69,6 +69,12 @@ public class Constants {
         ALL
     }
 
+    public static class ApplicationRecord {
+        public static final String KEY_ID = "id";
+        public static final String KEY_TIME = "time";
+        //public static final String KEY_ID = "id";
+    }
+
     public static class ErrorType{
 
         public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
