@@ -26,9 +26,9 @@
             <a href="/user/logout"><p style="position: absolute;right: 5rem;top:1.5rem;">注销</p></a>
 		</div>
 		<div class="user-info">
-			<img src="/assets/images/miao.jpg" alt="">
+			<img src="${user.profilePhotoPath}" alt="">
 			<div class="infos">
-				<p class="name">${username}</p>
+				<p class="name">${user.username}</p>
 				<p>2015-1-1</p>
 			</div>
 			<a href="">
