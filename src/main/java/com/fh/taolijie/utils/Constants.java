@@ -61,7 +61,7 @@ public class Constants {
         USER,
         ADMIN,
         STUDENT,
-        BUSINESS
+        EMPLOYER
     }
 
     public static enum AccessAuthority {
