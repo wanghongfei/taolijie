@@ -5,8 +5,13 @@ import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.service.repository.ReviewRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +31,12 @@ public class DefaultReviewService implements ReviewService {
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    ReviewRepo reviewRepo;
+
     @Override
     @Transactional(readOnly = true)
-    public List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity) {
+    public List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostEntity jobPost = em.getReference(JobPostEntity.class, postId);
 
         int cap = capacity;
@@ -36,11 +44,13 @@ public class DefaultReviewService implements ReviewService {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        List<ReviewEntity> reviewList = em.createNamedQuery("reviewEntity.findByPost", ReviewEntity.class)
+        Page<ReviewEntity> reviewList = reviewRepo.findByJobPost(jobPost, new PageRequest(firstResult, cap));
+        wrapper.setObj(reviewList.getTotalPages());
+/*        List<ReviewEntity> reviewList = em.createNamedQuery("reviewEntity.findByPost", ReviewEntity.class)
                 .setParameter("jobPost", jobPost)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         // 把Entity List转成DTO List
         List<ReviewDto> dtoList = new ArrayList<>();

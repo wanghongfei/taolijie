@@ -11,6 +11,7 @@ import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,18 +71,18 @@ public class SchoolServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetSchoolList() {
-        List<SchoolDto> dtoList = sService.getSchoolList(0, 0);
+        List<SchoolDto> dtoList = sService.getSchoolList(0, 0, new ObjWrapper());
         boolean contains = containsSchoolName(dtoList, "school");
     }
 
     @Test
     @Transactional(readOnly = true)
     public void testGetSchoolByProvince() {
-        List<SchoolDto> dtoList = sService.getSchoolListByProvince("shandong", 0, 0);
+        List<SchoolDto> dtoList = sService.getSchoolListByProvince("shandong", 0, 0, new ObjWrapper());
         boolean contains = containsSchoolName(dtoList, "school");
         Assert.assertTrue(contains);
 
-        dtoList = sService.getSchoolListByProvince("guangzhou", 0, 0);
+        dtoList = sService.getSchoolListByProvince("guangzhou", 0, 0, new ObjWrapper());
         contains = containsSchoolName(dtoList, "school");
         Assert.assertFalse(contains);
     }

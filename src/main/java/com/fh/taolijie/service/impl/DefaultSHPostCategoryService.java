@@ -6,6 +6,7 @@ import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.SHPostCategoryService;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,13 +27,14 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SecondHandPostCategoryDto> getCategoryList(int firstResult, int capacity) {
+    public List<SecondHandPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0 ) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         Page<SecondHandPostCategoryEntity> catePages = cateRepo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(catePages.getTotalPages());
 
         List<SecondHandPostCategoryDto> dtoList = new ArrayList<>();
         for (SecondHandPostCategoryEntity cate : catePages) {

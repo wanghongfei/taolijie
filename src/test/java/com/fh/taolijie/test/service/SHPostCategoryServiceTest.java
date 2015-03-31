@@ -11,6 +11,7 @@ import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +81,7 @@ public class SHPostCategoryServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetCategory() {
-        List<SecondHandPostCategoryDto> dtoList = cateService.getCategoryList(0, 0);
+        List<SecondHandPostCategoryDto> dtoList = cateService.getCategoryList(0, 0, new ObjWrapper());
         Assert.assertTrue(containsCategoryName(dtoList, "category"));
     }
 

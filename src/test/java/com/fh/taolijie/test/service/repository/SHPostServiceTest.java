@@ -9,6 +9,7 @@ import com.fh.taolijie.service.impl.DefaultSHPostService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -90,7 +91,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void tsetGetAllPost() {
-        List<SecondHandPostDto> dtoList = postService.getAllPostList(0, 0);
+        List<SecondHandPostDto> dtoList = postService.getAllPostList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         boolean contains = dtoList.stream().anyMatch( (dto) -> {
             return dto.getTitle().equals("a post");
@@ -101,7 +102,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetByCategory() {
-        List<SecondHandPostDto> dtoList = postService.getPostList(cate1.getId(), 0, 0);
+        List<SecondHandPostDto> dtoList = postService.getPostList(cate1.getId(), 0, 0, new ObjWrapper());
         boolean contains = dtoList.stream().anyMatch( (dto) -> {
             return dto.getTitle().equals("a post");
         });
@@ -110,14 +111,14 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetByFilter() {
-        List<SecondHandPostDto> dtoList = postService.getPostList(member.getId(), true, 0, 0);
+        List<SecondHandPostDto> dtoList = postService.getPostList(member.getId(), true, 0, 0, new ObjWrapper());
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = dtoList.stream().anyMatch( (dto) -> {
             return dto.getTitle().equals("another post");
         });
         Assert.assertTrue(contains);
 
-        dtoList = postService.getPostList(member.getId(), false, 0, 0);
+        dtoList = postService.getPostList(member.getId(), false, 0, 0, new ObjWrapper());
         Assert.assertFalse(dtoList.isEmpty());
         contains = dtoList.stream().anyMatch( (dto) -> {
             return dto.getTitle().equals("another post");
