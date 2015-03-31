@@ -25,15 +25,6 @@
         <listener-class>cn.fh.security.servlet.PageProtectionContextListener</listener-class>
     </listener>
 
-    <!-- 配置web-security过滤器 -->
-    <filter>
-        <filter-name>Page Protection Filter</filter-name>
-        <filter-class>cn.fh.security.servlet.PageProtectionFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Page Protection Filter</filter-name>
-        <url-pattern>/</url-pattern>
-    </filter-mapping>
 
 	<!-- Processes application requests -->
 	<servlet>
@@ -51,5 +42,14 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- 配置web-security过滤器 -->
+	<filter>
+		<filter-name>Page Protection Filter</filter-name>
+		<filter-class>cn.fh.security.servlet.PageProtectionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Page Protection Filter</filter-name>
+		<servlet-name>appServlet</servlet-name>
+	</filter-mapping>
 
 </web-app>
