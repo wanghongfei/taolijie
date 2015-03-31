@@ -136,59 +136,31 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
             throw new IllegalStateException("boolean参数最多只能有一个为true");
         }
 
-        StringBuilder query = new StringBuilder("SELECT job FROM JobPostEntity job WHERE ");
-
+        // 构造参数列表
         Map<String, Object> parmMap = new HashMap<>();
-
-        // 构造过滤条件JPQL语句
         if (null != categoryId) {
             parmMap.put("category", jobCateRepo.getOne(categoryId));
-            query.append("job.category = :category ")
-                    .append("AND ");
         }
-
         if (null != wayToPay) {
-            parmMap.put("timeToPlay", wayToPay);
-            query.append("job.timeToPay = :timeToPay ")
-                    .append("AND ");
+            parmMap.put("timeToPay", wayToPay);
         }
 
-        if (null != schoolId) {
-            parmMap.put("school", schoolRepo.getOne(schoolId));
-            query.append("job.school = :school ").append("AND ");
+        // 构造排序参数表
+        Map.Entry<String, String> order = null;
+        if (true == orderByDate) {
+            order = new AbstractMap.SimpleEntry<String, String>("postTime", "DESC");
+        }
+        if (true == orderByPageVisit) {
+            order = new AbstractMap.SimpleEntry<String, String>("pageView", "DESC");
         }
 
-        // 去掉最后的"AND "
-        if (false == parmMap.isEmpty()) {
-            int len = query.length();
-            String ql = query.substring(0, len - 4);
-            query = new StringBuilder(ql);
-        }
-        // 去 WHERE
-        if (true == parmMap.isEmpty()) {
-            int len = query.length();
-            String ql = query.substring(0, len - 6);
-            query = new StringBuilder(ql);
-        }
-
-        // 设置排序信息
-
-        if (orderByPageVisit) {
-            query.append("ORDER BY ");
-            query.append("job.pageView DESC ");
-        }
-        if (orderByDate) { // DESC
-            query.append("ORDER BY ");
-            query.append("job.postTime DESC ");
-        }
-
-
+        String query = StringUtils.buildQuery("job", JobPostEntity.class.getSimpleName(), parmMap, order);
         if (logger.isDebugEnabled()) {
-            logger.debug("构造JPQL:{}", query.toString());
+            logger.debug("构造JPQL:{}", query);
         }
 
         // 给参数赋值
-        TypedQuery queryObj = em.createQuery(query.toString(), JobPostEntity.class);
+        TypedQuery queryObj = em.createQuery(query, JobPostEntity.class);
         Set<Parameter<?>> parmSet = queryObj.getParameters();
         for ( Parameter parm : parmSet) {
             String parmName = parm.getName();
@@ -198,7 +170,11 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         }
 
         // 执行查询
-        List<JobPostEntity> entityList = queryObj.getResultList();
+        List<JobPostEntity> entityList = queryObj
+                .setFirstResult(firstResult)
+                .setMaxResults(CollectionUtils.determineCapacity(capacity))
+                .getResultList();
+
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
                 dto.setMemberId(entity.getMember().getId());
