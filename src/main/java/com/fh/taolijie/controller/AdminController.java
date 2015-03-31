@@ -44,6 +44,15 @@ public class AdminController {
     BannerPicRepo bannerPicRepo;
 
     /**
+     * 测试admin的请求权限
+     */
+    @RequestMapping(value = "/test",method = RequestMethod.GET)
+    public @ResponseBody String test(){
+        return "you are administrator!";
+    }
+
+
+    /**
      * 添加用户
      * @return
      */
