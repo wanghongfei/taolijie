@@ -8,6 +8,7 @@ import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.NotificationRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,13 +31,14 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity) {
+    public List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         Page<NotificationEntity> noList = notRepo.findByMember(memRepo.getOne(memId), new PageRequest(firstResult, cap));
+        wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
@@ -47,13 +49,14 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity) {
+    public List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         Page<NotificationEntity> noList = notRepo.findByMemberAndIsRead(memRepo.getOne(memId), isRead ? 1 : 0, new PageRequest(firstResult, cap));
+        wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
@@ -65,13 +68,14 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity) {
+    public List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         Page<NotificationEntity> noList = notRepo.findAfterTheTime(memRepo.getOne(memId), time, new PageRequest(firstResult, cap));
+        wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {

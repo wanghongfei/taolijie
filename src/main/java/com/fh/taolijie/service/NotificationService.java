@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.NotificationDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface NotificationService {
      * @param memId
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity);
+    List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某一用户已读或未读的所有通知
@@ -23,7 +24,7 @@ public interface NotificationService {
      * @param isRead true为已读, false为未读
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity);
+    List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某个日期之后的所有通知
@@ -31,7 +32,7 @@ public interface NotificationService {
      * @param time
      * @return
      */
-    List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity);
+    List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 查找一条通知
