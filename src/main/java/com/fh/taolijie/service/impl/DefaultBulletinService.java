@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.BulletinEntity;
 import com.fh.taolijie.service.BulletinService;
 import com.fh.taolijie.service.repository.BulletinRepo;
 import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,11 +37,12 @@ public class DefaultBulletinService implements BulletinService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BulletinDto> getAll(int firstResult, int capacity) {
+    public List<BulletinDto> getAll(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
 
         Page<BulletinEntity> entityList = repo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, BulletinDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, BulletinDto.class, null);

@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.BulletinEntity;
 import com.fh.taolijie.service.BulletinService;
 import com.fh.taolijie.service.impl.DefaultBulletinService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +88,7 @@ public class BulletinServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetAll() {
-        List<BulletinDto> dtoList = bService.getAll(0, 0);
+        List<BulletinDto> dtoList = bService.getAll(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
 

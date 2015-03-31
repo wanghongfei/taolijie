@@ -10,7 +10,10 @@ import com.fh.taolijie.service.repository.EduExpRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,14 +34,16 @@ public class DefaultEduExpService implements EduExpService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity) {
+    public List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         MemberEntity member = memberRepo.getOne(memberId);
-        List<EducationExperienceEntity> eduList = eduRepo.findByMember(member);
+        //List<EducationExperienceEntity> eduList = eduRepo.findByMember(member);
+        Page<EducationExperienceEntity> eduList = eduRepo.findByMember(member, new PageRequest(firstResult, cap));
+        //wrapper.setObj(eduLis);
 
         return CollectionUtils.transformCollection(eduList, EducationExperienceDto.class, (entity) -> {
             return makeEduExpDto(entity);

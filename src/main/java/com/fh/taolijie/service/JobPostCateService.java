@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface JobPostCateService {
      * 获取所有分类
      * @return
      */
-    List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity);
+    List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 添加一个分类

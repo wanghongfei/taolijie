@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.impl.DefaultJobPostCategoryService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class JobPostCategoryServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetList() {
-        List<JobPostCategoryDto> dtoList = cateService.getCategoryList(0, 0);
+        List<JobPostCategoryDto> dtoList = cateService.getCategoryList(0, 0, new ObjWrapper());
         boolean contains = containsCategory(dtoList, "dog");
         Assert.assertTrue(contains);
         contains = containsCategory(dtoList, "cat");

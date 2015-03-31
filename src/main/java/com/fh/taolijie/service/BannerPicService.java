@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.BannerPicDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface BannerPicService {
      * 获取所有banner信息
      * @return
      */
-    List<BannerPicDto> getBannerList(int firstResult, int capacity);
+    List<BannerPicDto> getBannerList(int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 更新banner信息
