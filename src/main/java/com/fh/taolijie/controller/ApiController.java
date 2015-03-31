@@ -9,6 +9,7 @@ import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,11 +59,20 @@ public class ApiController {
     /**
      * 查询所有兼职
      */
-    @RequestMapping(value = {"joblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String joblist(){
+    @RequestMapping(value = {"alljoblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String allJobList(){
         List<JobPostDto> list = jobPostService.getAllJobPostList(0, 0);
         return JSON.toJSONString(list);
     }
+
+    @RequestMapping(value = "joblist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String jobList(@RequestParam(required=false,defaultValue = "") String category
+                                        ){
+        List<JobPostDto> list = null;
+
+        return JSON.toJSONString(list);
+    }
+
 
     /**
      * 查询用户发布的兼职
@@ -162,7 +172,8 @@ public class ApiController {
      */
     @RequestMapping(value = {"resumelist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String resumelist(){
-        List<ResumeDto> list = resumeService.getAllResumeList(0,0);
+        ObjWrapper maxPage = new ObjWrapper();
+        List<ResumeDto> list = resumeService.getAllResumeList(0,0,maxPage);
         return JSON.toJSONString(list);
     }
 
@@ -178,7 +189,9 @@ public class ApiController {
 
         GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
 
-        List<ResumeDto> list = resumeService.getResumeList(mem.getId(), 0, 0);
+
+        ObjWrapper maxPage = new ObjWrapper();
+        List<ResumeDto> list = resumeService.getResumeList(mem.getId(), 0, 0,maxPage);
         return JSON.toJSONString(list);
     }
 

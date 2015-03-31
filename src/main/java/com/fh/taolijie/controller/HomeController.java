@@ -3,27 +3,33 @@ package com.fh.taolijie.controller;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
-import com.fh.taolijie.controller.dto.JobPostDto;
-import com.fh.taolijie.controller.dto.NewsDto;
-import com.fh.taolijie.controller.dto.ResumeDto;
-import com.fh.taolijie.controller.dto.SecondHandPostDto;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.NewsService;
-import com.fh.taolijie.service.ResumeService;
-import com.fh.taolijie.service.SHPostService;
+import com.fh.taolijie.controller.dto.*;
+import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
+import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.service.*;
+import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.DefaultAvatarGenerator;
 import com.fh.taolijie.utils.ResponseUtils;
+import com.fh.taolijie.utils.TaolijieCredential;
+import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -38,11 +44,13 @@ public class HomeController {
     ResumeService resumeService;
     @Autowired
     SHPostService shPostService;
+    @Autowired
+    AccountService accountService;
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
-	 * 主页
+	 * 主页 get
 	 */
 	@RequestMapping(value = {"index","/"}, method = {RequestMethod.GET,RequestMethod.HEAD})
 	public String home(HttpSession session,
@@ -68,10 +76,19 @@ public class HomeController {
 	}
 
 
+    /**
+     * 切换学校 ajax post
+     * 学校信息放入session中，并保存cookie
+     * @return
+     */
+    @RequestMapping(value = "changeschool",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String changeSchool(){
+        return "";
+    }
 
 
     /**
-     * 兼职列表页面
+     * 兼职列表页面 get
      */
     @RequestMapping(value = {"joblist"},method = RequestMethod.GET)
     public String joblist(){
@@ -79,7 +96,7 @@ public class HomeController {
     }
 
     /**
-     * 兼职详情页
+     * 兼职详情页 get
      */
     @RequestMapping(value = "jobdetail/{jobId}",method = RequestMethod.GET)
     public String jobdetail(@PathVariable("jobId") int jobId,Model model){
@@ -90,9 +107,26 @@ public class HomeController {
         return "mobile/jobdetail";
     }
 
+    /**
+     * 二手列表
+     */
+    @RequestMapping(value = "shlist",method = RequestMethod.GET)
+    public String shList(){
+        return "mobile/shlist";
+    }
+
 
     /**
-     * 简历列表
+     * 二手详情页
+     */
+    @RequestMapping(value = "shdetail",method = RequestMethod.GET)
+    public String shDetail(){
+         return "";
+    }
+
+
+    /**
+     * 简历库列表
      */
     @RequestMapping(value = {"resumelist"},method = RequestMethod.GET)
     public String resumeList(){
@@ -103,46 +137,58 @@ public class HomeController {
      * 简历详情页
      */
     @RequestMapping(value = "resumedetail/{resumeId}",method = RequestMethod.GET)
-    public String resumedetail(@PathVariable("resumeId") int resumeId,Model model){
+    public String resumedetail(@PathVariable("resumeId") int resumeId,Model model,HttpSession session){
+        boolean contactDisplay = false;
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential.getUsername() != null){
+            GeneralMemberDto member= accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],true);
+            if(member.getRoleIdList().contains(Constants.RoleType.EMPLOYER.ordinal())
+                    ||member.getRoleIdList().contains(Constants.RoleType.ADMIN.ordinal())){
+                contactDisplay = true;
+            }
+        }
         ResumeDto resumeDto = resumeService.findResume(resumeId);
+
+        /*如果是用户或者为登陆,不会显示联系方式*/
+        if(contactDisplay == false){
+            resumeDto.setQq(null);
+            /*
+            *未完成
+             */
+        }
         model.addAttribute("resume",resumeDto);
         return "mobile/resume";
     }
 
 
 
-    /**
-     * 二手列表
-     */
-    @RequestMapping(value = {"shlist"},method = RequestMethod.GET)
-    public String shList(Model model){
-        List<SecondHandPostDto> list = null;
-        model.addAttribute("shlist",list);
-        return "mobile/shlist";
-    }
+
 
 
 
     /**
      * 新闻列表
      */
-    @RequestMapping(value = {"newslist"},method = RequestMethod.GET)
-    public String newslist(Model model){
-        List<NewsDto> list = null;
-        /*暂时未分页*/
-        newsService.getNewsList(0,0);
-        model.addAttribute("newslist",list);
+    @RequestMapping(value = "newslist",method = RequestMethod.GET)
+    public String newslist(){
         return "mobile/newslist";
     }
 
     /**
-     * 新闻页面
+     * 新闻详细页面
      */
     @RequestMapping(value = {"news"},method = RequestMethod.GET)
     public String news(@PathVariable int nid,Model model) {
         NewsDto news = newsService.findNews(nid);
         model.addAttribute("news", news);
         return "mobile/new";
+    }
+    /**
+     * 获取新闻列表请求 Get
+     */
+    @RequestMapping(value = "newslist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String newslist(@PathVariable int pageid){
+        return "";
     }
 
     /**
@@ -168,6 +214,175 @@ public class HomeController {
     public String joinus(){
         return "mobile/join";
     }
+
+
+
+    /**
+     * 注册页面
+     */
+    @RequestMapping(value = "/register",method = RequestMethod.GET)
+    public String register(HttpServletRequest req){
+        return ResponseUtils.determinePage(req,"user/register");
+    }
+
+
+
+
+    /**
+     * ajax注册请求
+     * 后续会添加邮箱验证或手机验证功能
+     * @return
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public @ResponseBody String register(@Valid RegisterDto mem,
+                                         BindingResult result,
+                                         HttpSession session,
+                                         HttpServletResponse res){
+        GeneralMemberDto newMember = null;
+        GeneralMemberDto memDto = null;
+        RoleDto role = null;
+        int cookieExpireTime = 1*24*60*60;//1天
+
+        /*
+         * 注册需要的表单内容
+         * 1.用户名
+         * 2.密码
+         * 3.邮箱
+         */
+
+        if(result.hasErrors()){
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+        }
+        /*用户名重复*/
+        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
+            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
+        }
+        /*两次密码不一致*/
+        if(!mem.getPassword().equals(mem.getRepassword())){
+            return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
+        }
+
+
+        newMember = new GeneralMemberDto();
+        if(mem.getIsEmployer()){
+            newMember.setRoleIdList(Arrays.asList(
+                    Constants.RoleType.EMPLOYER.ordinal()));
+
+        }else{
+            newMember.setRoleIdList(Arrays.asList(
+                    Constants.RoleType.STUDENT.ordinal()));
+        }
+        newMember.setUsername(mem.getUsername());
+        newMember.setPassword(mem.getPassword());
+        newMember.setProfilePhotoPath(DefaultAvatarGenerator.getRandomAvatar());
+
+
+
+        /*注册*/
+        try {
+            accountService.register(newMember);
+        } catch (DuplicatedUsernameException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        }
+
+
+        /*用户登陆*/
+
+        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
+        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
+        for(Integer rid:memDto.getRoleIdList()){
+            role = accountService.findRole(rid);
+            credential.addRole(role.getRolename());
+
+            if(logger.isDebugEnabled()){
+                logger.debug("RoleId:{}",rid);
+                logger.debug("RoleName:{}",role.getRolename());
+            }
+        }
+        CredentialUtils.createCredential(session,credential);
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+
+    }
+
+
+
+    /**
+     * 登陆页面
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String login(HttpServletRequest req){
+        return ResponseUtils.determinePage(req,"user/login");
+    }
+
+    /**
+     * ajax登陆请求
+     * @param mem
+     * @param result
+     * @param session
+     * @param res
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public @ResponseBody String login(@Valid LoginDto mem,
+                                      BindingResult result,
+                                      HttpSession session,
+                                      HttpServletResponse res){
+
+        GeneralMemberDto memDto = null;
+        RoleDto role = null;
+        int cookieExpireTime = 1*24*60*60;//1天
+
+        /*验证用户信息*/
+        if(result.hasErrors()){
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+        }
+
+        /*验证用户是否存在*/
+        try {
+            accountService.login(mem.getUsername(),mem.getPassword());
+        } catch (UserNotExistsException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        } catch (PasswordIncorrectException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        }
+
+        /*获取用户信息和用户权限*/
+
+        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
+        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
+        for(Integer rid:memDto.getRoleIdList()){
+            role = accountService.findRole(rid);
+            credential.addRole(role.getRolename());
+
+            if(logger.isDebugEnabled()){
+                logger.debug("RoleId:{}",rid);
+                logger.debug("RoleName:{}",role.getRolename());
+            }
+        }
+        CredentialUtils.createCredential(session,credential);
+
+
+
+        /*如果选择自动登陆,加入cookie*/
+        if(mem.getRememberMe().equals("true")){
+            Cookie usernameCookie = new Cookie("username", mem.getUsername());
+            usernameCookie.setMaxAge(cookieExpireTime);
+            Cookie passwordCookie = new Cookie("password", mem.getPassword());
+            passwordCookie.setMaxAge(cookieExpireTime);
+            res.addCookie(usernameCookie);
+            res.addCookie(passwordCookie);
+        }
+
+
+        /*如果自动登陆为true ,返回cookie*/
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
+
 
 
 }
