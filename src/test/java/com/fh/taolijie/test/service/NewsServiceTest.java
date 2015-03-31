@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.NewsEntity;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.impl.DefaultNewsService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,7 +70,7 @@ public class NewsServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGet() throws Exception {
-        List<NewsDto> dtoList = newsService.getNewsList(0, 0);
+        List<NewsDto> dtoList = newsService.getNewsList(0, 0, new ObjWrapper());
 
         // 测试是否包含
         boolean contains = containsNews(dtoList, "newsBefore");
@@ -91,7 +92,7 @@ public class NewsServiceTest extends BaseSpringDataTestClass {
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        dtoList = newsService.getNewsList(sdf.parse("2010/1/1"), 0, 0);
+        dtoList = newsService.getNewsList(sdf.parse("2010/1/1"), 0, 0, new ObjWrapper());
         Assert.assertEquals(1, dtoList.size());
         contains = containsNews(dtoList, "newsLater");
         Assert.assertTrue(contains);

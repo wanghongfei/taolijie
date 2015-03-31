@@ -4,8 +4,13 @@ import com.fh.taolijie.controller.dto.NewsDto;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.NewsEntity;
 import com.fh.taolijie.service.NewsService;
+import com.fh.taolijie.service.repository.NewsRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,18 +29,24 @@ public class DefaultNewsService implements NewsService {
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    NewsRepo newsRepo;
+
     @Override
     @Transactional(readOnly = true)
-    public List<NewsDto> getNewsList(int firstResult, int capacity) {
+    public List<NewsDto> getNewsList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (0 == capacity) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findAll")
+        Page<NewsEntity> newsList = newsRepo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(newsList.getTotalPages());
+
+/*        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findAll")
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         List<NewsDto> dtoList = new ArrayList<>();
         for (NewsEntity news : newsList) {
@@ -50,17 +61,20 @@ public class DefaultNewsService implements NewsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity) {
+    public List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (0 == cap) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findByDate", NewsEntity.class)
+        Page<NewsEntity> newsList = newsRepo.findByDate(uptime, new PageRequest(firstResult, cap));
+        wrapper.setObj(newsList.getTotalPages());
+
+/*        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findByDate", NewsEntity.class)
                 .setParameter("date", uptime)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         List<NewsDto> dtoList = new ArrayList<>();
         for (NewsEntity news : newsList) {

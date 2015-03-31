@@ -8,10 +8,7 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.DefaultAvatarGenerator;
-import com.fh.taolijie.utils.ResponseUtils;
-import com.fh.taolijie.utils.TaolijieCredential;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +62,7 @@ public class HomeController {
             username = credential.getUsername();
         }
 
-        list = newsService.getNewsList(0,3);
+        list = newsService.getNewsList(0,3, new ObjWrapper());
 
         System.out.println(username);
         model.addAttribute("username", username);
