@@ -15,7 +15,7 @@
 		<level value="debug" />
 	</logger>
     <logger name="cn.fh.security">
-        <level value="debug" />
+        <level value="info" />
     </logger>
 
 	<!-- 3rdparty Loggers -->
@@ -37,7 +37,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 	
