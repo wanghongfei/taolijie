@@ -45,6 +45,15 @@ public class AdminController {
     BannerPicRepo bannerPicRepo;
 
     /**
+     * 测试admin的请求权限
+     */
+    @RequestMapping(value = "/test",method = RequestMethod.GET)
+    public @ResponseBody String test(){
+        return "you are administrator!";
+    }
+
+
+    /**
      * 添加用户
      * @return
      */
@@ -235,7 +244,7 @@ public class AdminController {
     /**
      * 修改学院
      */
-    @RequestMapping(value = "/deleteacacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/updateAcacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateAcacdemy(@Valid AcademyDto academyDto){
         if(!schoolService.updateAcademy(academyDto.getId(),academyDto)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
@@ -283,7 +292,7 @@ public class AdminController {
     /**
      * 修改banner
      */
-    @RequestMapping(value = "/adduser",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/updateBanner",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateBanner(){
         /*修改banner*/
 //        bannerPicRepo.save()
