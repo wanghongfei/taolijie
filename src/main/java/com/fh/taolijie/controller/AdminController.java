@@ -9,7 +9,6 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.repository.BannerPicRepo;
-import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -235,7 +234,7 @@ public class AdminController {
     /**
      * 修改学院
      */
-    @RequestMapping(value = "/deleteacacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/updateAcacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateAcacdemy(@Valid AcademyDto academyDto){
         if(!schoolService.updateAcademy(academyDto.getId(),academyDto)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
@@ -283,7 +282,7 @@ public class AdminController {
     /**
      * 修改banner
      */
-    @RequestMapping(value = "/adduser",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/updateBanner",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateBanner(){
         /*修改banner*/
 //        bannerPicRepo.save()
