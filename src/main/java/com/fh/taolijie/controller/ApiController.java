@@ -63,7 +63,7 @@ public class ApiController {
      */
     @RequestMapping(value = {"alljoblist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String allJobList(){
-        List<JobPostDto> list = jobPostService.getAllJobPostList(0, 0);
+        List<JobPostDto> list = jobPostService.getAllJobPostList(0, 0, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -88,7 +88,7 @@ public class ApiController {
 
         GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
 
-        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(), 0, 0);
+        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(), 0, 0, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 

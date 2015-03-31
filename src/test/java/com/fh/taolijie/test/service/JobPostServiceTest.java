@@ -7,6 +7,7 @@ import com.fh.taolijie.service.impl.DefaultJobPostService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -114,7 +115,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testFindAll() {
-        List<JobPostDto> dtoList = postService.getAllJobPostList(0 ,0);
+        List<JobPostDto> dtoList = postService.getAllJobPostList(0 ,0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = containsPostTitle(dtoList, "a post");
@@ -124,14 +125,14 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetByMember() {
-        List<JobPostDto> dtoList = postService.getJobPostListByMember(member.getId(), 0, 0);
+        List<JobPostDto> dtoList = postService.getJobPostListByMember(member.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = containsPostTitle(dtoList, "a post");
         Assert.assertTrue(contains);
 
 
-        dtoList = postService.getJobPostListByCategory(cate1.getId(), 0, 0);
+        dtoList = postService.getJobPostListByCategory(cate1.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         contains = containsPostTitle(dtoList, "a post");
@@ -165,13 +166,13 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = false)
     public void testFilter() {
-        postService.getAndFilter(this.cate1.getId(), Constants.WayToPay.DAY, true, false, null, 0, 0);
+        postService.getAndFilter(this.cate1.getId(), Constants.WayToPay.DAY, true, false, null, 0, 0, new ObjWrapper());
 
-        postService.getAndFilter(null, Constants.WayToPay.DAY, false, true, null, 0, 0);
+        postService.getAndFilter(null, Constants.WayToPay.DAY, false, true, null, 0, 0, new ObjWrapper());
 
-        postService.getAndFilter(null, null, false, true, null, 0, 0);
+        postService.getAndFilter(null, null, false, true, null, 0, 0, new ObjWrapper());
 
-        postService.getAndFilter(null, null, false, false, null, 0, 0);
+        postService.getAndFilter(null, null, false, false, null, 0, 0, new ObjWrapper());
     }
 
     @Test
