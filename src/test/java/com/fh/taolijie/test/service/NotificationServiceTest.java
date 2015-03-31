@@ -9,6 +9,7 @@ import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.NotificationRepo;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +71,7 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
     @Transactional(readOnly = true)
     public void testGetList() throws Exception {
         // test get by member
-        List<NotificationDto> dtoList = noService.getNotificationList(member.getId(), 0, 0);
+        List<NotificationDto> dtoList = noService.getNotificationList(member.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = dtoList.stream()
@@ -81,12 +82,12 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
 
 
         // test get by isRead
-        dtoList = noService.getNotificationList(member.getId(), true,  0, 0);
+        dtoList = noService.getNotificationList(member.getId(), true,  0, 0, new ObjWrapper());
         contains = dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("some notes") );
         Assert.assertTrue(contains);
 
         // test get by isRead
-        dtoList = noService.getNotificationList(member.getId(), false,  0, 0);
+        dtoList = noService.getNotificationList(member.getId(), false,  0, 0, new ObjWrapper());
         contains = dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a note") );
         Assert.assertTrue(contains);
 
@@ -94,7 +95,7 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
 
         // test get by time
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        dtoList = noService.getNotificationList(member.getId(), sdf.parse("2005/1/1"),  0, 0);
+        dtoList = noService.getNotificationList(member.getId(), sdf.parse("2005/1/1"),  0, 0, new ObjWrapper());
         contains = dtoList.stream().anyMatch((dto) -> dto.getTitle().equals("some notes"));
         Assert.assertTrue(contains);
         contains = dtoList.stream().noneMatch( (dto) -> dto.getTime().equals("a note") );

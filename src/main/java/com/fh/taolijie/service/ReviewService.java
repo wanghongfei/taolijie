@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ReviewDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface ReviewService {
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity);
+    List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 添加一条评论

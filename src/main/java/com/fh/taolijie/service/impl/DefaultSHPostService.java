@@ -10,6 +10,7 @@ import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,10 +40,11 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<SecondHandPostDto> getAllPostList(int firstResult, int capacity) {
+    public List<SecondHandPostDto> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<SecondHandPostEntity> entityList = postRepo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
@@ -55,7 +57,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<SecondHandPostDto> getPostList(Integer cateId, int firstResult, int capacity) {
+    public List<SecondHandPostDto> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
@@ -64,6 +66,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         SecondHandPostCategoryEntity cate = cateRepo.findOne(cateId);
 
         Page<SecondHandPostEntity> postPages = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
+        wrapper.setObj(postPages.getTotalPages());
 
         return CollectionUtils.transformCollection(postPages, SecondHandPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
@@ -75,7 +78,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     }
 
     @Override
-    public List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity) {
+    public List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0 ) {
             cap = Constants.PAGE_CAPACITY;
@@ -83,11 +86,14 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
 
         MemberEntity member = memberRepo.getOne(memId);
         Page<SecondHandPostEntity> postList = null;
+
         if (filtered) {
             postList = postRepo.findByMemberAndNotExpired(member, new Date(), new PageRequest(firstResult, cap));
         } else {
             postList = postRepo.findByMember(member, new PageRequest(firstResult, cap));
         }
+
+        wrapper.setObj(postList.getTotalPages());
 
         List<SecondHandPostDto> dtoList = new ArrayList<>();
         for (SecondHandPostEntity post : postList) {

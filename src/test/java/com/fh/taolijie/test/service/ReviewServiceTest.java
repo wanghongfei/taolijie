@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,7 +93,7 @@ public class ReviewServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetList() {
-        List<ReviewDto> dtoList = rService.getReviewList(this.post.getId(), 0, 0);
+        List<ReviewDto> dtoList = rService.getReviewList(this.post.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         boolean contains = containsReviewContent(dtoList, "OK");

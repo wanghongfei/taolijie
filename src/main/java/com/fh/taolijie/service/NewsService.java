@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.NewsDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.Date;
 import java.util.List;
@@ -13,14 +14,14 @@ public interface NewsService {
      * 得到所有新闻
      * @return
      */
-    List<NewsDto> getNewsList(int firstResult, int capacity);
+    List<NewsDto> getNewsList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取从<code>uptime</code>到现在的所有新闻
      * @param uptime
      * @return
      */
-    List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity);
+    List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找新闻

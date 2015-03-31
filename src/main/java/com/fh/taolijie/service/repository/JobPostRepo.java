@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.repository;
 
+import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import org.springframework.data.domain.Page;
@@ -21,4 +22,6 @@ public interface JobPostRepo extends JpaRepository<JobPostEntity, Integer> {
 
     @Query
     Page<JobPostEntity> findByMember(@Param("member") MemberEntity member, Pageable pageable);
+
+    Page<JobPostEntity> findByCategory(JobPostCategoryEntity category, Pageable pageable);
 }

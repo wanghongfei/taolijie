@@ -13,12 +13,14 @@ import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -57,10 +59,11 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostDto> getAllJobPostList(int firstResult, int capacity) {
+    public List<JobPostDto> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<JobPostEntity> entityList = postRepo.findAllOrderByPostTime(new PageRequest(firstResult, cap));
+        wrapper.setObj(entityList.getTotalPages());
 
 /*        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
             JobPostDto dto =  CollectionUtils.entity2Dto(entity, JobPostDto.class, null);
@@ -84,12 +87,13 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostDto> getJobPostListByMember(Integer memId, int firstResult, int capacity) {
+    public List<JobPostDto> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
 
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<JobPostEntity> entityList = postRepo.findByMember(mem, new PageRequest(firstResult, cap));
+        wrapper.setObj(entityList.getTotalPages());
 /*        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByMember", JobPostEntity.class)
                 .setParameter("member", mem)
                 .setFirstResult(firstResult)
@@ -107,18 +111,20 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity) {
+    public List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
         JobPostCategoryEntity cate = em.getReference(JobPostCategoryEntity.class, cateId);
-        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByCategory", JobPostEntity.class)
+        Page<JobPostEntity> postList = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
+        wrapper.setObj(postList.getTotalPages());
+/*        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByCategory", JobPostEntity.class)
                 .setParameter("category", cate)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
@@ -131,7 +137,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity) {
+    public List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
         if (orderByDate && orderByPageVisit) {
             throw new IllegalStateException("boolean参数最多只能有一个为true");
         }
@@ -171,11 +177,15 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
         // 执行查询
         List<JobPostEntity> entityList = queryObj
-                .setFirstResult(firstResult)
-                .setMaxResults(CollectionUtils.determineCapacity(capacity))
+                //.setFirstResult(firstResult)
+                //.setMaxResults(CollectionUtils.determineCapacity(capacity))
                 .getResultList();
 
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<JobPostEntity> postPage = new PageImpl<JobPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
+        wrapper.setObj(postPage);
+
+        return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
                 dto.setMemberId(entity.getMember().getId());
                 dto.setCategoryId(entity.getCategory().getId());

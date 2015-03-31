@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.BulletinDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface BulletinService {
     /**
      * 查询所有公告
      */
-    List<BulletinDto> getAll(int firstResult, int capacity);
+    List<BulletinDto> getAll(int firstResult, int capacity, ObjWrapper wrap);
 
     BulletinDto findOne(Integer id);
 }

@@ -12,6 +12,7 @@ import com.fh.taolijie.service.repository.EduExpRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +78,7 @@ public class EduExpServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetList() {
-        List<EducationExperienceDto> dtoList = eduService.getEduExpList(member.getId(), 0, 0);
+        List<EducationExperienceDto> dtoList = eduService.getEduExpList(member.getId(), 0, 0, new ObjWrapper());
         boolean contains = dtoList.stream().anyMatch( (dto) -> dto.getMajor().equals("math") );
         Assert.assertTrue(contains);
     }

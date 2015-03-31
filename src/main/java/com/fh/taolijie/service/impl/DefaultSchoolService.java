@@ -10,6 +10,7 @@ import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +34,7 @@ public class DefaultSchoolService implements SchoolService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SchoolDto> getSchoolList(int firstResult, int capacity) {
+    public List<SchoolDto> getSchoolList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
@@ -44,6 +45,7 @@ public class DefaultSchoolService implements SchoolService {
                 .setMaxResults(cap)
                 .getResultList();*/
         Page<SchoolEntity> sList = schoolRepo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(sList.getTotalPages());
 
         List<SchoolDto> dtoList = new ArrayList<>();
         for (SchoolEntity s : sList) {
@@ -56,7 +58,7 @@ public class DefaultSchoolService implements SchoolService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SchoolDto> getSchoolListByProvince(String province, int firstResult, int capacity) {
+    public List<SchoolDto> getSchoolListByProvince(String province, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
@@ -69,6 +71,7 @@ public class DefaultSchoolService implements SchoolService {
                 .getResultList();*/
 
         Page<SchoolEntity> sList = schoolRepo.findByProvince(province, new PageRequest(firstResult, cap));
+        wrapper.setObj(sList.getTotalPages());
 
         List<SchoolDto> dtoList = new ArrayList<>();
         for (SchoolEntity s : sList) {

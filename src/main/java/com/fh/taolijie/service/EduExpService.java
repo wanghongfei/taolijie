@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.EducationExperienceDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface EduExpService {
      * 得到所有教育经历信息
      * @return
      */
-    List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity);
+    List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 新建教育信息

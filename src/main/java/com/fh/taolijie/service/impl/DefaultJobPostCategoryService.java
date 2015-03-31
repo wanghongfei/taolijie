@@ -4,8 +4,13 @@ import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
+import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +27,23 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    JobPostCategoryRepo cateRepo;
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity) {
+    public List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (0 == cap) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        List<JobPostCategoryEntity> cateList = em.createNamedQuery("jobPostCategoryEntity.findAll", JobPostCategoryEntity.class)
+        Page<JobPostCategoryEntity> cateList = cateRepo.findAll(new PageRequest(firstResult, cap));
+        wrapper.setObj(cateList.getTotalPages());
+/*        List<JobPostCategoryEntity> cateList = em.createNamedQuery("jobPostCategoryEntity.findAll", JobPostCategoryEntity.class)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         return CollectionUtils.transformCollection(cateList, JobPostCategoryDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostCategoryDto.class, null);

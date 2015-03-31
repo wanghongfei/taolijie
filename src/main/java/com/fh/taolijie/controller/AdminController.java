@@ -10,6 +10,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.repository.BannerPicRepo;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -135,7 +136,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/getuser",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String getUser(){
-        List<GeneralMemberDto> list = accountService.getMemberList(0, 0);
+        List<GeneralMemberDto> list = accountService.getMemberList(0, 0, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 

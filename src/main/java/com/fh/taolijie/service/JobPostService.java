@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -13,21 +14,21 @@ public interface JobPostService extends PageService {
      * 查找所有兼职
      * @return
      */
-    List<JobPostDto> getAllJobPostList(int firstResult, int capacity);
+    List<JobPostDto> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某个用户发的所有兼职帖子
      * @param memId 用户id
      * @return
      */
-    List<JobPostDto> getJobPostListByMember(Integer memId , int firstResult, int capacity);
+    List<JobPostDto> getJobPostListByMember(Integer memId , int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某分类下所有的兼职帖子
      * @param cateId
      * @return
      */
-    List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
+    List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据条件查找兼职信息.
@@ -42,7 +43,7 @@ public interface JobPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity);
+    List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找某个兼职帖子

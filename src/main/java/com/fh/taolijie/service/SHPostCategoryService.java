@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostCategoryDto;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface SHPostCategoryService {
      * @param capacity
      * @return
      */
-    List<SecondHandPostCategoryDto> getCategoryList(int firstResult, int capacity);
+    List<SecondHandPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找分类

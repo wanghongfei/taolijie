@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface SHPostService extends PageService {
      * 查找所有二手帖子
      * @return
      */
-    List<SecondHandPostDto> getAllPostList(int firstResult, int capacity);
+    List<SecondHandPostDto> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 得到某分类下的二手帖子
@@ -22,7 +23,7 @@ public interface SHPostService extends PageService {
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    List<SecondHandPostDto> getPostList(Integer cateId, int firstResult, int capacity);
+    List<SecondHandPostDto> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 得到某个用户发的二手帖子信息
@@ -32,7 +33,7 @@ public interface SHPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity);
+    List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 发布新二手帖子

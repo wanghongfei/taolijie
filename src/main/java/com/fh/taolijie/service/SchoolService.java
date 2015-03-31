@@ -3,6 +3,7 @@ package com.fh.taolijie.service;
 import com.fh.taolijie.controller.dto.AcademyDto;
 import com.fh.taolijie.controller.dto.SchoolDto;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -15,14 +16,14 @@ public interface SchoolService {
      * 得到所有的学校信息
      * @return
      */
-    List<SchoolDto> getSchoolList(int firstResult, int capacity);
+    List<SchoolDto> getSchoolList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 得到某一省份的所有学校
      * @param province 省名
      * @return
      */
-    List<SchoolDto> getSchoolListByProvince(String province, int firstResult, int capacity);
+    List<SchoolDto> getSchoolListByProvince(String province, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找学校
