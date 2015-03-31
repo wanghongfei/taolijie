@@ -15,7 +15,7 @@
 		<level value="debug" />
 	</logger>
     <logger name="cn.fh.security">
-        <level value="info" />
+        <level value="debug" />
     </logger>
 
 	<!-- 3rdparty Loggers -->
