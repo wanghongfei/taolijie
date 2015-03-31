@@ -7,4 +7,10 @@ import com.fh.taolijie.controller.dto.ImageDto;
  */
 public interface ImageService {
     ImageDto findImage(Integer imgId);
+
+    /**
+     * 保存一个图片
+     * @return 返回图片id
+     */
+    Integer saveImage(ImageDto dto);
 }

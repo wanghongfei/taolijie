@@ -22,4 +22,13 @@ public class DefaultImageService implements ImageService {
 
         return CollectionUtils.entity2Dto(entity, ImageDto.class, null);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer saveImage(ImageDto dto) {
+        ImageResourceEntity entity = CollectionUtils.dto2Entity(dto, ImageResourceEntity.class, null);
+        imageRepo.save(entity);
+
+        return entity.getId();
+    }
 }
