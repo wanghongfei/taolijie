@@ -4,6 +4,7 @@ import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -69,7 +70,7 @@ public interface AccountService {
      * @param capacity
      * @return
      */
-    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity);
+    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 得到当前已注册用户的数量

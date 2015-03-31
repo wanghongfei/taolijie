@@ -13,12 +13,17 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +39,15 @@ import java.util.stream.Collectors;
 /**
  * Created by wanghongfei on 15-3-5.
  */
-@Repository
+@Service
 public class DefaultAccountService implements AccountService {
     private Logger logger = LoggerFactory.getLogger(DefaultAccountService.class);
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    MemberRepo memberRepo;
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
@@ -195,16 +203,19 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity) {
+    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity, ObjWrapper wrap) {
         int cap = capacity;
         if (0 == capacity) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        List<MemberEntity> memList = em.createNamedQuery("memberEntity.findAll", MemberEntity.class)
+        Page<MemberEntity> memList = memberRepo.findAll(new PageRequest(firstResult, cap));
+        wrap.setObj(memList.getTotalPages());
+
+/*        List<MemberEntity> memList = em.createNamedQuery("memberEntity.findAll", MemberEntity.class)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         List<GeneralMemberDto> dtoList = new ArrayList<>();
         for (MemberEntity m : memList) {

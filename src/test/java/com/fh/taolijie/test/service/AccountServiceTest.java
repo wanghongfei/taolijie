@@ -10,6 +10,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.DefaultAccountService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
 import org.junit.Before;
@@ -206,7 +207,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetMemberList() {
-        List<GeneralMemberDto> dtoList = accService.getMemberList(0, 0);
+        List<GeneralMemberDto> dtoList = accService.getMemberList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertTrue(containsUsername(dtoList, "Bruce"));
