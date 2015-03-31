@@ -7,6 +7,7 @@ import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.impl.DefaultResumeService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,7 +77,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetAll() {
-        List<ResumeDto> dtoList = rService.getAllResumeList(0, 0);
+        List<ResumeDto> dtoList = rService.getAllResumeList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertTrue(containsName(dtoList, "resume"));
@@ -87,7 +88,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetAllByAuthority() {
-        List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0);
+        List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertEquals(1, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resumeBefore"));
@@ -98,7 +99,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetByAuthority() {
-        List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0);
+        List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertEquals(1, dtoList.size());
@@ -107,7 +108,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         Assert.assertTrue(isRecentFront(dtoList));
 
 
-        dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ME_ONLY, 0, 0);
+        dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ME_ONLY, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertEquals(1, dtoList.size());
@@ -137,7 +138,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGet() {
-        List<ResumeDto> dtoList = rService.getResumeList(member.getId(), 0, 0);
+        List<ResumeDto> dtoList = rService.getResumeList(member.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
         Assert.assertTrue(containsName(dtoList, "resume"));

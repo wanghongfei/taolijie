@@ -7,6 +7,7 @@ import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,23 +35,12 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumeDto> getAllResumeList(int firstResult, int capacity) {
+    public List<ResumeDto> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<ResumeEntity> entityList = resumeRepo.findAll(new PageRequest(firstResult, cap));
 
-        return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
-                dto.setMemberId(resumeEntity.getMember().getId());
-            });
-        });
-    }
-
-    @Override
-    public List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity) {
-        int cap = CollectionUtils.determineCapacity(capacity);
-
-        Page<ResumeEntity> entityList = resumeRepo.findByAuthority(authority.toString(), new PageRequest(firstResult, cap));
+        wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
             return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
@@ -61,19 +51,33 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity) {
-        int cap = capacity;
-        if (cap <= 0) {
-            cap = Constants.PAGE_CAPACITY;
-        }
+    public List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<ResumeEntity> entityList = resumeRepo.findByAuthority(authority.toString(), new PageRequest(firstResult, cap));
+        wrap.setObj(entityList.getTotalPages());
+
+        return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(resumeEntity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap) {
+        int cap = CollectionUtils.determineCapacity(capacity);
 
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
 
-        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
+        Page<ResumeEntity> rList = resumeRepo.findByMember(mem, new PageRequest(firstResult, cap));
+        wrap.setObj(rList.getTotalPages());
+/*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
                 .setParameter("member", mem)
                 .setFirstResult(firstResult)
                 .setMaxResults(cap)
-                .getResultList();
+                .getResultList();*/
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
             return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
@@ -83,12 +87,11 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     }
 
     @Override
-    public List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity) {
+    public List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
         int cap = CollectionUtils.determineCapacity(capacity);
 
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
 
-        // TODO
 /*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
                 .setParameter("member", mem)
                 .setFirstResult(firstResult)
@@ -96,6 +99,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
                 .getResultList();*/
 
         Page<ResumeEntity> rList = resumeRepo.findByMemberAndAuthority(mem, authority.toString(), new PageRequest(firstResult, cap));
+        wrap.setObj(rList.getTotalPages());
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
             return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {

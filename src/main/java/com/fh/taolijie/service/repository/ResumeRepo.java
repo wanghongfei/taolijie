@@ -15,6 +15,8 @@ public interface ResumeRepo extends JpaRepository<ResumeEntity, Integer> {
     @Query
     Page<ResumeEntity> findAll(Pageable pageable);
 
+    Page<ResumeEntity> findByMember(MemberEntity member, Pageable pageable);
+
     @Query
     Page<ResumeEntity> findByMemberAndAuthority(@Param("member") MemberEntity member, @Param("authority") String authority, Pageable pageable);
 

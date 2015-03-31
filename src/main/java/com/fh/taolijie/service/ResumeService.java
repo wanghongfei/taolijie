@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -13,13 +14,13 @@ public interface ResumeService extends PageService {
      * 查找所有简历
      * @return
      */
-    List<ResumeDto> getAllResumeList(int firstResult, int capacity);
+    List<ResumeDto> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 根据权限查找所有简历
      * @return
      */
-    List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity);
+    List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 获取某个用户的部分简历.
@@ -30,7 +31,7 @@ public interface ResumeService extends PageService {
      * @see com.fh.taolijie.utils.Constants
      * @return
      */
-    List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity);
+    List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      *
@@ -38,7 +39,7 @@ public interface ResumeService extends PageService {
      * @param authority 设置简历权限类型
      * @return
      */
-    List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity);
+    List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 修改简历信息
