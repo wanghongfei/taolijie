@@ -164,6 +164,18 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = false)
+    public void testFilter() {
+        postService.getAndFilter(this.cate1.getId(), Constants.WayToPay.DAY, true, false, null, 0, 0);
+
+        postService.getAndFilter(null, Constants.WayToPay.DAY, false, true, null, 0, 0);
+
+        postService.getAndFilter(null, null, false, true, null, 0, 0);
+
+        postService.getAndFilter(null, null, false, false, null, 0, 0);
+    }
+
+    @Test
+    @Transactional(readOnly = false)
     public void testPost() {
         postService.postResume(this.post.getId(), this.resume.getId());
 

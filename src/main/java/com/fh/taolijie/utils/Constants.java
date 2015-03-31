@@ -69,6 +69,17 @@ public class Constants {
         ALL
     }
 
+    /**
+     * 结算方式
+     */
+    public static class WayToPay {
+        public static final String WEEK = "周结";
+        public static final String DAY = "日结";
+        public static final String MONTH = "月结";
+        public static final String OTHER = "面议";
+    }
+
+
     public static class ApplicationRecord {
         public static final String KEY_ID = "id";
         public static final String KEY_TIME = "time";

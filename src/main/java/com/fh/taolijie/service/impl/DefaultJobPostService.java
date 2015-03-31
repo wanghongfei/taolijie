@@ -7,12 +7,16 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
+import com.fh.taolijie.service.repository.SchoolRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,28 +25,35 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 /**
  * Created by wanghongfei on 15-3-7.
  */
 @Repository
 public class DefaultJobPostService extends DefaultPageService implements JobPostService {
+    private static Logger logger = LoggerFactory.getLogger(DefaultJobPostService.class);
+
     @Autowired
     private ReviewService reviewService;
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     private JobPostRepo postRepo;
 
     @Autowired
     private ResumeRepo resumeRepo;
+
+    @Autowired
+    private SchoolRepo schoolRepo;
+
+    @Autowired
+    private JobPostCategoryRepo jobCateRepo;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Override
     @Transactional(readOnly = true)
@@ -114,6 +125,85 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
                 postDto.setCategoryName(entity.getCategory().getName());
                 postDto.setCategoryId(entity.getCategory().getId());
                 postDto.setMemberId(entity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity) {
+        if (orderByDate && orderByPageVisit) {
+            throw new IllegalStateException("boolean参数最多只能有一个为true");
+        }
+
+        StringBuilder query = new StringBuilder("SELECT job FROM JobPostEntity job WHERE ");
+
+        Map<String, Object> parmMap = new HashMap<>();
+
+        // 构造过滤条件JPQL语句
+        if (null != categoryId) {
+            parmMap.put("category", jobCateRepo.getOne(categoryId));
+            query.append("job.category = :category ")
+                    .append("AND ");
+        }
+
+        if (null != wayToPay) {
+            parmMap.put("timeToPlay", wayToPay);
+            query.append("job.timeToPay = :timeToPay ")
+                    .append("AND ");
+        }
+
+        if (null != schoolId) {
+            parmMap.put("school", schoolRepo.getOne(schoolId));
+            query.append("job.school = :school ").append("AND ");
+        }
+
+        // 去掉最后的"AND "
+        if (false == parmMap.isEmpty()) {
+            int len = query.length();
+            String ql = query.substring(0, len - 4);
+            query = new StringBuilder(ql);
+        }
+        // 去 WHERE
+        if (true == parmMap.isEmpty()) {
+            int len = query.length();
+            String ql = query.substring(0, len - 6);
+            query = new StringBuilder(ql);
+        }
+
+        // 设置排序信息
+
+        if (orderByPageVisit) {
+            query.append("ORDER BY ");
+            query.append("job.pageView DESC ");
+        }
+        if (orderByDate) { // DESC
+            query.append("ORDER BY ");
+            query.append("job.postTime DESC ");
+        }
+
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("构造JPQL:{}", query.toString());
+        }
+
+        // 给参数赋值
+        TypedQuery queryObj = em.createQuery(query.toString(), JobPostEntity.class);
+        Set<Parameter<?>> parmSet = queryObj.getParameters();
+        for ( Parameter parm : parmSet) {
+            String parmName = parm.getName();
+            Object parmValue = parmMap.get(parmName);
+
+            queryObj.setParameter(parmName, parmValue);
+        }
+
+        // 执行查询
+        List<JobPostEntity> entityList = queryObj.getResultList();
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
             });
         });
     }

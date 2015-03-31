@@ -30,6 +30,21 @@ public interface JobPostService extends PageService {
     List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
 
     /**
+     * 根据条件查找兼职信息.
+     * 所有的boolean值**最多只能有一个为true**
+     *
+     * @param categoryId 分类id
+     * @param wayToPay 结算方式
+     * @param orderByDate 传递true为最新在前，false为最旧在前
+     * @param orderByPageVisit 访问量高的在前, false为忽略
+     * @param schoolId 学校实体id
+     * @param firstResult
+     * @param capacity
+     * @return
+     */
+    List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity);
+
+    /**
      * 根据id查找某个兼职帖子
      * @param postId
      * @return
