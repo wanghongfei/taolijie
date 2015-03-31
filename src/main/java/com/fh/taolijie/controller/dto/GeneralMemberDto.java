@@ -42,6 +42,8 @@ public class GeneralMemberDto {
 
     private Integer complaint;
 
+    private Integer profilePhotoId;
+
     /**
      * 保存了{@link com.sun.javafx.scene.accessibility.Role}实体的主键.
      * <p> 这些{@code Role}实体都会被关联到{@code MemberEntity}中
@@ -54,6 +56,14 @@ public class GeneralMemberDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getProfilePhotoId() {
+        return profilePhotoId;
+    }
+
+    public void setProfilePhotoId(Integer profilePhotoId) {
+        this.profilePhotoId = profilePhotoId;
     }
 
     public List<Integer> getRoleIdList() {

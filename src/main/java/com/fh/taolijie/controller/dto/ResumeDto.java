@@ -21,6 +21,7 @@ public class ResumeDto {
     private String accessAuthority;
     private Integer pageView;
     private String verified;
+    private Integer photoId;
 
     private Integer memberId;
 
@@ -46,6 +47,14 @@ public class ResumeDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(Integer photoId) {
+        this.photoId = photoId;
     }
 
     public String getVerified() {

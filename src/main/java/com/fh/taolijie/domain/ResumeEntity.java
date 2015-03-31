@@ -46,6 +46,8 @@ public class ResumeEntity implements PageViewAware {
     private Integer pageView;
     private String verified;
 
+    private Integer photoId;
+
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
         this.name = name;
@@ -69,6 +71,15 @@ public class ResumeEntity implements PageViewAware {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "photo_id")
+    public Integer getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(Integer photoId) {
+        this.photoId = photoId;
     }
 
     @Basic

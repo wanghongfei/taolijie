@@ -52,6 +52,7 @@ public class MemberEntity {
 
     private Integer complaint;
 
+    private Integer profilePhotoId;
 
     private Collection<EducationExperienceEntity> educationExperienceCollection;
     private Collection<JobPostEntity> jobPostCollection;
@@ -107,6 +108,15 @@ public class MemberEntity {
 
     public void setAppliedJobIds(String appliedJobIds) {
         this.appliedJobIds = appliedJobIds;
+    }
+
+    @Column(name = "profile_photo_id")
+    public Integer getProfilePhotoId() {
+        return profilePhotoId;
+    }
+
+    public void setProfilePhotoId(Integer profilePhotoId) {
+        this.profilePhotoId = profilePhotoId;
     }
 
     @Basic
