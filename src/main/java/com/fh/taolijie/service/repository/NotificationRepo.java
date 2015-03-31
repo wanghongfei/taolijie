@@ -17,6 +17,9 @@ public interface NotificationRepo extends JpaRepository<NotificationEntity, Inte
     Page<NotificationEntity> findByMember(MemberEntity member, Pageable pageable);
     Page<NotificationEntity> findByMemberAndIsRead(MemberEntity member, Integer isRead, Pageable pageable);
 
+    @Query("SELECT COUNT(no) FROM NotificationEntity no WHERE no.member = :member AND no.isRead = :isRead")
+    Long getNotificationAmount(@Param("member") MemberEntity member, @Param("isRead") int isRead);
+
     @Query("SELECT no FROM NotificationEntity no WHERE no.member = :member AND no.time > :time")
     Page<NotificationEntity> findAfterTheTime(@Param("member") MemberEntity member, @Param("time") Date thatTime, Pageable pageable);
 }

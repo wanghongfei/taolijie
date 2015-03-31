@@ -34,6 +34,8 @@ public interface NotificationService {
      */
     List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity, ObjWrapper wrapper);
 
+    Long getNotificationAmount(Integer memId, boolean isRead);
+
     /**
      * 查找一条通知
      * @param notificationId

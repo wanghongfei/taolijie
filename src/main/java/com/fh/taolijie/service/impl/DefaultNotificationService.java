@@ -85,6 +85,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    public Long getNotificationAmount(Integer memId, boolean isRead) {
+        MemberEntity mem = memRepo.getOne(memId);
+
+        return notRepo.getNotificationAmount(mem, isRead ? 1 : 0);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public NotificationDto findNotification(Integer notificationId) {
         NotificationEntity entity = notRepo.findOne(notificationId);

@@ -69,6 +69,13 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = true)
+    public void getGetAmount() {
+        Long tot = noService.getNotificationAmount(this.member.getId(), true);
+        Assert.assertEquals(1, tot.intValue());
+    }
+
+    @Test
+    @Transactional(readOnly = true)
     public void testGetList() throws Exception {
         // test get by member
         List<NotificationDto> dtoList = noService.getNotificationList(member.getId(), 0, 0, new ObjWrapper());
