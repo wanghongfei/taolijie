@@ -8,6 +8,27 @@ import org.hibernate.validator.constraints.NotEmpty;
  * Created by wynfrith on 15-3-26.
  */
 public class RegisterDto {
+
+    @Length(min = 6,max =25,message = Constants.ErrorType.USERNAME_ILLEGAL)
+    private String username;
+
+    @Length(min = 6,max =25,message = Constants.ErrorType.PASSWORD_ILLEGAL)
+    private String password;
+
+    private String email;
+
+    private String repassword;
+
+    private boolean isEmployer;
+
+    public boolean getIsEmployer() {
+        return isEmployer;
+    }
+
+    public void setIsEmployer(boolean isEmployer) {
+        this.isEmployer = isEmployer;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -40,16 +61,5 @@ public class RegisterDto {
         this.repassword = repassword;
     }
 
-    @NotEmpty(message = Constants.ErrorType.USERNAME_ILLEGAL)
-    @Length(min = 6,max =25,message = Constants.ErrorType.USERNAME_ILLEGAL)
-    private String username;
 
-    @NotEmpty(message = Constants.ErrorType.PASSWORD_ILLEGAL)
-    @Length(min = 6,max =25,message = Constants.ErrorType.PASSWORD_ILLEGAL)
-    private String password;
-
-    private String email;
-
-    @NotEmpty(message = Constants.ErrorType.PASSWORD_ILLEGAL)
-    private String repassword;
 }
