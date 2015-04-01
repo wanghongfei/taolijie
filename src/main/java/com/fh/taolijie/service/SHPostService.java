@@ -36,6 +36,14 @@ public interface SHPostService extends PageService {
     List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
+     * 根据分类查找二手
+     * @param cateId
+     * @param pageView 传递true为最火的在前
+     * @return
+     */
+    List<SecondHandPostDto> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
+
+    /**
      * 发布新二手帖子
      * @param postDto
      * @return

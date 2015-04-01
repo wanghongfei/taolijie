@@ -101,6 +101,23 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     @Transactional(readOnly = true)
+    public void testGetAndFilter() {
+        // TODO
+        List<SecondHandPostDto> dtoList = postService.getAndFilter(null, true, 0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
+                return dto.getTitle().equals("a post");
+        }));
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
+            return dto.getTitle().equals("another post");
+        }));
+    }
+
+    @Test
+    @Transactional(readOnly = true)
     public void testGetByCategory() {
         List<SecondHandPostDto> dtoList = postService.getPostList(cate1.getId(), 0, 0, new ObjWrapper());
         boolean contains = dtoList.stream().anyMatch( (dto) -> {
