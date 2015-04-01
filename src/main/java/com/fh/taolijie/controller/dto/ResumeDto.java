@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -23,6 +24,10 @@ public class ResumeDto {
     private String verified;
     private Integer photoId;
 
+    /**
+     * 求职意向，即job_post_category表的id
+     */
+    private List<Integer> intendCategoryId;
     private Integer memberId;
 
     public Integer getId() {
@@ -55,6 +60,14 @@ public class ResumeDto {
 
     public void setPhotoId(Integer photoId) {
         this.photoId = photoId;
+    }
+
+    public List<Integer> getIntendCategoryId() {
+        return intendCategoryId;
+    }
+
+    public void setIntendCategoryId(List<Integer> intendCategoryId) {
+        this.intendCategoryId = intendCategoryId;
     }
 
     public String getVerified() {

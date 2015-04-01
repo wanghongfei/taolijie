@@ -4,6 +4,7 @@ import com.fh.taolijie.service.PageViewAware;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
@@ -47,6 +48,9 @@ public class ResumeEntity implements PageViewAware {
     private String verified;
 
     private Integer photoId;
+
+    // 求职意向
+    private List<JobPostCategoryEntity> categoryList;
 
     public ResumeEntity() {}
     public ResumeEntity(String name, String gender, Integer age, Integer height, String photoPath, String email, String qq, String experience, String introduce, MemberEntity member) {
@@ -242,6 +246,21 @@ public class ResumeEntity implements PageViewAware {
         result = 31 * result + (experience != null ? experience.hashCode() : 0);
         result = 31 * result + (introduce != null ? introduce.hashCode() : 0);
         return result;
+    }
+
+    @ManyToMany
+    @JoinTable(
+            name = "resume_job_post_category",
+            joinColumns = @JoinColumn(name = "resume_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_post_category_id")
+
+    )
+    public List<JobPostCategoryEntity> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<JobPostCategoryEntity> categoryList) {
+        this.categoryList = categoryList;
     }
 
     @ManyToOne
