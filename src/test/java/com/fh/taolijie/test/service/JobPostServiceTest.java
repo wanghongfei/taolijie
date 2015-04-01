@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.impl.DefaultJobPostService;
 import com.fh.taolijie.service.impl.DefaultReviewService;
+import com.fh.taolijie.service.impl.DefaultSearchService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -29,7 +30,8 @@ import java.util.List;
  */
 @ContextConfiguration(classes = {
         DefaultJobPostService.class,
-        DefaultReviewService.class
+        DefaultReviewService.class,
+        DefaultSearchService.class
 })
 public class JobPostServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
@@ -173,6 +175,17 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         postService.getAndFilter(null, null, false, true, null, 0, 0, new ObjWrapper());
 
         postService.getAndFilter(null, null, false, false, null, 0, 0, new ObjWrapper());
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testSearch() {
+        List<JobPostDto> dtoList = postService.runSearch("title", "post", 0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
+            return dto.getTitle().equals("a post");
+        }));
     }
 
     @Test

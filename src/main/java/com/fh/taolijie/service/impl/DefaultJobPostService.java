@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.service.SearchService;
 import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
@@ -27,9 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Parameter;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.*;
 
 /**
@@ -53,6 +52,9 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Autowired
     private JobPostCategoryRepo jobCateRepo;
+
+    @Autowired
+    SearchService search;
 
     @PersistenceContext
     EntityManager em;
@@ -165,8 +167,9 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
             logger.debug("构造JPQL:{}", query);
         }
 
+        List<JobPostEntity> entityList = search.runAccurateQuery(JobPostEntity.class, parmMap, order, em);
         // 给参数赋值
-        TypedQuery queryObj = em.createQuery(query, JobPostEntity.class);
+/*        TypedQuery queryObj = em.createQuery(query, JobPostEntity.class);
         Set<Parameter<?>> parmSet = queryObj.getParameters();
         for ( Parameter parm : parmSet) {
             String parmName = parm.getName();
@@ -179,11 +182,49 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         List<JobPostEntity> entityList = queryObj
                 //.setFirstResult(firstResult)
                 //.setMaxResults(CollectionUtils.determineCapacity(capacity))
-                .getResultList();
+                .getResultList();*/
 
         int cap = CollectionUtils.determineCapacity(capacity);
         Page<JobPostEntity> postPage = new PageImpl<JobPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
         wrapper.setObj(postPage);
+
+        return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<JobPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper) {
+        Map<String, Object> parmMap = new HashMap<>();
+        parmMap.put(field, includeString);
+
+/*        String query = StringUtils.buildLikeQuery(JobPostEntity.class.getSimpleName(), parmMap, null);
+
+        // 给参数赋值
+        TypedQuery queryObj = em.createQuery(query, JobPostEntity.class);
+        Set<Parameter<?>> parmSet = queryObj.getParameters();
+        for ( Parameter parm : parmSet) {
+            String parmName = parm.getName();
+            Object parmValue = parmMap.get(parmName);
+
+            queryObj.setParameter(parmName, parmValue);
+        }
+
+        // 执行查询
+        List<JobPostEntity> entityList = queryObj
+                .getResultList();*/
+
+        List<JobPostEntity> entityList = search.runLikeQuery(JobPostEntity.class, parmMap, null, em);
+
+        // 分页
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<JobPostEntity> postPage = new PageImpl<JobPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
+        wrapper.setObj(postPage.getTotalPages());
 
         return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
