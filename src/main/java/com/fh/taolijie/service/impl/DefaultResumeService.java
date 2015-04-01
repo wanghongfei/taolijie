@@ -42,6 +42,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Autowired
     private JobPostCategoryRepo cateRepo;
 
+    private static final String QUERY_INTEND = "SELECT resume_id AS resumeId, job_post_category_id AS categoryId FROM resume_job_post_category AS category WHERE category.job_post_category_id = :cateId";
+
     @Override
     @Transactional(readOnly = true)
     public List<ResumeDto> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
@@ -115,6 +117,36 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
                 dto.setMemberId(resumeEntity.getMember().getId());
             });
         });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResumeDto> getResumeListByIntend(Integer cateId) {
+        // 查询关联表
+        // object[0]是简历id, object[1]是工作分类id
+        List<Object[]> rajList =  em.createNativeQuery(QUERY_INTEND)
+                .setParameter("cateId", cateId)
+                .getResultList();
+
+        // 构造ResumeList
+        List<ResumeDto> dtoList = new ArrayList<>();
+        for (Object[] obj : rajList) {
+            Integer resumeId = (Integer) obj[0];
+            //ResumeAndJobCategory raj = (ResumeAndJobCategory) obj;
+            //Integer resumeId = raj.getResumeId();
+            ResumeEntity entity = resumeRepo.findOne(resumeId);
+
+            dtoList.add(CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+            }));
+        }
+
+        // 根据简历创建时间排序
+        dtoList.stream().sorted( (dto1, dto2) -> {
+            return dto1.getCreatedTime().compareTo(dto2.getCreatedTime());
+        });
+
+        return dtoList;
     }
 
     @Override

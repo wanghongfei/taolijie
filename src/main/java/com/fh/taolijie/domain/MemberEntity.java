@@ -8,6 +8,18 @@ import java.util.List;
 /**
  * Created by wanghongfei on 15-3-4.
  */
+/*@SqlResultSetMapping(
+        name = "ResumeAndJobCategoryMapping",
+        classes = @ConstructorResult(
+                        targetClass = ResumeAndJobCategory.class,
+                        columns = {
+                                @ColumnResult(name = "resumeId", type = Integer.class),
+                                @ColumnResult(name = "categoryId", type = Integer.class)
+                        }
+                )
+)*/
+
+
 @Entity
 @Table(name = "member")
 

@@ -32,6 +32,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
     ResumeEntity resume;
     ResumeEntity resumeBefore;
+    ResumeEntity resumeIntend;
     JobPostCategoryEntity cate1;
     JobPostCategoryEntity cate2;
 
@@ -64,6 +65,13 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         resumeBefore.setMember(member);
         em.persist(resumeBefore);
 
+        resumeIntend = new ResumeEntity();
+        resumeIntend.setName("resumeIntend");
+        resumeIntend.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
+        resumeIntend.setCreatedTime(sdf.parse("2011/1/1"));
+        resumeIntend.setMember(member);
+        em.persist(resumeIntend);
+
         // 创建工作分类
         cate1 = new JobPostCategoryEntity();
         cate1.setName("category");
@@ -77,6 +85,9 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         member.setResumeCollection(new ArrayList<>());
         member.getResumeCollection().add(resume);
         member.getResumeCollection().add(resumeBefore);
+        // 添加意向
+        resumeIntend.setCategoryList(Arrays.asList(cate1, cate2));
+
 
         em.flush();
         em.clear();
@@ -98,7 +109,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     public void testGetAllByAuthority() {
         List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
-        Assert.assertEquals(1, dtoList.size());
+        Assert.assertEquals(2, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resumeBefore"));
 
         Assert.assertTrue(isRecentFront(dtoList));
@@ -110,7 +121,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
-        Assert.assertEquals(1, dtoList.size());
+        Assert.assertEquals(2, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resumeBefore"));
 
         Assert.assertTrue(isRecentFront(dtoList));
@@ -168,6 +179,19 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         Assert.assertEquals("1", r.getQq());
         Assert.assertEquals(1, r.getCategoryList().size());
         Assert.assertEquals("category2", r.getCategoryList().get(0).getName());
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetByIntend() {
+        // TODO
+        List<ResumeDto> dtoList = rService.getResumeListByIntend(cate1.getId());
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
+            return dto.getName().equals("resumeIntend");
+        }));
     }
 
     @Test
