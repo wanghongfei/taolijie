@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.SecondHandPostCategoryEntity;
 import com.fh.taolijie.domain.SecondHandPostEntity;
 import com.fh.taolijie.service.SHPostService;
 import com.fh.taolijie.service.impl.DefaultSHPostService;
+import com.fh.taolijie.service.impl.DefaultSearchService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
@@ -29,7 +30,8 @@ import java.util.List;
  * Created by wanghongfei on 15-3-8.
  */
 @ContextConfiguration(classes = {
-        DefaultSHPostService.class
+        DefaultSHPostService.class,
+        DefaultSearchService.class
 })
 public class SHPostServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
@@ -107,8 +109,8 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
 
-        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
-                return dto.getTitle().equals("a post");
+        Assert.assertTrue(dtoList.stream().anyMatch((dto) -> {
+            return dto.getTitle().equals("a post");
         }));
 
         Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
@@ -125,6 +127,22 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         });
         Assert.assertTrue(contains);
     }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testSearch() {
+        List<SecondHandPostDto> dtoList = postService.runSearch("title", "post", 0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+
+        Assert.assertTrue(dtoList.stream().anyMatch((dto) -> {
+            return dto.getTitle().equals("another post");
+        }));
+
+        Assert.assertTrue(dtoList.stream().anyMatch((dto) -> {
+            return dto.getTitle().equals("a post");
+        }));
+    }
+
     @Test
     @Transactional(readOnly = true)
     public void testGetByFilter() {

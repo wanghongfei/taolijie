@@ -46,6 +46,14 @@ public interface JobPostService extends PageService {
     List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
+     * 根据兼职信息的某个字段执行模糊查询
+     * @param field {@link com.fh.taolijie.domain.JobPostEntity}的某个字段名
+     * @param includeString
+     * @return
+     */
+    List<JobPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper);
+
+    /**
      * 根据id查找某个兼职帖子
      * @param postId
      * @return

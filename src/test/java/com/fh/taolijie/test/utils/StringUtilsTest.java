@@ -25,4 +25,20 @@ public class StringUtilsTest {
 
         Assert.assertEquals("SELECT job FROM JobPostEntity job WHERE job.name=:name AND job.age=:age AND job.home=:home ORDER BY job.time DESC", query);
     }
+
+    @Test
+    public void testLikeJPQL() {
+        Map<String, Object> parmMap = new HashMap<>();
+        parmMap.put("name", "wanghongfei");
+        parmMap.put("age", "20");
+        parmMap.put("home", "none");
+
+        Map.Entry<String, String> order = new AbstractMap.SimpleEntry<String, String>("time", "DESC");
+
+        String query = StringUtils.buildLikeQuery("JobPostEntity", parmMap, order);
+        System.out.println(query);
+
+        //Assert.assertEquals("SELECT job FROM JobPostEntity job WHERE job.name=:name AND job.age=:age AND job.home=:home ORDER BY job.time DESC", query);
+
+    }
 }
