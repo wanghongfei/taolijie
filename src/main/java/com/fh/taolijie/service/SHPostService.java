@@ -45,7 +45,17 @@ public interface SHPostService extends PageService {
 
     List<SecondHandPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper);
 
+    /**
+     * 查询还未审核的二手信息
+     * @return
+     */
     List<SecondHandPostDto> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper);
+
+    /**
+     * 查询被投诉的二手信息
+     * @return
+     */
+    List<SecondHandPostDto> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 发布新二手帖子

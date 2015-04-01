@@ -35,4 +35,7 @@ public interface SHPostRepo extends JpaRepository<SecondHandPostEntity, Integer>
 
     @Query("SELECT post FROM SecondHandPostEntity post WHERE post.verified = :verified ORDER BY post.postTime DESC")
     Page<SecondHandPostEntity> findByVerified(@Param("verified")String verified, Pageable pageable);
+
+    @Query("SELECT post FROM SecondHandPostEntity post WHERE post.complaint > 0 ORDER BY post.complaint DESC")
+    Page<SecondHandPostEntity> getSuedPost(Pageable pageable);
 }

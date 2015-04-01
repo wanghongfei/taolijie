@@ -74,6 +74,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         // set category for this post
         post1.setCategory(cate1);
         post1.setMember(member);
+        post1.setComplaint(10);
         // set expired time for this post
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         post1.setExpiredTime(sdf.parse("2014/1/1"));
@@ -85,6 +86,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         post2.setCategory(cate1);
         post2.setMember(member);
         post2.setExpiredTime(sdf.parse("2016/1/1"));
+        post2.setComplaint(0);
         postRepo.save(post2);
         // set post for category-1
         cate1.setPostCollection(new ArrayList<>());
@@ -144,6 +146,15 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         }));
     }
 
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetSuedPost() {
+        List<SecondHandPostDto> dtoList = postService.getSuedPost(0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
+        Assert.assertTrue(dtoList.stream().noneMatch( (dto) -> dto.getTitle().equals("another post") ));
+    }
 
     @Test
     @Transactional(readOnly = true)

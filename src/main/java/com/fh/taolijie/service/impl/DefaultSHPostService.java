@@ -189,6 +189,21 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<SecondHandPostDto> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<SecondHandPostEntity> entityPage = postRepo.getSuedPost(new PageRequest(firstResult, cap));
+
+        return CollectionUtils.transformCollection(entityPage, SecondHandPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+            });
+        });
+    }
+
+    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addPost(SecondHandPostDto postDto) {
         // 创建帖子实体
