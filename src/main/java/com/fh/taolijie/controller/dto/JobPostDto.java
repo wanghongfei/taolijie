@@ -33,7 +33,7 @@ public class JobPostDto {
     private String workTime;
     private String salaryUnit;
     private Integer pageView;
-    private Integer verified;
+    private String verified;
 
     private Integer categoryId;
     private String categoryName;
@@ -57,11 +57,11 @@ public class JobPostDto {
         this.title = title;
     }
 
-    public Integer getVerified() {
+    public String getVerified() {
         return verified;
     }
 
-    public void setVerified(Integer verified) {
+    public void setVerified(String verified) {
         this.verified = verified;
     }
 

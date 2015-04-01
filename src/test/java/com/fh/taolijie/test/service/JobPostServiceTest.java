@@ -69,6 +69,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         // 创建帖子
         post = new JobPostEntity();
         post.setTitle("a post");
+        post.setVerified(Constants.VerifyStatus.NONE.toString());
         post.setMember(member);
         // 创建关联
         post.setCategory(cate1);
@@ -141,6 +142,13 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertTrue(contains);
     }
 
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetUnverified() {
+        List<JobPostDto> dtoList = postService.getUnverifiedPostList(0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
+    }
     @Test
     @Transactional(readOnly = true)
     public void testFindPost() {

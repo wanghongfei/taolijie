@@ -24,4 +24,6 @@ public interface JobPostRepo extends JpaRepository<JobPostEntity, Integer> {
     Page<JobPostEntity> findByMember(@Param("member") MemberEntity member, Pageable pageable);
 
     Page<JobPostEntity> findByCategory(JobPostCategoryEntity category, Pageable pageable);
+
+    Page<JobPostEntity> findByVerified(String verified, Pageable pageable);
 }

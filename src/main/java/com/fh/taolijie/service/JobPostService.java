@@ -31,6 +31,15 @@ public interface JobPostService extends PageService {
     List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
+     * 查询审核的post
+     * @param firstResult
+     * @param capacity
+     * @param wrapper
+     * @return
+     */
+    List<JobPostDto> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper);
+
+    /**
      * 根据条件查找兼职信息.
      * 所有的boolean值**最多只能有一个为true**
      *
