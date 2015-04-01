@@ -166,6 +166,29 @@ public class SHController{
      */
     @RequestMapping(value = "refresh/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String refresh(@PathVariable int id,HttpSession session){
+
         return  "";
     }
+
+    /**
+     * 我收藏的二手 get
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "fav",method = RequestMethod.GET)
+    public String fav(HttpSession session){
+        return "";
+    }
+    /**
+     * 我收藏的二手 ajax
+     * @param  page
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "fav/{page}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String fav(@PathVariable int page,HttpSession session){
+        return "";
+    }
+
+
 }

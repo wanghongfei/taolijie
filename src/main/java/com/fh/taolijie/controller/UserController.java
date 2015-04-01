@@ -9,10 +9,7 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.DefaultAvatarGenerator;
-import com.fh.taolijie.utils.ResponseUtils;
-import com.fh.taolijie.utils.TaolijieCredential;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -46,6 +43,7 @@ import java.util.List;
  * Created by wynfrith on 15-3-5.
  */
 @Controller
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -58,7 +56,8 @@ public class UserController {
     ResumeService resumeService;
     @Autowired
     SHPostService shPostService;
-
+    @Autowired
+    NotificationService notificationService;
 
     /*日志*/
     private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -73,7 +72,7 @@ public class UserController {
     /**
      * 个人中心
      */
-    @RequestMapping(value = "/user",method = RequestMethod.GET)
+    @RequestMapping(value = "/",method = RequestMethod.GET)
     public String user(HttpSession session,Model model,HttpServletRequest req){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
@@ -81,7 +80,9 @@ public class UserController {
         }
         GeneralMemberDto memberDto = accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],false);
         model.addAttribute("user", memberDto);
-
+        long notifaicationNum = notificationService.getNotificationAmount(credential.getId(),false);
+        model.addAttribute("notificationNum",notifaicationNum);
+        model.addAttribute("role",credential.getRoleList().get(0));
 
         return "mobile/user/user";
 
@@ -92,160 +93,85 @@ public class UserController {
 
     /**
      * 消息列表
-     * @param mem
-     * @param notification
+     * 分页是传给前台总页数
+     * @return
+     */
+
+    @RequestMapping(value = "/msglist", method = RequestMethod.GET)
+    public String msglist(){
+        return "";
+    }
+
+
+    /**
+     * 消息详情页
+     * @param msgId 消息的id
      * @param session
+     * @param model
      * @return
      */
-
-    @RequestMapping(value = "/user/messages", method = RequestMethod.GET)
-    public String messages(GeneralMemberDto mem,
-                           NotificationDto notification,
-                           HttpSession session,
-                           HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"messages");
-    }
-
-
-
-
-    /**
-     * 我的发布(简历,兼职,二手)
-     * @param job
-     * @param req
-     * @return
-     */
-    @RequestMapping(value = "user/posts", method = RequestMethod.GET)
-    public String posts(JobPostDto job,
-                        ResumeDto resume,
-                        SecondHandPostCategoryDto secondHand,
-                        HttpSession session,
-                        HttpServletRequest req){
-       String username = null;
-
-        /*通过session获取当前的用户*/
-        username = CredentialUtils.getCredential(session).getUsername();
-
-        /*查询各种表*/
-
-        /*绑定model*/
-        return ResponseUtils.determinePage(req,"user/posts");
+    @RequestMapping(value = "msg/{msgId}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public String msg(@PathVariable int msgId,HttpSession session,Model model){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential==null){
+            return "redirect:/user/login";
+        }
+       NotificationDto notificationDto = notificationService.findNotification(msgId);
+        model.addAttribute("notification",notificationDto);
+        return "";
     }
 
     /**
-     * 我的收藏
+     * 获取消息列表 ajax get
+     * @param page 页码数
+     * @param session 获取用户名
+     * @param model 绑定一个消息的list
+     * @return
      */
+    @RequestMapping(value = "/msglist", method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String msgList(@PathVariable int page,HttpSession session,Model model){
+        return  "";
+    }
 
-    @RequestMapping(value = "user/fav",method = RequestMethod.GET)
-    public String fav(JobPostDto job,
-                      ResumeDto resume,
-                      SecondHandPostCategoryDto secondHand,
-                      HttpSession session,
-                      HttpServletRequest req){
+    /**
+     * 消息提醒,留言或回复会触发该方法
+     * @param session
+     * @param acceptor 接受人
+     * @param content 回复的内容
+     * @return
+     */
+    @RequestMapping(value = "/messages", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public String messages(HttpSession session,@RequestParam String acceptor,@RequestParam String content){
 
-        /*通过session获取当前的用户*/
+        /*获取接收人的dto实体*/
         String username = CredentialUtils.getCredential(session).getUsername();
+        GeneralMemberDto acceptorDto = accountService.findMember(acceptor,new GeneralMemberDto[0],false);
 
-         /*绑定model*/
-        return ResponseUtils.determinePage(req,"user/fav");
+        /*发送消息*/
 
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 
-    /**
-     * 发布兼职
-     * @param
-     * @param req
-     * @return
-     */
-    @RequestMapping(value = "user/job" ,method = RequestMethod.GET)
-    public String job(HttpSession session,
-                      HttpServletRequest req){
-        Credential credential = CredentialUtils.getCredential(session);
-        if(credential==null){
-            return "redirect:/user/login";
-        }
-        return ResponseUtils.determinePage(req,"user/jobpost");
-    }
 
-
-    /**
-     * 发布简历
-     * @param resume
-     * @param req
-     * @return
-     */
-    @RequestMapping(value = "user/resume" ,method = RequestMethod.GET)
-    public String job(ResumeDto resume,
-                      HttpSession session,
-                      HttpServletRequest req){
-        Credential credential = CredentialUtils.getCredential(session);
-        if(credential==null){
-            return "redirect:/user/login";
-        }
-        return ResponseUtils.determinePage(req,"user/resume");
-    }
-
-    /**
-     * 发布二手
-     * @param secondhand
-     * @param session
-     * @param req
-     * @return
-     */
-    @RequestMapping(value = "user/secondhand" ,method = RequestMethod.GET)
-    public String job(SecondHandPostDto secondhand,
-                      HttpSession session,
-                      HttpServletRequest req){
-        Credential credential = CredentialUtils.getCredential(session);
-        if(credential==null){
-            return "redirect:/user/login";
-        }
-        return ResponseUtils.determinePage(req,"user/secondhand");
-    }
 
     /**
      * 个人资料
      * @param req
      * @return
      */
-    @RequestMapping(value = "user/setting/profile", method = RequestMethod.GET)
+    @RequestMapping(value = "/setting/profile", method = RequestMethod.GET)
     public String profile(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"user/profile");
-    }
-
-
-    /**
-     * 安全信息(密码)
-     * @param req
-     * @return
-     */
-    @RequestMapping(value = "user/setting/security", method = RequestMethod.GET)
-    public String security(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"user/security");
-    }
-
-
-
-    //==============post==============
-
-    /**
-     * 用户注销
-     */
-
-    @RequestMapping(value = "user/logout",method = RequestMethod.GET)
-    public String logout(HttpSession session){
-        session.invalidate();
-        return "redirect:/index";
+        return ResponseUtils.determinePage(req, "user/profile");
     }
 
     /**
      * 修改个人资料
      * @param session
-     * @param
+     * @param gmem
      * @return
      */
-    @RequestMapping(value = "user/setting/profile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/setting/profile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String profile(GeneralMemberDto gmem, HttpSession session){
         GeneralMemberDto mem = null;
 
@@ -266,13 +192,22 @@ public class UserController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 安全信息(密码)
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/setting/security", method = RequestMethod.GET)
+    public String security(HttpServletRequest req){
+        return ResponseUtils.determinePage(req, "user/security");
+    }
 
     /**
      * 修改密码
      * @param session
      * @return
      */
-    @RequestMapping(value = "user/setting/security",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/setting/security",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String security(@Valid ChangePasswordDto dto,
                                          BindingResult result,
                                          HttpSession session){
@@ -310,71 +245,42 @@ public class UserController {
     }
 
     /**
-     * 发布二手信息
-     * @param sechand
-     * @param session
-     * @return
+     * 用户注销 post
      */
-    @RequestMapping(value = "user/post/sechand", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(@Valid SecondHandPostDto sechand,
-                                    BindingResult result,
-                                    HttpSession session){
-        GeneralMemberDto mem = null;
 
-        if(result.hasErrors())
-            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
-
-        String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
-
-
-
-        /*创建二手信息*/
-
-
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    @RequestMapping(value = "logout",method = RequestMethod.POST)
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/index";
     }
 
     /**
-     * 发布简历信息
-     * @param resume
+     * 投诉 ajax post
+     * 前端打算写成一个弹出框，不需要新页面
+     * @param id  被投诉的兼职或者二手物品的id
      * @param session
-     * @return
      */
-    @RequestMapping(value = "user/post/resume", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(ResumeDto resume,
-                                    HttpSession session){
-        GeneralMemberDto mem = null;
-        String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
-
-        /*创建二手信息*/
-
-
-        return new JsonWrapper(true,"success").getAjaxMessage();
+    @RequestMapping(value = "complaint/{id}",method =RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String complaint(@PathVariable int id,HttpSession session){
+        return "";
     }
-
 
     /**
-     * 消息提醒,留言或回复会触发该方法
-     * @param session
-     * @param acceptor 接受人
-     * @param content 回复的内容
-     * @return
+     * 意见反馈页面 get
      */
-    @RequestMapping(value = "/user/messages", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public String messages(HttpSession session,@RequestParam String acceptor,@RequestParam String content){
-
-        /*获取接收人的dto实体*/
-        String username = CredentialUtils.getCredential(session).getUsername();
-        GeneralMemberDto acceptorDto = accountService.findMember(acceptor,new GeneralMemberDto[0],false);
-
-        /*发送消息*/
-
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    @RequestMapping(value = "feedback",method = RequestMethod.GET)
+    public String feedback(){
+        return "";
     }
 
-
-
+    /**
+     * 意见反馈页面 post ajax
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String feedback(HttpSession session){
+        return "";
+    }
 
 }

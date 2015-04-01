@@ -68,10 +68,8 @@ public class ApiController {
     }
 
     @RequestMapping(value = "joblist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String jobList(@RequestParam(required=false,defaultValue = "") String category
-                                        ){
+    public @ResponseBody String jobList(@RequestParam(required=false) String category){
         List<JobPostDto> list = null;
-
         return JSON.toJSONString(list);
     }
 
@@ -135,33 +133,7 @@ public class ApiController {
 
     }
 
-    /**
-     * 发布兼职信息
-     * @param job
-     * @param session
-     * @return
-     */
-    @RequestMapping(value = "/post/job", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String job(@Valid JobPostDto  job,
-                                    BindingResult result,
-                                    HttpSession session){
-        GeneralMemberDto mem = null;
 
-        if(result.hasErrors()){
-            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
-        }
-
-        String username = CredentialUtils.getCredential(session).getUsername();
-        mem = accountService.findMember(username,new GeneralMemberDto[0],false);
-
-        /*创建兼职信息*/
-        job.setMemberId(mem.getId());
-        job.setPostTime(new Date());
-        jobPostService.addJobPost(job);
-
-
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
 
 
 
@@ -170,12 +142,28 @@ public class ApiController {
     /*******************************************/
 
     /**
+     * 查询简历分类
+     * @return
+     */
+    @RequestMapping(value = {"resumecate"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String resumeCate(){
+        return "";
+    }
+    /**
      * 查询所有简历
+     * 筛选条件  分类 时间顺序
      */
     @RequestMapping(value = {"resumelist"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String resumelist(){
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeDto> list = resumeService.getAllResumeList(0,0,maxPage);
+    public @ResponseBody String resumelist(HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        ObjWrapper totalPage = new ObjWrapper();
+        List<ResumeDto> list = null;
+
+        if(credential.hasRole(Constants.RoleType.EMPLOYER.toString())) {
+            list = resumeService.getAllResumeList(0,0,totalPage);
+        }else {
+            list = resumeService.getAllResumeList(0,0,totalPage);
+        }
         return JSON.toJSONString(list);
     }
 
