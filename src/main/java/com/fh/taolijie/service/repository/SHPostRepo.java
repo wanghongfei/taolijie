@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
@@ -32,5 +33,6 @@ public interface SHPostRepo extends JpaRepository<SecondHandPostEntity, Integer>
     @Query("SELECT post FROM SecondHandPostEntity post WHERE post.member = ?1")
     Page<SecondHandPostEntity> findByMember(MemberEntity member, Pageable pageable);
 
-    Page<SecondHandPostEntity> findByVerified(String verified, Pageable pageable);
+    @Query("SELECT post FROM SecondHandPostEntity post WHERE post.verified = :verified ORDER BY post.postTime DESC")
+    Page<SecondHandPostEntity> findByVerified(@Param("verified")String verified, Pageable pageable);
 }
