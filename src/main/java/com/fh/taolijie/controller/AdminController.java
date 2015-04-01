@@ -15,10 +15,7 @@ import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -44,20 +41,29 @@ public class AdminController {
     @Autowired
     BannerPicRepo bannerPicRepo;
 
+
     /**
-     * 测试admin的请求权限
+     * 用户列表页面
+     * @return
      */
-    @RequestMapping(value = "/test",method = RequestMethod.GET)
-    public @ResponseBody String test(){
-        return "you are administrator!";
+    @RequestMapping(value = "userlist",method = RequestMethod.GET)
+    public String userlist(){
+       return "";
     }
 
+
+    /**
+     * 添加或修改用户页面（填表单）
+     */
+    @RequestMapping(value = "adduser",method = RequestMethod.GET)
+    public String addUser(){
+        return "";
+    }
 
     /**
      * 添加用户
      * @return
      */
-
     @RequestMapping(value = "/adduser",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String  addUser(GeneralMemberDto dto){
         if(null == accountService.findMember(dto.getUsername(),new GeneralMemberDto[0],false)){
@@ -246,7 +252,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/updateAcacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateAcacdemy(@Valid AcademyDto academyDto){
-        if(!schoolService.updateAcademy(academyDto.getId(),academyDto)){
+        if(!schoolService.updateAcademy(academyDto.getId(), academyDto)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -298,5 +304,123 @@ public class AdminController {
 //        bannerPicRepo.save()
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+
+    /**
+     * 兼职分类页面 Get
+     * 页面左边显示所有分类，右边可以添加分类
+     */
+    @RequestMapping(value = "/jobcate",method = RequestMethod.GET)
+    public String jobCate(){
+        return "";
+    }
+
+    /**
+     * 兼职分类获取 ajax
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/jobcatelist",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String jobCateList(@PathVariable int page){
+        return "";
+    }
+
+
+    /**
+     * 添加兼职分类 ajax
+     * @param jobPostCategoryDto
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/addjobcate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String addJobCate(@Valid JobPostCategoryDto jobPostCategoryDto,
+                                           BindingResult result){
+        return "";
+    }
+
+    /**
+     * 删除兼职分类
+     * @param id 分类id
+     * @return
+     */
+    @RequestMapping(value = "/deljobcate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String delJobCate(@PathVariable int id){
+        return  "";
+    }
+
+    /**
+     * 更新兼职分类
+     * @param  id 要更新的id
+     * @param  jobPostCategoryDto 更新的数据
+     * @return
+     */
+    @RequestMapping(value = "/updatejobcate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String updateJobCate(@PathVariable int id,
+                                              @Valid JobPostCategoryDto jobPostCategoryDto,
+                                              BindingResult result){
+        return  "";
+    }
+
+
+
+
+
+
+
+    /**
+     * 二手分类页面 Get
+     * 页面左边显示所有分类，右边可以添加分类
+     */
+    @RequestMapping(value = "/shcate",method = RequestMethod.GET)
+    public String shCate(){
+        return "";
+    }
+
+    /**
+     * 兼职分类获取 ajax
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/shcatelist",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String shCateList(@PathVariable int page){
+        return "";
+    }
+
+
+    /**
+     * 添加兼职分类 ajax
+     * @param secondHandPostCategoryDto
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/addshcate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String addShCate(@Valid SecondHandPostCategoryDto secondHandPostCategoryDto,
+                                           BindingResult result){
+        return "";
+    }
+
+    /**
+     * 删除兼职分类
+     * @param id 分类id
+     * @return
+     */
+    @RequestMapping(value = "/delShCate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String delShCate(@PathVariable int id){
+        return  "";
+    }
+
+    /**
+     * 更新兼职分类
+     * @param  id 要更新的id
+     * @param  secondHandPostCategoryDto 更新的数据
+     * @return
+     */
+    @RequestMapping(value = "/updateshate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String updateShCate(@PathVariable int id,
+                                              @Valid SecondHandPostCategoryDto secondHandPostCategoryDto,
+                                              BindingResult result){
+        return  "";
+    }
+
 
 }
