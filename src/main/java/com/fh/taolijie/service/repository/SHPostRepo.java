@@ -31,4 +31,6 @@ public interface SHPostRepo extends JpaRepository<SecondHandPostEntity, Integer>
      */
     @Query("SELECT post FROM SecondHandPostEntity post WHERE post.member = ?1")
     Page<SecondHandPostEntity> findByMember(MemberEntity member, Pageable pageable);
+
+    Page<SecondHandPostEntity> findByVerified(String verified, Pageable pageable);
 }

@@ -10,6 +10,7 @@ import com.fh.taolijie.service.impl.DefaultSearchService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
 import org.junit.Assert;
@@ -69,6 +70,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         // create post
         post1 = new SecondHandPostEntity();
         post1.setTitle("a post");
+        post1.setVerified(Constants.VerifyStatus.NONE.toString());
         // set category for this post
         post1.setCategory(cate1);
         post1.setMember(member);
@@ -104,7 +106,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = true)
     public void testGetAndFilter() {
-        // TODO
         List<SecondHandPostDto> dtoList = postService.getAndFilter(null, true, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
@@ -143,6 +144,16 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
         }));
     }
 
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetUnverified() {
+        List<SecondHandPostDto> dtoList = postService.getUnverifiedPostList(0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+        Assert.assertEquals(1, dtoList.size());
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
+    }
+
     @Test
     @Transactional(readOnly = true)
     public void testGetByFilter() {
@@ -165,7 +176,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     @Test
     @Transactional(readOnly = false)
     public void testComplaint() {
-        // TODO
         postService.complaint(post1.getId());
         SecondHandPostDto dto = postService.findPost(post1.getId());
         Assert.assertEquals(1, dto.getComplaint().intValue());
