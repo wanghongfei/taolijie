@@ -27,4 +27,7 @@ public interface JobPostRepo extends JpaRepository<JobPostEntity, Integer> {
 
     @Query("SELECT job FROM JobPostEntity job WHERE job.verified = :verified ORDER BY job.postTime DESC")
     Page<JobPostEntity> findByVerified(@Param("verified")String verified, Pageable pageable);
+
+    @Query("SELECT job FROM JobPostEntity job WHERE job.complaint > 0 ORDER BY job.complaint DESC")
+    Page<JobPostEntity> findSuedPost(Pageable pageable);
 }

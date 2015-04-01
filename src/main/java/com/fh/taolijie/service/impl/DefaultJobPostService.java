@@ -154,6 +154,22 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
+    public List<JobPostDto> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<JobPostEntity> entityList = postRepo.findSuedPost(new PageRequest(firstResult, cap));
+
+
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+                dto.setMemberId(entity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
         if (orderByDate && orderByPageVisit) {
             throw new IllegalStateException("boolean参数最多只能有一个为true");

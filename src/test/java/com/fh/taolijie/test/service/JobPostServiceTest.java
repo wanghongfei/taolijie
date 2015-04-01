@@ -38,6 +38,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     JobPostCategoryEntity cate1;
     JobPostCategoryEntity cate2;
     JobPostEntity post;
+    JobPostEntity post2;
     ResumeEntity resume;
     ResumeEntity resumeBefore;
     ReviewEntity review;
@@ -70,12 +71,25 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         post = new JobPostEntity();
         post.setTitle("a post");
         post.setVerified(Constants.VerifyStatus.NONE.toString());
+        post.setComplaint(10);
         post.setMember(member);
+        post2 = new JobPostEntity();
+        post2.setTitle("third post");
+        post2.setVerified(Constants.VerifyStatus.NONE.toString());
+        post2.setComplaint(0);
+        post2.setMember(member);
+
+        // 设置帖子到member的关联
+        member.setJobPostCollection(new ArrayList<>());
+        member.getJobPostCollection().add(post);
+        member.getJobPostCollection().add(post2);
+
         // 创建关联
         post.setCategory(cate1);
         cate1.setJobPostCollection(new ArrayList<>());
         cate1.getJobPostCollection().add(post);
         em.persist(post);
+        em.persist(post2);
 
         // 创建评论
         review = new ReviewEntity();
@@ -142,6 +156,15 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertTrue(contains);
     }
 
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetBySuedPost() {
+        List<JobPostDto> dtoList = postService.getByComplaint(0, 0, new ObjWrapper());
+        Assert.assertNotNull(dtoList);
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
+        Assert.assertTrue(dtoList.stream().noneMatch( (dto) -> dto.getTitle().equals("third post") ));
+    }
     @Test
     @Transactional(readOnly = true)
     public void testGetUnverified() {

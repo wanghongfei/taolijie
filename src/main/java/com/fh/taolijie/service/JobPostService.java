@@ -40,6 +40,12 @@ public interface JobPostService extends PageService {
     List<JobPostDto> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
+     * 查询被投诉的兼职信息，值最高的在前
+     * @return
+     */
+    List<JobPostDto> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper);
+
+    /**
      * 根据条件查找兼职信息.
      * 所有的boolean值**最多只能有一个为true**
      *
