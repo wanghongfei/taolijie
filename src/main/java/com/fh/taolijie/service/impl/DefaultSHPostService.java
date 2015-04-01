@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.SecondHandPostCategoryEntity;
 import com.fh.taolijie.domain.SecondHandPostEntity;
 import com.fh.taolijie.service.SHPostService;
+import com.fh.taolijie.service.SearchService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.*;
 
@@ -37,6 +40,11 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Autowired
     MemberRepo memberRepo;
 
+    @Autowired
+    SearchService search;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Override
     @Transactional(readOnly = true)
@@ -144,6 +152,23 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
                 dto.setCategoryId(entity.getCategory().getId());
                 dto.setCategoryName(entity.getCategory().getName());
                 dto.setMemberId(entity.getMember().getId());
+            });
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SecondHandPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper) {
+        Map<String, Object> parmMap = new HashMap<>();
+        parmMap.put(field, includeString);
+
+        List<SecondHandPostEntity> entityList = search.runLikeQuery(SecondHandPostEntity.class, parmMap, null, em);
+
+        return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
             });
         });
     }
