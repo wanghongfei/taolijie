@@ -16,6 +16,8 @@ public class NotificationEntity {
     private Date time;
     private MemberEntity member;
 
+    private String accessRange;
+
     public NotificationEntity() {}
     public NotificationEntity(String title, String content, Integer isRead, Date time, MemberEntity member) {
         this.title = title;
@@ -54,6 +56,15 @@ public class NotificationEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Column(name = "access_range")
+    public String getAccessRange() {
+        return accessRange;
+    }
+
+    public void setAccessRange(String accessRange) {
+        this.accessRange = accessRange;
     }
 
     @Basic

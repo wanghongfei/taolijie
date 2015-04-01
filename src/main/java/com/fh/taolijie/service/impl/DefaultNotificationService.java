@@ -11,6 +11,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-3-9.
@@ -31,13 +33,20 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<NotificationDto> getNotificationList(Integer memId, String roleName, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        Page<NotificationEntity> noList = notRepo.findByMember(memRepo.getOne(memId), new PageRequest(firstResult, cap));
+        MemberEntity mem = memRepo.getOne(memId);
+        List<NotificationEntity> allList = retrieveAll(mem, roleName);
+
+
+        // 分页
+        Page<NotificationEntity> noList = new PageImpl<NotificationEntity>(allList, new PageRequest(firstResult, cap), allList.size());
+
+        //Page<NotificationEntity> noList = notRepo.findByMember(mem, new PageRequest(firstResult, cap));
         wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
@@ -49,13 +58,27 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<NotificationDto> getNotificationList(Integer memId, String roleName, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        Page<NotificationEntity> noList = notRepo.findByMemberAndIsRead(memRepo.getOne(memId), isRead ? 1 : 0, new PageRequest(firstResult, cap));
+        MemberEntity mem = memRepo.getOne(memId);
+        List<NotificationEntity> allList = retrieveAll(mem, roleName);
+
+        // 根据isRead过虑
+        allList = allList.stream()
+                .filter( (entity) -> {
+                    if (1 == entity.getIsRead().intValue()) {
+                        return isRead ? true : false;
+                    } else {
+                        return isRead ? false : true;
+                    }
+                }).collect(Collectors.toList());
+
+        // 分页
+        Page<NotificationEntity> noList = new PageImpl<NotificationEntity>(allList, new PageRequest(firstResult, cap), allList.size());
         wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
@@ -68,13 +91,13 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<NotificationDto> getNotificationList(Integer memId, Date time, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<NotificationDto> getNotificationList(Integer memId, String roleName, Date time, int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = capacity;
         if (cap <= 0) {
             cap = Constants.PAGE_CAPACITY;
         }
 
-        Page<NotificationEntity> noList = notRepo.findAfterTheTime(memRepo.getOne(memId), time, new PageRequest(firstResult, cap));
+        Page<NotificationEntity> noList = notRepo.findAfterTheTime(memRepo.getOne(memId), time, roleName, new PageRequest(firstResult, cap));
         wrapper.setObj(noList.getTotalPages());
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
@@ -142,6 +165,23 @@ public class DefaultNotificationService implements NotificationService {
         }
 
         notRepo.save(no);
+    }
+
+    private List<NotificationEntity> retrieveAll(MemberEntity member, String roleName) {
+        List<NotificationEntity> list = retrieveNoByRange(roleName);
+        list.addAll(retrievePrivateRange(member));
+
+        return list;
+    }
+
+    private List<NotificationEntity> retrieveNoByRange(String roleName) {
+        List<NotificationEntity> noList = notRepo.findByAccessRange(roleName);
+
+        return noList;
+    }
+
+    private List<NotificationEntity> retrievePrivateRange(MemberEntity member) {
+        return notRepo.findByMember(member);
     }
 
     /*private NotificationDto makeDto(NotificationEntity no) {

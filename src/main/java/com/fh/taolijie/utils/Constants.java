@@ -69,6 +69,25 @@ public class Constants {
         ALL
     }
 
+    public static enum NotificationRange {
+        /**
+         * 只有目标member收到
+         */
+        PRIVATE,
+        /**
+         * 所有用户收到
+         */
+        GLOBAL,
+        /**
+         * 只有商家能收到
+         */
+        EMPLOYER,
+        /**
+         * 只有学生能收到
+         */
+        STUDENT,
+    }
+
     /**
      * 结算方式
      */

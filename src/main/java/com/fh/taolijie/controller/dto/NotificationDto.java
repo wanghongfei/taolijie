@@ -12,6 +12,8 @@ public class NotificationDto {
     private Integer isRead;
     private Date time;
 
+    private String accessRange;
+
     private Integer memberId;
 
     public Integer getId() {
@@ -20,6 +22,14 @@ public class NotificationDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getAccessRange() {
+        return accessRange;
+    }
+
+    public void setAccessRange(String accessRange) {
+        this.accessRange = accessRange;
     }
 
     public String getTitle() {
