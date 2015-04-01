@@ -11,17 +11,17 @@ import com.fh.taolijie.service.repository.SHPostRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.TypedQuery;
+import java.util.*;
 
 /**
  * Created by wanghongfei on 15-3-8.
@@ -105,6 +105,47 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         }
 
         return dtoList;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SecondHandPostDto> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper) {
+        Map<String, Object> parmMap = new HashMap<>();
+
+        if (null != cateId) {
+            parmMap.put("category", cateRepo.getOne(cateId));
+        }
+
+
+        Map.Entry<String, String> sort = null;
+        if (pageView) {
+            sort = new AbstractMap.SimpleEntry("postTime", "DESC");
+        }
+
+        // 构建Query对象
+        String query = StringUtils.buildQuery("post", SecondHandPostEntity.class.getSimpleName(), parmMap, sort);
+        TypedQuery<SecondHandPostEntity> queryObj = em.createQuery(query, SecondHandPostEntity.class);
+
+        // 参数赋值
+        Set<Map.Entry<String, Object>> entrySet = parmMap.entrySet();
+        for (Map.Entry<String, Object> entry : entrySet) {
+            queryObj.setParameter(entry.getKey(), entry.getValue());
+        }
+
+        // 执行查询
+        List<SecondHandPostEntity> entityList = queryObj.getResultList();
+        // 分页
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<SecondHandPostEntity> entityPage = new PageImpl<SecondHandPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
+        wrapper.setObj(entityPage.getTotalPages());
+
+        return CollectionUtils.transformCollection(entityPage, SecondHandPostDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
+                dto.setCategoryId(entity.getCategory().getId());
+                dto.setCategoryName(entity.getCategory().getName());
+                dto.setMemberId(entity.getMember().getId());
+            });
+        });
     }
 
     @Override

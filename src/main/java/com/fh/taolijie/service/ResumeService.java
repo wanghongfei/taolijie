@@ -41,6 +41,8 @@ public interface ResumeService extends PageService {
      */
     List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
+    List<ResumeDto> getResumeListByIntend(Integer jobPostCategoryId);
+
     /**
      * 修改简历信息
      * @param resumeId

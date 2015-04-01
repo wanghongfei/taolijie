@@ -1,9 +1,12 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.repository.JobPostCategoryRepo;
+import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +36,13 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Autowired
     private ResumeRepo resumeRepo;
 
+    @Autowired
+    private MemberRepo memRepo;
+
+    @Autowired
+    private JobPostCategoryRepo cateRepo;
+
+    private static final String QUERY_INTEND = "SELECT resume_id AS resumeId, job_post_category_id AS categoryId FROM resume_job_post_category AS category WHERE category.job_post_category_id = :cateId";
 
     @Override
     @Transactional(readOnly = true)
@@ -109,6 +120,36 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<ResumeDto> getResumeListByIntend(Integer cateId) {
+        // 查询关联表
+        // object[0]是简历id, object[1]是工作分类id
+        List<Object[]> rajList =  em.createNativeQuery(QUERY_INTEND)
+                .setParameter("cateId", cateId)
+                .getResultList();
+
+        // 构造ResumeList
+        List<ResumeDto> dtoList = new ArrayList<>();
+        for (Object[] obj : rajList) {
+            Integer resumeId = (Integer) obj[0];
+            //ResumeAndJobCategory raj = (ResumeAndJobCategory) obj;
+            //Integer resumeId = raj.getResumeId();
+            ResumeEntity entity = resumeRepo.findOne(resumeId);
+
+            dtoList.add(CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
+                dto.setMemberId(entity.getMember().getId());
+            }));
+        }
+
+        // 根据简历创建时间排序
+        dtoList.stream().sorted( (dto1, dto2) -> {
+            return dto1.getCreatedTime().compareTo(dto2.getCreatedTime());
+        });
+
+        return dtoList;
+    }
+
+    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean refresh(Integer resumeId) {
         ResumeEntity r = em.find(ResumeEntity.class, resumeId);
@@ -129,7 +170,16 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateResume(Integer resumeId, ResumeDto resumeDto) {
         ResumeEntity r = em.find(ResumeEntity.class, resumeId);
-        CollectionUtils.updateEntity(r, resumeDto, null);
+
+        CollectionUtils.updateEntity(r, resumeDto, (entity) -> {
+            // 设置求职意向
+            entity.getCategoryList().clear();
+            for (Integer cateId : resumeDto.getIntendCategoryId()) {
+                JobPostCategoryEntity cate = cateRepo.getOne(cateId);
+                entity.getCategoryList().add(cate);
+            }
+        });
+
         //updateResume(r, resumeDto);
 
         return true;
@@ -164,8 +214,22 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void addResume(ResumeDto dto) {
-        ResumeEntity r = makeResume(dto);
-        em.persist(r);
+        //ResumeEntity r = makeResume(dto);
+        ResumeEntity r = CollectionUtils.dto2Entity(dto, ResumeEntity.class, (entity) -> {
+            // 设置简历主人
+            entity.setMember(memRepo.getOne(dto.getMemberId()));
+
+            // 设置求职意向
+            List<JobPostCategoryEntity> cateList = new ArrayList<>();
+            for (Integer cateId : dto.getIntendCategoryId()) {
+                JobPostCategoryEntity cate = cateRepo.getOne(cateId);
+                cateList.add(cate);
+            }
+            entity.setCategoryList(cateList);
+        });
+
+        resumeRepo.save(r);
+        //em.persist(r);
     }
 
     private ResumeEntity makeResume(ResumeDto dto) {

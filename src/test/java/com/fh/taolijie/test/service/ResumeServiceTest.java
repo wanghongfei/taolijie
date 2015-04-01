@@ -1,6 +1,7 @@
 package com.fh.taolijie.test.service;
 
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ResumeEntity;
 import com.fh.taolijie.service.ResumeService;
@@ -19,10 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -34,6 +32,9 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     MemberEntity member;
     ResumeEntity resume;
     ResumeEntity resumeBefore;
+    ResumeEntity resumeIntend;
+    JobPostCategoryEntity cate1;
+    JobPostCategoryEntity cate2;
 
     @Autowired
     ResumeService rService;
@@ -64,11 +65,29 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         resumeBefore.setMember(member);
         em.persist(resumeBefore);
 
+        resumeIntend = new ResumeEntity();
+        resumeIntend.setName("resumeIntend");
+        resumeIntend.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
+        resumeIntend.setCreatedTime(sdf.parse("2011/1/1"));
+        resumeIntend.setMember(member);
+        em.persist(resumeIntend);
+
+        // 创建工作分类
+        cate1 = new JobPostCategoryEntity();
+        cate1.setName("category");
+        em.persist(cate1);
+        cate2 = new JobPostCategoryEntity();
+        cate2.setName("category2");
+        em.persist(cate2);
+
 
         // build connection
         member.setResumeCollection(new ArrayList<>());
         member.getResumeCollection().add(resume);
         member.getResumeCollection().add(resumeBefore);
+        // 添加意向
+        resumeIntend.setCategoryList(Arrays.asList(cate1, cate2));
+
 
         em.flush();
         em.clear();
@@ -90,7 +109,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     public void testGetAllByAuthority() {
         List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
-        Assert.assertEquals(1, dtoList.size());
+        Assert.assertEquals(2, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resumeBefore"));
 
         Assert.assertTrue(isRecentFront(dtoList));
@@ -102,7 +121,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertFalse(dtoList.isEmpty());
-        Assert.assertEquals(1, dtoList.size());
+        Assert.assertEquals(2, dtoList.size());
         Assert.assertTrue(containsName(dtoList, "resumeBefore"));
 
         Assert.assertTrue(isRecentFront(dtoList));
@@ -150,12 +169,29 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         ResumeDto dto = new ResumeDto();
         dto.setName("name");
         dto.setQq("1");
+        // 修改求职意向
+        dto.setIntendCategoryId(Arrays.asList(this.cate2.getId()));
 
         rService.updateResume(resume.getId(), dto);
 
         ResumeEntity r = em.createQuery("SELECT r FROM ResumeEntity r WHERE r.name = 'name'", ResumeEntity.class)
                 .getSingleResult();
         Assert.assertEquals("1", r.getQq());
+        Assert.assertEquals(1, r.getCategoryList().size());
+        Assert.assertEquals("category2", r.getCategoryList().get(0).getName());
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void testGetByIntend() {
+        // TODO
+        List<ResumeDto> dtoList = rService.getResumeListByIntend(cate1.getId());
+        Assert.assertNotNull(dtoList);
+        Assert.assertFalse(dtoList.isEmpty());
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> {
+            return dto.getName().equals("resumeIntend");
+        }));
     }
 
     @Test
@@ -187,10 +223,12 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         ResumeDto dto = new ResumeDto();
         dto.setMemberId(member.getId());
         dto.setQq("1");
+        dto.setIntendCategoryId(Arrays.asList(this.cate1.getId()));
         rService.addResume(dto);
 
-        em.createQuery("SELECT r FROM ResumeEntity r WHERE r.qq = '1'", ResumeEntity.class)
+        ResumeEntity entity = em.createQuery("SELECT r FROM ResumeEntity r WHERE r.qq = '1'", ResumeEntity.class)
                 .getSingleResult();
+        Assert.assertEquals("category", entity.getCategoryList().get(0).getName());
     }
 
     private boolean containsName(Collection<ResumeDto> co, String name) {
