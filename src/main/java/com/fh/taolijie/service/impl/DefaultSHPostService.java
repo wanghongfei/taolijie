@@ -162,7 +162,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         Map<String, Object> parmMap = new HashMap<>();
         parmMap.put(field, includeString);
 
-        List<SecondHandPostEntity> entityList = search.runLikeQuery(SecondHandPostEntity.class, parmMap, null, em);
+        List<SecondHandPostEntity> entityList = search.runLikeQuery(SecondHandPostEntity.class, parmMap, new AbstractMap.SimpleEntry<String, String>("postTime", "DESC"), em);
 
         return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
