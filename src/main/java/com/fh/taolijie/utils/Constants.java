@@ -105,6 +105,12 @@ public class Constants {
         //public static final String KEY_ID = "id";
     }
 
+    public static class FeedbackType {
+        public static final String ADVICE = "产品建议";
+        public static final String BUG = "程序BUG";
+        //public static final String
+    }
+
     public static class ErrorType{
 
         public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
