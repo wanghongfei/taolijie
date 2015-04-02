@@ -53,7 +53,7 @@ public class DefaultAccountService implements AccountService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean registerStudent(StudentDto stuDto) throws DuplicatedUsernameException {
         if (true == isUserExists(stuDto.getUsername())) {
-            throw new DuplicatedUsernameException("用户名[" + stuDto.getUsername() + "]已存在");
+            throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
         }
 
         // 创建实体
@@ -87,7 +87,7 @@ public class DefaultAccountService implements AccountService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException {
         if (true == isUserExists(dto.getUsername())) {
-            throw new DuplicatedUsernameException("用户名[" + dto.getUsername() + "]已存在");
+            throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
         }
 
         // 创建实体
@@ -122,7 +122,7 @@ public class DefaultAccountService implements AccountService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean registerEmployer(EmployerDto empDto) throws DuplicatedUsernameException {
         if (true == isUserExists(empDto.getUsername())) {
-            throw new DuplicatedUsernameException("用户名[" + empDto.getUsername() + "]已存在");
+            throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
         }
 
         // create entity
@@ -163,11 +163,11 @@ public class DefaultAccountService implements AccountService {
 
             // check password
             if (false == mem.getPassword().equals(CredentialUtils.sha(password))) {
-                throw new PasswordIncorrectException("密码错误");
+                throw new PasswordIncorrectException(Constants.ErrorType.PASSWORD_ERROR);
             }
 
         } catch (NoResultException ex) {
-            throw new UserNotExistsException("用户[" + username + "]不存在");
+            throw new UserNotExistsException(Constants.ErrorType.USERNAME_NOT_EXISTS);
         }
 
         return true;

@@ -69,7 +69,7 @@ public class HomeController {
         model.addAttribute("newsList",list);
 
 
-        return ResponseUtils.determinePage(req,"/index");
+        return "mobile/index";
 	}
 
 
@@ -78,6 +78,7 @@ public class HomeController {
      * 学校信息放入session中，并保存cookie
      * @return
      */
+    @Deprecated
     @RequestMapping(value = "changeschool",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String changeSchool(){
         return "";
@@ -87,7 +88,7 @@ public class HomeController {
     /**
      * 兼职列表页面 get
      */
-    @RequestMapping(value = {"joblist"},method = RequestMethod.GET)
+    @RequestMapping(value = {"list/job"},method = RequestMethod.GET)
     public String joblist(){
         return "mobile/joblist";
     }
@@ -95,11 +96,9 @@ public class HomeController {
     /**
      * 兼职详情页 get
      */
-    @RequestMapping(value = "jobdetail/{jobId}",method = RequestMethod.GET)
+    @RequestMapping(value = "detail/job/{jobId}",method = RequestMethod.GET)
     public String jobdetail(@PathVariable("jobId") int jobId,Model model){
         JobPostDto jobPostDto = jobPostService.findJobPost(jobId);
-        System.out.println("#########################");
-        System.out.println(JSON.toJSONString(jobPostDto));
         model.addAttribute("job",jobPostDto);
         return "mobile/jobdetail";
     }
@@ -107,7 +106,7 @@ public class HomeController {
     /**
      * 二手列表
      */
-    @RequestMapping(value = "shlist",method = RequestMethod.GET)
+    @RequestMapping(value = "list/sh",method = RequestMethod.GET)
     public String shList(){
         return "mobile/shlist";
     }
@@ -116,8 +115,10 @@ public class HomeController {
     /**
      * 二手详情页
      */
-    @RequestMapping(value = "shdetail",method = RequestMethod.GET)
-    public String shDetail(){
+    @RequestMapping(value = "detail/sh/{id}",method = RequestMethod.GET)
+    public String shDetail(@PathVariable int id,Model model){
+        SecondHandPostDto sh = shPostService.findPost(id);
+        model.addAttribute("sh",sh);
          return "";
     }
 
@@ -125,48 +126,58 @@ public class HomeController {
     /**
      * 简历库列表
      */
-    @RequestMapping(value = {"resumelist"},method = RequestMethod.GET)
+    @RequestMapping(value = {"list/resume"},method = RequestMethod.GET)
     public String resumeList(){
         return "mobile/resumelist";
     }
 
     /**
      * 简历详情页
+     *
+     * 权限 : 对为 未注册用户 和 学生 联系方式不可见
+     * @param id 简历的id号
+     * @param model
+     * @param session
      */
-    @RequestMapping(value = "resumedetail/{resumeId}",method = RequestMethod.GET)
-    public String resumedetail(@PathVariable("resumeId") int resumeId,Model model,HttpSession session){
+    @RequestMapping(value = "detail/resume/{id}",method = RequestMethod.GET)
+    public String resumedetail(@PathVariable("id") int id,Model model,HttpSession session){
         boolean contactDisplay = false;
+        RoleDto role = null;
         Credential credential = CredentialUtils.getCredential(session);
         if(credential.getUsername() != null){
             GeneralMemberDto member= accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],true);
-            if(member.getRoleIdList().contains(Constants.RoleType.EMPLOYER.ordinal())
-                    ||member.getRoleIdList().contains(Constants.RoleType.ADMIN.ordinal())){
-                contactDisplay = true;
-            }
+           for(String roleName:credential.getRoleList()){
+               System.out.println(roleName);
+               if(roleName.equals(Constants.RoleType.EMPLOYER.toString())||
+                       roleName.equals(Constants.RoleType.ADMIN.toString())){
+                   contactDisplay = true;
+               }
+           }
         }
-        ResumeDto resumeDto = resumeService.findResume(resumeId);
+        System.out.println("resume:"+id);
+        ResumeDto resumeDto = resumeService.findResume(id);
 
         /*如果是用户或者为登陆,不会显示联系方式*/
         if(contactDisplay == false){
             resumeDto.setQq(null);
+            resumeDto.setEmail(null);
             /*
-            *未完成
+             可以不需要显示的东西设为null
+             前端
              */
         }
+
         model.addAttribute("resume",resumeDto);
+        model.addAttribute("contactDisplay",contactDisplay);
         return "mobile/resume";
     }
-
-
-
-
 
 
 
     /**
      * 新闻列表
      */
-    @RequestMapping(value = "newslist",method = RequestMethod.GET)
+    @RequestMapping(value = "list/news",method = RequestMethod.GET)
     public String newslist(){
         return "mobile/newslist";
     }
@@ -174,18 +185,22 @@ public class HomeController {
     /**
      * 新闻详细页面
      */
-    @RequestMapping(value = {"news"},method = RequestMethod.GET)
+    @RequestMapping(value = "detail/news/{nid}",method = RequestMethod.GET)
     public String news(@PathVariable int nid,Model model) {
         NewsDto news = newsService.findNews(nid);
         model.addAttribute("news", news);
-        return "mobile/new";
+        return "mobile/news";
     }
+
     /**
-     * 获取新闻列表请求 Get
+     * 获取新闻列表请求 ajax Get
      */
-    @RequestMapping(value = "newslist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "list/news/{pageid}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String newslist(@PathVariable int pageid){
-        return "";
+        int capcity = Constants.PAGE_CAPACITY;
+        int start = (pageid-1)*capcity;
+        List<NewsDto> list = newsService.getNewsList(start,capcity,new ObjWrapper());
+        return JSON.toJSONString(list);
     }
 
     /**
