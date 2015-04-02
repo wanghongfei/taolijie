@@ -199,7 +199,7 @@ public class HomeController {
     public @ResponseBody String newslist(@PathVariable int pageid){
         int capcity = Constants.PAGE_CAPACITY;
         int start = (pageid-1)*capcity;
-        List<NewsDto> list = newsService.getNewsList(start,capcity,new ObjWrapper());
+        List<NewsDto> list = newsService.getNewsList(start, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -395,6 +395,10 @@ public class HomeController {
 
     }
 
+    @RequestMapping(value = "/404",method = RequestMethod.GET,produces = "text/html;charset=utf-8")
+    public @ResponseBody String error(){
+        return "error!!!";
+    }
 
 
 }
