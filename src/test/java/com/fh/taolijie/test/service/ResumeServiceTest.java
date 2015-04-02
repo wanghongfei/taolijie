@@ -94,7 +94,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetAll() {
         List<ResumeDto> dtoList = rService.getAllResumeList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -105,7 +104,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetAllByAuthority() {
         List<ResumeDto> dtoList = rService.getAllResumeList(Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -116,7 +114,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
 
     }
     @Test
-    @Transactional(readOnly = true)
     public void testGetByAuthority() {
         List<ResumeDto> dtoList = rService.getResumeList(this.member.getId(), Constants.AccessAuthority.ALL, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -155,7 +152,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGet() {
         List<ResumeDto> dtoList = rService.getResumeList(member.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -164,7 +160,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testUpdate() {
         ResumeDto dto = new ResumeDto();
         dto.setName("name");
@@ -182,7 +177,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetByIntend() {
         // TODO
         List<ResumeDto> dtoList = rService.getResumeListByIntend(cate1.getId());
@@ -195,7 +189,6 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testFind() {
         ResumeDto dto = rService.findResume(resume.getId());
         Assert.assertNotNull(dto);

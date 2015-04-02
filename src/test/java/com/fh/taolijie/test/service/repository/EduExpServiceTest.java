@@ -76,7 +76,6 @@ public class EduExpServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetList() {
         List<EducationExperienceDto> dtoList = eduService.getEduExpList(member.getId(), 0, 0, new ObjWrapper());
         boolean contains = dtoList.stream().anyMatch( (dto) -> dto.getMajor().equals("math") );

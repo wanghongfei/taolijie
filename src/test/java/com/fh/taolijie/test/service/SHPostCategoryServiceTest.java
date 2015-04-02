@@ -79,14 +79,12 @@ public class SHPostCategoryServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetCategory() {
         List<SecondHandPostCategoryDto> dtoList = cateService.getCategoryList(0, 0, new ObjWrapper());
         Assert.assertTrue(containsCategoryName(dtoList, "category"));
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testFind() {
         SecondHandPostCategoryDto dto = cateService.findCategory(cate.getId());
         Assert.assertEquals("category", dto.getName());

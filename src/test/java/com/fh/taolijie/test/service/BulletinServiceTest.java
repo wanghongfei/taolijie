@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -47,7 +46,6 @@ public class BulletinServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testAdd() {
         BulletinDto dto = new BulletinDto();
         dto.setCreatedTime(new Date());
@@ -61,7 +59,6 @@ public class BulletinServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testDelete() {
         bService.deleteBulletin(this.b1.getId());
 
@@ -77,7 +74,6 @@ public class BulletinServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetOne() {
         BulletinDto dto = bService.findOne(this.b1.getId());
         Assert.assertNotNull(dto);
@@ -86,7 +82,6 @@ public class BulletinServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetAll() {
         List<BulletinDto> dtoList = bService.getAll(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);

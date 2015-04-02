@@ -95,7 +95,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void tsetGetAllPost() {
         List<SecondHandPostDto> dtoList = postService.getAllPostList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -106,7 +105,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetAndFilter() {
         List<SecondHandPostDto> dtoList = postService.getAndFilter(null, true, 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -122,7 +120,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetByCategory() {
         List<SecondHandPostDto> dtoList = postService.getPostList(cate1.getId(), 0, 0, new ObjWrapper());
         boolean contains = dtoList.stream().anyMatch( (dto) -> {
@@ -132,7 +129,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testSearch() {
         List<SecondHandPostDto> dtoList = postService.runSearch("title", "post", 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -147,7 +143,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetSuedPost() {
         List<SecondHandPostDto> dtoList = postService.getSuedPost(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -157,7 +152,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetUnverified() {
         List<SecondHandPostDto> dtoList = postService.getUnverifiedPostList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -166,7 +160,6 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetByFilter() {
         List<SecondHandPostDto> dtoList = postService.getPostList(member.getId(), true, 0, 0, new ObjWrapper());
         Assert.assertFalse(dtoList.isEmpty());
@@ -189,7 +182,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
     public void testComplaint() {
         postService.complaint(post1.getId());
         SecondHandPostDto dto = postService.findPost(post1.getId());
-        Assert.assertEquals(1, dto.getComplaint().intValue());
+        Assert.assertEquals(11, dto.getComplaint().intValue());
 
 
         MemberEntity mem = em.find(MemberEntity.class, member.getId());
@@ -200,7 +193,7 @@ public class SHPostServiceTest extends BaseSpringDataTestClass {
 
         postService.complaint(post1.getId());
         dto = postService.findPost(post1.getId());
-        Assert.assertEquals(2, dto.getComplaint().intValue());
+        Assert.assertEquals(12, dto.getComplaint().intValue());
 
 
         mem = em.find(MemberEntity.class, member.getId());

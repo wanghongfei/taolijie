@@ -58,7 +58,6 @@ public class SchoolServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void test() {
         Assert.assertNotNull(sService);
         Assert.assertNotNull(school.getId());
@@ -69,14 +68,12 @@ public class SchoolServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetSchoolList() {
         List<SchoolDto> dtoList = sService.getSchoolList(0, 0, new ObjWrapper());
         boolean contains = containsSchoolName(dtoList, "school");
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetSchoolByProvince() {
         List<SchoolDto> dtoList = sService.getSchoolListByProvince("shandong", 0, 0, new ObjWrapper());
         boolean contains = containsSchoolName(dtoList, "school");
@@ -160,7 +157,6 @@ public class SchoolServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testFindAcademy() {
         AcademyDto dto = sService.findAcademy(academy.getId());
         Assert.assertNotNull(dto);
