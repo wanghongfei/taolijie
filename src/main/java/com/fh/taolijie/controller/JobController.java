@@ -118,10 +118,30 @@ public class JobController {
      * @return
      */
     @RequestMapping(value = "post/{jobId}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String myJob(@PathVariable int jobId,HttpSession session){
+    public @ResponseBody String post(@PathVariable int jobId,HttpSession session){
         return "";
     }
 
+
+    /**
+     * 我收藏的兼职 get
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "fav",method = RequestMethod.GET)
+    public String fav(HttpSession session){
+        return "";
+    }
+    /**
+     * 我收藏的兼职 ajax
+     * @param  page
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "fav/{page}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String fav(@PathVariable int page,HttpSession session){
+        return "";
+    }
 
     /**
      * 获取已删除的兼职列表 Ajax GET
