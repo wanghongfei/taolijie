@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.controller.dto.PostRecordDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -42,6 +43,12 @@ public interface ResumeService extends PageService {
     List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
     List<ResumeDto> getResumeListByIntend(Integer jobPostCategoryId);
+
+    /**
+     * 查询投递记录
+     * @return
+     */
+    List<PostRecordDto> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
 
     /**
      * 修改简历信息

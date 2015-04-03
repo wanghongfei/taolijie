@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.PostRecordDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.MemberEntity;
@@ -11,8 +12,10 @@ import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,7 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -145,6 +151,39 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         });
 
         return dtoList;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostRecordDto> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
+        MemberEntity mem = memRepo.getOne(memId);
+        String recordJson = mem.getAppliedJobIds();
+
+        // 没有记录，返回空List
+        if (null == recordJson) {
+            return new ArrayList<PostRecordDto>();
+        }
+
+        // 解析JSON
+        JsonWrapper js = new JsonWrapper(recordJson);
+        List<Map<String, String>> jsonList = js.getJsonList();
+
+
+        // 取出记录信息
+        List<PostRecordDto> dtoList = new ArrayList<>();
+        for (Map<String, String> jsonObj : jsonList) {
+            String postId = jsonObj.get(Constants.ApplicationRecord.KEY_ID);
+            String timeString = jsonObj.get(Constants.ApplicationRecord.KEY_TIME);
+
+            PostRecordDto dto = new PostRecordDto(Integer.valueOf(postId), new Date(Long.parseLong(timeString)) );
+            dtoList.add(dto);
+        }
+
+        // 分页
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<PostRecordDto> dtoPage = new PageImpl<>(dtoList, new PageRequest(page, cap), dtoList.size());
+
+        return CollectionUtils.transformCollection(dtoPage, PostRecordDto.class, (dto) -> dto);
     }
 
     @Override

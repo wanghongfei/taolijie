@@ -283,7 +283,6 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         JobPostEntity post = postRepo.findOne(postId);
 
         // 记录收到的简历id
-        // 在Member中记录这次投递
         String applicationIds = post.getApplicationResumeIds();
         String newIds = StringUtils.addToString(applicationIds, resumeId.toString());
         post.setApplicationResumeIds(newIds);
