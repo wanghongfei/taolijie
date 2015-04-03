@@ -63,6 +63,10 @@ public class MemberEntity {
     private String appliedJobIds;
 
     private Integer complaint;
+    private String likedJobIds;
+    private String likedShIds;
+/*    private String likedIds;
+    private String dislikedIds;*/
 
     private Integer profilePhotoId;
 
@@ -140,6 +144,42 @@ public class MemberEntity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Column(name = "liked_job_ids", columnDefinition = "TEXT")
+    public String getLikedJobIds() {
+        return likedJobIds;
+    }
+
+    public void setLikedJobIds(String likedJobIds) {
+        this.likedJobIds = likedJobIds;
+    }
+
+    @Column(name = "liked_sh_ids", columnDefinition = "TEXT")
+    public String getLikedShIds() {
+        return likedShIds;
+    }
+
+    public void setLikedShIds(String likedShIds) {
+        this.likedShIds = likedShIds;
+    }
+
+    /* @Column(name = "disliked_ids", columnDefinition = "TEXT")
+    public String getDislikedIds() {
+        return dislikedIds;
+    }
+
+    public void setDislikedIds(String dislikedIds) {
+        this.dislikedIds = dislikedIds;
+    }
+
+    @Column(name = "liked_ids", columnDefinition = "TEXT")
+    public String getLikedIds() {
+        return likedIds;
+    }
+
+    public void setLikedIds(String likedIds) {
+        this.likedIds = likedIds;
+    }*/
 
     @Basic
     @Column(name = "password")

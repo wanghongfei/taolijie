@@ -1,5 +1,6 @@
 package com.fh.taolijie.utils;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -111,5 +112,16 @@ public class StringUtils {
         }
 
         return sb.toString();
+    }
+
+    public static boolean checkIdExists(String idsString, String idString) {
+        if (null == idsString) {
+            return false;
+        }
+
+        String[] ids = idString.split(Constants.DELIMITER);
+
+        return Arrays.stream(ids)
+                .anyMatch( (id) -> id.equals(idString) );
     }
 }
