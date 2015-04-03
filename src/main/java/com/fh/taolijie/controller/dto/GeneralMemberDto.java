@@ -27,6 +27,8 @@ public class GeneralMemberDto {
 
     private String name;
 
+    //private String likedIds;
+
     //private String studentId;
     private String gender;
     private String verified;
@@ -57,6 +59,14 @@ public class GeneralMemberDto {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    /*public String getLikedIds() {
+        return likedIds;
+    }
+
+    public void setLikedIds(String likedIds) {
+        this.likedIds = likedIds;
+    }*/
 
     public Integer getProfilePhotoId() {
         return profilePhotoId;
