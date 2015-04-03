@@ -170,7 +170,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<JobPostDto> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
         if (orderByDate && orderByPageVisit) {
             throw new IllegalStateException("boolean参数最多只能有一个为true");
         }
@@ -181,7 +181,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
             parmMap.put("category", jobCateRepo.getOne(categoryId));
         }
         if (null != wayToPay) {
-            parmMap.put("timeToPay", wayToPay);
+            parmMap.put("timeToPay", wayToPay.toString());
         }
 
         // 构造排序参数表

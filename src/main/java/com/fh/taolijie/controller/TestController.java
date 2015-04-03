@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ExceptionUtils;
 import com.fh.taolijie.service.impl.Mail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class TestController {
             str.toString();
         } catch (Exception ex) {
             String err = ExceptionUtils.convertToString(ex);
-            mail.sendMailAsync(err, "brucewhf@gmail.com", "wangfucheng56@gmail.com");
+            mail.sendMailAsync(err, Constants.MailType.ERROR, "brucewhf@gmail.com", "wangfucheng56@gmail.com");
         }
 
         return  "test/hello";

@@ -75,6 +75,8 @@ public interface AccountService {
      */
     public List<GeneralMemberDto> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
 
+    GeneralMemberDto findMember(Integer memId);
+
     /**
      * 得到当前已注册用户的数量
      * @return

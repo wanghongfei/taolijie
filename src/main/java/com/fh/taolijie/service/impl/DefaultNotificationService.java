@@ -155,13 +155,15 @@ public class DefaultNotificationService implements NotificationService {
         NotificationEntity no = new NotificationEntity(dto.getTitle(), dto.getContent(), dto.getIsRead(),
                 dto.getTime(), null);
 
-        MemberEntity mem = memRepo.getOne(dto.getMemberId());
-        no.setMember(mem);
+        if (null != dto.getMemberId()) {
+            MemberEntity mem = memRepo.getOne(dto.getMemberId());
+            no.setMember(mem);
 
-        // add to member collection
-        List<NotificationEntity> list = CollectionUtils.addToCollection(mem.getNotificationCollection(), no);
-        if (null != list) {
-            mem.setNotificationCollection(list);
+            // add to member collection
+            List<NotificationEntity> list = CollectionUtils.addToCollection(mem.getNotificationCollection(), no);
+            if (null != list) {
+                mem.setNotificationCollection(list);
+            }
         }
 
         notRepo.save(no);

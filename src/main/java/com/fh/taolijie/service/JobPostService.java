@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public interface JobPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<JobPostDto> getAndFilter(Integer categoryId, String wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper);
+    List<JobPostDto> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据兼职信息的某个字段执行模糊查询

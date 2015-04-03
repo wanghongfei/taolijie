@@ -92,14 +92,59 @@ public class Constants {
         STUDENT,
     }
 
+    public static enum MailType {
+        ERROR,
+        FEEDBACK;
+
+        @Override
+        public String toString() {
+            String str = null;
+            switch (this) {
+                case ERROR:
+                    str = "服务器出错";
+                    break;
+                case FEEDBACK:
+                    str = "用户反馈";
+                    break;
+
+                default:
+                    str = "none";
+            }
+
+            return str;
+        }
+    }
+
+
     /**
      * 结算方式
      */
-    public static class WayToPay {
-        public static final String WEEK = "周结";
+    public static enum WayToPay {
+        WEEK,
+        DAY,
+        MONTH,
+        OTHER;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case WEEK:
+                    return "周结";
+                case DAY:
+                    return "周结";
+                case MONTH:
+                    return "月结";
+                case OTHER:
+                    return "面议";
+                default:
+                    throw new IllegalArgumentException("wrong WayToPay enum!");
+            }
+        }
+
+        /*        public static final String WEEK = "周结";
         public static final String DAY = "日结";
         public static final String MONTH = "月结";
-        public static final String OTHER = "面议";
+        public static final String OTHER = "面议";*/
     }
 
 

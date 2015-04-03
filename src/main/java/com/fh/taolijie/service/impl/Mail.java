@@ -24,9 +24,9 @@ public class Mail {
      * @param content
      * @param toAddresses
      */
-    public void sendMail(String content, String... toAddresses) throws MailException {
+    public void sendMail(String content, Constants.MailType type, String... toAddresses) throws MailException {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setSubject("taolijie: 服务器内部错误");
+        msg.setSubject(type.toString());
         msg.setFrom(Constants.SENDER_EMAIL);
         msg.setTo(toAddresses);
         msg.setText(content);
@@ -39,18 +39,18 @@ public class Mail {
      * @param content
      * @param toAddresses
      */
-    public void sendMailAsync(String content, String... toAddresses) {
+    public void sendMailAsync(String content, Constants.MailType type, String... toAddresses) {
         logger.info("发送邮件");
         new Thread( () -> {
             try {
-                sendMail(content, toAddresses);
+                sendMail(content,type, toAddresses);
             } catch (MailException ex) {
                 // 尝试重新发送一次
                 logger.info("发送失败，尝试重新发送");
                 ex.printStackTrace();
 
                 try {
-                    sendMail(content, toAddresses);
+                    sendMail(content,type, toAddresses);
                 } catch (MailException e) {
                     logger.error("二次邮件发送失败");
                     ex.printStackTrace();
