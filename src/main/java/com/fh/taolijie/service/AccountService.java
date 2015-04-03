@@ -1,6 +1,9 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.*;
+import com.fh.taolijie.controller.dto.EmployerDto;
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.RoleDto;
+import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -127,6 +130,12 @@ public interface AccountService {
      * @return
      */
     public RoleDto findRole(Integer roleId);
+
+    /**
+     * 查询所有role
+     * @return
+     */
+    List<RoleDto> getAllRole();
 
     /**
      * 为指定用户添加一个新role

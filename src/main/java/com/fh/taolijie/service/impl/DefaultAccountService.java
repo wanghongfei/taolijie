@@ -1,19 +1,14 @@
 package com.fh.taolijie.service.impl;
 
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.controller.dto.EmployerDto;
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.controller.dto.RoleDto;
-import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.EducationExperienceEntity;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.MemberRoleEntity;
-import com.fh.taolijie.domain.RoleEntity;
+import com.fh.taolijie.controller.dto.*;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.repository.MemberRepo;
+import com.fh.taolijie.service.repository.RoleRepo;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -48,6 +43,9 @@ public class DefaultAccountService implements AccountService {
 
     @Autowired
     MemberRepo memberRepo;
+
+    @Autowired
+    RoleRepo roleRepo;
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
@@ -321,6 +319,16 @@ public class DefaultAccountService implements AccountService {
         RoleEntity role = em.find(RoleEntity.class, roleId);
 
         return makeRoleDto(role);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RoleDto> getAllRole() {
+        List<RoleEntity> entityList = roleRepo.findAll();
+
+        return CollectionUtils.transformCollection(entityList, RoleDto.class, (entity) -> {
+            return CollectionUtils.entity2Dto(entity, RoleDto.class, null);
+        });
     }
 
     private RoleDto makeRoleDto(RoleEntity role) {

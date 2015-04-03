@@ -4,16 +4,16 @@ package com.fh.taolijie.controller.dto;
  * Created by wanghongfei on 15-3-4.
  */
 public class RoleDto {
-    private Integer id;
+    private Integer rid;
     private String rolename;
     private String memo;
 
-    public Integer getId() {
-        return id;
+    public Integer getRid() {
+        return rid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setRid(Integer rid) {
+        this.rid = rid;
     }
 
     public String getRolename() {
