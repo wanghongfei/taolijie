@@ -47,6 +47,9 @@ public class ResumeEntity implements PageViewAware {
     private Integer pageView;
     private String verified;
 
+    private String phoneNumber;
+    private String wechatAccount;
+
     private Integer photoId;
 
     // 求职意向
@@ -84,6 +87,24 @@ public class ResumeEntity implements PageViewAware {
 
     public void setPhotoId(Integer photoId) {
         this.photoId = photoId;
+    }
+
+    @Column(name = "phone_number")
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Column(name = "wechat_account")
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
     }
 
     @Basic

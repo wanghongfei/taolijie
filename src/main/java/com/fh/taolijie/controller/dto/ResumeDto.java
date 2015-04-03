@@ -24,6 +24,9 @@ public class ResumeDto {
     private String verified;
     private Integer photoId;
 
+    private String phoneNumber;
+    private String wechatAccount;
+
     /**
      * 求职意向，即job_post_category表的id
      */
@@ -60,6 +63,22 @@ public class ResumeDto {
 
     public void setPhotoId(Integer photoId) {
         this.photoId = photoId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
     }
 
     public List<Integer> getIntendCategoryId() {
