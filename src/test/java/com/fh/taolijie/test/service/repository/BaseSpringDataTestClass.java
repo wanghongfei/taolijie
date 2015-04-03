@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SpringDataConfigBean.class })
 @TransactionConfiguration
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class BaseSpringDataTestClass {
 }

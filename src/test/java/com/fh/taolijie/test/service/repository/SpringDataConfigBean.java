@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -42,7 +41,8 @@ public class SpringDataConfigBean {
         prop.put("hibernate.hbm2ddl.auto", "update");
         prop.put("hibernate.show_sql", "true");
         prop.put("hibernate.format_sql", "true");
-        prop.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        //prop.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        prop.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 
         emfb.setJpaProperties(prop);
 
@@ -64,8 +64,14 @@ public class SpringDataConfigBean {
 
     @Bean
     public DataSource dataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setUsername("root");
+        ds.setPassword("111111");
+        ds.setUrl("jdbc:mysql://localhost:3306/taolijie?characterEncoding=utf-8");
+        ds.setDriverClassName("com.mysql.jdbc.Driver");
+        return ds;
+/*        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         builder.setType(EmbeddedDatabaseType.H2);
-        return builder.build();
+        return builder.build();*/
     }
 }

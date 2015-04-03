@@ -47,7 +47,6 @@ public class JobPostCategoryServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetList() {
         List<JobPostCategoryDto> dtoList = cateService.getCategoryList(0, 0, new ObjWrapper());
         boolean contains = containsCategory(dtoList, "dog");
@@ -57,7 +56,6 @@ public class JobPostCategoryServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testDeleteCate() throws CategoryNotEmptyException {
         cateService.deleteCategory(this.cate1.getId());
 

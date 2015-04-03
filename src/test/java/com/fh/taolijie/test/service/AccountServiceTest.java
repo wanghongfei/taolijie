@@ -28,6 +28,7 @@ import java.util.*;
  * Created by wanghongfei on 15-3-5.
  */
 @ContextConfiguration(classes = {DefaultAccountService.class})
+@Transactional(readOnly = false)
 public class AccountServiceTest extends BaseSpringDataTestClass {
     private MemberEntity member;
     private RoleEntity role;
@@ -40,7 +41,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     private EntityManager em;
 
     @Before
-    @Transactional(readOnly = false)
     public void initData() {
         Print.print("准备数据");
 
@@ -82,7 +82,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testRegisterStudent() {
         StudentDto stuDto = new StudentDto();
         stuDto.setUsername("Hello");
@@ -126,7 +125,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testRegisterStudentDuplicatesName() {
         StudentDto stuDto = new StudentDto();
         stuDto.setUsername("Bruce");
@@ -143,7 +141,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testLogin() {
         boolean res = false;
         try {
@@ -179,7 +176,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testFindMember() {
         Print.print("-------- testFindMember");
         StudentDto dto = accService.findMember("Bruce", new StudentDto[0], true);
@@ -205,7 +201,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetMemberList() {
         List<GeneralMemberDto> dtoList = accService.getMemberList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -224,7 +219,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testUpdateMember() {
         StudentDto dto = new StudentDto();
         dto.setUsername("Bruce");
@@ -242,7 +236,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testAddRole() {
         RoleDto dto = new RoleDto();
         dto.setRolename("USER");
@@ -255,7 +248,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testDeleteRole() {
         RoleDto dto = new RoleDto();
         dto.setRolename("USER");
@@ -279,7 +271,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testAssignRole() {
         // 添加USER角色
         RoleDto dto = new RoleDto();
@@ -300,7 +291,6 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = false)
     public void testDeassignRole() {
         accService.deassignRole(this.role.getRid(), this.member.getUsername());
 

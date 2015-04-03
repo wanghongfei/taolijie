@@ -91,7 +91,6 @@ public class ReviewServiceTest extends BaseSpringDataTestClass {
         //em.flush();
     }
     @Test
-    @Transactional(readOnly = true)
     public void testGetList() {
         List<ReviewDto> dtoList = rService.getReviewList(this.post.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);

@@ -68,7 +68,6 @@ public class NewsServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGet() throws Exception {
         List<NewsDto> dtoList = newsService.getNewsList(0, 0, new ObjWrapper());
 

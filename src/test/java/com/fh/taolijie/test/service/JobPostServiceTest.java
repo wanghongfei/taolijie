@@ -86,8 +86,10 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
         // 创建关联
         post.setCategory(cate1);
+        post2.setCategory(cate1);
         cate1.setJobPostCollection(new ArrayList<>());
         cate1.getJobPostCollection().add(post);
+        cate1.getJobPostCollection().add(post2);
         em.persist(post);
         em.persist(post2);
 
@@ -130,7 +132,6 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testFindAll() {
         List<JobPostDto> dtoList = postService.getAllJobPostList(0 ,0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -140,7 +141,6 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetByMember() {
         List<JobPostDto> dtoList = postService.getJobPostListByMember(member.getId(), 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -157,7 +157,6 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testGetBySuedPost() {
         List<JobPostDto> dtoList = postService.getByComplaint(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -166,14 +165,12 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertTrue(dtoList.stream().noneMatch( (dto) -> dto.getTitle().equals("third post") ));
     }
     @Test
-    @Transactional(readOnly = true)
     public void testGetUnverified() {
         List<JobPostDto> dtoList = postService.getUnverifiedPostList(0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
         Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
     }
     @Test
-    @Transactional(readOnly = true)
     public void testFindPost() {
         JobPostDto dto = postService.findJobPost(post.getId());
         Assert.assertNotNull(dto);
@@ -209,7 +206,6 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Transactional(readOnly = true)
     public void testSearch() {
         List<JobPostDto> dtoList = postService.runSearch("title", "post", 0, 0, new ObjWrapper());
         Assert.assertNotNull(dtoList);
@@ -254,7 +250,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
     public void testComplaint() {
         postService.complaint(post.getId());
         JobPostDto dto = postService.findJobPost(post.getId());
-        Assert.assertEquals(1, dto.getComplaint().intValue());
+        Assert.assertEquals(11, dto.getComplaint().intValue());
 
 
         MemberEntity mem = em.find(MemberEntity.class, member.getId());
@@ -265,7 +261,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
         postService.complaint(post.getId());
         dto = postService.findJobPost(post.getId());
-        Assert.assertEquals(2, dto.getComplaint().intValue());
+        Assert.assertEquals(12, dto.getComplaint().intValue());
 
 
         mem = em.find(MemberEntity.class, member.getId());
