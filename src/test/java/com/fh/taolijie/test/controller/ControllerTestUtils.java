@@ -29,38 +29,52 @@ import java.util.List;
  * Created by wynfrith on 15-4-1.
  */
 
+
+
 public class ControllerTestUtils extends BaseSpringDataTestClass {
 
 
-    public static void initData(EntityManager em){
 
+    public  static void initData(EntityManager em){
 
+        RoleEntity role1;
+        RoleEntity role2;
+        RoleEntity role3;
+        MemberEntity mem1;
+        MemberEntity mem2;
+        NewsEntity news1;
+        ReviewEntity review1;
+        JobPostEntity job1;
+        ResumeEntity resume1;
+        SecondHandPostEntity sh1;
+        SecondHandPostCategoryEntity shCate1;
+        JobPostCategoryEntity jobCate1;
+        NotificationEntity notification1;
         /**
          * 创建role
          */
-        RoleEntity role1 = new RoleEntity();
+        role1 = new RoleEntity();
         role1.setRolename(Constants.RoleType.STUDENT.toString());
         role1.setMemo("学生");
         em.persist(role1);
 
-        RoleEntity role2 = new RoleEntity();
+        role2 = new RoleEntity();
         role2.setRolename(Constants.RoleType.EMPLOYER.toString());
         role2.setMemo("商家");
         em.persist(role2);
 
 
-        RoleEntity role3 = new RoleEntity();
+        role3 = new RoleEntity();
         role3.setRolename(Constants.RoleType.ADMIN.toString());
         role3.setMemo("管理员");
         em.persist(role3);
-
 
         /**
          *  创建用户
          *
          */
         /* mem1 学生用户 wynfrith*/
-        MemberEntity mem1 = new MemberEntity();
+        mem1 = new MemberEntity();
         mem1.setUsername("wynfrith");
         mem1.setEmail("wangfucheng56@gmail.com");
         mem1.setPassword(CredentialUtils.sha("wfc5582563"));
@@ -73,15 +87,15 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         mem1.setGender("男");
         //mem1.setCompanyName("");
         mem1.setName("王富诚");
-      //  mem1.setComplaint();
-       // mem1.setVerified();
-       // mem1.setSecondHandPostCollection();
-      //  mem1.setJobPostCollection();
-       // mem1.setReviewCollection();
+        //  mem1.setComplaint();
+        // mem1.setVerified();
+        // mem1.setSecondHandPostCollection();
+        //  mem1.setJobPostCollection();
+        // mem1.setReviewCollection();
         //mem1.setResumeCollection();
-       // mem1.setProfilePhotoId();
+        // mem1.setProfilePhotoId();
         //mem1.setReplyList();
-       // mem1.setPhone();
+        // mem1.setPhone();
         //mem1.setNotificationCollection();
         //mem1.setNewsCollection();
         em.persist(mem1);
@@ -89,7 +103,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
 
 
         /* mem2 商家用户 wfc5582563*/
-        MemberEntity mem2 = new MemberEntity();
+        mem2 = new MemberEntity();
         mem2.setUsername("wfc5582563");
         mem2.setEmail("wfc5582563@126.com");
         mem2.setPassword(CredentialUtils.sha("qq123456"));
@@ -109,7 +123,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         memRole1.setRole(role1);
         memRole1.setMember(mem1);
 
-       List<MemberRoleEntity> memRoleList = new ArrayList<>();
+        List<MemberRoleEntity> memRoleList = new ArrayList<>();
         memRoleList.add(memRole1);
         mem1.setMemberRoleCollection(memRoleList);
         em.persist(memRole1);
@@ -123,7 +137,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 新闻聚焦点
          */
-        NewsEntity news1 = new NewsEntity();
+        news1 = new NewsEntity();
         news1.setMember(mem1);
         news1.setContent("新闻聚焦点正文1");
         news1.setTime(new Date());
@@ -134,7 +148,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 用户发送的评论
          */
-        ReviewEntity review1 = new ReviewEntity();
+        review1 = new ReviewEntity();
         review1.setMember(mem1);
         review1.setTime(new Date());
         review1.setContent("评论正文1");
@@ -143,7 +157,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 用户收到的通知
          */
-        NotificationEntity notification1 = new NotificationEntity();
+        notification1 = new NotificationEntity();
         notification1.setContent("通知正文");
         notification1.setTitle("通知标题");
         notification1.setTime(new Date());
@@ -155,7 +169,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 兼职分类
          */
-        JobPostCategoryEntity jobCate1 = new JobPostCategoryEntity();
+        jobCate1 = new JobPostCategoryEntity();
         jobCate1.setName("电脑维护人员");
         jobCate1.setLevel(1);
         jobCate1.setMemo("修电脑的");
@@ -165,7 +179,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 兼职
          */
-        JobPostEntity job1 = new JobPostEntity();
+        job1 = new JobPostEntity();
         job1.setMember(mem1);
         job1.setWorkTime("工作时间在周六周日");
         job1.setWorkPlace("工作地点在淄博");
@@ -178,10 +192,23 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         mem1.getJobPostCollection().add(job1);
         em.persist(job1);
 
+        JobPostEntity job;
+        for(int i=0;i<10;i++){
+            job = new JobPostEntity();
+            job.setMember(mem1);
+            job.setWorkTime("工作时间在周六周日");
+            job.setWorkPlace("工作地点在淄博");
+            job.setTitle("兼职标题"+i);
+            job.setCategory(jobCate1);
+            jobCate1.setJobPostCollection(new ArrayList<>());
+            jobCate1.getJobPostCollection().add(job);
+            em.persist(job);
+        }
+
         /**
          * 二手分类
          */
-        SecondHandPostCategoryEntity shCate1 = new SecondHandPostCategoryEntity();
+        shCate1 = new SecondHandPostCategoryEntity();
         shCate1.setName("废旧电子设备");
         shCate1.setLevel(1);
         shCate1.setMemo("电子设备");
@@ -191,7 +218,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         /**
          * 二手
          */
-        SecondHandPostEntity sh1 = new SecondHandPostEntity();
+        sh1 = new SecondHandPostEntity();
         sh1.setMember(mem1);
         sh1.setTitle("二手标题");
         sh1.setDescription("二手物品的描述");
@@ -209,7 +236,7 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
          */
 
         /*学生mem1 发的简历*/
-        ResumeEntity resume1= new ResumeEntity();
+        resume1= new ResumeEntity();
         resume1.setMember(mem1);
         resume1.setEmail("wangfucheng56@gmail.com");
         resume1.setGender("男");
@@ -222,4 +249,6 @@ public class ControllerTestUtils extends BaseSpringDataTestClass {
         em.flush();
         em.clear();
     }
+
+
 }

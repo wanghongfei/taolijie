@@ -461,5 +461,15 @@ public class AdminController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 获取投诉列表
+     * 此共功能暂未实现
+     * @return
+     */
+    public @ResponseBody String complaintList(){
+        return "";
+    }
+
+
 
 }

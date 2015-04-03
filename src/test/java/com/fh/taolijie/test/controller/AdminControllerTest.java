@@ -1,8 +1,6 @@
 package com.fh.taolijie.test.controller;
 
 import com.fh.taolijie.controller.AdminController;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Print;
 import org.junit.Before;
@@ -37,16 +35,11 @@ public class AdminControllerTest extends BaseSpringDataTestClass{
         // UserController userController = new UserController();
         if(mockMvc==null){
             this.mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
-            initData();
+            ControllerTestUtils.initData(em);
         }
         Print.print("准备完成");
     }
 
-    private void initData() {
 
-        /*创建一个账户*/
-        MemberEntity entity = new MemberEntity();
-
-    }
 
 }

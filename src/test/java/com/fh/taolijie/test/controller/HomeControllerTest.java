@@ -152,18 +152,18 @@ public class HomeControllerTest extends BaseSpringDataTestClass{
         em.persist(mem1);
 
 
-
-        /* mem2 商家用户 wfc5582563*/
-        mem2 = new MemberEntity();
-        mem2.setUsername("wfc5582563");
-        mem2.setEmail("wfc5582563@126.com");
-        mem2.setPassword(CredentialUtils.sha("qq123456"));
-        mem2.setQq("123456789");
-        mem2.setAge(28);
-        /*加入三个工作id*/
-        mem2.setGender("男");
-        mem2.setName("王先生");
-        em.persist(mem2);
+//
+//        /* mem2 商家用户 wfc5582563*/
+//        mem2 = new MemberEntity();
+//        mem2.setUsername("wfc5582563");
+//        mem2.setEmail("wfc5582563@126.com");
+//        mem2.setPassword(CredentialUtils.sha("qq123456"));
+//        mem2.setQq("123456789");
+//        mem2.setAge(28);
+//        /*加入三个工作id*/
+//        mem2.setGender("男");
+//        mem2.setName("王先生");
+//        em.persist(mem2);
 
 
 
