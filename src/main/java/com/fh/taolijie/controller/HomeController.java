@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -144,7 +146,7 @@ public class HomeController {
         boolean contactDisplay = false;
         RoleDto role = null;
         Credential credential = CredentialUtils.getCredential(session);
-        if(credential.getUsername() != null){
+        if(credential!= null){
             GeneralMemberDto member= accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],true);
            for(String roleName:credential.getRoleList()){
                System.out.println(roleName);
@@ -198,8 +200,7 @@ public class HomeController {
     @RequestMapping(value = "list/news/{pageid}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String newslist(@PathVariable int pageid){
         int capcity = Constants.PAGE_CAPACITY;
-        int start = (pageid-1)*capcity;
-        List<NewsDto> list = newsService.getNewsList(start, capcity, new ObjWrapper());
+        List<NewsDto> list = newsService.getNewsList(pageid-1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -254,6 +255,8 @@ public class HomeController {
         GeneralMemberDto memDto = null;
         RoleDto role = null;
         int cookieExpireTime = 1*24*60*60;//1天
+        RoleDto studentRole = null;
+        RoleDto employerRole = null;
 
         /*
          * 注册需要的表单内容
@@ -275,14 +278,37 @@ public class HomeController {
         }
 
 
-        newMember = new GeneralMemberDto();
-        if(mem.getIsEmployer()){
-            newMember.setRoleIdList(Arrays.asList(
-                    Constants.RoleType.EMPLOYER.ordinal()));
+        for(RoleDto r : accountService.getAllRole()){
+            if(r.getRolename().equals(Constants.RoleType.STUDENT.toString())) {
+                studentRole = r;
+            }else if(r.getRolename().equals(Constants.RoleType.EMPLOYER.toString())){
+                employerRole = r;
+            }
+        }
 
+        /*如果没有role,创建*/
+        if(studentRole == null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.STUDENT.toString());
+            r.setMemo("学生");
+            accountService.addRole(r);
+            studentRole = r;
+        }
+        if(employerRole==null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.EMPLOYER.toString());
+            r.setMemo("商家");
+            accountService.addRole(r);
+            employerRole = r;
+        }
+
+        newMember = new GeneralMemberDto();
+
+        /*按照类型注册不同ROle的用户*/
+        if(mem.getIsEmployer()){
+            newMember.setRoleIdList(Arrays.asList(employerRole.getRid()));
         }else{
-            newMember.setRoleIdList(Arrays.asList(
-                    Constants.RoleType.STUDENT.ordinal()));
+            newMember.setRoleIdList(Arrays.asList(studentRole.getRid()));
         }
         newMember.setUsername(mem.getUsername());
         newMember.setPassword(mem.getPassword());
