@@ -27,6 +27,11 @@ public interface SHPostCategoryService {
     SecondHandPostCategoryDto findCategory(Integer cateId);
 
     /**
+     * 添加二手分类
+     */
+    void addCategory(SecondHandPostCategoryDto dto);
+
+    /**
      * 修改一个分类
      * @param cateId
      * @param cateDto

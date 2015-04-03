@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.SecondHandPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.SHPostCategoryService;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,13 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
     @Transactional(readOnly = true)
     public SecondHandPostCategoryDto findCategory(Integer cateId) {
         return makeCateDto(cateRepo.findOne(cateId));
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addCategory(SecondHandPostCategoryDto dto) {
+        SecondHandPostCategoryEntity entity = CollectionUtils.dto2Entity(dto, SecondHandPostCategoryEntity.class, null);
+        cateRepo.save(entity);
     }
 
     @Override
