@@ -9,6 +9,6 @@ import org.junit.Test;
 public class CachePageTest {
     @Test
     public void testCacehPage() throws Exception {
-        CachePageUtils.flush("http://localhost:8080/");
+        CachePageUtils.flush("http://localhost:8080/", "test.html");
     }
 }
