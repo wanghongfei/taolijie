@@ -115,11 +115,32 @@ public class Constants {
     /**
      * 结算方式
      */
-    public static class WayToPay {
-        public static final String WEEK = "周结";
+    public static enum WayToPay {
+        WEEK,
+        DAY,
+        MONTH,
+        OTHER;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case WEEK:
+                    return "周结";
+                case DAY:
+                    return "周结";
+                case MONTH:
+                    return "月结";
+                case OTHER:
+                    return "面议";
+                default:
+                    throw new IllegalArgumentException("wrong WayToPay enum!");
+            }
+        }
+
+        /*        public static final String WEEK = "周结";
         public static final String DAY = "日结";
         public static final String MONTH = "月结";
-        public static final String OTHER = "面议";
+        public static final String OTHER = "面议";*/
     }
 
 
