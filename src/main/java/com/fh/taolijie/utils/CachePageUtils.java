@@ -1,12 +1,21 @@
 package com.fh.taolijie.utils;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by wanghongfei on 15-4-3.
  */
 public class CachePageUtils {
     private static final int _1000 = 1000;
+
+    /**
+     * 保存已经缓存过的页面
+     * K: 页面文件名
+     */
+    private static Set<String> cachedPageSet = new HashSet<>();
+
 
     private CachePageUtils() {}
 
@@ -43,7 +52,13 @@ public class CachePageUtils {
             return false;
         }
 
-        return exitCode == 0;
+        if (0 != exitCode) {
+            return false;
+        }
+
+        cachedPageSet.add(fileName);
+
+        return true;
     }
 
     /**
@@ -65,5 +80,14 @@ public class CachePageUtils {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * 判断页面是否被缓存过
+     * @param fileName
+     * @return
+     */
+    public static boolean isCacheExists(String fileName) {
+        return cachedPageSet.contains(fileName);
     }
 }
