@@ -1,11 +1,17 @@
 package com.fh.taolijie.controller;
 
+import com.fh.taolijie.controller.dto.ImageDto;
+import com.fh.taolijie.service.impl.DefaultImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /**
  * 该控制器用来存取一些静态资源文件，如果图片等
@@ -14,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/static")
 @Controller
 public class StaticController {
+    private static int _500KB = 1024 * 500;// 500KB
 
+    @Autowired
+    DefaultImageService imageService;
 
     /**
      * 获取图片
@@ -49,10 +58,36 @@ public class StaticController {
      * 用户上传图片
      * @return
      */
-    @RequestMapping(value = "upload")
-    public @ResponseBody String upload(){
+    @RequestMapping(value = "upload", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public @ResponseBody String upload(@RequestParam MultipartFile file,
+                                       @Valid ImageDto imageDto) {
+
+        try (InputStream inStream = file.getInputStream()) {
+            // 读取byte数据
+            byte[] imageByte = writeToBuffer(inStream, file.getSize());
+            imageDto.setBinData(imageByte);
+            // 写入数据库
+            Integer imageId = imageService.saveImage(imageDto);
+            // 返回成功信息
+
+        } catch (IOException ex) {
+            // 返回上传失败错误信息
+        }
+
         return "savepic";
     }
 
+    private byte[] writeToBuffer(InputStream in, Long size) throws IOException {
+        ByteBuffer buffer = ByteBuffer.allocate(size.intValue());
+        byte[] buf = new byte[_500KB];
+
+        int len = 0;
+        while ( (len = in.read(buf)) != -1 ) {
+            buffer.put(buf, 0, len);
+        }
+
+
+        return buffer.array();
+    }
 
 }
