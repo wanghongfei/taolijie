@@ -66,6 +66,9 @@ public class StaticController {
             // 读取byte数据
             byte[] imageByte = writeToBuffer(inStream, file.getSize());
             imageDto.setBinData(imageByte);
+
+            String fileName = file.getOriginalFilename();
+            imageDto.setFileName(fileName);
             // 写入数据库
             Integer imageId = imageService.saveImage(imageDto);
             // 返回成功信息
