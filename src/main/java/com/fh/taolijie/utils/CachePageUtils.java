@@ -14,7 +14,7 @@ public class CachePageUtils {
     //public static String CACHED_PAGE_DIR = "/var";
     public static String CACHED_PAGE_DIR = "/home/whf/test";
 
-    public static void flush(String url) throws IOException {
+    public static boolean flush(String url) throws IOException {
         StringBuilder cmd = new StringBuilder("wget");
         cmd.append(" ");
         cmd.append(url);
@@ -24,10 +24,14 @@ public class CachePageUtils {
         cmd.append(CACHED_PAGE_DIR);
 
         Process process = Runtime.getRuntime().exec(cmd.toString());
+        int exitCode = -1;
         try {
-            process.waitFor();
+            exitCode = process.waitFor();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return exitCode == 0;
     }
 }
