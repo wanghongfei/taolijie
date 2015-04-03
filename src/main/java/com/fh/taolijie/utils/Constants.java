@@ -88,6 +88,30 @@ public class Constants {
         STUDENT,
     }
 
+    public static enum MailType {
+        ERROR,
+        FEEDBACK;
+
+        @Override
+        public String toString() {
+            String str = null;
+            switch (this) {
+                case ERROR:
+                    str = "服务器出错";
+                    break;
+                case FEEDBACK:
+                    str = "用户反馈";
+                    break;
+
+                default:
+                    str = "none";
+            }
+
+            return str;
+        }
+    }
+
+
     /**
      * 结算方式
      */
