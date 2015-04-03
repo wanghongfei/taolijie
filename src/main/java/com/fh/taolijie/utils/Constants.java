@@ -31,7 +31,11 @@ public class Constants {
         /**
          * 已完成认证
          */
-        VERIFIED
+        VERIFIED,
+        /**
+         * 认证失败
+         */
+        FAILED
     }
 
     /**
@@ -181,6 +185,11 @@ public class Constants {
         public static final String PARAM_ILLEGAL = "参数不合法";
 
         public static final String CANT_DELETE_CURRENT_USER = "不能删除当前用户";
+
+        public static final String VERFIEDSUCCESS = "审核通过";
+        public static final String VERFIEDFAILED = "审核未通过";
+
+        public static final String ERROR = "出现错误";
 
 
     }
