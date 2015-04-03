@@ -1,8 +1,14 @@
 package com.fh.taolijie.service.impl;
 
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.controller.dto.*;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.controller.dto.EmployerDto;
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.RoleDto;
+import com.fh.taolijie.controller.dto.StudentDto;
+import com.fh.taolijie.domain.EducationExperienceEntity;
+import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.MemberRoleEntity;
+import com.fh.taolijie.domain.RoleEntity;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -221,6 +227,22 @@ public class DefaultAccountService implements AccountService {
         }
 
         return dtoList;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GeneralMemberDto findMember(Integer memId) {
+        MemberEntity mem = memberRepo.findOne(memId);
+
+        return CollectionUtils.entity2Dto(mem, GeneralMemberDto.class, (dto) -> {
+            // 设置role信息
+            Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
+            List<Integer> idList = mrCollection.stream()
+                    .map((mr) -> mr.getRole().getRid())
+                    .collect(Collectors.toList());
+
+            dto.setRoleIdList(idList);
+        });
     }
 
     @Override
