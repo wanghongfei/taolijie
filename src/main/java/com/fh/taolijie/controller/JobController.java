@@ -9,6 +9,7 @@ import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -126,12 +127,11 @@ public class JobController {
     @ResponseBody
     String list(@PathVariable int page, HttpSession session) {
         int capcity = Constants.PAGE_CAPACITY;
-        int start = (page - 1) * capcity;
         Credential credential = CredentialUtils.getCredential(session);
 
         GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
 
-        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(), start, capcity, new ObjWrapper());
+        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(),page-1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -243,20 +243,17 @@ public class JobController {
      * @return
      */
     @RequestMapping(value = "change/{id}", method = RequestMethod.GET)
-    public String change(@PathVariable int id, HttpSession session) {
+    public String change(@PathVariable int id, HttpSession session,Model model) {
         /**
          * 如果该job不是用户发送的,则返回404
          */
         Credential credential = CredentialUtils.getCredential(session);
         JobPostDto job = jobPostService.findJobPost(id);
-        if(job == null){
-            return "/404";
+        if(job == null|| ControllerHelper.isCurrentUser(credential,job)){
+            return "redirect:/404";
         }
-        if (job.getMemberId() != credential.getId()) {
-            System.out.println(job.getMemberId());
-            System.out.println(credential.getId());
-            return  "/404";
-        }
+
+        model.addAttribute("job",job);
         return "mobile/jobdetail";
     }
 
@@ -276,9 +273,7 @@ public class JobController {
          */
         Credential credential = CredentialUtils.getCredential(session);
 
-        if (job.getMemberId() != credential.getId()) {
-            System.out.println(job.getMemberId());
-            System.out.println(credential.getId());
+        if(job == null|| ControllerHelper.isCurrentUser(credential,job)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 
@@ -305,12 +300,11 @@ public class JobController {
          */
         Credential credential = CredentialUtils.getCredential(session);
         JobPostDto job = jobPostService.findJobPost(id);
-        if(job == null){
+        if(job == null) {
             return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
         }
-        if (job.getMemberId() != credential.getId()) {
-            System.out.println(job.getMemberId());
-            System.out.println(credential.getId());
+
+        if(ControllerHelper.isCurrentUser(credential,job)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 

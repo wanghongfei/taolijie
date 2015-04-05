@@ -2,27 +2,27 @@ package com.fh.taolijie.controller;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ControllerHelper;
+import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wynfrith on 15-4-1.
@@ -32,9 +32,9 @@ import java.util.Date;
 public class SHController{
 
     @Autowired
-    JobPostService jobPostService;
+    SHPostService shPostService;
     @Autowired
-    JobPostCateService jobPostCateService;
+    SHPostCategoryService shPostCategoryService;
     @Autowired
     AccountService accountService;
 
@@ -61,8 +61,24 @@ public class SHController{
     String job(@Valid SecondHandPostDto shDto,
                BindingResult result,
                HttpSession session){
+        GeneralMemberDto mem = null;
 
-        return "";
+        if (result.hasErrors()) {
+            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+        }
+        String username = CredentialUtils.getCredential(session).getUsername();
+        mem = accountService.findMember(username, new GeneralMemberDto[0], false);
+
+        /*创建二手信息*/
+        shDto.setMemberId(mem.getId());
+        shDto.setPostTime(new Date());
+
+        if(shDto.getCategoryId()!=null){
+            shPostService.addPost(shDto);
+        }else {
+            return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+        }
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 
@@ -85,19 +101,16 @@ public class SHController{
      */
     @RequestMapping(value = "list/{page}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String mySHList(@PathVariable int page,HttpSession session){
-        return "";
+        int capcity = Constants.PAGE_CAPACITY;
+        Credential credential = CredentialUtils.getCredential(session);
+
+        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
+
+        List<SecondHandPostDto> list = shPostService.getPostList(mem.getId(),false,page-1,capcity,new ObjWrapper());
+        return JSON.toJSONString(list);
     }
 
-    /**
-     * 获取详情页 Ajax GET
-     * @param id  页码数
-     * @param session 用户的信息
-     * @return
-     */
-    @RequestMapping(value = "post/{id}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String myJob(@PathVariable int id,HttpSession session){
-        return "";
-    }
+
 
 
     /**
@@ -132,42 +145,96 @@ public class SHController{
      */
     @RequestMapping(value = "del/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String del(@PathVariable int id,HttpSession session){
-        return  "";
+        Credential credential = CredentialUtils.getCredential(session);
+        SecondHandPostDto sh =shPostService.findPost(id);
+
+        /*判断兼职信息是否由当前用户发布*/
+        if(ControllerHelper.isCurrentUser(credential,sh)){
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+
+        /*删除*/
+
+        if (!shPostService.deletePost(id)) {
+            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+        }
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 
     /**
      * 修改二手页面
-     * @param jobPostDto 传入一个二手所有信息
+     * @param id 传入一个二手所有信息
      * @param session 用户的信息
+     * @param model
      * @return
      */
     @RequestMapping(value = "change",method = RequestMethod.POST)
-    public String change(JobPostDto jobPostDto,HttpSession session){
-        return  "";
+    public String change(@RequestParam int id,HttpSession session,Model model){
+        /**
+         * 如果该job不是用户发送的,则返回404
+         */
+        Credential credential = CredentialUtils.getCredential(session);
+        SecondHandPostDto sh=shPostService.findPost(id);
+        if(sh == null|| ControllerHelper.isCurrentUser(credential,sh)){
+            return "redirect:/404";
+        }
+
+        model.addAttribute("sh",sh);
+        return "mobile/shdetail";
     }
 
     /**
-     * 修改一条兼职 ajax
-     * @param id 兼职的id
+     * 修改一条二手 ajax
+     * @param sh 二手的dto对象
      * @param session  用户的信息
      * @return
      */
-    @RequestMapping(value = "change/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String change(@PathVariable int id,HttpSession session){
-        return  "";
+    @RequestMapping(value = "change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String change(@Valid SecondHandPostDto sh,HttpSession session){
+        /**
+         * 如果该job不是用户发送的,则错误json
+         */
+        Credential credential = CredentialUtils.getCredential(session);
+
+        if(sh == null|| ControllerHelper.isCurrentUser(credential,sh)){
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+
+        if(!shPostService.updatePost(sh.getId(), sh)){
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
     /**
-     * 刷新兼职数据 ajax
+     * 刷新二手 数据 ajax
      * 更新一下posttime
-     * @param id 兼职的id
+     * @param id 二手 id
      * @param session  用户的信息
      */
     @RequestMapping(value = "refresh/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String refresh(@PathVariable int id,HttpSession session){
+        /**
+         * 如果该sh不是用户发送的,则错误json
+        */
+        Credential credential = CredentialUtils.getCredential(session);
+        SecondHandPostDto sh =shPostService.findPost(id);
+        if(sh == null) {
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        }
 
-        return  "";
+        if(ControllerHelper.isCurrentUser(credential,sh)){
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+
+        sh.setPostTime(new Date());
+        if(!shPostService.updatePost(sh.getId(),sh)){
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
     /**
