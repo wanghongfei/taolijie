@@ -9,6 +9,7 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
+import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,8 @@ public class UserController {
     SHPostService shPostService;
     @Autowired
     NotificationService notificationService;
+    @Autowired
+    Mail mail;
 
     /*日志*/
     private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -130,7 +133,14 @@ public class UserController {
      */
     @RequestMapping(value = "/msglist", method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String msgList(@PathVariable int page,HttpSession session,Model model){
-        return  "";
+        Credential credential = CredentialUtils.getCredential(session);
+        int capcity = Constants.PAGE_CAPACITY;
+        String roleName = null;
+        for(String r : credential.getRoleList()){
+            roleName =r;
+        }
+        List<NotificationDto> list =notificationService.getNotificationList(credential.getId(),roleName,page-1,capcity,new ObjWrapper());
+        return  JSON.toJSONString(list);
     }
 
     /**
@@ -144,10 +154,15 @@ public class UserController {
     public String messages(HttpSession session,@RequestParam String acceptor,@RequestParam String content){
 
         /*获取接收人的dto实体*/
-        String username = CredentialUtils.getCredential(session).getUsername();
         GeneralMemberDto acceptorDto = accountService.findMember(acceptor,new GeneralMemberDto[0],false);
 
         /*发送消息*/
+        NotificationDto notification = new NotificationDto();
+        notification.setMemberId(acceptorDto.getId());
+        notification.setAccessRange(Constants.NotificationRange.PRIVATE.toString());
+        notification.setContent(content);
+        notification.setIsRead(0); //0未读 1已读
+        notificationService.addNotification(notification);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
@@ -257,12 +272,35 @@ public class UserController {
     /**
      * 投诉 ajax post
      * 前端打算写成一个弹出框，不需要新页面
-     * @param id  被投诉的兼职或者二手物品的id
+     * 投诉的是改物品,而不是人,但是用户可以记录总被投诉数
+     * 投诉后会发送消息给管理员
+     * @param id  被投诉的兼职或者二手物品的id 0兼职 1二手
      * @param session
+     * @param content 投诉的内容
      */
     @RequestMapping(value = "complaint/{id}",method =RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String complaint(@PathVariable int id,HttpSession session){
-        return "";
+    public @ResponseBody String complaint(@RequestParam int id,@RequestParam int type,@RequestParam String content,HttpSession session){
+
+        Credential credential = CredentialUtils.getCredential(session);
+
+        /*被投诉人*/
+        GeneralMemberDto mem ;
+
+        /**/
+        if(type == 0){
+            JobPostDto job = jobPostService.findJobPost(id);
+            job.setComplaint(job.getComplaint() + 1);
+            jobPostService.updateJobPost(id,job);
+
+        }else if(type == 1){
+             SecondHandPostDto sh =shPostService.findPost(id);
+            sh.setComplaint(sh.getComplaint()+1);
+            shPostService.updatePost(id, sh);
+        }else{
+            return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -279,7 +317,13 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String feedback(HttpSession session){
+    public @ResponseBody String feedback(@RequestParam String content,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        mail.sendMailAsync("反馈人:  "+credential.getUsername()+"/n"
+                +"用户类型:  "+credential.getRoleList()+"/n"
+                +"反馈内容:  "+content+"/n"
+                +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
+
         return "";
     }
 

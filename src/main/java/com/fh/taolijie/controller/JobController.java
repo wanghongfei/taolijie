@@ -249,7 +249,7 @@ public class JobController {
          */
         Credential credential = CredentialUtils.getCredential(session);
         JobPostDto job = jobPostService.findJobPost(id);
-        if(job == null|| ControllerHelper.isCurrentUser(credential,job)){
+        if(job == null|| !ControllerHelper.isCurrentUser(credential,job)){
             return "redirect:/404";
         }
 
@@ -273,8 +273,14 @@ public class JobController {
          */
         Credential credential = CredentialUtils.getCredential(session);
 
-        if(job == null|| ControllerHelper.isCurrentUser(credential,job)){
+
+
+        if(job == null|| !ControllerHelper.isCurrentUser(credential,job)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+
+        if(result.hasErrors()){
+            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
 
         if(!jobPostService.updateJobPost(job.getId(),job)){
@@ -304,7 +310,7 @@ public class JobController {
             return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
         }
 
-        if(ControllerHelper.isCurrentUser(credential,job)){
+        if(!ControllerHelper.isCurrentUser(credential,job)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 

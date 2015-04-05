@@ -149,7 +149,7 @@ public class SHController{
         SecondHandPostDto sh =shPostService.findPost(id);
 
         /*判断兼职信息是否由当前用户发布*/
-        if(ControllerHelper.isCurrentUser(credential,sh)){
+        if(!ControllerHelper.isCurrentUser(credential,sh)){
             return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 
@@ -176,7 +176,7 @@ public class SHController{
          */
         Credential credential = CredentialUtils.getCredential(session);
         SecondHandPostDto sh=shPostService.findPost(id);
-        if(sh == null|| ControllerHelper.isCurrentUser(credential,sh)){
+        if(sh == null|| !ControllerHelper.isCurrentUser(credential,sh)){
             return "redirect:/404";
         }
 
@@ -197,7 +197,7 @@ public class SHController{
          */
         Credential credential = CredentialUtils.getCredential(session);
 
-        if(sh == null|| ControllerHelper.isCurrentUser(credential,sh)){
+        if(sh == null|| !ControllerHelper.isCurrentUser(credential,sh)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 
@@ -225,12 +225,12 @@ public class SHController{
             return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
         }
 
-        if(ControllerHelper.isCurrentUser(credential,sh)){
+        if(!ControllerHelper.isCurrentUser(credential,sh)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 
         sh.setPostTime(new Date());
-        if(!shPostService.updatePost(sh.getId(),sh)){
+        if(!shPostService.updatePost(sh.getId(), sh)){
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         }
 
