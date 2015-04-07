@@ -83,6 +83,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         int cap = CollectionUtils.determineCapacity(capacity);
 
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        CheckUtils.nullCheck(mem);
 
         Page<ResumeEntity> rList = resumeRepo.findByMember(mem, new PageRequest(firstResult, cap));
         wrap.setObj(rList.getTotalPages());
@@ -104,6 +105,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         int cap = CollectionUtils.determineCapacity(capacity);
 
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        CheckUtils.nullCheck(mem);
 
 /*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
                 .setParameter("member", mem)
@@ -155,6 +157,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = true)
     public List<PostRecordDto> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
         MemberEntity mem = memRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
+
         String recordJson = mem.getAppliedJobIds();
 
         // 没有记录，返回空List
@@ -188,6 +192,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean refresh(Integer resumeId) {
         ResumeEntity r = em.find(ResumeEntity.class, resumeId);
+        CheckUtils.nullCheck(r);
 
         Date original = r.getCreatedTime();
         Date now = new Date();
@@ -217,6 +222,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateResume(Integer resumeId, ResumeDto resumeDto) {
         ResumeEntity r = em.find(ResumeEntity.class, resumeId);
+        CheckUtils.nullCheck(r);
 
         CollectionUtils.updateEntity(r, resumeDto, (entity) -> {
             // 设置求职意向
@@ -236,6 +242,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = true)
     public ResumeDto findResume(Integer resumeId) {
         ResumeEntity entity = em.find(ResumeEntity.class, resumeId);
+        CheckUtils.nullCheck(entity);
 
         return CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
             dto.setMemberId(entity.getMember().getId());
@@ -246,6 +253,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteResume(Integer resumeId) {
         ResumeEntity r = em.getReference(ResumeEntity.class, resumeId);
+        CheckUtils.nullCheck(r);
 
         // 从member中删除关联
         CollectionUtils.removeFromCollection(r.getMember().getResumeCollection(), (resume) -> {
@@ -263,8 +271,11 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     public void addResume(ResumeDto dto) {
         //ResumeEntity r = makeResume(dto);
         ResumeEntity r = CollectionUtils.dto2Entity(dto, ResumeEntity.class, (entity) -> {
+            MemberEntity mem = memRepo.getOne(dto.getMemberId());
+            CheckUtils.nullCheck(mem);
+
             // 设置简历主人
-            entity.setMember(memRepo.getOne(dto.getMemberId()));
+            entity.setMember(mem);
 
             // 设置求职意向
             List<JobPostCategoryEntity> cateList = new ArrayList<>();
@@ -279,7 +290,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         //em.persist(r);
     }
 
-    private ResumeEntity makeResume(ResumeDto dto) {
+   /* private ResumeEntity makeResume(ResumeDto dto) {
         ResumeEntity r = new ResumeEntity(dto.getName(), dto.getGender(), dto.getAge(), dto.getHeight(),
                 dto.getPhonePath(), dto.getEmail(), dto.getQq(), dto.getExperience(), dto.getIntroduce(),
                 null);
@@ -287,7 +298,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         r.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
 
         return r;
-    }
+    }*/
 
     /**
      * 不更新关联信息

@@ -91,6 +91,7 @@ public class DefaultUserService implements UserService {
     @Transactional(readOnly = true)
     public boolean isJobPostAlreadyLiked(Integer memId, Integer posId) {
         MemberEntity mem = memRepo.findOne(memId);
+        CheckUtils.nullCheck(mem);
 
         String ids = mem.getLikedJobIds();
         return StringUtils.checkIdExists(ids, posId.toString());
@@ -100,6 +101,7 @@ public class DefaultUserService implements UserService {
     @Transactional(readOnly = true)
     public boolean isSHPostAlreadyLiked(Integer memId, Integer shId) {
         MemberEntity mem = memRepo.findOne(memId);
+        CheckUtils.nullCheck(mem);
 
         String ids = mem.getLikedShIds();
         return StringUtils.checkIdExists(ids, shId.toString());

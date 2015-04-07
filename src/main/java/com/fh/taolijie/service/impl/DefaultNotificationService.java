@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.NotificationEntity;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.NotificationRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -40,6 +41,7 @@ public class DefaultNotificationService implements NotificationService {
         }
 
         MemberEntity mem = memRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
         List<NotificationEntity> allList = retrieveAll(mem, roleName);
 
 
@@ -65,6 +67,7 @@ public class DefaultNotificationService implements NotificationService {
         }
 
         MemberEntity mem = memRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
         List<NotificationEntity> allList = retrieveAll(mem, roleName);
 
         // 根据isRead过虑
@@ -83,7 +86,7 @@ public class DefaultNotificationService implements NotificationService {
 
         return CollectionUtils.transformCollection(noList, NotificationDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
-                System.out.println("set title:" + dto.getTitle());
+                //System.out.println("set title:" + dto.getTitle());
                 dto.setMemberId(entity.getMember().getId());
             });
         });
@@ -110,6 +113,7 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     public Long getNotificationAmount(Integer memId, boolean isRead) {
         MemberEntity mem = memRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
 
         return notRepo.getNotificationAmount(mem, isRead ? 1 : 0);
     }
@@ -118,6 +122,7 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = true)
     public NotificationDto findNotification(Integer notificationId) {
         NotificationEntity entity = notRepo.findOne(notificationId);
+        CheckUtils.nullCheck(entity);
 
         return CollectionUtils.entity2Dto(entity, NotificationDto.class, (dto) -> {
             dto.setMemberId(entity.getMember().getId());
@@ -129,6 +134,7 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteNotification(Integer notificationId) {
         NotificationEntity no = notRepo.getOne(notificationId);
+        CheckUtils.nullCheck(no);
 
         // remove connection to member
         CollectionUtils.removeFromCollection(no.getMember().getNotificationCollection(), (entity) -> {
@@ -144,6 +150,8 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean markAsRead(Integer noticicationId) {
         NotificationEntity no = notRepo.getOne(noticicationId);
+        CheckUtils.nullCheck(no);
+
         no.setIsRead(1);
 
         return true;
@@ -152,10 +160,22 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void addNotification(NotificationDto dto) {
-        NotificationEntity no = new NotificationEntity(dto.getTitle(), dto.getContent(), dto.getIsRead(),
-                dto.getTime(), null);
+/*        NotificationEntity no = new NotificationEntity(dto.getTitle(), dto.getContent(), dto.getIsRead(),
+                dto.getTime(), null);*/
+        NotificationEntity no = CollectionUtils.dto2Entity(dto, NotificationEntity.class, (entity) -> {
+            if (null != dto.getMemberId()) {
+                MemberEntity mem = memRepo.getOne(dto.getMemberId());
+                entity.setMember(mem);
 
-        if (null != dto.getMemberId()) {
+                // add to member collection
+                List<NotificationEntity> list = CollectionUtils.addToCollection(mem.getNotificationCollection(), entity);
+                if (null != list) {
+                    mem.setNotificationCollection(list);
+                }
+            }
+        });
+
+/*        if (null != dto.getMemberId()) {
             MemberEntity mem = memRepo.getOne(dto.getMemberId());
             no.setMember(mem);
 
@@ -164,7 +184,7 @@ public class DefaultNotificationService implements NotificationService {
             if (null != list) {
                 mem.setNotificationCollection(list);
             }
-        }
+        }*/
 
         notRepo.save(no);
     }

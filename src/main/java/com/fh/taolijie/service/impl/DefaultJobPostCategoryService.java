@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.repository.JobPostCategoryRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -55,6 +56,8 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException{
         // 判断分类下是否为空
         JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+        CheckUtils.nullCheck(cate);
+
         if (null != cate.getJobPostCollection() && false == cate.getJobPostCollection().isEmpty()) {
             throw new CategoryNotEmptyException("分类" + cate.getName() + "不是空的");
         }
@@ -69,6 +72,8 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateCategory(Integer cateId, JobPostCategoryDto dto) {
         JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+        CheckUtils.nullCheck(cate);
+
         CollectionUtils.updateEntity(cate, dto, null);
         //updateCategory(cate, dto);
 
@@ -79,6 +84,7 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Transactional(readOnly = true)
     public JobPostCategoryDto findCategory(Integer cateId) {
         JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
+        CheckUtils.nullCheck(cate);
 
         return CollectionUtils.entity2Dto(cate, JobPostCategoryDto.class, null);
     }

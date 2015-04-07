@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.ReviewEntity;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.repository.ReviewRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -38,6 +39,7 @@ public class DefaultReviewService implements ReviewService {
     @Transactional(readOnly = true)
     public List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostEntity jobPost = em.getReference(JobPostEntity.class, postId);
+        CheckUtils.nullCheck(jobPost);
 
         int cap = capacity;
         if (cap <= 0) {
@@ -82,6 +84,7 @@ public class DefaultReviewService implements ReviewService {
         // TODO untested!!
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
         ReviewEntity review = em.getReference(ReviewEntity.class, reviewId);
+        CheckUtils.nullCheck(mem, review);
 
         // 创建回复Entity对象
         ReviewEntity reply = CollectionUtils.dto2Entity(dto, ReviewEntity.class, (replyEntity) -> {
@@ -111,14 +114,25 @@ public class DefaultReviewService implements ReviewService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addReview(ReviewDto reviewDto) {
-        ReviewEntity review = new ReviewEntity();
+/*        ReviewEntity review = new ReviewEntity();
         review.setContent(reviewDto.getContent());
-        review.setTime(reviewDto.getTime());
+        review.setTime(reviewDto.getTime());*/
 
-        MemberEntity mem = em.getReference(MemberEntity.class, reviewDto.getMemberId());
+        ReviewEntity review = CollectionUtils.dto2Entity(reviewDto, ReviewEntity.class, (entity) -> {
+            MemberEntity mem = em.getReference(MemberEntity.class, reviewDto.getMemberId());
+            JobPostEntity post = em.getReference(JobPostEntity.class, reviewDto.getJobPostId());
+            CheckUtils.nullCheck(mem ,post);
+
+            entity.setMember(mem);
+            entity.setJobPost(post);
+        });
+
+/*        MemberEntity mem = em.getReference(MemberEntity.class, reviewDto.getMemberId());
         JobPostEntity post = em.getReference(JobPostEntity.class, reviewDto.getJobPostId());
+        CheckUtils.nullCheck(mem ,post);
+
         review.setMember(mem);
-        review.setJobPost(post);
+        review.setJobPost(post);*/
 
         em.persist(review);
 
@@ -128,8 +142,12 @@ public class DefaultReviewService implements ReviewService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteReview(Integer reviewId) {
+        ReviewEntity review = em.getReference(ReviewEntity.class, reviewId);
+        CheckUtils.nullCheck(review);
+        MemberEntity mem = review.getMember();
+
         // 删除与member的关联
-        MemberEntity mem = em.getReference(MemberEntity.class, em.getReference(ReviewEntity.class, reviewId).getMember().getId());
+        //MemberEntity mem = em.getReference(MemberEntity.class, em.getReference(ReviewEntity.class, reviewId).getMember().getId());
         Collection<ReviewEntity> reCollection = mem.getReviewCollection();
         reCollection.size();
 
@@ -155,7 +173,10 @@ public class DefaultReviewService implements ReviewService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateReview(Integer reviewId, ReviewDto reviewDto) {
         ReviewEntity r = em.getReference(ReviewEntity.class, reviewId);
-        updateReview(r, reviewDto);
+        CheckUtils.nullCheck(r);
+
+        CollectionUtils.updateEntity(r, reviewDto, null);
+        //updateReview(r, reviewDto);
 
         return true;
     }
@@ -171,13 +192,8 @@ public class DefaultReviewService implements ReviewService {
         return dto;
     }*/
 
-    /**
-     * 只修改content
-     * @param r
-     * @param dto
-     */
-    private void updateReview(ReviewEntity r, ReviewDto dto) {
+   /* private void updateReview(ReviewEntity r, ReviewDto dto) {
         //r.setTime(dto.getTime());
         r.setContent(dto.getContent());
-    }
+    }*/
 }

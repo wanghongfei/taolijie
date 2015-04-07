@@ -8,6 +8,7 @@ import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.SchoolService;
 import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -86,6 +87,7 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = true)
     public SchoolDto findSchool(Integer schoolId) {
         SchoolEntity schoolEntity = schoolRepo.findOne(schoolId);
+        CheckUtils.nullCheck(schoolEntity);
 
         return CollectionUtils.entity2Dto(schoolEntity, SchoolDto.class, null);
         //return makeSchoolDto(schoolRepo.findOne(schoolId));
@@ -108,6 +110,8 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public void addAcademy(Integer schoolId, AcademyDto dto) {
         SchoolEntity school = schoolRepo.getOne(schoolId);
+        CheckUtils.nullCheck(school);
+
         AcademyEntity aca = CollectionUtils.dto2Entity(dto, AcademyEntity.class, (entity) -> {
             entity.setSchool(school);
         });
@@ -119,11 +123,14 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateSchoolInfo(Integer schoolId, SchoolDto schoolDto) {
         SchoolEntity school = schoolRepo.findOne(schoolId);
+        CheckUtils.nullCheck(school);
 
-        school.setFullName(schoolDto.getFullName());
+        CollectionUtils.updateEntity(school, schoolDto, null);
+
+/*        school.setFullName(schoolDto.getFullName());
         school.setShortName(schoolDto.getShortName());
         school.setProvince(schoolDto.getProvince());
-        school.setType(schoolDto.getType());
+        school.setType(schoolDto.getType());*/
 
         return true;
     }
@@ -132,6 +139,8 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteSchool(Integer schoolId) throws CascadeDeleteException {
         SchoolEntity school = schoolRepo.findOne(schoolId);
+        CheckUtils.nullCheck(school);
+
         // 检查对应的学院是否为空
         if (school.getAcademyCollection() != null && false == school.getAcademyCollection().isEmpty()) {
             throw new CascadeDeleteException("学校下的学院不为空");
@@ -147,6 +156,8 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = true)
     public List<AcademyDto> getAcademyList(Integer schoolId) {
         SchoolEntity school = schoolRepo.getOne(schoolId);
+        CheckUtils.nullCheck(school);
+
         List<AcademyEntity> aList = academyRepo.findBySchool(school);
 
         List<AcademyDto> dtoList = new ArrayList<>();
@@ -162,6 +173,7 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = true)
     public AcademyDto findAcademy(Integer academyId) {
         AcademyEntity academyEntity = academyRepo.findOne(academyId);
+        CheckUtils.nullCheck(academyEntity);
 
         return CollectionUtils.entity2Dto(academyEntity, AcademyDto.class, null);
         //return makeAcademyDto(academyRepo.findOne(academyId));
@@ -171,8 +183,12 @@ public class DefaultSchoolService implements SchoolService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateAcademy(Integer academyId, AcademyDto academyDto) {
         AcademyEntity academy = academyRepo.getOne(academyId);
-        academy.setFullName(academyDto.getFullName());
-        academy.setShortName(academyDto.getShortName());
+        CheckUtils.nullCheck(academy);
+
+        CollectionUtils.updateEntity(academy, academyDto, null);
+
+/*        academy.setFullName(academyDto.getFullName());
+        academy.setShortName(academyDto.getShortName());*/
 
         return true;
     }
@@ -182,6 +198,8 @@ public class DefaultSchoolService implements SchoolService {
     public boolean deleteAcademy(Integer academyId) {
         // 从school中解除关系
         AcademyEntity academy = academyRepo.findOne(academyId);
+        CheckUtils.nullCheck(academy);
+
         CollectionUtils.removeFromCollection(academy.getSchool().getAcademyCollection(), (aca) -> {
             return aca.getId().equals(academyId);
         });

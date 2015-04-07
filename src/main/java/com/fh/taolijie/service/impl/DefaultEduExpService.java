@@ -8,6 +8,7 @@ import com.fh.taolijie.service.EduExpService;
 import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.EduExpRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -41,6 +42,7 @@ public class DefaultEduExpService implements EduExpService {
         }
 
         MemberEntity member = memberRepo.getOne(memberId);
+        CheckUtils.nullCheck(member);
         //List<EducationExperienceEntity> eduList = eduRepo.findByMember(member);
         Page<EducationExperienceEntity> eduList = eduRepo.findByMember(member, new PageRequest(firstResult, cap));
         //wrapper.setObj(eduLis);
@@ -58,6 +60,7 @@ public class DefaultEduExpService implements EduExpService {
     public boolean addEduExp(EducationExperienceDto eduDto) {
         MemberEntity mem = memberRepo.getOne(eduDto.getMemberId());
         AcademyEntity aca = academyRepo.getOne(eduDto.getAcademyId());
+        CheckUtils.nullCheck(mem, aca);
 
         EducationExperienceEntity ee = new EducationExperienceEntity();
         ee.setAdmissionTime(eduDto.getAdmissionTime());
@@ -82,6 +85,7 @@ public class DefaultEduExpService implements EduExpService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateEduExp(Integer eduId, EducationExperienceDto eduDto) {
         EducationExperienceEntity ee = eduRepo.getOne(eduId);
+        CheckUtils.nullCheck(ee);
 
         // change state
         ee.setAdmissionTime(eduDto.getAdmissionTime());
@@ -96,6 +100,7 @@ public class DefaultEduExpService implements EduExpService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteEduExp(Integer id) {
         EducationExperienceEntity ee = eduRepo.getOne(id);
+        CheckUtils.nullCheck(ee);
 
         // remove connection from Member
         CollectionUtils.removeFromCollection(ee.getMember().getEducationExperienceCollection(), (entity) -> {
@@ -111,7 +116,10 @@ public class DefaultEduExpService implements EduExpService {
     @Override
     @Transactional(readOnly = true)
     public EducationExperienceDto findEduExp(Integer id) {
-        return makeEduExpDto(eduRepo.findOne(id));
+        EducationExperienceEntity edu = eduRepo.findOne(id);
+        CheckUtils.nullCheck(edu);
+
+        return makeEduExpDto(edu);
     }
 
     private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
