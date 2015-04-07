@@ -32,9 +32,10 @@ public class DefaultUserService implements UserService {
     public boolean likeJobPost(Integer memId, Integer postId) {
         MemberEntity mem = memRepo.findOne(memId);
         JobPostEntity post = jobPostRepo.findOne(postId);
-        if (false == CheckUtils.nullCheck(mem, post)) {
+/*        if (false == CheckUtils.nullCheck(mem, post)) {
             return false;
-        }
+        }*/
+        CheckUtils.nullCheck(mem, post);
 
         // 查检是否重复赞
         String oldIds = mem.getLikedJobIds();
@@ -62,9 +63,10 @@ public class DefaultUserService implements UserService {
     public boolean likeSHPost(Integer memId, Integer shId) {
         MemberEntity mem = memRepo.findOne(memId);
         SecondHandPostEntity post = shPostRepo.findOne(shId);
-        if (false == CheckUtils.nullCheck(mem, post)) {
+/*        if (false == CheckUtils.nullCheck(mem, post)) {
             return false;
-        }
+        }*/
+        CheckUtils.nullCheck(mem, post);
 
         // 检查是否重复
         String oldIds = mem.getLikedShIds();

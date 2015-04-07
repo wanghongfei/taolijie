@@ -1,5 +1,7 @@
 package com.fh.taolijie.utils;
 
+import com.fh.taolijie.exception.unchecked.EntityNotExistException;
+
 /**
  * Created by wanghongfei on 15-4-3.
  */
@@ -11,17 +13,15 @@ public class CheckUtils {
      * @param objs
      * @return 如果有一个null则返回false
      */
-    public static boolean nullCheck(Object... objs) {
+    public static void nullCheck(Object... objs) {
         if (0 == objs.length) {
-            return false;
+            throw new EntityNotExistException("entity cannot be null!");
         }
 
         for (Object o : objs) {
             if (null == o) {
-                return false;
+                throw new EntityNotExistException("entity " + o + " cannot be null!");
             }
         }
-
-        return true;
     }
 }
