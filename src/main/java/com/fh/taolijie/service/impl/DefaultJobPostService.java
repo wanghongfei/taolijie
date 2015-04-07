@@ -313,7 +313,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean favoritePost(Integer memId, Integer postId) {
+    public void favoritePost(Integer memId, Integer postId) {
         // TODO untested!!
         MemberEntity mem = em.find(MemberEntity.class, memId);
         JobPostEntity post = postRepo.findOne(postId);
@@ -323,7 +323,6 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         String newIds = StringUtils.addToString(oldIds, postId.toString());
         mem.setFavoriteJobIds(newIds);
 
-        return true;
     }
 
     @Override

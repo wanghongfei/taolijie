@@ -85,9 +85,8 @@ public interface JobPostService extends PageService {
      * 收藏一个工作信息
      * @param memId
      * @param postId
-     * @return
      */
-    boolean favoritePost(Integer memId, Integer postId);
+    void favoritePost(Integer memId, Integer postId);
 
     /**
      * 投递简历

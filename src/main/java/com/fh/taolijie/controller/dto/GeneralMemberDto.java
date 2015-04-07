@@ -44,6 +44,7 @@ public class GeneralMemberDto {
 
     private Integer complaint;
     private String favoriteJobIds;
+    private String favoriteShIds;
 
     private Integer profilePhotoId;
 
@@ -75,6 +76,14 @@ public class GeneralMemberDto {
 
     public void setFavoriteJobIds(String favoriteJobIds) {
         this.favoriteJobIds = favoriteJobIds;
+    }
+
+    public String getFavoriteShIds() {
+        return favoriteShIds;
+    }
+
+    public void setFavoriteShIds(String favoriteShIds) {
+        this.favoriteShIds = favoriteShIds;
     }
 
     public Integer getProfilePhotoId() {

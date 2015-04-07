@@ -9,10 +9,7 @@ import com.fh.taolijie.service.SearchService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -201,6 +198,19 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
                 dto.setCategoryName(entity.getCategory().getName());
             });
         });
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void favoritePost(Integer memId, Integer postId) {
+        MemberEntity mem = memberRepo.findOne(memId);
+        SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+
+        String oldIds = mem.getFavoriteJobIds();
+        String newIds = StringUtils.addToString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
     }
 
     @Override

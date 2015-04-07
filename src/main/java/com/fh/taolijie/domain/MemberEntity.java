@@ -66,6 +66,7 @@ public class MemberEntity {
     private String likedJobIds;
     private String likedShIds;
     private String favoriteJobIds;
+    private String favoriteShIds;
 /*    private String likedIds;
     private String dislikedIds;*/
 
@@ -125,6 +126,15 @@ public class MemberEntity {
 
     public void setAppliedJobIds(String appliedJobIds) {
         this.appliedJobIds = appliedJobIds;
+    }
+
+    @Column(name = "favorite_sh_ids")
+    public String getFavoriteShIds() {
+        return favoriteShIds;
+    }
+
+    public void setFavoriteShIds(String favoriteShIds) {
+        this.favoriteShIds = favoriteShIds;
     }
 
     @Column(name = "profile_photo_id")
