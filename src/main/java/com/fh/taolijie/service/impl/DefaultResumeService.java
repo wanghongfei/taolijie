@@ -9,9 +9,7 @@ import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -201,6 +199,18 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         }
 
         return false;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void favoriteResume(Integer memId, Integer resumeId) {
+        MemberEntity mem = memRepo.findOne(memId);
+        ResumeEntity resume = resumeRepo.findOne(resumeId);
+        CheckUtils.nullCheck(mem ,resume);
+
+        String oldIds = mem.getFavoriteResumeIds();
+        String newIds = StringUtils.addToString(oldIds, resumeId.toString());
+        mem.setFavoriteResumeIds(newIds);
     }
 
     @Override

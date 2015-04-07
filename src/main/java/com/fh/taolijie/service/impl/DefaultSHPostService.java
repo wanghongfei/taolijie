@@ -208,9 +208,9 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         CheckUtils.nullCheck(mem, post);
 
 
-        String oldIds = mem.getFavoriteJobIds();
+        String oldIds = mem.getFavoriteShIds();
         String newIds = StringUtils.addToString(oldIds, postId.toString());
-        mem.setFavoriteJobIds(newIds);
+        mem.setFavoriteShIds(newIds);
     }
 
     @Override

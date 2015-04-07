@@ -65,6 +65,13 @@ public interface ResumeService extends PageService {
     boolean refresh(Integer resumeId);
 
     /**
+     * 收藏简历
+     * @param memId
+     * @param resumeId
+     */
+    void favoriteResume(Integer memId, Integer resumeId);
+
+    /**
      * 创建新简历
      * @param dto
      */
