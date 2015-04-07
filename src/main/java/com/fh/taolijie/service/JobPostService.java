@@ -32,7 +32,7 @@ public interface JobPostService extends PageService {
     List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
-     * 查询审核的post
+     * 查询未审核的post
      * @param firstResult
      * @param capacity
      * @param wrapper
@@ -80,6 +80,14 @@ public interface JobPostService extends PageService {
      * 投诉数+1
      */
     void complaint(Integer postId);
+
+    /**
+     * 收藏一个工作信息
+     * @param memId
+     * @param postId
+     * @return
+     */
+    boolean favoritePost(Integer memId, Integer postId);
 
     /**
      * 投递简历

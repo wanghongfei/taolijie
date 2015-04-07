@@ -12,10 +12,7 @@ import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -312,6 +309,21 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         String originalIds = mem.getAppliedJobIds();
         newIds = StringUtils.addToString(originalIds, postId.toString());
         mem.setAppliedJobIds(newIds);*/
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean favoritePost(Integer memId, Integer postId) {
+        // TODO untested!!
+        MemberEntity mem = em.find(MemberEntity.class, memId);
+        JobPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+        String oldIds = mem.getFavoriteJobIds();
+        String newIds = StringUtils.addToString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
+
+        return true;
     }
 
     @Override
