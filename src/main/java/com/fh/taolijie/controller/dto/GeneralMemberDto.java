@@ -43,6 +43,7 @@ public class GeneralMemberDto {
     private Boolean valid;
 
     private Integer complaint;
+    private String favoriteJobIds;
 
     private Integer profilePhotoId;
 
@@ -67,6 +68,14 @@ public class GeneralMemberDto {
     public void setLikedIds(String likedIds) {
         this.likedIds = likedIds;
     }*/
+
+    public String getFavoriteJobIds() {
+        return favoriteJobIds;
+    }
+
+    public void setFavoriteJobIds(String favoriteJobIds) {
+        this.favoriteJobIds = favoriteJobIds;
+    }
 
     public Integer getProfilePhotoId() {
         return profilePhotoId;

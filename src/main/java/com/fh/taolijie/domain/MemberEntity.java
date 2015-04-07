@@ -65,6 +65,7 @@ public class MemberEntity {
     private Integer complaint;
     private String likedJobIds;
     private String likedShIds;
+    private String favoriteJobIds;
 /*    private String likedIds;
     private String dislikedIds;*/
 
@@ -133,6 +134,15 @@ public class MemberEntity {
 
     public void setProfilePhotoId(Integer profilePhotoId) {
         this.profilePhotoId = profilePhotoId;
+    }
+
+    @Column(name = "favorite_job_ids")
+    public String getFavoriteJobIds() {
+        return favoriteJobIds;
+    }
+
+    public void setFavoriteJobIds(String favoriteJobIds) {
+        this.favoriteJobIds = favoriteJobIds;
     }
 
     @Basic
