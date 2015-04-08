@@ -169,7 +169,7 @@ public class SHController{
      * @param model
      * @return
      */
-    @RequestMapping(value = "change",method = RequestMethod.POST)
+    @RequestMapping(value = "change",method = RequestMethod.GET)
     public String change(@RequestParam int id,HttpSession session,Model model){
         /**
          * 如果该job不是用户发送的,则返回404
@@ -195,6 +195,8 @@ public class SHController{
         /**
          * 如果该job不是用户发送的,则错误json
          */
+        SecondHandPostDto oldsh = shPostService.findPost(sh.getId());
+        sh.setMemberId(oldsh.getMemberId());
         Credential credential = CredentialUtils.getCredential(session);
 
         if(sh == null|| !ControllerHelper.isCurrentUser(credential,sh)){
@@ -214,11 +216,12 @@ public class SHController{
      * @param id 二手 id
      * @param session  用户的信息
      */
-    @RequestMapping(value = "refresh/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String refresh(@PathVariable int id,HttpSession session){
+    @RequestMapping(value = "refresh",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String refresh(@RequestParam int id,HttpSession session){
         /**
          * 如果该sh不是用户发送的,则错误json
         */
+
         Credential credential = CredentialUtils.getCredential(session);
         SecondHandPostDto sh =shPostService.findPost(id);
         if(sh == null) {

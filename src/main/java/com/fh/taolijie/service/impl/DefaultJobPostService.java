@@ -270,6 +270,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = true)
     public JobPostDto findJobPost(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
+        CheckUtils.nullCheck(post);
         return CollectionUtils.entity2Dto(post, JobPostDto.class, (dto) -> {
             dto.setCategoryName(post.getCategory().getName());
             dto.setCategoryId(post.getCategory().getId());

@@ -199,8 +199,12 @@ public class JobController {
     @ResponseBody
     @RequestMapping(value = "auditlist/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public String auditList(@PathVariable int page, HttpSession session) {
+        int capcity = Constants.PAGE_CAPACITY;
+        Credential credential = CredentialUtils.getCredential(session);
 
-        return "";
+        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
+        List<JobPostDto> list = jobPostService.getJobPostListByMember(mem.getId(),page-1, capcity, new ObjWrapper());
+        return JSON.toJSONString(list);
     }
 
 
@@ -219,9 +223,7 @@ public class JobController {
         JobPostDto job = jobPostService.findJobPost(id);
 
         /*判断兼职信息是否由当前用户发布*/
-        if (job.getMemberId() != credential.getId()) {
-            System.out.println(job.getMemberId());
-            System.out.println(credential.getId());
+        if(!ControllerHelper.isCurrentUser(credential,job)){
             return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
 

@@ -30,8 +30,10 @@ public class ControllerHelper {
      */
     public static boolean isCurrentUser(Credential credential,JobPostDto job){
         String roleName = getRoleName(credential);
-        if (job.getMemberId()!= credential.getId()&&!roleName.equals(Constants.RoleType.ADMIN))       {
-            return false;
+        if (!job.getMemberId().equals(credential.getId())){
+            if(!roleName.equals(Constants.RoleType.ADMIN.toString())){
+                return false;
+            }
         }
         return true;
     }
@@ -40,8 +42,10 @@ public class ControllerHelper {
         for(String r:credential.getRoleList()){
             roleName = r;
         }
-        if (sh.getMemberId()!= credential.getId()&&!roleName.equals(Constants.RoleType.ADMIN))       {
-            return false;
+        if (!sh.getMemberId().equals(credential.getId())){
+            if(!roleName.equals(Constants.RoleType.ADMIN.toString())){
+                return false;
+            }
         }
         return true;
     }
@@ -50,8 +54,10 @@ public class ControllerHelper {
         for(String r:credential.getRoleList()){
             roleName = r;
         }
-        if (resume.getMemberId()!= credential.getId()&&!roleName.equals(Constants.RoleType.ADMIN))       {
-            return false;
+        if (!resume.getMemberId().equals(credential.getId())){
+            if(!roleName.equals(Constants.RoleType.ADMIN.toString())){
+                return false;
+            }
         }
         return true;
     }

@@ -77,7 +77,7 @@ public class ResumeController{
         String username = CredentialUtils.getCredential(session).getUsername();
         mem = accountService.findMember(username, new GeneralMemberDto[0], false);
 
-        /*创建兼职信息*/
+        /*创建信息*/
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
 
@@ -93,8 +93,9 @@ public class ResumeController{
      * @param session 用户的角色
      * @return
      */
+
     @RequestMapping(value = "view",method = RequestMethod.GET)
-    public String view(HttpSession session,HttpServletResponse response) throws IOException {
+    public  @ResponseBody String view(HttpSession session,HttpServletResponse response) throws IOException {
         Credential credential = CredentialUtils.getCredential(session);
         GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
 
@@ -111,8 +112,10 @@ public class ResumeController{
         {
             response.sendRedirect("/user/resume/create");
             return null;
+        }else {
+            return JSON.toJSONString(resume);
         }
-        return JSON.toJSONString(resume);
+
     }
 
 
@@ -205,6 +208,12 @@ public class ResumeController{
     @RequestMapping(value = "change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String change(@Valid ResumeDto resume,BindingResult result,HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
+        ResumeDto oldResume= resumeService.findResume(resume.getId());
+        resume.setMemberId(oldResume.getMemberId());
+
+        /*因为简历只有一张,所以直接用遍历得到*/
+
+
         if(resume == null|| !ControllerHelper.isCurrentUser(credential,resume)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
