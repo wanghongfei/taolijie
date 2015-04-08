@@ -54,6 +54,13 @@ public interface AccountService {
      */
     public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException;
 
+    /**
+     * 根据Cookie信息中的identifier登陆.
+     * 登陆失败返回null, 成功返回member实体的id值
+     * @param identifier
+     * @return
+     */
+    Integer login(String identifier);
 
     /**
      * 查询用户所有基本信息.
@@ -118,6 +125,13 @@ public interface AccountService {
      * @return 删除成功返回true, 失败返回false
      */
     public boolean addRole(RoleDto roleDto);
+
+    /**
+     * 保存随机生成的字符串，用于自动登陆
+     * @param memId
+     * @param identifier
+     */
+    void saveLoginIdentifier(Integer memId, String identifier);
 
     /**
      * 从数据库role表中删除一个已存在的role

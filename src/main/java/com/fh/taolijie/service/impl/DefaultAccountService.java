@@ -15,10 +15,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.RoleRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.Print;
+import com.fh.taolijie.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,6 +176,22 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
+    public Integer login(String identifier) {
+        MemberEntity mem = null;
+
+        try {
+            mem = em.createNamedQuery("memberEntity.findByIdentifier", MemberEntity.class)
+                    .setParameter("identifier", identifier)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+
+        return mem.getId();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired) {
         MemberEntity mem = null;
 
@@ -290,6 +303,15 @@ public class DefaultAccountService implements AccountService {
         em.persist(role);
 
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void saveLoginIdentifier(Integer memId, String identifier) {
+        MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        CheckUtils.nullCheck(mem);
+
+        mem.setAutoLoginIdentifier(identifier);
     }
 
     @Override

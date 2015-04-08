@@ -29,6 +29,10 @@ import java.util.List;
                 query = "SELECT COUNT(mem) FROM MemberEntity mem " +
                         "WHERE mem.username = :username"),
 
+        @NamedQuery(name = "memberEntity.findByIdentifier",
+                query = "SELECT mem FROM MemberEntity mem " +
+                        "WHERE mem.autoLoginIdentifier = :identifier"),
+
         // 根据用户名查找member实体
         @NamedQuery(name = "memberEntity.findMemberByUsername",
                 query = "SELECT m " +
@@ -68,6 +72,8 @@ public class MemberEntity {
     private String favoriteJobIds;
     private String favoriteShIds;
     private String favoriteResumeIds;
+    private String autoLoginIdentifier;
+
 /*    private String likedIds;
     private String dislikedIds;*/
 
@@ -118,6 +124,15 @@ public class MemberEntity {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Column(name = "auto_login_identifier")
+    public String getAutoLoginIdentifier() {
+        return autoLoginIdentifier;
+    }
+
+    public void setAutoLoginIdentifier(String autoLoginIdentifier) {
+        this.autoLoginIdentifier = autoLoginIdentifier;
     }
 
     @Column(name = "applied_job_ids", columnDefinition = "TEXT")

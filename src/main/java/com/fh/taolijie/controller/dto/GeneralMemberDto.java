@@ -46,6 +46,7 @@ public class GeneralMemberDto {
     private String favoriteJobIds;
     private String favoriteShIds;
     private String favoriteResumeIds;
+    private String autoLoginIdentifier;
 
     private Integer profilePhotoId;
 
@@ -70,6 +71,14 @@ public class GeneralMemberDto {
     public void setLikedIds(String likedIds) {
         this.likedIds = likedIds;
     }*/
+
+    public String getAutoLoginIdentifier() {
+        return autoLoginIdentifier;
+    }
+
+    public void setAutoLoginIdentifier(String autoLoginIdentifier) {
+        this.autoLoginIdentifier = autoLoginIdentifier;
+    }
 
     public String getFavoriteResumeIds() {
         return favoriteResumeIds;
