@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -46,6 +48,36 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     private static final String QUERY_INTEND = "SELECT resume_id AS resumeId, job_post_category_id AS categoryId FROM resume_job_post_category AS category WHERE category.job_post_category_id = :cateId";
 
+    private SetupResumeDto setupDto = new SetupResumeDto();
+
+
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * 使用前必须先调用{@code setEntity()}方法
+     * @param <ENTITY>
+     */
+    private class SetupResumeDto<ENTITY extends ResumeEntity> implements Consumer<ResumeDto> {
+        private ENTITY entity;
+
+        public void setEntity(ENTITY entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void accept(ResumeDto dto) {
+            // 设置member id
+            dto.setMemberId(entity.getMember().getId());
+
+            // 设置求职意向到DTO对象中
+            if (null != entity.getCategoryList()) {
+                List<Integer> intendList = entity.getCategoryList().stream()
+                        .map( en -> en.getId() )
+                        .collect(Collectors.toList());
+                dto.setIntendCategoryId(intendList);
+            }
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<ResumeDto> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
@@ -56,9 +88,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
-                dto.setMemberId(resumeEntity.getMember().getId());
-            });
+            setupDto.setEntity(resumeEntity);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
         });
     }
 
@@ -71,9 +102,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
-                dto.setMemberId(resumeEntity.getMember().getId());
-            });
+            setupDto.setEntity(resumeEntity);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
         });
     }
 
@@ -94,9 +124,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
-                dto.setMemberId(resumeEntity.getMember().getId());
-            });
+            setupDto.setEntity(resumeEntity);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
         });
     }
 
@@ -117,9 +146,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(rList.getTotalPages());
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, (dto) -> {
-                dto.setMemberId(resumeEntity.getMember().getId());
-            });
+            setupDto.setEntity(resumeEntity);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
         });
     }
 
@@ -244,9 +272,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         ResumeEntity entity = em.find(ResumeEntity.class, resumeId);
         CheckUtils.nullCheck(entity);
 
-        return CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
-            dto.setMemberId(entity.getMember().getId());
-        });
+        setupDto.setEntity(entity);
+        return CollectionUtils.entity2Dto(entity, ResumeDto.class, setupDto);
     }
 
     @Override
