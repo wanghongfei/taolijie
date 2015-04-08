@@ -16,6 +16,7 @@ import com.fh.taolijie.service.impl.*;
 import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.test.BaseDatabaseTestClass;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.Print;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
@@ -28,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -71,6 +73,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         DefaultSHPostService.class,
         DefaultResumeService.class,
         DefaultReviewService.class,
+        DefaultSearchService.class,
+        DefaultNotificationService.class,
+        Mail.class,
+        JavaMailSenderImpl.class,
         DefaultJobPostCategoryService.class
         })
 //@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml")
@@ -171,7 +177,7 @@ public class UserControllerTest extends BaseSpringDataTestClass{
 
 
 
-        String expected = new JsonWrapper(true,"修改成功!").getAjaxMessage();
+        String expected = new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
         mockMvc.perform(post("/user/setting/profile")
                         .contentType("application/json;charset=utf-8")
                         .session(session)

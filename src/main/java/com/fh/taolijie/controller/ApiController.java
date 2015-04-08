@@ -11,6 +11,7 @@ import com.fh.taolijie.utils.json.JsonWrapper;
 import net.sf.ehcache.util.FindBugsSuppressWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,7 +64,7 @@ public class ApiController {
     @RequestMapping(value = "/list/job/{page}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String allJobList(@PathVariable int page){
         int capcity = Constants.PAGE_CAPACITY;
-        List<JobPostDto> list = jobPostService.getAllJobPostList(page-1,capcity, new ObjWrapper());
+        List<JobPostDto> list = jobPostService.getAllJobPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -76,7 +77,7 @@ public class ApiController {
         int capcity = Constants.PAGE_CAPACITY;
         ObjWrapper totalPage = new ObjWrapper();
 
-        List<ResumeDto> list = resumeService.getAllResumeList(page-1,capcity,totalPage);
+        List<ResumeDto> list = resumeService.getAllResumeList(page - 1, capcity, totalPage);
 
         return JSON.toJSONString(list);
     }
@@ -99,6 +100,38 @@ public class ApiController {
         int capcity = Constants.PAGE_CAPACITY;
         List<SecondHandPostDto> list = shPostService.getAllPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
+    }
+
+
+    /**
+     * 获取兼职详情页 Ajax GET
+     *
+     * @param jobId   页码数
+     * @param session 用户的信息
+     * @param model 绑定的模型
+     * @return
+     */
+    @RequestMapping(value = "post/job/{jobId}", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    String jobDetail(@PathVariable int jobId, HttpSession session,Model model) {
+        JobPostDto job = jobPostService.findJobPost(jobId);
+        if(job==null){
+            return "redirect:/404";
+        }
+        model.addAttribute("job",job);
+        return "";
+    }
+
+    /**
+     * 获取二手详情页 Ajax GET
+     * @param id  页码数
+     * @param session 用户的信息
+     * @return
+     */
+    @RequestMapping(value = "post/sh/{id}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String shDetail(@PathVariable int id,HttpSession session){
+        return "";
     }
 
 

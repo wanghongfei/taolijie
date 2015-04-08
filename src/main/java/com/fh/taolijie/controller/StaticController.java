@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller;
 
 import com.fh.taolijie.controller.dto.ImageDto;
+import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.impl.DefaultImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ public class StaticController {
     private static int _500KB = 1024 * 500;// 500KB
 
     @Autowired
-    DefaultImageService imageService;
+    ImageService imageService;
 
     /**
      * 获取图片

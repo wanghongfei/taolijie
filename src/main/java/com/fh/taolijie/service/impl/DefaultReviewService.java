@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -35,38 +34,6 @@ public class DefaultReviewService implements ReviewService {
 
     @Autowired
     ReviewRepo reviewRepo;
-
-    /**
-     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
-     * 此内部类存在的原因是为了消除重复代码。
-     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
-     * @param <ENTITY>
-     */
-    protected class SetupReviewDto<ENTITY extends ReviewEntity> implements Consumer<ReviewDto> {
-        private ENTITY entity;
-
-        public SetupReviewDto(ENTITY entity) {
-            this.entity = entity;
-        }
-
-        @Override
-        public void accept(ReviewDto dto) {
-            // 设置DTO的关联信息
-            dto.setMemberId(entity.getMember().getId());
-            dto.setJobPostId(entity.getJobPost().getId());
-
-            // 如果有评论回复，则设置回复
-            List<ReviewEntity> replyList = entity.getReplyList();
-            if (null != replyList) {
-                // 把Entity转成DTO
-                CollectionUtils.transformCollection(replyList, ReviewDto.class, (entity) -> {
-                    return CollectionUtils.entity2Dto(entity, ReviewDto.class, (reviewDto) -> {
-                        reviewDto.setMemberId(entity.getMember().getId());
-                    });
-                });
-            }
-        }
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -81,11 +48,31 @@ public class DefaultReviewService implements ReviewService {
 
         Page<ReviewEntity> reviewList = reviewRepo.findByJobPost(jobPost, new PageRequest(firstResult, cap));
         wrapper.setObj(reviewList.getTotalPages());
+/*        List<ReviewEntity> reviewList = em.createNamedQuery("reviewEntity.findByPost", ReviewEntity.class)
+                .setParameter("jobPost", jobPost)
+                .setFirstResult(firstResult)
+                .setMaxResults(cap)
+                .getResultList();*/
 
         // 把Entity List转成DTO List
         List<ReviewDto> dtoList = new ArrayList<>();
         for (ReviewEntity r : reviewList) {
-            dtoList.add(CollectionUtils.entity2Dto(r, ReviewDto.class, new SetupReviewDto(r) ));
+            dtoList.add(CollectionUtils.entity2Dto(r, ReviewDto.class, (dto) -> {
+                // 设置DTO的关联信息
+                dto.setMemberId(r.getMember().getId());
+                dto.setJobPostId(r.getJobPost().getId());
+
+                // 如果有评论回复，则设置回复
+                List<ReviewEntity> replyList = r.getReplyList();
+                if (null != replyList) {
+                    // 把Entity转成DTO
+                    CollectionUtils.transformCollection(replyList, ReviewDto.class, (entity) -> {
+                        return CollectionUtils.entity2Dto(entity, ReviewDto.class, (reviewDto) -> {
+                            reviewDto.setMemberId(entity.getMember().getId());
+                        });
+                    });
+                }
+            }));
         }
 
         return dtoList;
@@ -127,6 +114,10 @@ public class DefaultReviewService implements ReviewService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addReview(ReviewDto reviewDto) {
+/*        ReviewEntity review = new ReviewEntity();
+        review.setContent(reviewDto.getContent());
+        review.setTime(reviewDto.getTime());*/
+
         ReviewEntity review = CollectionUtils.dto2Entity(reviewDto, ReviewEntity.class, (entity) -> {
             MemberEntity mem = em.getReference(MemberEntity.class, reviewDto.getMemberId());
             JobPostEntity post = em.getReference(JobPostEntity.class, reviewDto.getJobPostId());
@@ -136,6 +127,12 @@ public class DefaultReviewService implements ReviewService {
             entity.setJobPost(post);
         });
 
+/*        MemberEntity mem = em.getReference(MemberEntity.class, reviewDto.getMemberId());
+        JobPostEntity post = em.getReference(JobPostEntity.class, reviewDto.getJobPostId());
+        CheckUtils.nullCheck(mem ,post);
+
+        review.setMember(mem);
+        review.setJobPost(post);*/
 
         em.persist(review);
 
@@ -183,4 +180,20 @@ public class DefaultReviewService implements ReviewService {
 
         return true;
     }
+
+    /*private ReviewDto makeReviewDto(ReviewEntity review) {
+        ReviewDto dto = new ReviewDto();
+        dto.setId(review.getId());
+        dto.setContent(review.getContent());
+        dto.setTime(review.getTime());
+
+        dto.setMemberId(review.getMember().getId());
+        dto.setJobPostId(review.getJobPost().getId());
+        return dto;
+    }*/
+
+   /* private void updateReview(ReviewEntity r, ReviewDto dto) {
+        //r.setTime(dto.getTime());
+        r.setContent(dto.getContent());
+    }*/
 }

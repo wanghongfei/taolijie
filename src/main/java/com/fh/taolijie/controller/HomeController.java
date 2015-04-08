@@ -423,7 +423,7 @@ public class HomeController {
 
     @RequestMapping(value = "/404",method = RequestMethod.GET,produces = "text/html;charset=utf-8")
     public @ResponseBody String error(){
-        return "error!!!";
+        return "404 error!!!";
     }
 
 

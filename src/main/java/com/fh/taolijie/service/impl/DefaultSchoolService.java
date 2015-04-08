@@ -210,4 +210,21 @@ public class DefaultSchoolService implements SchoolService {
         return true;
     }
 
+    /*private AcademyDto makeAcademyDto(AcademyEntity academy) {
+        AcademyDto dto = new AcademyDto();
+        dto.setShortName(academy.getShortName());
+        dto.setFullName(academy.getFullName());
+
+        return dto;
+    }*/
+    /*private SchoolDto makeSchoolDto(SchoolEntity school) {
+        SchoolDto dto = new SchoolDto();
+        dto.setId(school.getId());
+        dto.setShortName(school.getShortName());
+        dto.setFullName(school.getFullName());
+        dto.setProvince(school.getProvince());
+        dto.setType(school.getType());
+
+        return dto;
+    }*/
 }

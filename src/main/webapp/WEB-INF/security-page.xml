@@ -3,6 +3,14 @@
 	xsi:noNamespaceSchemaLocation="security-page.xsd">
 	
 	<!-- <request url="/backstage/statistics" role="ADMIN USER" /> -->
-	<request url="/backstage/*" role="ADMIN USER" />
-	<request url="/admin/*" role="ADMIN USER" to-url="/error" />
+	<request url="/user/*" role="STUDENT EMPLOYERR ADMIN" to-url="/404" />
+	<request url="/user/job/*" role="STUDENT EMPLOYERR ADMIN" to-url="/404" />
+	<request url="/user/resume/*" role="STUDENT EMPLOYERR ADMIN" to-url="/404" />
+	<request url="/user/sh/*" role="STUDENT EMPLOYERR ADMIN" to-url="/404" />
+
+	<request url="/admin/*" role="ADMIN" to-url="/404" />
+
+	<request url="/api/joblistbymember" role="STUDENT EMPLOYER ADMIN"/>
+	<request url="/api/joblistbyfav" role="STUDENT EMPLOYER ADMIN"/>
+	<request url="/api/resumelistbymember" role="STUDENT"/>
 </page>

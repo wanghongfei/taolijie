@@ -190,6 +190,8 @@ public class Constants {
         public static final String VERFIEDFAILED = "审核未通过";
 
         public static final String ERROR = "出现错误";
+        public static final String NOT_FOUND = "没有找到";
+        public static final String PERMISSION_ERROR = "权限不足";
 
 
     }
