@@ -1,5 +1,7 @@
 package com.fh.taolijie.utils;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +15,23 @@ public class StringUtils {
     private StringUtils() {
     }
 
+    /**
+     * 随机生成一个{@code length}位的字符串
+     * @param length
+     * @return
+     */
+    public static String randomString(int length) {
+        return RandomStringUtils.randomAlphabetic(length);
+    }
+
+
+    /**
+     * 构造 {@code SELECT XXX FROM XXX WHERE XXX LIKE '%XXX%' AND XXX ORDER By XXX}语句
+     * @param entityName
+     * @param likeParam
+     * @param orderBy
+     * @return
+     */
     public static String buildLikeQuery(String entityName, Map<String, Object> likeParam, Map.Entry<String, String> orderBy) {
         StringBuilder query = new StringBuilder();
 
@@ -52,6 +71,14 @@ public class StringUtils {
         return query.toString();
     }
 
+    /**
+     * 构造 {@code SELECT XXX FROM XXX WHERE XXX = 'XXX' AND XXX ORDER By XXX}语句
+     * @param objAlias
+     * @param entityName
+     * @param whereParm
+     * @param orderBy
+     * @return
+     */
     public static String buildQuery(String objAlias, String entityName, Map<String, Object> whereParm, Map.Entry<String, String> orderBy) {
         StringBuilder query = new StringBuilder();
 
