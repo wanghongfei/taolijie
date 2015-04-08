@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -56,6 +57,27 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @PersistenceContext
     EntityManager em;
 
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * 此内部类存在的原因是为了消除重复代码。
+     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
+     * @param <ENTITY>
+     */
+    protected class SetupPostDto<ENTITY extends JobPostEntity> implements Consumer<JobPostDto> {
+        private ENTITY entity;
+
+        public SetupPostDto(ENTITY entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void accept(JobPostDto dto) {
+            dto.setCategoryName(entity.getCategory().getName());
+            dto.setCategoryId(entity.getCategory().getId());
+            dto.setMemberId(entity.getMember().getId());
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<JobPostDto> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
@@ -75,11 +97,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
 
     }
@@ -101,11 +119,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -129,11 +143,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -143,12 +153,9 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<JobPostEntity> entityPage = postRepo.findByVerified(Constants.VerifyStatus.NONE.toString(), new PageRequest(firstResult, cap));
+
         return CollectionUtils.transformCollection(entityPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -160,11 +167,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-                dto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -220,11 +223,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         wrapper.setObj(postPage);
 
         return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setMemberId(entity.getMember().getId());
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -258,11 +257,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         wrapper.setObj(postPage.getTotalPages());
 
         return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setMemberId(entity.getMember().getId());
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupPostDto(entity));
         });
     }
 
@@ -270,11 +265,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = true)
     public JobPostDto findJobPost(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
-        return CollectionUtils.entity2Dto(post, JobPostDto.class, (dto) -> {
-            dto.setCategoryName(post.getCategory().getName());
-            dto.setCategoryId(post.getCategory().getId());
-            dto.setMemberId(post.getMember().getId());
-        });
+        return CollectionUtils.entity2Dto(post, JobPostDto.class, new SetupPostDto(post));
     }
 
     @Override

@@ -46,20 +46,22 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     @Autowired
     private JobPostCategoryRepo cateRepo;
 
+    /**
+     * Native查询SQL语句，用于查询resume_job_post_category关联表
+     */
     private static final String QUERY_INTEND = "SELECT resume_id AS resumeId, job_post_category_id AS categoryId FROM resume_job_post_category AS category WHERE category.job_post_category_id = :cateId";
-
-    private SetupResumeDto setupDto = new SetupResumeDto();
 
 
     /**
      * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
-     * 使用前必须先调用{@code setEntity()}方法
+     * 此内部类存在的原因是为了消除重复代码。
+     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
      * @param <ENTITY>
      */
-    private class SetupResumeDto<ENTITY extends ResumeEntity> implements Consumer<ResumeDto> {
+    protected class SetupResumeDto<ENTITY extends ResumeEntity> implements Consumer<ResumeDto> {
         private ENTITY entity;
 
-        public void setEntity(ENTITY entity) {
+        public SetupResumeDto(ENTITY entity) {
             this.entity = entity;
         }
 
@@ -88,8 +90,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -102,8 +103,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -124,8 +124,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -146,8 +145,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(rList.getTotalPages());
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -272,8 +270,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         ResumeEntity entity = em.find(ResumeEntity.class, resumeId);
         CheckUtils.nullCheck(entity);
 
-        setupDto.setEntity(entity);
-        return CollectionUtils.entity2Dto(entity, ResumeDto.class, setupDto);
+        return CollectionUtils.entity2Dto(entity, ResumeDto.class, new SetupResumeDto(entity));
     }
 
     @Override
