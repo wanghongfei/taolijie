@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by wanghongfei on 15-3-8.
@@ -32,6 +33,26 @@ public class DefaultEduExpService implements EduExpService {
     MemberRepo memberRepo;
     @Autowired
     AcademyRepo academyRepo;
+
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * 此内部类存在的原因是为了消除重复代码。
+     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
+     * @param <ENTITY>
+     */
+    protected class SetupEduDto<ENTITY extends EducationExperienceEntity> implements Consumer<EducationExperienceDto> {
+        private ENTITY entity;
+
+        public SetupEduDto(ENTITY entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void accept(EducationExperienceDto dto) {
+            dto.setMemberId(entity.getMember().getId());
+            dto.setAcademyId(entity.getAcademy().getId());
+        }
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -48,7 +69,7 @@ public class DefaultEduExpService implements EduExpService {
         //wrapper.setObj(eduLis);
 
         return CollectionUtils.transformCollection(eduList, EducationExperienceDto.class, (entity) -> {
-            return makeEduExpDto(entity);
+            return CollectionUtils.entity2Dto(entity, EducationExperienceDto.class, new SetupEduDto(entity));
         });
     }
 
@@ -62,13 +83,18 @@ public class DefaultEduExpService implements EduExpService {
         AcademyEntity aca = academyRepo.getOne(eduDto.getAcademyId());
         CheckUtils.nullCheck(mem, aca);
 
-        EducationExperienceEntity ee = new EducationExperienceEntity();
+/*        EducationExperienceEntity ee = new EducationExperienceEntity();
         ee.setAdmissionTime(eduDto.getAdmissionTime());
         ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
         ee.setMajor(eduDto.getMajor());
 
         ee.setMember(mem);
-        ee.setAcademy(aca);
+        ee.setAcademy(aca);*/
+
+        EducationExperienceEntity ee = CollectionUtils.dto2Entity(eduDto, EducationExperienceEntity.class, entity -> {
+            entity.setMember(mem);
+            entity.setAcademy(aca);
+        });
 
         // add experience to member
         List<EducationExperienceEntity> list = CollectionUtils.addToCollection(mem.getEducationExperienceCollection(), ee);
@@ -88,9 +114,10 @@ public class DefaultEduExpService implements EduExpService {
         CheckUtils.nullCheck(ee);
 
         // change state
-        ee.setAdmissionTime(eduDto.getAdmissionTime());
+        CollectionUtils.updateEntity(ee, eduDto, null);
+/*        ee.setAdmissionTime(eduDto.getAdmissionTime());
         ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
-        ee.setMajor(eduDto.getMajor());
+        ee.setMajor(eduDto.getMajor());*/
 
 
         return true;
@@ -119,10 +146,11 @@ public class DefaultEduExpService implements EduExpService {
         EducationExperienceEntity edu = eduRepo.findOne(id);
         CheckUtils.nullCheck(edu);
 
-        return makeEduExpDto(edu);
+        return CollectionUtils.entity2Dto(edu, EducationExperienceDto.class,  new SetupEduDto(edu));
+        //return makeEduExpDto(edu);
     }
 
-    private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
+   /* private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
         EducationExperienceDto dto = new EducationExperienceDto();
         dto.setId(edu.getId());
         dto.setAdmissionTime(edu.getAdmissionTime());
@@ -133,5 +161,5 @@ public class DefaultEduExpService implements EduExpService {
         dto.setMemberId(edu.getMember().getId());
 
         return dto;
-    }
+    }*/
 }
