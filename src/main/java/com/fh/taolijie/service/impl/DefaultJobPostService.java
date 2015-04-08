@@ -12,10 +12,7 @@ import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.service.repository.ResumeRepo;
 import com.fh.taolijie.service.repository.SchoolRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +88,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = true)
     public List<JobPostDto> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
+        CheckUtils.nullCheck(mem);
 
         int cap = CollectionUtils.determineCapacity(capacity);
 
@@ -120,6 +118,8 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         }
 
         JobPostCategoryEntity cate = em.getReference(JobPostCategoryEntity.class, cateId);
+        CheckUtils.nullCheck(cate);
+
         Page<JobPostEntity> postList = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
         wrapper.setObj(postList.getTotalPages());
 /*        List<JobPostEntity> postList = em.createNamedQuery("jobPostEntity.findByCategory", JobPostEntity.class)
@@ -281,6 +281,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void postResume(Integer postId, Integer resumeId) {
         JobPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(post);
 
         // 记录收到的简历id
         String applicationIds = post.getApplicationResumeIds();
@@ -316,8 +317,24 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void favoritePost(Integer memId, Integer postId) {
+        // TODO untested!!
+        MemberEntity mem = em.find(MemberEntity.class, memId);
+        JobPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+        String oldIds = mem.getFavoriteJobIds();
+        String newIds = StringUtils.addToString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void complaint(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
+        CheckUtils.nullCheck(post);
+
         Integer original = post.getComplaint();
 
         // 帖子本身投诉数+1
@@ -334,6 +351,8 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateJobPost(Integer postId, JobPostDto postDto) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
+        CheckUtils.nullCheck(post);
+
         CollectionUtils.updateEntity(post, postDto, null);
         //updateJobPost(post, postDto);
 
@@ -344,6 +363,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteJobPost(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
+        CheckUtils.nullCheck(post);
 
         // 从member实体中删除关联
         CollectionUtils.removeFromCollection(post.getMember().getJobPostCollection(), (jobPost) -> {
@@ -370,10 +390,18 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void addJobPost(JobPostDto dto) {
-        em.persist(makeJobPost(dto));
+        //em.persist(makeJobPost(dto));
+        em.persist(CollectionUtils.dto2Entity(dto, JobPostEntity.class, (entity) -> {
+            JobPostCategoryEntity cate = em.getReference(JobPostCategoryEntity.class, dto.getCategoryId());
+            MemberEntity mem = em.getReference(MemberEntity.class, dto.getMemberId());
+            CheckUtils.nullCheck(cate, mem);
+
+            entity.setCategory(cate);
+            entity.setMember(mem);
+        }));
     }
 
-    private JobPostEntity makeJobPost(JobPostDto dto) {
+    /*private JobPostEntity makeJobPost(JobPostDto dto) {
         JobPostEntity post = new JobPostEntity(dto.getTitle(), dto.getExpiredTime(), dto.getPostTime(),
                 dto.getWorkPlace(), dto.getWage(), dto.getTimeToPay(), dto.getJobDescription(),
                 dto.getContact(), dto.getContactPhone(), dto.getContactEmail(), dto.getContactQq(),
@@ -384,7 +412,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         post.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
 
         return post;
-    }
+    }*/
     /**
      * 不更新关联信息
      * @param post

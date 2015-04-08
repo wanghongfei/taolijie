@@ -9,10 +9,7 @@ import com.fh.taolijie.service.SearchService;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
 import com.fh.taolijie.service.repository.SHPostRepo;
-import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -72,6 +69,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         }
 
         SecondHandPostCategoryEntity cate = cateRepo.findOne(cateId);
+        CheckUtils.nullCheck(cate);
 
         Page<SecondHandPostEntity> postPages = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
         wrapper.setObj(postPages.getTotalPages());
@@ -93,6 +91,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         }
 
         MemberEntity member = memberRepo.getOne(memId);
+        CheckUtils.nullCheck(member);
+
         Page<SecondHandPostEntity> postList = null;
 
         if (filtered) {
@@ -205,12 +205,26 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void favoritePost(Integer memId, Integer postId) {
+        MemberEntity mem = memberRepo.findOne(memId);
+        SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+
+        String oldIds = mem.getFavoriteShIds();
+        String newIds = StringUtils.addToString(oldIds, postId.toString());
+        mem.setFavoriteShIds(newIds);
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addPost(SecondHandPostDto postDto) {
         // 创建帖子实体
         //SecondHandPostEntity post = makePost(postDto);
         SecondHandPostEntity post = CollectionUtils.dto2Entity(postDto, SecondHandPostEntity.class, (entity) -> {
             MemberEntity mem = memberRepo.getOne(postDto.getMemberId());
             SecondHandPostCategoryEntity cate = cateRepo.getOne(postDto.getCategoryId());
+            CheckUtils.nullCheck(mem, cate);
 
             entity.setMember(mem);
             entity.setCategory(cate);
@@ -219,6 +233,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         // 从分类中添加此帖子
         Integer cateId = postDto.getCategoryId();
         SecondHandPostCategoryEntity cate = cateRepo.getOne(cateId);
+        CheckUtils.nullCheck(cate);
+
         Collection<SecondHandPostEntity> postCollection = cate.getPostCollection();
         if (postCollection == null) {
             cate.setPostCollection(new ArrayList<>());
@@ -236,6 +252,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void complaint(Integer postId) {
         SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(post);
+
         Integer original = post.getComplaint();
 
         // 帖子本身投诉数+1
@@ -253,6 +271,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Transactional(readOnly = true)
     public SecondHandPostDto findPost(Integer postId) {
         SecondHandPostEntity entity = postRepo.getOne(postId);
+        CheckUtils.nullCheck(entity);
 
         return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> {
             dto.setMemberId(entity.getMember().getId());
@@ -266,6 +285,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     public boolean deletePost(Integer postId) {
         // 从分类中删除关联
         SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(post);
+
         CollectionUtils.removeFromCollection(post.getCategory().getPostCollection(), (po) -> {
             return po.getId().equals(postId);
         });
@@ -280,6 +301,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updatePost(Integer postId, SecondHandPostDto postDto) {
         SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(post);
+
         CollectionUtils.updateEntity(post, postDto, null);
         //updatePost(postRepo.findOne(postId), postDto);
 
@@ -290,8 +313,9 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void changeCategory(Integer postId, Integer cateId) {
         SecondHandPostEntity post = postRepo.getOne(postId);
-        // 得到新分类
         SecondHandPostCategoryEntity cate = cateRepo.getOne(cateId);
+        CheckUtils.nullCheck(post, cate);
+
         // 设置新分类
         post.setCategory(cate);
 

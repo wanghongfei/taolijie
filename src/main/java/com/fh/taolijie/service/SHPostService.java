@@ -65,6 +65,13 @@ public interface SHPostService extends PageService {
     boolean addPost(SecondHandPostDto postDto);
 
     /**
+     * 收藏二手信息
+     * @param memId
+     * @param postId
+     */
+    void favoritePost(Integer memId, Integer postId);
+
+    /**
      * 投诉+1
      */
     void complaint(Integer postId);

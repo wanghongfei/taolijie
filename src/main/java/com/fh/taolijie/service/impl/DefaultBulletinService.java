@@ -4,6 +4,7 @@ import com.fh.taolijie.controller.dto.BulletinDto;
 import com.fh.taolijie.domain.BulletinEntity;
 import com.fh.taolijie.service.BulletinService;
 import com.fh.taolijie.service.repository.BulletinRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class DefaultBulletinService implements BulletinService {
     @Transactional(readOnly = true)
     public BulletinDto findOne(Integer id) {
         BulletinEntity entity = repo.findOne(id);
+        CheckUtils.nullCheck(entity);
 
         return CollectionUtils.entity2Dto(entity, BulletinDto.class, null);
     }

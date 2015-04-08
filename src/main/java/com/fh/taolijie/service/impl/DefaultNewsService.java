@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.NewsEntity;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.repository.NewsRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -92,6 +93,8 @@ public class DefaultNewsService implements NewsService {
     @Transactional(readOnly = true)
     public NewsDto findNews(Integer newsId) {
         NewsEntity news = em.find(NewsEntity.class, newsId);
+        CheckUtils.nullCheck(news);
+
         return CollectionUtils.entity2Dto(news, NewsDto.class, (dto) -> dto.setMemberId(news.getMember().getId()) );
         //return makeNewsDto(news);
     }
@@ -100,6 +103,8 @@ public class DefaultNewsService implements NewsService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateNews(Integer newsId, NewsDto newsDto) {
         NewsEntity news = em.find(NewsEntity.class, newsId);
+        CheckUtils.nullCheck(news);
+
         CollectionUtils.updateEntity(news, newsDto, null);
         //updateNewsDto(news, newsDto);
 
@@ -128,6 +133,7 @@ public class DefaultNewsService implements NewsService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteNews(Integer newsId) {
         NewsEntity news = em.getReference(NewsEntity.class, newsId);
+        CheckUtils.nullCheck(news);
 
         CollectionUtils.removeFromCollection(news.getMember().getNewsCollection(), (newsEntity) -> {
             return newsEntity.getId().equals(newsId);

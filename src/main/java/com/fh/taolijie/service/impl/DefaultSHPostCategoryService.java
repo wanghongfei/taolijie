@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.SecondHandPostCategoryEntity;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.SHPostCategoryService;
 import com.fh.taolijie.service.repository.SHPostCategoryRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -39,7 +40,8 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
 
         List<SecondHandPostCategoryDto> dtoList = new ArrayList<>();
         for (SecondHandPostCategoryEntity cate : catePages) {
-            dtoList.add(makeCateDto(cate));
+            //dtoList.add(makeCateDto(cate));
+            dtoList.add(CollectionUtils.entity2Dto(cate, SecondHandPostCategoryDto.class, null));
         }
 
         return dtoList;
@@ -48,7 +50,11 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
     @Override
     @Transactional(readOnly = true)
     public SecondHandPostCategoryDto findCategory(Integer cateId) {
-        return makeCateDto(cateRepo.findOne(cateId));
+        SecondHandPostCategoryEntity entity = cateRepo.findOne(cateId);
+        CheckUtils.nullCheck(entity);
+
+        return CollectionUtils.entity2Dto(entity, SecondHandPostCategoryDto.class, null);
+        //return makeCateDto(cateRepo.findOne(cateId));
     }
 
     @Override
@@ -62,7 +68,11 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateCategory(Integer cateId, SecondHandPostCategoryDto cateDto) {
         SecondHandPostCategoryEntity cate = cateRepo.findOne(cateId);
-        updateCategory(cate, cateDto);
+        CheckUtils.nullCheck(cate);
+
+        CollectionUtils.updateEntity(cate, cateDto, null);
+
+        //updateCategory(cate, cateDto);
 
         return true;
     }
@@ -71,6 +81,7 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteCategory(Integer cateId) throws CascadeDeleteException {
         SecondHandPostCategoryEntity cate = cateRepo.findOne(cateId);
+        CheckUtils.nullCheck(cate);
 
         // 检查分类是否为空
         if (cate.getPostCollection() != null && false == cate.getPostCollection().isEmpty()) {
@@ -83,7 +94,7 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
         return true;
     }
 
-    private void updateCategory(SecondHandPostCategoryEntity cate, SecondHandPostCategoryDto dto) {
+   /* private void updateCategory(SecondHandPostCategoryEntity cate, SecondHandPostCategoryDto dto) {
         cate.setLevel(dto.getLevel());
         cate.setMemo(dto.getMemo());
         cate.setName(dto.getName());
@@ -96,5 +107,5 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
         dto.setMemo(cate.getMemo());
 
         return dto;
-    }
+    }*/
 }

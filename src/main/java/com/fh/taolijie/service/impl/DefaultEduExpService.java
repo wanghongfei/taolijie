@@ -8,6 +8,7 @@ import com.fh.taolijie.service.EduExpService;
 import com.fh.taolijie.service.repository.AcademyRepo;
 import com.fh.taolijie.service.repository.EduExpRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
+import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by wanghongfei on 15-3-8.
@@ -32,6 +34,26 @@ public class DefaultEduExpService implements EduExpService {
     @Autowired
     AcademyRepo academyRepo;
 
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * 此内部类存在的原因是为了消除重复代码。
+     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
+     * @param <ENTITY>
+     */
+    protected class SetupEduDto<ENTITY extends EducationExperienceEntity> implements Consumer<EducationExperienceDto> {
+        private ENTITY entity;
+
+        public SetupEduDto(ENTITY entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void accept(EducationExperienceDto dto) {
+            dto.setMemberId(entity.getMember().getId());
+            dto.setAcademyId(entity.getAcademy().getId());
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper) {
@@ -41,12 +63,13 @@ public class DefaultEduExpService implements EduExpService {
         }
 
         MemberEntity member = memberRepo.getOne(memberId);
+        CheckUtils.nullCheck(member);
         //List<EducationExperienceEntity> eduList = eduRepo.findByMember(member);
         Page<EducationExperienceEntity> eduList = eduRepo.findByMember(member, new PageRequest(firstResult, cap));
         //wrapper.setObj(eduLis);
 
         return CollectionUtils.transformCollection(eduList, EducationExperienceDto.class, (entity) -> {
-            return makeEduExpDto(entity);
+            return CollectionUtils.entity2Dto(entity, EducationExperienceDto.class, new SetupEduDto(entity));
         });
     }
 
@@ -58,14 +81,20 @@ public class DefaultEduExpService implements EduExpService {
     public boolean addEduExp(EducationExperienceDto eduDto) {
         MemberEntity mem = memberRepo.getOne(eduDto.getMemberId());
         AcademyEntity aca = academyRepo.getOne(eduDto.getAcademyId());
+        CheckUtils.nullCheck(mem, aca);
 
-        EducationExperienceEntity ee = new EducationExperienceEntity();
+/*        EducationExperienceEntity ee = new EducationExperienceEntity();
         ee.setAdmissionTime(eduDto.getAdmissionTime());
         ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
         ee.setMajor(eduDto.getMajor());
 
         ee.setMember(mem);
-        ee.setAcademy(aca);
+        ee.setAcademy(aca);*/
+
+        EducationExperienceEntity ee = CollectionUtils.dto2Entity(eduDto, EducationExperienceEntity.class, entity -> {
+            entity.setMember(mem);
+            entity.setAcademy(aca);
+        });
 
         // add experience to member
         List<EducationExperienceEntity> list = CollectionUtils.addToCollection(mem.getEducationExperienceCollection(), ee);
@@ -82,11 +111,13 @@ public class DefaultEduExpService implements EduExpService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean updateEduExp(Integer eduId, EducationExperienceDto eduDto) {
         EducationExperienceEntity ee = eduRepo.getOne(eduId);
+        CheckUtils.nullCheck(ee);
 
         // change state
-        ee.setAdmissionTime(eduDto.getAdmissionTime());
+        CollectionUtils.updateEntity(ee, eduDto, null);
+/*        ee.setAdmissionTime(eduDto.getAdmissionTime());
         ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
-        ee.setMajor(eduDto.getMajor());
+        ee.setMajor(eduDto.getMajor());*/
 
 
         return true;
@@ -96,6 +127,7 @@ public class DefaultEduExpService implements EduExpService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteEduExp(Integer id) {
         EducationExperienceEntity ee = eduRepo.getOne(id);
+        CheckUtils.nullCheck(ee);
 
         // remove connection from Member
         CollectionUtils.removeFromCollection(ee.getMember().getEducationExperienceCollection(), (entity) -> {
@@ -111,10 +143,14 @@ public class DefaultEduExpService implements EduExpService {
     @Override
     @Transactional(readOnly = true)
     public EducationExperienceDto findEduExp(Integer id) {
-        return makeEduExpDto(eduRepo.findOne(id));
+        EducationExperienceEntity edu = eduRepo.findOne(id);
+        CheckUtils.nullCheck(edu);
+
+        return CollectionUtils.entity2Dto(edu, EducationExperienceDto.class,  new SetupEduDto(edu));
+        //return makeEduExpDto(edu);
     }
 
-    private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
+   /* private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
         EducationExperienceDto dto = new EducationExperienceDto();
         dto.setId(edu.getId());
         dto.setAdmissionTime(edu.getAdmissionTime());
@@ -125,5 +161,5 @@ public class DefaultEduExpService implements EduExpService {
         dto.setMemberId(edu.getMember().getId());
 
         return dto;
-    }
+    }*/
 }

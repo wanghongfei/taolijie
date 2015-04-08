@@ -65,6 +65,9 @@ public class MemberEntity {
     private Integer complaint;
     private String likedJobIds;
     private String likedShIds;
+    private String favoriteJobIds;
+    private String favoriteShIds;
+    private String favoriteResumeIds;
 /*    private String likedIds;
     private String dislikedIds;*/
 
@@ -126,6 +129,24 @@ public class MemberEntity {
         this.appliedJobIds = appliedJobIds;
     }
 
+    @Column(name = "favorite_resume_ids")
+    public String getFavoriteResumeIds() {
+        return favoriteResumeIds;
+    }
+
+    public void setFavoriteResumeIds(String favoriteResumeIds) {
+        this.favoriteResumeIds = favoriteResumeIds;
+    }
+
+    @Column(name = "favorite_sh_ids")
+    public String getFavoriteShIds() {
+        return favoriteShIds;
+    }
+
+    public void setFavoriteShIds(String favoriteShIds) {
+        this.favoriteShIds = favoriteShIds;
+    }
+
     @Column(name = "profile_photo_id")
     public Integer getProfilePhotoId() {
         return profilePhotoId;
@@ -133,6 +154,15 @@ public class MemberEntity {
 
     public void setProfilePhotoId(Integer profilePhotoId) {
         this.profilePhotoId = profilePhotoId;
+    }
+
+    @Column(name = "favorite_job_ids")
+    public String getFavoriteJobIds() {
+        return favoriteJobIds;
+    }
+
+    public void setFavoriteJobIds(String favoriteJobIds) {
+        this.favoriteJobIds = favoriteJobIds;
     }
 
     @Basic
