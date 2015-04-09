@@ -30,7 +30,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,15 +52,14 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean registerStudent(StudentDto stuDto) throws DuplicatedUsernameException {
+        // 判断用户是否存在
         if (true == isUserExists(stuDto.getUsername())) {
             throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
         }
 
         // 创建实体
-        MemberEntity mem = new MemberEntity(stuDto.getUsername(), CredentialUtils.sha(stuDto.getPassword()), stuDto.getEmail(),
-                stuDto.getName(), stuDto.getStudentId(), stuDto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                stuDto.getProfilePhotoPath(), stuDto.getPhone(), stuDto.getQq(), stuDto.getAge(), "", "",
-                true, new Date());
+        MemberEntity mem = CollectionUtils.dto2Entity(stuDto, MemberEntity.class, null);
+
         // 保存实体
         em.persist(mem);
 
@@ -87,15 +85,14 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException {
+        // 检查用户是否存在
         if (true == isUserExists(dto.getUsername())) {
             throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
         }
 
         // 创建实体
-        MemberEntity mem = new MemberEntity(dto.getUsername(), CredentialUtils.sha(dto.getPassword()), dto.getEmail(),
-                dto.getName(), "", dto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                dto.getProfilePhotoPath(), dto.getPhone(), dto.getQq(), dto.getAge(), "", "",
-                true, new Date());
+        MemberEntity mem = CollectionUtils.dto2Entity(dto, MemberEntity.class, null);
+
         // 保存实体
         em.persist(mem);
 
@@ -127,10 +124,7 @@ public class DefaultAccountService implements AccountService {
         }
 
         // create entity
-        MemberEntity mem = new MemberEntity(empDto.getUsername(), CredentialUtils.sha(empDto.getPassword()), empDto.getEmail(),
-                empDto.getName(), "", empDto.getGender(), Constants.VerifyStatus.NONE.toString(),
-                empDto.getProfilePhotoPath(), empDto.getPhone(), empDto.getQq(), empDto.getAge(), empDto.getCompanyName(), "",
-                true, new Date());
+        MemberEntity mem = CollectionUtils.dto2Entity(empDto, MemberEntity.class, null);
 
         // 保存用户实体
         em.persist(mem);
