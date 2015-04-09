@@ -5,12 +5,10 @@ import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.EducationExperienceEntity;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.MemberRoleEntity;
-import com.fh.taolijie.domain.RoleEntity;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.repository.MemberRepo;
@@ -172,11 +170,16 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException {
+    public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException, UserInvalidException {
         try {
             MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
                     .setParameter("username", username)
                     .getSingleResult();
+
+            // check validity
+            if (false == mem.getValid()) {
+                throw new UserInvalidException(Constants.ErrorType.USER_INVALID_ERROR);
+            }
 
             // check password
             if (false == mem.getPassword().equals(CredentialUtils.sha(password))) {
@@ -307,12 +310,64 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public boolean deleteMember(Integer memberId) throws UserNotExistsException {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public boolean deleteMember(Integer memberId) {
+        MemberEntity me = memberRepo.getOne(memberId);
+        CheckUtils.nullCheck(me);
+
+        // 删除用户所有评论
+        Collection<ReviewEntity> reviewCo = me.getReviewCollection();
+        if (null != reviewCo) {
+            reviewCo.stream().forEach( review -> {
+                // 判断评论有没有回复
+                List<ReviewEntity> replyCo = review.getReplyList();
+                if (null != replyCo) {
+                    // 先删除回复
+                    replyCo.stream().forEach( reply -> {
+                        em.remove(reply);
+                    });
+                }
+
+                // 删除评论本身
+                em.remove(review);
+            });
+        }
+
+        // 删除用户所有二手信息
+        Collection<SecondHandPostEntity> shCo = me.getSecondHandPostCollection();
+        if (null != shCo) {
+            shCo.stream().forEach( post -> {
+                em.remove(post);
+            });
+        }
+
+        // 删除用户所有兼职信息
+        Collection<JobPostEntity> jobCo = me.getJobPostCollection();
+        if (null != jobCo) {
+            jobCo.stream().forEach( post -> {
+                em.remove(post);
+            });
+        }
+
+
+
+
+        // 删除用户所有简历
+        // 在兼职信息中删除简历投递
+        Collection<ResumeEntity> resumeCo = me.getResumeCollection();
+        if (null != resumeCo) {
+            // TODO
+        }
+
+        // 删除用户所有通知
+        // 与教育信息取消关联
+        // 删除用户本身
+
         return false;
     }
 
     @Override
-    public boolean deleteMember(String username) throws UserNotExistsException {
+    public boolean deleteMember(String username) {
         return false;
     }
 
@@ -323,6 +378,24 @@ public class DefaultAccountService implements AccountService {
         em.persist(role);
 
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void invalidAccount(Integer memId) {
+        MemberEntity mem = memberRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
+
+        mem.setValid(false);
+    }
+
+    @Override
+    public void validateAccount(Integer memId) {
+        MemberEntity mem = memberRepo.getOne(memId);
+        CheckUtils.nullCheck(mem);
+
+        mem.setValid(true);
+
     }
 
     @Override
