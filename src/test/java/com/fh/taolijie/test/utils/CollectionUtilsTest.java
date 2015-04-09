@@ -50,13 +50,13 @@ public class CollectionUtilsTest {
         m.setStudentId("121105");
 
         StudentDto dto = new StudentDto();
-        dto.setUsername("Neo");
+        //dto.setUsername("Neo");
         dto.setAge(20);
         dto.setStudentId("2222");
 
         CollectionUtils.updateEntity(m, dto, null);
 
-        Assert.assertEquals("Neo", m.getUsername());
+        //Assert.assertEquals("Neo", m.getUsername());
         Assert.assertEquals(20, m.getAge().intValue());
         Assert.assertEquals("2222", m.getStudentId());
     }
