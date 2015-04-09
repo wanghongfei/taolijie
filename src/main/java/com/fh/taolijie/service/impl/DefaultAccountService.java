@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
+ * {@link AccountService}接口的默认实现
  * Created by wanghongfei on 15-3-5.
  */
 @Service
@@ -48,6 +49,12 @@ public class DefaultAccountService implements AccountService {
     @Autowired
     RoleRepo roleRepo;
 
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * 此内部类存在的原因是为了消除重复代码。
+     * <p> 用于{@link CollectionUtils#entity2Dto(Object, Class, Consumer)}方法的第三个参数
+     * @param <ENTITY>
+     */
     protected class SetupMemberDto<ENTITY extends MemberEntity> implements Consumer<GeneralMemberDto> {
         private ENTITY entity;
         private Constants.RoleType type;
@@ -248,18 +255,10 @@ public class DefaultAccountService implements AccountService {
         Page<MemberEntity> memList = memberRepo.findAll(new PageRequest(firstResult, cap));
         wrap.setObj(memList.getTotalPages());
 
-/*        List<MemberEntity> memList = em.createNamedQuery("memberEntity.findAll", MemberEntity.class)
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
 
-        List<GeneralMemberDto> dtoList = new ArrayList<>();
-        for (MemberEntity m : memList) {
-            //dtoList.add(makeEmployerDto(m, false));
-            dtoList.add(CollectionUtils.entity2Dto(m, GeneralMemberDto.class, null));
-        }
-
-        return dtoList;
+        return CollectionUtils.transformCollection(memList, GeneralMemberDto.class, entity -> {
+            return CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null);
+        });
     }
 
     @Override
@@ -293,15 +292,12 @@ public class DefaultAccountService implements AccountService {
         if (memDto instanceof StudentDto) {
             StudentDto dto = (StudentDto) memDto;
             CollectionUtils.updateEntity(mem, dto, null);
-            //updateMemberEntity(mem, dto);
         } else if (memDto instanceof EmployerDto) {
             EmployerDto dto = (EmployerDto) memDto;
             CollectionUtils.updateEntity(mem , dto, null);
-            //updateMemberEntity(mem, dto);
         } else if (memDto instanceof GeneralMemberDto) {
-            GeneralMemberDto dto = (GeneralMemberDto) memDto;
+            GeneralMemberDto dto = memDto;
             CollectionUtils.updateEntity(mem, dto, null);
-            //updateMemberEntity(mem, dto);
         }
 
         em.merge(mem);
@@ -309,6 +305,7 @@ public class DefaultAccountService implements AccountService {
         return true;
     }
 
+    @Deprecated
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean deleteMember(Integer memberId) {
@@ -366,6 +363,7 @@ public class DefaultAccountService implements AccountService {
         return false;
     }
 
+    @Deprecated
     @Override
     public boolean deleteMember(String username) {
         return false;
@@ -374,7 +372,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addRole(RoleDto roleDto) {
-        RoleEntity role = new RoleEntity(roleDto.getRolename(), roleDto.getMemo());
+        RoleEntity role = CollectionUtils.dto2Entity(roleDto, RoleEntity.class, null);
         em.persist(role);
 
         return true;
@@ -455,7 +453,8 @@ public class DefaultAccountService implements AccountService {
     public RoleDto findRole(Integer roleId) {
         RoleEntity role = em.find(RoleEntity.class, roleId);
 
-        return makeRoleDto(role);
+        return CollectionUtils.entity2Dto(role, RoleDto.class, null);
+        //return makeRoleDto(role);
     }
 
     @Override
@@ -463,18 +462,11 @@ public class DefaultAccountService implements AccountService {
     public List<RoleDto> getAllRole() {
         List<RoleEntity> entityList = roleRepo.findAll();
 
-        return CollectionUtils.transformCollection(entityList, RoleDto.class, (entity) -> {
+        return CollectionUtils.transformCollection(entityList, RoleDto.class, entity -> {
             return CollectionUtils.entity2Dto(entity, RoleDto.class, null);
         });
     }
 
-    private RoleDto makeRoleDto(RoleEntity role) {
-        RoleDto dto = new RoleDto();
-        dto.setRolename(role.getRolename());
-        dto.setMemo(role.getMemo());
-
-        return dto;
-    }
 
     /**
      * 判断用户名在数据库是是否存在
@@ -490,25 +482,6 @@ public class DefaultAccountService implements AccountService {
     }
 
     /**
-     * @deprecated
-     */
-    private boolean isStudentType(Class clazz) {
-        return clazz == StudentDto.class;
-    }
-    /**
-     * @deprecated
-     */
-    private boolean isEmployerType(Class clazz) {
-        return clazz == EmployerDto.class;
-    }
-    /**
-     * @deprecated
-     */
-    private boolean isGeneralMemberType(Class clazz) {
-        return clazz == GeneralMemberDto.class;
-    }
-
-    /**
      * 触发role信息的加载
      * @param mem
      * @param dto
@@ -516,11 +489,12 @@ public class DefaultAccountService implements AccountService {
     @Transactional(propagation = Propagation.REQUIRED)
     private void loadRoleField(MemberEntity mem, GeneralMemberDto dto) {
         // 设置role信息
-        // 得到MemberEntity关联的Role对象的id
         Collection<MemberRoleEntity> mrCollection = mem.getMemberRoleCollection();
         if (null != mrCollection) {
+            // 得到MemberEntity关联的Role对象的id
+            // 并转换成List对象返回
             List<Integer> roleIdList = mrCollection.stream()
-                    .map((MemberRoleEntity mre) -> mre.getRole().getRid())
+                    .map(mre -> mre.getRole().getRid())
                     .collect(Collectors.toList());
 
             dto.setRoleIdList(roleIdList);
@@ -536,12 +510,13 @@ public class DefaultAccountService implements AccountService {
         // 得到关联表实体
         Collection<EducationExperienceEntity> eduCollection = mem.getEducationExperienceCollection();
         if (null == eduCollection) {
-            eduCollection = new ArrayList<>();
+            // 没有关联对象，直接返回
+            return;
         }
 
         // 将关联表实体中学院id取出
         List<Integer> academyIdList = eduCollection.stream()
-                .map( (eduEntity) -> eduEntity.getAcademy().getId() )
+                .map( eduEntity -> eduEntity.getAcademy().getId() )
                 .collect(Collectors.toList());
 
         // 放置到DTO对象中
@@ -562,5 +537,7 @@ public class DefaultAccountService implements AccountService {
     public static void main(String[] args) {
         String hashed = CredentialUtils.sha("111111");
         Print.print(hashed);
+
     }
+
 }
