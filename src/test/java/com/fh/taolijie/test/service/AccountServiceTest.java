@@ -12,6 +12,7 @@ import com.fh.taolijie.service.impl.DefaultAccountService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
+import com.fh.taolijie.utils.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -173,6 +174,19 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
             res = true;
         }
         Assert.assertTrue(res);
+    }
+
+    @Test
+    public void testSaveIdentifier() {
+        String iden = StringUtils.randomString(25);
+        accService.saveLoginIdentifier(this.member.getId(), iden);
+
+        em.flush();
+        em.clear();
+
+        Integer id = accService.login(iden);
+        Assert.assertNotNull(id);
+        Assert.assertEquals(this.member.getId(), id);
     }
 
     @Test

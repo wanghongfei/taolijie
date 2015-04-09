@@ -11,7 +11,6 @@ public class CheckUtils {
     /**
      * 检查形参中是否全为非null
      * @param objs
-     * @return 如果有一个null则返回false
      */
     public static void nullCheck(Object... objs) {
         if (0 == objs.length) {
