@@ -105,6 +105,7 @@ public interface AccountService {
     //public boolean deleteEducation(Integer academyId, String username);
 
     /**
+     * @deprecated 方法未实现
      * 删除一个用户
      * @param memberId {@link com.fh.taolijie.domain.MemberEntity}实体的主键值
      * @return 删除成功返回true, 失败返回false
@@ -113,6 +114,7 @@ public interface AccountService {
     public boolean deleteMember(Integer memberId);
 
     /**
+     * @deprecated 方法未实现
      * 删除一个用户
      * @param username 要删除用户的用户名
      * @return 删除成功返回true, 失败返回false
