@@ -10,7 +10,6 @@ import com.fh.taolijie.service.repository.EduExpRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
 import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,18 +56,15 @@ public class DefaultEduExpService implements EduExpService {
     @Override
     @Transactional(readOnly = true)
     public List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = capacity;
-        if (cap <= 0) {
-            cap = Constants.PAGE_CAPACITY;
-        }
+        int cap = CollectionUtils.determineCapacity(capacity);
 
         MemberEntity member = memberRepo.getOne(memberId);
         CheckUtils.nullCheck(member);
-        //List<EducationExperienceEntity> eduList = eduRepo.findByMember(member);
         Page<EducationExperienceEntity> eduList = eduRepo.findByMember(member, new PageRequest(firstResult, cap));
+        // no need to paging
         //wrapper.setObj(eduLis);
 
-        return CollectionUtils.transformCollection(eduList, EducationExperienceDto.class, (entity) -> {
+        return CollectionUtils.transformCollection(eduList, EducationExperienceDto.class, entity -> {
             return CollectionUtils.entity2Dto(entity, EducationExperienceDto.class, new SetupEduDto(entity));
         });
     }
@@ -82,14 +78,6 @@ public class DefaultEduExpService implements EduExpService {
         MemberEntity mem = memberRepo.getOne(eduDto.getMemberId());
         AcademyEntity aca = academyRepo.getOne(eduDto.getAcademyId());
         CheckUtils.nullCheck(mem, aca);
-
-/*        EducationExperienceEntity ee = new EducationExperienceEntity();
-        ee.setAdmissionTime(eduDto.getAdmissionTime());
-        ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
-        ee.setMajor(eduDto.getMajor());
-
-        ee.setMember(mem);
-        ee.setAcademy(aca);*/
 
         EducationExperienceEntity ee = CollectionUtils.dto2Entity(eduDto, EducationExperienceEntity.class, entity -> {
             entity.setMember(mem);
@@ -115,10 +103,6 @@ public class DefaultEduExpService implements EduExpService {
 
         // change state
         CollectionUtils.updateEntity(ee, eduDto, null);
-/*        ee.setAdmissionTime(eduDto.getAdmissionTime());
-        ee.setLengthOfSchooling(eduDto.getLengthOfSchooling());
-        ee.setMajor(eduDto.getMajor());*/
-
 
         return true;
     }
@@ -130,7 +114,7 @@ public class DefaultEduExpService implements EduExpService {
         CheckUtils.nullCheck(ee);
 
         // remove connection from Member
-        CollectionUtils.removeFromCollection(ee.getMember().getEducationExperienceCollection(), (entity) -> {
+        CollectionUtils.removeFromCollection(ee.getMember().getEducationExperienceCollection(), entity -> {
             return entity.getId().equals(id);
         });
 
@@ -147,19 +131,5 @@ public class DefaultEduExpService implements EduExpService {
         CheckUtils.nullCheck(edu);
 
         return CollectionUtils.entity2Dto(edu, EducationExperienceDto.class,  new SetupEduDto(edu));
-        //return makeEduExpDto(edu);
     }
-
-   /* private EducationExperienceDto makeEduExpDto(EducationExperienceEntity edu) {
-        EducationExperienceDto dto = new EducationExperienceDto();
-        dto.setId(edu.getId());
-        dto.setAdmissionTime(edu.getAdmissionTime());
-        dto.setLengthOfSchooling(edu.getLengthOfSchooling());
-        dto.setMajor(edu.getMajor());
-
-        dto.setAcademyId(edu.getAcademy().getId());
-        dto.setMemberId(edu.getMember().getId());
-
-        return dto;
-    }*/
 }

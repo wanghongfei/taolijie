@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
+ * {@link BulletinService}接口的默认实现
  * Created by wanghongfei on 15-3-31.
  */
 @Service
@@ -45,7 +46,7 @@ public class DefaultBulletinService implements BulletinService {
         Page<BulletinEntity> entityList = repo.findAll(new PageRequest(firstResult, cap));
         wrapper.setObj(entityList.getTotalPages());
 
-        return CollectionUtils.transformCollection(entityList, BulletinDto.class, (entity) -> {
+        return CollectionUtils.transformCollection(entityList, BulletinDto.class, entity -> {
             return CollectionUtils.entity2Dto(entity, BulletinDto.class, null);
         });
     }
