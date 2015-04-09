@@ -57,7 +57,8 @@ public class CollectionUtils {
             }
 
             for (Field f : superFields) {
-                if (false == f.getName().equals("id")) {
+                // skip id and username field
+                if (false == f.getName().equals("id") && false == f.getName().equals("username")) {
                     setField(dto, entity, f, entityFields);
                 }
             }
