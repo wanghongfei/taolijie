@@ -7,7 +7,6 @@ import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.repository.JobPostCategoryRepo;
 import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,19 +33,12 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Override
     @Transactional(readOnly = true)
     public List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = capacity;
-        if (0 == cap) {
-            cap = Constants.PAGE_CAPACITY;
-        }
+        int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<JobPostCategoryEntity> cateList = cateRepo.findAll(new PageRequest(firstResult, cap));
         wrapper.setObj(cateList.getTotalPages());
-/*        List<JobPostCategoryEntity> cateList = em.createNamedQuery("jobPostCategoryEntity.findAll", JobPostCategoryEntity.class)
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
 
-        return CollectionUtils.transformCollection(cateList, JobPostCategoryDto.class, (entity) -> {
+        return CollectionUtils.transformCollection(cateList, JobPostCategoryDto.class, entity -> {
             return CollectionUtils.entity2Dto(entity, JobPostCategoryDto.class, null);
         });
     }
@@ -75,7 +67,6 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
         CheckUtils.nullCheck(cate);
 
         CollectionUtils.updateEntity(cate, dto, null);
-        //updateCategory(cate, dto);
 
         return true;
     }
@@ -92,23 +83,8 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void addCategory(JobPostCategoryDto dto) {
-        //JobPostCategoryEntity cate = makeCategory(dto);
         JobPostCategoryEntity cate = CollectionUtils.dto2Entity(dto, JobPostCategoryEntity.class, null);
         em.persist(cate);
     }
 
-   /* private JobPostCategoryEntity makeCategory(JobPostCategoryDto dto) {
-        JobPostCategoryEntity cate = new JobPostCategoryEntity(dto.getName(), dto.getMemo(),
-                dto.getLevel());
-
-        return cate;
-    }*/
-/*    private JobPostCategoryDto makeCategory(JobPostCategoryEntity cate) {
-        return new JobPostCategoryDto(cate.getId(), cate.getName(), cate.getMemo(), cate.getLevel());
-    }*/
-    /*private void updateCategory(JobPostCategoryEntity cate, JobPostCategoryDto dto) {
-        cate.setName(dto.getName());
-        cate.setMemo(dto.getMemo());
-        cate.setLevel(dto.getLevel());
-    }*/
 }

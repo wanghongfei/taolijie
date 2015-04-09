@@ -93,19 +93,4 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
 
         return true;
     }
-
-   /* private void updateCategory(SecondHandPostCategoryEntity cate, SecondHandPostCategoryDto dto) {
-        cate.setLevel(dto.getLevel());
-        cate.setMemo(dto.getMemo());
-        cate.setName(dto.getName());
-    }
-    private SecondHandPostCategoryDto makeCateDto(SecondHandPostCategoryEntity cate) {
-        SecondHandPostCategoryDto dto = new SecondHandPostCategoryDto();
-        dto.setId(cate.getId());
-        dto.setName(cate.getName());
-        dto.setLevel(cate.getLevel());
-        dto.setMemo(cate.getMemo());
-
-        return dto;
-    }*/
 }

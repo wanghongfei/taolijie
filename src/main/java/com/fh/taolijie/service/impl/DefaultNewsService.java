@@ -44,42 +44,24 @@ public class DefaultNewsService implements NewsService {
         Page<NewsEntity> newsList = newsRepo.findAll(new PageRequest(firstResult, cap));
         wrapper.setObj(newsList.getTotalPages());
 
-/*        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findAll")
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
+        return CollectionUtils.transformCollection(newsList, NewsDto.class, entity -> {
+            return CollectionUtils.entity2Dto(entity, NewsDto.class, dto -> {
+                dto.setMemberId(entity.getMember().getId());
+            });
+        });
 
-        List<NewsDto> dtoList = new ArrayList<>();
-        for (NewsEntity news : newsList) {
-            //dtoList.add(makeNewsDto(news));
-            dtoList.add(CollectionUtils.entity2Dto(news, NewsDto.class, (dto) -> {
-                dto.setMemberId(news.getMember().getId());
-            }));
-        }
-
-        return dtoList;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<NewsDto> getNewsList(Date uptime, int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = capacity;
-        if (0 == cap) {
-            cap = Constants.PAGE_CAPACITY;
-        }
+        int cap = CollectionUtils.determineCapacity(capacity);
 
         Page<NewsEntity> newsList = newsRepo.findByDate(uptime, new PageRequest(firstResult, cap));
         wrapper.setObj(newsList.getTotalPages());
 
-/*        List<NewsEntity> newsList = em.createNamedQuery("newsEntity.findByDate", NewsEntity.class)
-                .setParameter("date", uptime)
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
-
         List<NewsDto> dtoList = new ArrayList<>();
         for (NewsEntity news : newsList) {
-            //dtoList.add(CollectionUtils.entity2Dto(news, NewsDto.class, null));
             dtoList.add(CollectionUtils.entity2Dto(news, NewsDto.class, (dto) -> {
                 dto.setMemberId(news.getMember().getId());
             }));
@@ -96,7 +78,6 @@ public class DefaultNewsService implements NewsService {
         CheckUtils.nullCheck(news);
 
         return CollectionUtils.entity2Dto(news, NewsDto.class, (dto) -> dto.setMemberId(news.getMember().getId()) );
-        //return makeNewsDto(news);
     }
 
     @Override
@@ -106,7 +87,6 @@ public class DefaultNewsService implements NewsService {
         CheckUtils.nullCheck(news);
 
         CollectionUtils.updateEntity(news, newsDto, null);
-        //updateNewsDto(news, newsDto);
 
         return true;
     }
@@ -125,7 +105,6 @@ public class DefaultNewsService implements NewsService {
             }
         });
 
-        //em.persist(makeNews(dto));
         em.persist(entity);
     }
 
@@ -144,35 +123,4 @@ public class DefaultNewsService implements NewsService {
         return true;
     }
 
-    /*private NewsEntity makeNews(NewsDto dto) {
-        NewsEntity news = new NewsEntity(dto.getTitle(), dto.getContent(), dto.getPicturePath(),
-                dto.getTime(), dto.getHeadPicturePath(), null);
-
-        news.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
-
-        return news;
-    }*/
-
-    /*private NewsDto makeNewsDto(NewsEntity news) {
-        NewsDto dto = new NewsDto(news.getTitle(), news.getContent(), news.getPicturePath(),
-                news.getTime(), news.getHeadPicturePath(), null);
-
-        dto.setId(news.getId());
-        dto.setMemberId(news.getMember().getId());
-
-        return dto;
-    }*/
-
-    /**
-     * 不更新time和memberId
-     * @param news
-     * @param dto
-     */
-    /*private void updateNewsDto(NewsEntity news, NewsDto dto) {
-        news.setTitle(dto.getTitle());
-        news.setTime(dto.getTime());
-        news.setContent(dto.getContent());
-        news.setPicturePath(dto.getPicturePath());
-        news.setHeadPicturePath(dto.getHeadPicturePath());
-    }*/
 }
