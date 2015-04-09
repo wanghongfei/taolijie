@@ -48,8 +48,6 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     private static final String QUERY_INTEND = "SELECT resume_id AS resumeId, job_post_category_id AS categoryId FROM resume_job_post_category AS category WHERE category.job_post_category_id = :cateId";
 
-    private SetupResumeDto setupDto = new SetupResumeDto();
-
 
     /**
      * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
@@ -58,7 +56,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
     private class SetupResumeDto<ENTITY extends ResumeEntity> implements Consumer<ResumeDto> {
         private ENTITY entity;
 
-        public void setEntity(ENTITY entity) {
+        public SetupResumeDto(ENTITY entity) {
             this.entity = entity;
         }
 
@@ -87,8 +85,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -101,8 +98,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         wrap.setObj(entityList.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -116,15 +112,9 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
         Page<ResumeEntity> rList = resumeRepo.findByMember(mem, new PageRequest(firstResult, cap));
         wrap.setObj(rList.getTotalPages());
-/*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
-                .setParameter("member", mem)
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -135,18 +125,12 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         MemberEntity mem = em.getReference(MemberEntity.class, memId);
         CheckUtils.nullCheck(mem);
 
-/*        List<ResumeEntity> rList = em.createNamedQuery("resumeEntity.findByMember", ResumeEntity.class)
-                .setParameter("member", mem)
-                .setFirstResult(firstResult)
-                .setMaxResults(cap)
-                .getResultList();*/
 
         Page<ResumeEntity> rList = resumeRepo.findByMemberAndAuthority(mem, authority.toString(), new PageRequest(firstResult, cap));
         wrap.setObj(rList.getTotalPages());
 
         return CollectionUtils.transformCollection(rList, ResumeDto.class, (ResumeEntity resumeEntity) -> {
-            setupDto.setEntity(resumeEntity);
-            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, setupDto);
+            return  CollectionUtils.entity2Dto(resumeEntity, ResumeDto.class, new SetupResumeDto(resumeEntity));
         });
     }
 
@@ -190,7 +174,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
         // 没有记录，返回空List
         if (null == recordJson) {
-            return new ArrayList<PostRecordDto>();
+            return new ArrayList<>();
         }
 
         // 解析JSON
@@ -271,8 +255,7 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         ResumeEntity entity = em.find(ResumeEntity.class, resumeId);
         CheckUtils.nullCheck(entity);
 
-        setupDto.setEntity(entity);
-        return CollectionUtils.entity2Dto(entity, ResumeDto.class, setupDto);
+        return CollectionUtils.entity2Dto(entity, ResumeDto.class, new SetupResumeDto(entity));
     }
 
     @Override
@@ -313,50 +296,6 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         });
 
         resumeRepo.save(r);
-        //em.persist(r);
     }
 
-   /* private ResumeEntity makeResume(ResumeDto dto) {
-        ResumeEntity r = new ResumeEntity(dto.getName(), dto.getGender(), dto.getAge(), dto.getHeight(),
-                dto.getPhonePath(), dto.getEmail(), dto.getQq(), dto.getExperience(), dto.getIntroduce(),
-                null);
-
-        r.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
-
-        return r;
-    }*/
-
-    /**
-     * 不更新关联信息
-     * @param resume
-     * @param dto
-     */
-    /*private void updateResume(ResumeEntity resume, ResumeDto dto) {
-        resume.setName(dto.getName());
-        resume.setGender(dto.getGender());
-        resume.setAge(dto.getAge());
-        resume.setHeight(dto.getHeight());
-        resume.setPhotoPath(dto.getPhotoPath());
-        resume.setEmail(dto.getEmail());
-        resume.setQq(dto.getQq());
-        resume.setIntroduce(dto.getIntroduce());
-    }*/
-    /*private ResumeDto makeResumeDto(ResumeEntity resume) {
-        ResumeDto dto = new ResumeDto();
-        dto.setId(resume.getId());
-        dto.setName(resume.getName());
-        dto.setGender(resume.getGender());
-        dto.setAge(resume.getAge());
-        dto.setHeight(resume.getHeight());
-        dto.setPhotoPath(resume.getPhotoPath());
-        dto.setEmail(resume.getEmail());
-        dto.setQq(resume.getQq());
-        dto.setExperience(resume.getExperience());
-        dto.setIntroduce(resume.getIntroduce());
-        dto.setCreatedTime(resume.getCreatedTime());
-
-        dto.setMemberId(resume.getMember().getId());
-
-        return dto;
-    }*/
 }
