@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -56,6 +57,25 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     @PersistenceContext
     EntityManager em;
 
+    /**
+     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
+     * @param <ENTITY>
+     */
+    protected class SetupDto<ENTITY extends JobPostEntity> implements Consumer<JobPostDto> {
+        private ENTITY entity;
+
+        public SetupDto(ENTITY entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void accept(JobPostDto dto) {
+            dto.setCategoryName(entity.getCategory().getName());
+            dto.setCategoryId(entity.getCategory().getId());
+            dto.setMemberId(entity.getMember().getId());
+        }
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<JobPostDto> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
@@ -75,11 +95,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
 
     }
@@ -101,11 +117,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -129,11 +141,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
                 .getResultList();*/
 
         return CollectionUtils.transformCollection(postList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -144,11 +152,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
         Page<JobPostEntity> entityPage = postRepo.findByVerified(Constants.VerifyStatus.NONE.toString(), new PageRequest(firstResult, cap));
         return CollectionUtils.transformCollection(entityPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (postDto) -> {
-                postDto.setCategoryName(entity.getCategory().getName());
-                postDto.setCategoryId(entity.getCategory().getId());
-                postDto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -160,11 +164,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
 
         return CollectionUtils.transformCollection(entityList, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-                dto.setMemberId(entity.getMember().getId());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -220,11 +220,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         wrapper.setObj(postPage);
 
         return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setMemberId(entity.getMember().getId());
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -258,11 +254,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
         wrapper.setObj(postPage.getTotalPages());
 
         return CollectionUtils.transformCollection(postPage, JobPostDto.class, (entity) -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, (dto) -> {
-                dto.setMemberId(entity.getMember().getId());
-                dto.setCategoryId(entity.getCategory().getId());
-                dto.setCategoryName(entity.getCategory().getName());
-            });
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
         });
     }
 
@@ -271,11 +263,7 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
     public JobPostDto findJobPost(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
         CheckUtils.nullCheck(post);
-        return CollectionUtils.entity2Dto(post, JobPostDto.class, (dto) -> {
-            dto.setCategoryName(post.getCategory().getName());
-            dto.setCategoryId(post.getCategory().getId());
-            dto.setMemberId(post.getMember().getId());
-        });
+        return CollectionUtils.entity2Dto(post, JobPostDto.class, new SetupDto(post));
     }
 
     @Override
@@ -401,66 +389,4 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
             entity.setMember(mem);
         }));
     }
-
-    /*private JobPostEntity makeJobPost(JobPostDto dto) {
-        JobPostEntity post = new JobPostEntity(dto.getTitle(), dto.getExpiredTime(), dto.getPostTime(),
-                dto.getWorkPlace(), dto.getWage(), dto.getTimeToPay(), dto.getJobDescription(),
-                dto.getContact(), dto.getContactPhone(), dto.getContactEmail(), dto.getContactQq(),
-                dto.getJobDetail(), dto.getIntroduce(), dto.getLikes(), dto.getDislikes(), dto.getEducationLevel(),
-                null, null);
-
-        post.setCategory(em.getReference(JobPostCategoryEntity.class, dto.getCategoryId()));
-        post.setMember(em.getReference(MemberEntity.class, dto.getMemberId()));
-
-        return post;
-    }*/
-    /**
-     * 不更新关联信息
-     * @param post
-     * @param dto
-     */
-    /*private void updateJobPost(JobPostEntity post, JobPostDto dto) {
-        post.setTitle(dto.getTitle());
-        post.setExpiredTime(dto.getExpiredTime());
-        post.setPostTime(dto.getPostTime());
-        post.setWorkPlace(dto.getWorkPlace());
-        post.setWage(dto.getWage());
-        post.setTimeToPay(dto.getTimeToPay());
-        post.setContact(dto.getContact());
-        post.setContactPhone(dto.getContactPhone());
-        post.setContactQq(dto.getContactQq());
-        post.setContactEmail(dto.getContactEmail());
-        post.setJobDetail(dto.getJobDetail());
-        post.setIntroduce(dto.getIntroduce());
-        post.setLikes(dto.getLikes());
-        post.setDislikes(dto.getDislikes());
-        post.setEducationLevel(dto.getEducationLevel());
-    }*/
-
-   /* private JobPostDto makeJobPostDto(JobPostEntity post) {
-        JobPostDto dto = new JobPostDto();
-        dto.setId(post.getId());
-        dto.setTitle(post.getTitle());
-        dto.setExpiredTime(dto.getExpiredTime());
-        dto.setPostTime(dto.getPostTime());
-        dto.setWorkPlace(dto.getWorkPlace());
-        dto.setWage(dto.getWage());
-        dto.setTimeToPay(dto.getTimeToPay());
-        dto.setContact(dto.getContact());
-        dto.setContactPhone(dto.getContactPhone());
-        dto.setContactQq(dto.getContactQq());
-        dto.setContactEmail(dto.getContactEmail());
-        dto.setJobDetail(dto.getJobDetail());
-        dto.setIntroduce(dto.getIntroduce());
-        dto.setLikes(dto.getLikes());
-        dto.setDislikes(dto.getDislikes());
-        dto.setEducationLevel(dto.getEducationLevel());
-
-        dto.setMemberId(post.getMember().getId());
-        dto.setCategoryName(post.getCategory().getName());
-        dto.setCategoryId(post.getCategory().getId());
-
-
-        return dto;
-    }*/
 }

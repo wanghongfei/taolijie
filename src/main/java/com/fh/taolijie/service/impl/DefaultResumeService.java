@@ -53,7 +53,6 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     /**
      * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
-     * 使用前必须先调用{@code setEntity()}方法
      * @param <ENTITY>
      */
     private class SetupResumeDto<ENTITY extends ResumeEntity> implements Consumer<ResumeDto> {
