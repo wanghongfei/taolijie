@@ -6,6 +6,7 @@ import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.DefaultAccountService;
@@ -150,6 +151,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
             Assert.assertTrue(false);
         } catch (PasswordIncorrectException e) {
             Assert.assertTrue(false);
+        } catch (UserInvalidException e) {
+            Assert.assertTrue(false);
         }
         Assert.assertTrue(res);
 
@@ -160,6 +163,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
         } catch (UserNotExistsException e) {
             res = true;
         } catch (PasswordIncorrectException e) {
+            res = false;
+        } catch (UserInvalidException e) {
             res = false;
         }
         Assert.assertTrue(res);
@@ -172,6 +177,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
             res = false;
         } catch (PasswordIncorrectException e) {
             res = true;
+        } catch (UserInvalidException e) {
+            res = false;
         }
         Assert.assertTrue(res);
     }

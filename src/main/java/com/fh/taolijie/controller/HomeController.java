@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.*;
@@ -26,8 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -385,6 +384,8 @@ public class HomeController {
         } catch (UserNotExistsException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         } catch (PasswordIncorrectException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        } catch (UserInvalidException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 

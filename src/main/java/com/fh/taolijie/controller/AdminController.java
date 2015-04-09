@@ -7,7 +7,6 @@ import com.fh.taolijie.controller.dto.*;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.repository.BannerPicRepo;
 import com.fh.taolijie.utils.Constants;
@@ -128,12 +127,12 @@ public class AdminController {
         if(member.getUsername().equals(credential.getUsername())){
             return new JsonWrapper(true,Constants.ErrorType.CANT_DELETE_CURRENT_USER).getAjaxMessage();
         }
-        try {
-            if(!accountService.deleteMember(member.getUsername())){
-                return new JsonWrapper(true,Constants.ErrorType.DELETE_FAILED).getAjaxMessage();
-            }
+/*        try {
         } catch (UserNotExistsException e) {
             return new JsonWrapper(true,Constants.ErrorType.USERNAME_NOT_EXISTS).getAjaxMessage();
+        }*/
+        if(!accountService.deleteMember(member.getUsername())){
+            return new JsonWrapper(true,Constants.ErrorType.DELETE_FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
