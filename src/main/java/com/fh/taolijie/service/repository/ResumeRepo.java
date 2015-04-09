@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by wanghongfei on 15-3-8.
  */
@@ -22,4 +24,7 @@ public interface ResumeRepo extends JpaRepository<ResumeEntity, Integer> {
 
     @Query
     Page<ResumeEntity> findByAuthority(@Param("authority") String authority, Pageable pageable);
+
+    @Query
+    Page<ResumeEntity> findByIds(@Param("ids") List<Integer> ids, Pageable pageable);
 }

@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -197,6 +194,18 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         Page<PostRecordDto> dtoPage = new PageImpl<>(dtoList, new PageRequest(page, cap), dtoList.size());
 
         return CollectionUtils.transformCollection(dtoPage, PostRecordDto.class, (dto) -> dto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ResumeDto> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
+        int cap = CollectionUtils.determineCapacity(capacity);
+
+        Page<ResumeEntity> entityList = resumeRepo.findByIds(Arrays.asList(ids), new PageRequest(page, cap));
+
+        return CollectionUtils.transformCollection(entityList, ResumeDto.class, entity -> {
+            return CollectionUtils.entity2Dto(entity, ResumeDto.class, new SetupResumeDto(entity));
+        });
     }
 
     @Override

@@ -133,6 +133,16 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         Assert.assertTrue(isRecentFront(dtoList));
     }
 
+    @Test
+    public void testGetByIds() {
+        List<ResumeDto> dtoList = rService.getResumesByIds(0, 0, new ObjWrapper(), this.resume.getId(), this.resumeBefore.getId());
+        Assert.assertNotNull(dtoList);
+        Assert.assertEquals(2, dtoList.size());
+        
+        Assert.assertTrue(dtoList.stream().anyMatch( dto -> dto.getName().equals("resume") ));
+        Assert.assertTrue(dtoList.stream().anyMatch( dto -> dto.getName().equals("resumeBefore") ));
+    }
+
     private boolean isRecentFront(List<ResumeDto> list) {
         int len = list.size();
         if (len <= 1) {
