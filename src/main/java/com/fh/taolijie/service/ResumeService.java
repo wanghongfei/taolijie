@@ -50,12 +50,6 @@ public interface ResumeService extends PageService {
      */
     List<PostRecordDto> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
 
-    /**
-     * 根据{@link PostRecordDto}对象中的id得到所有对应的实体
-     * @param recordList
-     * @return
-     */
-    List<ResumeDto> getResumesByRecord(List<PostRecordDto> recordList);
 
     /**
      * 可同时查询多个简历

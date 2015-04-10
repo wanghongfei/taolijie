@@ -197,20 +197,6 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumeDto> getResumesByRecord(List<PostRecordDto> recordList) {
-        List<Integer> ids = recordList.stream()
-                .map(PostRecordDto::getJobPostId)
-                .collect(Collectors.toList());
-
-        List<ResumeEntity> entityList = resumeRepo.findByIds(ids);
-
-        return CollectionUtils.transformCollection(entityList, ResumeDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, ResumeDto.class, new SetupResumeDto(entity));
-        });
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<ResumeDto> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
         int cap = CollectionUtils.determineCapacity(capacity);
 

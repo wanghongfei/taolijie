@@ -135,6 +135,17 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = true)
+    public List<JobPostDto> getPostListByIds(Integer... ids) {
+        List<JobPostEntity> entityList = postRepo.findByIds(Arrays.asList(ids));
+
+        return CollectionUtils.transformCollection(entityList, JobPostDto.class, entity -> {
+            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
+        });
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
     public List<JobPostDto> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
         int cap = CollectionUtils.determineCapacity(capacity);
         Page<JobPostEntity> entityList = postRepo.findSuedPost(new PageRequest(firstResult, cap));
