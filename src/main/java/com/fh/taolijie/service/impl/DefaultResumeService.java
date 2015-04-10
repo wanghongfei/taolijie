@@ -180,14 +180,13 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
 
 
         // 取出记录信息
-        List<PostRecordDto> dtoList = new ArrayList<>();
-        for (Map<String, String> jsonObj : jsonList) {
-            String postId = jsonObj.get(Constants.ApplicationRecord.KEY_ID);
-            String timeString = jsonObj.get(Constants.ApplicationRecord.KEY_TIME);
-
-            PostRecordDto dto = new PostRecordDto(Integer.valueOf(postId), new Date(Long.parseLong(timeString)) );
-            dtoList.add(dto);
-        }
+        // 将postId和time封装到PostRecordDto对象中
+        List<PostRecordDto> dtoList = jsonList.stream()
+                .map(jsonObj -> {
+                    String postId = jsonObj.get(Constants.ApplicationRecord.KEY_ID);
+                    String timeString = jsonObj.get(Constants.ApplicationRecord.KEY_TIME);
+                    return new PostRecordDto(Integer.valueOf(postId), new Date(Long.parseLong(timeString)));
+                }).collect(Collectors.toList());
 
         // 分页
         int cap = CollectionUtils.determineCapacity(capacity);
