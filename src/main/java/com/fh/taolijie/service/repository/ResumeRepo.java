@@ -27,4 +27,7 @@ public interface ResumeRepo extends JpaRepository<ResumeEntity, Integer> {
 
     @Query
     Page<ResumeEntity> findByIds(@Param("ids") List<Integer> ids, Pageable pageable);
+
+    @Query
+    List<ResumeEntity> findByIds(@Param("ids") List<Integer> ids);
 }
