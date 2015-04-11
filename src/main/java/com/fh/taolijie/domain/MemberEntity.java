@@ -73,6 +73,7 @@ public class MemberEntity {
     private String favoriteShIds;
     private String favoriteResumeIds;
     private String autoLoginIdentifier;
+    private Date lastPostTime;
 
 /*    private String likedIds;
     private String dislikedIds;*/
@@ -133,6 +134,15 @@ public class MemberEntity {
 
     public void setAutoLoginIdentifier(String autoLoginIdentifier) {
         this.autoLoginIdentifier = autoLoginIdentifier;
+    }
+
+    @Column(name = "last_post_time")
+    public Date getLastPostTime() {
+        return lastPostTime;
+    }
+
+    public void setLastPostTime(Date lastPostTime) {
+        this.lastPostTime = lastPostTime;
     }
 
     @Column(name = "applied_job_ids", columnDefinition = "TEXT")
