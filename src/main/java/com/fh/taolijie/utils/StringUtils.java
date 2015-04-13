@@ -130,8 +130,6 @@ public class StringUtils {
      * 从一个id组成的字符串中去掉指定id.
      * 如，将 "1;2;3;4;5;" 去掉 "2" 后的结果为 "1;3;4;5;".
      * 如果{@code originalStr}中不包含{@code strToBeRemoved}，则直接返回原字符串
-     * cd
-     * cd 
      * @param originalStr
      * @param strToBeRemoved
      * @return
