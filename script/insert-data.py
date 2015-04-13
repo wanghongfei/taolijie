@@ -1,7 +1,17 @@
 # coding=UTF-8
 __author__ = 'wanghongfei'
 
-import mysql.connector
+import mysql.connector, sys
+
+CLEAR_DB = False
+args = sys.argv[1:]
+
+if len(args) == 1:
+    if args[0] == 'clear':
+        CLEAR_DB = True
+    else:
+        print 'wrong parameter!'
+        sys.exit(1)
 
 config = {
     'user': 'root',
@@ -19,6 +29,24 @@ def build_connection(conf):
 
 def close_connection(conn):
     conn.close()
+
+
+# 清空所有数据
+def clear_data():
+    sqls = [
+        "DELETE FROM member_role",
+        "DELETE FROM role",
+        "DELETE FROM job_post",
+        "DELETE FROM second_hand_post",
+        "DELETE FROM job_post_category",
+        "DELETE FROM second_hand_post_category",
+        "DELETE FROM resume",
+        "DELETE FROM member",
+    ]
+
+    for sql in sqls:
+        cursor.execute(sql)
+        conn.commit()
 
 
 def insert_role_data(cursor):
@@ -212,15 +240,40 @@ def insert_job_data(name_list):
 conn = build_connection(config)
 cursor = conn.cursor()
 
+if CLEAR_DB:
+    clear_data()
+    print 'done clearing'
+    sys.exit(0)
+
 users = ['wanghongfei', 'wangfucheng', 'abc']
 # insert data
-# insert_role_data(cursor)
-# insert_member_data(cursor)
-# insert_member_role_data(cursor)
-# insert_category_data()
-# insert_resume_data(cursor, ['wanghongfei', 'wangfucheng', 'abc'])
-# insert_job_`data(users)
-# insert_sh_data(users)
+print 'inserting into role table'
+insert_role_data(cursor)
+print 'done'
+
+print 'inserting into member table'
+insert_member_data(cursor)
+print 'done'
+
+print 'inserting into member_role table'
+insert_member_role_data(cursor)
+print 'done'
+
+print 'inserting into category table'
+insert_category_data()
+print 'done'
+
+print 'inserting into resume table'
+insert_resume_data(cursor, users)
+print 'done'
+
+print 'inserting into job table'
+insert_job_data(users)
+print 'done'
+
+print 'inserting into second_hand table'
+insert_sh_data(users)
+print 'done'
 
 
 
