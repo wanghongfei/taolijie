@@ -41,6 +41,8 @@ def clear_data():
         "DELETE FROM job_post_category",
         "DELETE FROM second_hand_post_category",
         "DELETE FROM resume",
+        "DELETE FROM academy",
+        "DELETE FROM school",
         "DELETE FROM member",
     ]
 
@@ -98,6 +100,51 @@ def insert_member_role_data(cursor):
         }
     ]
     cursor.executemany(sql, data)
+
+
+def insert_school_data():
+    sql = "INSERT INTO school(short_name, full_name, province) VALUES ( %(short_name)s, %(full_name)s,  %(province)s )"
+    data = [
+        {
+            'short_name': '理工大',
+            'full_name': '山东理工大学',
+            'province': '山东'
+        }
+    ]
+    cursor.executemany(sql, data)
+
+
+def insert_academy_data():
+    sql = "INSERT INTO academy(college_id, short_name, full_name) VALUES (%(college_id)s, %(short_name)s, %(full_name)s )"
+    data = [
+        {
+            'college_id': query_school_id('山东理工大学'),
+            'short_name': '计院',
+            'full_name': '计算机学院'
+        },
+        {
+            'college_id': query_school_id('山东理工大学'),
+            'short_name': '商学院',
+            'full_name': '商学院'
+        },
+        {
+            'college_id': query_school_id('山东理工大学'),
+            'short_name': '电气学院',
+            'full_name': '电气与电子工程学院'
+        }
+    ]
+    cursor.executemany(sql, data)
+
+
+def query_school_id(school_name):
+    sql = "SELECT id FROM school WHERE full_name = %(full_name)s"
+    data = {
+        'full_name': school_name
+    }
+    cursor.execute(sql, data)
+
+    res = cursor.fetchone()
+    return res[0]
 
 
 def query_role_id(rolename):
@@ -275,7 +322,14 @@ print 'inserting into second_hand table'
 insert_sh_data(users)
 print 'done'
 
+print 'inserting into school table'
+insert_school_data()
+print 'done'
 
+
+print 'inserting into academy table'
+insert_academy_data()
+print 'done'
 
 conn.commit()
 close_connection(conn)
