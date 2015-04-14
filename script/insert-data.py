@@ -43,6 +43,7 @@ def clear_data():
         "DELETE FROM resume",
         "DELETE FROM academy",
         "DELETE FROM school",
+        "DELETE FROM news",
         "DELETE FROM member",
     ]
 
@@ -131,6 +132,28 @@ def insert_academy_data():
             'college_id': query_school_id('山东理工大学'),
             'short_name': '电气学院',
             'full_name': '电气与电子工程学院'
+        }
+    ]
+    cursor.executemany(sql, data)
+
+
+def insert_news_data():
+    sql = "INSERT INTO news(title, content, member_id) VALUE ( %(title)s, %(content)s, %(member_id)s) "
+    data = [
+        {
+            'title': '死人了1',
+            'content': '哪里死人了?',
+            'member_id': query_member_id('wanghongfei')
+        },
+        {
+            'title': '死人了2',
+            'content': '哪里死人了?',
+            'member_id': query_member_id('wangfucheng')
+        },
+        {
+            'title': '死人了3',
+            'content': '哪里死人了?',
+            'member_id': query_member_id('abc')
         }
     ]
     cursor.executemany(sql, data)
@@ -330,6 +353,11 @@ print 'done'
 print 'inserting into academy table'
 insert_academy_data()
 print 'done'
+
+print 'inserting into news table'
+insert_news_data()
+print 'done'
+
 
 conn.commit()
 close_connection(conn)
