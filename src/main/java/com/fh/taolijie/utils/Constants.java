@@ -163,6 +163,7 @@ public class Constants {
     public static class ErrorType{
 
         public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
+        public static final String USER_INVALID_ERROR = "该用户已被封号";
 
         public static final String USERNAME_ILLEGAL = "用户名不合法";
         public static final String USERNAME_ERROR = "用户名错误";

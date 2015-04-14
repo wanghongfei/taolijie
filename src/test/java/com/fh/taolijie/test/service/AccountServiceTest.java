@@ -6,12 +6,14 @@ import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.DefaultAccountService;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.Print;
+import com.fh.taolijie.utils.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -149,6 +151,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
             Assert.assertTrue(false);
         } catch (PasswordIncorrectException e) {
             Assert.assertTrue(false);
+        } catch (UserInvalidException e) {
+            Assert.assertTrue(false);
         }
         Assert.assertTrue(res);
 
@@ -159,6 +163,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
         } catch (UserNotExistsException e) {
             res = true;
         } catch (PasswordIncorrectException e) {
+            res = false;
+        } catch (UserInvalidException e) {
             res = false;
         }
         Assert.assertTrue(res);
@@ -171,8 +177,23 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
             res = false;
         } catch (PasswordIncorrectException e) {
             res = true;
+        } catch (UserInvalidException e) {
+            res = false;
         }
         Assert.assertTrue(res);
+    }
+
+    @Test
+    public void testSaveIdentifier() {
+        String iden = StringUtils.randomString(25);
+        accService.saveLoginIdentifier(this.member.getId(), iden);
+
+        em.flush();
+        em.clear();
+
+        Integer id = accService.login(iden);
+        Assert.assertNotNull(id);
+        Assert.assertEquals(this.member.getId(), id);
     }
 
     @Test

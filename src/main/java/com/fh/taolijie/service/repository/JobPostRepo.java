@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 
 /**
  * Created by wanghongfei on 15-3-8.
@@ -30,4 +32,7 @@ public interface JobPostRepo extends JpaRepository<JobPostEntity, Integer> {
 
     @Query("SELECT job FROM JobPostEntity job WHERE job.complaint > 0 ORDER BY job.complaint DESC")
     Page<JobPostEntity> findSuedPost(Pageable pageable);
+
+    @Query
+    List<JobPostEntity> findByIds(@Param("ids") List<Integer> ids);
 }

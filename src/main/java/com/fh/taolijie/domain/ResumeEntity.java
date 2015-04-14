@@ -25,7 +25,11 @@ import java.util.List;
         @NamedQuery(name = "ResumeEntity.findByMemberAndAuthority",
             query = "SELECT r FROM ResumeEntity r WHERE " +
                     "r.member = :member AND " +
-                    "r.accessAuthority = :authority")
+                    "r.accessAuthority = :authority"),
+
+        @NamedQuery(name = "ResumeEntity.findByIds",
+            query = "SELECT r FROM ResumeEntity r WHERE " +
+                    "r.id IN :ids")
 })
 @Entity
 @Table(name = "resume")

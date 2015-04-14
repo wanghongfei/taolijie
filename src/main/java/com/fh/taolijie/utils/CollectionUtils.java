@@ -57,7 +57,8 @@ public class CollectionUtils {
             }
 
             for (Field f : superFields) {
-                if (false == f.getName().equals("id")) {
+                // skip id and username field
+                if (false == f.getName().equals("id") && false == f.getName().equals("username")) {
                     setField(dto, entity, f, entityFields);
                 }
             }
@@ -173,9 +174,9 @@ public class CollectionUtils {
             // 判断dto的父类是否也是DTO对象
             if (false == dtoClass.getSuperclass().getName().equals("java.lang.Object")) {
                 // 先给父dto对象赋值
-                List<Field> superFields = getFieldsFromCache(dtoClass.getName());
+                List<Field> superFields = getFieldsFromCache(dtoClass.getSuperclass().getName());
                 if (null == superFields) {
-                    superFields = cacheFields(dtoClass);
+                    superFields = cacheFields(dtoClass.getSuperclass());
                 }
 
                 //Field[] superFileds = dtoClass.getSuperclass().getDeclaredFields();

@@ -6,6 +6,7 @@ import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
+import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -52,7 +53,7 @@ public interface AccountService {
      * @throws UserNotExistsException 用户名不存在
      * @throws PasswordIncorrectException 密码错误
      */
-    public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException;
+    public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException, UserInvalidException;
 
     /**
      * 根据Cookie信息中的identifier登陆.
@@ -104,20 +105,22 @@ public interface AccountService {
     //public boolean deleteEducation(Integer academyId, String username);
 
     /**
+     * @deprecated 方法未实现
      * 删除一个用户
      * @param memberId {@link com.fh.taolijie.domain.MemberEntity}实体的主键值
      * @return 删除成功返回true, 失败返回false
      * @throws UserNotExistsException 该用户不存在
      */
-    public boolean deleteMember(Integer memberId) throws UserNotExistsException;
+    public boolean deleteMember(Integer memberId);
 
     /**
+     * @deprecated 方法未实现
      * 删除一个用户
      * @param username 要删除用户的用户名
      * @return 删除成功返回true, 失败返回false
      * @throws UserNotExistsException 该用户不存在
      */
-    public boolean deleteMember(String username) throws UserNotExistsException;
+    public boolean deleteMember(String username);
 
     /**
      * 向数据库role表中添加一个新角色
@@ -125,6 +128,18 @@ public interface AccountService {
      * @return 删除成功返回true, 失败返回false
      */
     public boolean addRole(RoleDto roleDto);
+
+    /**
+     * 封号
+     * @param memId
+     */
+    void invalidAccount(Integer memId);
+
+    /**
+     * 解封
+     * @param memId
+     */
+    void validateAccount(Integer memId);
 
     /**
      * 保存随机生成的字符串，用于自动登陆

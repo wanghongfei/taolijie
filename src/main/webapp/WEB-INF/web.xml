@@ -25,6 +25,11 @@
         <listener-class>cn.fh.security.servlet.PageProtectionContextListener</listener-class>
     </listener>
 
+	<!-- 统计在线人数 -->
+	<listener>
+		<listener-class>com.fh.taolijie.servlet.OnlineListener</listener-class>
+	</listener>
+
 
 	<!-- Processes application requests -->
 	<servlet>

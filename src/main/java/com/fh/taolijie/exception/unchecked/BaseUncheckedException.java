@@ -10,6 +10,15 @@ public abstract class BaseUncheckedException extends RuntimeException {
         this.message = msg;
     }
 
+    /**
+     * 重写此方法，性能提高10倍以上
+     * @return
+     */
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
+
     public String getMessage() {
         return this.message;
     }

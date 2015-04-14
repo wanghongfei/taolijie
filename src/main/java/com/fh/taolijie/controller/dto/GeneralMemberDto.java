@@ -40,6 +40,7 @@ public class GeneralMemberDto {
     //private String blockList;
 
     private Date created_time;
+    private Date lastPostTime;
     private Boolean valid;
 
     private Integer complaint;
@@ -71,6 +72,14 @@ public class GeneralMemberDto {
     public void setLikedIds(String likedIds) {
         this.likedIds = likedIds;
     }*/
+
+    public Date getLastPostTime() {
+        return lastPostTime;
+    }
+
+    public void setLastPostTime(Date lastPostTime) {
+        this.lastPostTime = lastPostTime;
+    }
 
     public String getAutoLoginIdentifier() {
         return autoLoginIdentifier;

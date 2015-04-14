@@ -3,10 +3,8 @@ package com.fh.taolijie.test.controller;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.controller.HomeController;
-import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
-import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.impl.*;
@@ -15,9 +13,9 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.Print;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
@@ -30,19 +28,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by wynfrith on 15-4-1.
@@ -544,7 +536,7 @@ public class HomeControllerTest extends BaseSpringDataTestClass{
      */
     @Test
     public void testLoginPasswordError() throws Exception {
-        String expected = new JsonWrapper(false, Constants.ErrorType.PASSWORD_ERROR).getAjaxMessage();
+        String expected = new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
 
         mockMvc.perform(post("/login")
                         .contentType("application/json;charset=utf-8")

@@ -41,4 +41,33 @@ public class StringUtilsTest {
         //Assert.assertEquals("SELECT job FROM JobPostEntity job WHERE job.name=:name AND job.age=:age AND job.home=:home ORDER BY job.time DESC", query);
 
     }
+
+    @Test
+    public void testRemoveFromString() {
+        String str = "1;2;3;4;5;";
+
+        String result = StringUtils.removeFromString(str, "3");
+        Assert.assertEquals("1;2;4;5;", result);
+
+        result = StringUtils.removeFromString(str, "1");
+        Assert.assertEquals("2;3;4;5;", result);
+
+        result = StringUtils.removeFromString(str, "5");
+        Assert.assertEquals("1;2;3;4;", result);
+
+
+
+        str = "12;123;931;0;";
+        result = StringUtils.removeFromString(str, "12");
+        Assert.assertEquals("123;931;0;", result);
+
+        result = StringUtils.removeFromString(str, "123");
+        Assert.assertEquals("12;931;0;", result);
+
+        result = StringUtils.removeFromString(str, "0");
+        Assert.assertEquals("12;123;931;", result);
+
+        result = StringUtils.removeFromString(str, "111");
+        Assert.assertEquals("12;123;931;0;", result);
+    }
 }

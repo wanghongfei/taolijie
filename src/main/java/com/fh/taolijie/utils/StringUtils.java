@@ -126,6 +126,32 @@ public class StringUtils {
         return str.substring(1, str.length() - 1);
     }
 
+    /**
+     * 从一个id组成的字符串中去掉指定id.
+     * 如，将 "1;2;3;4;5;" 去掉 "2" 后的结果为 "1;3;4;5;".
+     * 如果{@code originalStr}中不包含{@code strToBeRemoved}，则直接返回原字符串
+     * @param originalStr
+     * @param strToBeRemoved
+     * @return
+     */
+    public static String removeFromString(String originalStr, String strToBeRemoved) {
+        if (null == originalStr) {
+            throw new IllegalArgumentException("original string 不能为null");
+        }
+
+        String fullString = strToBeRemoved + Constants.DELIMITER;
+        StringBuilder sb = new StringBuilder(originalStr);
+
+        int pos = sb.indexOf(fullString);
+        // 原字符串中不包含要删除的内容
+        // 直接返回原串
+        if (-1 == pos) {
+            return originalStr;
+        }
+        sb.replace(pos, pos + fullString.length(), "");
+
+        return sb.toString();
+    }
 
     public static String addToString(String originalStr, String newStr) {
         StringBuilder sb = new StringBuilder();

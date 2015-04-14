@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by wanghongfei on 15-3-7.
@@ -154,6 +151,15 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertFalse(dtoList.isEmpty());
         contains = containsPostTitle(dtoList, "a post");
         Assert.assertTrue(contains);
+    }
+
+    @Test
+    public void testGetByIds() {
+        List<JobPostDto> dtoList = postService.getPostListByIds(new Integer[] {post.getId(), post2.getId()});
+        Assert.assertNotNull(dtoList);
+
+        Assert.assertTrue(dtoList.stream().anyMatch( (dto) -> dto.getTitle().equals("a post") ));
+        Assert.assertTrue(dtoList.stream().anyMatch((dto) -> dto.getTitle().equals("third post")));
     }
 
     @Test

@@ -17,7 +17,9 @@ import java.util.Date;
         @NamedQuery(name = "JobPostEntity.findByMember",
                 query = "SELECT j FROM JobPostEntity j WHERE j.member = :member ORDER BY j.postTime DESC"),
         @NamedQuery(name = "jobPostEntity.findByCategory",
-                query = "SELECT j FROM JobPostEntity j WHERE j.category = :category ORDER BY j.postTime DESC")
+                query = "SELECT j FROM JobPostEntity j WHERE j.category = :category ORDER BY j.postTime DESC"),
+        @NamedQuery(name = "JobPostEntity.findByIds",
+                query = "SELECT j FROM JobPostEntity j WHERE j.id IN :ids")
 })
 
 @Entity
