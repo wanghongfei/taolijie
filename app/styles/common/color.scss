@@ -1,0 +1,66 @@
+
+
+/**主题色**/
+.theme-color{
+    color: $theme-color !important;
+}
+.theme-color-bd{
+   border-color: $theme-color !important;
+}
+.theme-color-bg{
+   background-color: $theme-color !important;
+}
+
+/*白*/
+.white{
+	color: $white !important;
+}
+.white-bg{
+	background-color: $white !important;
+}
+
+
+/*深绿*/
+.dark-green{
+	color: $dark-green !important;
+}
+.dark-green-bd{
+	border-color: $dark-green !important;
+}
+.dark-green-bg{
+	background-color: $dark-green !important;
+}
+
+
+/*蓝*/
+.blue{
+	color: $blue !important;
+}
+.blue-bd{
+	border-color: $blue !important;
+}
+.blue-bg{
+	background-color: $blue !important;
+}
+
+/*浅绿*/
+.light-green{
+	color: $light-green !important;
+}
+.light-green-bd{
+	border-color: $light-green !important;
+}
+.light-green-bg{
+	background-color: $light-green !important;
+}
+
+/*红*/
+.red{
+	color: $red;
+}
+.red-bd{
+	border-color: $red !important;
+}
+.red-bg{
+	background-color: $red !important;
+}

@@ -1,0 +1,101 @@
+.index .segment{
+    margin-bottom: 10px;
+}
+.index .pin-title{
+    font-size: 18px;
+    width: 140px;
+}
+.index .jobs{
+    height: 264px;
+}
+
+.index .job-slip{
+    width: 365px;
+    height: 60px;
+    line-height: 60px;
+    float: left;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    span{
+        float: left;
+    }
+    .content{
+        border: 1px solid #e6e6e6;
+        width: 305px;
+        padding-left: 20px;
+    }
+    span.cate{
+        background-color: #eebc5b;
+        height:60px;
+        width:60px;
+        display: inline-block;
+        text-align: center;
+        color: #fff;
+    }
+}
+.index .job-slip:hover{
+    cursor: pointer;
+}
+.index .shs,.shlist .shs{
+    overflow: auto;
+}
+.index .sh-slip,.shlist .sh-slip{
+    margin-bottom: 20px;
+    width: 261px;
+    height: 314px;
+    background-color: #fff;
+    margin-right: 13px;
+    img{
+        width: 100%;
+        height: 194px;
+    }
+    &>p{
+        margin-top: 12px;
+        margin-left: 10px;
+        font-size: 18px;
+    }        
+    &>span{
+        width: 68px;
+        height: 68px;
+        border-radius: 68px;
+        background-color: #5fc4a4;
+        margin-top: 5px;
+        margin-right: 10px;
+        color: #fff;
+        line-height: 68px;
+        text-align: center;
+        font-size: 18px;
+    }
+    div p,div span{
+        margin-top: 20px;
+        line-height: 25px;
+        margin-left: 10px;
+        font-size: 15px;
+    }
+
+}
+
+.index .about{
+    div{
+        float: left;
+        margin-top: 60px;
+        margin-bottom: 60px;
+        margin-left: 80px;
+         text-align: center;
+    }
+    span{
+        width: 97px;
+        height: 97px;
+        border-radius: 97px;
+        cursor: pointer;
+        line-height: 97px;
+        background-color: #e3e3e3;
+        font-size: 40px;
+        color: #888888;
+        display: inline-block;
+    }
+    p{
+        margin-top: 10px;
+        color: #666;
+    }
+}

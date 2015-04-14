@@ -1,0 +1,80 @@
+.side{
+	margin-top: 18px;
+	float: left;
+	width: 163px;
+}
+
+/*左侧导航*/
+.side .services{
+	font-size: $title-font;
+	min-height: 380px;
+	background-color: $white;
+	text-align: center;
+	p{
+		background-color: #fa6a38;
+		height: 60px;
+		width: 100%;
+		line-height: 60px;
+		color: $white;
+	}
+	ul{
+		li{
+			display: block;
+			height: 60px;
+			line-height: 60px;
+			border-bottom: 1px solid #d5d5d5;
+		}
+	}
+}
+
+
+/*校园聚焦点*/
+.side .news{
+	margin-top: 30px;
+	font-size: $title-font;
+	min-height: 380px;
+	text-align: center;
+	p{
+		background-color: #fa6a38;
+		height: 60px;
+		width: 100%;
+		line-height: 60px;
+		color: $white;
+		position: relative;
+	}
+	ul{
+		li{
+			display: block; 
+			width: 163px;
+			height: 138px;
+			margin-top: 15px;
+		}
+		li:hover{
+			-webkit-animation: hinge 1s;
+			-o-animation: hinge 1s;
+			animation: hinge 1s;
+		}
+	}
+	.news-1{
+		background-image: url("/images/1.gif");
+	}
+	.news-2{
+		background-image: url("/images/2.gif");
+	}
+	.news-3{
+		background-image: url("/images/3.gif");
+	}
+	.news-arrow {
+		position: absolute;
+		display: block;
+		width: 0;
+		height: 0;
+		left: 70px;
+		border-top: 8px solid;
+		border-right: 10px solid transparent;
+		border-left: 10px solid transparent;
+		color: $theme-color;
+	}
+
+
+}
