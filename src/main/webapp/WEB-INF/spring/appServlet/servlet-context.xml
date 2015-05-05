@@ -22,6 +22,9 @@
         up static resources in the ${webappRoot}/resources directory -->
     <resources mapping="/assets/**" location="/WEB-INF/views/assets/" />
 
+    <!--管理员后台资源路径-->
+    <resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
+
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources
         in the /WEB-INF/views directory -->
     <beans:bean
@@ -56,8 +59,15 @@
         <beans:property name="database" value="MYSQL" />
     </beans:bean>
 
-    <jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"
-                     resource-ref="true" />
+    <!--<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"-->
+                     <!--resource-ref="true" />-->
+    <!--数据库连接采用jdbc驱动-->
+    <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie" />
+        <beans:property name="username" value="root" />
+        <beans:property name="password" value="wfc" />
+    </beans:bean>
 
     <beans:bean
             class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
