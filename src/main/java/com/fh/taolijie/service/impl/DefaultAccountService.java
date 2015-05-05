@@ -28,7 +28,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,9 @@ public class DefaultAccountService implements AccountService {
 
     @Autowired
     RoleRepo roleRepo;
+
+    @Autowired
+    Mail mail;
 
     /**
      * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
@@ -540,4 +545,58 @@ public class DefaultAccountService implements AccountService {
 
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public boolean resetPassword(String username, String token, String newPassword) {
+        List<MemberEntity> memList = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                .setParameter("username", username)
+                .getResultList();
+
+
+        MemberEntity mem = memList.get(0);
+        CheckUtils.nullCheck(mem);
+
+        String tk = mem.getResetPasswordToken();
+        String email = mem.getEmail();
+        Date lastTokenDate = mem.getLastTokenDate();
+
+        // 验证用户表中的邮箱和token, token日期是否为空
+        if (!StringUtils.checkNotEmpty(email)  || !StringUtils.checkNotEmpty(tk) || null == lastTokenDate) {
+            return false;
+        }
+
+        // 验证token是否匹配，是否过期
+        if (false == checkDate(lastTokenDate) || false == token.equals(tk)) {
+            return false;
+        }
+
+        // 验证通过，修改密码
+        mem.setPassword(CredentialUtils.sha(newPassword));
+
+        return true;
+    }
+
+    private boolean checkDate(Date date) {
+        return TimeUtil.intervalGreaterThan(new Date(), date, Constants.MAIL_VALID_MINUTES, TimeUnit.MINUTES);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void sendResetPasswordEmail(String username) {
+        MemberEntity mem = em.createNamedQuery("memberEntity.findMemberByUsername", MemberEntity.class)
+                .setParameter("username", username)
+                .getResultList()
+                .get(0);
+
+        CheckUtils.nullCheck(mem);
+
+
+        // 向用户表中写入重置密码所需的token和日期
+        String token = StringUtils.randomString(Constants.TOKEN_LENGTH);
+        mem.setLastTokenDate(new Date());
+        mem.setResetPasswordToken(token);
+
+        // send email
+        mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
+    }
 }

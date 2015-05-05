@@ -4,9 +4,7 @@ import com.fh.taolijie.utils.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wanghongfei on 15-3-31.
@@ -69,5 +67,17 @@ public class StringUtilsTest {
 
         result = StringUtils.removeFromString(str, "111");
         Assert.assertEquals("12;123;931;0;", result);
+    }
+
+    @Test
+    public void repeatTest() {
+        Set<String> set = new HashSet<>();
+        for (int i = 0 ; i < 100000 ; ++i) {
+            String str = StringUtils.randomString(15);
+            if (true == set.contains(str)) {
+                Assert.assertTrue("重复的token", false);
+            }
+            set.add(str);
+        }
     }
 }

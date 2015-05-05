@@ -13,8 +13,8 @@ public class TimeUtil {
         long olderTime = olderDate.getTime();
         long newerTime = newerDate.getTime();
 
-        long expectedInterval = timeUnit.toSeconds(interval);
+        long expectedInterval = timeUnit.toMillis(interval);
 
-        return newerTime - olderTime >= expectedInterval;
+        return expectedInterval >= newerTime - olderTime;
     }
 }

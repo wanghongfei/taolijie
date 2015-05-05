@@ -16,6 +16,10 @@ public class Constants {
      */
     public static final int PAGE_CAPACITY = 8;
 
+    public static final int TOKEN_LENGTH = 15;
+
+    public static final long MAIL_VALID_MINUTES = 10;
+
     /**
      * 数据库member表中verified字段的取值
      */
@@ -94,6 +98,7 @@ public class Constants {
 
     public static enum MailType {
         ERROR,
+        RESET_PASSWORD,
         FEEDBACK;
 
         @Override
@@ -105,6 +110,10 @@ public class Constants {
                     break;
                 case FEEDBACK:
                     str = "用户反馈";
+                    break;
+
+                case RESET_PASSWORD:
+                    str = "密码重置";
                     break;
 
                 default:

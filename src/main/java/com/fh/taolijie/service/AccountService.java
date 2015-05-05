@@ -181,4 +181,20 @@ public interface AccountService {
      * @param username
      */
     public void deassignRole(Integer roleId, String username);
+
+
+    /**
+     * 找回密码并重置密码
+     * @param username
+     * @param token 发给用户邮件中的token值
+     * @param newPassword
+     * @return 修改成功返回true, 否则返回false
+     */
+    boolean resetPassword(String username, String token, String newPassword);
+
+    /**
+     * 向用户发送重置密码邮件
+     * @param username
+     */
+    void sendResetPasswordEmail(String username);
 }

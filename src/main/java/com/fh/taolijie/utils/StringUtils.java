@@ -177,4 +177,24 @@ public class StringUtils {
         return Arrays.stream(ids)
                 .anyMatch( (id) -> id.equals(idString) );
     }
+
+    public static boolean checkEqualAndNotEmpty(String str1, String str2) {
+        if (null == str1 || null == str2) {
+            return false;
+        }
+
+        if (str1.isEmpty() || str2.isEmpty()) {
+            return false;
+        }
+
+        return str1.equals(str2);
+    }
+
+    public static boolean checkNotEmpty(String str) {
+        if (null == str || str.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
 }
