@@ -80,6 +80,9 @@ public class MemberEntity {
 
     private Integer profilePhotoId;
 
+    private String resetPasswordToken;
+    private Date lastTokenDate;
+
     private Collection<EducationExperienceEntity> educationExperienceCollection;
     private Collection<JobPostEntity> jobPostCollection;
     private Collection<MemberRoleEntity> memberRoleCollection;
@@ -136,6 +139,15 @@ public class MemberEntity {
         this.autoLoginIdentifier = autoLoginIdentifier;
     }
 
+    @Column(name = "last_token_date")
+    public Date getLastTokenDate() {
+        return lastTokenDate;
+    }
+
+    public void setLastTokenDate(Date lastTokenDate) {
+        this.lastTokenDate = lastTokenDate;
+    }
+
     @Column(name = "last_post_time")
     public Date getLastPostTime() {
         return lastPostTime;
@@ -143,6 +155,15 @@ public class MemberEntity {
 
     public void setLastPostTime(Date lastPostTime) {
         this.lastPostTime = lastPostTime;
+    }
+
+    @Column(name = "reset_password_token")
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 
     @Column(name = "applied_job_ids", columnDefinition = "TEXT")
