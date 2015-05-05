@@ -577,7 +577,7 @@ public class DefaultAccountService implements AccountService {
     }
 
     private boolean checkDate(Date date) {
-        return TimeUtil.intervalGreaterThan(new Date(), date, Constants.MAIL_VALID_MINUTES, TimeUnit.MINUTES);
+        return TimeUtil.intervalLessThan(new Date(), date, Constants.MAIL_VALID_MINUTES, TimeUnit.MINUTES);
     }
 
     @Override

@@ -17,4 +17,14 @@ public class TimeUtil {
 
         return expectedInterval >= newerTime - olderTime;
     }
+
+    public static boolean intervalLessThan(Date newerDate, Date olderDate, long interval, TimeUnit timeUnit) {
+        long olderTime = olderDate.getTime();
+        long newerTime = newerDate.getTime();
+
+        long expectedInterval = timeUnit.toMillis(interval);
+
+        return expectedInterval <= newerTime - olderTime;
+
+    }
 }

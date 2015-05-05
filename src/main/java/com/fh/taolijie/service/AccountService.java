@@ -184,7 +184,13 @@ public interface AccountService {
 
 
     /**
-     * 找回密码并重置密码
+     * 找回密码并重置密码.
+     * <p> 找回密码调用说明:
+     * 1. 用户请求找回密码后，服务器向用户邮箱发送一封带有15位token的邮件, 通过调用{@link #sendResetPasswordEmail(String)}实现;
+     * 2. 用户得到token后，点击邮件中的url, 服务端从请求中获取token调用{@link #resetPassword(String, String, String)}方法，
+     * 然后与用户表中的token, last_token_time对比，只有当token相同且时间间隔在10分钟以内，才能成功修改密码。
+     *
+     *
      * @param username
      * @param token 发给用户邮件中的token值
      * @param newPassword
