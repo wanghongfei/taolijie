@@ -4,9 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.*;
-import com.fh.taolijie.exception.checked.CascadeDeleteException;
-import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
-import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.repository.BannerPicRepo;
 import com.fh.taolijie.utils.Constants;
@@ -14,18 +12,21 @@ import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by wynfrith on 15-3-30.
  */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/manage")
 public class AdminController {
 
     @Autowired
@@ -44,22 +45,84 @@ public class AdminController {
     NewsService newsService;
     @Autowired
     BannerPicRepo bannerPicRepo;
+
+
+
     /**
-     * 用户列表页面
-     * @return
+     * 后台主页
      */
-    @RequestMapping(value = "userlist",method = RequestMethod.GET)
-    public String userlist(){
-       return "";
+    @RequestMapping(value = {"/","index"},method = RequestMethod.GET)
+    public String index(){
+        return "pc/admin/index";
+    }
+
+    /**
+     * 管理员注销
+     */
+    @RequestMapping(value = "logout",method = RequestMethod.GET)
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login/admin";
     }
 
 
     /**
-     * 添加或修改用户页面（填表单）
+     * 兼职列表页面
+     */
+    @RequestMapping(value = "jobs",method = RequestMethod.GET)
+    public String jobs(){
+        return "pc/admin/jobs";
+    }
+    /**
+     * 二手列表页面
+     */
+    @RequestMapping(value = "shs",method = RequestMethod.GET)
+    public String shs(){
+        return "pc/admin/shs";
+    }
+    /**
+     * 简历页面
+     */
+    @RequestMapping(value = "resumes",method = RequestMethod.GET)
+    public String resumes(){
+        return "pc/admin/resumes";
+    }
+
+
+
+
+    /**
+     * 用户列表页面
+     * @return
+     */
+    @RequestMapping(value = "users",method = RequestMethod.GET)
+    public String userlist(){
+       return "pc/admin/users";
+    }
+
+
+    /**
+     * 添加用户页面（填表单）
      */
     @RequestMapping(value = "adduser",method = RequestMethod.GET)
-    public String addUser(){
-        return "";
+    public String addUser(Model model){
+        model.addAttribute("isUpdate",false);
+        return "pc/admin/adduser";
+    }
+    /**
+     * 修改用户页面
+     */
+    @RequestMapping(value = "updateUser/{id}",method = RequestMethod.GET)
+    public String updateUser(@PathVariable int id,Model model){
+
+        GeneralMemberDto member = accountService.findMember(id);
+        if(member == null){
+            return "redirect:pc/admin/adduser";
+        }
+
+        model.addAttribute("isUpdate",true);
+        model.addAttribute("member",member);
+        return "pc/admin/adduser";
     }
 
     /**
@@ -67,17 +130,77 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "/adduser",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String  addUser(GeneralMemberDto dto){
-        if(null == accountService.findMember(dto.getUsername(),new GeneralMemberDto[0],false)){
+    public @ResponseBody String  addUser(GeneralMemberDto dto,@RequestParam String role){
+        RoleDto studentRole = null;
+        RoleDto employerRole = null;
+        RoleDto adminRole = null;
+
+        if(null != accountService.findMember(dto.getUsername(),new GeneralMemberDto[0],false)){
             return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
         }
+        System.out.println("添加用户的role:" + role);
+
+           /*查询所有role*/
+        for(RoleDto r : accountService.getAllRole()){
+            if(r.getRolename().equals(Constants.RoleType.STUDENT.toString())) {
+                studentRole = r;
+            }else if(r.getRolename().equals(Constants.RoleType.EMPLOYER.toString())){
+                employerRole = r;
+            }else if(r.getRolename().equals(Constants.RoleType.ADMIN.toString())){
+                adminRole = r;
+            }
+        }
+
+         /*如果没有role,创建*/
+        if(studentRole == null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.STUDENT.toString());
+            r.setMemo("学生");
+            accountService.addRole(r);
+            studentRole = r;
+        }
+        if(employerRole==null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.EMPLOYER.toString());
+            r.setMemo("商家");
+            accountService.addRole(r);
+            employerRole = r;
+        }
+        if(adminRole==null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.ADMIN.toString());
+            r.setMemo("管理员");
+            accountService.addRole(r);
+            employerRole = r;
+        }
+
+
+        List<Integer> roleList = new ArrayList<>();
+        /*对role的判断*/
+        if(role.equals(adminRole.getRolename())){
+            roleList.add(adminRole.getRid());
+        }else if(role.equals(employerRole.getRolename())){
+            roleList.add(employerRole.getRid());
+        }else if(role.equals(studentRole.getRolename())){
+            roleList.add(studentRole.getRid());
+        }else{
+            return new JsonWrapper(false,Constants.ErrorType.FAILED).getAjaxMessage();
+        }
+
+        /*设置role*/
+        dto.setRoleIdList(roleList);
+        dto.setPassword(CredentialUtils.sha(dto.getPassword()));
+        dto.setCreated_time(new Date());
+
+
         try {
             accountService.register(dto);
         } catch (DuplicatedUsernameException e) {
-            return new JsonWrapper(true,Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false,Constants.ErrorType.FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
 
     /***
      * 修改账户(权限)
@@ -106,6 +229,8 @@ public class AdminController {
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+
     /**
      * 解封账户
      */
@@ -121,17 +246,17 @@ public class AdminController {
     /**
      *删除用户
      */
-    @RequestMapping(value = "/deleteUser",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String deleterUser(HttpSession session,GeneralMemberDto member){
+    @RequestMapping(value = "/deleteUser/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String deleterUser(@PathVariable int id, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
-        if(member.getUsername().equals(credential.getUsername())){
+        if(id == credential.getId()){
             return new JsonWrapper(true,Constants.ErrorType.CANT_DELETE_CURRENT_USER).getAjaxMessage();
         }
 /*        try {
         } catch (UserNotExistsException e) {
             return new JsonWrapper(true,Constants.ErrorType.USERNAME_NOT_EXISTS).getAjaxMessage();
         }*/
-        if(!accountService.deleteMember(member.getUsername())){
+        if(!accountService.deleteMember(id)){
             return new JsonWrapper(true,Constants.ErrorType.DELETE_FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -144,8 +269,21 @@ public class AdminController {
      */
     @RequestMapping(value = "/getuser",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String getUser(){
-        List<GeneralMemberDto> list = accountService.getMemberList(0, 0, new ObjWrapper());
+        List<GeneralMemberDto> list = accountService.getMemberList(0,Integer.MAX_VALUE, new ObjWrapper());
         return JSON.toJSONString(list);
+    }
+
+    /**
+     * 获取一个用户的信息
+     */
+    @RequestMapping(value="/findUser/{id}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String getOneUser(@PathVariable int id){
+        GeneralMemberDto member = accountService.findMember(id);
+        if(member == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        }
+
+        return JSON.toJSONString(member);
     }
 
     /**
@@ -208,96 +346,36 @@ public class AdminController {
 
 
     /**
-     * 添加学校
+     * 添加新闻 页面
      */
-    @Deprecated
-    @RequestMapping(value = "/addschool",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String addSchool(@Valid SchoolDto school,BindingResult result){
-        if(result.hasErrors()){
-            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
-        }
-        if(!schoolService.addSchool(school)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-        }
-
-
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    @RequestMapping(value = "/addnews", method = RequestMethod.GET)
+    public String addNews(Model model){
+        model.addAttribute("isUpdate",false);
+        return "pc/admin/addnews";
     }
-
     /**
-     * 删除学校
+     * 修改新闻页面
      */
-    @Deprecated
-    @RequestMapping(value = "/deleteschool",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String deleteSchool(SchoolDto schoolDto){
-        try {
-            if(!schoolService.deleteSchool(schoolDto.getId())){
-                return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-            }
-        } catch (CascadeDeleteException e) {
-            return new JsonWrapper(false, Constants.ErrorType.DELETE_FAILED).getAjaxMessage();
+    @RequestMapping(value = "/updatenews", method = RequestMethod.GET)
+    public String updateNews(@PathVariable int id, Model model){
+        NewsDto news = newsService.findNews(id);
+        if(news == null){
+            return "redirect:pc/admin/addnews";
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        model.addAttribute("news",news);
+        model.addAttribute("isUpdate", true);
+        return "pc/admin/addnews";
     }
-
-    /**
-     * 修改学校
-     */
-    @Deprecated
-    @RequestMapping(value = "/updateschool",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String updateSchool(SchoolDto schoolDto){
-        /*需要传入学校的id放入schoolDto中*/
-        if(!schoolService.updateSchoolInfo(schoolDto.getId(),schoolDto)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-        }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-
-    /**
-     * 添加学院
-     */
-    @Deprecated
-    @RequestMapping(value = "/addacademy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String addAcademy(@RequestParam int schoolId,AcademyDto academyDto){
-        schoolService.addAcademy(schoolId,academyDto);
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-
-    /**
-     * 删除学院
-     */
-    @Deprecated
-    @RequestMapping(value = "/deleteacacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String deleteAcacdemy(@RequestParam int academyId){
-        if(!schoolService.deleteAcademy(academyId)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-        }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-
-
-    /**
-     * 修改学院
-     */
-    @RequestMapping(value = "/updateAcacdemy",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String updateAcacdemy(@Valid AcademyDto academyDto){
-        if(!schoolService.updateAcademy(academyDto.getId(), academyDto)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-        }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-
-
 
     /**
      * 添加新闻
      */
     @RequestMapping(value = "/addnews",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String addNews(@Valid NewsDto newsDto,BindingResult result){
-        if(result.hasErrors()){
-            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
-        }
+    public @ResponseBody String addNews(@Valid NewsDto newsDto,BindingResult result,HttpSession session){
 
+        System.out.println(newsDto.getContent());
+        Credential credential = CredentialUtils.getCredential(session);
+        newsDto.setMemberId(credential.getId());
         newsService.addNews(newsDto);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -319,10 +397,10 @@ public class AdminController {
     @RequestMapping(value = "/updatenews",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateNews(NewsDto newsDto){
 
+
         if(!newsService.updateNews(newsDto.getId(), newsDto)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
-
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
@@ -337,16 +415,26 @@ public class AdminController {
     }
 
     /**
-     * 添加二手\兼职分类
-     * @param categoryType  0为兼职分类,1为二手分类
+     * 添加二手/分类页面
+     * @param type
      */
-    @RequestMapping(value = "/addctegory",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String addCategory(@RequestParam int categoryType,
+    @RequestMapping(value = "/addcategory", method = RequestMethod.GET)
+    public String addCategoryPage(@RequestParam(defaultValue = "3") int type,Model model){
+        model.addAttribute("type", type);
+        return "pc/admin/addcategory";
+    }
+
+    /**
+     * 添加二手\兼职分类
+     * @param type  0为兼职分类,1为二手分类
+     */
+    @RequestMapping(value = "/addcategory",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String addCategory(@RequestParam int type,
                                             JobPostCategoryDto jobCate,
                                             SecondHandPostCategoryDto shCate){
-        if(categoryType==0){
+        if(type==0){
             jobPostCateService.addCategory(jobCate);
-        }else if(categoryType==1){
+        }else if(type==1){
             /*添加分类*/
             shPostCategoryService.addCategory(shCate);
         }else {
@@ -359,20 +447,29 @@ public class AdminController {
      * 兼职分类页面 Get
      * 页面左边显示所有分类，右边可以添加分类
      */
-    @RequestMapping(value = "/jobcate",method = RequestMethod.GET)
-    public String jobCate(){
-        return "";
+    @RequestMapping(value = "/jobcategory",method = RequestMethod.GET)
+    public String jobCategory(){
+        return "pc/admin/jobcategory";
     }
 
     /**
+     * 二手分类页面 Get
+     * 页面左边显示所有分类，右边可以添加分类
+     */
+    @RequestMapping(value = "/shcategory",method = RequestMethod.GET)
+    public String shCategory(){
+        return "pc/admin/shcategory";
+    }
+
+
+    /**
      * 兼职分类获取 ajax
-     * @param page
      * @return
      */
-    @RequestMapping(value = "/jobcatelist",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String jobCateList(@PathVariable int page){
+    @RequestMapping(value = "/jobcatelist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String jobCateList(){
         int capcity = Constants.PAGE_CAPACITY;
-        List<JobPostCategoryDto> list = jobPostCateService.getCategoryList(page-1,capcity,new ObjWrapper());
+        List<JobPostCategoryDto> list = jobPostCateService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -383,8 +480,8 @@ public class AdminController {
      * @param id 分类id
      * @param type  0为兼职分类,1为二手分类
      */
-    @RequestMapping(value = "/deljobcate",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String delJobCate(@RequestParam int id,@RequestParam int type){
+    @RequestMapping(value = "/deljobcate/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String delJobCate(@PathVariable int id,@RequestParam int type){
         if(type == 0){
             try {
                 jobPostCateService.deleteCategory(id);
@@ -420,26 +517,15 @@ public class AdminController {
     }
 
 
-
-    /**
-     * 二手分类页面 Get
-     * 页面左边显示所有分类，右边可以添加分类
-     */
-    @RequestMapping(value = "/shcate",method = RequestMethod.GET)
-    public String shCate(){
-        return "";
-
-    }
-
     /**
      * 二手分类获取 ajax
-     * @param page
      * @return
      */
-    @RequestMapping(value = "/shcatelist",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String shCateList(@PathVariable int page){
+    @RequestMapping(value = "/shcatelist",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody String shCateList(){
+        System.out.println("hello");
         int capcity = Constants.PAGE_CAPACITY;
-        List<SecondHandPostCategoryDto> list =shPostCategoryService.getCategoryList(page - 1, capcity, new ObjWrapper());
+        List<SecondHandPostCategoryDto> list =shPostCategoryService.getCategoryList(0,Integer.MAX_VALUE, new ObjWrapper());
         return JSON.toJSONString(list);
     }
 
@@ -459,16 +545,6 @@ public class AdminController {
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
-
-    /**
-     * 获取投诉列表
-     * 此共功能暂未实现
-     * @return
-     */
-    public @ResponseBody String complaintList(){
-        return "";
-    }
-
 
 
 }
