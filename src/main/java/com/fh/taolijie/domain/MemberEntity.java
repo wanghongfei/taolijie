@@ -315,8 +315,7 @@ public class MemberEntity {
         this.valid = valid;
     }
 
-    @Basic
-    @Column(name = "student_id")
+    @Column(name = "student_id", columnDefinition = "TEXT")
     public String getStudentId() {
         return studentId;
     }
@@ -395,8 +394,7 @@ public class MemberEntity {
         this.companyName = companyName;
     }
 
-    @Basic
-    @Column(name = "block_list")
+    @Column(name = "block_list", columnDefinition = "TEXT")
     public String getBlockList() {
         return blockList;
     }

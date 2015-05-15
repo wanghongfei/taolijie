@@ -64,8 +64,7 @@ public class NewsEntity {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "picture_path")
+    @Column(name = "picture_path", columnDefinition = "TEXT")
     public String getPicturePath() {
         return picturePath;
     }

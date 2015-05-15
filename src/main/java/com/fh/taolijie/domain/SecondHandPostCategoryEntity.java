@@ -55,8 +55,7 @@ public class SecondHandPostCategoryEntity {
         this.themeColor = themeColor;
     }
 
-    @Basic
-    @Column(name = "memo")
+    @Column(name = "memo", columnDefinition = "TEXT")
     public String getMemo() {
         return memo;
     }

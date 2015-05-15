@@ -145,8 +145,7 @@ public class SecondHandPostEntity implements PageViewAware {
         this.sellPrice = sellPrice;
     }
 
-    @Basic
-    @Column(name = "picture_path")
+    @Column(name = "picture_path", columnDefinition = "TEXT")
     public String getPicturePath() {
         return picturePath;
     }
@@ -155,8 +154,7 @@ public class SecondHandPostEntity implements PageViewAware {
         this.picturePath = picturePath;
     }
 
-    @Basic
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     public String getDescription() {
         return description;
     }
