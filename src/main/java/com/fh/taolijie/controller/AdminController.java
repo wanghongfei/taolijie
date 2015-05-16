@@ -191,6 +191,7 @@ public class AdminController {
         dto.setRoleIdList(roleList);
         dto.setPassword(CredentialUtils.sha(dto.getPassword()));
         dto.setCreated_time(new Date());
+        dto.setValid(true);
 
 
         try {
