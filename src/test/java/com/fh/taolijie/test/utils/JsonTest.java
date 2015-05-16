@@ -3,6 +3,7 @@ package com.fh.taolijie.test.utils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -84,7 +85,7 @@ public class JsonTest {
 
         System.out.println(actual);
 
-        Assert.assertEquals(expert,actual);
+        Assert.assertEquals(expert, actual);
 
     }
 

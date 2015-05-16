@@ -67,61 +67,15 @@ public class JobControllerTest extends BaseSpringDataTestClass {
     private MockMvc mockMvc;
 
 
-    MemberEntity mem1;
-    MemberEntity mem2;
-    /*学生*/
-    RoleEntity role1;
-    /*商户*/
-    RoleEntity role2;
-    JobPostEntity job1;
-    JobPostCategoryEntity jobcate1;
+    GeneralMemberDto mem;
+    JobPostDto job1;
     private void initData(){
-        role1 = new RoleEntity();
-        role1.setRolename(Constants.RoleType.STUDENT.toString());
-        em.persist(role1);
+        mem = new GeneralMemberDto();
+        mem.setId(1);
+        mem.setUsername("wynfrith");
 
-        mem1 = new MemberEntity();
-        mem1.setUsername("wynfrith");
-        mem1.setPassword("helloo");
-        mem1.setQq("123456");
-        em.persist(mem1);
-
-        MemberRoleEntity memRole = new MemberRoleEntity();
-        memRole.setMember(mem1);
-        memRole.setRole(role1);
-        List<MemberRoleEntity> memberRoleEntityList1 = new ArrayList<>();
-        memberRoleEntityList1.add(memRole);
-        mem1.setMemberRoleCollection(memberRoleEntityList1);
-        em.persist(memRole);
-
-        mem2 = new MemberEntity();
-        mem2.setUsername("helloworld");
-        mem2.setPassword("wfc5582563");
-        em.persist(mem2);
-
-        MemberRoleEntity memRole2 = new MemberRoleEntity();
-        memRole2.setMember(mem2);
-        memRole2.setRole(role1);
-        List<MemberRoleEntity> memberRoleEntityList2 = new ArrayList<>();
-        memberRoleEntityList2.add(memRole);
-        mem2.setMemberRoleCollection(memberRoleEntityList2);
-        em.persist(memRole2);
-
-
-        jobcate1 = new JobPostCategoryEntity();
-        jobcate1.setLevel(1);
-        jobcate1.setName("分类");
-        em.persist(jobcate1);
-
-        job1 = new JobPostEntity();
-        job1.setTitle("兼职标题");
-        job1.setMember(mem1);
-        job1.setCategory(jobcate1);
-        List<JobPostEntity> memberRoleEntityList3 = new ArrayList<>();
-        memberRoleEntityList3.add(job1);
-        jobcate1.setJobPostCollection(memberRoleEntityList3);
-        em.persist(job1);
-
+        job1 = new JobPostDto();
+        job1.setId(1);
 
     }
 
@@ -157,17 +111,19 @@ public class JobControllerTest extends BaseSpringDataTestClass {
 
     @Test
     public void testPostSuccess() throws Exception {
-        getCredential(mem1.getId(),mem1.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(post("/user/job/post")
                 .session(session)
                 .contentType("application/json;charset=utf-8")
-                .param("categoryId",jobcate1.getId()+"")
+                .param("categoryId","2")
                 .param("jobDescription","我是一篇普通的兼职信息")
                 .param("title", "兼职"))
         .andExpect(status().isOk())
                 .andReturn();
         List<JobPostDto> list =jobPostService.getAllJobPostList(0,0,new ObjWrapper());
-        System.out.println(list.toString());
+        for(JobPostDto job : list){
+            System.out.println("id: "+job.getId()+"  title: "+job.getTitle());
+        }
     }
 
     /**
@@ -176,7 +132,7 @@ public class JobControllerTest extends BaseSpringDataTestClass {
      */
     @Test
     public void testGetList() throws  Exception{
-        getCredential(mem1.getId(), mem1.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(get("/user/job/list/1")
                 .contentType("application/json;charset=utf-8")
                 .session(session))
@@ -191,7 +147,7 @@ public class JobControllerTest extends BaseSpringDataTestClass {
      */
     @Test
     public void testChangeGet() throws  Exception{
-        getCredential(mem1.getId(), mem1.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(get("/user/job/change/"+job1.getId())
                 .session(session))
                 .andDo(MockMvcResultHandlers.print())
@@ -220,7 +176,7 @@ public class JobControllerTest extends BaseSpringDataTestClass {
      */
     @Test
     public void testDeleteJob()  throws Exception{
-        getCredential(mem1.getId(),mem1.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(post("/user/job/del/" + job1.getId())
                 .session(session))
                 .andExpect(status().isOk())
@@ -233,7 +189,7 @@ public class JobControllerTest extends BaseSpringDataTestClass {
      */
     @Test
     public void testDeleteJobNoPermission() throws Exception{
-        getCredential(mem2.getId(),mem2.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(post("/user/job/del/" + job1.getId())
                 .session(session))
                 .andExpect(status().isOk())
@@ -246,7 +202,7 @@ public class JobControllerTest extends BaseSpringDataTestClass {
      */
     @Test
     public void testRefresh() throws Exception{
-        getCredential(mem1.getId(),mem1.getUsername(), session);
+        getCredential(mem.getId(),mem.getUsername(), session);
         mockMvc.perform(post("/user/job/refresh/" + job1.getId())
                 .session(session))
                 .andExpect(status().isOk())

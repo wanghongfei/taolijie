@@ -66,7 +66,7 @@ public class SpringDataConfigBean {
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setUsername("root");
-        ds.setPassword("111111");
+        ds.setPassword("wfc");
         ds.setUrl("jdbc:mysql://localhost:3306/taolijie?characterEncoding=utf-8");
         ds.setDriverClassName("com.mysql.jdbc.Driver");
         return ds;

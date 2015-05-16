@@ -3,7 +3,9 @@ package com.fh.taolijie.utils;
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
+import com.fh.taolijie.service.AccountService;
 
 /**
  * 控制器的重复方法
@@ -61,4 +63,46 @@ public class ControllerHelper {
         }
         return true;
     }
+
+    /**
+     * 获取三种Role的引用
+     */
+    public static void getRole(RoleDto studentRole,RoleDto employerRole,RoleDto adminRole,AccountService accountService){
+          /*查询所有role*/
+        for(RoleDto r : accountService.getAllRole()){
+            if(r.getRolename().equals(Constants.RoleType.STUDENT.toString())) {
+                studentRole = r;
+            }else if(r.getRolename().equals(Constants.RoleType.EMPLOYER.toString())){
+                employerRole = r;
+            }else if(r.getRolename().equals(Constants.RoleType.ADMIN.toString())){
+                adminRole = r;
+            }
+        }
+
+
+         /*如果没有role,创建*/
+        if(studentRole == null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.STUDENT.toString());
+            r.setMemo("学生");
+            accountService.addRole(r);
+            studentRole = r;
+        }
+        if(employerRole==null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.EMPLOYER.toString());
+            r.setMemo("商家");
+            accountService.addRole(r);
+            employerRole = r;
+        }
+        if(adminRole==null){
+            RoleDto r = new RoleDto();
+            r.setRolename(Constants.RoleType.ADMIN.toString());
+            r.setMemo("管理员");
+            accountService.addRole(r);
+            employerRole = r;
+        }
+        System.out.println("getRole:"+studentRole.getRolename());
+    }
+
 }
