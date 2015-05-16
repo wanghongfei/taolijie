@@ -212,6 +212,18 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void unfavoritePost(Integer memId, Integer postId) {
+        MemberEntity mem = memberRepo.findOne(memId);
+        SecondHandPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+        String oldIds = mem.getFavoriteShIds();
+        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
+        mem.setFavoriteShIds(newIds);
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean addPost(SecondHandPostDto postDto) {
         // 创建帖子实体
         //SecondHandPostEntity post = makePost(postDto);

@@ -44,8 +44,7 @@ public class RoleEntity {
         this.rolename = rolename;
     }
 
-    @Basic
-    @Column(name = "memo")
+    @Column(name = "memo", columnDefinition = "TEXT")
     public String getMemo() {
         return memo;
     }

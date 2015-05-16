@@ -42,8 +42,7 @@ public class ReviewEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     public String getContent() {
         return content;
     }

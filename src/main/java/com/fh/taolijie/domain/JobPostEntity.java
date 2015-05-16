@@ -271,8 +271,7 @@ public class JobPostEntity implements PageViewAware {
         this.jobDetail = jobDetail;
     }
 
-    @Basic
-    @Column(name = "introduce")
+    @Column(name = "introduce", columnDefinition = "TEXT")
     public String getIntroduce() {
         return introduce;
     }

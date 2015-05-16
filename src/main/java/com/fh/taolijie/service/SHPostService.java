@@ -71,6 +71,8 @@ public interface SHPostService extends PageService {
      */
     void favoritePost(Integer memId, Integer postId);
 
+    void unfavoritePost(Integer memId, Integer postId);
+
     /**
      * 投诉+1
      */

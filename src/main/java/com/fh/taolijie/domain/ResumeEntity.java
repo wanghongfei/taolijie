@@ -217,8 +217,7 @@ public class ResumeEntity implements PageViewAware {
         this.qq = qq;
     }
 
-    @Basic
-    @Column(name = "experience")
+    @Column(name = "experience", columnDefinition = "TEXT")
     public String getExperience() {
         return experience;
     }
@@ -227,8 +226,7 @@ public class ResumeEntity implements PageViewAware {
         this.experience = experience;
     }
 
-    @Basic
-    @Column(name = "introduce")
+    @Column(name = "introduce", columnDefinition = "TEXT")
     public String getIntroduce() {
         return introduce;
     }

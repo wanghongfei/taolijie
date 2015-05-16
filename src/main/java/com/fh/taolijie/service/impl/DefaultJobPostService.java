@@ -273,6 +273,20 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
 
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void unfavoritePost(Integer memId, Integer postId) {
+        // TODO untested!!
+        MemberEntity mem = em.find(MemberEntity.class, memId);
+        JobPostEntity post = postRepo.findOne(postId);
+        CheckUtils.nullCheck(mem, post);
+
+        // 取出ids
+        String oldIds = mem.getFavoriteJobIds();
+        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
+    }
+
+    @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void complaint(Integer postId) {
         JobPostEntity post = em.find(JobPostEntity.class, postId);
         CheckUtils.nullCheck(post);

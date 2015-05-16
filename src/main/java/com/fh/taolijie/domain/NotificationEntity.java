@@ -48,8 +48,7 @@ public class NotificationEntity {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     public String getContent() {
         return content;
     }
