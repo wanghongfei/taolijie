@@ -6,6 +6,7 @@ import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
 import com.fh.taolijie.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 控制器的重复方法
@@ -14,12 +15,12 @@ import com.fh.taolijie.service.AccountService;
 
 
 public class ControllerHelper {
-
     /**
      * 获得RoleName
      * @param credential
      * @return
      */
+    @Deprecated
     public static String getRoleName(Credential credential){
         String roleName = null;
         for(String r:credential.getRoleList()){
@@ -65,8 +66,22 @@ public class ControllerHelper {
     }
 
     /**
+     * 通过RoleName获得对应的roleId
+     * 如果找不到返回-1
+     */
+    public static int getRoleId(String roleName,AccountService service){
+        for(RoleDto role : service.getAllRole()){
+            if(role.getRolename().equals(roleName)){
+                return role.getRid();
+            }
+        }
+        return -1;
+    }
+
+    /**
      * 获取三种Role的引用
      */
+    @Deprecated
     public static void getRole(RoleDto studentRole,RoleDto employerRole,RoleDto adminRole,AccountService accountService){
           /*查询所有role*/
         for(RoleDto r : accountService.getAllRole()){
