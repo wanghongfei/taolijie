@@ -12,7 +12,7 @@
     <img src="/images/pig.jpg" alt="">
   </div>
   <div class="fr big-btn">
-    <a href="">发布信息</a>
+    <a href="/user/job/post">发布信息</a>
   </div>
   <div class="content">
     <p>Wynfrith <span>学生</span></p>

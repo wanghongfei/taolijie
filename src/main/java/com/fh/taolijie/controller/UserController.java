@@ -79,7 +79,7 @@ public class UserController {
     public String user(HttpSession session,Model model,HttpServletRequest req){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
-            return "redirect:/user/login";
+            return "redirect:pc/login";
         }
         GeneralMemberDto memberDto = accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],false);
         model.addAttribute("user", memberDto);
@@ -87,7 +87,7 @@ public class UserController {
         model.addAttribute("notificationNum",notifaicationNum);
         model.addAttribute("role",credential.getRoleList().get(0));
 
-        return "mobile/user/user";
+        return "pc/user/profile";
 
     }
 
@@ -266,7 +266,7 @@ public class UserController {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     /**
@@ -308,7 +308,7 @@ public class UserController {
      */
     @RequestMapping(value = "feedback",method = RequestMethod.GET)
     public String feedback(){
-        return "";
+        return "/pc/user/feedback";
     }
 
     /**
@@ -317,11 +317,12 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String feedback(@RequestParam String content,HttpSession session){
+    public @ResponseBody String feedback(@RequestParam String content,@RequestParam String  email, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         mail.sendMailAsync("反馈人:  "+credential.getUsername()+"/n"
                 +"用户类型:  "+credential.getRoleList()+"/n"
                 +"反馈内容:  "+content+"/n"
+                +"用户邮箱:"+email+"/n"
                 +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
 
         return "";

@@ -29,6 +29,7 @@ public class ResponseUtils {
         if (agent!=null&&(agent.contains(DeviceToken.Android.toString()) || agent.contains(DeviceToken.iPhone.toString()) || agent.contains(DeviceToken.iPad.toString()))) {
             sb.append("mobile/");
         } else {
+            /*调试用*/
             sb.append("mobile/");
         }
 

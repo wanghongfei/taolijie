@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
@@ -59,12 +60,14 @@ public class JobController {
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String post(HttpSession session) {
+    public String post(HttpSession session,Model model) {
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
             return "redirect:/login";
         }
-        return "";
+        List<JobPostCategoryDto> cateList= jobPostCateService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
+        model.addAttribute("cates",cateList);
+        return "pc/user/jobpost";
     }
 
     /**

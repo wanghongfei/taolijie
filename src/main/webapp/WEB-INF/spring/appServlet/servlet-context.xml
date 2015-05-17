@@ -70,7 +70,7 @@
     <!--数据库连接采用jdbc驱动-->
     <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie" />
+        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
         <beans:property name="username" value="root" />
         <beans:property name="password" value="wfc" />
     </beans:bean>

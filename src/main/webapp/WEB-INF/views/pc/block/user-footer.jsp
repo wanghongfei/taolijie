@@ -23,6 +23,4 @@
 <!-- endbuild -->
 
 
-</body>
-</html>
 

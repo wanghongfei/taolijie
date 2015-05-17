@@ -119,7 +119,6 @@ public class AdminController {
         if(member == null){
             return "redirect:pc/admin/adduser";
         }
-
         model.addAttribute("isUpdate",true);
         model.addAttribute("member",member);
         return "pc/admin/adduser";

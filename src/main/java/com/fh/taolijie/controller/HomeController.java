@@ -219,7 +219,7 @@ public class HomeController {
      */
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String register(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"user/register");
+        return "pc/register";
     }
 
 
