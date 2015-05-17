@@ -7,7 +7,7 @@
         <driver>mysql</driver>
         <security>
             <user-name>root</user-name>
-            <password>111111</password>
+            <password>wfc</password>
         </security>
     </datasource>
 </datasources>

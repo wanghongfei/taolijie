@@ -72,7 +72,7 @@
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie" />
         <beans:property name="username" value="root" />
-        <beans:property name="password" value="111111" />
+        <beans:property name="password" value="wfc" />
     </beans:bean>
 
     <beans:bean
