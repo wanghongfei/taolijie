@@ -24,6 +24,12 @@
 
     <!--管理员后台资源路径-->
     <resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
+    <!--前台资源-->
+    <resources mapping="/images/**" location="/WEB-INF/views/pc/assets/images/" />
+    <resources mapping="/scripts/**" location="/WEB-INF/views/pc/assets/scripts/" />
+    <resources mapping="/styles/**" location="/WEB-INF/views/pc/assets/styles/" />
+
+
 
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources
         in the /WEB-INF/views directory -->

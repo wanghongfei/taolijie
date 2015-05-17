@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
@@ -23,7 +24,6 @@ import java.util.List;
 /**
  * Created by wynfrith on 15-3-27.
  */
-
 
 /**
  * 提供各种增删改查接口
@@ -62,11 +62,16 @@ public class ApiController {
      * 查询所有兼职
      */
     @RequestMapping(value = "/list/job/{page}",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
-    public @ResponseBody String allJobList(@PathVariable int page){
+    public @ResponseBody String allJobList(@PathVariable int page,HttpServletResponse response){
+        /*允许跨域,便于调试*/
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+
         int capcity = Constants.PAGE_CAPACITY;
         List<JobPostDto> list = jobPostService.getAllJobPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
+
+
 
     /**
      * 查询所有简历
@@ -81,6 +86,20 @@ public class ApiController {
 
         return JSON.toJSONString(list);
     }
+    /**
+     * 查询一条简历
+     *
+     */
+    @RequestMapping(value = "item/resume/{id}",method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public @ResponseBody String resumeItem(@PathVariable int id,HttpSession session){
+        ResumeDto resume = resumeService.findResume(id);
+        if(resume == null){
+            return new JsonWrapper(false,"没有找到id").getAjaxMessage();
+        }
+        return JSON.toJSONString(resume);
+    }
+
+
 
     /**
      * 查询所有二手分类
@@ -93,7 +112,7 @@ public class ApiController {
     }
 
     /**
-     * 查询所有兼职
+     * 查询所有二手
      */
     @RequestMapping(value = {"list/sh/{page}"},method = RequestMethod.GET,produces = "application/json;charset=utf-8")
     public @ResponseBody String shList(@PathVariable int page){
@@ -101,7 +120,18 @@ public class ApiController {
         List<SecondHandPostDto> list = shPostService.getAllPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
-
+    /**
+     * 查询一条二手
+     *
+     */
+    @RequestMapping(value = "item/sh/{id}",method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public @ResponseBody String shItem(@PathVariable int id,HttpSession session){
+        SecondHandPostDto sh = shPostService.findPost(id);
+        if(sh == null){
+            return new JsonWrapper(false,"没有找到id").getAjaxMessage();
+        }
+        return JSON.toJSONString(sh);
+    }
 
     /**
      * 获取兼职详情页 Ajax GET

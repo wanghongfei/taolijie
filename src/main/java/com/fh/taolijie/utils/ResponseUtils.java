@@ -29,7 +29,7 @@ public class ResponseUtils {
         if (agent!=null&&(agent.contains(DeviceToken.Android.toString()) || agent.contains(DeviceToken.iPhone.toString()) || agent.contains(DeviceToken.iPad.toString()))) {
             sb.append("mobile/");
         } else {
-            sb.append("pc/");
+            sb.append("mobile/");
         }
 
         sb.append(jspPage);

@@ -1,5 +1,7 @@
 package com.fh.taolijie.controller.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class ResumeDto {
     /**
      * 求职意向，即job_post_category表的id
      */
+    @NotEmpty
     private List<Integer> intendCategoryId;
     private Integer memberId;
 

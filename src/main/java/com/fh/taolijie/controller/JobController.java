@@ -62,7 +62,7 @@ public class JobController {
     public String post(HttpSession session) {
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
         return "";
     }
@@ -258,6 +258,8 @@ public class JobController {
         model.addAttribute("job",job);
         return "mobile/jobdetail";
     }
+
+
 
     /**
      * 修改一条兼职 ajax

@@ -65,7 +65,7 @@
 				<!-- Wrapper for slides -->
 				<div class="carousel-inner" role="listbox">
 					<div class="item active">
-						<img src="/assets/images/pic.jpg" alt="..." height="200px">
+						<img src="/images/getpic" alt="..." height="200px">
 					</div>
 					<div class="item">
 						<img src="/assets/images/pic.jpg" alt="...">

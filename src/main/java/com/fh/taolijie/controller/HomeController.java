@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +41,8 @@ public class HomeController {
     SHPostService shPostService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    ReviewService reviewService;
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -56,21 +55,21 @@ public class HomeController {
                        HttpServletRequest req) {
         System.out.println("session"+session);
         Credential credential =  CredentialUtils.getCredential(session);
-        String username = "个人中心";
-        List<NewsDto> list = null;
 
         if(credential!=null){
-            username = credential.getUsername();
+
         }
 
-        list = newsService.getNewsList(0,3, new ObjWrapper());
+        List<NewsDto> news = newsService.getNewsList(0,3, new ObjWrapper());
+        List<JobPostDto> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper());
+        List<SecondHandPostDto> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
 
-        System.out.println(username);
-        model.addAttribute("username", username);
-        model.addAttribute("newsList",list);
+        model.addAttribute("news", news);
+        model.addAttribute("jobs", jobs);
+        model.addAttribute("shs", shs);
+        model.addAttribute("mem",credential);
 
-
-        return "mobile/index";
+        return "pc/index";
 	}
 
 
@@ -89,27 +88,38 @@ public class HomeController {
     /**
      * 兼职列表页面 get
      */
+
     @RequestMapping(value = {"list/job"},method = RequestMethod.GET)
-    public String joblist(){
-        return "mobile/joblist";
+    public String joblist(@RequestParam(defaultValue = "0") int page,
+                          Model model){
+        List<JobPostDto> jobs = jobPostService.getAllJobPostList(page,Constants.PAGE_CAPACITY,new ObjWrapper());
+        model.addAttribute("jobs",jobs);
+        return "pc/joblist";
     }
 
     /**
-     * 兼职详情页 get
+     * 查询一条兼职
+     *
      */
-    @RequestMapping(value = "detail/job/{jobId}",method = RequestMethod.GET)
-    public String jobdetail(@PathVariable("jobId") int jobId,Model model){
-        JobPostDto jobPostDto = jobPostService.findJobPost(jobId);
-        model.addAttribute("job",jobPostDto);
-        return "mobile/jobdetail";
+    @RequestMapping(value = "item/job/{id}",method = RequestMethod.GET)
+    public String jobItem(@PathVariable int id,HttpSession session,Model model){
+        JobPostDto job = jobPostService.findJobPost(id);
+        List<ReviewDto> reviews = reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        if(job == null){
+            return "redirect:/404";
+        }
+        model.addAttribute("job",job);
+        model.addAttribute("reviews",reviews);
+        return "pc/jobdetail";
     }
+
 
     /**
      * 二手列表
      */
     @RequestMapping(value = "list/sh",method = RequestMethod.GET)
     public String shList(){
-        return "mobile/shlist";
+        return "pc/shlist";
     }
 
 
@@ -170,7 +180,7 @@ public class HomeController {
 
         model.addAttribute("resume",resumeDto);
         model.addAttribute("contactDisplay",contactDisplay);
-        return "mobile/resume";
+        return "pc/resume";
     }
 
 
@@ -180,7 +190,7 @@ public class HomeController {
      */
     @RequestMapping(value = "list/news",method = RequestMethod.GET)
     public String newslist(){
-        return "mobile/newslist";
+        return "pc/newslist";
     }
 
     /**
@@ -190,7 +200,7 @@ public class HomeController {
     public String news(@PathVariable int nid,Model model) {
         NewsDto news = newsService.findNews(nid);
         model.addAttribute("news", news);
-        return "mobile/news";
+        return "pc/news";
     }
 
     /**
@@ -202,31 +212,6 @@ public class HomeController {
         List<NewsDto> list = newsService.getNewsList(pageid-1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
-
-    /**
-     * 服务宗旨
-     */
-    @RequestMapping(value = {"tenet"},method = RequestMethod.GET)
-    public String tenet(){
-        return "mobile/tenet";
-    }
-
-    /**
-     * 成员介绍
-     */
-    @RequestMapping(value = {"member"},method =RequestMethod.GET)
-    public String member(){
-        return "mobile/member";
-    }
-
-    /**
-     * 加入我们
-     */
-    @RequestMapping(value = "join",method = RequestMethod.GET)
-    public String joinus(){
-        return "mobile/join";
-    }
-
 
 
     /**
@@ -352,7 +337,7 @@ public class HomeController {
      */
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String login(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"user/login");
+        return "pc/login";
     }
 
     /**
@@ -368,6 +353,7 @@ public class HomeController {
                                       BindingResult result,
                                       HttpSession session,
                                       HttpServletResponse res){
+
 
         GeneralMemberDto memDto = null;
         RoleDto role = null;
@@ -422,10 +408,81 @@ public class HomeController {
 
     }
 
-    @RequestMapping(value = "/404",method = RequestMethod.GET,produces = "text/html;charset=utf-8")
-    public @ResponseBody String error(){
-        return "404 error!!!";
+
+    /**
+     * 后台登陆页面
+     */
+    @RequestMapping(value = "login/admin",method = RequestMethod.GET)
+    public String AdminLogin(){
+        return "pc/admin/login";
+    }
+    /**
+     * 管理员后台登陆
+     */
+    @RequestMapping(value = "login/admin",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String AdminLogin(@Valid LoginDto login,
+                                      BindingResult result,
+                                      HttpSession session,
+                                      HttpServletResponse res){
+
+        System.out.println("后台管理员登陆:::");
+        System.out.println(login.getUsername());
+        System.out.println(login.getRememberMe());
+
+        GeneralMemberDto memDto = null;
+        RoleDto role = null;
+        int cookieExpireTime = 1*24*60*60;//1天
+
+        if(result.hasErrors()){
+            return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
+        }
+
+        /*需要给管理员新增一个登陆方法*/
+        try {
+            accountService.login(login.getUsername(),login.getPassword());
+        } catch (UserNotExistsException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        } catch (PasswordIncorrectException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        } catch (UserInvalidException e) {
+            return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+        }
+
+        /*获取用户信息和用户权限*/
+
+        memDto = accountService.findMember(login.getUsername(),new GeneralMemberDto[0],true);
+        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
+        for(Integer rid:memDto.getRoleIdList()){
+            role = accountService.findRole(rid);
+            /*如果不是管理员用户,返回登录失败信息*/
+            if(!role.getRolename().equals(Constants.RoleType.ADMIN.toString())){
+                return new JsonWrapper(false, Constants.ErrorType.USERNAME_NOT_EXISTS).getAjaxMessage();
+            }else{
+                credential.addRole(role.getRolename());
+            }
+        }
+
+        CredentialUtils.createCredential(session,credential);
+         /*如果选择自动登陆,加入cookie*/
+        if(login.getRememberMe().equals("true")){
+            Cookie usernameCookie = new Cookie("username", login.getUsername());
+            usernameCookie.setMaxAge(cookieExpireTime);
+            Cookie passwordCookie = new Cookie("password", login.getPassword());
+            passwordCookie.setMaxAge(cookieExpireTime);
+            res.addCookie(usernameCookie);
+            res.addCookie(passwordCookie);
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
+
+
+    @RequestMapping(value = "/404",method = RequestMethod.GET)
+    public String error(){
+        return "pc/404";
     }
 
 
 }
+
