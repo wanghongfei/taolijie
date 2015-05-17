@@ -325,7 +325,7 @@ public class UserController {
                 +"用户邮箱:"+email+"/n"
                 +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
 
-        return "";
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 }

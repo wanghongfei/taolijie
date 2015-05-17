@@ -33,6 +33,6 @@
     <li><a href="">我的发布</a></li>
     <li><a href="">消息通知</a></li>
     <li><a href="">修改密码</a></li>
-    <li><a href="">意见反馈</a></li>
+    <li><a href="/user/feedback">意见反馈</a></li>
   </ul>
 </div>
