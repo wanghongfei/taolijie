@@ -214,7 +214,7 @@ public class UserController {
      */
     @RequestMapping(value = "/setting/security", method = RequestMethod.GET)
     public String security(HttpServletRequest req){
-        return ResponseUtils.determinePage(req, "user/security");
+        return "pc/user/security";
     }
 
     /**
@@ -243,12 +243,13 @@ public class UserController {
         if(!mem.getPassword().equals(CredentialUtils.sha(dto.getOldPassword()))){
             System.out.println("用户的密码:"+mem.getPassword());
             System.out.println("输入的原密码:"+CredentialUtils.sha(dto.getOldPassword()));
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, Constants.ErrorType.PASSWORD_ERROR).getAjaxMessage();
         }else if(!dto.getNewPassword().equals(dto.getRePassword())){
-            return  new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return  new JsonWrapper(false, Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
         }
 
-        mem.setPassword(dto.getNewPassword());
+        //加密
+        mem.setPassword(CredentialUtils.sha(dto.getNewPassword()));
 
         System.out.println("更新后的密码"+mem.getPassword());
         System.out.println(CredentialUtils.sha(mem.getPassword()));

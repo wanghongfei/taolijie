@@ -27,12 +27,12 @@
 
 <div class="segment user-nav">
   <ul>
-    <li class=""><a href="">个人资料</a></li>
+    <li class=""><a href="/user/">个人资料</a></li>
     <li><a href="">我的简历</a></li>
     <li><a href="">我的收藏</a></li>
     <li><a href="">我的发布</a></li>
     <li><a href="">消息通知</a></li>
-    <li><a href="">修改密码</a></li>
+    <li><a href="/user/setting/security">修改密码</a></li>
     <li><a href="/user/feedback">意见反馈</a></li>
   </ul>
 </div>

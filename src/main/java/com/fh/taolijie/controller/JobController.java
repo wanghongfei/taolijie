@@ -281,7 +281,6 @@ public class JobController {
         Credential credential = CredentialUtils.getCredential(session);
 
 
-
         if(job == null|| !ControllerHelper.isCurrentUser(credential,job)){
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
