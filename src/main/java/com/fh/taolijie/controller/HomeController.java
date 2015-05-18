@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +53,7 @@ public class HomeController {
 	@RequestMapping(value = {"index","/"}, method = {RequestMethod.GET,RequestMethod.HEAD})
 	public String home(HttpSession session,
                        Model model,
-                       HttpServletRequest req) {
+                       HttpServletRequest req,ModelAndView modelAndView) {
         System.out.println("session"+session);
         Credential credential =  CredentialUtils.getCredential(session);
 
@@ -66,7 +67,7 @@ public class HomeController {
         List<SecondHandPostDto> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
 
         model.addAttribute("news", news);
-        model.addAttribute("jobs", jobs);
+       model.addAttribute("jobs", jobs);
         model.addAttribute("shs", shs);
         model.addAttribute("mem",credential);
 
@@ -420,7 +421,7 @@ public class HomeController {
         }
         //验证身份的session
         CredentialUtils.createCredential(session,credential);
-        session.setAttribute("user",memDto);
+        session.setAttribute("user", memDto);
 
         /*如果选择自动登陆,加入cookie*/
         if(mem.getRememberMe().equals("true")){

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -22,9 +23,12 @@
       <i class="news-arrow"></i>
     </p>
     <ul>
-      <li class="news-1"></li>
-      <li class="news-2"></li>
-      <li class="news-3"></li>
+        <c:forEach var="title" items="${titles}" varStatus="status">
+            <li class="news-${status.index+1}" style="padding-top: 50px;">${title.title}</li>
+        </c:forEach>
+      <%--<li class="news-1"></li>--%>
+      <%--<li class="news-2">大学里的拉时刻的减肥...</li>--%>
+      <%--<li class="news-3">大学里的拉时刻的减肥...</li>--%>
     </ul>
   </div>
 </div>
