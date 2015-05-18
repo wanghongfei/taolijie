@@ -67,6 +67,9 @@ public class JobController {
             produces = "application/json;charset=utf-8")
     public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
         //获取评论内容,已经用户的的信息
+        if(content.trim().equals("")){
+            return new JsonWrapper(false,Constants.ErrorType.NOT_EMPTY).getAjaxMessage();
+        }
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
             return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();

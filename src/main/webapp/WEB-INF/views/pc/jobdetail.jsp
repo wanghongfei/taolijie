@@ -80,11 +80,11 @@
           <span id="complaint" data-id="${job.id}" class="text">举报</span>
         </div>
       </div>
-      <div class="content">
+      <div class="content" id="contents">
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/images/pig.jpg" alt="">
-           <p>wynfrith</p>
+           <p>${review.memberId}</p>
            <span>${review.content}</span>
         </div>
         </c:forEach>
@@ -92,7 +92,7 @@
       <div class="review-bar">
         <img src="/images/pig.jpg" alt="">
         <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
-        <span class="review-span" id="review-btn" data-id="${job.id}" >评论</span>
+        <span class="review-span" id="review-btn" data-id="${job.id}" data-username="${poster.username}">评论</span>
       </div>
     </div>
 

@@ -41,9 +41,14 @@ $("#dislike").click(function(){
 });
 
 $("#review-btn").click(function(){
+    var $contents = $("#contents");
+    var $parent = $('<div class="no-border-bottom"></div>');
+
     var id = this.dataset.id;
+    var username = this.dataset.username;
+    var content = $("#comment-input").val();
     var data = {
-        content:$("#comment-input").val()
+        content:content
     }
     console.log("review-btn");
     $.ajax({
@@ -51,7 +56,14 @@ $("#review-btn").click(function(){
         url:"/user/job/"+id+"/review/post",
         data:data,
         success:function(data){
-            console.log(data);
+            if(data.result){
+                $parent.append('<img src="/images/pig.jpg" alt="">');
+                $parent.append('<p>'+username+'</p>');
+                $parent.append('<span>'+content+'</span>');
+                $contents.append($parent);
+            }else{
+                alert(data.messages);
+            }
         }
     });
 });
