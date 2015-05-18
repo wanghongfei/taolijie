@@ -14,12 +14,12 @@
   <div class="top-bar-content">
     <p>山东理工大学</p>
     <ul>
-      <c:if test="${not empty mem}">
-        <li><a href="">${mem.username} &nbsp;|&nbsp;</a></li>
+      <c:if test="${not empty sessionScope.user}">
+        <li><a href="/user/">${sessionScope.user.username} &nbsp;|&nbsp;</a></li>
         <li><a href="/user/logout">我的桃李街 <i class="fa fa-caret-down"> </i></a></li>
       </c:if>
 
-      <c:if test="${empty mem}">
+      <c:if test="${empty sessionScope.user}">
         <li> <a href="/login">登陆</a>&nbsp;|&nbsp;</li>
         <li> <a href="/register">注册</a></li>
       </c:if>

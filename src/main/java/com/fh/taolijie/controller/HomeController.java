@@ -388,9 +388,9 @@ public class HomeController {
                 logger.debug("RoleName:{}",role.getRolename());
             }
         }
+        //验证身份的session
         CredentialUtils.createCredential(session,credential);
-
-
+        session.setAttribute("user",memDto);
 
         /*如果选择自动登陆,加入cookie*/
         if(mem.getRememberMe().equals("true")){

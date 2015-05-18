@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -11,9 +12,19 @@
   <div class="top-bar-content">
     <p>山东理工大学</p>
     <ul>
-      <li> <a href="">登陆</a>&nbsp;|&nbsp;</li>
-      <li> <a href="">注册</a>&nbsp;|&nbsp;</li>
-      <li>我的桃李街 <i class="fa fa-caret-down"> </i></li>
+
+      <c:if test="${not empty sessionScope.user}">
+        <li><a href="/user/">${sessionScope.user.username} &nbsp;|&nbsp;</a></li>
+        <li><a href="/user/logout">我的桃李街 <i class="fa fa-caret-down"> </i></a></li>
+      </c:if>
+
+      <c:if test="${empty sessionScope.user}">
+        <li> <a href="/login">登陆</a>&nbsp;|&nbsp;</li>
+        <li> <a href="/register">注册</a></li>
+      </c:if>
+      <%--<li> <a href="">登陆</a>&nbsp;|&nbsp;</li>--%>
+      <%--<li> <a href="">注册</a>&nbsp;|&nbsp;</li>--%>
+      <%--<li>我的桃李街 <i class="fa fa-caret-down"> </i></li>--%>
     </ul>
   </div>
 
