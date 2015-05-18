@@ -7,8 +7,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  * Created by wynfrith on 15-3-28.
  */
 public class ChangePasswordDto {
+    @NotEmpty
     private String oldPassword;
+    @NotEmpty
     private String newPassword;
+    @NotEmpty
     private String rePassword;
 
     public String getOldPassword() {
