@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -19,56 +20,54 @@
     <p class="pin-title dark-green-bg ">二手物品介绍
       <i class="pin-arrow  dark-green-arrow"></i>
     </p>
-    <form action="">
+    <form action="" id="ShPostForm">
       <div class="form-group">
         <label for="">商品名称</label>
-        <input type="text" class="form-control" >
+        <input name="title" type="text" class="form-control" >
       </div>
       <div class="form-group">
         <label for="">商品分类</label>
-        <select name="" id="">
+        <select name="categoryId" >
           <option value="">选择分类</option>
-          <option value="">家教</option>
-          <option value="">苦逼程序员</option>
-          <option value="">服务员</option>
+          <c:forEach items="${cates}" var="cate">
+            <option value="${cate.id}">${cate.name}</option>
+          </c:forEach>
         </select>
       </div>
       <div class="form-group">
         <label for="">价格</label>
-        <input type="text" class="form-control" >
+        <input name="sellPrice" type="text" class="form-control" >
       </div>
       <div class="form-group">
         <label for="">商品描述</label>
-        <textarea name="" class="form-control"></textarea>
+        <textarea name="description" class="form-control"></textarea>
       </div>
-      <div class="form-group">
-        <label for="">交易地点</label>
-        <input type="text" class="form-control" >
-      </div>
-    </form>
+      <%--<div class="form-group">--%>
+        <%--<label for="">交易地点</label>--%>
+        <%--<input name="" type="text" class="form-control" >--%>
+      <%--</div>--%>
 
     <p class="pin-title dark-green-bg ">联系方式
       <i class="pin-arrow  dark-green-arrow"></i>
     </p>
 
-    <form action="">
       <div class="form-group">
-        <label for="">联系人</label>
+        <label for="">联系人(暂无)</label>
         <input type="text" class="form-control" >
       </div>
       <div class="form-group">
-        <label for="">手机号</label>
+        <label for="">手机号(暂无)</label>
         <input type="text" class="form-control" >
       </div>
       <div class="form-group">
-        <label for="">QQ号</label>
+        <label for="">QQ号(暂无)</label>
         <input type="text" class="form-control" >
       </div>
     </form>
 
     <div class="segment">
       <div class="submit-btn big-btn dark-green-bg">
-        <span href="">发布二手</span>
+        <span href="javascript:void(0);">发布二手</span>
       </div>
     </div>
 
@@ -76,5 +75,6 @@
 </div>
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
+<script src="/scripts/shpost.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.controller.dto.SecondHandPostCategoryDto;
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
@@ -41,13 +42,14 @@ public class SHController{
     /**
      * 发布二手
      * @param
-     * @param req
      * @return
      */
     @RequestMapping(value = "/post" ,method = RequestMethod.GET)
     public String postSH(HttpSession session,
-                      HttpServletRequest req){
-      return "";
+                      Model model){
+        List<SecondHandPostCategoryDto> cateList= shPostCategoryService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
+        model.addAttribute("cates",cateList);
+      return "pc/user/shpost";
     }
 
     /**
