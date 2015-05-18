@@ -71,6 +71,61 @@ public class ApiController {
         return JSON.toJSONString(list);
     }
 
+    /**
+     * 喜欢一条兼职
+     */
+    @RequestMapping(value = "/item/job/{id}/like",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody String like(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setLikes(job.getLikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+
+    /**
+     * 不喜欢一条兼职
+     */
+    @RequestMapping(value = "/item/job/{id}/dislike",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody String dislike(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setDislikes(job.getDislikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+
 
 
     /**
@@ -120,18 +175,7 @@ public class ApiController {
         List<SecondHandPostDto> list = shPostService.getAllPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
-    /**
-     * 查询一条二手
-     *
-     */
-    @RequestMapping(value = "item/sh/{id}",method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public @ResponseBody String shItem(@PathVariable int id,HttpSession session){
-        SecondHandPostDto sh = shPostService.findPost(id);
-        if(sh == null){
-            return new JsonWrapper(false,"没有找到id").getAjaxMessage();
-        }
-        return JSON.toJSONString(sh);
-    }
+
 
     /**
      * 获取兼职详情页 Ajax GET

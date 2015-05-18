@@ -65,19 +65,19 @@
       </p>
       <div class="operates">
         <div class="operate">
-          <span class="fa fa-thumbs-up"></span>
-          <p>100</p>
+          <span id="like" data-id="${job.id}" class="fa fa-thumbs-up"></span>
+          <p >${job.likes}</p>
         </div>
         <div class="operate">
-          <span class="fa fa-thumbs-down"></span>
-          <p>1</p>
+          <span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>
+          <p >${job.dislikes}</p>
         </div>
         <div class="operate">
-          <span class="fa fa-comment"></span>
-          <p>3</p>
+          <span id="toComment" class="fa fa-comment"></span>
+          <p >${reviews.size()}</p>
         </div>
         <div class="operate">
-          <span class="text">举报</span>
+          <span id="complaint" data-id="${job.id}" class="text">举报</span>
         </div>
       </div>
       <div class="content">
@@ -91,8 +91,8 @@
       </div>
       <div class="review-bar">
         <img src="/images/pig.jpg" alt="">
-        <input type="text" class="review-input" placeholder="发表评论">
-        <span class="review-span">评论</span>
+        <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
+        <span class="review-span" id="review-btn" data-id="${job.id}" >评论</span>
       </div>
     </div>
 
@@ -103,3 +103,6 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/jobdetail.js"></script>
+</body>
+</html>

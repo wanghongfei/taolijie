@@ -178,6 +178,7 @@ public class Constants {
         public static final String USERNAME_ERROR = "用户名错误";
         public static final String USERNAME_EXISTS = "用户名已存在";
         public static final String USERNAME_NOT_EXISTS = "用户名不存在";
+        public static final String NOT_LOGGED_IN = "用户未登录";
 
         public static final String PASSWORD_ILLEGAL = "密码不合法";
         public static final String PASSWORD_ERROR = "密码错误";

@@ -60,6 +60,7 @@ public class HomeController {
 
         }
 
+        // 二手物品需要加入一个发布人
         List<NewsDto> news = newsService.getNewsList(0,3, new ObjWrapper());
         List<JobPostDto> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper());
         List<SecondHandPostDto> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
@@ -108,8 +109,14 @@ public class HomeController {
         if(job == null){
             return "redirect:/404";
         }
+        GeneralMemberDto poster = accountService.findMember(job.getMemberId());
+        int roleId = poster.getRoleIdList().iterator().next();
+        RoleDto role = accountService.findRole(roleId);
+
         model.addAttribute("job",job);
         model.addAttribute("reviews",reviews);
+        model.addAttribute("poster",poster);
+        model.addAttribute("posterRole",role);
         return "pc/jobdetail";
     }
 
@@ -131,6 +138,29 @@ public class HomeController {
         SecondHandPostDto sh = shPostService.findPost(id);
         model.addAttribute("sh",sh);
          return "";
+    }
+
+    /**
+     * 查询一条二手
+     *
+     */
+    @RequestMapping(value = "item/sh/{id}",method = RequestMethod.GET)
+    public String shItem(@PathVariable int id,HttpSession session,Model model){
+        SecondHandPostDto sh = shPostService.findPost(id);
+        if(sh == null){
+            return "redirect:/404";
+        }
+        List<ReviewDto> reviews = reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        //对应的用户和用户类别
+        GeneralMemberDto poster = accountService.findMember(sh.getMemberId());
+        int roleId =poster.getRoleIdList().iterator().next();
+        RoleDto role = accountService.findRole(roleId);
+
+        model.addAttribute("sh",sh);
+        model.addAttribute("reviews",reviews);
+        model.addAttribute("poster",poster);
+        model.addAttribute("posterRole",role);
+        return "pc/shdetail";
     }
 
 

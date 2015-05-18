@@ -6,9 +6,11 @@ import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -45,6 +47,8 @@ public class JobController {
     JobPostCateService jobPostCateService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    ReviewService reviewService;
 
     @RequestMapping(value = "test",method = RequestMethod.GET)
     public @ResponseBody String test(){
@@ -52,6 +56,39 @@ public class JobController {
     }
 
 
+
+    /**
+     * 评论
+     * @param content
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
+        //获取评论内容,已经用户的的信息
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        int memId = credential.getId();
+
+        //先查一下有没有这个帖子
+       if(jobPostService.findJobPost(id) == null){
+           return new JsonWrapper(false,Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+       }
+
+        //为该id的帖子创建一条评论
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setJobPostId(id);
+        reviewDto.setContent(content);
+        reviewDto.setMemberId(memId);
+        reviewDto.setTime(new Date());
+        if(!reviewService.addReview(reviewDto))
+            return  new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
+
+        //刷新视图
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
 
     /**
      * 发布兼职 get
@@ -93,6 +130,8 @@ public class JobController {
         /*创建兼职信息*/
         job.setMemberId(mem.getId());
         job.setPostTime(new Date());
+        job.setLikes(0);
+        job.setDislikes(0);
 
         if(job.getCategoryId()!=null){
             jobPostService.addJobPost(job);
