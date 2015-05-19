@@ -84,7 +84,13 @@
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/images/pig.jpg" alt="">
-           <p>${review.memberId}<a class="red delete-review" href="javascript:void(0);"  data-id="${job.id}" data-reviewId="${review.id}"> 删除</a></p>
+           <p>${review.memberId}
+             <%--判断是该用户发的显示删除按钮--%>
+             <c:if test="${sessionScope.user.id == review.memberId}">
+               <a class="red delete-review" href="javascript:void(0);"  data-id="${job.id}" data-reviewId="${review.id}"> 删除</a>
+             </c:if>
+
+           </p>
 
            <span>${review.content}</span>
         </div>
