@@ -26,27 +26,38 @@
       <div class="login-body">
         <form action="" id="reg-form">
 
+          <div class="form-group role-choose">
+                <div class="col-6">
+                    <input type="radio" name="isEmployer" value="false" checked="checked"> 学生
+                </div>
+                <div class="col-6">
+                    <input type="radio" name="isEmployer" value="true"> 商家
+                </div>
+          </div>
           <div class="form-group">
             <label for="" class="col-4 label-control">用户名</label>
             <div class="col-8">
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" name="username">
             </div>
 
           </div>
           <div class="form-group">
-            <label for="" class="col-4 label-control">密码</label>
+            <label for="" class="col-4 label-control" name="password">密码</label>
             <div class="col-8	">
-              <input type="text" class="form-control">
+              <input type="password" class="form-control" name="password">
             </div>
           </div>
           <div class="form-group">
-            <label for="" class="col-4 label-control">确认密码</label>
+            <label for="" class="col-4 label-control" name="rePassword">确认密码</label>
             <div class="col-8">
-              <input type="text" class="form-control">
+              <input type="password" class="form-control" name="repassword">
             </div>
           </div>
+            <div class="col-12" >
+                <label class="red" id="error-box"></label>
+            </div>
           <div class="col-12 no-pd">
-            <p class="login-btn btn theme-color-bg">注册</p>
+            <p class="login-btn btn theme-color-bg" id="sub-btn">注册</p>
           </div>
         </form>
       </div>

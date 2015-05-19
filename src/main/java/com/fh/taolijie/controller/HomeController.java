@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -254,110 +255,66 @@ public class HomeController {
     }
 
 
-
-
     /**
-     * ajax注册请求
-     * 后续会添加邮箱验证或手机验证功能
+     * 注册用户
+     * Method : POST AJAX
+     * @param mem
+     * @param result
+     * @param session
+     * @param res
      * @return
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/register", method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 注册用户 public @ResponseBody String register
     public @ResponseBody String register(@Valid RegisterDto mem,
                                          BindingResult result,
                                          HttpSession session,
                                          HttpServletResponse res){
-        GeneralMemberDto newMember = null;
-        GeneralMemberDto memDto = null;
-        RoleDto role = null;
-        int cookieExpireTime = 1*24*60*60;//1天
-        RoleDto studentRole = null;
-        RoleDto employerRole = null;
-
-        /*
-         * 注册需要的表单内容
-         * 1.用户名
-         * 2.密码
-         * 3.邮箱
-         */
-
+        // TODO: 需要验证邮箱的唯一性
+        //验证表单错误
         if(result.hasErrors()){
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
-        /*用户名重复*/
-        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
-            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
-        }
-        /*两次密码不一致*/
-        if(!mem.getPassword().equals(mem.getRepassword())){
+        //两次密码不一致
+        if(!(mem.getPassword().equals(mem.getRepassword()))){
             return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
         }
 
+        //注册不同权限的账户
+        //1.根据权限的名称找到对应的权限id,如果没有找到,返回false
+        //2.创建一个用户
+        //3.为该账户添加权限, assignRole方法
+        String roleName = mem.getIsEmployer() ?
+                Constants.RoleType.EMPLOYER.toString() :
+                Constants.RoleType.STUDENT.toString();
+        int roleId = ControllerHelper.getRoleId(roleName,accountService);
+        if(roleId == -1)
+            return new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
 
-        for(RoleDto r : accountService.getAllRole()){
-            if(r.getRolename().equals(Constants.RoleType.STUDENT.toString())) {
-                studentRole = r;
-            }else if(r.getRolename().equals(Constants.RoleType.EMPLOYER.toString())){
-                employerRole = r;
-            }
-        }
-
-        /*如果没有role,创建*/
-        if(studentRole == null){
-            RoleDto r = new RoleDto();
-            r.setRolename(Constants.RoleType.STUDENT.toString());
-            r.setMemo("学生");
-            accountService.addRole(r);
-            studentRole = r;
-        }
-        if(employerRole==null){
-            RoleDto r = new RoleDto();
-            r.setRolename(Constants.RoleType.EMPLOYER.toString());
-            r.setMemo("商家");
-            accountService.addRole(r);
-            employerRole = r;
-        }
-
-        newMember = new GeneralMemberDto();
-
-        /*按照类型注册不同ROle的用户*/
-        if(mem.getIsEmployer()){
-            newMember.setRoleIdList(Arrays.asList(employerRole.getRid()));
-        }else{
-            newMember.setRoleIdList(Arrays.asList(studentRole.getRid()));
-        }
+        GeneralMemberDto newMember = new GeneralMemberDto();
         newMember.setUsername(mem.getUsername());
-        newMember.setPassword(mem.getPassword());
-        newMember.setProfilePhotoPath(DefaultAvatarGenerator.getRandomAvatar());
-
-
-
-        /*注册*/
+        newMember.setPassword(CredentialUtils.sha(mem.getPassword()));
+        newMember.setValid(true);
+        newMember.setCreated_time(new Date());
+        newMember.setRoleIdList(Arrays.asList(roleId));
+        //注册并且检查用户名是否存在
         try {
             accountService.register(newMember);
         } catch (DuplicatedUsernameException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 
-
-        /*用户登陆*/
-
-        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
-        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
-        for(Integer rid:memDto.getRoleIdList()){
-            role = accountService.findRole(rid);
-            credential.addRole(role.getRolename());
-
-            if(logger.isDebugEnabled()){
-                logger.debug("RoleId:{}",rid);
-                logger.debug("RoleName:{}",role.getRolename());
-            }
-        }
-        CredentialUtils.createCredential(session,credential);
+        //accountService.assignRole(roleId,mem.getUsername());
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-
-
     }
+    //endregion
+
+
+
+
+
 
 
 

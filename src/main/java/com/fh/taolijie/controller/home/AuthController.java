@@ -160,7 +160,7 @@ public class AuthController{
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
         //两次密码不一致
-        if(!mem.getPassword().equals(mem.getRepassword())){
+        if(!(mem.getPassword().equals(mem.getRepassword()))){
             return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
         }
 
@@ -177,7 +177,7 @@ public class AuthController{
 
         GeneralMemberDto newMember = new GeneralMemberDto();
         newMember.setUsername(mem.getUsername());
-        newMember.setPassword(mem.getPassword());
+        newMember.setPassword(CredentialUtils.sha(mem.getPassword()));
         newMember.setValid(true);
         newMember.setCreated_time(new Date());
         newMember.setRoleIdList(Arrays.asList(roleId));
