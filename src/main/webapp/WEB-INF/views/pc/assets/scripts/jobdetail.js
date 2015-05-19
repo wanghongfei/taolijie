@@ -40,7 +40,7 @@ $("#dislike").click(function(){
     });
 });
 
-$("#review-btn").click(function(){
+$("#review-btn").on("click",function(){
     var $contents = $("#contents");
     var $parent = $('<div class="no-border-bottom"></div>');
 
@@ -49,23 +49,45 @@ $("#review-btn").click(function(){
     var content = $("#comment-input").val();
     var data = {
         content:content
-    }
-    console.log("review-btn");
+    };
     $.ajax({
         type:"POST",
         url:"/user/job/"+id+"/review/post",
         data:data,
         success:function(data){
+            console.log(data);
             if(data.result){
+                var reviewId =data.parm.reviewId;
+                console.log(reviewId);
+
                 $parent.append('<img src="/images/pig.jpg" alt="">');
-                $parent.append('<p>'+username+'</p>');
+                $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
                 $parent.append('<span>'+content+'</span>');
                 $contents.append($parent);
+                $("#comment-input").val('');
             }else{
-                alert(data.messages);
+                alert(data.message);
             }
         }
     });
+});
+
+$(".delete-review").on("click",function(){
+    var id = this.dataset.id;
+    var reviewId = this.getAttribute("data-reviewId");
+    var $parent = $(this).parent().parent();
+    $.ajax({
+        type:"POST",
+        url:"/user/job/"+id+"/review/delete/"+reviewId,
+        success:function(data){
+            if(data.result){
+                $parent.remove();
+            }else{
+                alert(data.message);
+            }
+        }
+    });
+
 });
 
 $("#toComment").click(function(){

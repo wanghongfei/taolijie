@@ -84,7 +84,8 @@
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/images/pig.jpg" alt="">
-           <p>${review.memberId}</p>
+           <p>${review.memberId}<a class="red delete-review" href="javascript:void(0);"  data-id="${job.id}" data-reviewId="${review.id}"> 删除</a></p>
+
            <span>${review.content}</span>
         </div>
         </c:forEach>

@@ -16,6 +16,7 @@ import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,13 +51,6 @@ public class JobController {
     @Autowired
     ReviewService reviewService;
 
-    @RequestMapping(value = "test",method = RequestMethod.GET)
-    public @ResponseBody String test(){
-        return "hello";
-    }
-
-
-
     /**
      * 评论
      * @param content
@@ -89,13 +83,57 @@ public class JobController {
         if(!reviewService.addReview(reviewDto))
             return  new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
 
-        //刷新视图
-        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+        List<ReviewDto> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        for(int i = list.size()-1; i> 0; i--){
+            ReviewDto r = list.get(i);
+            if(r.getContent().equals(content)){
+                reviewDto = r;
+                break;
+            }
+        }
+
+        //返回帖子id
+        return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
     }
 
     /**
+     * 删除一条兼职评论
+     * @param id
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/{id}/review/delete/{reviewId}",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody String reviewDelete(@PathVariable int id,
+                                             @PathVariable int reviewId,
+                                             HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        //先查看是否登陆,发偶泽返回错误信息
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+
+        //验证评论是否自己发布
+        List<ReviewDto> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        ReviewDto reviewDto = null;
+        for(ReviewDto r : list){
+            if(r.getId() == reviewId){
+                reviewDto = r;
+                break;
+            }
+        }
+        if(reviewDto == null)
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        if(reviewDto.getMemberId() != credential.getId())
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+
+        //删除评论
+        if(!reviewService.deleteReview(reviewId))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    /**
      * 发布兼职 get
-     *
      * @param
      * @return
      */

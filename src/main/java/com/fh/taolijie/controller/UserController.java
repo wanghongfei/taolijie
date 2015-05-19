@@ -75,11 +75,11 @@ public class UserController {
     /**
      * 个人中心
      */
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = {"","/"},method = RequestMethod.GET)
     public String user(HttpSession session,Model model,HttpServletRequest req){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
-            return "redirect:pc/login";
+            return "redirect:/login";
         }
         GeneralMemberDto memberDto = accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],false);
         model.addAttribute("user", memberDto);
