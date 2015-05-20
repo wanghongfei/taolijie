@@ -304,7 +304,9 @@ public class JobController {
         //遍历用户的收藏列表
         //如果没有这条兼职则添加,反之删除
         GeneralMemberDto mem = accountService.findMember(credential.getId());
-        String[] favIds = mem.getFavoriteJobIds().split(";");
+        String[] favIds = {};
+        if(mem.getFavoriteJobIds() != null)
+            favIds = mem.getFavoriteJobIds() .split(";");
         String favid = "";
         for(String fId : favIds){
             if(fId.equals(id+"")){

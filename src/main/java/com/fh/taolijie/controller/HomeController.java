@@ -143,7 +143,10 @@ public class HomeController {
             status =false;
         else{ //查找有没有收藏
             GeneralMemberDto member = accountService.findMember(credential.getId());
-            String[] favIds = member.getFavoriteJobIds().split(";");
+            String[] favIds = {};
+            if(member.getFavoriteJobIds() != null)
+                favIds = member.getFavoriteJobIds() .split(";");
+            
             String favid = "";
             for(String fId : favIds){
                 if(fId.equals(id+"")){
