@@ -56,6 +56,7 @@
 
       <%--二手--%>
       <c:forEach var="sh" items="${shs}" varStatus="status">
+        <a href="/item/sh/${sh.id}">
         <div class="sh-slip fl ${status.index == 2 ? 'no-margin':null}">
           <img src="${ (sh.picturePath) ? sh.picturePath : "/images/pig.jpg"}" alt="">
           <p class="titile">${sh.title}</p>
@@ -66,6 +67,7 @@
           </div>
           <span class="fr">￥${sh.sellPrice.intValue()}</span>
         </div>
+        </a>
 
       </c:forEach>
     </div>

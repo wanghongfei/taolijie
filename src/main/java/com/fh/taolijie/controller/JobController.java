@@ -59,6 +59,7 @@ public class JobController {
      */
     @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
+    //region 评论 String review
     public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
         //获取评论内容,已经用户的的信息
         if(content.trim().equals("")){
@@ -95,6 +96,7 @@ public class JobController {
         //返回帖子id
         return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
     }
+    //endregion
 
     /**
      * 删除一条兼职评论
@@ -102,8 +104,10 @@ public class JobController {
      * @param session
      * @return
      */
+
     @RequestMapping(value = "/{id}/review/delete/{reviewId}",method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
+    //region 删除一条兼职评论 @ResponseBody String reviewDelete
     public @ResponseBody String reviewDelete(@PathVariable int id,
                                              @PathVariable int reviewId,
                                              HttpSession session){
@@ -132,12 +136,76 @@ public class JobController {
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+    //endregion
+
+    /**
+     * 喜欢一条兼职
+     */
+    @RequestMapping(value = "/{id}/like",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 喜欢一条兼职 ResponseBody String like
+    public @ResponseBody String like(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setLikes(job.getLikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+
+    /**
+     * 不喜欢一条兼职
+     */
+    @RequestMapping(value = "/{id}/dislike",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 不喜欢一条兼职 ResponseBody String dislike
+    public @ResponseBody String dislike(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setDislikes(job.getDislikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+
+
+
     /**
      * 发布兼职 get
      * @param
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
+    //region 发布兼职 String post
     public String post(HttpSession session,Model model) {
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
@@ -147,6 +215,8 @@ public class JobController {
         model.addAttribute("cates",cateList);
         return "pc/user/jobpost";
     }
+    //endregion
+
 
     /**
      * 发布兼职信息 post ajax
@@ -155,6 +225,7 @@ public class JobController {
      * @param session
      * @return
      */
+    //region 发布兼职 ajax String post
     @RequestMapping(value = "/post", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String post(@Valid JobPostDto job,
                 BindingResult result,
@@ -180,10 +251,9 @@ public class JobController {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
 
-
-
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+    //endregion
 
 
     /**

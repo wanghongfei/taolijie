@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -107,7 +108,22 @@ public class HomeController {
     @RequestMapping(value = "item/job/{id}",method = RequestMethod.GET)
     public String jobItem(@PathVariable int id,HttpSession session,Model model){
         JobPostDto job = jobPostService.findJobPost(id);
+
+        // TODO: 把review中的memberId映射成member对象,暂时解决办法放到另一个dto中
         List<ReviewDto> reviews = reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        List<ReviewShowDto> reviewShow = new ArrayList<>();
+        for(ReviewDto r : reviews){
+            ReviewShowDto show = new ReviewShowDto();
+            show.setMember(accountService.findMember(r.getMemberId()));
+            show.setTime(r.getTime());
+            show.setJobPostId(r.getJobPostId());
+            show.setContent(r.getContent());
+            show.setId(r.getId());
+            show.setReplyList(r.getReplyList());
+            reviewShow.add(show);
+        }
+
+
         if(job == null){
             return "redirect:/404";
         }
@@ -116,7 +132,7 @@ public class HomeController {
         RoleDto role = accountService.findRole(roleId);
 
         model.addAttribute("job",job);
-        model.addAttribute("reviews",reviews);
+        model.addAttribute("reviews",reviewShow);
         model.addAttribute("poster",poster);
         model.addAttribute("posterRole",role);
         return "pc/jobdetail";

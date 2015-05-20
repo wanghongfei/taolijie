@@ -9,7 +9,7 @@ $("#like").click(function(){
     var p = $(this).next();
     $.ajax({
         type:"post",
-        url:"/api/item/job/"+id+"/like",
+        url:"/user/job/"+id+"/like",
         success:function(data){
             console.log(data);
             if(data.result){
@@ -27,7 +27,7 @@ $("#dislike").click(function(){
     var p = $(this).next();
     $.ajax({
         type:"post",
-        url:"/api/item/job/"+id+"/dislike",
+        url:"/user/job/"+id+"/dislike",
         success:function(data){
             console.log(data);
             if(data.result){
@@ -43,9 +43,10 @@ $("#dislike").click(function(){
 $("#review-btn").on("click",function(){
     var $contents = $("#contents");
     var $parent = $('<div class="no-border-bottom"></div>');
-
+    var $commetCount = $("#toComment").next();
+    console.log($commetCount);
     var id = this.dataset.id;
-    var username = this.dataset.username;
+    var username = $("#user-name-label").text();
     var content = $("#comment-input").val();
     var data = {
         content:content
@@ -55,16 +56,15 @@ $("#review-btn").on("click",function(){
         url:"/user/job/"+id+"/review/post",
         data:data,
         success:function(data){
-            console.log(data);
             if(data.result){
                 var reviewId =data.parm.reviewId;
-                console.log(reviewId);
-
                 $parent.append('<img src="/images/pig.jpg" alt="">');
                 $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
                 $parent.append('<span>'+content+'</span>');
                 $contents.append($parent);
                 $("#comment-input").val('');
+                //更新评论条数
+                $commetCount.text(parseInt($commetCount.text())+1);
             }else{
                 alert(data.message);
             }
@@ -72,8 +72,9 @@ $("#review-btn").on("click",function(){
     });
 });
 
-$(".delete-review").on("click",function(){
+$(document).on("click",'.delete-review',function(){
     var id = this.dataset.id;
+    var $commetCount = $("#toComment").next();
     var reviewId = this.getAttribute("data-reviewId");
     var $parent = $(this).parent().parent();
     $.ajax({
@@ -82,6 +83,7 @@ $(".delete-review").on("click",function(){
         success:function(data){
             if(data.result){
                 $parent.remove();
+                $commetCount.text(parseInt($commetCount.text())-1);
             }else{
                 alert(data.message);
             }
