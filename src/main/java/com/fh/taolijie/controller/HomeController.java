@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sun.security.krb5.internal.PAData;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +54,7 @@ public class HomeController {
 	 * 主页 get
 	 */
 	@RequestMapping(value = {"index","/"}, method = {RequestMethod.GET,RequestMethod.HEAD})
+    //region 主页 home
 	public String home(HttpSession session,
                        Model model,
                        HttpServletRequest req,ModelAndView modelAndView) {
@@ -75,6 +77,8 @@ public class HomeController {
 
         return "pc/index";
 	}
+    //endregion
+
 
 
     /**
@@ -105,7 +109,9 @@ public class HomeController {
      * 查询一条兼职
      *
      */
+
     @RequestMapping(value = "item/job/{id}",method = RequestMethod.GET)
+    //region 查询一条兼职 jobItem
     public String jobItem(@PathVariable int id,HttpSession session,Model model){
         JobPostDto job = jobPostService.findJobPost(id);
 
@@ -123,7 +129,6 @@ public class HomeController {
             reviewShow.add(show);
         }
 
-
         if(job == null){
             return "redirect:/404";
         }
@@ -137,13 +142,35 @@ public class HomeController {
         model.addAttribute("posterRole",role);
         return "pc/jobdetail";
     }
+    //endregion
+
+
+    @RequestMapping(value = "item/job/{id}/fav",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 收藏一条兼职信息
+    public @ResponseBody String favJob(@PathVariable int id,HttpSession session){
+        //判断用户是否登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        //查看id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        //判断是否fav过,如果没有,fav = true ,有 fav = false
+        // TODO:判断收藏
+        //返回fav的状态
+        return new JsonWrapper(true,"").getAjaxMessage();
+    }
+    //endregion
 
 
     /**
      * 二手列表
      */
     @RequestMapping(value = "list/sh",method = RequestMethod.GET)
-    public String shList(){
+    public String shList(@RequestParam(defaultValue = "0") int page,Model model){
+        List<SecondHandPostDto> shs = shPostService.getAllPostList(page,Constants.PAGE_CAPACITY,new ObjWrapper());
+        model.addAttribute("shs",shs);
         return "pc/shlist";
     }
 
@@ -329,11 +356,6 @@ public class HomeController {
 
 
 
-
-
-
-
-
     /**
      * 登陆页面
      * @param req
@@ -353,6 +375,7 @@ public class HomeController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    //region 登陆请求 login
     public @ResponseBody String login(@Valid LoginDto mem,
                                       BindingResult result,
                                       HttpSession session,
@@ -409,8 +432,8 @@ public class HomeController {
 
         /*如果自动登陆为true ,返回cookie*/
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-
     }
+    //endregion
 
 
     /**
@@ -424,6 +447,7 @@ public class HomeController {
      * 管理员后台登陆
      */
     @RequestMapping(value = "login/admin",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 管理员后台登陆 AdminLogin
     public @ResponseBody String AdminLogin(@Valid LoginDto login,
                                       BindingResult result,
                                       HttpSession session,
@@ -480,6 +504,7 @@ public class HomeController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
+    //endregion
 
 
     @RequestMapping(value = "/404",method = RequestMethod.GET)

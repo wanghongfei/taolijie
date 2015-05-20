@@ -12,9 +12,9 @@
   <div class="services">
     <p>我们的服务</p>
     <ul>
-      <li>学生兼职</li>
-      <li>校园二手</li>
-      <li>求职简历</li>
+      <li><a href="/list/job">学生兼职</a></li>
+      <li><a href="/list/sh">校园二手</a></li>
+      <li><a href="/list/resume">求职简历</a></li>
       <li>发布信息</li>
     </ul>
   </div>
