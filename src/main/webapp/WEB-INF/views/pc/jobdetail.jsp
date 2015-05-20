@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -33,7 +34,10 @@
       <span>兼职详情</span>
       <a href="/"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
       <p class="fr">分享</p>
-      <p class="fr"><i class="fa fa-heart-o">&nbsp;&nbsp;</i>收藏</p>
+      <p class="fr" id="fav" data-id="${job.id}">
+          <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
+          ${favStatus? '已收藏':'收藏'}
+      </p>
     </div>
     <div style="clean:both"></div>
     <div class="title">

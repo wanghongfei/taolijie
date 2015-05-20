@@ -40,6 +40,7 @@ $("#dislike").click(function(){
     });
 });
 
+//评论
 $("#review-btn").on("click",function(){
     var $contents = $("#contents");
     var $parent = $('<div class="no-border-bottom"></div>');
@@ -72,6 +73,7 @@ $("#review-btn").on("click",function(){
     });
 });
 
+//删除一条评论
 $(document).on("click",'.delete-review',function(){
     var id = this.dataset.id;
     var $commetCount = $("#toComment").next();
@@ -95,5 +97,27 @@ $(document).on("click",'.delete-review',function(){
 $("#toComment").click(function(){
     var input = document.getElementById("comment-input");
     input.focus();
+});
+
+//收藏/取消收藏一条兼职
+$("#fav").on("click",function(){
+    var jobId = this.getAttribute("data-id");
+    var $this = $(this);
+    //收藏
+    $.ajax({
+        type:"POST",
+        url:"/user/job/fav/"+jobId,
+        success:function(data){
+            if(data.result){
+                if(data.parm.status === "0"){
+                    $this.html('<i class="fa fa-heart">&nbsp;&nbsp;</i>已收藏');
+                }else if(data.parm.status === "1"){
+                    $this.html('<i class="fa fa-heart-o">&nbsp;&nbsp;</i>收藏');
+                }
+            }else{
+                alert(data.message);
+            }
+        }
+    });
 });
 

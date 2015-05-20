@@ -136,10 +136,35 @@ public class HomeController {
         int roleId = poster.getRoleIdList().iterator().next();
         RoleDto role = accountService.findRole(roleId);
 
+        //收藏的显示状态
+        boolean status = false; //不显示
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            status =false;
+        else{ //查找有没有收藏
+            GeneralMemberDto member = accountService.findMember(credential.getId());
+            String[] favIds = member.getFavoriteJobIds().split(";");
+            String favid = "";
+            for(String fId : favIds){
+                if(fId.equals(id+"")){
+                    favid = fId;
+                    break;
+                }
+            }
+            if(favid.equals("")){
+                status = false;
+            }else{
+                status = true;
+            }
+
+        }
+
+
         model.addAttribute("job",job);
         model.addAttribute("reviews",reviewShow);
         model.addAttribute("poster",poster);
         model.addAttribute("posterRole",role);
+        model.addAttribute("favStatus",status);
         return "pc/jobdetail";
     }
     //endregion

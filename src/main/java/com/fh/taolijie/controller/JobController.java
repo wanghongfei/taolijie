@@ -289,6 +289,62 @@ public class JobController {
     }
 
 
+    /**
+     * 收藏一条兼职
+     */
+    @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 收藏一条兼职 fav
+   public @ResponseBody String fav (@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        if(jobPostService.findJobPost(id) == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+
+        //遍历用户的收藏列表
+        //如果没有这条兼职则添加,反之删除
+        GeneralMemberDto mem = accountService.findMember(credential.getId());
+        String[] favIds = mem.getFavoriteJobIds().split(";");
+        String favid = "";
+        for(String fId : favIds){
+            if(fId.equals(id+"")){
+               favid = fId;
+                break;
+            }
+        }
+
+        String status;
+        if(favid.equals("")){ //没有找到,则添加收藏
+            jobPostService.favoritePost(credential.getId(),id);
+            status = "0";
+        }else{ //否则删除收藏
+            jobPostService.unfavoritePost(credential.getId(),id);
+            status = "1";
+        }
+
+        return new JsonWrapper(true, "status",status).getAjaxMessage();
+    }
+    //endregion
+
+
+    /**
+     * 取消收藏一条兼职
+     * @param id
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/unfav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+     //region 取消收藏一条兼职 unfav
+   public @ResponseBody String unfav (@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        if(jobPostService.findJobPost(id) == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        jobPostService.unfavoritePost(credential.getId(),id);
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
 
 
     /**
@@ -297,8 +353,8 @@ public class JobController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "fav", method = RequestMethod.GET)
-    public String fav(HttpSession session) {
+    @RequestMapping(value = "myfav", method = RequestMethod.GET)
+    public String myfav(HttpSession session) {
         return "";
     }
 
@@ -309,16 +365,20 @@ public class JobController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "fav/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "myfav/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public
     @ResponseBody
-    String fav(@PathVariable int page, HttpSession session) {
+    String myfav(@PathVariable int page, HttpSession session) {
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+
         int capcity = Constants.PAGE_CAPACITY;
         int start = capcity * (page - 1);
-        Credential credential = CredentialUtils.getCredential(session);
 
 
         List<JobPostDto> list = null;
+
         /*实现收藏*/
         /*
         *
