@@ -74,6 +74,7 @@ public class DefaultReviewService implements ReviewService {
                     CollectionUtils.transformCollection(replyList, ReviewDto.class, (entity) -> {
                         return CollectionUtils.entity2Dto(entity, ReviewDto.class, (reviewDto) -> {
                             reviewDto.setMemberId(entity.getMember().getId());
+                            reviewDto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
                         });
                     });
                 }
