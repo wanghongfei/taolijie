@@ -18,13 +18,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import sun.security.krb5.internal.PAData;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -50,9 +54,10 @@ public class HomeController {
 	 * 主页 get
 	 */
 	@RequestMapping(value = {"index","/"}, method = {RequestMethod.GET,RequestMethod.HEAD})
+    //region 主页 home
 	public String home(HttpSession session,
                        Model model,
-                       HttpServletRequest req) {
+                       HttpServletRequest req,ModelAndView modelAndView) {
         System.out.println("session"+session);
         Credential credential =  CredentialUtils.getCredential(session);
 
@@ -60,17 +65,20 @@ public class HomeController {
 
         }
 
+        // 二手物品需要加入一个发布人
         List<NewsDto> news = newsService.getNewsList(0,3, new ObjWrapper());
         List<JobPostDto> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper());
         List<SecondHandPostDto> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
 
         model.addAttribute("news", news);
-        model.addAttribute("jobs", jobs);
+       model.addAttribute("jobs", jobs);
         model.addAttribute("shs", shs);
         model.addAttribute("mem",credential);
 
         return "pc/index";
 	}
+    //endregion
+
 
 
     /**
@@ -101,24 +109,96 @@ public class HomeController {
      * 查询一条兼职
      *
      */
+
     @RequestMapping(value = "item/job/{id}",method = RequestMethod.GET)
+    //region 查询一条兼职 jobItem
     public String jobItem(@PathVariable int id,HttpSession session,Model model){
         JobPostDto job = jobPostService.findJobPost(id);
+
+        // TODO: 把review中的memberId映射成member对象,暂时解决办法放到另一个dto中
         List<ReviewDto> reviews = reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        List<ReviewShowDto> reviewShow = new ArrayList<>();
+        for(ReviewDto r : reviews){
+            ReviewShowDto show = new ReviewShowDto();
+            show.setMember(accountService.findMember(r.getMemberId()));
+            show.setTime(r.getTime());
+            show.setJobPostId(r.getJobPostId());
+            show.setContent(r.getContent());
+            show.setId(r.getId());
+            show.setReplyList(r.getReplyList());
+            reviewShow.add(show);
+        }
+
         if(job == null){
             return "redirect:/404";
         }
+        GeneralMemberDto poster = accountService.findMember(job.getMemberId());
+        int roleId = poster.getRoleIdList().iterator().next();
+        RoleDto role = accountService.findRole(roleId);
+
+        //收藏的显示状态
+        boolean status = false; //不显示
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            status =false;
+        else{ //查找有没有收藏
+            GeneralMemberDto member = accountService.findMember(credential.getId());
+            String[] favIds = {};
+            if(member.getFavoriteJobIds() != null)
+                favIds = member.getFavoriteJobIds() .split(";");
+            
+            String favid = "";
+            for(String fId : favIds){
+                if(fId.equals(id+"")){
+                    favid = fId;
+                    break;
+                }
+            }
+            if(favid.equals("")){
+                status = false;
+            }else{
+                status = true;
+            }
+
+        }
+
+
         model.addAttribute("job",job);
-        model.addAttribute("reviews",reviews);
+        model.addAttribute("reviews",reviewShow);
+        model.addAttribute("poster",poster);
+        model.addAttribute("posterRole",role);
+        model.addAttribute("favStatus",status);
         return "pc/jobdetail";
     }
+    //endregion
+
+
+    @RequestMapping(value = "item/job/{id}/fav",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 收藏一条兼职信息
+    public @ResponseBody String favJob(@PathVariable int id,HttpSession session){
+        //判断用户是否登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        //查看id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        //判断是否fav过,如果没有,fav = true ,有 fav = false
+        // TODO:判断收藏
+        //返回fav的状态
+        return new JsonWrapper(true,"").getAjaxMessage();
+    }
+    //endregion
 
 
     /**
      * 二手列表
      */
     @RequestMapping(value = "list/sh",method = RequestMethod.GET)
-    public String shList(){
+    public String shList(@RequestParam(defaultValue = "0") int page,Model model){
+        List<SecondHandPostDto> shs = shPostService.getAllPostList(page,Constants.PAGE_CAPACITY,new ObjWrapper());
+        model.addAttribute("shs",shs);
         return "pc/shlist";
     }
 
@@ -131,6 +211,29 @@ public class HomeController {
         SecondHandPostDto sh = shPostService.findPost(id);
         model.addAttribute("sh",sh);
          return "";
+    }
+
+    /**
+     * 查询一条二手
+     *
+     */
+    @RequestMapping(value = "item/sh/{id}",method = RequestMethod.GET)
+    public String shItem(@PathVariable int id,HttpSession session,Model model){
+        SecondHandPostDto sh = shPostService.findPost(id);
+        if(sh == null){
+            return "redirect:/404";
+        }
+        List<ReviewDto> reviews = reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        //对应的用户和用户类别
+        GeneralMemberDto poster = accountService.findMember(sh.getMemberId());
+        int roleId =poster.getRoleIdList().iterator().next();
+        RoleDto role = accountService.findRole(roleId);
+
+        model.addAttribute("sh",sh);
+        model.addAttribute("reviews",reviews);
+        model.addAttribute("poster",poster);
+        model.addAttribute("posterRole",role);
+        return "pc/shdetail";
     }
 
 
@@ -219,114 +322,65 @@ public class HomeController {
      */
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String register(HttpServletRequest req){
-        return ResponseUtils.determinePage(req,"user/register");
+        return "pc/register";
     }
 
 
-
-
     /**
-     * ajax注册请求
-     * 后续会添加邮箱验证或手机验证功能
+     * 注册用户
+     * Method : POST AJAX
+     * @param mem
+     * @param result
+     * @param session
+     * @param res
      * @return
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/register", method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 注册用户 public @ResponseBody String register
     public @ResponseBody String register(@Valid RegisterDto mem,
                                          BindingResult result,
                                          HttpSession session,
                                          HttpServletResponse res){
-        GeneralMemberDto newMember = null;
-        GeneralMemberDto memDto = null;
-        RoleDto role = null;
-        int cookieExpireTime = 1*24*60*60;//1天
-        RoleDto studentRole = null;
-        RoleDto employerRole = null;
-
-        /*
-         * 注册需要的表单内容
-         * 1.用户名
-         * 2.密码
-         * 3.邮箱
-         */
-
+        // TODO: 需要验证邮箱的唯一性
+        //验证表单错误
         if(result.hasErrors()){
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
-        /*用户名重复*/
-        if(accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],false)!=null){
-            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
-        }
-        /*两次密码不一致*/
-        if(!mem.getPassword().equals(mem.getRepassword())){
+        //两次密码不一致
+        if(!(mem.getPassword().equals(mem.getRepassword()))){
             return new JsonWrapper(false,Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
         }
 
+        //注册不同权限的账户
+        //1.根据权限的名称找到对应的权限id,如果没有找到,返回false
+        //2.创建一个用户
+        //3.为该账户添加权限, assignRole方法
+        String roleName = mem.getIsEmployer() ?
+                Constants.RoleType.EMPLOYER.toString() :
+                Constants.RoleType.STUDENT.toString();
+        int roleId = ControllerHelper.getRoleId(roleName,accountService);
+        if(roleId == -1)
+            return new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
 
-        for(RoleDto r : accountService.getAllRole()){
-            if(r.getRolename().equals(Constants.RoleType.STUDENT.toString())) {
-                studentRole = r;
-            }else if(r.getRolename().equals(Constants.RoleType.EMPLOYER.toString())){
-                employerRole = r;
-            }
-        }
-
-        /*如果没有role,创建*/
-        if(studentRole == null){
-            RoleDto r = new RoleDto();
-            r.setRolename(Constants.RoleType.STUDENT.toString());
-            r.setMemo("学生");
-            accountService.addRole(r);
-            studentRole = r;
-        }
-        if(employerRole==null){
-            RoleDto r = new RoleDto();
-            r.setRolename(Constants.RoleType.EMPLOYER.toString());
-            r.setMemo("商家");
-            accountService.addRole(r);
-            employerRole = r;
-        }
-
-        newMember = new GeneralMemberDto();
-
-        /*按照类型注册不同ROle的用户*/
-        if(mem.getIsEmployer()){
-            newMember.setRoleIdList(Arrays.asList(employerRole.getRid()));
-        }else{
-            newMember.setRoleIdList(Arrays.asList(studentRole.getRid()));
-        }
+        GeneralMemberDto newMember = new GeneralMemberDto();
         newMember.setUsername(mem.getUsername());
-        newMember.setPassword(mem.getPassword());
-        newMember.setProfilePhotoPath(DefaultAvatarGenerator.getRandomAvatar());
-
-
-
-        /*注册*/
+        newMember.setPassword(CredentialUtils.sha(mem.getPassword()));
+        newMember.setValid(true);
+        newMember.setCreated_time(new Date());
+        newMember.setRoleIdList(Arrays.asList(roleId));
+        //注册并且检查用户名是否存在
         try {
             accountService.register(newMember);
         } catch (DuplicatedUsernameException e) {
             return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
         }
 
-
-        /*用户登陆*/
-
-        memDto = accountService.findMember(mem.getUsername(),new GeneralMemberDto[0],true);
-        Credential credential = new TaolijieCredential(memDto.getId(),memDto.getUsername());
-        for(Integer rid:memDto.getRoleIdList()){
-            role = accountService.findRole(rid);
-            credential.addRole(role.getRolename());
-
-            if(logger.isDebugEnabled()){
-                logger.debug("RoleId:{}",rid);
-                logger.debug("RoleName:{}",role.getRolename());
-            }
-        }
-        CredentialUtils.createCredential(session,credential);
+        //accountService.assignRole(roleId,mem.getUsername());
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-
-
     }
+    //endregion
 
 
 
@@ -349,6 +403,7 @@ public class HomeController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    //region 登陆请求 login
     public @ResponseBody String login(@Valid LoginDto mem,
                                       BindingResult result,
                                       HttpSession session,
@@ -388,9 +443,9 @@ public class HomeController {
                 logger.debug("RoleName:{}",role.getRolename());
             }
         }
+        //验证身份的session
         CredentialUtils.createCredential(session,credential);
-
-
+        session.setAttribute("user", memDto);
 
         /*如果选择自动登陆,加入cookie*/
         if(mem.getRememberMe().equals("true")){
@@ -405,8 +460,8 @@ public class HomeController {
 
         /*如果自动登陆为true ,返回cookie*/
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-
     }
+    //endregion
 
 
     /**
@@ -420,6 +475,7 @@ public class HomeController {
      * 管理员后台登陆
      */
     @RequestMapping(value = "login/admin",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 管理员后台登陆 AdminLogin
     public @ResponseBody String AdminLogin(@Valid LoginDto login,
                                       BindingResult result,
                                       HttpSession session,
@@ -476,6 +532,7 @@ public class HomeController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
+    //endregion
 
 
     @RequestMapping(value = "/404",method = RequestMethod.GET)

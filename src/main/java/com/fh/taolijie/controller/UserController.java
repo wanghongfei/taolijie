@@ -75,11 +75,11 @@ public class UserController {
     /**
      * 个人中心
      */
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = {"","/"},method = RequestMethod.GET)
     public String user(HttpSession session,Model model,HttpServletRequest req){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential==null){
-            return "redirect:/user/login";
+            return "redirect:/login";
         }
         GeneralMemberDto memberDto = accountService.findMember(credential.getUsername(),new GeneralMemberDto[0],false);
         model.addAttribute("user", memberDto);
@@ -87,7 +87,7 @@ public class UserController {
         model.addAttribute("notificationNum",notifaicationNum);
         model.addAttribute("role",credential.getRoleList().get(0));
 
-        return "mobile/user/user";
+        return "pc/user/profile";
 
     }
 
@@ -214,7 +214,7 @@ public class UserController {
      */
     @RequestMapping(value = "/setting/security", method = RequestMethod.GET)
     public String security(HttpServletRequest req){
-        return ResponseUtils.determinePage(req, "user/security");
+        return "pc/user/security";
     }
 
     /**
@@ -243,12 +243,13 @@ public class UserController {
         if(!mem.getPassword().equals(CredentialUtils.sha(dto.getOldPassword()))){
             System.out.println("用户的密码:"+mem.getPassword());
             System.out.println("输入的原密码:"+CredentialUtils.sha(dto.getOldPassword()));
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, Constants.ErrorType.PASSWORD_ERROR).getAjaxMessage();
         }else if(!dto.getNewPassword().equals(dto.getRePassword())){
-            return  new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return  new JsonWrapper(false, Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
         }
 
-        mem.setPassword(dto.getNewPassword());
+        //加密
+        mem.setPassword(CredentialUtils.sha(dto.getNewPassword()));
 
         System.out.println("更新后的密码"+mem.getPassword());
         System.out.println(CredentialUtils.sha(mem.getPassword()));
@@ -266,7 +267,7 @@ public class UserController {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     /**
@@ -308,7 +309,7 @@ public class UserController {
      */
     @RequestMapping(value = "feedback",method = RequestMethod.GET)
     public String feedback(){
-        return "";
+        return "/pc/user/feedback";
     }
 
     /**
@@ -317,14 +318,15 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String feedback(@RequestParam String content,HttpSession session){
+    public @ResponseBody String feedback(@RequestParam String content,@RequestParam String  email, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         mail.sendMailAsync("反馈人:  "+credential.getUsername()+"/n"
                 +"用户类型:  "+credential.getRoleList()+"/n"
                 +"反馈内容:  "+content+"/n"
+                +"用户邮箱:"+email+"/n"
                 +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
 
-        return "";
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 }

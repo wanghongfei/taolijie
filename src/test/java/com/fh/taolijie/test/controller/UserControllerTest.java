@@ -29,7 +29,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -73,10 +72,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         DefaultSHPostService.class,
         DefaultResumeService.class,
         DefaultReviewService.class,
-        DefaultSearchService.class,
-        DefaultNotificationService.class,
-        Mail.class,
-        JavaMailSenderImpl.class,
         DefaultJobPostCategoryService.class
         })
 //@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml")
@@ -104,9 +99,6 @@ public class UserControllerTest extends BaseSpringDataTestClass{
             this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
             initData();
         }
-
-
-
         Print.print("准备完成");
     }
 
@@ -157,6 +149,118 @@ public class UserControllerTest extends BaseSpringDataTestClass{
 
     }
 
+    private void mockSession(){
+            /*创建session*/
+        Credential credential = new TaolijieCredential("yazhou");
+        GeneralMemberDto memDto = accountService.findMember("yazhou",new GeneralMemberDto[0],true);
+        for(Integer rid:memDto.getRoleIdList()){
+            RoleDto role = accountService.findRole(rid);
+            credential.addRole(role.getRolename());
+        }
+        CredentialUtils.createCredential(session,credential);
+    }
+
+    /**
+     * 测试登陆成功
+     * 需要测试cookie是否写入
+     */
+    @Test
+    public void testLoginSuccess() throws Exception {
+        String expected = new JsonWrapper(true,"登陆成功").getAjaxMessage();
+        int cookieExpireTime = 1*24*60*60;
+        mockMvc.perform(post("/user/login")
+                .contentType("application/json;charset=utf-8")
+                     .param("username", "yazhou")
+                     .param("password", "yazhou110")
+                      .param("rememberMe", "true"))
+                .andExpect(status().isOk())
+                .andExpect(cookie().value("username", "yazhou"))
+                .andExpect(cookie().value("password","yazhou110"))
+                .andExpect(cookie().maxAge("username", cookieExpireTime))
+                .andExpect(cookie().maxAge("password",cookieExpireTime))
+                .andExpect(content().string(expected));
+    }
+
+    /**
+     * 测试登陆用户名不存在
+     * @throws Exception
+     */
+    @Test
+    public void testLoginUsernameError() throws Exception {
+        String expected = new JsonWrapper(false,"用户[wynfrith]不存在").getAjaxMessage();
+
+        mockMvc.perform(post("/user/login")
+                        .contentType("application/json;charset=utf-8")
+                        .param("username","wynfrith")
+                        .param("password","yazhou110")
+        ).andExpect(status().isOk())
+                .andExpect(content().string(expected));
+
+    }
+
+    /**
+     * 测试登陆密码错误
+     * @throws Exception
+     */
+    @Test
+    public void testLoginPasswordError() throws Exception {
+        String expected = new JsonWrapper(false,"密码错误").getAjaxMessage();
+
+        mockMvc.perform(post("/user/login")
+                        .contentType("application/json;charset=utf-8")
+                        .param("username","yazhou")
+                        .param("password","9988979797779797")
+        ).andExpect(status().isOk())
+                .andExpect(content().string(expected));
+
+    }
+
+    /**
+     * 注册成功
+     * @throws Exception
+     */
+    @Test
+    public void testRegisterSuccess() throws Exception{
+
+        String expected = new JsonWrapper(true,"success").getAjaxMessage();
+
+        mockMvc.perform(post("/user/register")
+                .contentType("application/json;charset=utf-8")
+                .param("email","wangfucheng56@gmail.com")
+                .param("username","wynfrith")
+                .param("password","wfc5582563")
+        ).andExpect(status().isOk())
+                .andExpect(content().json(expected));
+    }
+
+    /**
+     * 注册失败
+     * @throws Exception
+     */
+    @Test
+    public void testRegisterError() throws Exception{
+        JsonObjectBuilder jsonBuilder = Json.createObjectBuilder();
+        jsonBuilder.add("email","邮箱格式错误");
+        jsonBuilder.add("password","用户名密码错误");
+        jsonBuilder.add("username","用户名密码错误");
+
+        JsonObject jsonObject = Json.createObjectBuilder()
+                .add("result", false)
+                .add("parm", jsonBuilder)
+                .build();
+
+        String expected = jsonObject.toString();
+
+        mockMvc.perform(post("/user/register")
+                        .contentType("application/json;charset=utf-8")
+                        .param("email", "")
+                        .param("username", "")
+                        .param("password", "")
+        ).andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(content().json(expected));
+
+    }
 
 
     /**
@@ -165,19 +269,8 @@ public class UserControllerTest extends BaseSpringDataTestClass{
      */
     @Test
     public void testChangeProfile() throws Exception{
-
-        /*创建session*/
-        Credential credential = new TaolijieCredential("yazhou");
-        GeneralMemberDto memDto = accountService.findMember("yazhou",new GeneralMemberDto[0],true);
-        for(Integer rid:memDto.getRoleIdList()){
-           RoleDto role = accountService.findRole(rid);
-            credential.addRole(role.getRolename());
-        }
-        CredentialUtils.createCredential(session,credential);
-
-
-
-        String expected = new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        mockSession();
+        String expected = new JsonWrapper(true,"操作成功").getAjaxMessage();
         mockMvc.perform(post("/user/setting/profile")
                         .contentType("application/json;charset=utf-8")
                         .session(session)
@@ -221,14 +314,8 @@ public class UserControllerTest extends BaseSpringDataTestClass{
      */
     @Test
     public void testChangePasswordError() throws Exception{
-        /*创建session*/
-        Credential credential = new TaolijieCredential("yazhou");
-        GeneralMemberDto memDto = accountService.findMember("yazhou",new GeneralMemberDto[0],true);
-        for(Integer rid:memDto.getRoleIdList()){
-            RoleDto role = accountService.findRole(rid);
-            credential.addRole(role.getRolename());
-        }
-        CredentialUtils.createCredential(session,credential);
+
+        mockSession();
 
         String expected = new JsonWrapper(false,"密码不合法").getAjaxMessage();
         mockMvc.perform(post("/user/setting/security")
@@ -240,4 +327,30 @@ public class UserControllerTest extends BaseSpringDataTestClass{
                 .andExpect(content().json(expected));
     }
 
+    @Test
+    public void testJobPostSuccess() throws Exception {
+        mockSession();
+
+        String expected = new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+        mockMvc.perform(post("/user/post/job")
+                .contentType("application/json;charset=utf-8")
+                .session(session)
+                .param("title", "桃李街程序员")
+                .param("categoryId", "1")
+                .param("wage","18")
+                .param("wageUtil","小时")
+                .param("timeToPay","周结")
+                .param("postTime",new Date().toString())
+                .param("expiredTime","2015-5-5")
+                .param("workTime","周六周日")
+                .param("workPlace","青春在线工作室")
+                .param("jobDetail","具体的工作内容")
+                .param("jobDescription","工作要求")
+                .param("company","公司名称")
+                .param("contact","联系人")
+                .param("contactPhone","联系电话")
+        ).andExpect(status().isOk())
+                .andExpect(content().json(expected));
+    }
 }

@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.service.AccountService;
@@ -15,6 +16,7 @@ import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +49,8 @@ public class ResumeController{
     ResumeService resumeService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    JobPostCateService jobPostCateService;
 
     /**
      * 创建简历 get
@@ -54,8 +58,10 @@ public class ResumeController{
      * @return
      */
     @RequestMapping(value = "/create" ,method = RequestMethod.GET)
-    public String create(HttpSession session){
-        return "";
+    public String create(HttpSession session,Model model){
+        List<JobPostCategoryDto> cateList= jobPostCateService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
+        model.addAttribute("cates",cateList);
+        return "pc/user/myresume";
     }
 
     /**

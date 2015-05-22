@@ -1,24 +1,11 @@
 package com.fh.taolijie.test.controller;
 
-import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.controller.HomeController;
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.controller.dto.MemberRoleDto;
-import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.domain.*;
-import com.fh.taolijie.domain.wrapper.ResumeAndJobCategory;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.impl.*;
 import com.fh.taolijie.test.service.repository.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.TaolijieCredential;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.ContextConfiguration;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

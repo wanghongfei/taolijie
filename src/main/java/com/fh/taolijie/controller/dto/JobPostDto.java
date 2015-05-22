@@ -18,12 +18,12 @@ public class JobPostDto {
     private String workPlace;
     private Double wage;
     private String timeToPay;
-    private String jobDescription;
+    private String jobDescription;//工作要求
     private String contact;
     private String contactPhone;
     private String contactEmail;
     private String contactQq;
-    private String jobDetail;
+    private String jobDetail;//工作内容
     private String introduce;
     private Integer likes;
     private Integer dislikes;

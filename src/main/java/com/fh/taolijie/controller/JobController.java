@@ -4,15 +4,19 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
+import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.ResponseUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,28 +48,175 @@ public class JobController {
     JobPostCateService jobPostCateService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    ReviewService reviewService;
 
-    @RequestMapping(value = "test",method = RequestMethod.GET)
-    public @ResponseBody String test(){
-        return "hello";
+    /**
+     * 评论
+     * @param content
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 评论 String review
+    public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
+        //获取评论内容,已经用户的的信息
+        if(content.trim().equals("")){
+            return new JsonWrapper(false,Constants.ErrorType.NOT_EMPTY).getAjaxMessage();
+        }
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        int memId = credential.getId();
+
+        //先查一下有没有这个帖子
+       if(jobPostService.findJobPost(id) == null){
+           return new JsonWrapper(false,Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+       }
+
+        //为该id的帖子创建一条评论
+        ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setJobPostId(id);
+        reviewDto.setContent(content);
+        reviewDto.setMemberId(memId);
+        reviewDto.setTime(new Date());
+        if(!reviewService.addReview(reviewDto))
+            return  new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
+
+        List<ReviewDto> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        for(int i = list.size()-1; i> 0; i--){
+            ReviewDto r = list.get(i);
+            if(r.getContent().equals(content)){
+                reviewDto = r;
+                break;
+            }
+        }
+
+        //返回帖子id
+        return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
     }
+    //endregion
+
+    /**
+     * 删除一条兼职评论
+     * @param id
+     * @param session
+     * @return
+     */
+
+    @RequestMapping(value = "/{id}/review/delete/{reviewId}",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 删除一条兼职评论 @ResponseBody String reviewDelete
+    public @ResponseBody String reviewDelete(@PathVariable int id,
+                                             @PathVariable int reviewId,
+                                             HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        //先查看是否登陆,发偶泽返回错误信息
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+
+        //验证评论是否自己发布
+        List<ReviewDto> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        ReviewDto reviewDto = null;
+        for(ReviewDto r : list){
+            if(r.getId() == reviewId){
+                reviewDto = r;
+                break;
+            }
+        }
+        if(reviewDto == null)
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        if(reviewDto.getMemberId() != credential.getId())
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+
+        //删除评论
+        if(!reviewService.deleteReview(reviewId))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+    /**
+     * 喜欢一条兼职
+     */
+    @RequestMapping(value = "/{id}/like",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 喜欢一条兼职 ResponseBody String like
+    public @ResponseBody String like(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setLikes(job.getLikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+
+    /**
+     * 不喜欢一条兼职
+     */
+    @RequestMapping(value = "/{id}/dislike",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 不喜欢一条兼职 ResponseBody String dislike
+    public @ResponseBody String dislike(@PathVariable int id,HttpSession session){
+        // 1.判断是否登陆,如果未登录弹出,请先登陆
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        }
+        // 2.查询一下id是否存在
+        JobPostDto job = jobPostService.findJobPost(id);
+        if(job == null)
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+        // 3.判断是否已经喜欢过了
+
+        // TODO : 需要在数据库层面记录喜欢的用户
+
+        // 4.set likes + 1
+        job.setDislikes(job.getDislikes()+1);
+        if(!jobPostService.updateJobPost(id,job))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
 
 
 
     /**
      * 发布兼职 get
-     *
      * @param
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String post(HttpSession session) {
+    //region 发布兼职 String post
+    public String post(HttpSession session,Model model) {
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
             return "redirect:/login";
         }
-        return "";
+        List<JobPostCategoryDto> cateList= jobPostCateService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
+        model.addAttribute("cates",cateList);
+        return "pc/user/jobpost";
     }
+    //endregion
+
 
     /**
      * 发布兼职信息 post ajax
@@ -74,6 +225,7 @@ public class JobController {
      * @param session
      * @return
      */
+    //region 发布兼职 ajax String post
     @RequestMapping(value = "/post", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String post(@Valid JobPostDto job,
                 BindingResult result,
@@ -90,6 +242,8 @@ public class JobController {
         /*创建兼职信息*/
         job.setMemberId(mem.getId());
         job.setPostTime(new Date());
+        job.setLikes(0);
+        job.setDislikes(0);
 
         if(job.getCategoryId()!=null){
             jobPostService.addJobPost(job);
@@ -97,10 +251,9 @@ public class JobController {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
 
-
-
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+    //endregion
 
 
     /**
@@ -136,6 +289,64 @@ public class JobController {
     }
 
 
+    /**
+     * 收藏一条兼职
+     */
+    @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 收藏一条兼职 fav
+   public @ResponseBody String fav (@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        if(jobPostService.findJobPost(id) == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+
+        //遍历用户的收藏列表
+        //如果没有这条兼职则添加,反之删除
+        GeneralMemberDto mem = accountService.findMember(credential.getId());
+        String[] favIds = {};
+        if(mem.getFavoriteJobIds() != null)
+            favIds = mem.getFavoriteJobIds() .split(";");
+        String favid = "";
+        for(String fId : favIds){
+            if(fId.equals(id+"")){
+               favid = fId;
+                break;
+            }
+        }
+
+        String status;
+        if(favid.equals("")){ //没有找到,则添加收藏
+            jobPostService.favoritePost(credential.getId(),id);
+            status = "0";
+        }else{ //否则删除收藏
+            jobPostService.unfavoritePost(credential.getId(),id);
+            status = "1";
+        }
+
+        return new JsonWrapper(true, "status",status).getAjaxMessage();
+    }
+    //endregion
+
+
+    /**
+     * 取消收藏一条兼职
+     * @param id
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/unfav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+     //region 取消收藏一条兼职 unfav
+   public @ResponseBody String unfav (@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        if(jobPostService.findJobPost(id) == null)
+            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        jobPostService.unfavoritePost(credential.getId(),id);
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
 
 
     /**
@@ -144,8 +355,8 @@ public class JobController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "fav", method = RequestMethod.GET)
-    public String fav(HttpSession session) {
+    @RequestMapping(value = "myfav", method = RequestMethod.GET)
+    public String myfav(HttpSession session) {
         return "";
     }
 
@@ -156,16 +367,20 @@ public class JobController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "fav/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "myfav/{page}", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
     public
     @ResponseBody
-    String fav(@PathVariable int page, HttpSession session) {
+    String myfav(@PathVariable int page, HttpSession session) {
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+
         int capcity = Constants.PAGE_CAPACITY;
         int start = capcity * (page - 1);
-        Credential credential = CredentialUtils.getCredential(session);
 
 
         List<JobPostDto> list = null;
+
         /*实现收藏*/
         /*
         *
@@ -276,7 +491,6 @@ public class JobController {
          * 如果该job不是用户发送的,则错误json
          */
         Credential credential = CredentialUtils.getCredential(session);
-
 
 
         if(job == null|| !ControllerHelper.isCurrentUser(credential,job)){

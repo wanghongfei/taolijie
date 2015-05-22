@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
              xmlns:jpa="http://www.springframework.org/schema/data/jpa"
              xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+             xmlns:mvc="http://java.sun.com/xml/ns/javaee"
              xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -70,9 +72,9 @@
     <!--数据库连接采用jdbc驱动-->
     <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie" />
+        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
         <beans:property name="username" value="root" />
-        <beans:property name="password" value="111111" />
+        <beans:property name="password" value="wfc" />
     </beans:bean>
 
     <beans:bean
@@ -99,7 +101,7 @@
 
 
 
-    <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service" />
+    <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor" />
 
 
     <!-- Email -->
@@ -117,6 +119,15 @@
             </beans:props>
         </beans:property>
     </beans:bean>
+
+    <interceptors>
+        <interceptor>
+            <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
+            <mapping path="/**" />
+            <beans:bean class="com.fh.taolijie.interceptor.CommonInterceptor"></beans:bean>
+        </interceptor>
+        <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
+    </interceptors>
 
 
 

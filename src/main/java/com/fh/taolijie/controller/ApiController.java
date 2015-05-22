@@ -73,6 +73,9 @@ public class ApiController {
 
 
 
+
+
+
     /**
      * 查询所有简历
      * 筛选条件  分类 时间顺序
@@ -120,18 +123,7 @@ public class ApiController {
         List<SecondHandPostDto> list = shPostService.getAllPostList(page - 1, capcity, new ObjWrapper());
         return JSON.toJSONString(list);
     }
-    /**
-     * 查询一条二手
-     *
-     */
-    @RequestMapping(value = "item/sh/{id}",method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-    public @ResponseBody String shItem(@PathVariable int id,HttpSession session){
-        SecondHandPostDto sh = shPostService.findPost(id);
-        if(sh == null){
-            return new JsonWrapper(false,"没有找到id").getAjaxMessage();
-        }
-        return JSON.toJSONString(sh);
-    }
+
 
     /**
      * 获取兼职详情页 Ajax GET
