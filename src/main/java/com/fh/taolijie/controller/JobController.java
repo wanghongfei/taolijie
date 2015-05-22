@@ -7,10 +7,7 @@ import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostCategoryDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.ReviewDto;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ReviewService;
+import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -50,6 +47,8 @@ public class JobController {
     AccountService accountService;
     @Autowired
     ReviewService reviewService;
+    @Autowired
+    UserService userService;
 
     /**
      * 评论
@@ -156,10 +155,11 @@ public class JobController {
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         // 3.判断是否已经喜欢过了
         // TODO : 需要在数据库层面记录喜欢的用户
+        if(userService.isJobPostAlreadyLiked(credential.getId(),id))
+            return  new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
 
         // 4.set likes + 1
-        job.setLikes(job.getLikes()+1);
-        if(!jobPostService.updateJobPost(id,job))
+        if(!userService.likeJobPost(credential.getId(),id))
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
 
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -195,8 +195,6 @@ public class JobController {
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion
-
-
 
 
     /**
@@ -329,24 +327,6 @@ public class JobController {
     //endregion
 
 
-    /**
-     * 取消收藏一条兼职
-     * @param id
-     * @param session
-     * @return
-     */
-    @RequestMapping(value = "/unfav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-     //region 取消收藏一条兼职 unfav
-   public @ResponseBody String unfav (@PathVariable int id,HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
-        if(credential == null)
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
-        if(jobPostService.findJobPost(id) == null)
-            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
-        jobPostService.unfavoritePost(credential.getId(),id);
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
-    //endregion
 
 
     /**

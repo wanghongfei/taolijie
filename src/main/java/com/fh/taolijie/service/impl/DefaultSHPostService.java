@@ -276,8 +276,14 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
     @Override
     @Transactional(readOnly = true)
     public SecondHandPostDto findPost(Integer postId) {
-        SecondHandPostEntity entity = postRepo.getOne(postId);
+        //SecondHandPostEntity entity = postRepo.getOne(postId);
+        SecondHandPostEntity entity = postRepo.findOne(postId);
+
+
         CheckUtils.nullCheck(entity);
+
+        System.out.println("title:" + entity.getTitle());
+        System.out.println("desp:" + entity.getDescription());
 
         return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, new SetupDto(entity));
     }

@@ -56,8 +56,8 @@
               <div class="bubble-arrow-inner"></div>
             </div>
             <div class="sh-contact">
-              <p><i class="fa fa-phone red"></i> 18369905318</p>
-              <p><i class="fa fa-qq blue"></i> 1252265267</p>
+              <p><i class="fa fa-phone red"></i> ${poster.phone}</p>
+              <p><i class="fa fa-qq blue"></i> ${poster.qq}</p>
             </div>
           </div>
           <div class="sh-block">
@@ -68,14 +68,14 @@
               <div class="bubble-arrow-inner"></div>
             </div>
             <div class="place">
-              <p>山东理工大学西校六号公寓</p>
+              <p>暂无字段</p>
             </div>
           </div>
         </div>
         <div style="clean:both"></div>
-        <span class="sh-title">出售二手吉他一个出售二手吉他</span>
-        <span class="fr">浏览量 ：888</span>
-        <span class="fr">发布时间：2015-3-1 8:00</span>
+        <span class="sh-title">${sh.title}</span>
+        <span class="fr">浏览量 ：${sh.likes}</span>
+        <span class="fr">发布时间：${sh.postTime}</span>
         <!-- 分享（暂时不实现） -->
         <div class="share"></div>
       </div>
@@ -87,7 +87,7 @@
 
         <div>
           <img src="/images/pig.jpg" alt="">
-				<span>九成新，便宜处理，桃李街二手物品考的住，用的好，要买二手 就到桃李街！
+				<span>${sh.description}
 				</span>
         </div>
       </div>

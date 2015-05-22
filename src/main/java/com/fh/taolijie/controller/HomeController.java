@@ -204,16 +204,6 @@ public class HomeController {
 
 
     /**
-     * 二手详情页
-     */
-    @RequestMapping(value = "detail/sh/{id}",method = RequestMethod.GET)
-    public String shDetail(@PathVariable int id,Model model){
-        SecondHandPostDto sh = shPostService.findPost(id);
-        model.addAttribute("sh",sh);
-         return "";
-    }
-
-    /**
      * 查询一条二手
      *
      */
@@ -241,8 +231,10 @@ public class HomeController {
      * 简历库列表
      */
     @RequestMapping(value = {"list/resume"},method = RequestMethod.GET)
-    public String resumeList(){
-        return "mobile/resumelist";
+    public String resumeList(Model model){
+        List<ResumeDto> resumes =resumeService.getAllResumeList(0, 9999, new ObjWrapper());
+        model.addAttribute("resumes",resumes);
+        return "pc/resumelist";
     }
 
     /**
@@ -283,7 +275,7 @@ public class HomeController {
 
         model.addAttribute("resume",resumeDto);
         model.addAttribute("contactDisplay",contactDisplay);
-        return "pc/resume";
+        return "pc/resumedetail";
     }
 
 

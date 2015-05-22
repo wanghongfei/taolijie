@@ -54,13 +54,21 @@ public class ResumeController{
 
     /**
      * 创建简历 get
+     * 如果简历不存在,创建简历
+     * 简历以存在,则跳转到简历预览界面,自己的简历简历界面可以修改和删除
      * @param session
      * @return
      */
     @RequestMapping(value = "/create" ,method = RequestMethod.GET)
     public String create(HttpSession session,Model model){
-        List<JobPostCategoryDto> cateList= jobPostCateService.getCategoryList(0,Integer.MAX_VALUE,new ObjWrapper());
-        model.addAttribute("cates",cateList);
+        Credential credential = CredentialUtils.getCredential(session);
+        List<ResumeDto> resumeDtoList = resumeService.getResumeList(credential.getId(), 0, 0, new ObjWrapper());
+        if(resumeDtoList.size()>0){
+            return "redirect:/user/resume/view";
+        }
+
+        List<JobPostCategoryDto> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        model.addAttribute("cates",jobCateList);
         return "pc/user/myresume";
     }
 
@@ -72,6 +80,7 @@ public class ResumeController{
      * @return
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    //region 创建简历
     public @ResponseBody String create(@Valid ResumeDto resume,
                BindingResult result,
                HttpSession session){
@@ -92,6 +101,7 @@ public class ResumeController{
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+    //endregion
 
 
     /**
@@ -100,27 +110,21 @@ public class ResumeController{
      * @return
      */
 
-    @RequestMapping(value = "view",method = RequestMethod.GET)
-    public  @ResponseBody String view(HttpSession session,HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/view",method = RequestMethod.GET)
+    public String view(HttpSession session,Model model)  {
         Credential credential = CredentialUtils.getCredential(session);
-        GeneralMemberDto mem = accountService.findMember(credential.getUsername(), new GeneralMemberDto[0], false);
-
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeDto> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        List<ResumeDto> list = resumeService.getResumeList(credential.getId(), 0, 0, new ObjWrapper());
 
         /*因为简历只有一张,所以直接用遍历得到*/
-        ResumeDto resume = null;
-        for(ResumeDto r : list){
-            resume = r;
-        }
+
         /*如果没有简历,跳转到创建简历页面*/
-        if(resume == null)
+        if(list.size()==0)
         {
-            response.sendRedirect("/user/resume/create");
-            return null;
-        }else {
-            return JSON.toJSONString(resume);
+            return "redirect:/user/resume/create";
         }
+        ResumeDto resume = list.get(0);
+        model.addAttribute("resume",resume);
+        return  "pc/resumedetail";
 
     }
 

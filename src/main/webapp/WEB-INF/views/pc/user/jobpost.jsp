@@ -12,11 +12,11 @@
     <jsp:param name="title" value="兼职发布"/>
 </jsp:include>
 
-<jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
+<jsp:include page="../block/top-bar-reverse.jsp"/>
 
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp"></jsp:include>
+    <jsp:include page="../block/user.jsp"/>
 
   <div class="segment end-segment">
     <p class="pin-title red-bg ">基本信息
