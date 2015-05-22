@@ -22,9 +22,11 @@ public class SecondHandPostDto {
     private Integer pageView;
     private String verified;
 
-    private Integer memberId;
     private String categoryName;
     private Integer categoryId;
+
+    private Integer memberId;
+    private GeneralMemberDto memberDto;
 
     public Integer getId() {
         return id;
@@ -48,6 +50,14 @@ public class SecondHandPostDto {
 
     public void setVerified(String verified) {
         this.verified = verified;
+    }
+
+    public GeneralMemberDto getMemberDto() {
+        return memberDto;
+    }
+
+    public void setMemberDto(GeneralMemberDto memberDto) {
+        this.memberDto = memberDto;
     }
 
     public Integer getPageView() {

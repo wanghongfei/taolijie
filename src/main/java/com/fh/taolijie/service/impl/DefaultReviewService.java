@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
@@ -61,6 +62,10 @@ public class DefaultReviewService implements ReviewService {
                 // 设置DTO的关联信息
                 dto.setMemberId(r.getMember().getId());
                 dto.setJobPostId(r.getJobPost().getId());
+
+                // 设置内嵌dto
+                dto.setMemberDto(CollectionUtils.entity2Dto(r.getMember(), GeneralMemberDto.class, null));
+                //dto.setJobPostDto(CollectionUtils.entity2Dto(r.getJobPost(), JobPostDto.class, null));
 
                 // 如果有评论回复，则设置回复
                 List<ReviewEntity> replyList = r.getReplyList();

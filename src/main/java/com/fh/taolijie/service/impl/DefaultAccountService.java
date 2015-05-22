@@ -189,8 +189,7 @@ public class DefaultAccountService implements AccountService {
                     .getSingleResult();
 
             // check validity
-            if (null != mem.getValid() && gs
-            false == mem.getValid()) {
+            if (null != mem.getValid() && false == mem.getValid()) {
                 throw new UserInvalidException(Constants.ErrorType.USER_INVALID_ERROR);
             }
 

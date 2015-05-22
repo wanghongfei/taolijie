@@ -12,7 +12,11 @@ public class ReviewDto {
     private Date time;
 
     private Integer memberId;
+    private GeneralMemberDto memberDto;
+
+
     private Integer jobPostId;
+    private JobPostDto jobPostDto;
 
     /**
      * Replies to this comment, if any.
@@ -61,6 +65,22 @@ public class ReviewDto {
 
     public Integer getJobPostId() {
         return jobPostId;
+    }
+
+    public GeneralMemberDto getMemberDto() {
+        return memberDto;
+    }
+
+    public void setMemberDto(GeneralMemberDto memberDto) {
+        this.memberDto = memberDto;
+    }
+
+    public JobPostDto getJobPostDto() {
+        return jobPostDto;
+    }
+
+    public void setJobPostDto(JobPostDto jobPostDto) {
+        this.jobPostDto = jobPostDto;
     }
 
     public void setJobPostId(Integer jobPostId) {

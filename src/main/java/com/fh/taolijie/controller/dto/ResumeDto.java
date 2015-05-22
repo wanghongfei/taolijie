@@ -29,12 +29,14 @@ public class ResumeDto {
     private String phoneNumber;
     private String wechatAccount;
 
+    private Integer memberId;
+    private GeneralMemberDto memberDto;
+
     /**
      * 求职意向，即job_post_category表的id
      */
     @NotEmpty
     private List<Integer> intendCategoryId;
-    private Integer memberId;
 
     public Integer getId() {
         return id;
@@ -50,6 +52,14 @@ public class ResumeDto {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public GeneralMemberDto getMemberDto() {
+        return memberDto;
+    }
+
+    public void setMemberDto(GeneralMemberDto memberDto) {
+        this.memberDto = memberDto;
     }
 
     public String getName() {
