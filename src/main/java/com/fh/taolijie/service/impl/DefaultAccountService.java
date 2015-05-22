@@ -189,7 +189,8 @@ public class DefaultAccountService implements AccountService {
                     .getSingleResult();
 
             // check validity
-            if (false == mem.getValid()) {
+            if (null != mem.getValid() && gs
+            false == mem.getValid()) {
                 throw new UserInvalidException(Constants.ErrorType.USER_INVALID_ERROR);
             }
 
@@ -317,7 +318,7 @@ public class DefaultAccountService implements AccountService {
         MemberEntity me = memberRepo.getOne(memberId);
         CheckUtils.nullCheck(me);
 
-        // 删除用户所有评论
+/*        // 删除用户所有评论
         Collection<ReviewEntity> reviewCo = me.getReviewCollection();
         if (null != reviewCo) {
             reviewCo.stream().forEach( review -> {
@@ -359,7 +360,7 @@ public class DefaultAccountService implements AccountService {
         Collection<ResumeEntity> resumeCo = me.getResumeCollection();
         if (null != resumeCo) {
             // TODO
-        }
+        }*/
 
         // 删除用户所有通知
         // 与教育信息取消关联
@@ -368,10 +369,13 @@ public class DefaultAccountService implements AccountService {
         return false;
     }
 
-    @Deprecated
     @Override
+    @Transactional(readOnly = false)
     public boolean deleteMember(String username) {
-        return false;
+        MemberEntity mem = getMemberByUsername(username);
+        mem.setValid(false);
+
+        return true;
     }
 
     @Override
