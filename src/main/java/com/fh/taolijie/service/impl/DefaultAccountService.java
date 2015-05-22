@@ -292,7 +292,13 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public <T extends GeneralMemberDto> boolean updateMember(T memDto) {
-        MemberEntity mem = getMemberByUsername(memDto.getUsername());
+        MemberEntity mem = null;
+
+        try {
+            mem = getMemberByUsername(memDto.getUsername());
+        } catch (NoResultException ex) {
+            return false;
+        }
 
         if (memDto instanceof StudentDto) {
             StudentDto dto = (StudentDto) memDto;
