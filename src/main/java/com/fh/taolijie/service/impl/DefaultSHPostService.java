@@ -64,7 +64,7 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
             dto.setCategoryId(entity.getCategory().getId());
             dto.setCategoryName(entity.getCategory().getName());
             // 设置内嵌dto
-            dto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
+            dto.setMemberDto(CollectionUtils.entity2Dto(entity.getMember(), GeneralMemberDto.class, null));
         }
     }
 
