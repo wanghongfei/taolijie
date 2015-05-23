@@ -52,6 +52,7 @@ public class UserServiceTest extends BaseSpringDataTestClass {
         jobPost = new JobPostEntity();
         jobPost.setTitle("a post");
         jobPost.setVerified(Constants.VerifyStatus.NONE.toString());
+        jobPost.setLikes(0);
         jobPost.setComplaint(10);
         jobPost.setMember(member);
         em.persist(jobPost);
@@ -59,6 +60,7 @@ public class UserServiceTest extends BaseSpringDataTestClass {
         // 创建二手帖子
         shPost = new SecondHandPostEntity();
         shPost.setTitle("a post");
+        shPost.setLikes(0);
         shPost.setVerified(Constants.VerifyStatus.NONE.toString());
         em.persist(shPost);
 
