@@ -13,4 +13,6 @@ public interface ImageService {
      * @return 返回图片id
      */
     Integer saveImage(ImageDto dto);
+
+    void deleteImage(Integer imageId);
 }
