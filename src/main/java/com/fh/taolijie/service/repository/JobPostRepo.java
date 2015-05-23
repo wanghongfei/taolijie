@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.MemberEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -35,4 +36,8 @@ public interface JobPostRepo extends JpaRepository<JobPostEntity, Integer> {
 
     @Query
     List<JobPostEntity> findByIds(@Param("ids") List<Integer> ids);
+
+    @Query("update JobPostEntity job set job.likes = job.likes + 1 where job.id = :postId")
+    @Modifying
+    void likePost(@Param("postId") Integer postId);
 }

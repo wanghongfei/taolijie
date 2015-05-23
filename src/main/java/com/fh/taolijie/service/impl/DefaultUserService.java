@@ -1,8 +1,6 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.SecondHandPostEntity;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.service.repository.JobPostRepo;
 import com.fh.taolijie.service.repository.MemberRepo;
@@ -31,11 +29,11 @@ public class DefaultUserService implements UserService {
     @Transactional(readOnly = false)
     public boolean likeJobPost(Integer memId, Integer postId) {
         MemberEntity mem = memRepo.findOne(memId);
-        JobPostEntity post = jobPostRepo.findOne(postId);
+        //JobPostEntity post = jobPostRepo.findOne(postId);
 /*        if (false == CheckUtils.nullCheck(mem, post)) {
             return false;
         }*/
-        CheckUtils.nullCheck(mem, post);
+        //CheckUtils.nullCheck(mem, post);
 
         // 查检是否重复赞
         String oldIds = mem.getLikedJobIds();
@@ -45,13 +43,14 @@ public class DefaultUserService implements UserService {
 
 
         // 在member中记录这次点赞
-        String newIds = StringUtils.addToString(oldIds, post.getId().toString());
+        String newIds = StringUtils.addToString(oldIds, postId.toString());
         mem.setLikedJobIds(newIds);
 
         // post赞数+1
-        Integer oldValue = post.getLikes();
+/*        Integer oldValue = post.getLikes();
         Integer newValue = oldValue == null ? 1 : oldValue.intValue() + 1;
-        post.setLikes(newValue);
+        post.setLikes(newValue);*/
+        jobPostRepo.likePost(postId);
 
 
 
@@ -62,11 +61,11 @@ public class DefaultUserService implements UserService {
     @Transactional(readOnly = false)
     public boolean likeSHPost(Integer memId, Integer shId) {
         MemberEntity mem = memRepo.findOne(memId);
-        SecondHandPostEntity post = shPostRepo.findOne(shId);
+        //SecondHandPostEntity post = shPostRepo.findOne(shId);
 /*        if (false == CheckUtils.nullCheck(mem, post)) {
             return false;
         }*/
-        CheckUtils.nullCheck(mem, post);
+        //CheckUtils.nullCheck(mem, post);
 
         // 检查是否重复
         String oldIds = mem.getLikedShIds();
@@ -79,9 +78,10 @@ public class DefaultUserService implements UserService {
         mem.setLikedShIds(newIds);
 
         // SHpost点赞数+1
-        Integer oldValue = post.getLikes();
+/*        Integer oldValue = post.getLikes();
         Integer newValue = oldValue == null ? 1 : oldValue.intValue() + 1;
-        post.setLikes(newValue);
+        post.setLikes(newValue);*/
+        shPostRepo.likePost(shId);
 
 
         return true;

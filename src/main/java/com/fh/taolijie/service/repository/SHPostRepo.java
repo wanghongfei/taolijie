@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.SecondHandPostEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -38,4 +39,8 @@ public interface SHPostRepo extends JpaRepository<SecondHandPostEntity, Integer>
 
     @Query("SELECT post FROM SecondHandPostEntity post WHERE post.complaint > 0 ORDER BY post.complaint DESC")
     Page<SecondHandPostEntity> getSuedPost(Pageable pageable);
+
+    @Query("update SecondHandPostEntity sh set sh.likes = sh.likes + 1 where sh.id = :postId")
+    @Modifying
+    void likePost(@Param("postId") Integer postId);
 }
