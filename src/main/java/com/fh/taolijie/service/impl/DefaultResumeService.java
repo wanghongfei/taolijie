@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.PostRecordDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
@@ -61,6 +62,8 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
         public void accept(ResumeDto dto) {
             // 设置member id
             dto.setMemberId(entity.getMember().getId());
+            // 设置内嵌memberDto
+            dto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
 
             // 设置求职意向到DTO对象中
             if (null != entity.getCategoryList()) {
@@ -149,7 +152,9 @@ public class DefaultResumeService extends DefaultPageService implements ResumeSe
             ResumeEntity entity = resumeRepo.findOne(resumeId);
 
             dtoList.add(CollectionUtils.entity2Dto(entity, ResumeDto.class, (dto) -> {
+                // 设置内嵌dto
                 dto.setMemberId(entity.getMember().getId());
+                dto.setMemberDto(CollectionUtils.entity2Dto(entity.getMember(), GeneralMemberDto.class, null));
             }));
         }
 

@@ -114,11 +114,9 @@ public interface AccountService {
     public boolean deleteMember(Integer memberId);
 
     /**
-     * @deprecated 方法未实现
-     * 删除一个用户
+     * 封号
      * @param username 要删除用户的用户名
      * @return 删除成功返回true, 失败返回false
-     * @throws UserNotExistsException 该用户不存在
      */
     public boolean deleteMember(String username);
 

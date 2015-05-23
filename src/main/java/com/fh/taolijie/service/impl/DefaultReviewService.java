@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.domain.JobPostEntity;
 import com.fh.taolijie.domain.MemberEntity;
@@ -62,6 +63,10 @@ public class DefaultReviewService implements ReviewService {
                 dto.setMemberId(r.getMember().getId());
                 dto.setJobPostId(r.getJobPost().getId());
 
+                // 设置内嵌dto
+                dto.setMemberDto(CollectionUtils.entity2Dto(r.getMember(), GeneralMemberDto.class, null));
+                //dto.setJobPostDto(CollectionUtils.entity2Dto(r.getJobPost(), JobPostDto.class, null));
+
                 // 如果有评论回复，则设置回复
                 List<ReviewEntity> replyList = r.getReplyList();
                 if (null != replyList) {
@@ -69,6 +74,7 @@ public class DefaultReviewService implements ReviewService {
                     CollectionUtils.transformCollection(replyList, ReviewDto.class, (entity) -> {
                         return CollectionUtils.entity2Dto(entity, ReviewDto.class, (reviewDto) -> {
                             reviewDto.setMemberId(entity.getMember().getId());
+                            reviewDto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
                         });
                     });
                 }

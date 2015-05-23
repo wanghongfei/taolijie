@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
 import com.fh.taolijie.domain.MemberEntity;
 import com.fh.taolijie.domain.SecondHandPostCategoryEntity;
@@ -62,6 +63,8 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
             dto.setMemberId(entity.getMember().getId());
             dto.setCategoryId(entity.getCategory().getId());
             dto.setCategoryName(entity.getCategory().getName());
+            // 设置内嵌dto
+            dto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
         }
     }
 

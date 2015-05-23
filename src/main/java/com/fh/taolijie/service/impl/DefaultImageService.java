@@ -33,4 +33,10 @@ public class DefaultImageService implements ImageService {
 
         return entity.getId();
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteImage(Integer imageId) {
+        imageRepo.delete(imageId);
+    }
 }

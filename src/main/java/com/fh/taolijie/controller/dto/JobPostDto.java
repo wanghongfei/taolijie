@@ -37,9 +37,11 @@ public class JobPostDto {
 
     private Integer categoryId;
     private String categoryName;
-    private Integer memberId;
     private String applicationResumeIds;
     private Integer applicantAmount;
+
+    private Integer memberId;
+    private GeneralMemberDto memberDto;
 
     public Integer getId() {
         return id;
@@ -71,6 +73,14 @@ public class JobPostDto {
 
     public void setApplicationResumeIds(String applicationResumeIds) {
         this.applicationResumeIds = applicationResumeIds;
+    }
+
+    public GeneralMemberDto getMemberDto() {
+        return memberDto;
+    }
+
+    public void setMemberDto(GeneralMemberDto memberDto) {
+        this.memberDto = memberDto;
     }
 
     public Integer getApplicantAmount() {

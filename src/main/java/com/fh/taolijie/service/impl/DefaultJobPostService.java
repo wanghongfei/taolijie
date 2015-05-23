@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.domain.JobPostCategoryEntity;
 import com.fh.taolijie.domain.JobPostEntity;
@@ -73,6 +74,8 @@ public class DefaultJobPostService extends DefaultPageService implements JobPost
             dto.setCategoryName(entity.getCategory().getName());
             dto.setCategoryId(entity.getCategory().getId());
             dto.setMemberId(entity.getMember().getId());
+            // 设置内嵌dto
+            dto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
         }
     }
 
