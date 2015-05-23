@@ -172,6 +172,9 @@ public class DefaultSHPostService extends DefaultPageService implements SHPostSe
         parmMap.put(field, includeString);
 
         List<SecondHandPostEntity> entityList = search.runLikeQuery(SecondHandPostEntity.class, parmMap, new AbstractMap.SimpleEntry<String, String>("postTime", "DESC"), em);
+        int cap = CollectionUtils.determineCapacity(capacity);
+        Page<SecondHandPostEntity> entityPage = new PageImpl<SecondHandPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
+        wrapper.setObj(entityPage.getTotalPages());
 
         return CollectionUtils.transformCollection(entityList, SecondHandPostDto.class, (entity) -> {
             return CollectionUtils.entity2Dto(entity, SecondHandPostDto.class, (dto) -> new SetupDto(entity));
