@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,23 +64,6 @@ public class StaticController {
         return "{code:0}";
     }
 
-    @ExceptionHandler
-    @ResponseBody
-    public String doException(Exception e,HttpServletRequest request) throws Exception {
-        String result = null;
-        
-        if (e instanceof MaxUploadSizeExceededException) {
-            long maxSize = ((MaxUploadSizeExceededException) e)
-                    .getMaxUploadSize();
-            result = "文件过大";
-        }else if(e instanceof RuntimeException){
-            result = "ERROR";
-        }else{
-            result = "ERROR";
-        }
-        return result;
-
-    }
 
     /**
      * 用户上传图片
