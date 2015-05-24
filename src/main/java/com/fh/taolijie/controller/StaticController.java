@@ -2,6 +2,8 @@ package com.fh.taolijie.controller;
 
 import com.fh.taolijie.controller.dto.ImageDto;
 import com.fh.taolijie.service.ImageService;
+import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -79,6 +81,12 @@ public class StaticController {
         try (InputStream inStream = file.getInputStream()) {
             // 读取byte数据
             byte[] imageByte = writeToBuffer(inStream, file.getSize());
+            if (null == imageByte) {
+                // 不是图片文件
+                inStream.close();
+                return "invalid image!";
+            }
+
             imageDto.setBinData(imageByte);
 
             String fileName = file.getOriginalFilename();
@@ -100,9 +108,19 @@ public class StaticController {
 
     private byte[] writeToBuffer(InputStream in, Long size) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(size.intValue());
-        byte[] buf = new byte[_500KB];
-
         int len = 0;
+
+        // 先读10 bytes
+        // 验证是否是png, jpg或gif
+        byte[] validationBuf = new byte[10];
+        in.read(validationBuf);
+        if (Constants.ImageType.UNSUPPORTED == ImageUtils.getImageType(validationBuf)) {
+            return null;
+        }
+        buffer.put(validationBuf);
+
+
+        byte[] buf = new byte[_500KB];
         while ( (len = in.read(buf)) != -1 ) {
             buffer.put(buf, 0, len);
         }

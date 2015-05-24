@@ -77,6 +77,13 @@ public class Constants {
         ALL
     }
 
+    public enum ImageType {
+        PNG,
+        JPG,
+        GIF,
+        UNSUPPORTED
+    }
+
     public static enum NotificationRange {
         /**
          * 只有目标member收到
