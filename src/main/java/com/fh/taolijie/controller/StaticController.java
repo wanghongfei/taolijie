@@ -3,12 +3,15 @@ package com.fh.taolijie.controller;
 import com.fh.taolijie.controller.dto.ImageDto;
 import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.impl.DefaultImageService;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,12 +59,25 @@ public class StaticController {
 
 
     /**
+     * 上传图片options方法验证
+     */
+    @RequestMapping(value = "upload", method =RequestMethod.OPTIONS, produces = "application/json; charset=utf-8")
+    public @ResponseBody String uploadOptions(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST");
+        return "{code:0}";
+    }
+
+    /**
      * 用户上传图片
      * @return
      */
-    @RequestMapping(value = "upload", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "upload", method =RequestMethod.POST, produces = "application/json; charset=utf-8")
     public @ResponseBody String upload(@RequestParam MultipartFile file,
-                                       @Valid ImageDto imageDto) {
+                                       HttpServletResponse response) {
+
+        ImageDto imageDto = new ImageDto();
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
         try (InputStream inStream = file.getInputStream()) {
             // 读取byte数据
@@ -72,14 +88,18 @@ public class StaticController {
             imageDto.setFileName(fileName);
             // 写入数据库
             Integer imageId = imageService.saveImage(imageDto);
+            System.out.println(imageId);
             // 返回成功信息
 
         } catch (IOException ex) {
             // 返回上传失败错误信息
+            System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
         return "savepic";
     }
+
+
 
     private byte[] writeToBuffer(InputStream in, Long size) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(size.intValue());

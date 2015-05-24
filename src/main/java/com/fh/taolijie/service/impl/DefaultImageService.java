@@ -6,6 +6,7 @@ import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.repository.ImageRepo;
 import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class DefaultImageService implements ImageService {
+    @Autowired
     ImageRepo imageRepo;
 
     @Override
@@ -26,7 +28,7 @@ public class DefaultImageService implements ImageService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public Integer saveImage(ImageDto dto) {
         ImageResourceEntity entity = CollectionUtils.dto2Entity(dto, ImageResourceEntity.class, null);
         imageRepo.save(entity);

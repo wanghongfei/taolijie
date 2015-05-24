@@ -94,7 +94,7 @@
     <!-- 文件上传 -->
     <beans:bean id="multipartResolver"
                 class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <beans:property name="maxUploadSize" value="524288000" /> <!-- 500M -->
+        <beans:property name="maxUploadSize" value="5242880" /> <!-- 5M -->
     </beans:bean>
 
     <tx:annotation-driven />
