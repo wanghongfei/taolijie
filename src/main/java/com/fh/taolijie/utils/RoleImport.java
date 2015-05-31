@@ -1,6 +1,6 @@
 package com.fh.taolijie.utils;
 
-import com.fh.taolijie.domain.RoleEntity;
+import com.fh.taolijie.domain.RoleModel;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,7 +32,7 @@ public class RoleImport {
             Constants.RoleType[] types = Constants.RoleType.values();
 
             for (Constants.RoleType role : types) {
-                em.persist(new RoleEntity(role.toString(), ""));
+                em.persist(new RoleModel(role.toString(), ""));
             }
         }
     }

@@ -2,8 +2,8 @@ package com.fh.taolijie.test.utils;
 
 import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.controller.dto.StudentDto;
-import com.fh.taolijie.domain.JobPostEntity;
-import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.utils.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,14 +18,14 @@ public class CollectionUtilsTest {
         dto.setUsername("Neo");
         dto.setAge(20);
 
-        MemberEntity entity = CollectionUtils.dto2Entity(dto, MemberEntity.class, null);
+        MemberModel entity = CollectionUtils.dto2Entity(dto, MemberModel.class, null);
 
         Assert.assertEquals("Neo", entity.getUsername());
     }
 
     @Test
     public void testEntity2Dto() throws Exception {
-        MemberEntity m = new MemberEntity();
+        MemberModel m = new MemberModel();
         m.setUsername("Bruce");
         m.setAge(100);
         m.setStudentId("121105");
@@ -34,7 +34,7 @@ public class CollectionUtilsTest {
         Assert.assertEquals("121105", dto.getStudentId());
 
 
-        JobPostEntity jobPostEntity = new JobPostEntity();
+        JobPostModel jobPostEntity = new JobPostModel();
         jobPostEntity.setTitle("title");
 
         JobPostDto jobPostDto = CollectionUtils.entity2Dto(jobPostEntity, JobPostDto.class, null);
@@ -44,7 +44,7 @@ public class CollectionUtilsTest {
     @Test
     public void testUpdateEntity() {
 
-        MemberEntity m = new MemberEntity();
+        MemberModel m = new MemberModel();
         m.setUsername("Bruce");
         m.setAge(100);
         m.setStudentId("121105");

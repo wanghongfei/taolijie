@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ReviewDto;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface ReviewService {
     /**
      * 获取某个帖子的评论
-     * @param postId {@link com.fh.taolijie.domain.JobPostEntity}的主键值
+     * @param postId {@link JobPostModel}的主键值
      * @param firstResult See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return

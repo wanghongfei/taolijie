@@ -4,6 +4,8 @@ import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
@@ -107,7 +109,7 @@ public interface AccountService {
     /**
      * @deprecated 方法未实现
      * 删除一个用户
-     * @param memberId {@link com.fh.taolijie.domain.MemberEntity}实体的主键值
+     * @param memberId {@link MemberModel}实体的主键值
      * @return 删除成功返回true, 失败返回false
      * @throws UserNotExistsException 该用户不存在
      */
@@ -148,7 +150,7 @@ public interface AccountService {
 
     /**
      * 从数据库role表中删除一个已存在的role
-     * @param roleId {@link com.fh.taolijie.domain.RoleEntity}实体的主键值
+     * @param roleId {@link RoleModel}实体的主键值
      * @return 删除成功返回true, 失败返回false
      */
     public boolean deleteRole(Integer roleId);

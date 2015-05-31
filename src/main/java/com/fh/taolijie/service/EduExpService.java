@@ -1,6 +1,8 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.EducationExperienceDto;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.SchoolModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public interface EduExpService {
 
     /**
      * 删除教育信息.
-     * <p> 教育信息对应的{@link com.fh.taolijie.domain.MemberEntity}和{@link com.fh.taolijie.domain.SchoolEntity}
+     * <p> 教育信息对应的{@link MemberModel}和{@link SchoolModel}
      *          不会被删除.
      * @param id
      * @return

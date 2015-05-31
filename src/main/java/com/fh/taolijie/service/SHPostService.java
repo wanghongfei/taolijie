@@ -1,6 +1,8 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
+import com.fh.taolijie.domain.SecondHandPostCategoryModel;
+import com.fh.taolijie.domain.SecondHandPostModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public interface SHPostService extends PageService {
 
     /**
      * 得到某分类下的二手帖子
-     * @param cateId {@link com.fh.taolijie.domain.SecondHandPostCategoryEntity}实体的主键值
+     * @param cateId {@link SecondHandPostCategoryModel}实体的主键值
      * @param firstResult See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
@@ -80,14 +82,14 @@ public interface SHPostService extends PageService {
 
     /**
      * 根据id查找帖子
-     * @param postId {@link com.fh.taolijie.domain.SecondHandPostEntity}实体的主键值
+     * @param postId {@link SecondHandPostModel}实体的主键值
      * @return
      */
     SecondHandPostDto findPost(Integer postId);
 
     /**
      * 删除一个帖子
-     * @param postId {@link com.fh.taolijie.domain.SecondHandPostEntity}实体的主键值
+     * @param postId {@link SecondHandPostModel}实体的主键值
      * @return
      */
     boolean deletePost(Integer postId);

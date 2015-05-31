@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.JobPostDto;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -70,7 +71,7 @@ public interface JobPostService extends PageService {
 
     /**
      * 根据兼职信息的某个字段执行模糊查询
-     * @param field {@link com.fh.taolijie.domain.JobPostEntity}的某个字段名
+     * @param field {@link JobPostModel}的某个字段名
      * @param includeString
      * @return
      */
