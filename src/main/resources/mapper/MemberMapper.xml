@@ -67,16 +67,61 @@
         LIMIT #{param1}, #{param2}
     </select>
 
+    <select id="getMemberAmount" resultType="Long">
+        SELECT COUNT(*) FROM member
+    </select>
+
+    <select id="isUsernameExists" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM member WHERE username = #{username})
+    </select>
+
 
     <insert id="saveMember">
-        INSERT INTO member (username, password, valid, gender, phone_number, qq_number, wechat_number, email, college_name, school_name, major, height, weight, status, profile_photo_id, description, motto, age, grade, favorite_grade_top, favorite_grade_bottom, favorite_weight_top, favorite_weight_bottom, favorite_height_top, favorite_height_bottom, hair, favorite_hair, likes)
-        VALUES (#{username}, #{password}, #{valid}, #{gender}, #{phoneNumber}, #{qqNumber}, #{wechatNumber}, #{email}, #{collegeName}, #{schoolName}, #{major}, #{height}, #{weight}, #{status}, #{description}, #{motto}, #{age}, #{grade}, #{favoriteGradeTop}, #{favoriteGradeBottom}, #{favoriteWeightTop}, #{favoriteWeightBottom}, #{favoriteHeightTop}, #{favoriteHeightBottom}, #{hair}, #{favoriteHair}, #{likes})
+        INSERT INTO member (username, password, email, name, student_id, gender, age, verified, valid, profile_photo_path,
+        phone, qq, company_name, block_list, created_time, applied_job_ids, complaint, liked_job_ids, liked_sh_ids,favorite_job_ids, favorite_sh_ids,
+        favorite_resume_ids, auto_login_identifier, last_post_time, profile_photo_id, reset_password_token, last_token_date)
+        VALUES (#{uername}, #{password}, #{email}, #{name}, #{studentId}, #{gender}, #{age}, #{verified}, #{valid}, #{profilePhotoPath},
+        #{phone}, #{qq}, #{companyName}, #{blockList}, #{createdTime}, #{appliedJobIds}, #{complaint}, #{likedJobIds}, #{likedShIds}, #{favoriteJobIds}, #{favoriteShIds},
+        #{favoriteResumeIds}, #{autoLoginIdentifer}, #{lastPostTime}, #{profilePhotoId}, #{resetPasswordToken}, #{lastTokenDate})
     </insert>
 
     <insert id="assignRole">
         INSERT INTO member_role_rel (member_id, role_id)
         VALUES (#{param1}, #{param2})
     </insert>
+
+    <update id="updateSelectiveById">
+        UPDATE member
+        <set>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">AND email = #{email},</if>
+            <if test="name != null">AND name = #{name},</if>
+            <if test="studentId != null">AND student_id = #{student_id},</if>
+            <if test="gender != null">AND gender = #{gender},</if>
+            <if test="age != null">AND age = #{age},</if>
+            <if test="verified != null">AND verified = #{verified},</if>
+            <if test="valid != null">AND valid = #{valid},</if>
+            <if test="profilePhotoPath != null">AND profile_photo_path = #{profilePhotoPath},</if>
+            <if test="phone != null">AND phone = #{phone},</if>
+            <if test="qq != null">AND qq = #{qq},</if>
+            <if test="companyName != null">AND company_name = #{companyName},</if>
+            <if test="blockList != null">AND block_list = #{blockList},</if>
+            <if test="createdTime != null">AND created_time = #{createdTime},</if>
+            <if test="appliedJobIds != null">AND applied_job_ids = #{appliedJobIds},</if>
+            <if test="complaint != null">AND complaint = #{complaint},</if>
+            <if test="likedJobIds != null">AND liked_job_ids = #{likedJobIds},</if>
+            <if test="likedShIds != null">AND liked_sh_ids = #{likedShIds},</if>
+            <if test="favoriteJobIds != null">AND favorite_job_ids = #{favoriteJobIds},</if>
+            <if test="favoriteShIds != null">AND favorite_sh_ids = #{favoriteShIds},</if>
+            <if test="favoriteResumeIds != null">AND favorite_resume_ids = #{favoriteResumeIds},</if>
+            <if test="autoLoginIdentifier != null">AND auto_login_identifier = #{autoLoginIdentifier},</if>
+            <if test="lastPostTime != null">AND last_post_time = #{lastPostTime},</if>
+            <if test="profilePhotoId != null">AND profile_photo_id = #{profilePhotoId},</if>
+            <if test="resetPasswordToken != null">AND reset_password_token = #{resetPasswordToken},</if>
+            <if test="lastTokenDate != null">AND last_token_date = #{lastTokenDate},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 
 
     <delete id="removeRole">

@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.RoleModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by wanghongfei on 15-5-30.
  */
@@ -13,4 +15,6 @@ public interface RoleMapper {
 
     RoleModel findRoleById(Integer id);
     RoleModel findRoleByName(String roleName);
+
+    List<RoleModel> findAllRole(RoleModel model);
 }

@@ -18,7 +18,7 @@ public interface MemberMapper {
 
     void saveMember(MemberModel mem);
 
-    //void updateBySelective(MemberModel mem);
+    void updateSelectiveById(MemberModel model);
 
     void assignRole(Integer memberId, Integer roleId);
 
@@ -27,5 +27,9 @@ public interface MemberMapper {
      * @param rel
      */
     void removeRole(MemberRoleRel rel);
+
+    boolean isUsernameExists(String username);
+
+    long getMemberAmount();
 
 }

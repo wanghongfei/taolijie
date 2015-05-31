@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.taolijie.dao.mapper.RoleMapper">
+
+    <resultMap type="RoleModel" id="roleRS">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="memo" column="memo"/>
+    </resultMap>
+
+    <select id="findRoleByName" parameterType="String" resultMap="roleRS">
+        SELECT * FROM role WHERE name = #{roleName}
+    </select>
+
+    <select id="findRoleById" parameterType="Integer" resultMap="roleRS">
+        SELECT * FROM role where id = #{id}
+    </select>
+
+    <select id="findAllRole">
+        SELECT * FROM role
+        LIMIT #{pageNumber}, #{pageSize}
+    </select>
+
+    <insert id="addRole" parameterType="RoleModel">
+        INSERT INTO role(name, memo) VALUES(#{name}, #{memo})
+    </insert>
+
+    <delete id="deleteByName" parameterType="String">
+        DELETE FROM role WHERE name = #{name}
+    </delete>
+
+</mapper>

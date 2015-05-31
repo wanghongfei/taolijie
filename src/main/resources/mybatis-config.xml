@@ -3,9 +3,11 @@
 <configuration>
     <typeAliases>
         <typeAlias alias="MemberModel" type="com.fh.taolijie.domain.MemberModel"/>
+        <typeAlias alias="RoleModel" type="com.fh.taolijie.domain.RoleModel"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="mapper/MemberMapper.xml" />
+        <mapper resource="mapper/RoleMapper.xml" />
     </mappers>
 </configuration>

@@ -1,7 +1,6 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.EmployerDto;
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
 import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.MemberModel;
@@ -21,11 +20,11 @@ import java.util.List;
 public interface AccountService {
     /**
      * 注册一个普通用户
-     * @param dto
+     * @param model
      * @throws DuplicatedUsernameException
      * @return 如果注册成功，返回用户主键
      */
-    public Integer register(GeneralMemberDto dto) throws DuplicatedUsernameException;
+    public Integer register(MemberModel model) throws DuplicatedUsernameException;
 
     /**
      * @deprecated
@@ -68,14 +67,9 @@ public interface AccountService {
     /**
      * 查询用户所有基本信息.
      * @param username 要查询的用户的用户名
-     * @param type new StudentDto[0]
      * @param isWired 指定是否查询关联表内的信息
-     * @param <T> 用户实体有3类，该方法会根据泛型参数的实际类型返回对应的对象。一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
-     *             或{@link EmployerDto}中的一种。
-     * @return 返回类型由泛型参数{@code T}决定. 一定是{@link com.fh.taolijie.controller.dto.GeneralMemberDto}, {@link com.fh.taolijie.controller.dto.StudentDto}
-     *          或{@link EmployerDto}中的一种。
      */
-    public <T extends GeneralMemberDto> T findMember(String username, T[] type, boolean isWired);
+    public MemberModel findMember(String username, boolean isWired);
 
     /**
      * 得到所有用户信息. 不包含关联表内的信息
@@ -83,9 +77,9 @@ public interface AccountService {
      * @param capacity
      * @return
      */
-    public List<GeneralMemberDto> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
+    public List<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
 
-    GeneralMemberDto findMember(Integer memId);
+    MemberModel findMember(Integer memId);
 
     /**
      * 得到当前已注册用户的数量
@@ -93,18 +87,11 @@ public interface AccountService {
      */
     public Long getMemberAmount();
 
-    //List<JobPostDto> getAppliedJobList(Integer memberId, );
     /**
      * 更新用户信息.
-     * @param memDto 表示用户的dto对象.
-     * @param <T>
-     * @return 更新成功返回true, 失败返回false
      */
-    public <T extends GeneralMemberDto> boolean updateMember(T memDto);
+    void updateMember(MemberModel model);
 
-    //public boolean addEducation(Integer academyId, String username);
-
-    //public boolean deleteEducation(Integer academyId, String username);
 
     /**
      * @deprecated 方法未实现
@@ -120,7 +107,7 @@ public interface AccountService {
      * @param username 要删除用户的用户名
      * @return 删除成功返回true, 失败返回false
      */
-    public boolean deleteMember(String username);
+    boolean deleteMember(String username);
 
     /**
      * 向数据库role表中添加一个新角色
