@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.MemberModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,5 +11,10 @@ import java.util.List;
  */
 @Repository
 public interface JobPostMapper {
-    List<JobPostModel> getPostByIdWithoutReview(JobPostModel model);
+    JobPostModel getPostByIdWithoutReview(Integer postId);
+    List<JobPostModel> getPostByMemberId(MemberModel model);
+
+    void saveJobPost(JobPostModel model);
+    void updateBySelective(JobPostModel model);
+    void deleteByBatch(List<Integer> idList);
 }

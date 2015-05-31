@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 /**
  * Created by wanghongfei on 15-5-31.
  */
@@ -18,9 +16,7 @@ public class JobPostMapperTest extends BaseSpringDataTestClass {
 
     @Test
     public void testGetWithoutReview() {
-        JobPostModel model = new JobPostModel();
-        model.setId(1);
-        List<JobPostModel> list = jobMapper.getPostByIdWithoutReview(model);
-        Assert.assertNotNull(list);
+        JobPostModel model = jobMapper.getPostByIdWithoutReview(1);
+        Assert.assertNotNull(model);
     }
 }

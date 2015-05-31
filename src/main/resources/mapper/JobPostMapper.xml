@@ -45,11 +45,68 @@
 
     </resultMap>
 
+    <select id="getPostByMemberId" resultMap="jobPostRS" resultType="ArrayList">
+        SELECT post.*, cate.*, mem.* FROM job_post post
+	      LEFT JOIN job_post_category cate ON cate.id = post.id
+	      LEFT JOIN member mem ON mem.id = post.member_id
+        WHERE post.member_id = #{id}
+        LIMIT #{pageNumber}, #{pageSize}
+    </select>
+
     <select id="getPostByIdWithoutReview" resultMap="jobPostRS" >
         SELECT post.*, cate.*, mem.* FROM job_post post
 	      LEFT JOIN job_post_category cate ON cate.id = post.id
 	      LEFT JOIN member mem ON mem.id = post.member_id
-        WHERE post.id = #{id}
+        WHERE post.id = #{postId}
     </select>
 
+    <insert id="saveJobPost">
+        INSERT INTO job_post (title, expired_time, post_time, work_place, wage, time_to_pay,
+          job_description, contact, contact_phone, contact_email, contact_qq, job_detail,
+          introduce, likes, dislikes, complaint, education_level, work_time, salary_unit,
+          pageView, verified, application_resume_ids, application_amount, category_id,
+          member_id)
+          VALUES (#{title}, #{expiredTime}, #{postTime}, #{workPlace}, #{wage}, #{timeToPay},
+          #{jobDescription}, #{contact}, #{contactPhone}, #{contactEmail}, #{contactQq}, #{jobDetail},
+          #{introduce}, #{likes}, #{dislikes}, #{complaint}, #{education_level}, #{workTime}, #{salaryUnit},
+          #{pageView}, #{verified}, #{applicationResumeIds}, #{applicationAmount}, #{categoryId}, #{memberId})
+    </insert>
+
+    <update id="updateBySelective">
+        UPDATE job_post
+          <set>
+              <if test="title != null">title = #{title},</if>
+              <if test="expiredTime != null">expired_time = #{expiredTime},</if>
+              <if test="postTime != null">post_time = #{postTime},</if>
+              <if test="workPlace != null">work_place = #{workPlace},</if>
+              <if test="wage != null">wage = #{wage},</if>
+              <if test="timeToPay != null">time_to_pay = #{timeToPay},</if>
+              <if test="jobDescription != null">job_description = #{jobDescription},</if>
+              <if test="contact != null">contact = #{contact},</if>
+              <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+              <if test="contactEmail != null">contact_email = #{contactEmail},</if>
+              <if test="contactQq != null">contact_qq = #{contactQq},</if>
+              <if test="jobDetail != null">job_detail = #{jobDetail},</if>
+              <if test="introduce != null">introduce = #{introduce},</if>
+              <if test="likes != null">likes = #{likes},</if>
+              <if test="dislikes != null">dislikes = #{dislikes},</if>
+              <if test="complaint != null">complaint = #{complaint},</if>
+              <if test="educationLevel != null">education_level = #{educationLevel},</if>
+              <if test="workTime != null">work_time = #{workTime},</if>
+              <if test="salaryUnit != null">salary_unit = #{salaryUnit},</if>
+              <if test="pageView != null">page_view = #{pageView},</if>
+              <if test="verified != null">verified = #{verified},</if>
+              <if test="applicationResumeIds != null">application_resume_ids = #{applicationResumeIds},</if>
+              <if test="applicationAmount != null">application_amount = #{applicationAmount},</if>
+              <if test="categoryId != null">category_id = #{categoryId},</if>
+              <if test="memberId != null">member_id = #{memberId},</if>
+          </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByBatch">
+        DELETE FROM job_post WHERE
+         id IN
+          <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
 </mapper>
