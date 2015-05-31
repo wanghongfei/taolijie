@@ -1,8 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.EmployerDto;
 import com.fh.taolijie.controller.dto.RoleDto;
-import com.fh.taolijie.controller.dto.StudentDto;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
@@ -26,25 +24,6 @@ public interface AccountService {
      */
     public Integer register(MemberModel model) throws DuplicatedUsernameException;
 
-    /**
-     * @deprecated
-     * 注册一个学生用户.
-     *
-     * @param stuDto 封装了学生信息的{@link StudentDto}对象
-     * @return 注册成功返回true, 失败返回false
-     * @throws UserNotExistsException 用户名重复
-     */
-    public boolean registerStudent(StudentDto stuDto) throws DuplicatedUsernameException;
-
-    /**
-     * @deprecated
-     * 注册一个商家用户.
-     *
-     * @param empDto 封装了商家信息的dto对象
-     * @return 注册成功返回true, 失败返回false
-     * @throws DuplicatedUsernameException 用户名重复
-     */
-    public boolean registerEmployer(EmployerDto empDto) throws DuplicatedUsernameException;
 
     /**
      * 执行用户登陆操作
@@ -111,10 +90,9 @@ public interface AccountService {
 
     /**
      * 向数据库role表中添加一个新角色
-     * @param roleDto 封装了role信息的dto对象
      * @return 删除成功返回true, 失败返回false
      */
-    public boolean addRole(RoleDto roleDto);
+    public boolean addRole(RoleModel model);
 
     /**
      * 封号
