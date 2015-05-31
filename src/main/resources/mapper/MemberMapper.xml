@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.taolijie.dao.mapper.MemberMapper">
+
+    <resultMap type="MemberModel" id="memberRS">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+
+        <result property="name" column="name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="gender" column="gender"/>
+        <result property="age" column="age"/>
+
+        <result property="verified" column="verified"/>
+        <result property="valid" column="valid"/>
+        <result property="profilePhotoPath" column="profile_photo_path"/>
+
+        <result property="phone" column="phone"/>
+        <result property="qq" column="qq"/>
+
+        <result property="companyName" column="company_name"/>
+        <result property="blockList" column="block_list"/>
+
+        <result property="createdTime" column="created_time"/>
+        <result property="appliedJobIds" column="applied_job_ids"/>
+
+        <result property="complaint" column="complaint"/>
+        <result property="likedJobIds" column="liked_job_ids"/>
+        <result property="likedShIds" column="liked_sh_ids"/>
+        <result property="favoriteJobIds" column="favorite_job_ids"/>
+        <result property="favoriteShIds" column="favorite_sh_ids"/>
+        <result property="favoriteResumeIds" column="favorite_resume_ids"/>
+
+        <result property="autoLoginIdentifier" column="auto_login_identifier"/>
+
+        <result property="lastPostTime" column="last_post_time"/>
+        <result property="profilePhotoId" column="profile_photo_id"/>
+        <result property="resetPasswordToken" column="reset_password_token"/>
+        <result property="lastTokenDate" column="last_token_date"/>
+    </resultMap>
+
+    <select id="getMemberById" resultMap="memberRS" parameterType="Integer">
+        SELECT * FROM member mem
+        LEFT JOIN role r ON
+        r.id IN (
+        SELECT rel.role_id FROM member_role_rel rel WHERE rel.member_id = #{id}
+        )
+        WHERE
+        mem.id = #{id}
+    </select>
+
+    <select id="getMemberByName" resultMap="memberRS" parameterType="String">
+        SELECT mem.*, r.*
+        from (
+        SELECT id FROM member WHERE username = #{username}
+        ) info, member mem
+        LEFT JOIN role r
+        ON r.id in
+        (SELECT role_id FROM member_role_rel WHERE member_id = info.id)
+        where mem.id = info.id
+    </select>
+
+    <select id="getMemberList" resultMap="memberRS" resultType="ArrayList">
+        SELECT * FROM member
+        LIMIT #{param1}, #{param2}
+    </select>
+
+
+    <insert id="saveMember">
+        INSERT INTO member (username, password, valid, gender, phone_number, qq_number, wechat_number, email, college_name, school_name, major, height, weight, status, profile_photo_id, description, motto, age, grade, favorite_grade_top, favorite_grade_bottom, favorite_weight_top, favorite_weight_bottom, favorite_height_top, favorite_height_bottom, hair, favorite_hair, likes)
+        VALUES (#{username}, #{password}, #{valid}, #{gender}, #{phoneNumber}, #{qqNumber}, #{wechatNumber}, #{email}, #{collegeName}, #{schoolName}, #{major}, #{height}, #{weight}, #{status}, #{description}, #{motto}, #{age}, #{grade}, #{favoriteGradeTop}, #{favoriteGradeBottom}, #{favoriteWeightTop}, #{favoriteWeightBottom}, #{favoriteHeightTop}, #{favoriteHeightBottom}, #{hair}, #{favoriteHair}, #{likes})
+    </insert>
+
+    <insert id="assignRole">
+        INSERT INTO member_role_rel (member_id, role_id)
+        VALUES (#{param1}, #{param2})
+    </insert>
+
+
+    <delete id="removeRole">
+        DELETE FROM member_role_rel
+        WHERE
+        member_id = #{memberId} AND role_id = #{role_id}
+    </delete>
+
+<!--    <update id="updateBySelective">
+        UPDATE member
+        <set>
+        </set>
+        WHERE id = #{id}
+    </update>-->
+
+</mapper>

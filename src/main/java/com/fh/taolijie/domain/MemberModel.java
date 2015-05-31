@@ -1,27 +1,15 @@
 package com.fh.taolijie.domain;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
  */
-/*@SqlResultSetMapping(
-        name = "ResumeAndJobCategoryMapping",
-        classes = @ConstructorResult(
-                        targetClass = ResumeAndJobCategory.class,
-                        columns = {
-                                @ColumnResult(name = "resumeId", type = Integer.class),
-                                @ColumnResult(name = "categoryId", type = Integer.class)
-                        }
-                )
-)*/
-
-public class MemberModel {
+public class MemberModel extends Pageable {
     private Integer id;
     private String username;
     private String password;
+
     private String email;
     private String name;
     private String studentId;
@@ -55,7 +43,7 @@ public class MemberModel {
     private String resetPasswordToken;
     private Date lastTokenDate;
 
-    private Collection<EducationExperienceModel> educationExperienceCollection;
+/*    private Collection<EducationExperienceModel> educationExperienceCollection;
     private Collection<JobPostModel> jobPostCollection;
     private Collection<MemberRoleModel> memberRoleCollection;
     private Collection<NewsModel> newsCollection;
@@ -64,7 +52,7 @@ public class MemberModel {
     private Collection<ReviewModel> reviewCollection;
     private Collection<SecondHandPostModel> secondHandPostCollection;
 
-    private List<ReviewModel> replyList;
+    private List<ReviewModel> replyList;*/
 
     public MemberModel() {
 
@@ -378,75 +366,4 @@ public class MemberModel {
         return result;
     }
 
-    public Collection<EducationExperienceModel> getEducationExperienceCollection() {
-        return educationExperienceCollection;
-    }
-
-    public void setEducationExperienceCollection(Collection<EducationExperienceModel> educationExperienceCollection) {
-        this.educationExperienceCollection = educationExperienceCollection;
-    }
-
-    public Collection<JobPostModel> getJobPostCollection() {
-        return jobPostCollection;
-    }
-
-    public void setJobPostCollection(Collection<JobPostModel> jobPostCollection) {
-        this.jobPostCollection = jobPostCollection;
-    }
-
-    public Collection<MemberRoleModel> getMemberRoleCollection() {
-        return memberRoleCollection;
-    }
-
-    public void setMemberRoleCollection(Collection<MemberRoleModel> memberRoleCollection) {
-        this.memberRoleCollection = memberRoleCollection;
-    }
-
-    public List<ReviewModel> getReplyList() {
-        return replyList;
-    }
-
-    public void setReplyList(List<ReviewModel> replyList) {
-        this.replyList = replyList;
-    }
-
-    public Collection<NewsModel> getNewsCollection() {
-        return newsCollection;
-    }
-
-    public void setNewsCollection(Collection<NewsModel> newsCollection) {
-        this.newsCollection = newsCollection;
-    }
-
-    public Collection<NotificationModel> getNotificationCollection() {
-        return notificationCollection;
-    }
-
-    public void setNotificationCollection(Collection<NotificationModel> notificationCollection) {
-        this.notificationCollection = notificationCollection;
-    }
-
-    public Collection<ResumeModel> getResumeCollection() {
-        return resumeCollection;
-    }
-
-    public void setResumeCollection(Collection<ResumeModel> resumeCollection) {
-        this.resumeCollection = resumeCollection;
-    }
-
-    public Collection<ReviewModel> getReviewCollection() {
-        return reviewCollection;
-    }
-
-    public void setReviewCollection(Collection<ReviewModel> reviewCollection) {
-        this.reviewCollection = reviewCollection;
-    }
-
-    public Collection<SecondHandPostModel> getSecondHandPostCollection() {
-        return secondHandPostCollection;
-    }
-
-    public void setSecondHandPostCollection(Collection<SecondHandPostModel> secondHandPostCollection) {
-        this.secondHandPostCollection = secondHandPostCollection;
-    }
 }
