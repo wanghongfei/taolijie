@@ -10,10 +10,16 @@ public class ReviewModel {
     private Integer id;
     private String content;
     private Date time;
+
+    private Integer jobPostId;
     private JobPostModel jobPost;
+
+    private Integer memberId;
     private MemberModel member;
 
     private List<ReviewModel> replyList;
+
+    private Integer baseReviewId;
     private ReviewModel baseReview;
 
     public ReviewModel() {}
@@ -22,6 +28,30 @@ public class ReviewModel {
         this.time = time;
         this.jobPost = jobPost;
         this.member = member;
+    }
+
+    public Integer getJobPostId() {
+        return jobPostId;
+    }
+
+    public void setJobPostId(Integer jobPostId) {
+        this.jobPostId = jobPostId;
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+    }
+
+    public Integer getBaseReviewId() {
+        return baseReviewId;
+    }
+
+    public void setBaseReviewId(Integer baseReviewId) {
+        this.baseReviewId = baseReviewId;
     }
 
     public Integer getId() {

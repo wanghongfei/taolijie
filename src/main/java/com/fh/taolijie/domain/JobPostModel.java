@@ -2,13 +2,13 @@ package com.fh.taolijie.domain;
 
 import com.fh.taolijie.service.PageViewAware;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-4.
  */
-public class JobPostModel implements PageViewAware {
+public class JobPostModel extends Pageable implements PageViewAware {
     private Integer id;
     private String title;
     private Date expiredTime;
@@ -35,9 +35,13 @@ public class JobPostModel implements PageViewAware {
     private String applicationResumeIds;
     private Integer applicantAmount;
 
+    private Integer categoryId;
     private JobPostCategoryModel category;
+
+    private Integer memberId;
     private MemberModel member;
-    private Collection<ReviewModel> reviewCollection;
+
+    private List<ReviewModel> reviewList;
 
     public JobPostModel() {}
     public JobPostModel(String title, Date expiredTime, Date postTime, String workPlace, Double wage, String timeToPay, String jobDescription, String contact, String contactPhone, String contactEmail, String contactQq, String jobDetail, String introduce, Integer likes, Integer dislikes, String educationLevel, JobPostCategoryModel category, MemberModel member) {
@@ -321,11 +325,27 @@ public class JobPostModel implements PageViewAware {
         this.member = member;
     }
 
-    public Collection<ReviewModel> getReviewCollection() {
-        return reviewCollection;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setReviewCollection(Collection<ReviewModel> reviewCollection) {
-        this.reviewCollection = reviewCollection;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+    }
+
+    public List<ReviewModel> getReviewList() {
+        return reviewList;
+    }
+
+    public void setReviewList(List<ReviewModel> reviewList) {
+        this.reviewList = reviewList;
     }
 }

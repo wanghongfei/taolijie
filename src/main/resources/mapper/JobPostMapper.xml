@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.taolijie.dao.mapper.JobPostMapper">
+
+    <resultMap type="JobPostModel" id="jobPostRS">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+
+        <result property="expiredTime" column="expired_time"/>
+        <result property="postTime" column="post_time"/>
+
+        <result property="workPlace" column="work_place"/>
+        <result property="wage" column="wage"/>
+        <result property="timeToPay" column="time_to_pay"/>
+
+        <result property="jobDescription" column="job_description"/>
+
+        <result property="contact" column="contact"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactQq" column="contact_qq"/>
+
+        <result property="jobDetail" column="job_detail"/>
+        <result property="introduce" column="introduce"/>
+        
+        <result property="likes" column="likes"/>
+        <result property="dislikes" column="dislikes"/>
+        <result property="complaint" column="complaint"/>
+        
+        <result property="educationLevel" column="education_level"/>
+        <result property="workTime" column="work_time"/>
+        <result property="salaryUnit" column="salary_unit"/>
+        <result property="pageView" column="page_view"/>
+        <result property="verified" column="verified"/>
+        
+        <result property="applicationResumeIds" column="application_resume_ids"/>
+        <result property="applicantAmount" column="applicant_amount"/>
+
+        <result property="categoryId" column="category_id"/>
+        <result property="memberId" column="member_id" />
+
+        <association property="category" column="job_post_category_id" resultMap="com.fh.taolijie.dao.mapper.JobPostCategoryMapper.jobPostCategoryRS" />
+        <association property="member" column="member_id" resultMap="com.fh.taolijie.dao.mapper.MemberMapper.memberRS"/>
+
+
+    </resultMap>
+
+    <select id="getPostByIdWithoutReview" resultMap="jobPostRS" >
+        SELECT post.*, cate.*, mem.* FROM job_post post
+	      LEFT JOIN job_post_category cate ON cate.id = post.id
+	      LEFT JOIN member mem ON mem.id = post.member_id
+        WHERE post.id = #{id}
+    </select>
+
+</mapper>

@@ -4,8 +4,8 @@ package com.fh.taolijie.domain;
  * Created by wanghongfei on 15-5-30.
  */
 public abstract class Pageable {
-    protected int pageNumber;
-    protected int pageSize;
+    protected int pageNumber = 0;
+    protected int pageSize = 10;
 
     public int getPageNumber() {
         return this.pageNumber;

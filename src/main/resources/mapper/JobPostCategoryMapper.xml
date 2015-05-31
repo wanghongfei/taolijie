@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.taolijie.dao.mapper.JobPostCategoryMapper">
+
+    <resultMap type="JobPostCategoryModel" id="jobPostCategoryRS">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="memo" column="memo"/>
+        <result property="level" column="level"/>
+        <result property="themeColor" column="theme_color"/>
+    </resultMap>
+
+    <select id="getCategoryById" resultMap="jobPostCategoryRS">
+        SELECT * FROM job_post_category WHERE id = #{categoryId}
+    </select>
+
+</mapper>

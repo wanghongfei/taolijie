@@ -4,10 +4,16 @@
     <typeAliases>
         <typeAlias alias="MemberModel" type="com.fh.taolijie.domain.MemberModel"/>
         <typeAlias alias="RoleModel" type="com.fh.taolijie.domain.RoleModel"/>
+        <typeAlias alias="JobPostModel" type="com.fh.taolijie.domain.JobPostModel"/>
+        <typeAlias alias="JobPostCategoryModel" type="com.fh.taolijie.domain.JobPostCategoryModel"/>
+        <typeAlias alias="ReviewModel" type="com.fh.taolijie.domain.ReviewModel"/>
     </typeAliases>
 
     <mappers>
         <mapper resource="mapper/MemberMapper.xml" />
         <mapper resource="mapper/RoleMapper.xml" />
+        <mapper resource="mapper/JobPostMapper.xml" />
+        <mapper resource="mapper/JobPostCategoryMapper.xml" />
+        <mapper resource="mapper/ReviewMapper.xml" />
     </mappers>
 </configuration>
