@@ -6,7 +6,7 @@ import java.util.Collection;
  * Created by wanghongfei on 15-3-4.
  */
 
-public class JobPostCategoryModel {
+public class JobPostCategoryModel extends Pageable {
     private Integer id;
     private String name;
     private String memo;

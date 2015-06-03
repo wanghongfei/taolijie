@@ -2,6 +2,7 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.MemberRoleRel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface MemberMapper {
      * 取消与role的关联关系
      * @param rel
      */
-    void removeRole(MemberRoleRel rel);
+    void removeRole(@Param("rel") MemberRoleRel rel);
 
     boolean isUsernameExists(String username);
 
