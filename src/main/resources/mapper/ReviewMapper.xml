@@ -13,4 +13,31 @@
 
     </resultMap>
 
+    <select id="getReviewByIdInBatch" resultMap="reviewRS" resultType="ArrayList">
+        SELECT * FROM review WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 查询某个兼职帖子的评论 -->
+    <select id="getReviewByJobPost">
+        SELECT * FROM review WHERE post_id = #{postId}
+        LIMIT #{pageNumber}, #{pageSize}
+    </select>
+
+    <insert id="addReview">
+        INSERT INTO review (content, time, replied_review_id, post_id, member_id)
+                VALUES (#{content}, #{time}, #{repliedReviewId}, #{postId}, #{memberId})
+    </insert>
+
+    <insert id="updateContent">
+        UPDATE review set content = #{content} WHERE id = #{id}
+    </insert>
+
+    <delete id="deleteReviewByIdInBatch">
+        DELETE FROM review WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
 </mapper>

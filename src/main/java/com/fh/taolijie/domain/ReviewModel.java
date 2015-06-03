@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by wanghongfei on 15-3-4.
  */
-public class ReviewModel {
+public class ReviewModel extends Pageable {
     private Integer id;
     private String content;
     private Date time;
