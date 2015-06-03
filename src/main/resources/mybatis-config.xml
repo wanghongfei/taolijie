@@ -7,6 +7,8 @@
         <typeAlias alias="JobPostModel" type="com.fh.taolijie.domain.JobPostModel"/>
         <typeAlias alias="JobPostCategoryModel" type="com.fh.taolijie.domain.JobPostCategoryModel"/>
         <typeAlias alias="ReviewModel" type="com.fh.taolijie.domain.ReviewModel"/>
+        <typeAlias alias="SHPostCategoryModel" type="com.fh.taolijie.domain.SecondHandPostCategoryModel"/>
+        <typeAlias alias="SHPostModel" type="com.fh.taolijie.domain.SecondHandPostModel"/>
     </typeAliases>
 
     <mappers>
@@ -15,5 +17,7 @@
         <mapper resource="mapper/JobPostMapper.xml" />
         <mapper resource="mapper/JobPostCategoryMapper.xml" />
         <mapper resource="mapper/ReviewMapper.xml" />
+        <mapper resource="mapper/SHPostCategoryMapper.xml" />
+        <mapper resource="mapper/SHPostMapper.xml" />
     </mappers>
 </configuration>

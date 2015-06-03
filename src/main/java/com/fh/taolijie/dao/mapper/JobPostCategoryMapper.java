@@ -1,12 +1,14 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.JobPostCategoryModel;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by wanghongfei on 15-5-31.
  */
+@Repository
 public interface JobPostCategoryMapper {
     JobPostCategoryModel getCategoryById(Integer categoryId);
 

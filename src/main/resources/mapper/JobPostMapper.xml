@@ -36,7 +36,7 @@
         <result property="applicationResumeIds" column="application_resume_ids"/>
         <result property="applicantAmount" column="applicant_amount"/>
 
-        <result property="categoryId" column="category_id"/>
+        <result property="categoryId" column="job_post_category_id"/>
         <result property="memberId" column="member_id" />
 
         <association property="category" column="job_post_category_id" resultMap="com.fh.taolijie.dao.mapper.JobPostCategoryMapper.jobPostCategoryRS" />
@@ -98,7 +98,7 @@
               <if test="verified != null">verified = #{verified},</if>
               <if test="applicationResumeIds != null">application_resume_ids = #{applicationResumeIds},</if>
               <if test="applicationAmount != null">application_amount = #{applicationAmount},</if>
-              <if test="categoryId != null">category_id = #{categoryId},</if>
+              <if test="categoryId != null">job_post_category_id = #{categoryId},</if>
               <if test="memberId != null">member_id = #{memberId},</if>
           </set>
         WHERE id = #{id}
