@@ -28,6 +28,8 @@ public class SecondHandPostEntity implements PageViewAware {
     private Integer pageView;
     private String verified;
 
+    private String tradePlace; // 交易地点
+
     private MemberEntity member;
     private SecondHandPostCategoryEntity category;
 
@@ -104,6 +106,16 @@ public class SecondHandPostEntity implements PageViewAware {
 
     public void setPostTime(Date postTime) {
         this.postTime = postTime;
+    }
+
+    @Basic
+    @Column(name = "trade_place")
+    public String getTradePlace() {
+        return tradePlace;
+    }
+
+    public void setTradePlace(String tradePlace) {
+        this.tradePlace = tradePlace;
     }
 
     @Column(name = "complaint")

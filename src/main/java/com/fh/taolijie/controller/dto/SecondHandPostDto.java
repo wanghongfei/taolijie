@@ -25,6 +25,8 @@ public class SecondHandPostDto {
     private String categoryName;
     private Integer categoryId;
 
+    private String tradePlace;
+
     private Integer memberId;
     private GeneralMemberDto memberDto;
 
@@ -54,6 +56,14 @@ public class SecondHandPostDto {
 
     public GeneralMemberDto getMemberDto() {
         return memberDto;
+    }
+
+    public String getTradePlace() {
+        return tradePlace;
+    }
+
+    public void setTradePlace(String tradePlace) {
+        this.tradePlace = tradePlace;
     }
 
     public void setMemberDto(GeneralMemberDto memberDto) {
