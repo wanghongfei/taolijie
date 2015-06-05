@@ -23,7 +23,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.fh.taolijie.domain.gen" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
+        <javaModelGenerator targetPackage="com.fh.taolijie.domain" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
             <!-- This property is used to select whether MyBatis Generator will generate different Java packages for
       the objects based on the catalog and schema of the introspected table -->
             <property name="enableSubPackages" value="false"/>
@@ -31,23 +31,54 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.fh.taolijie.dao.mapper.gen" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
+        <sqlMapGenerator targetPackage="com.fh.taolijie.dao.mapper.xml" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED">
             <!-- This property is used to select whether MyBatis Generator will generate different Java packages for
       the objects based on the catalog and schema of the introspected table -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="com.fh.taolijie.dao.mapper.gen" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.fh.taolijie.dao.mapper" targetProject="THIS_CONFIGURATION_IS_NOT_REQUIRED" type="XMLMAPPER">
             <!-- This property is used to select whether MyBatis Generator will generate different Java packages for
       the objects based on the catalog and schema of the introspected table -->
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="member" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="member" domainObjectName="MemberModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"/>
-        <table tableName="member_role" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="member_role" domainObjectName="MemberRoleModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"/>
-        <table tableName="role" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="role" domainObjectName="RoleModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+
+        <table tableName="notification" domainObjectName="NotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="review" domainObjectName="ReviewModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="job_post" domainObjectName="JobPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="job_post_category" domainObjectName="JobPostCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="resume" domainObjectName="ResumeModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="resume_job_post_category" domainObjectName="ApplicationIntendModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="school" domainObjectName="SchoolModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="academy" domainObjectName="AcademyModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="education_experience" domainObjectName="EEModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="image_resource" domainObjectName="ImageModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="news" domainObjectName="NewsModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="banner_pic" domainObjectName="BannerPicModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="bulletin" domainObjectName="BulletinModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="second_hand_post" domainObjectName="SHPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+        <table tableName="second_hand_post_category" domainObjectName="SHPostCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

@@ -19,27 +19,23 @@
 
     <!-- Continue going here -->
 
-    <typeAliases>
-        <typeAlias alias="MemberModel" type="com.fh.taolijie.domain.MemberModel"/>
-        <typeAlias alias="RoleModel" type="com.fh.taolijie.domain.RoleModel"/>
-        <typeAlias alias="JobPostModel" type="com.fh.taolijie.domain.JobPostModel"/>
-        <typeAlias alias="JobPostCategoryModel" type="com.fh.taolijie.domain.JobPostCategoryModel"/>
-        <typeAlias alias="ReviewModel" type="com.fh.taolijie.domain.ReviewModel"/>
-        <typeAlias alias="SHPostCategoryModel" type="com.fh.taolijie.domain.SecondHandPostCategoryModel"/>
-        <typeAlias alias="SHPostModel" type="com.fh.taolijie.domain.SecondHandPostModel"/>
-        <typeAlias alias="NewsModel" type="com.fh.taolijie.domain.NewsModel"/>
-        <typeAlias alias="ImageResourceModel" type="com.fh.taolijie.domain.ImageResourceModel"/>
-    </typeAliases>
-
     <mappers>
-        <mapper resource="mapper/MemberMapper.xml" />
-        <mapper resource="mapper/RoleMapper.xml" />
-        <mapper resource="mapper/JobPostMapper.xml" />
-        <mapper resource="mapper/JobPostCategoryMapper.xml" />
-        <mapper resource="mapper/ReviewMapper.xml" />
-        <mapper resource="mapper/SHPostCategoryMapper.xml" />
-        <mapper resource="mapper/SHPostMapper.xml" />
-        <mapper resource="mapper/NewsMapper.xml" />
-        <mapper resource="mapper/ImageResourceMapper.xml" />
+        <mapper resource="mapper/AcademyModelMapper.xml" />
+        <mapper resource="mapper/ApplicationIntendModelMapper.xml" />
+        <mapper resource="mapper/BannerPicModelMapper.xml" />
+        <mapper resource="mapper/BulletinModelMapper.xml" />
+        <mapper resource="mapper/EEModelMapper.xml" />
+        <mapper resource="mapper/ImageModelMapper.xml" />
+        <mapper resource="mapper/JobPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/JobPostModelMapper.xml" />
+        <mapper resource="mapper/MemberModelMapper.xml" />
+        <mapper resource="mapper/MemberRoleModelMapper.xml" />
+        <mapper resource="mapper/NewsModelMapper.xml" />
+        <mapper resource="mapper/NotificationModelMapper.xml" />
+        <mapper resource="mapper/ResumeModelMapper.xml" />
+        <mapper resource="mapper/RoleModelMapper.xml" />
+        <mapper resource="mapper/SchoolModelMapper.xml" />
+        <mapper resource="mapper/SHPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/SHPostModelMapper.xml" />
     </mappers>
 </configuration>

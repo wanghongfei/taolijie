@@ -1,6 +1,6 @@
 package com.fh.taolijie.test.dao.mapper;
 
-import com.fh.taolijie.dao.mapper.MemberMapper;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class MemberMapperTest extends BaseSpringDataTestClass {
     @Autowired
-    MemberMapper memMapper;
+    MemberModelMapper memMapper;
 
     @Test
     public void test() {
