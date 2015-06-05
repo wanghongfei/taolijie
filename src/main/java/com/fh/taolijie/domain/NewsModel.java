@@ -5,14 +5,21 @@ import java.util.Date;
 /**
  * Created by wanghongfei on 15-3-4.
  */
-public class NewsModel {
+public class NewsModel extends Pageable {
     private Integer id;
     private String title;
     private String content;
     private String picturePath;
     private Date time;
     private String headPicturePath;
+
+    private Integer memberId;
     private MemberModel member;
+
+    // 查询用
+    private Date timePoint;
+    private Date startTime;
+    private Date endTime;
 
     public NewsModel() {}
     public NewsModel(String title, String content, String picturePath, Date time, String headPicturePath, MemberModel member) {
@@ -30,6 +37,38 @@ public class NewsModel {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Date getTimePoint() {
+        return timePoint;
+    }
+
+    public void setTimePoint(Date timePoint) {
+        this.timePoint = timePoint;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
     }
 
     public String getTitle() {

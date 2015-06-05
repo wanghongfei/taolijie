@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.taolijie.dao.mapper.NewsMapper">
+
+    <resultMap type="NewsModel" id="newsRS">
+        <id property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="title" column="title"/>
+        <result property="time" column="time"/>
+        <result property="picturePath" column="picture_path"/>
+        <result property="headPicturePath" column="head_picture_path"/>
+
+        <result property="memberId" column="member_id"/>
+        <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberMapper.memberRS" />
+    </resultMap>
+    
+    <select id="getNewsById" resultMap="newsRS">
+        SELECT * FROM news WHERE id = #{newsId}
+    </select>
+    
+    <!-- 获取某个时间点之后的新闻 -->
+    <select id="getNewsAfterTime" resultMap="newsRS">
+        <![CDATA[
+          SELECT * FROM news WHERE time >= #{timePoint}
+          LIMIT #{pageNumber}, #{pageSize}
+        ]]>
+    </select>
+
+    <!-- 根据时间段得到新闻 -->
+    <select id="getNewsByTimeRange" resultMap="newsRS">
+        <![CDATA[
+          SELECT * FROM news WHERE time >= #{startTime} AND time <= #{endTime}
+          LIMIT #{pageNumber}, #{pageSize}
+        ]]>
+    </select>
+    
+    <select id="getNewsByMember" resultMap="newsRS">
+        SELECT * FROM news WHERE member_id = #{memberId}
+        LIMIT #{pageNumber}, #{pageSize}
+    </select>
+
+    <insert id="addNews">
+        INSERT INTO news (content, head_picture_path, picture_path, time, title, member_id)
+                VALUES (#{content}, #{headPicturePath}, #{picturePath}, #{time}, #{title}, #{memberId} )
+    </insert>
+
+    <update id="updateBySelective">
+        UPDATE news
+          <set>
+              <if test="content != null">content = #{content},</if>
+              <if test="headPicturePath != null">head_picture_path = #{headPicturePath},</if>
+              <if test="picturePath != null">picture_path = #{picturePath},</if>
+              <if test="time != null">time = #{time},</if>
+              <if test="title != null">title = #{title},</if>
+              <if test="memberId != null">member_id = #{member_id},</if>
+          </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteInBatch">
+        DELETE FROM news WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+</mapper>

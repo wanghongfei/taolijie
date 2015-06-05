@@ -9,6 +9,7 @@
         <typeAlias alias="ReviewModel" type="com.fh.taolijie.domain.ReviewModel"/>
         <typeAlias alias="SHPostCategoryModel" type="com.fh.taolijie.domain.SecondHandPostCategoryModel"/>
         <typeAlias alias="SHPostModel" type="com.fh.taolijie.domain.SecondHandPostModel"/>
+        <typeAlias alias="NewsModel" type="com.fh.taolijie.domain.NewsModel"/>
     </typeAliases>
 
     <mappers>
@@ -19,5 +20,6 @@
         <mapper resource="mapper/ReviewMapper.xml" />
         <mapper resource="mapper/SHPostCategoryMapper.xml" />
         <mapper resource="mapper/SHPostMapper.xml" />
+        <mapper resource="mapper/NewsMapper.xml" />
     </mappers>
 </configuration>
