@@ -1,5 +1,6 @@
 .idea/
 *.iml
+*.bak
 target/
 
 .settings/
