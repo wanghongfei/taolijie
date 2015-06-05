@@ -10,6 +10,7 @@
         <typeAlias alias="SHPostCategoryModel" type="com.fh.taolijie.domain.SecondHandPostCategoryModel"/>
         <typeAlias alias="SHPostModel" type="com.fh.taolijie.domain.SecondHandPostModel"/>
         <typeAlias alias="NewsModel" type="com.fh.taolijie.domain.NewsModel"/>
+        <typeAlias alias="ImageResourceModel" type="com.fh.taolijie.domain.ImageResourceModel"/>
     </typeAliases>
 
     <mappers>
@@ -21,5 +22,6 @@
         <mapper resource="mapper/SHPostCategoryMapper.xml" />
         <mapper resource="mapper/SHPostMapper.xml" />
         <mapper resource="mapper/NewsMapper.xml" />
+        <mapper resource="mapper/ImageResourceMapper.xml" />
     </mappers>
 </configuration>
