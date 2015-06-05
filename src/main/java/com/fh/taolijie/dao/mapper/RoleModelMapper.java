@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.RoleModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RoleModelMapper {
     /**
@@ -60,4 +62,6 @@ public interface RoleModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(RoleModel record);
+
+    List<RoleModel> getAllRole();
 }

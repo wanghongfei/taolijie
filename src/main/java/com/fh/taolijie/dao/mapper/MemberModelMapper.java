@@ -4,6 +4,9 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.MemberModelWithBLOBs;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface MemberModelMapper {
     /**
@@ -65,4 +68,12 @@ public interface MemberModelMapper {
     MemberModelWithBLOBs selectByUsername(String username);
 
     Long getMemberAmount();
+
+    boolean checkUserExist(String username);
+
+    MemberModel selectByIdentifier(String identifier);
+
+    List<MemberModel> getMemberList(Map<String, Integer> pageMap);
+
+    void validMemberById(Integer memberId, boolean valid);
 }

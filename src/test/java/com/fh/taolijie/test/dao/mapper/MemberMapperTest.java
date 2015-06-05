@@ -1,6 +1,7 @@
 package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,6 +16,7 @@ public class MemberMapperTest extends BaseSpringDataTestClass {
 
     @Test
     public void test() {
-        Assert.assertNotNull(memMapper);
+        MemberModel mem = memMapper.selectByUsername("wanghongfei");
+        Assert.assertNull(mem);
     }
 }

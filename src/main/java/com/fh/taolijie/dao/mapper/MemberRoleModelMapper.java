@@ -52,4 +52,6 @@ public interface MemberRoleModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(MemberRoleModel record);
+
+    void deleteRelation(MemberRoleModel model);
 }

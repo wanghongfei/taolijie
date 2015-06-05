@@ -1,7 +1,7 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.RoleDto;
 import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.MemberModelWithBLOBs;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -22,7 +22,7 @@ public interface AccountService {
      * @throws DuplicatedUsernameException
      * @return 如果注册成功，返回用户主键
      */
-    public Integer register(MemberModel model) throws DuplicatedUsernameException;
+    public Integer register(MemberModelWithBLOBs model) throws DuplicatedUsernameException;
 
 
     /**
@@ -48,7 +48,7 @@ public interface AccountService {
      * @param username 要查询的用户的用户名
      * @param isWired 指定是否查询关联表内的信息
      */
-    public MemberModel findMember(String username, boolean isWired);
+    public MemberModelWithBLOBs findMember(String username, boolean isWired);
 
     /**
      * 得到所有用户信息. 不包含关联表内的信息
@@ -58,7 +58,7 @@ public interface AccountService {
      */
     public List<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
 
-    MemberModel findMember(Integer memId);
+    MemberModelWithBLOBs findMember(Integer memId);
 
     /**
      * 得到当前已注册用户的数量
@@ -69,7 +69,7 @@ public interface AccountService {
     /**
      * 更新用户信息.
      */
-    void updateMember(MemberModel model);
+    void updateMember(MemberModelWithBLOBs model);
 
 
     /**
@@ -125,13 +125,13 @@ public interface AccountService {
      * @param roleId
      * @return
      */
-    public RoleDto findRole(Integer roleId);
+    public RoleModel findRole(Integer roleId);
 
     /**
      * 查询所有role
      * @return
      */
-    List<RoleDto> getAllRole();
+    List<RoleModel> getAllRole();
 
     /**
      * 为指定用户添加一个新role
