@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.ImageModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ImageModelMapper {
     /**
@@ -60,4 +62,6 @@ public interface ImageModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ImageModel record);
+
+    List<ImageModel> getInBatch(List<Integer> idList);
 }
