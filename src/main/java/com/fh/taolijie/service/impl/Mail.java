@@ -1,12 +1,7 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,14 +11,14 @@ import org.springframework.stereotype.Service;
 public class Mail {
     private static Logger logger = LoggerFactory.getLogger(Mail.class);
 
-    @Autowired
+/*    @Autowired
     MailSender sender;
 
-    /**
+    *//**
      * 发送邮件，该方法会block直到发送完成
      * @param content
      * @param toAddresses
-     */
+     *//*
     public void sendMail(String content, Constants.MailType type, String... toAddresses) throws MailException {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setSubject(type.toString());
@@ -34,11 +29,11 @@ public class Mail {
         sender.send(msg);
     }
 
-    /**
+    *//**
      * 异步发送邮件，方法立刻返回。
      * @param content
      * @param toAddresses
-     */
+     *//*
     public void sendMailAsync(String content, Constants.MailType type, String... toAddresses) {
         logger.info("发送邮件");
         new Thread( () -> {
@@ -57,5 +52,5 @@ public class Mail {
                 }
             }
         }).start();
-    }
+    }*/
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * 规定与二手帖子分类相关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface SHPostCategoryService {
+public interface ShPostCategoryService {
     /**
      * 获取(所有)分类
      * @param firstResult
@@ -34,10 +34,9 @@ public interface SHPostCategoryService {
     /**
      * 修改一个分类
      * @param cateId
-     * @param cateDto
      * @return
      */
-    boolean updateCategory(Integer cateId, SHPostCategoryModel cateDto);
+    boolean updateCategory(Integer cateId, SHPostCategoryModel model);
 
     /**
      * 删除一个分类. 仅当该分类下没有数据时才能删除

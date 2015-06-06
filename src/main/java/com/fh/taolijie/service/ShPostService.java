@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.SecondHandPostDto;
 import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.SHPostModelWithBLOBs;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * 规定与二手帖子有关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface SHPostService extends PageService {
+public interface ShPostService extends PageService {
     /**
      * 查找所有二手帖子
      * @return
@@ -34,7 +35,7 @@ public interface SHPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<SecondHandPostDto> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据分类查找二手
@@ -42,28 +43,28 @@ public interface SHPostService extends PageService {
      * @param pageView 传递true为最火的在前
      * @return
      */
-    List<SecondHandPostDto> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
 
-    List<SecondHandPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper);
 
     /**
      * 查询还未审核的二手信息
      * @return
      */
-    List<SecondHandPostDto> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> getUnverifiedPostList(SHPostModel model, ObjWrapper wrapper);
 
     /**
      * 查询被投诉的二手信息
      * @return
      */
-    List<SecondHandPostDto> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 发布新二手帖子
      * @param postDto
      * @return
      */
-    boolean addPost(SecondHandPostDto postDto);
+    boolean addPost(SHPostModelWithBLOBs model);
 
     /**
      * 收藏二手信息
@@ -81,14 +82,12 @@ public interface SHPostService extends PageService {
 
     /**
      * 根据id查找帖子
-     * @param postId {@link SecondHandPostModel}实体的主键值
      * @return
      */
-    SecondHandPostDto findPost(Integer postId);
+    SHPostModel findPost(Integer postId);
 
     /**
      * 删除一个帖子
-     * @param postId {@link SecondHandPostModel}实体的主键值
      * @return
      */
     boolean deletePost(Integer postId);
@@ -99,7 +98,7 @@ public interface SHPostService extends PageService {
      * @param postDto
      * @return
      */
-    boolean updatePost(Integer postId, SecondHandPostDto postDto);
+    boolean updatePost(Integer postId, SHPostModel model);
 
     /**
      * 修改帖子分类

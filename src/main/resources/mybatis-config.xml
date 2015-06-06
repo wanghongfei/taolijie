@@ -35,7 +35,7 @@
         <mapper resource="mapper/ResumeModelMapper.xml" />
         <mapper resource="mapper/RoleModelMapper.xml" />
         <mapper resource="mapper/SchoolModelMapper.xml" />
-        <mapper resource="mapper/SHPostCategoryModelMapper.xml" />
-        <mapper resource="mapper/SHPostModelMapper.xml" />
+        <mapper resource="mapper/ShPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/ShPostModelMapper.xml" />
     </mappers>
 </configuration>

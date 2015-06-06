@@ -1,10 +1,10 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.dao.mapper.SHPostCategoryModelMapper;
+import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
-import com.fh.taolijie.service.SHPostCategoryService;
+import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class DefaultSHPostCategoryService implements SHPostCategoryService {
+public class DefaultShPostCategoryService implements ShPostCategoryService {
     @Autowired
-    SHPostCategoryModelMapper cateMapper;
+    ShPostCategoryModelMapper cateMapper;
 
     @Override
     public List<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
@@ -31,21 +31,29 @@ public class DefaultSHPostCategoryService implements SHPostCategoryService {
 
     @Override
     public SHPostCategoryModel findCategory(Integer cateId) {
-        return null;
+        return cateMapper.selectByPrimaryKey(cateId);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void addCategory(SHPostCategoryModel dto) {
-
+        cateMapper.insert(dto);
     }
 
     @Override
-    public boolean updateCategory(Integer cateId, SHPostCategoryModel cateDto) {
-        return false;
+    @Transactional(readOnly = false)
+    public boolean updateCategory(Integer cateId, SHPostCategoryModel model) {
+        model.setId(cateId);
+        cateMapper.updateByPrimaryKeySelective(model);
+
+        return true;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean deleteCategory(Integer cateId) throws CascadeDeleteException {
-        return false;
+        cateMapper.deleteByPrimaryKey(cateId);
+
+        return true;
     }
 }

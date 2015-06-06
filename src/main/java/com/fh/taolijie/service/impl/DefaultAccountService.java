@@ -268,6 +268,6 @@ public class DefaultAccountService implements AccountService {
         memMapper.updateByPrimaryKeySelective(mem);
 
         // send email
-        mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
+        //mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
     }
 }
