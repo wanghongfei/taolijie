@@ -1,7 +1,10 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.ApplicationIntendModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ApplicationIntendModelMapper {
@@ -20,4 +23,6 @@ public interface ApplicationIntendModelMapper {
      * @mbggenerated
      */
     int insertSelective(ApplicationIntendModel record);
+
+    List<ApplicationIntendModel> getByIntend(@Param("categoryId") Integer categoryId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }

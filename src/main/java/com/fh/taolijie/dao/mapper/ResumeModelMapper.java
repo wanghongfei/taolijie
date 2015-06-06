@@ -2,7 +2,10 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModelWithBLOBs;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ResumeModelMapper {
@@ -61,4 +64,14 @@ public interface ResumeModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ResumeModel record);
+
+    List<ResumeModelWithBLOBs> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    List<ResumeModelWithBLOBs> findBy(ResumeModelWithBLOBs model);
+
+    List<ResumeModelWithBLOBs> getInBatch(List<Integer> idList);
+
+    void updateTime(Integer resumeId);
+
+    void increasePageView(Integer resumeId);
 }

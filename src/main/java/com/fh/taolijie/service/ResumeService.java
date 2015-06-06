@@ -1,7 +1,8 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.PostRecordDto;
 import com.fh.taolijie.controller.dto.ResumeDto;
+import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.ResumeModelWithBLOBs;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -15,13 +16,13 @@ public interface ResumeService extends PageService {
      * 查找所有简历
      * @return
      */
-    List<ResumeDto> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModelWithBLOBs> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 根据权限查找所有简历
      * @return
      */
-    List<ResumeDto> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModelWithBLOBs> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 获取某个用户的部分简历.
@@ -32,7 +33,7 @@ public interface ResumeService extends PageService {
      * @see com.fh.taolijie.utils.Constants
      * @return
      */
-    List<ResumeDto> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModelWithBLOBs> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      *
@@ -40,15 +41,15 @@ public interface ResumeService extends PageService {
      * @param authority 设置简历权限类型
      * @return
      */
-    List<ResumeDto> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModelWithBLOBs> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
-    List<ResumeDto> getResumeListByIntend(Integer jobPostCategoryId);
+    List<ResumeModelWithBLOBs> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
 
     /**
      * 查询投递记录
      * @return
      */
-    List<PostRecordDto> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
+    List<ResumeModelWithBLOBs> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
 
 
     /**
@@ -56,7 +57,7 @@ public interface ResumeService extends PageService {
      * @param ids
      * @return
      */
-    List<ResumeDto> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids);
+    List<ResumeModelWithBLOBs> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids);
 
     /**
      * 修改简历信息
@@ -64,7 +65,7 @@ public interface ResumeService extends PageService {
      * @param resumeDto
      * @return
      */
-    boolean updateResume(Integer resumeId, ResumeDto resumeDto);
+    boolean updateResume(Integer resumeId, ResumeModelWithBLOBs model);
 
     /**
      * 刷新简历更新时间
@@ -81,9 +82,8 @@ public interface ResumeService extends PageService {
 
     /**
      * 创建新简历
-     * @param dto
      */
-    void addResume(ResumeDto dto);
+    void addResume(ResumeModelWithBLOBs model);
 
 
     /**
@@ -91,7 +91,7 @@ public interface ResumeService extends PageService {
      * @param resumeId
      * @return
      */
-    ResumeDto findResume(Integer resumeId);
+    ResumeModelWithBLOBs findResume(Integer resumeId);
 
     /**
      * 根据id删除简历
