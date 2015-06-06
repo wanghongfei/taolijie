@@ -2,6 +2,7 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.MemberModelWithBLOBs;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -75,5 +76,5 @@ public interface MemberModelMapper {
 
     List<MemberModel> getMemberList(Map<String, Integer> pageMap);
 
-    void validMemberById(Integer memberId, boolean valid);
+    void validMemberById(@Param("memberId") Integer memberId, @Param("valid") boolean valid);
 }

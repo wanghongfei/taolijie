@@ -8,7 +8,7 @@
     -->
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="member_id" property="memberId" jdbcType="INTEGER" />
-    <result column="role_rid" property="roleRid" jdbcType="INTEGER" />
+    <result column="role_rid" property="rid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -42,7 +42,7 @@
     -->
     insert into member_role (member_id, role_rid
       )
-    values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{roleRid,jdbcType=INTEGER}
+    values (#{memberId,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.fh.taolijie.domain.MemberRoleModel" >
@@ -55,7 +55,7 @@
       <if test="memberId != null" >
         member_id,
       </if>
-      <if test="roleRid != null" >
+      <if test="rid != null" >
         role_rid,
       </if>
     </trim>
@@ -63,8 +63,8 @@
       <if test="memberId != null" >
         #{memberId,jdbcType=INTEGER},
       </if>
-      <if test="roleRid != null" >
-        #{roleRid,jdbcType=INTEGER},
+      <if test="rid != null" >
+        #{rid,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -78,8 +78,8 @@
       <if test="memberId != null" >
         member_id = #{memberId,jdbcType=INTEGER},
       </if>
-      <if test="roleRid != null" >
-        role_rid = #{roleRid,jdbcType=INTEGER},
+      <if test="rid != null" >
+        role_rid = #{rid,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -91,7 +91,7 @@
     -->
     update member_role
     set member_id = #{memberId,jdbcType=INTEGER},
-      role_rid = #{roleRid,jdbcType=INTEGER}
+      role_rid = #{rid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

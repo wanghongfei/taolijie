@@ -50,8 +50,9 @@ public class DefaultAccountService implements AccountService {
         List<RoleModel> roleList = model.getRoleList();
         MemberRoleModel mr = null;
         for (RoleModel role : roleList) {
+            mr = new MemberRoleModel();
             mr.setMemberId(model.getId());
-            mr.setRoleRid(role.getRid());
+            mr.setRid(role.getRid());
             mrMapper.insert(mr);
         }
 
@@ -207,7 +208,7 @@ public class DefaultAccountService implements AccountService {
         MemberModel mem = memMapper.selectByUsername(username);
         MemberRoleModel mr = new MemberRoleModel();
         mr.setMemberId(mem.getId());
-        mr.setRoleRid(roleId);
+        mr.setRid(roleId);
 
         mrMapper.insert(mr);
     }
@@ -218,7 +219,7 @@ public class DefaultAccountService implements AccountService {
         MemberModel mem = memMapper.selectByUsername(username);
         MemberRoleModel mr = new MemberRoleModel();
         mr.setMemberId(mem.getId());
-        mr.setRoleRid(roleId);
+        mr.setRid(roleId);
 
         mrMapper.deleteRelation(mr);
     }
