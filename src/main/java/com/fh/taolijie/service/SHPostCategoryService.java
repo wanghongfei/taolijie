@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.SecondHandPostCategoryDto;
+import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -17,19 +17,19 @@ public interface SHPostCategoryService {
      * @param capacity
      * @return
      */
-    List<SecondHandPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找分类
      * @param cateId
      * @return
      */
-    SecondHandPostCategoryDto findCategory(Integer cateId);
+    SHPostCategoryModel findCategory(Integer cateId);
 
     /**
      * 添加二手分类
      */
-    void addCategory(SecondHandPostCategoryDto dto);
+    void addCategory(SHPostCategoryModel dto);
 
     /**
      * 修改一个分类
@@ -37,7 +37,7 @@ public interface SHPostCategoryService {
      * @param cateDto
      * @return
      */
-    boolean updateCategory(Integer cateId, SecondHandPostCategoryDto cateDto);
+    boolean updateCategory(Integer cateId, SHPostCategoryModel cateDto);
 
     /**
      * 删除一个分类. 仅当该分类下没有数据时才能删除

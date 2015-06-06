@@ -3,6 +3,9 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface SHPostCategoryModelMapper {
     /**
@@ -60,4 +63,6 @@ public interface SHPostCategoryModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(SHPostCategoryModel record);
+
+    List<SHPostCategoryModel> getAll(Map<String, Integer> pageMap);
 }
