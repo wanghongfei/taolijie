@@ -51,9 +51,19 @@ public class ReviewModel extends Pageable {
      */
     private String content;
 
+    private MemberModel member;
+
     public ReviewModel() {}
     public ReviewModel(int pageNumber, int pageSize) {
         super(pageNumber, pageSize);
+    }
+
+    public MemberModel getMember() {
+        return member;
+    }
+
+    public void setMember(MemberModel member) {
+        this.member = member;
     }
 
     /**

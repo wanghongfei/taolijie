@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -18,21 +19,21 @@ public interface ReviewService {
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    List<ReviewDto> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper);
+    List<ReviewModel> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 添加一条评论
      * @param reviewDto
      * @return
      */
-    boolean addReview(ReviewDto reviewDto);
+    boolean addReview(ReviewModel model);
 
     /**
      * 回复一条评论
      * @param memId
      * @param reviewId
      */
-    void addComment(Integer memId, Integer reviewId, ReviewDto dto);
+    void addComment(Integer memId, Integer reviewId, ReviewModel model);
 
     /**
      * 删除一条评论
@@ -47,5 +48,5 @@ public interface ReviewService {
      * @param reviewDto
      * @return
      */
-    boolean updateReview(Integer reviewId, ReviewDto reviewDto);
+    boolean updateReview(Integer reviewId, ReviewModel model);
 }
