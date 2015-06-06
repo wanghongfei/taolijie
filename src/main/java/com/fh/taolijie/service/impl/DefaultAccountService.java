@@ -33,8 +33,8 @@ public class DefaultAccountService implements AccountService {
     @Autowired
     RoleModelMapper roleMapper;
 
-    @Autowired
-    Mail mail;
+/*    @Autowired
+    Mail mail;*/
 
     @Override
     @Transactional(readOnly = false)

@@ -1,7 +1,10 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.JobPostCategoryModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface JobPostCategoryModelMapper {
@@ -60,4 +63,6 @@ public interface JobPostCategoryModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(JobPostCategoryModel record);
+
+    List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageAmount") int pageAmount);
 }
