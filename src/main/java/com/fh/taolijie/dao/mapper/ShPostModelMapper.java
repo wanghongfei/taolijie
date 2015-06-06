@@ -77,4 +77,8 @@ public interface ShPostModelMapper {
     List<SHPostModel> findBy(SHPostModel model);
 
     List<SHPostModel> getSuedPost(@Param("pageSize") int pageSize, @Param("pageNumber") int pageNumber);
+
+    void increaseComplaint(Integer postId);
+
+    void increasePageView(Integer postId);
 }

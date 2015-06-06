@@ -6,7 +6,6 @@ import com.fh.taolijie.domain.MemberModelWithBLOBs;
 import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.domain.SHPostModelWithBLOBs;
-import com.fh.taolijie.service.PageViewAware;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -87,37 +86,67 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
+        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getFavoriteShIds();
+
+        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
+
+        mem.setFavoriteShIds(newIds);
+        memMapper.updateByPrimaryKeySelective(mem);
 
     }
 
     @Override
+    public boolean isPostAlreadyFavorite(Integer memId, Integer postId) {
+        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getFavoriteShIds();
+
+        return StringUtils.checkIdExists(oldIds, postId.toString());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void complaint(Integer postId) {
-
+        postMapper.increaseComplaint(postId);
     }
 
     @Override
-    public SHPostModel findPost(Integer postId) {
-        return null;
+    public SHPostModelWithBLOBs findPost(Integer postId) {
+        return postMapper.selectByPrimaryKey(postId);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean deletePost(Integer postId) {
-        return false;
+        int row = postMapper.deleteByPrimaryKey(postId);
+
+        return row <= 0 ? false : true;
     }
 
     @Override
-    public boolean updatePost(Integer postId, SHPostModel model) {
-        return false;
+    public boolean updatePost(Integer postId, SHPostModelWithBLOBs model) {
+        model.setId(postId);
+        int row = postMapper.updateByPrimaryKeySelective(model);
+
+        return row <= 0 ? false : true;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void changeCategory(Integer postId, Integer cateId) {
+        SHPostModelWithBLOBs model = new SHPostModelWithBLOBs();
+        model.setId(postId);
+        model.setSecondHandPostCategoryId(cateId);
 
+
+        postMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    public <T extends PageViewAware> void increasePageView(Integer entityId, Class<T> type) {
-
+    @Transactional(readOnly = false)
+    public void increasePageView(Integer postId) {
+        postMapper.increasePageView(postId);
     }
 }

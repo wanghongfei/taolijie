@@ -461,4 +461,20 @@
             post.post_time
         LIMIT #{pageNumber}, #{pageSize}
     </select>
+
+    <update id="increaseComplaint">
+        UPDATE
+            second_hand_post
+        SET
+            complaint = complaint + 1
+        WHERE id = #{postId}
+    </update>
+
+    <update id="increasePageView">
+        UPDATE
+          second_hand_post
+        SET
+          page_view = page_view + 1
+        WHERE id = #{postId}
+    </update>
 </mapper>

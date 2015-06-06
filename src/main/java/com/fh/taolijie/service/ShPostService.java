@@ -75,6 +75,8 @@ public interface ShPostService extends PageService {
 
     void unfavoritePost(Integer memId, Integer postId);
 
+    boolean isPostAlreadyFavorite(Integer memId, Integer postId);
+
     /**
      * 投诉+1
      */
@@ -84,7 +86,7 @@ public interface ShPostService extends PageService {
      * 根据id查找帖子
      * @return
      */
-    SHPostModel findPost(Integer postId);
+    SHPostModelWithBLOBs findPost(Integer postId);
 
     /**
      * 删除一个帖子
@@ -98,7 +100,7 @@ public interface ShPostService extends PageService {
      * @param postDto
      * @return
      */
-    boolean updatePost(Integer postId, SHPostModel model);
+    boolean updatePost(Integer postId, SHPostModelWithBLOBs model);
 
     /**
      * 修改帖子分类
