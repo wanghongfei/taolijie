@@ -2,7 +2,11 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.NewsModelWithBLOBs;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface NewsModelMapper {
@@ -61,4 +65,8 @@ public interface NewsModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(NewsModel record);
+
+    List<NewsModelWithBLOBs> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    List<NewsModelWithBLOBs> getByInterval(@Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }
