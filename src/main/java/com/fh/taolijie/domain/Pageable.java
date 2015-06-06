@@ -7,6 +7,13 @@ public abstract class Pageable {
     protected int pageNumber = 0;
     protected int pageSize = 10;
 
+    protected Pageable() {}
+
+    protected Pageable(int pageNumber, int pageSize) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+
     public int getPageNumber() {
         return this.pageNumber;
     }

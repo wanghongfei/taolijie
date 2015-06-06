@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.ReviewModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReviewModelMapper {
     /**
@@ -60,4 +62,10 @@ public interface ReviewModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ReviewModel record);
+
+    void deleteInBatch(List<Integer> idList);
+
+    List<ReviewModel> getInBatch(List<Integer> idList);
+
+    List<ReviewModel> findBy(ReviewModel model);
 }

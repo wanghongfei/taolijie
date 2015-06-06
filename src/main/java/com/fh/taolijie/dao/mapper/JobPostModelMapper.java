@@ -2,7 +2,10 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.JobPostModelWithBLOBs;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface JobPostModelMapper {
@@ -61,4 +64,21 @@ public interface JobPostModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(JobPostModel record);
+
+    List<JobPostModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    List<JobPostModel> getInBatch(List<Integer> idList);
+
+    List<JobPostModel> getByComplaint(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+
+    /*List<JobPostModel> getByMember(@Param("memberId") Integer memberId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    List<JobPostModel> getByCategory(@Param("categoryId") Integer categoryId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);*/
+
+    List<JobPostModel> findBy(JobPostModel model);
+
+    void complaint(Integer postId);
+
+    void increasePageView(Integer postId);
 }
