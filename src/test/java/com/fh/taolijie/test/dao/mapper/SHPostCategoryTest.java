@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.dao.mapper;
 
+import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.service.impl.DefaultShPostCategoryService;
 import com.fh.taolijie.service.impl.Mail;
@@ -14,14 +15,15 @@ import org.springframework.test.context.ContextConfiguration;
  */
 @ContextConfiguration(classes = {
         DefaultShPostCategoryService.class,
-        Mail.class
 })
 public class SHPostCategoryTest extends BaseSpringDataTestClass {
     @Autowired
     ShPostCategoryService cateS;
 
     @Test
-    public void init() {
-        Assert.assertNotNull(cateS);
+    public void testAdd() {
+        SHPostCategoryModel model = new SHPostCategoryModel();
+        model.setName("hihi");
+        cateS.addCategory(model);
     }
 }
