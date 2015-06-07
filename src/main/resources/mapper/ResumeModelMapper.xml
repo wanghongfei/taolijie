@@ -28,6 +28,13 @@
 
     <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap" />
   </resultMap>
+
+  <resultMap id="PostRecord" type="com.fh.taolijie.domain.middle.ResumePostRecord">
+    <association property="jobPost" resultMap="com.fh.taolijie.dao.mapper.JobPostModelMapper.BaseResultMap" />
+    <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap" />
+    <association property="resume" resultMap="BaseResultMap" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -375,6 +382,23 @@
         AND re.created_time = #{createdTime}
       </if>
     </where>
+    LIMIT
+      #{pageNumber}, #{pageSize}
+  </select>
+
+  <select id="findPostRecordByMember" resultMap="PostRecord">
+    SELECT
+      re.*, mem.*, resu.*
+    FROM
+      resume_post_rel re
+    INNER JOIN
+      member mem ON mem.id = re.member_id
+    INNER JOIN
+      job_post job ON job.id = re.job_post_id
+    INNER JOIN
+      resume resu ON resu.id = re.resume_id
+    WHERE
+      re.member_id = #{memberId}
     LIMIT
       #{pageNumber}, #{pageSize}
   </select>

@@ -110,7 +110,7 @@ public interface JobPostService extends PageService {
      * @param postId
      * @param resumeId
      */
-    void postResume(Integer postId, Integer resumeId);
+    void postResume(Integer postId, Integer resumeId, Integer memberId);
 
     /**
      * 发布帖子

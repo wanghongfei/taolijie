@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.middle.ResumePostRecord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -69,6 +70,8 @@ public interface ResumeModelMapper {
     List<ResumeModel> findBy(ResumeModel model);
 
     List<ResumeModel> getInBatch(List<Integer> idList);
+
+    List<ResumePostRecord> findPostRecordByMember(@Param("memberId") Integer memberId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
     void updateTime(Integer resumeId);
 

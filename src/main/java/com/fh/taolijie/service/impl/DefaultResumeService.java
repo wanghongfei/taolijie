@@ -6,6 +6,7 @@ import com.fh.taolijie.dao.mapper.ResumeModelMapper;
 import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -74,39 +75,8 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModel> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
-/*        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        CheckUtils.nullCheck(mem);
-
-        String recordJson = mem.getAppliedJobIds();
-
-        // 没有记录，返回空List
-        if (null == recordJson) {
-            return new ArrayList<>();
-        }
-
-        // 解析JSON
-        JsonWrapper js = new JsonWrapper(recordJson);
-        List<Map<String, String>> jsonList = js.getJsonList();
-
-
-        // 取出记录信息
-        // 将postId和time封装到PostRecordDto对象中
-        List<PostRecordDto> dtoList = jsonList.stream()
-                .map(jsonObj -> {
-                    String postId = jsonObj.get(Constants.ApplicationRecord.KEY_ID);
-                    String timeString = jsonObj.get(Constants.ApplicationRecord.KEY_TIME);
-                    return new PostRecordDto(Integer.valueOf(postId), new Date(Long.parseLong(timeString)));
-                }).collect(Collectors.toList());
-
-        // 分页
-        int cap = CollectionUtils.determineCapacity(capacity);
-        Page<PostRecordDto> dtoPage = new PageImpl<>(dtoList, new PageRequest(page, cap), dtoList.size());
-
-        return CollectionUtils.transformCollection(dtoPage, PostRecordDto.class, (dto) -> dto);
-        return null;*/
-
-        return null;
+    public List<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
+        return reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -42,13 +43,20 @@ public interface ResumeService extends PageService {
      */
     List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
+    /**
+     * 根据求职意向查找简历
+     * @param categoryId
+     * @param firstResult
+     * @param capacity
+     * @return
+     */
     List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
 
     /**
      * 查询投递记录
      * @return
      */
-    List<ResumeModel> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
+    List<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
 
 
     /**

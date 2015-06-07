@@ -82,4 +82,6 @@ public interface JobPostModelMapper {
     void increasePageView(Integer postId);
 
     void increaseLike(Integer postId);
+
+    void postResume(Integer resumeId, Integer jobPostId, Integer memberId);
 }

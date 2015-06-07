@@ -140,37 +140,8 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = false)
-    public void postResume(Integer postId, Integer resumeId) {
-/*
-        JobPostModel post = postMapper.selectByPrimaryKey(postId);
-        CheckUtils.nullCheck(post);
-
-        // 记录收到的简历id
-        String applicationIds = post.getApplicationResumeIds();
-        String newIds = StringUtils.addToString(applicationIds, resumeId.toString());
-        post.setApplicationResumeIds(newIds);
-
-
-
-        // 增加申请者数量
-        Integer original = post.getApplicantAmount();
-        Integer newValue = original == null ? 1 : original.intValue() + 1;
-        post.setApplicantAmount(newValue);
-
-        // 在Member中记录这次投递
-        ResumeEntity resumeEntity = resumeRepo.getOne(resumeId);
-        MemberEntity mem = resumeEntity.getMember();
-        String applicationJson = mem.getAppliedJobIds();
-
-        Date now = new Date();
-        JsonWrapper js = new JsonWrapper(applicationJson);
-        js.addObjectToArray(Arrays.asList(
-                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_ID, postId.toString()),
-                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_TIME, Long.toString(now.getTime()))
-        ));
-        mem.setAppliedJobIds(js.getAjaxMessage(true));
-*/
-
+    public void postResume(Integer postId, Integer resumeId, Integer memberId) {
+        postMapper.postResume(resumeId, postId, memberId);
     }
 
     @Override
