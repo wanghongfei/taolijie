@@ -81,4 +81,6 @@ public interface ShPostModelMapper {
     void increaseComplaint(Integer postId);
 
     void increasePageView(Integer postId);
+
+    void increaseLike(Integer postId);
 }

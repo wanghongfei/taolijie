@@ -477,4 +477,8 @@
           page_view = page_view + 1
         WHERE id = #{postId}
     </update>
+
+    <update id="increaseLike">
+        UPDATE second_hand_post SET likes = likes + 1 WHERE id = #{postId}
+    </update>
 </mapper>

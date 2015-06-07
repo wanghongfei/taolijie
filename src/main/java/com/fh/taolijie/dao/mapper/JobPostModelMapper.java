@@ -81,4 +81,6 @@ public interface JobPostModelMapper {
     void complaint(Integer postId);
 
     void increasePageView(Integer postId);
+
+    void increaseLike(Integer postId);
 }

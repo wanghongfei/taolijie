@@ -91,7 +91,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public JobPostModel findJobPost(Integer postId) {
+    public JobPostModelWithBLOBs findJobPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }
 

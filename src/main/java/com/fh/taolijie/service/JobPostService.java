@@ -83,7 +83,7 @@ public interface JobPostService extends PageService {
      * @param postId
      * @return
      */
-    JobPostModel findJobPost(Integer postId);
+    JobPostModelWithBLOBs findJobPost(Integer postId);
 
     /**
      * 投诉数+1

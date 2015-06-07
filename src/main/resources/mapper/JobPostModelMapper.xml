@@ -564,4 +564,8 @@
   <update id="increasePageView">
     UPDATE job_post SET page_view = page_view + 1 WHERE id = #{postId}
   </update>
+
+  <update id="increaseLike">
+    UPDATE job_post SET likes = likes + 1 WHERE id = #{postId}
+  </update>
 </mapper>
