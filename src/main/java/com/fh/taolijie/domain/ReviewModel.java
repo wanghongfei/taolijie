@@ -52,10 +52,19 @@ public class ReviewModel extends Pageable {
     private String content;
 
     private MemberModel member;
+    private JobPostModel jobPost;
 
     public ReviewModel() {}
     public ReviewModel(int pageNumber, int pageSize) {
         super(pageNumber, pageSize);
+    }
+
+    public JobPostModel getJobPost() {
+        return jobPost;
+    }
+
+    public void setJobPost(JobPostModel jobPost) {
+        this.jobPost = jobPost;
     }
 
     public MemberModel getMember() {

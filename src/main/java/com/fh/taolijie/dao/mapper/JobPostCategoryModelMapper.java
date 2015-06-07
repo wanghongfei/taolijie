@@ -64,5 +64,5 @@ public interface JobPostCategoryModelMapper {
      */
     int updateByPrimaryKey(JobPostCategoryModel record);
 
-    List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageAmount") int pageAmount);
+    List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }

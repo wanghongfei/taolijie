@@ -324,55 +324,55 @@
       INNER JOIN member mem ON mem.id = re.member_id
     <where>
       <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+        re.name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="gender != null" >
-        gender = #{gender,jdbcType=VARCHAR},
+        AND re.gender = #{gender,jdbcType=VARCHAR}
       </if>
       <if test="age != null" >
-        age = #{age,jdbcType=INTEGER},
+        AND re.age = #{age,jdbcType=INTEGER}
       </if>
       <if test="height != null" >
-        height = #{height,jdbcType=INTEGER},
+        AND re.height = #{height,jdbcType=INTEGER}
       </if>
       <if test="photoPath != null" >
-        photo_path = #{photoPath,jdbcType=VARCHAR},
+        AND re.photo_path = #{photoPath,jdbcType=VARCHAR}
       </if>
       <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
+        AND re.email = #{email,jdbcType=VARCHAR}
       </if>
       <if test="qq != null" >
-        qq = #{qq,jdbcType=VARCHAR},
+        AND re.qq = #{qq,jdbcType=VARCHAR}
       </if>
       <if test="memberId != null" >
-        member_id = #{memberId,jdbcType=INTEGER},
+        AND re.member_id = #{memberId,jdbcType=INTEGER}
       </if>
       <if test="accessAuthority != null" >
-        access_authority = #{accessAuthority,jdbcType=VARCHAR},
+        AND re.access_authority = #{accessAuthority,jdbcType=VARCHAR}
       </if>
       <if test="pageView != null" >
-        page_view = #{pageView,jdbcType=INTEGER},
+        AND re.page_view = #{pageView,jdbcType=INTEGER}
       </if>
       <if test="verified != null" >
-        verified = #{verified,jdbcType=VARCHAR},
+        AND re.verified = #{verified,jdbcType=VARCHAR}
       </if>
       <if test="photoId != null" >
-        photo_id = #{photoId,jdbcType=INTEGER},
+        AND re.photo_id = #{photoId,jdbcType=INTEGER}
       </if>
       <if test="phoneNumber != null" >
-        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+        AND re.phone_number = #{phoneNumber,jdbcType=VARCHAR},
       </if>
       <if test="wechatAccount != null" >
-        wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+        AND re.wechat_account = #{wechatAccount,jdbcType=VARCHAR}
       </if>
       <if test="experience != null" >
-        experience = #{experience,jdbcType=LONGVARCHAR},
+        AND re.experience = #{experience,jdbcType=LONGVARCHAR}
       </if>
       <if test="introduce != null" >
-        introduce = #{introduce,jdbcType=LONGVARCHAR},
+        AND re.introduce = #{introduce,jdbcType=LONGVARCHAR}
       </if>
       <if test="createdTime != null" >
-        created_time = #{createdTime},
+        AND re.created_time = #{createdTime}
       </if>
     </where>
     LIMIT

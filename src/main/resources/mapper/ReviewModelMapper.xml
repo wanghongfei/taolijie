@@ -15,6 +15,7 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
 
     <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap" />
+    <association property="jobPost" resultMap="com.fh.taolijie.dao.mapper.JobPostModelMapper.BaseResultMap" />
   </resultMap>
 
   <sql id="Base_Column_List" >
@@ -33,6 +34,7 @@
     <include refid="Base_Column_List" />
     from review re
     LEFT JOIN member mem ON mem.id = re.member_id
+    LEFT JOIN job_post job WHERE job.id = re.post_id
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
