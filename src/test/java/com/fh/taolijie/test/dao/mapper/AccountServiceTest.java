@@ -2,7 +2,7 @@ package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.MemberModelWithBLOBs;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -45,7 +45,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testAdd() {
-        MemberModelWithBLOBs mem = new MemberModelWithBLOBs();
+        MemberModel mem = new MemberModel();
         mem.setUsername("wanghongfei");
 
         // 测试用户名重复
@@ -125,7 +125,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testUpdate() {
-        MemberModelWithBLOBs mem = new MemberModelWithBLOBs();
+        MemberModel mem = new MemberModel();
         mem.setId(1); // wanghongfei
         mem.setValid(false);
         accountService.updateMember(mem);
@@ -137,7 +137,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     @Test
     public void testInvalid() {
         accountService.invalidAccount(1);
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(1);
+        MemberModel mem = memMapper.selectByPrimaryKey(1);
         Assert.assertEquals(false, mem.getValid().booleanValue());
 
         accountService.validateAccount(1);
@@ -157,7 +157,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     public void testAssignRole() {
         accountService.assignRole(2, "wanghongfei");
 
-        MemberModelWithBLOBs mem = memMapper.selectByUsername("wanghongfei");
+        MemberModel mem = memMapper.selectByUsername("wanghongfei");
         Assert.assertTrue(mem.getRoleList().stream().anyMatch(r -> r.getRolename().equals("STUDENT")));
     }
 
@@ -165,7 +165,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     public void testDeassignRole() {
         accountService.deassignRole(1, "wanghongfei");
 
-        MemberModelWithBLOBs mem = memMapper.selectByUsername("wanghongfei");
+        MemberModel mem = memMapper.selectByUsername("wanghongfei");
         Assert.assertTrue(mem.getRoleList().stream().noneMatch(r -> r.getRolename().equals("STUDENT")));
     }
 }

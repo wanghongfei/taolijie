@@ -91,7 +91,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public JobPostModelWithBLOBs findJobPost(Integer postId) {
+    public JobPostModel findJobPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }
 
@@ -104,7 +104,7 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public void favoritePost(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.addToString(oldIds, postId.toString());
 
@@ -114,7 +114,7 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.removeFromString(oldIds, postId.toString());
 
@@ -126,7 +126,7 @@ public class DefaultJobPostService implements JobPostService {
     @Transactional(readOnly = false)
     public void postResume(Integer postId, Integer resumeId) {
 /*
-        JobPostModelWithBLOBs post = postMapper.selectByPrimaryKey(postId);
+        JobPostModel post = postMapper.selectByPrimaryKey(postId);
         CheckUtils.nullCheck(post);
 
         // 记录收到的简历id
@@ -159,13 +159,13 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addJobPost(JobPostModelWithBLOBs model) {
+    public void addJobPost(JobPostModel model) {
         postMapper.insert(model);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public boolean updateJobPost(Integer postId, JobPostModelWithBLOBs model) {
+    public boolean updateJobPost(Integer postId, JobPostModel model) {
         model.setId(postId);
         int row = postMapper.updateByPrimaryKeySelective(model);
 

@@ -2,10 +2,9 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
-import com.fh.taolijie.domain.MemberModelWithBLOBs;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.domain.SHPostModelWithBLOBs;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -67,7 +66,7 @@ public class DefaultShPostService implements ShPostService {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean addPost(SHPostModelWithBLOBs model) {
+    public boolean addPost(SHPostModel model) {
         postMapper.insert(model);
 
         return true;
@@ -76,7 +75,7 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public void favoritePost(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteShIds();
 
         String newIds = StringUtils.addToString(oldIds, postId.toString());
@@ -88,7 +87,7 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteShIds();
 
         String newIds = StringUtils.removeFromString(oldIds, postId.toString());
@@ -100,7 +99,7 @@ public class DefaultShPostService implements ShPostService {
 
     @Override
     public boolean isPostAlreadyFavorite(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteShIds();
 
         return StringUtils.checkIdExists(oldIds, postId.toString());
@@ -113,7 +112,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public SHPostModelWithBLOBs findPost(Integer postId) {
+    public SHPostModel findPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }
 
@@ -126,7 +125,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public boolean updatePost(Integer postId, SHPostModelWithBLOBs model) {
+    public boolean updatePost(Integer postId, SHPostModel model) {
         model.setId(postId);
         int row = postMapper.updateByPrimaryKeySelective(model);
 
@@ -136,7 +135,7 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public void changeCategory(Integer postId, Integer cateId) {
-        SHPostModelWithBLOBs model = new SHPostModelWithBLOBs();
+        SHPostModel model = new SHPostModel();
         model.setId(postId);
         model.setSecondHandPostCategoryId(cateId);
 

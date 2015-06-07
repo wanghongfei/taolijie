@@ -1,7 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.JobPostModelWithBLOBs;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -82,7 +82,7 @@ public interface JobPostService extends PageService {
      * @param postId
      * @return
      */
-    JobPostModelWithBLOBs findJobPost(Integer postId);
+    JobPostModel findJobPost(Integer postId);
 
     /**
      * 投诉数+1
@@ -114,7 +114,7 @@ public interface JobPostService extends PageService {
      * 发布帖子
      * @param dto
      */
-    void addJobPost(JobPostModelWithBLOBs model);
+    void addJobPost(JobPostModel model);
 
     /**
      * 修改兼职帖子, 无法修改评论信息
@@ -122,7 +122,7 @@ public interface JobPostService extends PageService {
      * @param postDto
      * @return
      */
-    boolean updateJobPost(Integer postId, JobPostModelWithBLOBs model);
+    boolean updateJobPost(Integer postId, JobPostModel model);
 
     /**
      * 删除兼职帖子, 同时删除帖子下的评论

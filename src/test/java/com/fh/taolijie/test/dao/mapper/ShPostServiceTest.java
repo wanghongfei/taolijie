@@ -1,9 +1,9 @@
 package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
-import com.fh.taolijie.domain.JobPostModelWithBLOBs;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.domain.SHPostModelWithBLOBs;
+import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.service.impl.DefaultShPostService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
@@ -44,7 +44,7 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
 
         list = postService.getAndFilter(1, true, 0,100 ,null);
 
-        SHPostModelWithBLOBs model = new SHPostModelWithBLOBs();
+        SHPostModel model = new SHPostModel();
         model.setMemberId(1);
 
         list = postService.runSearch(model, null);
@@ -61,7 +61,7 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testAdd() {
-        SHPostModelWithBLOBs post = new SHPostModelWithBLOBs();
+        SHPostModel post = new SHPostModel();
         post.setMemberId(1);
         post.setSecondHandPostCategoryId(1);
         post.setComplaint(100);
@@ -79,7 +79,7 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
     public void testComplaint() {
         postService.complaint(1);
 
-        SHPostModelWithBLOBs post = postMapper.selectByPrimaryKey(1);
+        SHPostModel post = postMapper.selectByPrimaryKey(1);
         //Assert.assertEquals(1, post.getComplaint().intValue());
     }
 
@@ -87,7 +87,7 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
     public void testChangeCategory() {
         postService.changeCategory(1, 3);
 
-        SHPostModelWithBLOBs post = postMapper.selectByPrimaryKey(1);
+        SHPostModel post = postMapper.selectByPrimaryKey(1);
         Assert.assertEquals(3, post.getSecondHandPostCategoryId().intValue());
     }
 

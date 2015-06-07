@@ -38,7 +38,7 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = false)
-    public Integer register(MemberModelWithBLOBs model) throws DuplicatedUsernameException {
+    public Integer register(MemberModel model) throws DuplicatedUsernameException {
         // 检查用户是否存在
         if (true == isUserExisted(model.getUsername())) {
             throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
@@ -97,8 +97,8 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public MemberModelWithBLOBs findMember(String username, boolean isWired) {
-        MemberModelWithBLOBs mem = memMapper.selectByUsername(username);
+    public MemberModel findMember(String username, boolean isWired) {
+        MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
 
         return mem;
@@ -113,7 +113,7 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public MemberModelWithBLOBs findMember(Integer memId) {
+    public MemberModel findMember(Integer memId) {
         return memMapper.selectByPrimaryKey(memId);
     }
 
@@ -125,14 +125,14 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateMember(MemberModelWithBLOBs model) {
+    public void updateMember(MemberModel model) {
         memMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
     @Transactional(readOnly = false)
     public boolean deleteMember(Integer memberId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memberId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         mem.setValid(false);
         memMapper.updateByPrimaryKeySelective(mem);
 
@@ -142,7 +142,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteMember(String username) {
-        MemberModelWithBLOBs mem = memMapper.selectByUsername(username);
+        MemberModel mem = memMapper.selectByUsername(username);
         mem.setValid(false);
         memMapper.updateByPrimaryKeySelective(mem);
 
@@ -172,7 +172,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false)
     public void saveLoginIdentifier(Integer memId, String identifier) {
-        MemberModelWithBLOBs mem = new MemberModelWithBLOBs();
+        MemberModel mem = new MemberModel();
         mem.setId(memId);
         mem.setAutoLoginIdentifier(identifier);
 
@@ -227,7 +227,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false)
     public boolean resetPassword(String username, String token, String newPassword) {
-        MemberModelWithBLOBs mem = memMapper.selectByUsername(username);
+        MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
 
         String tk = mem.getResetPasswordToken();
@@ -258,7 +258,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional(readOnly = false)
     public void sendResetPasswordEmail(String username) {
-        MemberModelWithBLOBs mem = memMapper.selectByUsername(username);
+        MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
 
 

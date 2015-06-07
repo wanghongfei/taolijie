@@ -4,8 +4,8 @@ import com.fh.taolijie.dao.mapper.ApplicationIntendModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ResumeModelMapper;
 import com.fh.taolijie.domain.ApplicationIntendModel;
-import com.fh.taolijie.domain.MemberModelWithBLOBs;
-import com.fh.taolijie.domain.ResumeModelWithBLOBs;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -35,29 +35,29 @@ public class DefaultResumeService implements ResumeService {
     MemberModelMapper memMapper;
 
     @Override
-    public List<ResumeModelWithBLOBs> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
+    public List<ResumeModel> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
         return reMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
-        ResumeModelWithBLOBs model = new ResumeModelWithBLOBs(firstResult, CollectionUtils.determineCapacity(capacity));
+    public List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
+        ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setAccessAuthority(authority.toString());
 
         return reMapper.findBy(model);
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap) {
-        ResumeModelWithBLOBs model = new ResumeModelWithBLOBs(firstResult, CollectionUtils.determineCapacity(capacity));
+    public List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap) {
+        ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
 
         return reMapper.findBy(model);
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
-        ResumeModelWithBLOBs model = new ResumeModelWithBLOBs(firstResult, CollectionUtils.determineCapacity(capacity));
+    public List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
+        ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setAccessAuthority(authority.toString());
 
@@ -65,7 +65,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
+    public List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
         List<ApplicationIntendModel> intendList = intendMapper.getByIntend(categoryId, firstResult, CollectionUtils.determineCapacity(capacity));
         List<Integer> idList = intendList.stream().map(ApplicationIntendModel::getResumeId).collect(Collectors.toList());
 
@@ -74,8 +74,8 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
-/*        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+    public List<ResumeModel> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
+/*        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         CheckUtils.nullCheck(mem);
 
         String recordJson = mem.getAppliedJobIds();
@@ -110,13 +110,13 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModelWithBLOBs> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
+    public List<ResumeModel> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
         return reMapper.getInBatch(Arrays.asList(ids));
     }
 
     @Override
     @Transactional(readOnly = false)
-    public boolean updateResume(Integer resumeId, ResumeModelWithBLOBs model) {
+    public boolean updateResume(Integer resumeId, ResumeModel model) {
         model.setId(resumeId);
 
         int row = reMapper.updateByPrimaryKeySelective(model);
@@ -135,7 +135,7 @@ public class DefaultResumeService implements ResumeService {
     @Override
     @Transactional(readOnly = false)
     public void favoriteResume(Integer memId, Integer resumeId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
 
         String oldIds = mem.getFavoriteResumeIds();
         String newIds = StringUtils.addToString(oldIds, resumeId.toString());
@@ -147,12 +147,12 @@ public class DefaultResumeService implements ResumeService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addResume(ResumeModelWithBLOBs model) {
+    public void addResume(ResumeModel model) {
         reMapper.insert(model);
     }
 
     @Override
-    public ResumeModelWithBLOBs findResume(Integer resumeId) {
+    public ResumeModel findResume(Integer resumeId) {
         return reMapper.selectByPrimaryKey(resumeId);
     }
 

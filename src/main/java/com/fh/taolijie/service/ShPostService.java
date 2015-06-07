@@ -1,7 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.domain.SHPostModelWithBLOBs;
+import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -63,7 +63,7 @@ public interface ShPostService extends PageService {
      * @param postDto
      * @return
      */
-    boolean addPost(SHPostModelWithBLOBs model);
+    boolean addPost(SHPostModel model);
 
     /**
      * 收藏二手信息
@@ -85,7 +85,7 @@ public interface ShPostService extends PageService {
      * 根据id查找帖子
      * @return
      */
-    SHPostModelWithBLOBs findPost(Integer postId);
+    SHPostModel findPost(Integer postId);
 
     /**
      * 删除一个帖子
@@ -99,7 +99,7 @@ public interface ShPostService extends PageService {
      * @param postDto
      * @return
      */
-    boolean updatePost(Integer postId, SHPostModelWithBLOBs model);
+    boolean updatePost(Integer postId, SHPostModel model);
 
     /**
      * 修改帖子分类

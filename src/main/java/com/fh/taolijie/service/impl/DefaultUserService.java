@@ -3,7 +3,7 @@ package com.fh.taolijie.service.impl;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
-import com.fh.taolijie.domain.MemberModelWithBLOBs;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = false)
     public boolean likeJobPost(Integer memId, Integer postId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
         String newIds = StringUtils.addToString(oldIds, postId.toString());
 
@@ -42,7 +42,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = false)
     public boolean likeSHPost(Integer memId, Integer shId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
         String newIds = StringUtils.addToString(oldIds, shId.toString());
 
@@ -54,7 +54,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public boolean isJobPostAlreadyLiked(Integer memId, Integer posId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
 
         return StringUtils.checkIdExists(oldIds, posId.toString());
@@ -62,7 +62,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public boolean isSHPostAlreadyLiked(Integer memId, Integer shId) {
-        MemberModelWithBLOBs mem = memMapper.selectByPrimaryKey(memId);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
 
         return StringUtils.checkIdExists(oldIds, shId.toString());
