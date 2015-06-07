@@ -1,10 +1,13 @@
 package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
+import com.fh.taolijie.domain.JobPostModelWithBLOBs;
 import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.SHPostModelWithBLOBs;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.service.impl.DefaultShPostService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
+import com.fh.taolijie.utils.Constants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +32,67 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
     public void testGetGetAll() {
         List<SHPostModel>  list = postService.getAllPostList(0, Integer.MAX_VALUE, null);
         Assert.assertFalse(list.isEmpty());
+    }
+
+    @Test
+    public void testGetBy() {
+        List<SHPostModel> list = postService.getPostList(1, 0 ,100, null);
+        Assert.assertFalse(list.isEmpty());
+
+        list = postService.getPostList(1, false, 0, 100, null);
+        Assert.assertFalse(list.isEmpty());
+
+        list = postService.getAndFilter(1, true, 0,100 ,null);
+
+        SHPostModelWithBLOBs model = new SHPostModelWithBLOBs();
+        model.setMemberId(1);
+
+        list = postService.runSearch(model, null);
+        Assert.assertFalse(list.isEmpty());
+
+        model.setMemberId(null);
+        model.setVerified(Constants.VerifyStatus.NONE.toString());
+        list = postService.getUnverifiedPostList(model, null);
+        Assert.assertTrue(list.isEmpty());
+
+        list = postService.getSuedPost(0, 100, null);
+        Assert.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void testAdd() {
+        SHPostModelWithBLOBs post = new SHPostModelWithBLOBs();
+        post.setMemberId(1);
+        post.setSecondHandPostCategoryId(1);
+        post.setComplaint(100);
+        postService.addPost(post);
+    }
+
+    @Test
+    public void testFavorite() {
+        postService.favoritePost(1, 1);
+        Assert.assertTrue(postService.isPostAlreadyFavorite(1, 1));
+        postService.unfavoritePost(1, 1);
+    }
+
+    @Test
+    public void testComplaint() {
+        postService.complaint(1);
+
+        SHPostModelWithBLOBs post = postMapper.selectByPrimaryKey(1);
+        //Assert.assertEquals(1, post.getComplaint().intValue());
+    }
+
+    @Test
+    public void testChangeCategory() {
+        postService.changeCategory(1, 3);
+
+        SHPostModelWithBLOBs post = postMapper.selectByPrimaryKey(1);
+        Assert.assertEquals(3, post.getSecondHandPostCategoryId().intValue());
+    }
+
+    @Test
+    public void testDelete() {
+        postService.deletePost(1);
     }
 }

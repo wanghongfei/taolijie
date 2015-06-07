@@ -70,7 +70,7 @@ public interface ShPostModelMapper {
 
     List<SHPostModel> getByCategory(@Param("categoryId") Integer categoryId, @Param("orderByPageView") boolean orderByPageView, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
-    List<SHPostModel> getByMember(@Param("memberId") Integer memberId, @Param("filtered") boolean filtered, @Param("pageSize") int pageSize, @Param("pageNumber") int pageNumber);
+    List<SHPostModel> getByMember(@Param("memberId") Integer memberId, @Param("filtered") boolean filtered, @Param("pageNumber") int pageNumber ,@Param("pageSize") int pageSize);
 
     List<SHPostModel> searchBy(SHPostModel model);
 
