@@ -64,4 +64,8 @@ public interface ImageModelMapper {
     int updateByPrimaryKey(ImageModel record);
 
     List<ImageModel> getInBatch(List<Integer> idList);
+
+    List<ImageModel> getImageByMember(Integer memberId);
+    List<ImageModel> getImageByJob(Integer postId);
+    List<ImageModel> getImageByNews(Integer newsId);
 }

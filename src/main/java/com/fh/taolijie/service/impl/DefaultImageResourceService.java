@@ -26,13 +26,30 @@ public class DefaultImageResourceService implements ImageService {
     @Override
     @Transactional(readOnly = false)
     public Integer saveImage(ImageModel model) {
-        return imgMapper.insert(model);
+        imgMapper.insert(model);
+
+        return model.getId();
     }
 
     @Override
     @Transactional(readOnly = false)
     public void deleteImage(Integer imageId) {
         imgMapper.deleteByPrimaryKey(imageId);
+    }
+
+    @Override
+    public List<ImageModel> getImageByMember(Integer memberId) {
+        return imgMapper.getImageByMember(memberId);
+    }
+
+    @Override
+    public List<ImageModel> getImageByJob(Integer postId) {
+        return imgMapper.getImageByJob(postId);
+    }
+
+    @Override
+    public List<ImageModel> getImageByNews(Integer newsId) {
+        return imgMapper.getImageByNews(newsId);
     }
 
     public List<ImageModel> getInBatch(List<Integer> idList) {
