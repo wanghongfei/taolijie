@@ -1,6 +1,5 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.ResumeDto;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModelWithBLOBs;
 import com.fh.taolijie.utils.Constants;

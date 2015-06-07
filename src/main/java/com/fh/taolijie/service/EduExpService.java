@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.EducationExperienceDto;
+import com.fh.taolijie.domain.EEModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.SchoolModel;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -15,22 +15,20 @@ public interface EduExpService {
      * 得到所有教育经历信息
      * @return
      */
-    List<EducationExperienceDto> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper);
+    List<EEModel> getEduExpList(Integer memberId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 新建教育信息
-     * @param eduDto
      * @return
      */
-    boolean addEduExp(EducationExperienceDto eduDto);
+    boolean addEduExp(EEModel model);
 
     /**
      * 修改教育信息
      * @param eduId
-     * @param eduDto
      * @return
      */
-    boolean updateEduExp(Integer eduId, EducationExperienceDto eduDto);
+    boolean updateEduExp(Integer eduId, EEModel model);
 
     /**
      * 删除教育信息.
@@ -46,5 +44,5 @@ public interface EduExpService {
      * @param id
      * @return
      */
-    EducationExperienceDto findEduExp(Integer id);
+    EEModel findEduExp(Integer id);
 }

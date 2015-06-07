@@ -1,6 +1,5 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.SecondHandPostDto;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.domain.SHPostModelWithBLOBs;
 import com.fh.taolijie.utils.ObjWrapper;

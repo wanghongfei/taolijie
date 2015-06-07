@@ -1,6 +1,5 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.ReviewDto;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.utils.ObjWrapper;

@@ -1,6 +1,5 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.JobPostDto;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.JobPostModelWithBLOBs;
 import com.fh.taolijie.utils.Constants;

@@ -1,6 +1,5 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.NewsDto;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.NewsModelWithBLOBs;
 import com.fh.taolijie.utils.ObjWrapper;
