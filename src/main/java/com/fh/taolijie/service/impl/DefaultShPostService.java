@@ -7,13 +7,16 @@ import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-6-6.
@@ -95,6 +98,20 @@ public class DefaultShPostService implements ShPostService {
         mem.setFavoriteShIds(newIds);
         memMapper.updateByPrimaryKeySelective(mem);
 
+    }
+
+    @Override
+    public List<SHPostModel> getFavoritePost(Integer memberId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
+        String allIds = mem.getFavoriteShIds();
+        String[] ids = allIds.split(Constants.DELIMITER);
+
+        // id字符串数据转换成id整数数组
+        List<Integer> idList = Arrays.stream(ids).map(id -> {
+                return Integer.parseInt(id);
+        }).collect(Collectors.toList());
+
+        return postMapper.getInBatch(idList);
     }
 
     @Override

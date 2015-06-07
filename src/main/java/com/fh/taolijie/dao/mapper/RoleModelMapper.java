@@ -64,4 +64,6 @@ public interface RoleModelMapper {
     int updateByPrimaryKey(RoleModel record);
 
     List<RoleModel> getAllRole();
+
+    RoleModel getByName(String roleName);
 }

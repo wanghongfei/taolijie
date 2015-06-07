@@ -126,6 +126,8 @@ public interface AccountService {
      */
     public RoleModel findRole(Integer roleId);
 
+    RoleModel findRoleByName(String roleName);
+
     /**
      * 查询所有role
      * @return

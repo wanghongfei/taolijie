@@ -3,7 +3,9 @@ package com.fh.taolijie.service.impl;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -120,6 +122,20 @@ public class DefaultJobPostService implements JobPostService {
 
         memMapper.updateByPrimaryKeySelective(mem);
 
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public List<JobPostModel> getFavoritePost(Integer memberId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
+        String allIds = mem.getFavoriteJobIds();
+        String[] ids = allIds.split(Constants.DELIMITER);
+
+        List<Integer> idList = Arrays.stream(ids).map(id -> {
+            return Integer.parseInt(id);
+        }).collect(Collectors.toList());
+
+        return postMapper.getInBatch(idList);
     }
 
     @Override

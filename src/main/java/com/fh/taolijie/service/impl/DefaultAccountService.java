@@ -198,6 +198,12 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
+    public RoleModel findRoleByName(String roleName) {
+        return roleMapper.getByName(roleName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<RoleModel> getAllRole() {
         return roleMapper.getAllRole();
     }
