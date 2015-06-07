@@ -103,4 +103,9 @@
     set created_time = #{createdTime,jdbcType=DATE}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT * FROM bulletin
+    LIMIT #{pageNumber}, #{pageSize}
+  </select>
 </mapper>

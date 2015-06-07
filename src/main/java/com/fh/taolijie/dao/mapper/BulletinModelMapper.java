@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.BulletinModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BulletinModelMapper {
     /**
@@ -60,4 +62,6 @@ public interface BulletinModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(BulletinModel record);
+
+    List<BulletinModel> getAll(int pageNumber, int pageSize);
 }
