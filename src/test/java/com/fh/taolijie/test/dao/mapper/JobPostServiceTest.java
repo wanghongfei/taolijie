@@ -29,4 +29,13 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
         Assert.assertFalse(postService.getJobPostListByMember(1, 0, 100, null).isEmpty() );
     }
 
+    @Test
+    public void testSearch() {
+        JobPostModel job = new JobPostModel();
+        job.setTitle("快");
+        List<JobPostModel> list = postService.runSearch(job, 0, 100, null);
+
+        Assert.assertFalse(list.isEmpty());
+    }
+
 }

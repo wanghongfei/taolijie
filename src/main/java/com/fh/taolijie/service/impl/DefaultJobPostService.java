@@ -89,7 +89,7 @@ public class DefaultJobPostService implements JobPostService {
         model.setPageNumber(firstResult);
         model.setPageSize(CollectionUtils.determineCapacity(capacity));
 
-        return postMapper.findBy(model);
+        return postMapper.searchBy(model);
     }
 
     @Override

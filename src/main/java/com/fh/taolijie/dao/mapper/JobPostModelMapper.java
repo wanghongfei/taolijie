@@ -77,6 +77,8 @@ public interface JobPostModelMapper {
 
     List<JobPostModel> findBy(JobPostModel model);
 
+    List<JobPostModel> searchBy(JobPostModel model);
+
     void complaint(Integer postId);
 
     void increasePageView(Integer postId);

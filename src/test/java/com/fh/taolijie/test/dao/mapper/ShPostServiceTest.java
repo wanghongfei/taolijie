@@ -95,4 +95,15 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
     public void testDelete() {
         postService.deletePost(1);
     }
+
+    @Test
+    public void testRunSearch() {
+        SHPostModel model = new SHPostModel();
+        model.setPageNumber(0);
+        model.setPageSize(100);
+        model.setTitle("二");
+        List<SHPostModel> list = postService.runSearch(model, null);
+
+        Assert.assertFalse(list.isEmpty());
+    }
 }

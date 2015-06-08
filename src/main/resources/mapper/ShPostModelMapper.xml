@@ -335,31 +335,31 @@
           LEFT JOIN second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         <where>
             <if test="title != null" >
-                post.title LIKE #{title,jdbcType=VARCHAR}
+                post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null" >
-                AND post.expired_time LIKE #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime,jdbcType=DATE}
             </if>
             <if test="postTime != null" >
-                AND post.post_time LIKE #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime,jdbcType=DATE}
             </if>
             <if test="depreciationRate != null" >
-                AND post.depreciation_rate LIKE #{depreciationRate,jdbcType=VARCHAR}
+                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
             </if>
             <if test="originalPrice != null" >
-                AND post.original_price LIKE #{originalPrice,jdbcType=DECIMAL}
+                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
             </if>
             <if test="sellPrice != null" >
-                AND post.sell_price LIKE #{sellPrice,jdbcType=DECIMAL}
+                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
             </if>
             <if test="likes != null" >
-                AND post.likes LIKE #{likes,jdbcType=INTEGER}
+                AND post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null" >
-                AND post.dislikes LIKE #{dislikes,jdbcType=INTEGER}
+                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="memberId != null" >
-                AND post.member_id LIKE #{memberId,jdbcType=INTEGER}
+                AND post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="secondHandPostCategoryId != null" >
                 AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
@@ -374,10 +374,10 @@
                 AND post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="tradePlace != null" >
-                AND post.trade_place LIKE #{tradePlace,jdbcType=VARCHAR}
+                AND post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="description != null" >
-                AND post.description LIKE #{description,jdbcType=LONGVARCHAR}
+                AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
             </if>
         </where>
 
