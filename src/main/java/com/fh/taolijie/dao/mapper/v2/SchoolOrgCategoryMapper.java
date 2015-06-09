@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper.v2;
 
-import com.fh.taolijie.domain.SchoolOrgCategory;
+import com.fh.taolijie.domain.v2.SchoolOrgCategory;
 
 public interface SchoolOrgCategoryMapper {
     /**

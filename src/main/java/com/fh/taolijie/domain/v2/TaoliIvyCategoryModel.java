@@ -1,4 +1,4 @@
-package com.fh.taolijie.domain;
+package com.fh.taolijie.domain.v2;
 
 public class TaoliIvyCategoryModel {
     /**

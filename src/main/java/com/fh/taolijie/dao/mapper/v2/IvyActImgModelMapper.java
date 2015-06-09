@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper.v2;
 
-import com.fh.taolijie.domain.IvyActImgModel;
+import com.fh.taolijie.domain.v2.IvyActImgModel;
 
 public interface IvyActImgModelMapper {
     /**

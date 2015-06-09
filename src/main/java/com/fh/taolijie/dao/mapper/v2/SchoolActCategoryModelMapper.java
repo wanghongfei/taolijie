@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper.v2;
 
-import com.fh.taolijie.domain.SchoolActCategoryModel;
+import com.fh.taolijie.domain.v2.SchoolActCategoryModel;
 
 public interface SchoolActCategoryModelMapper {
     /**

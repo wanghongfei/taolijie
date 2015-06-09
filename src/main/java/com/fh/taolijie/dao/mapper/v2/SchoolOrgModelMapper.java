@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper.v2;
 
-import com.fh.taolijie.domain.SchoolOrgModel;
-import com.fh.taolijie.domain.SchoolOrgModelWithBLOBs;
+import com.fh.taolijie.domain.v2.SchoolOrgModel;
+import com.fh.taolijie.domain.v2.SchoolOrgModelWithBLOBs;
 
 public interface SchoolOrgModelMapper {
     /**
