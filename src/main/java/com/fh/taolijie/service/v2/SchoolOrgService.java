@@ -1,9 +1,7 @@
 package com.fh.taolijie.service.v2;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.v2.SchoolOrgModel;
-import com.fh.taolijie.utils.ObjWrapper;
-
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-10.
@@ -26,8 +24,7 @@ public interface SchoolOrgService {
      * @param cateId
      * @param page
      * @param capacity
-     * @param wrapper
      * @return
      */
-    List<SchoolOrgModel> findByCategory(Integer cateId, int page, int capacity, ObjWrapper wrapper);
+    ListResult<SchoolOrgModel> findByCategory(Integer cateId, int page, int capacity);
 }
