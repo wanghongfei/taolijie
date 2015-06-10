@@ -64,4 +64,6 @@ public interface TaoliIvyModelMapper {
     int updateByPrimaryKey(TaoliIvyModel record);
 
     List<TaoliIvyModel> findBy(TaoliIvyModel model);
+
+    List<TaoliIvyModel> searchBy(TaoliIvyModel model);
 }

@@ -47,4 +47,11 @@ public class DefaultTaoliIvyService implements TaoliIvyService {
 
         return new ListResult<>(list);
     }
+
+    @Override
+    public ListResult<TaoliIvyModel> searchBy(TaoliIvyModel model) {
+        List<TaoliIvyModel> list = ivyMapper.searchBy(model);
+
+        return new ListResult<>(list);
+    }
 }

@@ -21,4 +21,11 @@ public interface TaoliIvyService {
      * @param cateId
      */
     ListResult<TaoliIvyModel> getByCategory(Integer cateId, int page, int capacity);
+
+    /**
+     * 根据title或content执行模糊查询
+     * @param model
+     * @return
+     */
+    ListResult<TaoliIvyModel> searchBy(TaoliIvyModel model);
 }
