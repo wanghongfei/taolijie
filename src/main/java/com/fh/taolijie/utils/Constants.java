@@ -103,6 +103,10 @@ public class Constants {
         STUDENT,
     }
 
+    public enum VerificationType {
+        ID_FRONT, ID_BACK, ORG_FRONT, ORG_BACK, STU_ID_FRONT, STU_ID_BACK
+    }
+
     public static enum MailType {
         ERROR,
         RESET_PASSWORD,

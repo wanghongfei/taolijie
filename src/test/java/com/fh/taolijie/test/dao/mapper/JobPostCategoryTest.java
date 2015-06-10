@@ -33,4 +33,15 @@ public class JobPostCategoryTest extends BaseSpringDataTestClass {
         JobPostCategoryModel cate = cateService.findCategory(1);
         Assert.assertNotNull(cate);
     }
+
+    @Test
+    public void testAll() {
+        JobPostCategoryModel model = new JobPostCategoryModel();
+        model.setName("category A");
+        cateService.addCategory(model);
+
+        model.setId(1);
+        cateService.updateCategory(1, model);
+
+    }
 }
