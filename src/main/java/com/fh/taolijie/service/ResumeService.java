@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
@@ -51,6 +52,14 @@ public interface ResumeService extends PageService {
      * @return
      */
     List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
+
+    /**
+     * 根据简历查找意向
+     * @param resumeId
+     * @return
+     */
+    List<ApplicationIntendModel> getIntendByResume(Integer resumeId);
+
 
     /**
      * 查询投递记录

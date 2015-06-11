@@ -75,6 +75,11 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    public List<ApplicationIntendModel> getIntendByResume(Integer resumeId) {
+        return intendMapper.getByResume(resumeId);
+    }
+
+    @Override
     public List<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
         return reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
     }
