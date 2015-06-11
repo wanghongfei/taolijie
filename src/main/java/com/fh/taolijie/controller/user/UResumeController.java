@@ -128,11 +128,9 @@ public class UResumeController {
 
         MemberModel user = accountService.findMember(resume.getMemberId());
         //查询求职意向
-        List<String> intend = new ArrayList<>();
-        //TODO:查出求职意向名字放在列表中
         List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
 
-        model.addAttribute("intendJobs",intend);
+        model.addAttribute("intendJobs",intends);
         model.addAttribute("resume",resume);
         model.addAttribute("isShow",false);
         model.addAttribute("postUser",user);
@@ -189,19 +187,15 @@ public class UResumeController {
         //遍历用户的收藏列表
         //如果没有这条兼职则添加,反之删除
         MemberModel mem = accountService.findMember(credential.getId());
-        //TODO:需要是否收藏方法
 
         String status = "0";
-//        if(favid.equals("")){ //没有找到,则添加收藏
-//            resumeService.favoriteResume(credential.getId(),id);
-//            status = "0";
-//        }else{
-//            // TODO:否则删除收藏(为实现)
-////            resumeService.u(credential.getId(),id);
-////            status = "1";
-//            status="0";
-//        }
-
+        if(resumeService.isAlreadyFavorite(mem.getId(),id)){
+            resumeService.unFavorite(mem.getId(), id);
+            status = "1";
+        }else{
+            resumeService.favoriteResume(mem.getId(), id);
+            status = "0";
+        }
         return new JsonWrapper(true, "status",status).getAjaxMessage();
     }
     //endregion

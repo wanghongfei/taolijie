@@ -104,8 +104,7 @@ public class HResumeController {
         if (credential == null)
             status = false;
         else { //查找有没有收藏
-            //TODO:暂时没有查看收藏方法
-            //status = resumeService.isFav
+            status =  resumeService.isAlreadyFavorite(credential.getId(),id);
         }
         model.addAttribute("resume", resumeDto);
         model.addAttribute("postUser", user);
