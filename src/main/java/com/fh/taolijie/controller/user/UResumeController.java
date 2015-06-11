@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
@@ -129,12 +130,7 @@ public class UResumeController {
         //查询求职意向
         List<String> intend = new ArrayList<>();
         //TODO:查出求职意向名字放在列表中
-//        for (int jId : resumeDto) {
-//            JobPostCategoryModel intendJobCate = jobPostCateService.findCategory(jId);
-//            System.out.println(intendJobCate);
-//            String cateName = intendJobCate.getName();
-//            intend.add(cateName);
-//        }
+        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
 
         model.addAttribute("intendJobs",intend);
         model.addAttribute("resume",resume);
@@ -302,6 +298,41 @@ public class UResumeController {
         }
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+    /**
+     * 公开,不公开简历
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "open",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String open(HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        MemberModel mem = accountService.findMember(credential.getUsername(), false);
+
+        ObjWrapper maxPage = new ObjWrapper();
+        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        /*因为简历只有一张,所以直接用遍历得到*/
+        ResumeModel resume = null;
+        for(ResumeModel r : list){
+            resume = r;
+        }
+
+        if(resume == null || !ControllerHelper.isCurrentUser(credential,resume)){
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+        //切换公开状态
+        int status = 0;
+        if(resume.getAccessAuthority().equals(Constants.AccessAuthority.ALL.toString())){
+            resume.setAccessAuthority(Constants.AccessAuthority.ME_ONLY.toString());
+            status = 1; //只有我 1
+        }else if(resume.getAccessAuthority().equals(Constants.AccessAuthority.ME_ONLY.toString())){
+            resume.setAccessAuthority(Constants.AccessAuthority.ALL.toString());
+            status = 2; //公开 2
+        }
+
+        return new JsonWrapper(true,"status",status+"").getAjaxMessage();
+
     }
 
 

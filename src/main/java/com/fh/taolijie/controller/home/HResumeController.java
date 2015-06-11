@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
@@ -94,15 +95,7 @@ public class HResumeController {
         System.out.println("resume:" + id);
         ResumeModel resumeDto = resumeService.findResume(id);
         //查询求职意向
-        List<String> intend = new ArrayList<>();
-        //TODO:查出求职意向名字放在列表中
-//        for (int jId : resumeDto) {
-//            JobPostCategoryModel intendJobCate = jobPostCateService.findCategory(jId);
-//            System.out.println(intendJobCate);
-//            String cateName = intendJobCate.getName();
-//            intend.add(cateName);
-//        }
-
+        List<ApplicationIntendModel> intends= resumeService.getIntendByResume(id);
         //查询发布人的用户名
         MemberModel user = accountService.findMember(resumeDto.getMemberId());
 
@@ -118,7 +111,7 @@ public class HResumeController {
         model.addAttribute("postUser", user);
         model.addAttribute("favStatus", status);
         model.addAttribute("isShow", true);//显示收藏
-        model.addAttribute("intendJobs", intend);
+        model.addAttribute("intendJobs", intends);
 //        model.addAttribute("contactDisplay",contactDisplay);
         return "pc/resumedetail";
     }

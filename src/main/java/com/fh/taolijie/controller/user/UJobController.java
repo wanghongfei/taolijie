@@ -81,7 +81,6 @@ public class UJobController {
 
         List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId());
 
-        //TODO : 兼职列表没有memberDto是空的
         model.addAttribute("jobs",jobs);
         model.addAttribute("page",page);
         model.addAttribute("isFav",true);

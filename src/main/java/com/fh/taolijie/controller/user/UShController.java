@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
@@ -34,6 +35,8 @@ public class UShController {
     ShPostCategoryService shPostCategoryService;
     @Autowired
     AccountService accountService;
+    @Autowired
+    ReviewService reviewService;
 
     /**
      * 我的发布 GET
@@ -275,4 +278,93 @@ public class UShController {
     }
 
 
+
+    /**
+     * 评论
+     * @param content
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 评论 String review
+    public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
+        int page = 1;
+        int capacity = 9999;
+        //获取评论内容,已经用户的的信息
+        if(content.trim().equals("")){
+            return new JsonWrapper(false,Constants.ErrorType.NOT_EMPTY).getAjaxMessage();
+        }
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+        int memId = credential.getId();
+
+        //先查一下有没有这个帖子
+        if(shPostService.findPost(id) == null){
+            return new JsonWrapper(false,Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        }
+
+        //为该id的帖子创建一条评论
+        ReviewModel reviewDto = new ReviewModel();
+        reviewDto.setId(id);
+        reviewDto.setContent(content);
+        reviewDto.setMemberId(memId);
+        reviewDto.setTime(new Date());
+        if(!reviewService.addReview(reviewDto))
+            return  new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
+
+        List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
+        for(int i = list.size()-1; i> 0; i--){
+            ReviewModel r = list.get(i);
+            if(r.getContent().equals(content)){
+                reviewDto = r;
+                break;
+            }
+        }
+        //返回帖子id
+        return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
+    }
+    //endregion
+
+
+    /**
+     * 删除一条兼职评论
+     * @param id
+     * @param session
+     * @return
+     */
+
+    @RequestMapping(value = "/{id}/review/delete/{reviewId}",method = RequestMethod.POST,
+            produces = "application/json;charset=utf-8")
+    //region 删除一条兼职评论 @ResponseBody String reviewDelete
+    public @ResponseBody String reviewDelete(@PathVariable int id,
+                                             @PathVariable int reviewId,
+                                             HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        //先查看是否登陆,发偶泽返回错误信息
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+
+        //验证评论是否自己发布
+        List<ReviewModel> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        ReviewModel reviewDto = null;
+        for(ReviewModel r : list){
+            if(r.getId() == reviewId){
+                reviewDto = r;
+                break;
+            }
+        }
+        if(reviewDto == null)
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        if(reviewDto.getMemberId() != credential.getId())
+            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+
+        //删除评论
+        if(!reviewService.deleteReview(reviewId))
+            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
 }
