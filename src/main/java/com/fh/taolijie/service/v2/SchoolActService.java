@@ -1,10 +1,7 @@
 package com.fh.taolijie.service.v2;
 
-import com.fh.taolijie.domain.v2.IvyActImgModel;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.v2.SchoolActModel;
-import com.fh.taolijie.utils.ObjWrapper;
-
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-10.
@@ -16,16 +13,7 @@ public interface SchoolActService {
      */
     boolean postActivity(SchoolActModel model);
 
-    /**
-     * 返回图片的id
-     * @return
-     */
-    Integer saveImage(IvyActImgModel model, boolean isMain);
+    ListResult<SchoolActModel> findByCategory(Integer cateId, int page, int capacity);
 
-    List<SchoolActModel> findByCategory(Integer cateId, int page, int capacity, ObjWrapper wrapper);
-
-    /**
-     * 修改基本信息,包括过期时间
-     */
-    void updateBasicInfo(SchoolActModel model);
+    void update(SchoolActModel model);
 }

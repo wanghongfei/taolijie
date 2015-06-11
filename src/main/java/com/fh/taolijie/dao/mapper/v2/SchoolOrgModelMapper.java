@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper.v2;
 import com.fh.taolijie.domain.v2.SchoolOrgModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SchoolOrgModelMapper {
     /**
@@ -60,4 +62,6 @@ public interface SchoolOrgModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(SchoolOrgModel record);
+
+    List<SchoolOrgModel> findBy(SchoolOrgModel model);
 }
