@@ -13,7 +13,7 @@ public interface ParticipantService {
      * 报名参加一个activity或ivy
      * @param memberId
      */
-    void participate(Integer memberId,ParticipantModel model);
+    void participate(ParticipantModel model);
 
     /**
      * 得到ivy或校园活动的报名信息.

@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper.v2;
 import com.fh.taolijie.domain.ParticipantModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ParticipantModelMapper {
     /**
@@ -52,4 +54,6 @@ public interface ParticipantModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(ParticipantModel record);
+
+    List<ParticipantModel> findBy(ParticipantModel model);
 }
