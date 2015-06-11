@@ -96,10 +96,26 @@ public interface ResumeService extends PageService {
      */
     void favoriteResume(Integer memId, Integer resumeId);
 
+    void unFavorite(Integer memId, Integer resumeId);
+
+    boolean isAlreadyFavorite(Integer memId, Integer resumeId);
+
     /**
      * 创建新简历
      */
     void addResume(ResumeModel model);
+
+    /**
+     * 给简历添加求职意向
+     * @param intend
+     */
+    void addIntend(ApplicationIntendModel intend);
+
+    /**
+     * 删除简历的求职意向
+     * @param intendModel
+     */
+    void deleteIntend(ApplicationIntendModel intendModel);
 
 
     /**

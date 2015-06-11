@@ -122,8 +122,41 @@ public class DefaultResumeService implements ResumeService {
 
     @Override
     @Transactional(readOnly = false)
+    public void unFavorite(Integer memId, Integer resumeId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+
+        String oldIds = mem.getFavoriteResumeIds();
+        String newIds = StringUtils.removeFromString(oldIds, resumeId.toString());
+        mem.setFavoriteResumeIds(newIds);
+
+        memMapper.updateByPrimaryKeyWithBLOBs(mem);
+
+    }
+
+    @Override
+    public boolean isAlreadyFavorite(Integer memId, Integer resumeId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+
+        String oldIds = mem.getFavoriteResumeIds();
+        return StringUtils.checkIdExists(oldIds, resumeId.toString());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void addResume(ResumeModel model) {
         reMapper.insert(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addIntend(ApplicationIntendModel intend) {
+        intendMapper.insert(intend);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteIntend(ApplicationIntendModel intendModel) {
+        intendMapper.delete(intendModel);
     }
 
     @Override
