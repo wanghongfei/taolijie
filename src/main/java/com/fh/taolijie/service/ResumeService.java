@@ -96,6 +96,10 @@ public interface ResumeService extends PageService {
      */
     void favoriteResume(Integer memId, Integer resumeId);
 
+    void unFavorite(Integer memId, Integer resumeId);
+
+    boolean isAlreadyFavorite(Integer memId, Integer resumeId);
+
     /**
      * 创建新简历
      */
