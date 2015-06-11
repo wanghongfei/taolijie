@@ -76,4 +76,6 @@ public interface MemberModelMapper {
     List<MemberModel> getMemberList(Map<String, Integer> pageMap);
 
     void validMemberById(@Param("memberId") Integer memberId, @Param("valid") boolean valid);
+
+    MemberModel findByEmail(String email);
 }

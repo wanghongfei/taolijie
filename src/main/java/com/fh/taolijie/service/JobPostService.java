@@ -103,6 +103,14 @@ public interface JobPostService extends PageService {
      */
     void unfavoritePost(Integer memId, Integer postId);
 
+    /**
+     * 查检post是否已经收藏
+     * @param memId
+     * @param postId
+     * @return
+     */
+    boolean isPostFavorite(Integer memId, Integer postId);
+
     List<JobPostModel> getFavoritePost(Integer memberId);
 
     /**
