@@ -5,6 +5,8 @@ package com.fh.taolijie.utils;
  * Created by wanghongfei on 15-3-4.
  */
 public class Constants {
+
+    public static final String API_VERSION = "v1.1";
     public static final String SENDER_EMAIL = "wfc5582563@126.com";
 
     /**
