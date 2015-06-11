@@ -15,7 +15,9 @@
 <jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
 
 <div class="container user">
-  <jsp:include page="../block/user.jsp"></jsp:include>
+  <jsp:include page="../block/user.jsp">
+    <jsp:param name="navShow" value="security"/>
+  </jsp:include>
 
   <div class="segment end-segment">
     <p class="pin-title style2 ">修改密码</p>

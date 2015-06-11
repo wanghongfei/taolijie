@@ -22,11 +22,14 @@
   <!-- endbuild -->
 
   <!-- build:css({.tmp,app}) /styles/css/style.css -->
+  <link rel="stylesheet" href="/styles/animate.css"/>
   <link rel="stylesheet" href="/styles/style.css">
+  <%--图片上传美化--%>
+  <link rel="stylesheet" href="/styles/webuploader.css"/>
   <!-- endbuild -->
   <link rel="stylesheet" href="/styles/jquery.bxslider.css">
-  <link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">
-  <!-- <link href="//libs.baidu.com/fontawesome/4.0.3/css/font-awesome.min.css" rel="stylesheet"> -->
+  <%--<link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">--%>
+  <link rel="stylesheet" href="/styles/font-awesome.min.css"/>
 
   <!-- build:js /scripts/vendor/modernizr.js -->
   <script src="/scripts/modernizr.js"></script>
