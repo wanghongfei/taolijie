@@ -5,4 +5,5 @@ package com.fh.taolijie.controller.user;
  * 用户简历控制器  仅限于 学生
  */
 public class UResumeController {
+    
 }

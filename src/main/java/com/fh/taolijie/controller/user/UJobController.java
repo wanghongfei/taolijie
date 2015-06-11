@@ -5,7 +5,6 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.dto.JobPostDto;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
@@ -55,7 +54,6 @@ public class UJobController {
         List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(),page-1,capacity,objWrapper);
 //        totalPage = (Integer)objWrapper.getObj();
 
-        //TODO : 兼职列表没有memberDto是空的
         model.addAttribute("jobs",jobs);
         model.addAttribute("page",page);
 //        model.addAttribute("totalPage",totalPage);
