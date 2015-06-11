@@ -101,6 +101,12 @@ public interface ResumeService extends PageService {
      */
     void addResume(ResumeModel model);
 
+    /**
+     * 给简历添加求职意向
+     * @param intend
+     */
+    void addIntend(ApplicationIntendModel intend);
+
 
     /**
      * 根据id查找简历
