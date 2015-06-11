@@ -107,6 +107,12 @@ public interface ResumeService extends PageService {
      */
     void addIntend(ApplicationIntendModel intend);
 
+    /**
+     * 删除简历的求职意向
+     * @param intendModel
+     */
+    void deleteIntend(ApplicationIntendModel intendModel);
+
 
     /**
      * 根据id查找简历

@@ -45,6 +45,11 @@
         </trim>
     </insert>
 
+    <delete id="delete">
+        DELETE FROM resume_job_post_category
+        WHERE resume_id = #{resumeId} AND job_post_category_id = #{categoryId}
+    </delete>
+
     <select id="getByIntend" resultMap="BaseResultMap">
         SELECT * FROM resume_job_post_category intend
             INNER JOIN resume re ON re.id = intend.resume_id

@@ -133,6 +133,12 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteIntend(ApplicationIntendModel intendModel) {
+        intendMapper.delete(intendModel);
+    }
+
+    @Override
     public ResumeModel findResume(Integer resumeId) {
         return reMapper.selectByPrimaryKey(resumeId);
     }
