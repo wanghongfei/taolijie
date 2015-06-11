@@ -16,16 +16,14 @@
     <!-- Enables the Spring MVC @Controller programming model -->
     <annotation-driven />
 
-    <!-- Handles HTTP GET requests for /resources/** by efficiently serving
-        up static resources in the ${webappRoot}/resources directory -->
-    <resources mapping="/assets/**" location="/WEB-INF/views/assets/" />
-
     <!--管理员后台资源路径-->
     <resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
     <!--前台资源-->
     <resources mapping="/images/**" location="/WEB-INF/views/pc/assets/images/" />
     <resources mapping="/scripts/**" location="/WEB-INF/views/pc/assets/scripts/" />
     <resources mapping="/styles/**" location="/WEB-INF/views/pc/assets/styles/" />
+    <resources mapping="/fonts/**" location="/WEB-INF/views/pc/assets/fonts/"/>
+    <resources mapping="/about/**" location="/WEB-INF/views/pc/assets/about/"/>
 
 
 
@@ -46,7 +44,7 @@
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
         <beans:property name="username" value="root" />
-        <beans:property name="password" value="111111" />
+        <beans:property name="password" value="wfc" />
     </beans:bean>
 
 
@@ -85,8 +83,8 @@
     <tx:annotation-driven />
 
 
-
-    <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor com.fh.taolijie.dao" />
+    <context:component-scan base-package="com.fh.taolijie.controller.user com.fh.taolijie.controller.home com.fh.taolijie.service com.fh.taolijie.dao" />
+    <!--<context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor com.fh.taolijie.dao" />-->
 
 
     <!-- Email -->
@@ -105,14 +103,14 @@
         </beans:property>
     </beans:bean>
 
-    <interceptors>
-        <interceptor>
-            <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
-            <mapping path="/**" />
-            <beans:bean class="com.fh.taolijie.interceptor.CommonInterceptor"></beans:bean>
-        </interceptor>
-        <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
-    </interceptors>
+    <!--<interceptors>-->
+        <!--<interceptor>-->
+            <!--&lt;!&ndash; 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller &ndash;&gt;-->
+            <!--<mapping path="/**" />-->
+            <!--<beans:bean class="com.fh.taolijie.interceptor.CommonInterceptor"></beans:bean>-->
+        <!--</interceptor>-->
+        <!--&lt;!&ndash; 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 &ndash;&gt;-->
+    <!--</interceptors>-->
 
 
 
