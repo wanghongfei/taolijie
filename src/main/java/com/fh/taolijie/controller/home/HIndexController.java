@@ -31,9 +31,6 @@ public class HIndexController {
     @Autowired
     ShPostService shPostService;
 
-    private static final Logger logger = LoggerFactory.getLogger(HIndexController.class);
-
-
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);

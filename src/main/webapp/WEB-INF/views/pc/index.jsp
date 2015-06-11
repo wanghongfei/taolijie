@@ -38,7 +38,7 @@
       <c:forEach var="job" items="${jobs}">
         <a href="/item/job/${job.id}" style="color:#333333;">
           <div class="job-slip">
-            <span class="cate" style="">${job.categoryName}</span>
+            <span class="cate" style="">${job.category.name}</span>
             <span class="content">${job.title}</span>
           </div>
         </a>
