@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ShPostService;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -38,7 +40,6 @@ public class HIndexController {
         if (credential != null) {
 
         }
-        // 二手物品需要加入一个发布人
         List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper());
         List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
 
@@ -48,5 +49,6 @@ public class HIndexController {
 
         return "pc/index";
     }
+
 
 }

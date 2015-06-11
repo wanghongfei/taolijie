@@ -49,6 +49,7 @@ public class HJobController {
      * @return
      */
     @RequestMapping(value = {"list/job"}, method = RequestMethod.GET)
+    //region 兼职二级页面 jobList(
     public String jobList(@RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "0") int cate,
                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
@@ -68,12 +69,16 @@ public class HJobController {
 //      model.addAttribute("totalPage", totalPage);
         return "pc/joblist";
     }
+    //endregion
 
 
     /**
      * 查询一条兼职
+     * @param id
+     * @param session
+     * @param model
+     * @return
      */
-
     @RequestMapping(value = "item/job/{id}", method = RequestMethod.GET)
     //region 查询一条兼职 jobItem
     public String jobItem(@PathVariable int id, HttpSession session, Model model) {
@@ -92,26 +97,8 @@ public class HJobController {
         if (credential == null)
             status = false;
         else { //查找有没有收藏
-            MemberModel member = accountService.findMember(credential.getId());
-            String[] favIds = {};
-            if (member.getFavoriteJobIds() != null)
-                favIds = member.getFavoriteJobIds().split(";");
-
-            String favid = "";
-            for (String fId : favIds) {
-                if (fId.equals(id + "")) {
-                    favid = fId;
-                    break;
-                }
-            }
-            if (favid.equals("")) {
-                status = false;
-            } else {
-                status = true;
-            }
-
+            status = jobPostService.isPostFavorite(credential.getId(),id);
         }
-
 
         model.addAttribute("job", job);
         model.addAttribute("poster", poster);
@@ -119,4 +106,30 @@ public class HJobController {
         model.addAttribute("favStatus", status);
         return "pc/jobdetail";
     }
+    //endregion
+
+
+    /**
+    * 搜索一条兼职
+    * @return
+    */
+    @RequestMapping(value = "/search/job", method = RequestMethod.GET)
+    public String search(@RequestParam JobPostModel jobPostModel,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                         Model model) {
+
+
+        //TODO 把搜索内容按空格划分
+        ObjWrapper objWrapper = new ObjWrapper();
+            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, page-1, pageSize, objWrapper);
+            int totalPage = (Integer) objWrapper.getObj();
+            model.addAttribute("jobs", list);
+            model.addAttribute("page", page);
+//            model.addAttribute("totalPage", totalPage);
+            return "pc/joblist";
+        }
+
+
+
 }
