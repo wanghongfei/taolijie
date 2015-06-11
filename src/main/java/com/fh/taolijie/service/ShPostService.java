@@ -74,6 +74,8 @@ public interface ShPostService extends PageService {
 
     void unfavoritePost(Integer memId, Integer postId);
 
+    boolean isPostFavorite(Integer memId, Integer postId);
+
     /**
      * 得到某人收藏的二手
      * @param memberId

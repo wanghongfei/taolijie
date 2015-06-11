@@ -101,6 +101,14 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    public boolean isPostFavorite(Integer memId, Integer postId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String ids = mem.getFavoriteShIds();
+
+        return StringUtils.checkIdExists(ids, postId.toString());
+    }
+
+    @Override
     public List<SHPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteShIds();

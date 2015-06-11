@@ -125,6 +125,15 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public boolean isPostFavorite(Integer memId, Integer postId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String ids = mem.getFavoriteJobIds();
+
+        return StringUtils.checkIdExists(ids, postId.toString());
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public List<JobPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
