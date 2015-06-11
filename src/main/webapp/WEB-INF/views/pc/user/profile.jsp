@@ -11,49 +11,45 @@
 
 <jsp:include page="../block/start.jsp" >
     <jsp:param name="title" value="个人资料修改"/>
+
 </jsp:include>
 
 <jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp"></jsp:include>
+    <jsp:include page="../block/user.jsp">
+        <jsp:param name="navShow" value="profile"/>
+    </jsp:include>
 
     <div class="segment personal">
         <p class="pin-title  dark-green-bg">账号信息
             <i class="pin-arrow  dark-green-arrow"></i>
         </p>
-        <p  class="accout-info">账号： Wynfrith <span>学生</span></p>
+        <p  class="accout-info">账号： ${sessionScope.user.username}<span>${sessionScope.role.memo}</span></p>
         <p class="pin-title  dark-green-bg">基本信息
             <i class="pin-arrow  dark-green-arrow"></i>
         </p>
-        <form action="">
+        <form action="" id="ProfileForm">
             <div class="form-group">
                 <label for="">昵称<i class="theme-color">*</i></label>
-                <input type="text" class="form-control" placeholder="姓名">
+                <input type="text" name="name" class="form-control" placeholder="姓名" value="${user.name}">
             </div>
             <div class="form-group">
                 <label for="">性别<i class="star-symbol">*</i></label>
-                <input type="radio" name="render" value="">男
-                <input type="radio" name="render" value="">女
+                <input type="radio" name="gender" value="男" ${user.gender == "男"?'checked="checked"':''}>男
+                <input type="radio" name="gender" value="女" ${user.gender == "女"?'checked="checked"':''}>女
             </div>
-            <div></div>
-            <div class="form-group">
-                <label for="">学号</label>
-                <input type="text" class="form-control" placeholder="填写你的学号">
-            </div>
-            <div class="form-group">
-                <label for="">学校<i class="star-symbol">*</i></label>
-                <input type="text" class="form-control" placeholder="填写学校">
-            </div>
-            <div class="form-group">
-                <label for="">学院</label>
-                <input type="text" class="form-control" placeholder="填写您的学院">
+            <div class="segment">
+                <div class="submit-btn big-btn dark-green-bg">
+                    <span href="javascript:void(0);">保存资料</span>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<jsp:include page="../block/user-footer.jsp"></jsp:include>
 
+<jsp:include page="../block/user-footer.jsp"></jsp:include>
+<script src="/scripts/profile.js"></script>
 </body>
 </html>

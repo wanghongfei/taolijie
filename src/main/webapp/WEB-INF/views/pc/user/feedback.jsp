@@ -15,7 +15,9 @@
 
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp"></jsp:include>
+    <jsp:include page="../block/user.jsp">
+      <jsp:param name="navShow" value="feedback"/>
+    </jsp:include>
   <div class="segment feedback end-segment">
     <div>
       <img src="/images/logo.jpg" alt="">

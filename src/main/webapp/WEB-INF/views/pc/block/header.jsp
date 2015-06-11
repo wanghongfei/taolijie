@@ -15,19 +15,23 @@
         <img src="/images/logo.jpg" alt="">
       </a>
     </div>
+    <form id="search-form" action="/search">
     <div class="search-bar">
+
       <div class="search-left"></div>
-      <input type="text" placeholder="搜索你最想要的">
+      <input type="text" placeholder="搜索你最想要的" name="content" id="search-input">
+      <input type="hidden" value="0" name="type" id="search-type"/>
       <div class="search-right">
         搜索
         <div class="active-text jianzhi">
-          <span>兼职</span>
+          <span id="search-job">兼职</span>
         </div>
         <div class="active-text">
-          <span>二手</span>
+          <span id="search-sh">二手</span>
         </div>
       </div>
     </div>
+    </form>
 
     <div class="text">
       <span><a href="">首页</a></span>

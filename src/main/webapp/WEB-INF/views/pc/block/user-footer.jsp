@@ -23,4 +23,9 @@
 <!-- endbuild -->
 
 
+<script src="/scripts/webuploader.min.js"></script>
+<script src="/scripts/upload.js"></script>
+<script src="/scripts/user.js"></script>
+
+
 

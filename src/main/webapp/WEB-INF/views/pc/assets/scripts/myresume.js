@@ -6,6 +6,7 @@
 $(".submit-btn").click(function(){
     var data = $("#CreateResumeForm").serialize();
     console.log(data);
+    //首先先上传图片
     $.ajax({
         type:"POST",
         data:data,
