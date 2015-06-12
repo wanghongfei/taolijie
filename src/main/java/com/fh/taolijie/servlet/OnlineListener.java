@@ -8,7 +8,10 @@ import javax.servlet.http.HttpSessionListener;
  * Created by wanghongfei on 15-4-9.
  */
 public class OnlineListener implements HttpSessionListener {
-    public static int onlineAmount = 0;
+    /**
+     * 使用volatile进行轻量级同步
+     */
+    public static volatile int onlineAmount = 0;
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
