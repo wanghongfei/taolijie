@@ -38,6 +38,8 @@
         <result column="favorite_sh_ids" property="favoriteShIds" jdbcType="LONGVARCHAR"/>
         <result column="favorite_resume_ids" property="favoriteResumeIds" jdbcType="LONGVARCHAR"/>
 
+        <result column="read_global_noti_ids" property="readSysNotificationIds"/>
+
         <collection property="roleList" resultMap="com.fh.taolijie.dao.mapper.RoleModelMapper.BaseResultMap"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -49,7 +51,7 @@
         qq, age, company_name, created_time, valid, complaint, profile_photo_id, auto_login_identifier,
         last_post_time, reset_password_token, last_token_date, school_organization, creadits,
         student_id, block_list, applied_job_ids, liked_job_ids, liked_sh_ids, favorite_job_ids,
-        favorite_sh_ids, favorite_resume_ids
+        favorite_sh_ids, favorite_resume_ids,read_global_noti_ids
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -84,7 +86,7 @@
         creadits, student_id, block_list,
         applied_job_ids, liked_job_ids, liked_sh_ids,
         favorite_job_ids, favorite_sh_ids,
-        favorite_resume_ids)
+        favorite_resume_ids, read_global_noti_ids)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -95,7 +97,7 @@
         #{creadits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
         #{appliedJobIds,jdbcType=LONGVARCHAR}, #{likedJobIds,jdbcType=LONGVARCHAR}, #{likedShIds,jdbcType=LONGVARCHAR},
         #{favoriteJobIds,jdbcType=LONGVARCHAR}, #{favoriteShIds,jdbcType=LONGVARCHAR},
-        #{favoriteResumeIds,jdbcType=LONGVARCHAR})
+        #{favoriteResumeIds,jdbcType=LONGVARCHAR}, #{readSysNotificationIds})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -106,6 +108,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="username != null">
                 username,
+            </if>
+            <if test="readSysNotificationIds != null" >
+                read_global_noti_ids;
             </if>
             <if test="password != null">
                 password,
@@ -280,6 +285,9 @@
             <if test="favoriteResumeIds != null">
                 #{favoriteResumeIds,jdbcType=LONGVARCHAR},
             </if>
+            <if test="readSysNotificationIds != null" >
+                #{readSysNotificationIds}
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -376,6 +384,9 @@
             <if test="favoriteResumeIds != null">
                 favorite_resume_ids = #{favoriteResumeIds,jdbcType=LONGVARCHAR},
             </if>
+            <if test="readSysNotificationIds != null" >
+                read_global_noti_ids = #{readSysNotificationIds},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -413,7 +424,8 @@
         liked_sh_ids = #{likedShIds,jdbcType=LONGVARCHAR},
         favorite_job_ids = #{favoriteJobIds,jdbcType=LONGVARCHAR},
         favorite_sh_ids = #{favoriteShIds,jdbcType=LONGVARCHAR},
-        favorite_resume_ids = #{favoriteResumeIds,jdbcType=LONGVARCHAR}
+        favorite_resume_ids = #{favoriteResumeIds,jdbcType=LONGVARCHAR},
+        read_global_noti_ids = #{readSysNotificationIds}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 

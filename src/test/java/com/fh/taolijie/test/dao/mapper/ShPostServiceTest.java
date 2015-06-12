@@ -102,6 +102,7 @@ public class ShPostServiceTest extends BaseSpringDataTestClass {
         model.setPageNumber(0);
         model.setPageSize(100);
         model.setTitle("二");
+        //model.setTitle("i");
         List<SHPostModel> list = postService.runSearch(model, null);
 
         Assert.assertFalse(list.isEmpty());

@@ -244,6 +244,8 @@ public class MemberModel extends Pageable {
      */
     private Integer creadits;
 
+    private String readSysNotificationIds;
+
     private List<RoleModel> roleList;
 
     /**
@@ -268,6 +270,14 @@ public class MemberModel extends Pageable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getReadSysNotificationIds() {
+        return readSysNotificationIds;
+    }
+
+    public void setReadSysNotificationIds(String readSysNotificationIds) {
+        this.readSysNotificationIds = readSysNotificationIds;
     }
 
     /**
