@@ -116,7 +116,7 @@ public class DefaultResumeService implements ResumeService {
         String newIds = StringUtils.addToString(oldIds, resumeId.toString());
         mem.setFavoriteResumeIds(newIds);
 
-        memMapper.updateByPrimaryKeyWithBLOBs(mem);
+        memMapper.updateByPrimaryKeySelective(mem);
 
     }
 
@@ -129,7 +129,7 @@ public class DefaultResumeService implements ResumeService {
         String newIds = StringUtils.removeFromString(oldIds, resumeId.toString());
         mem.setFavoriteResumeIds(newIds);
 
-        memMapper.updateByPrimaryKeyWithBLOBs(mem);
+        memMapper.updateByPrimaryKeySelective(mem);
 
     }
 
