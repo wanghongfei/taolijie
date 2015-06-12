@@ -1,7 +1,11 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.NotificationModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface NotificationModelMapper {
@@ -60,4 +64,11 @@ public interface NotificationModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(NotificationModel record);
+
+    List<NotificationModel> findBy(NotificationModel model);
+
+    List<NotificationModel> findByTimeRange(@Param("memberId")Integer memberId, @Param("roleName") String roleName, @Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    Long getNotificationAmount(@Param("memberId") Integer memberId, @Param("isRead") boolean isRead)
+            ;
 }
