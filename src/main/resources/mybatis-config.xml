@@ -32,6 +32,7 @@
         <mapper resource="mapper/MemberRoleModelMapper.xml" />
         <mapper resource="mapper/NewsModelMapper.xml" />
         <mapper resource="mapper/PrivateNotificationModelMapper.xml" />
+        <mapper resource="mapper/SysNotificationModelMapper.xml" />
         <mapper resource="mapper/ResumeModelMapper.xml" />
         <mapper resource="mapper/RoleModelMapper.xml" />
         <mapper resource="mapper/SchoolModelMapper.xml" />
