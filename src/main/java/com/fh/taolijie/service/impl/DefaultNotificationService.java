@@ -1,7 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.dao.mapper.NotificationModelMapper;
-import com.fh.taolijie.domain.NotificationModel;
+import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -22,8 +22,8 @@ public class DefaultNotificationService implements NotificationService {
     NotificationModelMapper noMapper;
 
     @Override
-    public List<NotificationModel> getNotificationList(Integer memId, String roleName, int firstResult, int capacity, ObjWrapper wrapper) {
-        NotificationModel model = new NotificationModel(firstResult, CollectionUtils.determineCapacity(capacity));
+    public List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, int firstResult, int capacity, ObjWrapper wrapper) {
+        PrivateNotificationModel model = new PrivateNotificationModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setAccessRange(roleName.toString());
 
@@ -31,8 +31,8 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    public List<NotificationModel> getNotificationList(Integer memId, String roleName, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper) {
-        NotificationModel model = new NotificationModel(firstResult, CollectionUtils.determineCapacity(capacity));
+    public List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper) {
+        PrivateNotificationModel model = new PrivateNotificationModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setAccessRange(roleName.toString());
         model.setIsRead(isRead);
@@ -41,7 +41,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    public List<NotificationModel> getNotificationList(Integer memId, String roleName, Date time, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, Date time, int firstResult, int capacity, ObjWrapper wrapper) {
         return noMapper.findByTimeRange(memId, roleName, time, new Date(), firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
@@ -51,13 +51,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    public NotificationModel findNotification(Integer notificationId) {
+    public PrivateNotificationModel findNotification(Integer notificationId) {
         return noMapper.selectByPrimaryKey(notificationId);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void addNotification(NotificationModel model) {
+    public void addNotification(PrivateNotificationModel model) {
         noMapper.insert(model);
     }
 
@@ -70,7 +70,7 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     @Transactional(readOnly = false)
     public boolean markAsRead(Integer noticicationId) {
-        NotificationModel model = new NotificationModel();
+        PrivateNotificationModel model = new PrivateNotificationModel();
         model.setId(noticicationId);
         model.setIsRead(true);
 

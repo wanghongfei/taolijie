@@ -31,7 +31,7 @@
         <mapper resource="mapper/MemberModelMapper.xml" />
         <mapper resource="mapper/MemberRoleModelMapper.xml" />
         <mapper resource="mapper/NewsModelMapper.xml" />
-        <mapper resource="mapper/NotificationModelMapper.xml" />
+        <mapper resource="mapper/PrivateNotificationModelMapper.xml" />
         <mapper resource="mapper/ResumeModelMapper.xml" />
         <mapper resource="mapper/RoleModelMapper.xml" />
         <mapper resource="mapper/SchoolModelMapper.xml" />

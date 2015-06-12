@@ -1,7 +1,7 @@
 package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.NotificationModelMapper;
-import com.fh.taolijie.domain.NotificationModel;
+import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.impl.DefaultNotificationService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
@@ -31,7 +31,7 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
         noService.markAsRead(1);
         noService.deleteNotification(1);
 
-        NotificationModel model = new NotificationModel();
+        PrivateNotificationModel model = new PrivateNotificationModel();
         model.setTitle("hello");
         noService.addNotification(model);
         noService.getNotificationList(1, "GLOBLE",0, 100, null);

@@ -43,7 +43,7 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="taoli_ivy_category" domainObjectName="TaoliIvyCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+<!--        <table tableName="taoli_ivy_category" domainObjectName="TaoliIvyCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />
         <table tableName="taoli_ivy" domainObjectName="TaoliIvyModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />
@@ -65,7 +65,7 @@
                enableUpdateByExample="false" />
 
         <table tableName="ivy_activity_image_resource" domainObjectName="IvyActImgModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
+               enableUpdateByExample="false" />-->
 
 <!--        <table tableName="member" domainObjectName="MemberModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"/>

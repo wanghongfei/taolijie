@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.domain.NotificationModel;
+import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ public interface NotificationService {
      * @param memId
      * @return
      */
-    List<NotificationModel> getNotificationList(Integer memId, String roleName, int firstResult, int capacity, ObjWrapper wrapper);
+    List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某一用户已读或未读的所有通知
@@ -24,7 +24,7 @@ public interface NotificationService {
      * @param isRead true为已读, false为未读
      * @return
      */
-    List<NotificationModel> getNotificationList(Integer memId, String roleName, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper);
+    List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, boolean isRead, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某个日期之后的所有通知
@@ -32,7 +32,7 @@ public interface NotificationService {
      * @param time
      * @return
      */
-    List<NotificationModel> getNotificationList(Integer memId, String roleName, Date time, int firstResult, int capacity, ObjWrapper wrapper);
+    List<PrivateNotificationModel> getNotificationList(Integer memId, String roleName, Date time, int firstResult, int capacity, ObjWrapper wrapper);
 
     Long getNotificationAmount(Integer memId, boolean isRead);
 
@@ -41,13 +41,13 @@ public interface NotificationService {
      * @param notificationId
      * @return
      */
-    NotificationModel findNotification(Integer notificationId);
+    PrivateNotificationModel findNotification(Integer notificationId);
 
     /**
      * 创建一条通知
      * @param dto
      */
-    void addNotification(NotificationModel model);
+    void addNotification(PrivateNotificationModel model);
 
     /**
      * 删除一条通知
