@@ -61,5 +61,5 @@ public interface NotificationService {
      * @param noticicationId
      * @return
      */
-    boolean markAsRead(Integer noticicationId);
+    boolean markAsRead(Integer notificationId);
 }
