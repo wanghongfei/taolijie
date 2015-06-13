@@ -10,12 +10,12 @@
 
 <div class="top-bar top-bar-reverse">
   <div class="top-bar-content">
-    <p>山东理工大学</p>
+    <p  ><a href="/" style="color: #fff;">桃李街首页</a></p>
     <ul>
 
       <c:if test="${not empty sessionScope.user}">
         <li><a href="/user/">${sessionScope.user.username} &nbsp;|&nbsp;</a></li>
-        <li><a href="/user/logout">我的桃李街 <i class="fa fa-caret-down"> </i></a></li>
+        <li><a href="/user/logout">注销 <i class="fa fa-caret-down"> </i></a></li>
       </c:if>
 
       <c:if test="${empty sessionScope.user}">

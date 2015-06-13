@@ -1,90 +1,54 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.controller.dto.JobPostCategoryDto;
-import com.fh.taolijie.domain.JobPostCategoryEntity;
+import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
+import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.repository.JobPostCategoryRepo;
-import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
- * Created by wanghongfei on 15-3-6.
+ * Created by wanghongfei on 15-6-6.
  */
-@Repository
+@Service
+@Transactional(readOnly = true)
 public class DefaultJobPostCategoryService implements JobPostCateService {
-    @PersistenceContext
-    private EntityManager em;
-
     @Autowired
-    JobPostCategoryRepo cateRepo;
+    JobPostCategoryModelMapper cateMapper;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = CollectionUtils.determineCapacity(capacity);
-
-        Page<JobPostCategoryEntity> cateList = cateRepo.findAll(new PageRequest(firstResult, cap));
-        wrapper.setObj(cateList.getTotalPages());
-
-        return CollectionUtils.transformCollection(cateList, JobPostCategoryDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostCategoryDto.class, null);
-        });
+    public List<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
+        return cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException{
-        // 判断分类下是否为空
-        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
-        CheckUtils.nullCheck(cate);
-
-        if (null != cate.getJobPostCollection() && false == cate.getJobPostCollection().isEmpty()) {
-            throw new CategoryNotEmptyException("分类" + cate.getName() + "不是空的");
-        }
-
-        // 删除分类
-        em.remove(cate);
-
-        return true;
+    @Transactional(readOnly = false)
+    public void addCategory(JobPostCategoryModel model) {
+        cateMapper.insert(model);
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean updateCategory(Integer cateId, JobPostCategoryDto dto) {
-        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
-        CheckUtils.nullCheck(cate);
+    @Transactional(readOnly = false)
+    public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException {
+        int row = cateMapper.deleteByPrimaryKey(cateId);
 
-        CollectionUtils.updateEntity(cate, dto, null);
-
-        return true;
+        return row <= 0 ? false : true;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public JobPostCategoryDto findCategory(Integer cateId) {
-        JobPostCategoryEntity cate = em.find(JobPostCategoryEntity.class, cateId);
-        CheckUtils.nullCheck(cate);
-
-        return CollectionUtils.entity2Dto(cate, JobPostCategoryDto.class, null);
+    @Transactional(readOnly = false)
+    public boolean updateCategory(Integer cateId, JobPostCategoryModel model) {
+        model.setId(cateId);
+        return cateMapper.updateByPrimaryKey(model) <= 0 ? false : true;
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void addCategory(JobPostCategoryDto dto) {
-        JobPostCategoryEntity cate = CollectionUtils.dto2Entity(dto, JobPostCategoryEntity.class, null);
-        em.persist(cate);
+    public JobPostCategoryModel findCategory(Integer cateId) {
+        return cateMapper.selectByPrimaryKey(cateId);
     }
-
 }

@@ -49,17 +49,17 @@
 
           <div class="shs">
               <c:forEach var="sh" items="${shs}" varStatus="status">
-                  <a href="/item/sh/${sh.id}">
+                  <a href="/item/sh/${sh.id}" style="color: #333333">
                       <div class="sh-slip fl ${(status.index+1)%3 == 0 ? 'no-margin-right':''}" >
                           <img src="/images/pig.jpg" alt="">
                           <p class="titile">${sh.title}</p>
                           <div class="fl">
                               <p>${sh.categoryName}</p>
-                              <span>${sh.memberId}</span>
+                              <span>${sh.memberDto.username}</span>
                               <%--换成member的role--%>
-                              <span class="theme-color">${sh.memberId}</span>
+                              <%--<span class="theme-color">1</span>--%>
                           </div>
-                          <span class="fr">￥${sh.sellPrice}</span>
+                          <span class="fr">￥${sh.sellPrice.intValue()}</span>
                       </div>
                   </a>
               </c:forEach>
@@ -67,15 +67,26 @@
 
           <div style="clear:both"></div>
           <div class="page">
-              <ul>
-                  <li><a class="active" href="">1</a></li>
-                  <li><a href="">2</a></li>
-                  <li><a href="">3</a></li>
-                  <li><a href="">4</a></li>
-                  <li><a href="">5</a></li>
-                  <li><a href="">6</a></li>
-                  <li><a  class="next" href="">下一页</a></li>
-              </ul>
+              <div class="page">
+                  <ul>
+                      <c:if test="${page != 1}">
+                          <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
+                      </c:if>
+                      <c:if test="${page == 1}">
+                          <c:forEach  begin="1" end="${totalPage}" var="item">
+                              <li><a class="${page == item ? 'active':''}" href="/list/sh?page=${item}">${item}</a></li>
+                          </c:forEach>
+                          <c:if test="${page < totalPage}">
+                              <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
+                          </c:if>
+                          <c:if test="${page > totalPage}">
+                              <h2>没有更多了</h2>
+                          </c:if>
+
+                      </c:if>
+
+                  </ul>
+              </div>
           </div>
       </div>
 

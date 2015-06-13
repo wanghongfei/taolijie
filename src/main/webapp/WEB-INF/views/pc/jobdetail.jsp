@@ -32,9 +32,9 @@
   <div class="detail main">
     <div class="detail-bar">
       <span>兼职详情</span>
-      <a href="/"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
-      <p class="fr">分享</p>
-      <p class="fr" id="fav" data-id="${job.id}">
+      <a href="/" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
+      <%--<p class="fr">分享</p>--%>
+      <p class="fr" id="fav" data-id="${job.id}" data-type="job">
           <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
           ${favStatus? '已收藏':'收藏'}
       </p>
@@ -69,19 +69,19 @@
       </p>
       <div class="operates">
         <div class="operate">
-          <span id="like" data-id="${job.id}" class="fa fa-thumbs-up"></span>
+          <span id="like" data-id="${job.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
           <p >${job.likes}</p>
         </div>
+        <%--<div class="operate">--%>
+          <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
+          <%--<p >${job.dislikes}</p>--%>
+        <%--</div>--%>
         <div class="operate">
-          <span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>
-          <p >${job.dislikes}</p>
-        </div>
-        <div class="operate">
-          <span id="toComment" class="fa fa-comment"></span>
+          <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
           <p >${reviews.size()}</p>
         </div>
         <div class="operate">
-          <span id="complaint" data-id="${job.id}" class="text">举报</span>
+          <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
         </div>
       </div>
       <div class="content" id="contents">

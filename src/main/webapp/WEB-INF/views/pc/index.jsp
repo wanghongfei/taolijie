@@ -28,7 +28,7 @@
   <!-- 正文 -->
   <div class="main index">
     <div class="segment">
-      <p class="pin-title">最火的兼职
+      <p class="pin-title"><a href="/list/job" style="color:#fff;">最火的兼职</a>
         <i class="pin-arrow"></i>
       </p>
     </div>
@@ -36,9 +36,9 @@
     <div class="segment jobs">
       <%--兼职--%>
       <c:forEach var="job" items="${jobs}">
-        <a href="/item/job/${job.id}">
+        <a href="/item/job/${job.id}" style="color:#333333;">
           <div class="job-slip">
-            <span class="cate">${job.categoryName}</span>
+            <span class="cate" style="">${job.category.name}</span>
             <span class="content">${job.title}</span>
           </div>
         </a>
@@ -48,7 +48,7 @@
     </div>
 
     <div class="segment">
-      <p class="pin-title">最畅销的二手
+      <p class="pin-title"><a href="/list/sh" style="color:#fff;">最畅销的二手</a>
         <i class="pin-arrow"></i>
       </p>
     </div>
@@ -56,44 +56,46 @@
 
       <%--二手--%>
       <c:forEach var="sh" items="${shs}" varStatus="status">
-        <a href="/item/sh/${sh.id}">
+        <a href="/item/sh/${sh.id}" style="color:#333333;">
+
         <div class="sh-slip fl ${status.index == 2 ? 'no-margin':null}">
-          <img src="${ (sh.picturePath) ? sh.picturePath : "/images/pig.jpg"}" alt="">
+          <div class="shs_pic"><img src="${ (sh.picturePath) ? sh.picturePath : "/images/pig.jpg"}" alt=""></div>
           <p class="titile">${sh.title}</p>
           <div class="fl">
             <p>${sh.categoryName}</p>
-            <span>${status.index}</span>
-            <span class="theme-color">${sh.verified}</span>
+            <span>${sh.memberDto.username}</span>
           </div>
           <span class="fr">￥${sh.sellPrice.intValue()}</span>
         </div>
         </a>
-
       </c:forEach>
     </div>
+
+
+
 
     <div style="clean:both"></div>
 
     <div class="segment">
-      <p class="pin-title">最帅的我们
+      <p class="pin-title"><a href="/about/index.html#fourthPage" style="color:#fff;">最帅的我们</a>
         <i class="pin-arrow"></i>
       </p>
     </div>
     <div class="segment auto about">
       <div>
-        <a href=""><span class="fa fa-compass"></span></a>
+        <a href="/about/index.html#firstPage"><span class="fa fa-compass"></span></a>
         <p>使用指南</p>
       </div>
       <div>
-        <a href=""><span class="fa fa-users theme-color-bg white"></span></a>
+        <a href="/about/index.html#secondPage"><span class="fa fa-users"></span></a>
         <p>关于我们</p>
       </div>
       <div>
-        <a href=""><span class="fa fa-phone  theme-color-bg white"></span></a>
+        <a href="/about/index.html#thirdPage"><span class="fa fa-phone"></span></a>
         <p>联系我们</p>
       </div>
       <div>
-        <a href=""><span class="fa fa-users"></span></a>
+        <a href="/about/index.html#fourthPage"><span class="fa fa-users"></span></a>
         <p>加入我们</p>
       </div>
     </div>

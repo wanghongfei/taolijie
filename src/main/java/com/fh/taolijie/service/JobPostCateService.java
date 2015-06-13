@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.JobPostCategoryDto;
+import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -15,13 +15,13 @@ public interface JobPostCateService {
      * 获取所有分类
      * @return
      */
-    List<JobPostCategoryDto> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    List<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 添加一个分类
      * @param dto
      */
-    void addCategory(JobPostCategoryDto dto);
+    void addCategory(JobPostCategoryModel dto);
 
     /**
      * 删除一个分类.
@@ -37,12 +37,12 @@ public interface JobPostCateService {
      * @param dto
      * @return
      */
-    boolean updateCategory(Integer cateId, JobPostCategoryDto dto);
+    boolean updateCategory(Integer cateId, JobPostCategoryModel dto);
 
     /**
      * 根据id查找兼职分类
      * @param cateId
      * @return
      */
-    JobPostCategoryDto findCategory(Integer cateId);
+    JobPostCategoryModel findCategory(Integer cateId);
 }

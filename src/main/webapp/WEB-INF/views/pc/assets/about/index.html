@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>桃李街--关于我们</title>
+	<link rel="stylesheet" href="./css/javascript.fullPage.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/jquery.fullPage.min.js"></script>
+</head>
+<body>
+	<style>
+	*{margin: 0;padding: 0;}
+	#menu{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 40px;
+		z-index: 70;
+		margin: 0;
+		padding: 0;
+		background-color: rgba(0,0,0,0.72);
+	}
+	#menu ul{
+		width: 1100px;
+		margin: 0 auto;
+		list-style: none;
+	}
+	#menu ul li{
+		float: left;
+		width: 100px;
+		line-height: 40px;
+		color: #FFF;
+	}
+	#menu ul li a{
+		color: #FFF;
+		text-decoration: none;
+		font-family: "微软雅黑";
+		font-size: 16px;
+	}
+	#menu ul li a:hover{
+		color: #4ccda4;
+	}
+	#menu ul li.active{
+		background-color: red;
+	}
+	#leftnav{
+		position: fixed;
+		top: 90px;
+		left: 158px;
+		width: 100px;
+		height: auto;
+		z-index: 80;
+		overflow: hidden;
+	}
+	#leftnav ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	#leftnav ul li{
+		float: left;
+		margin-top: 20px;
+	}
+	#fullpage .section .main{
+		width: 900px;
+		margin-left: 307px;
+		margin-top: 125px;
+	}
+	.main .title{
+		height: 84px;
+		background-color: #fff;
+		padding-left: 20px;
+		overflow: hidden;
+	}
+	.main .title p{
+		line-height: 36px;
+		font-size: 36px;
+		border-left: 9px solid #4ccda4;
+		margin: 0;
+		margin-top: 22px;
+		padding-left: 9px;
+	}
+	.main .content{
+		height: 400px;
+		margin-top: 16px;
+		overflow: hidden;
+		background-color: #fff;
+	}
+	.fp-tableCell{
+		vertical-align:baseline;
+	}
+	.title_1{
+		width: 140px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		font-size: 18px;
+		font-family: "微软雅黑";
+		color: #FFF;
+		margin:15px auto auto 12px;
+		background-color: #4ccda4;
+	}
+	.content_1 p{
+		text-indent: 2em;
+		font-family: "微软雅黑";
+		font-size: 18px;
+		padding: 6px 12px;
+	}
+	
+	
+	.tese .title,.tese .content_1 p{color: #4ccda4;}
+
+
+	/*联系我们*/
+	.lianxi .left .content_1 p img{vertical-align: middle;}
+	.lianxi .left,.lianxi .right{float: left;}
+	.lianxi .left .content_1,.lianxi .right .content_1{
+		margin-top: 35px;
+	}
+	.lianxi .left .content_1 p{text-indent: 0em; padding-top: 10px;}
+	.lianxi .title,.lianxi .content_1 p{color: #00a9ea;}
+	.lianxi .title p{border-left-color: #00a9ea; }
+	.lianxi .title_1{background-color: #00a9ea;}
+	.lianxi .left .content_1{border-right: 1px solid #00a9ea;}
+	.lianxi .right .content_1 img{padding-left: 50px;padding-top: 35px;}
+	
+	/*加入我们*/
+	.join .title p{font-size: 24px;}
+	</style>
+	<div id="menu">
+		<ul>
+			<li><a href="/">桃李街</a></li>
+			<li><a href="http://www.sdut.edu.cn">山东理工大学</a></li>
+			<li style="float:right"><a href="/user"> 我的桃李街</a></li>
+			<!--<li style="float:right"><a href="">登陆</a> | <a href="">注册</a></li>-->
+			<!--<li style="float:right"><a href="">发布信息</a></li>-->
+			<!--<li style="text-align:center; float:right"><a href="">首页</a></li>-->
+		</ul>
+	</div>
+	<div id="leftnav">
+		<ul class="menu">
+			<li data-menuanchor="firstPage"><a href="#firstPage"><img src="./img/us_1.png" alt=""></a></li>
+			<li data-menuanchor="secondPage"><a href="#secondPage"><img src="./img/us_2.png" alt=""></a></li>
+			<li data-menuanchor="thirdPage"><a href="#thirdPage"><img src="./img/us_3.png" alt=""></a></li>
+			<li data-menuanchor="fourthPage"><a href="#fourthPage"><img src="./img/us_4.png" alt=""></a></li>
+		</ul>
+	</div>
+	<div id="fullpage">
+		<div class="section">
+			<div class="main">
+				<div class="title">
+					
+				</div>
+				<div class="content"></div>
+			</div>
+		</div>
+		<div class="section tese">
+			<div class="slide">
+				<div class="main">
+					<div class="title">
+						<p>我们的特色 Our Features</p>
+					</div>
+					<div class="content">
+						<div class="title_1">网站特色</div>
+						<div class="content_1">
+							<p>网站以学校作为切换，每个大学校园都是一个小型社区和圈子，桃李街网站为圈子里面的学生提供最优质的同校O2O服务，同时致力于搭建大学校园与校园外商家的互通服务平台。</p>
+						</div>
+						<div class="title_1">现阶段服务板块</div>
+						<div class="content_1">
+							<p>学生兼职、简历库、校园二手和校园聚焦点。</p>
+						</div>
+						<div class="title_1">团队使命</div>
+						<div class="content_1">
+							<p>让天下学生享受更优质的服务，搭建校外商家与学生沟通的最佳平台。</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="slide">
+				<div class="main">
+					<div class="title">
+						<p>关于我们 About Us</p>
+					</div>
+					<div class="content">
+						<div class="top">
+							<div style="float:left; width:310px; margin-top:67px;"><img src="./img/logo.jpg" alt=""></div>
+							<div style="float:left; width:570px; border-left:1px solid #4ccda4; font-family:'微软雅黑';font-size:18px; color:#4ccda4; margin-top:85px; padding-left:15px;">“桃李街”含义：“桃李”起源自“桃李满天下”，代表着师生情谊和校园意
+蕴，在这里我们将“桃李”定义为大学校园，而“桃李街”则是大学校园中一条可以满足学生需求的街。</div>
+						</div>
+						<div style="clear:both"></div>
+						<div style="width:800px;font-size:18px;font-family:'微软雅黑'; color:#4ccda4; text-align:center; border-top:1px solid #4ccda4; margin-left:50px;margin-top:50px; padding-top:50px;">
+							桃李街，大学校园里一条无所不能的街。（靠谱、有趣的同校社区服务平台）
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section lianxi">
+			<div class="main">
+				<div class="title">
+					<p>联系我们 Contect Us</p>
+				</div>
+				<div class="content">
+					<div class="left">
+						<div class="title_1">联系方式/地址</div>
+						<div class="content_1">
+							<p><img src="./img/sm1.gif" alt="">&nbsp;&nbsp;15653325871</p>
+							<p><img src="./img/sm2.gif" alt="">&nbsp;&nbsp;客服：1151336032       群号：252216355</p>
+							<p><img src="./img/sm3.gif" alt="">&nbsp;&nbsp;taolijie1(桃李街一号店)</p>
+							<p><img src="./img/sm4.gif" alt="">&nbsp;&nbsp;china_taolijie@163.com</p>
+							<p><img src="./img/sm5.gif" alt="">&nbsp;&nbsp;淄博市山东理工大学</p>
+						</div>
+					</div>
+					<div class="right">
+						<div class="title_1">我们的互动平台</div>
+						<div class="content_1">
+							<img src="./img/wx.jpg" alt="">
+							<img src="./img/wb.jpg" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section">
+			<div class="slide pic">
+				<div class="main">
+					<div class="content" style="height:500px;">
+						<div style="float:left; margin:12px;">
+							<img src="./img/team.jpg" alt="">
+						</div>
+						<div style="width:170px; float:left; font-size:18px; font-family:'微软雅黑';color:#ff626d;">
+							<p style="margin-top:28px;"> 我们是一支年轻的团队。我们充满着朝气和创新精神。</p>
+							<P style="margin-top:28px;">我们是一支专注的团队。我们坚信，只有专注才能走得更远。</p>
+							<p style="margin-top:28px;">我们是一支有梦想的团队。因为一个共同的梦想：搭建一个全国性的靠谱、有趣的同校社区服务平台，汇聚一堂。团队强大的凝聚力和执行力，将支撑我们实现梦想。</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<style>
+			.join .left{width:147px;float: left;}
+			.join .right{width: 710px; float: left;}
+			.join .left img{
+				padding: 15px 12px;
+			}
+			.join .right{
+				margin-left: 20px;
+			}
+			.join .right p{
+				font-size: 18px;
+				line-height: 45px;
+				font-family: "微软雅黑";
+			}
+			.join .right p.last{
+				margin-top: 10px;
+				line-height: 25px;
+			}
+			</style>
+			<div class="slide">
+				<div class="main join">
+					<div class="title">
+						<p>有以下任意一条件者均可申请加入桃李街团队，跟我们一起创业打拼！</p>
+					</div>
+					<div class="content">
+						<div class="left">
+							<img src="./img/join.gif" alt="">
+						</div>
+						<div class="right">
+							<p style="line-height:25px; margin:20px auto;">掌握Html、CSS、JavaScript等前端相关技术；熟悉至少一种后台开发语言（最好为Java）；熟悉Linux
+网络服务器和网络软件的安装、维护、调整和更新。</p>
+							<p>精通PS操作技术，擅长设计网站页面及宣传单页。一定要有有创意的Idea。</p>
+							<p>口才出众，人际沟通能力强，思维敏捷，有市场推广和产品运营的经验的优先。</p>
+							<p>有一定的栏目和版面策划能力，文笔出众，思维条理，创意丰富，见解独到者优先考虑。</p>
+							<p>给桃李街团队注入资金，桃李街团队按具体资金给予相应股份。</p>
+							<p class="last">勤奋好学，抗挫力强，不甘于平庸，有梦想，想发大财，有雄心壮志，敢于创业者，桃李街团队恭候您
+的加入！</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="slide">
+				<div class="main wewantyou">
+					<div class="content" style="background-color:#ff626d; color:#fff">
+						<p style="font-size:100px; text-align:left; margin:0">We Want You!</p>
+						<p style="font-size:36px; text-align:right;">——join us,the prize for you</p>
+						<div style="width:242px; float:right;text-align:right; margin-top:120px;">
+							<img src="./img/codepic.jpg" alt="">
+						</div>
+						<div style="width:242px; float:right; font-size:14px; font-family:'微软雅黑';color:#fff;border-right:1px solid #fff; margin-top:120px;">
+							<p>15653325871</p>
+							<p>1151336032</p>
+							<p>taolijie1(桃李街一号店)</p>
+							<p>china_taolijie@163.com</p>
+						</div>
+						<div style="clear:both"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#fullpage').fullpage({
+			anchors:["firstPage","secondPage","thirdPage","fourthPage"],
+			sectionsColor:["#c558f7","#4ccda4","#00a9ea","#ff626d"],
+			menu:".menu",
+			fixedElements:"#header",
+			showActiveTooltip:true,		//
+			continuousVertical:true,  	//循环滚动
+			autoScrolling:true,
+			css3:true
+		});
+	});
+</script>
+</body>
+</html>

@@ -42,6 +42,10 @@
         <label for="">商品描述</label>
         <textarea name="description" class="form-control"></textarea>
       </div>
+      <div class="form-group">
+        <label for="">图片</label>
+        <textarea name="picIds" class="form-control" value="11;12">11;12</textarea>
+      </div>
       <%--<div class="form-group">--%>
         <%--<label for="">交易地点</label>--%>
         <%--<input name="" type="text" class="form-control" >--%>

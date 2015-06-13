@@ -3,26 +3,18 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:jpa="http://www.springframework.org/schema/data/jpa"
              xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
-             xmlns:mvc="http://java.sun.com/xml/ns/javaee"
              xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/data/jpa
-		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
-
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+        >
     <!-- DispatcherServlet Context: defines this servlet's request-processing
         infrastructure -->
 
     <!-- Enables the Spring MVC @Controller programming model -->
     <annotation-driven />
-
-    <!-- Handles HTTP GET requests for /resources/** by efficiently serving
-        up static resources in the ${webappRoot}/resources directory -->
-    <resources mapping="/assets/**" location="/WEB-INF/views/assets/" />
 
     <!--管理员后台资源路径-->
     <resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
@@ -30,6 +22,8 @@
     <resources mapping="/images/**" location="/WEB-INF/views/pc/assets/images/" />
     <resources mapping="/scripts/**" location="/WEB-INF/views/pc/assets/scripts/" />
     <resources mapping="/styles/**" location="/WEB-INF/views/pc/assets/styles/" />
+    <resources mapping="/fonts/**" location="/WEB-INF/views/pc/assets/fonts/"/>
+    <resources mapping="/about/**" location="/WEB-INF/views/pc/assets/about/"/>
 
 
 
@@ -43,30 +37,6 @@
 
 
 
-    <!-- 容器管理的JPA -->
-    <beans:bean id="emf"
-                class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <beans:property name="dataSource" ref="dataSource" />
-        <beans:property name="jpaVendorAdapter" ref="jpaAdapter" />
-        <beans:property name="packagesToScan" value="com.fh.taolijie.domain" />
-        <beans:property name="jpaPropertyMap">
-            <beans:props>
-                <beans:prop key="hibernate.show_sql">true</beans:prop>
-                <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
-                <beans:prop key="hibernate.format_sql">true</beans:prop>
-                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
-                </beans:prop>
-                <!-- 开启L2 cache -->
-                <beans:prop key="hibernate.cache.use_second_level_cache">true</beans:prop>
-            </beans:props>
-        </beans:property>
-
-    </beans:bean>
-    <beans:bean id="jpaAdapter"
-                class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <beans:property name="database" value="MYSQL" />
-    </beans:bean>
-
     <!--<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"-->
                      <!--resource-ref="true" />-->
     <!--数据库连接采用jdbc驱动-->
@@ -74,22 +44,27 @@
         <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
         <beans:property name="username" value="root" />
-        <beans:property name="password" value="wfc" />
+    <beans:property name="password" value="111111" />
     </beans:bean>
 
-    <beans:bean
-            class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
-    <!-- 事务 -->
-    <beans:bean class="org.springframework.orm.jpa.JpaTransactionManager"
-                id="transactionManager">
-        <beans:property name="entityManagerFactory" ref="emf" />
+    <beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource" />
     </beans:bean>
 
-    <!-- Spring data -->
-    <jpa:repositories base-package="com.fh.taolijie.service.repository"
-                      entity-manager-factory-ref="emf"
-                      transaction-manager-ref="transactionManager" />
+
+    <!-- myBatis配置 -->
+    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <beans:property name="configLocation" value="classpath:mybatis-config.xml" />
+        <beans:property name="dataSource" ref="dataSource" />
+    </beans:bean>
+
+    <!-- myBatis配置 -->
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <beans:property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <beans:property name="basePackage" value="com.fh.taolijie.dao.mapper"/>
+        <beans:property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </beans:bean>
 
     <!-- 文件上传 -->
     <beans:bean id="multipartResolver"
@@ -108,8 +83,8 @@
     <tx:annotation-driven />
 
 
-
-    <context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor" />
+    <context:component-scan base-package="com.fh.taolijie" />
+    <!--<context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor com.fh.taolijie.dao" />-->
 
 
     <!-- Email -->

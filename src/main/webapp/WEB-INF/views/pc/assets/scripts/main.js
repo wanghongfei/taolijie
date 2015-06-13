@@ -1,10 +1,4 @@
-$(function(){
-   	$('.bxslider').bxSlider({
-        // speed:500,
-        auto:true
-    });
-  	
-});
+
 
 $('.nav-bar>.choose').mouseover(function(){
 	$('.choose-menu').addClass('show');
@@ -48,6 +42,25 @@ $("#reg-form #sub-btn").click(function(){
 			}
 		}
 	})
+});
+
+
+$("#search-job").on("click",function() {
+    $("#search-type").val(0);
+    $("#search-form").submit();
+});
+
+$("#search-sh").on("click",function() {
+    $("#search-type").val(1);
+    $("#search-form").submit();
+});
+
+$(function(){
+    $('.bxslider').bxSlider({
+        // speed:500,
+        auto:true
+    });
+
 });
 
 

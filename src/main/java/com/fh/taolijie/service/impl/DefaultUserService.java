@@ -1,58 +1,40 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.domain.MemberEntity;
+import com.fh.taolijie.dao.mapper.JobPostModelMapper;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.ShPostModelMapper;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.UserService;
-import com.fh.taolijie.service.repository.JobPostRepo;
-import com.fh.taolijie.service.repository.MemberRepo;
-import com.fh.taolijie.service.repository.SHPostRepo;
-import com.fh.taolijie.utils.CheckUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by wanghongfei on 15-4-3.
+ * Created by wanghongfei on 15-6-7.
  */
 @Service
+@Transactional(readOnly = true)
 public class DefaultUserService implements UserService {
     @Autowired
-    MemberRepo memRepo;
+    MemberModelMapper memMapper;
 
     @Autowired
-    JobPostRepo jobPostRepo;
+    JobPostModelMapper jobMapper;
 
     @Autowired
-    SHPostRepo shPostRepo;
+    ShPostModelMapper shMapper;
+
 
     @Override
     @Transactional(readOnly = false)
     public boolean likeJobPost(Integer memId, Integer postId) {
-        MemberEntity mem = memRepo.findOne(memId);
-        //JobPostEntity post = jobPostRepo.findOne(postId);
-/*        if (false == CheckUtils.nullCheck(mem, post)) {
-            return false;
-        }*/
-        //CheckUtils.nullCheck(mem, post);
-
-        // 查检是否重复赞
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
-        if (true == StringUtils.checkIdExists(oldIds, postId.toString())) {
-            return false;
-        }
-
-
-        // 在member中记录这次点赞
         String newIds = StringUtils.addToString(oldIds, postId.toString());
-        mem.setLikedJobIds(newIds);
 
-        // post赞数+1
-/*        Integer oldValue = post.getLikes();
-        Integer newValue = oldValue == null ? 1 : oldValue.intValue() + 1;
-        post.setLikes(newValue);*/
-        jobPostRepo.likePost(postId);
-
-
+        jobMapper.increaseLike(postId);
+        memMapper.updateByPrimaryKeySelective(mem);
 
         return true;
     }
@@ -60,51 +42,29 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = false)
     public boolean likeSHPost(Integer memId, Integer shId) {
-        MemberEntity mem = memRepo.findOne(memId);
-        //SecondHandPostEntity post = shPostRepo.findOne(shId);
-/*        if (false == CheckUtils.nullCheck(mem, post)) {
-            return false;
-        }*/
-        //CheckUtils.nullCheck(mem, post);
-
-        // 检查是否重复
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
-        if (true == StringUtils.checkIdExists(oldIds, shId.toString())) {
-            return false;
-        }
-
-        // 在member中记录这次点赞
         String newIds = StringUtils.addToString(oldIds, shId.toString());
-        mem.setLikedShIds(newIds);
 
-        // SHpost点赞数+1
-/*        Integer oldValue = post.getLikes();
-        Integer newValue = oldValue == null ? 1 : oldValue.intValue() + 1;
-        post.setLikes(newValue);*/
-        shPostRepo.likePost(shId);
+        shMapper.increaseLike(shId);
+        memMapper.updateByPrimaryKeySelective(mem);
 
-
-        return true;
+        return false;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean isJobPostAlreadyLiked(Integer memId, Integer posId) {
-        MemberEntity mem = memRepo.findOne(memId);
-        CheckUtils.nullCheck(mem);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getLikedJobIds();
 
-        String ids = mem.getLikedJobIds();
-        return StringUtils.checkIdExists(ids, posId.toString());
+        return StringUtils.checkIdExists(oldIds, posId.toString());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean isSHPostAlreadyLiked(Integer memId, Integer shId) {
-        MemberEntity mem = memRepo.findOne(memId);
-        CheckUtils.nullCheck(mem);
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getLikedShIds();
 
-        String ids = mem.getLikedShIds();
-        return StringUtils.checkIdExists(ids, shId.toString());
-
+        return StringUtils.checkIdExists(oldIds, shId.toString());
     }
 }

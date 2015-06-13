@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!-- Globally enables or disables any caches configured in any mapper under this configuration -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- Sets the number of seconds the driver will wait for a response from the database -->
+        <setting name="defaultStatementTimeout" value="3000"/>
+        <!-- Enables automatic mapping from classic database column names A_COLUMN to camel case classic Java property names aColumn -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- Allows JDBC support for generated keys. A compatible driver is required.
+        This setting forces generated keys to be used if set to true,
+         as some drivers deny compatibility but still work -->
+        <setting name="useGeneratedKeys" value="true"/>
+    </settings>
+
+    <!-- Continue going here -->
+
+    <mappers>
+        <mapper resource="mapper/AcademyModelMapper.xml" />
+        <mapper resource="mapper/ApplicationIntendModelMapper.xml" />
+        <mapper resource="mapper/BannerPicModelMapper.xml" />
+        <mapper resource="mapper/BulletinModelMapper.xml" />
+        <mapper resource="mapper/EEModelMapper.xml" />
+        <mapper resource="mapper/ImageModelMapper.xml" />
+        <mapper resource="mapper/JobPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/JobPostModelMapper.xml" />
+        <mapper resource="mapper/MemberModelMapper.xml" />
+        <mapper resource="mapper/MemberRoleModelMapper.xml" />
+        <mapper resource="mapper/NewsModelMapper.xml" />
+        <mapper resource="mapper/PrivateNotificationModelMapper.xml" />
+        <mapper resource="mapper/SysNotificationModelMapper.xml" />
+        <mapper resource="mapper/ResumeModelMapper.xml" />
+        <mapper resource="mapper/RoleModelMapper.xml" />
+        <mapper resource="mapper/SchoolModelMapper.xml" />
+        <mapper resource="mapper/ShPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/ShPostModelMapper.xml" />
+
+        <mapper resource="mapper/v2/IvyActImgModelMapper.xml" />
+        <mapper resource="mapper/v2/MemberVerifyRelModelMapper.xml" />
+        <mapper resource="mapper/v2/ParticipantModelMapper.xml" />
+        <mapper resource="mapper/v2/SchoolActCategoryModelMapper.xml" />
+        <mapper resource="mapper/v2/SchoolActModelMapper.xml" />
+        <mapper resource="mapper/v2/SchoolOrgCategoryMapper.xml" />
+        <mapper resource="mapper/v2/SchoolOrgModelMapper.xml" />
+        <mapper resource="mapper/v2/TaoliIvyCategoryModelMapper.xml" />
+        <mapper resource="mapper/v2/TaoliIvyModelMapper.xml" />
+    </mappers>
+</configuration>

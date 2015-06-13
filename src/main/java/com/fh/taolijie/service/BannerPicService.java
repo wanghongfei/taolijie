@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.controller.dto.BannerPicDto;
+import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -14,14 +14,14 @@ public interface BannerPicService {
      * 获取所有banner信息
      * @return
      */
-    List<BannerPicDto> getBannerList(int firstResult, int capacity, ObjWrapper wrap);
+    List<BannerPicModel> getBannerList(int firstResult, int capacity, ObjWrapper wrap);
 
     /**
      * 更新banner信息
      * @param banId
      * @return
      */
-    boolean updateBanner(Integer banId, BannerPicDto banDto);
+    boolean updateBanner(Integer banId, BannerPicModel model);
 
     /**
      * 删除一个banner
@@ -32,15 +32,14 @@ public interface BannerPicService {
 
     /**
      * 添加一个banner
-     * @param banDto
      * @return
      */
-    boolean addBanner(BannerPicDto banDto);
+    boolean addBanner(BannerPicModel model);
 
     /**
      * 根据id查找banner
      * @param id
      * @return
      */
-    BannerPicDto findBanner(Integer id);
+    BannerPicModel findBanner(Integer id);
 }

@@ -16,7 +16,8 @@ $("#like").click(function(){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             }else{
-                alert(data.message);
+                if(data.message == '已操作')
+                    alert('您已经喜欢过了!');
             }
         }
     });
@@ -34,7 +35,22 @@ $("#dislike").click(function(){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             }else{
-                alert(data.message);
+                if(data.message == '已操作')
+                    alert('您已经喜欢过了!');
+            }
+        }
+    });
+});
+
+$("#complaint").click(function(){
+    var id = this.getAttribute("data-id");
+    $.ajax({
+        type:"post",
+        url:"/user/job/complaint/"+id,
+        success:function(data){
+            console.log(data);
+            if(data.result){
+                alert("举报成功");
             }
         }
     });
@@ -99,14 +115,15 @@ $("#toComment").click(function(){
     input.focus();
 });
 
-//收藏/取消收藏一条兼职
+//收藏/取消收藏一条兼职或简历
 $("#fav").on("click",function(){
     var jobId = this.getAttribute("data-id");
+    var type = this.getAttribute("data-type");
     var $this = $(this);
     //收藏
     $.ajax({
         type:"POST",
-        url:"/user/job/fav/"+jobId,
+        url:"/user/"+type+"/fav/"+jobId,
         success:function(data){
             if(data.result){
                 if(data.parm.status === "0"){
@@ -120,4 +137,21 @@ $("#fav").on("click",function(){
         }
     });
 });
+
+$("#del").on("click",function(){
+    var id = this.getAttribute("data-id");
+    var type = this.getAttribute("data-type");
+    var $this = $(this);
+    $.ajax({
+        type:"POST",
+        url:"/user/"+type+"/del",
+        success:function(data){
+            if(data.result){
+                alert("简历已删除");
+                window.location = '/user';
+            }
+        }
+    });
+});
+
 

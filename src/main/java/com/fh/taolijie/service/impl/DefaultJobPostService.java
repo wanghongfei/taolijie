@@ -1,360 +1,197 @@
 package com.fh.taolijie.service.impl;
 
-import com.fh.taolijie.controller.dto.GeneralMemberDto;
-import com.fh.taolijie.controller.dto.JobPostDto;
-import com.fh.taolijie.domain.JobPostCategoryEntity;
-import com.fh.taolijie.domain.JobPostEntity;
-import com.fh.taolijie.domain.MemberEntity;
-import com.fh.taolijie.domain.ResumeEntity;
+import com.fh.taolijie.dao.mapper.JobPostModelMapper;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.ReviewModelMapper;
+import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ReviewService;
-import com.fh.taolijie.service.SearchService;
-import com.fh.taolijie.service.repository.JobPostCategoryRepo;
-import com.fh.taolijie.service.repository.JobPostRepo;
-import com.fh.taolijie.service.repository.ResumeRepo;
-import com.fh.taolijie.service.repository.SchoolRepo;
-import com.fh.taolijie.utils.*;
-import com.fh.taolijie.utils.json.JsonWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Created by wanghongfei on 15-3-7.
+ * Created by wanghongfei on 15-6-6.
  */
-@Repository
-public class DefaultJobPostService extends DefaultPageService implements JobPostService {
-    private static Logger logger = LoggerFactory.getLogger(DefaultJobPostService.class);
+@Service
+@Transactional(readOnly = true)
+public class DefaultJobPostService implements JobPostService {
+    @Autowired
+    JobPostModelMapper postMapper;
 
     @Autowired
-    private ReviewService reviewService;
+    MemberModelMapper memMapper;
 
     @Autowired
-    private JobPostRepo postRepo;
+    ReviewModelMapper revMapper;
 
-    @Autowired
-    private ResumeRepo resumeRepo;
-
-    @Autowired
-    private SchoolRepo schoolRepo;
-
-    @Autowired
-    private JobPostCategoryRepo jobCateRepo;
-
-    @Autowired
-    SearchService search;
-
-    @PersistenceContext
-    EntityManager em;
-
-    /**
-     * 用来设置DTO对象中与对应Domain对象变量名不匹配的域(field).
-     * @param <ENTITY>
-     */
-    protected class SetupDto<ENTITY extends JobPostEntity> implements Consumer<JobPostDto> {
-        private ENTITY entity;
-
-        public SetupDto(ENTITY entity) {
-            this.entity = entity;
-        }
-
-        @Override
-        public void accept(JobPostDto dto) {
-            dto.setCategoryName(entity.getCategory().getName());
-            dto.setCategoryId(entity.getCategory().getId());
-            dto.setMemberId(entity.getMember().getId());
-            // 设置内嵌dto
-            dto.setMemberDto(CollectionUtils.entity2Dto(entity, GeneralMemberDto.class, null));
-        }
+    @Override
+    public List<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+        return postMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = CollectionUtils.determineCapacity(capacity);
+    public List<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
+        JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
+        model.setMemberId(memId);
 
-        Page<JobPostEntity> entityList = postRepo.findAllOrderByPostTime(new PageRequest(firstResult, cap));
-        wrapper.setObj(entityList.getTotalPages());
-
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
-
+        return postMapper.findBy(model);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
-        MemberEntity mem = em.getReference(MemberEntity.class, memId);
-        CheckUtils.nullCheck(mem);
+    public List<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
+        JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
+        model.setJobPostCategoryId(cateId);
 
-        int cap = CollectionUtils.determineCapacity(capacity);
-
-        Page<JobPostEntity> entityList = postRepo.findByMember(mem, new PageRequest(firstResult, cap));
-        wrapper.setObj(entityList.getTotalPages());
-
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+        return postMapper.findBy(model);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = CollectionUtils.determineCapacity(capacity);
+    public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+        JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
+        model.setVerified(Constants.VerifyStatus.IN_PROCESS.toString());
 
-        JobPostCategoryEntity cate = em.getReference(JobPostCategoryEntity.class, cateId);
-        CheckUtils.nullCheck(cate);
-
-        Page<JobPostEntity> postList = postRepo.findByCategory(cate, new PageRequest(firstResult, cap));
-        wrapper.setObj(postList.getTotalPages());
-
-        return CollectionUtils.transformCollection(postList, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+        return postMapper.findBy(model);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = CollectionUtils.determineCapacity(capacity);
-
-        Page<JobPostEntity> entityPage = postRepo.findByVerified(Constants.VerifyStatus.NONE.toString(), new PageRequest(firstResult, cap));
-        return CollectionUtils.transformCollection(entityPage, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+    public List<JobPostModel> getPostListByIds(Integer... ids) {
+        return postMapper.getInBatch(Arrays.asList(ids));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getPostListByIds(Integer... ids) {
-        List<JobPostEntity> entityList = postRepo.findByIds(Arrays.asList(ids));
-
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
-        int cap = CollectionUtils.determineCapacity(capacity);
-        Page<JobPostEntity> entityList = postRepo.findSuedPost(new PageRequest(firstResult, cap));
-
-
-        return CollectionUtils.transformCollection(entityList, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+    public List<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
+        return postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
-        if (orderByDate && orderByPageVisit) {
-            throw new IllegalStateException("boolean参数最多只能有一个为true");
-        }
+    public List<JobPostModel> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
+        JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
+        model.setJobPostCategoryId(categoryId);
+        model.setTimeToPay(wayToPay.toString());
+        model.setOrderByDate(orderByDate);
+        model.setOrderByVisit(orderByPageVisit);
 
-        // 构造参数列表
-        Map<String, Object> parmMap = new HashMap<>();
-        if (null != categoryId) {
-            parmMap.put("category", jobCateRepo.getOne(categoryId));
-        }
-        if (null != wayToPay) {
-            parmMap.put("timeToPay", wayToPay.toString());
-        }
-
-        // 构造排序参数表
-        Map.Entry<String, String> order = null;
-        if (true == orderByDate) {
-            order = new AbstractMap.SimpleEntry<String, String>("postTime", "DESC");
-        }
-        if (true == orderByPageVisit) {
-            order = new AbstractMap.SimpleEntry<String, String>("pageView", "DESC");
-        }
-
-        String query = StringUtils.buildQuery("job", JobPostEntity.class.getSimpleName(), parmMap, order);
-        if (logger.isDebugEnabled()) {
-            logger.debug("构造JPQL:{}", query);
-        }
-
-        List<JobPostEntity> entityList = search.runAccurateQuery(JobPostEntity.class, parmMap, order, em);
-
-        int cap = CollectionUtils.determineCapacity(capacity);
-        Page<JobPostEntity> postPage = new PageImpl<JobPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
-        wrapper.setObj(postPage);
-
-        return CollectionUtils.transformCollection(postPage, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+        return postMapper.findBy(model);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<JobPostDto> runSearch(String field, String includeString, int firstResult, int capacity, ObjWrapper wrapper) {
-        Map<String, Object> parmMap = new HashMap<>();
-        parmMap.put(field, includeString);
+    public List<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper) {
+        model.setPageNumber(firstResult);
+        model.setPageSize(CollectionUtils.determineCapacity(capacity));
 
-        List<JobPostEntity> entityList = search.runLikeQuery(JobPostEntity.class, parmMap, null, em);
-
-        // 分页
-        int cap = CollectionUtils.determineCapacity(capacity);
-        Page<JobPostEntity> postPage = new PageImpl<JobPostEntity>(entityList, new PageRequest(firstResult, cap), entityList.size());
-        wrapper.setObj(postPage.getTotalPages());
-
-        return CollectionUtils.transformCollection(postPage, JobPostDto.class, entity -> {
-            return CollectionUtils.entity2Dto(entity, JobPostDto.class, new SetupDto(entity));
-        });
+        return postMapper.searchBy(model);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public JobPostDto findJobPost(Integer postId) {
-        JobPostEntity post = em.find(JobPostEntity.class, postId);
-        CheckUtils.nullCheck(post);
-
-        return CollectionUtils.entity2Dto(post, JobPostDto.class, new SetupDto(post));
+    public JobPostModel findJobPost(Integer postId) {
+        return postMapper.selectByPrimaryKey(postId);
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void postResume(Integer postId, Integer resumeId) {
-        JobPostEntity post = postRepo.findOne(postId);
-        CheckUtils.nullCheck(post);
-
-        // 记录收到的简历id
-        String applicationIds = post.getApplicationResumeIds();
-        String newIds = StringUtils.addToString(applicationIds, resumeId.toString());
-        post.setApplicationResumeIds(newIds);
-
-
-
-        // 增加申请者数量
-        Integer original = post.getApplicantAmount();
-        Integer newValue = original == null ? 1 : original.intValue() + 1;
-        post.setApplicantAmount(newValue);
-
-        // 在Member中记录这次投递
-        ResumeEntity resumeEntity = resumeRepo.getOne(resumeId);
-        MemberEntity mem = resumeEntity.getMember();
-        String applicationJson = mem.getAppliedJobIds();
-
-        Date now = new Date();
-        JsonWrapper js = new JsonWrapper(applicationJson);
-        js.addObjectToArray(Arrays.asList(
-                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_ID, postId.toString()),
-                new AbstractMap.SimpleEntry<String, String>(Constants.ApplicationRecord.KEY_TIME, Long.toString(now.getTime()))
-        ));
-        mem.setAppliedJobIds(js.getAjaxMessage(true));
-
+    @Transactional(readOnly = false)
+    public void complaint(Integer postId) {
+        postMapper.complaint(postId);
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
     public void favoritePost(Integer memId, Integer postId) {
-        // TODO untested!!
-        MemberEntity mem = em.find(MemberEntity.class, memId);
-        JobPostEntity post = postRepo.findOne(postId);
-        CheckUtils.nullCheck(mem, post);
-
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.addToString(oldIds, postId.toString());
-        mem.setFavoriteJobIds(newIds);
 
+        memMapper.updateByPrimaryKeySelective(mem);
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
-        // TODO untested!!
-        MemberEntity mem = em.find(MemberEntity.class, memId);
-        JobPostEntity post = postRepo.findOne(postId);
-        CheckUtils.nullCheck(mem, post);
-
-        // 取出ids
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.removeFromString(oldIds, postId.toString());
-        mem.setFavoriteJobIds(newIds);
+
+        memMapper.updateByPrimaryKeySelective(mem);
+
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void complaint(Integer postId) {
-        JobPostEntity post = em.find(JobPostEntity.class, postId);
-        CheckUtils.nullCheck(post);
+    @Transactional(readOnly = true)
+    public boolean isPostFavorite(Integer memId, Integer postId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String ids = mem.getFavoriteJobIds();
 
-        Integer original = post.getComplaint();
-
-        // 帖子本身投诉数+1
-        Integer newValue = original == null ? 1 : original.intValue() + 1;
-        post.setComplaint(newValue);
-
-        // 对应用户投诉数+1
-        original = post.getMember().getComplaint();
-        newValue = original == null ? 1 : original.intValue() + 1;
-        post.getMember().setComplaint(newValue);
+        return StringUtils.checkIdExists(ids, postId.toString());
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean updateJobPost(Integer postId, JobPostDto postDto) {
-        JobPostEntity post = em.find(JobPostEntity.class, postId);
-        CheckUtils.nullCheck(post);
+    @Transactional(readOnly = false)
+    public List<JobPostModel> getFavoritePost(Integer memberId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
+        String allIds = mem.getFavoriteJobIds();
+        String[] ids = allIds.split(Constants.DELIMITER);
 
-        CollectionUtils.updateEntity(post, postDto, null);
+        List<Integer> idList = Arrays.stream(ids).map(id -> {
+            return Integer.parseInt(id);
+        }).collect(Collectors.toList());
 
-        return true;
+        return postMapper.getInBatch(idList);
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(readOnly = false)
+    public void postResume(Integer postId, Integer resumeId, Integer memberId) {
+        postMapper.postResume(resumeId, postId, memberId);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addJobPost(JobPostModel model) {
+        postMapper.insert(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean updateJobPost(Integer postId, JobPostModel model) {
+        model.setId(postId);
+        int row = postMapper.updateByPrimaryKeySelective(model);
+
+        return row <= 0 ? false : true;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public boolean deleteJobPost(Integer postId) {
-        JobPostEntity post = em.find(JobPostEntity.class, postId);
-        CheckUtils.nullCheck(post);
+        //得到所有评论
+        ReviewModel revModel = new ReviewModel(0, Integer.MAX_VALUE);
+        revModel.setPostId(postId);
+        List<ReviewModel> revList = revMapper.findBy(revModel);
 
-        // 从member实体中删除关联
-        CollectionUtils.removeFromCollection(post.getMember().getJobPostCollection(), jobPost -> {
-            return jobPost.getId().equals(postId);
-        });
+        List<Integer> idList = revList.stream()
+                .map(ReviewModel::getId)
+                .collect(Collectors.toList());
 
-        // 从分类实体中删除关联
-        CollectionUtils.removeFromCollection(post.getCategory().getJobPostCollection(), jobPost -> {
-            return jobPost.getId().equals(postId);
-        });
+        // 批量删除评论
+        revMapper.deleteInBatch(idList);
 
-        // 删除帖子的评论
-        CollectionUtils.applyActionOnCollection(post.getReviewCollection(), review -> {
-            reviewService.deleteReview(review.getId());
-        });
+        // 删除兼职本身
+        int rows = postMapper.deleteByPrimaryKey(postId);
 
-        // 最后删除帖子本身
-        em.remove(post);
-
-
-        return true;
+        return rows <= 0 ? false : true;
     }
 
     @Override
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void addJobPost(JobPostDto dto) {
-        em.persist(CollectionUtils.dto2Entity(dto, JobPostEntity.class, (entity) -> {
-            JobPostCategoryEntity cate = em.getReference(JobPostCategoryEntity.class, dto.getCategoryId());
-            MemberEntity mem = em.getReference(MemberEntity.class, dto.getMemberId());
-            CheckUtils.nullCheck(cate, mem);
-
-            entity.setCategory(cate);
-            entity.setMember(mem);
-        }));
+    @Transactional(readOnly = false)
+    public void increasePageView(Integer id) {
+        postMapper.increasePageView(id);
     }
 }
