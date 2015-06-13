@@ -11,11 +11,13 @@ import java.util.List;
  * Created by wanghongfei on 15-3-5.
  */
 public interface NotificationService {
-    ListResult<SysNotificationModel> getSysNotification(List<String> rangeList, int pageNumber, int pageSize);
+    ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize);
 
     void deleteSysNotification(Integer sysId);
+
 
     ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize);
 
     void deletePriNotification(Integer priId);
+    void markPriAsRead(Integer sysId);
 }

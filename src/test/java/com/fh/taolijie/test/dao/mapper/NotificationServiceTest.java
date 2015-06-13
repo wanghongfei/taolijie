@@ -29,6 +29,6 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
         noService.deletePriNotification(1);
         noService.deleteSysNotification(1);
         noService.getPriNotification(1, 0, 100);
-        noService.getSysNotification(Arrays.asList("GLOBAL", "ADMIN"), 0, 100);
+        noService.getSysNotification(1, Arrays.asList("GLOBAL", "ADMIN"), 0, 100);
     }
 }

@@ -167,6 +167,23 @@ public class StringUtils {
         return sb.toString();
     }
 
+    public static String[] splitIds(String ids) {
+        if (null == ids) {
+            return null;
+        }
+
+        return ids.split(Constants.DELIMITER);
+    }
+
+    public static boolean checkIdExists(String[] ids, String targetId) {
+        if (null == ids) {
+            return false;
+        }
+
+        return Arrays.stream(ids)
+                .anyMatch( (id) -> id.equals(targetId) );
+    }
+
     public static boolean checkIdExists(String idsString, String idString) {
         if (null == idsString) {
             return false;
