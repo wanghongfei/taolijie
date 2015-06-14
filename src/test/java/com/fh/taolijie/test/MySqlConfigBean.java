@@ -73,6 +73,9 @@ public class MySqlConfigBean {
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
+        connectionFactory.setHostName("120.24.218.56");
+        connectionFactory.setPassword("111111");
+        connectionFactory.setPort(6379);
         connectionFactory.afterPropertiesSet();
 
         return connectionFactory;
@@ -92,6 +95,7 @@ public class MySqlConfigBean {
     @Bean
     public CacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+        //redisCacheManager.setDefaultExpiration(TimeUnit.MINUTES.toSeconds(30)); // 过期时间, 单位是秒
         redisCacheManager.afterPropertiesSet();
 
         return redisCacheManager;

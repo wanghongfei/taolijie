@@ -15,8 +15,6 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +36,8 @@ public class DefaultAccountService implements AccountService {
     @Autowired
     RoleModelMapper roleMapper;
 
-    @Autowired
-    RedisTemplate redisTemplate;
+/*    @Autowired
+    RedisTemplate redisTemplate;*/
 
 /*    @Autowired
     Mail mail;*/
@@ -105,9 +103,9 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "cache", key = "#username")
+    //@Cacheable(value = "memberCache", key = "#username")
+    //@CachePut(value = "memberCache", key = "#username")
     public MemberModel findMember(String username, boolean isWired) {
-        System.out.println("从DB中得到数据");
         MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
 

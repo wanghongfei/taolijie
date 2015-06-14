@@ -115,14 +115,24 @@
         <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
     </interceptors>
 
+    <beans:bean id="cacheFilter" class="com.fh.taolijie.servlet.CacheFilter" />
+
 
     <!-- Redis缓存配置 -->
     <beans:bean id="redisConnectionFactory"
-                class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" />
+                class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
+        <beans:property name="hostName" value="120.24.218.56" />
+        <beans:property name="password" value="111111" />
+    </beans:bean>
 
     <!-- Serializer -->
     <beans:bean id="keySerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" />
+    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" >
+    </beans:bean>
+<!--    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" >
+        <beans:constructor-arg name="type" value="com.fh.taolijie.domain.MemberModel" />
+    </beans:bean>-->
+
 
     <!-- redis template -->
     <beans:bean id="redisTemplate"

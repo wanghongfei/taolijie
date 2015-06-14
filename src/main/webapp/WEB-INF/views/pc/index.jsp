@@ -62,8 +62,8 @@
           <div class="shs_pic"><img src="${ (sh.picturePath) ? sh.picturePath : "/images/pig.jpg"}" alt=""></div>
           <p class="titile">${sh.title}</p>
           <div class="fl">
-            <p>${sh.categoryName}</p>
-            <span>${sh.memberDto.username}</span>
+            <p>${sh.category.name}</p>
+            <span>${sh.member.username}</span>
           </div>
           <span class="fr">￥${sh.sellPrice.intValue()}</span>
         </div>
