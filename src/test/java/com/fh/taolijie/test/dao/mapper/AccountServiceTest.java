@@ -37,6 +37,8 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     public void testFind() {
         MemberModel mem = accountService.findMember("wanghongfei", false);
         Assert.assertNotNull(mem);
+        mem = accountService.findMember("wanghongfei", false);
+        Assert.assertNotNull(mem);
 
         List<RoleModel> rList = mem.getRoleList();
         Assert.assertNotNull(rList);

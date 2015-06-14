@@ -4,7 +4,10 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.MemberRoleModel;
+import com.fh.taolijie.domain.Pagination;
+import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
@@ -12,6 +15,8 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,9 @@ public class DefaultAccountService implements AccountService {
 
     @Autowired
     RoleModelMapper roleMapper;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
 /*    @Autowired
     Mail mail;*/
@@ -97,7 +105,9 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "cache", key = "#username")
     public MemberModel findMember(String username, boolean isWired) {
+        System.out.println("从DB中得到数据");
         MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
 

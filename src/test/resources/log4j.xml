@@ -35,6 +35,10 @@
 		<level value="info" />
 	</logger>
 
+	<logger name="org.springframework.cache">
+		<level value="debug" />
+	</logger>
+
 	<!-- Root Logger -->
 	<root>
 		<priority value="info" />
