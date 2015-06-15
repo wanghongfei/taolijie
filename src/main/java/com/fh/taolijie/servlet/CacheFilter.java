@@ -41,10 +41,20 @@ public class CacheFilter implements Filter, ApplicationContextAware {
             return;
         }
 
+        // 判断是否强制刷新缓存
+        boolean flush = false;
+        String forceFlush = req.getParameter("flush");
+        if (null != forceFlush && forceFlush.equals("true")) {
+            flush = true;
+        }
 
         // 访问的是主页
         // 从缓存中得到主页html
-        String html = getHtmlFromCache();
+        String html = null;
+        if (false == flush) {
+            // 不需要强制刷新，从redis中取数据
+            html = getHtmlFromCache();
+        }
         if (null == html) {
             // 缓存中没有
             // 截取生成的html并放入缓存
