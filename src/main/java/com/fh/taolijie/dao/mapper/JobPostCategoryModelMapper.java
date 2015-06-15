@@ -19,8 +19,8 @@ public interface JobPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)"),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int deleteByPrimaryKey(Integer id);
@@ -31,7 +31,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true)
     int insert(JobPostCategoryModel record);
 
     /**
@@ -40,7 +40,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
     int insertSelective(JobPostCategoryModel record);
 
     /**
@@ -60,8 +60,8 @@ public interface JobPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKeySelective(JobPostCategoryModel record);
@@ -75,8 +75,8 @@ public interface JobPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKey(JobPostCategoryModel record);

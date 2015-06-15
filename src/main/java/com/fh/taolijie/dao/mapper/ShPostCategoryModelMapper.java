@@ -19,8 +19,8 @@ public interface ShPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)"),
-                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int deleteByPrimaryKey(Integer id);
@@ -31,7 +31,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
     int insert(SHPostCategoryModel record);
 
     /**
@@ -40,7 +40,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
     int insertSelective(SHPostCategoryModel record);
 
     /**
@@ -60,8 +60,8 @@ public interface ShPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKeySelective(SHPostCategoryModel record);
@@ -74,8 +74,8 @@ public interface ShPostCategoryModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKey(SHPostCategoryModel record);

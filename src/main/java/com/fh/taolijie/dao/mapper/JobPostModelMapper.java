@@ -19,8 +19,8 @@ public interface JobPostModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)"),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true)
+                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true),
+                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
             }
 
     )
@@ -32,7 +32,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobPostListCache", allEntries = true)
+    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
     int insert(JobPostModel record);
 
     /**
@@ -41,7 +41,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobPostListCache", allEntries = true)
+    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
     int insertSelective(JobPostModel record);
 
     /**
@@ -61,8 +61,8 @@ public interface JobPostModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true)
+                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)", beforeInvocation = true),
+                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
             }
 
     )
@@ -77,8 +77,8 @@ public interface JobPostModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true)
+                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)", beforeInvocation = true),
+                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
             }
 
     )
@@ -97,13 +97,13 @@ public interface JobPostModelMapper {
 
     List<JobPostModel> searchBy(JobPostModel model);
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)")
+    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void complaint(Integer postId);
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)")
+    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void increasePageView(Integer postId);
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)")
+    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void increaseLike(Integer postId);
 
     void postResume(Integer resumeId, Integer jobPostId, Integer memberId);

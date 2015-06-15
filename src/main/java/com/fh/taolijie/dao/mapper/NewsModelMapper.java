@@ -20,8 +20,8 @@ public interface NewsModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0)"),
-                    @CacheEvict(value = "newsListCache", allEntries = true)
+                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0)", beforeInvocation = true ),
+                    @CacheEvict(value = "newsListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int deleteByPrimaryKey(Integer id);
@@ -32,7 +32,7 @@ public interface NewsModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "newsListCache", allEntries = true)
+    @CacheEvict(value = "newsListCache", allEntries = true, beforeInvocation = true )
     int insert(NewsModel record);
 
     /**
@@ -41,7 +41,7 @@ public interface NewsModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "newsListCache", allEntries = true)
+    @CacheEvict(value = "newsListCache", allEntries = true, beforeInvocation = true )
     int insertSelective(NewsModel record);
 
     /**
@@ -61,8 +61,8 @@ public interface NewsModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "newsListCache", allEntries = true)
+                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "newsListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKeySelective(NewsModel record);
@@ -75,8 +75,8 @@ public interface NewsModelMapper {
      */
     @Caching(
             evict = {
-                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0.id)"),
-                    @CacheEvict(value = "newsListCache", allEntries = true)
+                    @CacheEvict(value = "newsListCache", key = "'News:id:'.concat(#p0.id)", beforeInvocation = true ),
+                    @CacheEvict(value = "newsListCache", allEntries = true, beforeInvocation = true )
             }
     )
     int updateByPrimaryKey(NewsModel record);
