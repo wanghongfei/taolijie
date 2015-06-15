@@ -2,6 +2,9 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +17,12 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)"),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+            }
+    )
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -22,6 +31,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
     int insert(JobPostCategoryModel record);
 
     /**
@@ -30,6 +40,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
     int insertSelective(JobPostCategoryModel record);
 
     /**
@@ -38,6 +49,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Cacheable(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)")
     JobPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -46,6 +58,12 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)"),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+            }
+    )
     int updateByPrimaryKeySelective(JobPostCategoryModel record);
 
 
@@ -55,7 +73,14 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)"),
+                    @CacheEvict(value = "jobCategoryListCache", allEntries = true)
+            }
+    )
     int updateByPrimaryKey(JobPostCategoryModel record);
 
+    @Cacheable(value = "jobCategoryListCache", key = "'JobPostCategory:query:all:'.concat(#p0).concat(':').concat(#p1)")
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }

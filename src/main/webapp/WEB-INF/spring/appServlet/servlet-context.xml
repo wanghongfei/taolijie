@@ -120,34 +120,5 @@
     <bean id="cacheFilter" class="com.fh.taolijie.servlet.CacheFilter" />
 
 
-    <!-- Redis缓存配置 -->
-    <bean id="redisConnectionFactory"
-                class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-        <property name="hostName" value="120.24.218.56" />
-        <property name="password" value="111111" />
-    </bean>
-
-    <!-- Serializer -->
-    <bean id="keySerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <bean id="valueSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" >
-    </bean>
-<!--    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" >
-        <beans:constructor-arg name="type" value="com.fh.taolijie.domain.MemberModel" />
-    </beans:bean>-->
-
-
-    <!-- redis template -->
-    <bean id="redisTemplate"
-                class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory" ref="redisConnectionFactory" />
-        <property name="keySerializer" ref="keySerializer" />
-        <property name="valueSerializer" ref="valueSerializer" />
-    </bean>
-
-    <!-- cache manager -->
-    <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
-        <constructor-arg name="template" ref="redisTemplate" />
-    </bean>
-
 
 </beans>

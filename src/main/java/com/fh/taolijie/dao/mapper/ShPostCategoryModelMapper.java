@@ -1,10 +1,13 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.SHPostCategoryModel;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface ShPostCategoryModelMapper {
@@ -14,6 +17,12 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)"),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+            }
+    )
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -22,6 +31,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
     int insert(SHPostCategoryModel record);
 
     /**
@@ -30,6 +40,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
     int insertSelective(SHPostCategoryModel record);
 
     /**
@@ -38,6 +49,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Cacheable(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)")
     SHPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -46,6 +58,12 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)"),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+            }
+    )
     int updateByPrimaryKeySelective(SHPostCategoryModel record);
 
     /**
@@ -54,7 +72,14 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)"),
+                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true)
+            }
+    )
     int updateByPrimaryKey(SHPostCategoryModel record);
 
-    List<SHPostCategoryModel> getAll(Map<String, Integer> pageMap);
+    @Cacheable(value = "shPostCategoryListCache", key = "'ShPostCategory:all:'.concat(#p0).concat(':').concat(#p1)")
+    List<SHPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }

@@ -1,7 +1,6 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
-import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.ShPostCategoryService;
@@ -24,9 +23,7 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
 
     @Override
     public List<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
-        Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
-
-        return cateMapper.getAll(page.getMap());
+        return cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
