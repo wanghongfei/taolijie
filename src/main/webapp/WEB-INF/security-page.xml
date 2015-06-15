@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="security-page.xsd">
-	
+
+	<login-page url="/login" />
 	<!-- <request url="/backstage/statistics" role="ADMIN USER" /> -->
 	<request url="/user/job/*" role="STUDENT EMPLOYERR ADMIN" to-url="/login" />
 	<request url="/user/resume/*" role="STUDENT EMPLOYERR ADMIN" to-url="/login" />
