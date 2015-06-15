@@ -20,6 +20,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by wanghongfei on 15-4-10.
@@ -95,6 +97,10 @@ public class MySqlConfigBean {
     @Bean
     public CacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("memberCache", 300L);
+        redisCacheManager.setExpires(map);
         //redisCacheManager.setDefaultExpiration(TimeUnit.MINUTES.toSeconds(30)); // 过期时间, 单位是秒
         redisCacheManager.afterPropertiesSet();
 

@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.fh.taolijie">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
     <logger name="cn.fh.security">
         <level value="debug" />

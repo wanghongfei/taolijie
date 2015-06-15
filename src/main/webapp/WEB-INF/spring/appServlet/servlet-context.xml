@@ -15,6 +15,8 @@
     <!-- DispatcherServlet Context: defines this servlet's request-processing
         infrastructure -->
 
+    <import resource="redis-config.xml" />
+
     <!-- Enables the Spring MVC @Controller programming model -->
     <cache:annotation-driven />
     <mvc:annotation-driven />

@@ -84,6 +84,6 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
     private void putIntoCache(String html) {
         StringRedisTemplate redis = (StringRedisTemplate)ctx.getBean("redisTemplate");
-        redis.opsForValue().set("home", html, TimeUnit.MINUTES.toSeconds(10)); // 10分钟
+        redis.opsForValue().set("home", html, 10, TimeUnit.MINUTES); // 10分钟
     }
 }

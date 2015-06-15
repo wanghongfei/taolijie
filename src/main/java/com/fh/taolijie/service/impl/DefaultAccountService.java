@@ -103,7 +103,6 @@ public class DefaultAccountService implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    //@Cacheable(value = "memberCache", key = "#username")
     //@CachePut(value = "memberCache", key = "#username")
     public MemberModel findMember(String username, boolean isWired) {
         MemberModel mem = memMapper.selectByUsername(username);

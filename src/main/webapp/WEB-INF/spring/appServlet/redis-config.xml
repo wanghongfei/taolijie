@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:cache="http://www.springframework.org/schema/cache"
+             xsi:schemaLocation="
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		"
+        >
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <cache:annotation-driven />
+
+
+
+    <bean id="cacheFilter" class="com.fh.taolijie.servlet.CacheFilter" />
+
+
+    <!-- Redis缓存配置 -->
+    <bean id="redisConnectionFactory"
+                class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
+        <property name="hostName" value="120.24.218.56" />
+        <property name="password" value="111111" />
+    </bean>
+
+    <!-- Serializer -->
+    <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    <bean id="jacksonSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer">
+        <constructor-arg name="type" value="java.lang.Object" />
+    </bean>
+<!--    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" >
+        <beans:constructor-arg name="type" value="com.fh.taolijie.domain.MemberModel" />
+    </beans:bean>-->
+
+
+    <!-- redis template -->
+    <bean id="redisTemplate"
+                class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+        <property name="keySerializer" ref="stringSerializer" />
+        <property name="valueSerializer" ref="jacksonSerializer" />
+    </bean>
+
+    <!-- cache manager -->
+    <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+        <constructor-arg name="template" ref="redisTemplate" />
+        <property name="expires">
+            <map>
+                <entry key="webCache" value="600" /> <!-- 10 minutes -->
+                <entry key="memberCache" value="3600" /> <!-- 1 hour -->
+            </map>
+        </property>
+    </bean>
+
+
+</beans>
