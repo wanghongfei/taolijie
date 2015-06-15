@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+<beans xmlns="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
-             xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+             xmlns:tx="http://www.springframework.org/schema/tx"
+             xsi:schemaLocation="
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
@@ -14,71 +14,71 @@
         infrastructure -->
 
     <!-- Enables the Spring MVC @Controller programming model -->
-    <annotation-driven />
+    <mvc:annotation-driven />
 
     <!--管理员后台资源路径-->
-    <resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
+    <mvc:resources mapping="/admin/**" location="/WEB-INF/views/pc/assets/admin/" />
     <!--前台资源-->
-    <resources mapping="/images/**" location="/WEB-INF/views/pc/assets/images/" />
-    <resources mapping="/scripts/**" location="/WEB-INF/views/pc/assets/scripts/" />
-    <resources mapping="/styles/**" location="/WEB-INF/views/pc/assets/styles/" />
-    <resources mapping="/fonts/**" location="/WEB-INF/views/pc/assets/fonts/"/>
-    <resources mapping="/about/**" location="/WEB-INF/views/pc/assets/about/"/>
+    <mvc:resources mapping="/images/**" location="/WEB-INF/views/pc/assets/images/" />
+    <mvc:resources mapping="/scripts/**" location="/WEB-INF/views/pc/assets/scripts/" />
+    <mvc:resources mapping="/styles/**" location="/WEB-INF/views/pc/assets/styles/" />
+    <mvc:resources mapping="/fonts/**" location="/WEB-INF/views/pc/assets/fonts/"/>
+    <mvc:resources mapping="/about/**" location="/WEB-INF/views/pc/assets/about/"/>
 
 
 
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources
         in the /WEB-INF/views directory -->
-    <beans:bean
+    <bean
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <beans:property name="prefix" value="/WEB-INF/views/" />
-        <beans:property name="suffix" value=".jsp" />
-    </beans:bean>
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
 
 
 
     <!--<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"-->
                      <!--resource-ref="true" />-->
     <!--数据库连接采用jdbc驱动-->
-    <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
-        <beans:property name="username" value="root" />
-    <beans:property name="password" value="111111" />
-    </beans:bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
+        <property name="username" value="root" />
+    <property name="password" value="111111" />
+    </bean>
 
 
-    <beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <beans:property name="dataSource" ref="dataSource" />
-    </beans:bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
 
     <!-- myBatis配置 -->
-    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <beans:property name="configLocation" value="classpath:mybatis-config.xml" />
-        <beans:property name="dataSource" ref="dataSource" />
-    </beans:bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
     <!-- myBatis配置 -->
-    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <beans:property name="annotationClass" value="org.springframework.stereotype.Repository"/>
-        <beans:property name="basePackage" value="com.fh.taolijie.dao.mapper"/>
-        <beans:property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-    </beans:bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="basePackage" value="com.fh.taolijie.dao.mapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
 
     <!-- 文件上传 -->
-    <beans:bean id="multipartResolver"
+    <bean id="multipartResolver"
                 class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <beans:property name="maxUploadSize" value="5242880" /> <!-- 5M -->
-    </beans:bean>
+        <property name="maxUploadSize" value="5242880" /> <!-- 5M -->
+    </bean>
 
-    <beans:bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <beans:property name="exceptionMappings">
-            <beans:props>
-                <beans:prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">/404</beans:prop>
-            </beans:props>
-        </beans:property>
-    </beans:bean>
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">/404</prop>
+            </props>
+        </property>
+    </bean>
 
     <tx:annotation-driven />
 
@@ -88,30 +88,30 @@
 
 
     <!-- Email -->
-    <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <beans:property name="host" value="smtp.126.com"/>
-        <beans:property name="port" value="25"/>
-        <beans:property name="username" value="wfc5582563@126.com"/>
-        <beans:property name="password" value="wang700327"/>
-        <beans:property name="javaMailProperties">
-            <beans:props>
-                <beans:prop key="mail.transport.protocol">smtp</beans:prop>
-                <beans:prop key="mail.smtp.auth">true</beans:prop>
-                <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
-                <beans:prop key="mail.debug">true</beans:prop>
-            </beans:props>
-        </beans:property>
-    </beans:bean>
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.126.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="wfc5582563@126.com"/>
+        <property name="password" value="wang700327"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
 
-    <interceptors>
-        <interceptor>
+    <mvc:interceptors>
+        <mvc:interceptor>
             <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
-            <mapping path="/**" />
-            <beans:bean class="com.fh.taolijie.interceptor.CommonInterceptor"></beans:bean>
-        </interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.fh.taolijie.interceptor.CommonInterceptor"></bean>
+        </mvc:interceptor>
         <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
-    </interceptors>
+    </mvc:interceptors>
 
 
 
-</beans:beans>
+</beans>
