@@ -1,7 +1,10 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.BannerPicModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
@@ -53,4 +56,6 @@ public interface BannerPicModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(BannerPicModel record);
+
+    List<BannerPicModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }
