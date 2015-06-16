@@ -86,6 +86,7 @@ public interface JobPostModelMapper {
 
     @Cacheable(value = "jobPostListCache", key = "'JobPost:'.concat(#root.methodName).concat(':').concat(#p0).concat(':').concat(#p1)")
     List<JobPostModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countGetAll();
 
     List<JobPostModel> getInBatch(List<Integer> idList);
 
@@ -94,11 +95,14 @@ public interface JobPostModelMapper {
 
 
     List<JobPostModel> findBy(JobPostModel model);
+    long countFindBy(JobPostModel model);
 
     List<JobPostModel> searchBy(JobPostModel model);
+    long countSearchBy(JobPostModel model);
 
     @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void complaint(Integer postId);
+
 
     @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void increasePageView(Integer postId);
