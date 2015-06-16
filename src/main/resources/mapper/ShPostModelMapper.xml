@@ -332,7 +332,7 @@
         LEFT JOIN
             second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         WHERE
-            id IN <foreach collection="list" separator="," open="(" close=")" item="id">#{id}</foreach>
+            post.id IN <foreach collection="list" separator="," open="(" close=")" item="id">#{id}</foreach>
     </select>
 
     <select id="getByCategory" resultMap="BaseResultMap">
