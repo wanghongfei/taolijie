@@ -2,7 +2,6 @@ package com.fh.taolijie.test.dao.mapper;
 
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -17,10 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by wanghongfei on 15-5-31.
+ * Created by hanxinxin on 15-5-31.
  */
 @ContextConfiguration(classes = {
         DefaultAccountService.class
@@ -35,22 +35,29 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testFind() {
-        MemberModel mem = accountService.findMember("wanghongfei", false);
+        MemberModel mem = accountService.findMember("hanxinxin", false);
         Assert.assertNotNull(mem);
-        mem = accountService.findMember("wanghongfei", false);
+        mem = accountService.findMember("hanxinxin", false);
         Assert.assertNotNull(mem);
 
         List<RoleModel> rList = mem.getRoleList();
         Assert.assertNotNull(rList);
-        Assert.assertTrue(rList.stream().anyMatch( role -> role.getRolename().equals("ADMIN") ));
+        Assert.assertTrue(rList.stream().anyMatch( role -> role.getRolename().equals("rolename2") ));
 
-        memMapper.checkUserExist("wanghongfei");
+        memMapper.checkUserExist("hanxinxin");
     }
 
     @Test
     public void testAdd() {
         MemberModel mem = new MemberModel();
-        mem.setUsername("wanghongfei");
+        mem.setUsername("hanxinxin");
+        mem.setPassword("111111");
+
+        RoleModel r1 = new RoleModel();
+        r1.setRid(1);
+        RoleModel r2 = new RoleModel();
+        r1.setRid(2);
+        mem.setRoleList(Arrays.asList(r1, r2));
 
         // 测试用户名重复
         boolean duplicated = false;
@@ -85,7 +92,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     public void testLogin() {
         // normal case
         try {
-            accountService.login("wanghongfei", "111111");
+            accountService.login("hanxinxin", "111111");
         } catch (UserNotExistsException e) {
             Assert.assertFalse(true);
         } catch (PasswordIncorrectException e) {
@@ -96,7 +103,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
         // wrong password
         try {
-            accountService.login("wanghongfei", "wrong password");
+            accountService.login("hanxinxin", "wrong password");
         } catch (UserNotExistsException e) {
             Assert.assertFalse(true);
         } catch (PasswordIncorrectException e) {
@@ -124,13 +131,13 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
     @Test
     public void testGetAmount() {
         Long tot = accountService.getMemberAmount();
-        Assert.assertEquals(3, tot.intValue());
+        Assert.assertEquals(2, tot.intValue());
     }
 
     @Test
     public void testUpdate() {
         MemberModel mem = new MemberModel();
-        mem.setId(1); // wanghongfei
+        mem.setId(1); // hanxinxin
         mem.setValid(false);
         accountService.updateMember(mem);
 
@@ -159,17 +166,17 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testAssignRole() {
-        accountService.assignRole(2, "wanghongfei");
+        accountService.assignRole(2, "hanxinxin");
 
-        MemberModel mem = memMapper.selectByUsername("wanghongfei");
-        Assert.assertTrue(mem.getRoleList().stream().anyMatch(r -> r.getRolename().equals("STUDENT")));
+        MemberModel mem = memMapper.selectByUsername("hanxinxin");
+        Assert.assertTrue(mem.getRoleList().stream().anyMatch(r -> r.getRolename().equals("rolename2")));
     }
 
     @Test
     public void testDeassignRole() {
-        accountService.deassignRole(1, "wanghongfei");
+        accountService.deassignRole(1, "hanxinxin");
 
-        MemberModel mem = memMapper.selectByUsername("wanghongfei");
+        MemberModel mem = memMapper.selectByUsername("hanxinxin");
         Assert.assertTrue(mem.getRoleList().stream().noneMatch(r -> r.getRolename().equals("STUDENT")));
     }
 }

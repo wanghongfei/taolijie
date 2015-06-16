@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
+import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
@@ -20,6 +21,8 @@ import java.util.List;
 public class DefaultJobPostCategoryService implements JobPostCateService {
     @Autowired
     JobPostCategoryModelMapper cateMapper;
+    @Autowired
+    JobPostModelMapper postMapper;
 
     @Override
     public List<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
@@ -35,6 +38,10 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException {
+        if (false == cateMapper.isCategoryEmpty(cateId)) {
+            throw new CategoryNotEmptyException("");
+        }
+
         int row = cateMapper.deleteByPrimaryKey(cateId);
 
         return row <= 0 ? false : true;

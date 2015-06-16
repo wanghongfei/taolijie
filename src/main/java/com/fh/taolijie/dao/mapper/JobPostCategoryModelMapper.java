@@ -83,4 +83,6 @@ public interface JobPostCategoryModelMapper {
 
     @Cacheable(value = "jobCategoryListCache", key = "'JobPostCategory:query:all:'.concat(#p0).concat(':').concat(#p1)")
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+
+    boolean isCategoryEmpty(Integer categoryId);
 }

@@ -847,6 +847,6 @@
     <!-- 向简历投递表中添加记录 -->
     <insert id="postResume">
         INSERT INTO resume_post_rel (resume_id, job_post_id, created_time, member_id)
-        VALUES (#{resumeId}, #{jobPostId}, now(), memberId)
+        VALUES (#{resumeId}, #{jobPostId}, now(), #{memberId})
     </insert>
 </mapper>

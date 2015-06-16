@@ -189,7 +189,7 @@ public class StringUtils {
             return false;
         }
 
-        String[] ids = idString.split(Constants.DELIMITER);
+        String[] ids = idsString.split(Constants.DELIMITER);
 
         return Arrays.stream(ids)
                 .anyMatch( (id) -> id.equals(idString) );

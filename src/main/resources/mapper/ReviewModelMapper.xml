@@ -183,25 +183,30 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
+            <include refid="member_column"/>
         FROM
-            review
+            review rev
+        LEFT JOIN
+            member mem ON mem.id = rev.member_id
         <where>
             <if test="postId != null">
-                post_id = #{postId,jdbcType=INTEGER}
+                rev.post_id = #{postId,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND member_id = #{memberId,jdbcType=INTEGER}
+                AND rev.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="time != null">
-                AND time = #{time,jdbcType=DATE}
+                AND rev.time = #{time,jdbcType=DATE}
             </if>
             <if test="repliedReviewId != null">
-                AND replied_review_id = #{repliedReviewId,jdbcType=INTEGER}
+                AND rev.replied_review_id = #{repliedReviewId,jdbcType=INTEGER}
             </if>
             <if test="content != null">
-                AND content = #{content,jdbcType=LONGVARCHAR}
+                AND rev.content = #{content,jdbcType=LONGVARCHAR}
             </if>
         </where>
+        LIMIT
+            #{pageNumber}, #{pageSize}
     </select>
 
 </mapper>

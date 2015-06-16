@@ -114,6 +114,7 @@ public interface JobPostService extends PageService {
     List<JobPostModel> getFavoritePost(Integer memberId);
 
     /**
+     * @deprecated
      * 投递简历
      * @param postId
      * @param resumeId

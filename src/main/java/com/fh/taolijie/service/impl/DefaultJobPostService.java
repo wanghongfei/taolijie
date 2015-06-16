@@ -58,7 +58,7 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
-        model.setVerified(Constants.VerifyStatus.IN_PROCESS.toString());
+        model.setVerified(Constants.VerifyStatus.NONE.toString());
 
         return postMapper.findBy(model);
     }
@@ -77,7 +77,9 @@ public class DefaultJobPostService implements JobPostService {
     public List<JobPostModel> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setJobPostCategoryId(categoryId);
-        model.setTimeToPay(wayToPay.toString());
+        if (null != wayToPay) {
+            model.setTimeToPay(wayToPay.toString());
+        }
         model.setOrderByDate(orderByDate);
         model.setOrderByVisit(orderByPageVisit);
 
@@ -147,6 +149,7 @@ public class DefaultJobPostService implements JobPostService {
         return postMapper.getInBatch(idList);
     }
 
+    @Deprecated
     @Override
     @Transactional(readOnly = false)
     public void postResume(Integer postId, Integer resumeId, Integer memberId) {
@@ -174,6 +177,7 @@ public class DefaultJobPostService implements JobPostService {
         //得到所有评论
         ReviewModel revModel = new ReviewModel(0, Integer.MAX_VALUE);
         revModel.setPostId(postId);
+
         List<ReviewModel> revList = revMapper.findBy(revModel);
 
         List<Integer> idList = revList.stream()

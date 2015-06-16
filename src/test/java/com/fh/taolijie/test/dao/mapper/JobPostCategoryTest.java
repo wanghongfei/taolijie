@@ -29,19 +29,31 @@ public class JobPostCategoryTest extends BaseSpringDataTestClass {
     public void testGetAll() {
         List<JobPostCategoryModel> list = cateService.getCategoryList(0, 100, null);
         Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(2, list.size());
 
         JobPostCategoryModel cate = cateService.findCategory(1);
         Assert.assertNotNull(cate);
+        Assert.assertEquals("name1", cate.getName());
     }
 
     @Test
-    public void testAll() {
+    public void testAll() throws Exception {
         JobPostCategoryModel model = new JobPostCategoryModel();
         model.setName("category A");
         cateService.addCategory(model);
 
         model.setId(1);
+        model.setName("category B");
         cateService.updateCategory(1, model);
+        model = cateService.findCategory(1);
+        Assert.assertEquals("category B", model.getName());
+
+        try {
+            cateService.deleteCategory(1);
+        } catch (Exception e) {
+            return;
+        }
+        Assert.assertTrue(false);
 
     }
 }

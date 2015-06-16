@@ -126,4 +126,9 @@
         LIMIT #{pageNumber},#{pageSize}
     </select>
 
+
+    <select id="isCategoryEmpty" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM job_post WHERE job_post_category_id = #{categoryId})
+    </select>
+
 </mapper>
