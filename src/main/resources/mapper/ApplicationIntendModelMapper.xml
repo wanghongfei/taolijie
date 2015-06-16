@@ -38,6 +38,11 @@
         post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids
     </sql>
 
+    <sql id="category_column">
+        cate.id AS job_cate_id, cate.name AS job_cate_name, cate.level AS job_cate_level, cate.theme_color AS job_cate_theme_color, cate.memo AS
+        job_cate_memo
+    </sql>
+
     <insert id="insert" parameterType="com.fh.taolijie.domain.ApplicationIntendModel">
         <!--
           WARNING - @mbggenerated
@@ -72,7 +77,7 @@
 
     <delete id="delete">
         DELETE FROM resume_job_post_category
-        WHERE resume_id = #{resumeId} AND job_post_category_id = #{categoryId}
+        WHERE resume_id = #{resumeId} AND job_post_category_id = #{jobPostCategoryId}
     </delete>
 
     <select id="getByIntend" resultMap="BaseResultMap">
@@ -80,7 +85,7 @@
             am.resume_id AS am_resume_id,
             am.job_post_category_id AS am_job_post_category_id,
             <include refid="resume_column" />,
-            <include refid="job_post_column" />
+            <include refid="category_column" />
         FROM
             resume_job_post_category am
         INNER JOIN
@@ -98,7 +103,7 @@
             intend.resume_id AS am_resume_id,
             intend.job_post_category_id AS am_job_post_category_id,
             <include refid="resume_column" />,
-            <include refid="job_post_column" />
+            <include refid="category_column" />
         FROM resume_job_post_category intend
           INNER JOIN resume re ON re.id = intend.resume_id
           INNER JOIN job_post_category cate ON cate.id = intend.job_post_category_id

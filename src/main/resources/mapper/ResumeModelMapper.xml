@@ -339,7 +339,7 @@
         FROM resume re
             LEFT JOIN member mem ON mem.id = re.member_id
         WHERE re.id IN
-        <foreach collection="list" item="id" open="(" close=")" separator=",">#{id}</foreach>
+        <foreach collection="list" item="id" open="(" close=")" separator="," >#{id}</foreach>
     </select>
 
     <update id="updateTime">
@@ -419,17 +419,17 @@
 
     <select id="findPostRecordByMember" resultMap="PostRecord">
         SELECT
-            <include refid="member_column"/>
-            <include refid="resume_column"/>
+            <include refid="member_column"/>,
+            <include refid="resume_column"/>,
             <include refid="job_post_column"/>
         FROM
             resume_post_rel rp
               INNER JOIN
                 member mem ON mem.id = rp.member_id
               INNER JOIN
-                job_post job ON job.id = rp.job_post_id
+                job_post post ON post.id = rp.job_post_id
               INNER JOIN
-                resume re ON resu.id = rp.resume_id
+                resume re ON re.id = rp.resume_id
         WHERE
             re.member_id = #{memberId}
         LIMIT

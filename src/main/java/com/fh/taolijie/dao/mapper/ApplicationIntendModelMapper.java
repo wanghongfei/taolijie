@@ -27,6 +27,5 @@ public interface ApplicationIntendModelMapper {
     void delete(ApplicationIntendModel model);
 
     List<ApplicationIntendModel> getByIntend(@Param("categoryId") Integer categoryId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
-
     List<ApplicationIntendModel> getByResume(@Param("resumeId") Integer resumeId);
 }
