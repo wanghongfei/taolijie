@@ -21,7 +21,7 @@ import java.util.List;
  * Created by wynfrith on 15-6-11.
  */
 @Controller
-@RequestMapping("admin/sh")
+@RequestMapping("manage/sh")
 public class AShController {
 
     @Autowired

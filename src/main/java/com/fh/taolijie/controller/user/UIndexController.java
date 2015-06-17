@@ -7,6 +7,7 @@ import com.fh.taolijie.dto.ChangePasswordDto;
 import com.fh.taolijie.dto.ProfileDto;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.NotificationService;
+import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ public class UIndexController {
     @Autowired
     AccountService accountService;
     @Autowired
+    Mail mail;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(){
@@ -132,6 +135,34 @@ public class UIndexController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion
+
+
+    /**
+     * 意见反馈页面 get
+     */
+    @RequestMapping(value = "feedback",method = RequestMethod.GET)
+    public String feedback(){
+        return "/pc/user/feedback";
+    }
+
+    /**
+     * 意见反馈页面 post ajax
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String feedback(@RequestParam String content,@RequestParam String  email, HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+//        mail.sendMailAsync("反馈人:  "+credential.getUsername()+"/n"
+//                +"用户类型:  "+credential.getRoleList()+"/n"
+//                +"反馈内容:  "+content+"/n"
+//                +"用户邮箱:"+email+"/n"
+//                +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+
 
 
 

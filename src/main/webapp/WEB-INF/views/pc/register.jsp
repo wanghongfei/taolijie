@@ -50,7 +50,7 @@
           <div class="form-group">
             <label for="" class="col-4 label-control" name="rePassword">确认密码</label>
             <div class="col-8">
-              <input type="password" class="form-control" name="repassword">
+              <input type="password" class="form-control" name="rePassword">
             </div>
           </div>
             <div class="col-12" >
