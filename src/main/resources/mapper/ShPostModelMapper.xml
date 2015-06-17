@@ -24,6 +24,7 @@
 
         <result column="sh_post_picture_path" property="picturePath" jdbcType="LONGVARCHAR"/>
         <result column="sh_post_description" property="description" jdbcType="LONGVARCHAR"/>
+        <result column="sh_post_deleted" property="deleted" />
 
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
@@ -47,7 +48,8 @@
         post.verified AS sh_post_verified,
         post.trade_place AS sh_post_trade_place,
         post.picture_path AS sh_post_picture_path,
-        post.description AS sh_post_description
+        post.description AS sh_post_description,
+        post.deleted AS sh_post_deleted
     </sql>
 
     <sql id="member_column">
@@ -108,13 +110,14 @@
         sell_price, likes, dislikes,
         member_id, second_hand_post_category_id, complaint,
         page_view, verified, trade_place,
-        picture_path, description)
+        picture_path, description, deleted)
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime,jdbcType=DATE},
         #{postTime,jdbcType=DATE}, #{depreciationRate,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL},
         #{sellPrice,jdbcType=DECIMAL}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER},
         #{memberId,jdbcType=INTEGER}, #{secondHandPostCategoryId,jdbcType=INTEGER}, #{complaint,jdbcType=INTEGER},
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{tradePlace,jdbcType=VARCHAR},
-        #{picturePath,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR})
+        #{picturePath,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR},
+        #{deleted})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -171,6 +174,9 @@
             <if test="description != null">
                 description,
             </if>
+            <if test="deleted != null">
+                deleted,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -220,6 +226,9 @@
             </if>
             <if test="description != null">
                 #{description,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted},
             </if>
         </trim>
     </insert>
@@ -278,6 +287,9 @@
             <if test="description != null">
                 description = #{description,jdbcType=LONGVARCHAR},
             </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -302,7 +314,8 @@
         verified = #{verified,jdbcType=VARCHAR},
         trade_place = #{tradePlace,jdbcType=VARCHAR},
         picture_path = #{picturePath,jdbcType=LONGVARCHAR},
-        description = #{description,jdbcType=LONGVARCHAR}
+        description = #{description,jdbcType=LONGVARCHAR},
+        deleted = #{deleted}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -432,6 +445,9 @@
             <if test="description != null">
                 AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
             </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
+            </if>
         </where>
 
         ORDER BY
@@ -497,6 +513,9 @@
             </if>
             <if test="description != null">
                 AND post.description = #{description,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
             </if>
         </where>
 
