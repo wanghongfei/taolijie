@@ -19,10 +19,10 @@
       </c:if>
 
       <c:if test="${empty sessionScope.user}">
-        <li> <a href="/login">登陆</a>&nbsp;|&nbsp;</li>
+        <li> <a href="/login">登录</a>&nbsp;|&nbsp;</li>
         <li> <a href="/register">注册</a></li>
       </c:if>
-      <%--<li> <a href="">登陆</a>&nbsp;|&nbsp;</li>--%>
+      <%--<li> <a href="">登录</a>&nbsp;|&nbsp;</li>--%>
       <%--<li> <a href="">注册</a>&nbsp;|&nbsp;</li>--%>
       <%--<li>我的桃李街 <i class="fa fa-caret-down"> </i></li>--%>
     </ul>

@@ -20,7 +20,7 @@
       </c:if>
 
       <c:if test="${empty sessionScope.user}">
-        <li> <a href="/login">登陆</a>&nbsp;|&nbsp;</li>
+        <li> <a href="/login">登录</a>&nbsp;|&nbsp;</li>
         <li> <a href="/register">注册</a></li>
       </c:if>
     </ul>

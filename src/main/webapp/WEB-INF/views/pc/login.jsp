@@ -55,7 +55,7 @@
             <input type="checkbox" class="checkbox" id="rememberMe" name="rememberMe" value="true">记住密码
           </div>
           <div class="col-12 no-pd">
-            <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登陆</p>
+            <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登录</p>
           </div>
           <div class="col-12 no-pd">
             <a class="login-btn btn dark-green-bg" href="/register">没有账号?赶紧去注册吧</a>

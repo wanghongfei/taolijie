@@ -16,7 +16,7 @@
     <meta name="author" content="ThemeBucket">
     <link rel="shortcut icon" href="#" type="image/png">
 
-    <title>登陆</title>
+    <title>登录</title>
 
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/style-responsive.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 
     <form class="form-signin" id="form-signin" >
         <div class="form-signin-heading text-center">
-            <h1 class="sign-title">用户登陆</h1>
+            <h1 class="sign-title">用户登录</h1>
             <img src="/admin/images/login-logo.png" alt=""/>
         </div>
         <div class="login-wrap">
