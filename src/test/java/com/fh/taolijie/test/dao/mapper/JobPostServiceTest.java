@@ -57,9 +57,9 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testFavoritePost() {
-        postService.favoritePost(1, 1);
-        postService.unfavoritePost(1, 1);
-        boolean fa = postService.isPostFavorite(1, 1);
+        postService.favoritePost(1, 2);
+        postService.unfavoritePost(1, 2);
+        boolean fa = postService.isPostFavorite(1, 2);
         Assert.assertEquals(false, fa);
     }
 

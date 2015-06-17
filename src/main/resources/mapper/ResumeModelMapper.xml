@@ -81,7 +81,8 @@
         post.dislikes AS job_dislikes, post.job_post_category_id AS job_job_post_category_id,
         post.member_id AS job_member_id, post.education_level AS job_education_level, post.complaint AS job_complaint, post.work_time AS job_work_time, post.salary_unit AS job_salary_unit, post.page_view AS job_page_view,
         post.verified AS job_verified,
-        post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids
+        post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids,
+        post.deleted AS job_deleted
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

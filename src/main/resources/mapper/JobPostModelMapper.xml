@@ -34,6 +34,7 @@
 
         <result column="job_introduce" property="introduce" jdbcType="LONGVARCHAR"/>
         <result column="job_application_resume_ids" property="applicationResumeIds" jdbcType="LONGVARCHAR"/>
+        <result column="job_deleted" property="deleted" />
 
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
@@ -51,7 +52,8 @@
         post.dislikes AS job_dislikes, post.job_post_category_id AS job_job_post_category_id,
         post.member_id AS job_member_id, post.education_level AS job_education_level, post.complaint AS job_complaint, post.work_time AS job_work_time, post.salary_unit AS job_salary_unit, post.page_view AS job_page_view,
         post.verified AS job_verified,
-        post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids
+        post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids,
+        post.deleted AS job_deleted
     </sql>
 
     <sql id="member_column">
@@ -105,7 +107,8 @@
         job_post_category_id, member_id, education_level,
         complaint, work_time, salary_unit,
         page_view, verified, job_postcol,
-        applicant_amount, introduce, application_resume_ids
+        applicant_amount, introduce, application_resume_ids,
+        deleted
         )
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime,jdbcType=DATE},
         #{postTime,jdbcType=DATE}, #{workPlace,jdbcType=VARCHAR}, #{wage,jdbcType=DECIMAL},
@@ -116,7 +119,8 @@
         #{complaint,jdbcType=INTEGER}, #{workTime,jdbcType=VARCHAR}, #{salaryUnit,jdbcType=VARCHAR},
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{jobPostcol,jdbcType=VARCHAR},
         #{applicantAmount,jdbcType=INTEGER}, #{introduce,jdbcType=LONGVARCHAR},
-        #{applicationResumeIds,jdbcType=LONGVARCHAR}
+        #{applicationResumeIds,jdbcType=LONGVARCHAR},
+        #{deleted}
         )
     </insert>
     <insert id="insertSelective">
@@ -204,6 +208,9 @@
             <if test="applicationResumeIds != null">
                 application_resume_ids,
             </if>
+            <if test="deleted != null">
+                deleted,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -283,6 +290,9 @@
             </if>
             <if test="applicationResumeIds != null">
                 #{applicationResumeIds,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="deleted != null">
+                #{deleted},
             </if>
         </trim>
     </insert>
@@ -371,6 +381,9 @@
             <if test="applicationResumeIds != null">
                 application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR},
             </if>
+            <if test="deleted != null">
+                deleted = #{deleted},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -405,7 +418,8 @@
         job_postcol = #{jobPostcol,jdbcType=VARCHAR},
         applicant_amount = #{applicantAmount,jdbcType=INTEGER},
         introduce = #{introduce,jdbcType=LONGVARCHAR},
-        application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
+        application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR},
+        deleted = #{deleted}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -544,6 +558,9 @@
             <if test="applicationResumeIds != null">
                 AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
+            </if>
 
         </where>
         ORDER BY
@@ -635,6 +652,9 @@
             </if>
             <if test="applicationResumeIds != null">
                 AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
             </if>
 
         </where>
@@ -728,6 +748,9 @@
             <if test="applicationResumeIds != null">
                 AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
+            </if>
 
         </where>
         ORDER BY
@@ -820,6 +843,9 @@
             </if>
             <if test="applicationResumeIds != null">
                 AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
             </if>
 
         </where>
