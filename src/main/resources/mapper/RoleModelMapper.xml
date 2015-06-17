@@ -103,6 +103,6 @@
     <select id="getByName" resultMap="BaseResultMap">
         SELECT *
         FROM role
-        WHERE role_name = #{roleName}
+        WHERE rolename = #{roleName}
     </select>
 </mapper>
