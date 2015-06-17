@@ -37,7 +37,7 @@
           <div class="form-group">
             <label for="" class="col-4 label-control">用户名</label>
             <div class="col-8">
-              <input type="text" class="form-control" name="username">
+              <input type="text" class="form-control" name="username" placeholder="推荐使用常用邮箱">
             </div>
 
           </div>

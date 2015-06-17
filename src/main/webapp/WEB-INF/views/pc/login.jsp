@@ -10,8 +10,10 @@
 <%request.setCharacterEncoding("UTF-8") ;%>
 <%--html头部--%>
 <jsp:include page="block/start.jsp">
-  <jsp:param name="title" value="登陆"/>
+  <jsp:param name="title" value="登录"/>
 </jsp:include>
+<!--JSP inheritance?-->
+<link rel="stylesheet" href="/styles/root/login.css">
 <%--顶栏--%>
 <jsp:include page="block/top-bar.jsp"/>
 <%--页首--%>
@@ -46,17 +48,17 @@
             </div>
           </div>
 
-            <div class="col-12" >
-              <label class="red" id="error-box"></label>
-            </div>
-          <div class="col-12 no-pd">
-            <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登陆</p>
+          <div class="col-12" >
+            <label class="red" id="error-box"></label>
           </div>
-          <div class="col-5">
+          <div class="col-12 remember-me">
             <input type="checkbox" class="checkbox" id="rememberMe" name="rememberMe" value="true">记住密码
           </div>
           <div class="col-12 no-pd">
-            <p class="login-btn btn dark-green-bg">没有账号?赶紧去注册吧</p>
+            <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登陆</p>
+          </div>
+          <div class="col-12 no-pd">
+            <a class="login-btn btn dark-green-bg" href="/register">没有账号?赶紧去注册吧</a>
           </div>
         </form>
       </div>

@@ -1,0 +1,15 @@
+input[name=rememberMe] {
+    margin-right: 5px;
+    margin-left: 73px;
+}
+
+.login-btn {
+    display: block;
+}
+
+.remember-me {
+    font-size: 12px;
+    color: #666;
+}
+
+
