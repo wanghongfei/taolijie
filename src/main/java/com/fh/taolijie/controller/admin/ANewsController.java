@@ -20,7 +20,7 @@ import java.util.Date;
  * Created by wynfrith on 15-6-11.
  */
 @Controller
-@RequestMapping("/admin/news")
+@RequestMapping("/manage/news")
 public class ANewsController {
     @Autowired
     NewsService newsService;

@@ -4,14 +4,14 @@
 
 	<login-page url="/login" />
 	<!-- <request url="/backstage/statistics" role="ADMIN USER" /> -->
-	<request url="/user/job/*" role="STUDENT EMPLOYERR ADMIN" to-url="/login" />
-	<request url="/user/resume/*" role="STUDENT EMPLOYERR ADMIN" to-url="/login" />
-	<request url="/user/sh/*" role="STUDENT EMPLOYERR ADMIN" to-url="/login" />
+	<request url="/user/job/*" role="STUDENT EMPLOYER ADMIN" to-url="/login" />
+	<request url="/user/resume/*" role="STUDENT EMPLOYER ADMIN" to-url="/login" />
+	<request url="/user/sh/*" role="STUDENT EMPLOYER ADMIN" to-url="/login" />
 	<request url="/user/post/*" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
+	<request url="/user/profile" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
+	<request url="/user/feedback" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
+	<request url="/user/setting/*" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
 
 	<request url="/manage/*" role="ADMIN" to-url="/login/admin" />
 
-	<request url="/api/joblistbymember" role="STUDENT EMPLOYER ADMIN"/>
-	<request url="/api/joblistbyfav" role="STUDENT EMPLOYER ADMIN"/>
-	<request url="/api/resumelistbymember" role="STUDENT"/>
 </page>

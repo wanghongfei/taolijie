@@ -44,7 +44,7 @@ public class UJobController {
      * @param session 用户的角色
      * @return
      */
-    @RequestMapping(value = "myPost", method = RequestMethod.GET)
+    @RequestMapping(value = "mypost", method = RequestMethod.GET)
     public String myPost(@RequestParam(defaultValue = "1") int page,
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
                          HttpSession session, Model model){
@@ -71,7 +71,7 @@ public class UJobController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "myFav" ,method = RequestMethod.GET)
+    @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
     public String fav(@RequestParam (defaultValue = "1") int page,
                       @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
                       HttpSession session, Model model){

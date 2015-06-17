@@ -15,7 +15,7 @@
     <p>山东理工大学</p>
     <ul>
       <c:if test="${not empty sessionScope.user}">
-        <li><a href="/user/" id="user-name-label">${sessionScope.user.username}</a>&nbsp;|&nbsp;</li>
+        <li><a href="/user/profile" id="user-name-label">${sessionScope.user.username}</a>&nbsp;|&nbsp;</li>
         <li><a href="/user/logout">注销 <i class="fa fa-caret-down"> </i></a></li>
       </c:if>
 

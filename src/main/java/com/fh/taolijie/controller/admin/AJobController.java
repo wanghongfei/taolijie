@@ -21,7 +21,7 @@ import java.util.List;
  * 兼职管理
  */
 @Controller
-@RequestMapping("admin/job")
+@RequestMapping("manage/job")
 public class AJobController {
 
     @Autowired

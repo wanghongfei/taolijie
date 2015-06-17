@@ -22,7 +22,7 @@ import java.util.List;
  * Created by wynfrith on 15-6-11.
  */
 @Controller
-@RequestMapping("admin/banner")
+@RequestMapping("manage/banner")
 public class ABannerController {
 
     @Autowired

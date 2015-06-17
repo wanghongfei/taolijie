@@ -10,7 +10,7 @@ import sun.misc.Contended;
  */
 
 @Controller
-@RequestMapping(value = "admin")
+@RequestMapping(value = "manage")
 public class AIndexController {
 
     @RequestMapping(value = {""},method = RequestMethod.GET)
