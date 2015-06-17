@@ -13,34 +13,34 @@
   <div class="footer-content">
     <div class="row">
       <div class="col-xs-2">
-        <h2>关于</h2>
+        <h3>关于</h3>
         <ul>
           <li><a href="/about/index.html#secondPage">关于我们</a></li>
           <li><a href="/about/index.html#fourthPage">加入我们</a></li>
         </ul>
       </div>
       <div class="col-xs-2">
-        <h2>合作</h2>
+        <h3>合作</h3>
         <ul>
           <li><a href="/about/index.html#thirdPage">联系我们</a></li>
         </ul>
       </div>
       <div class="col-xs-2">
-        <h2>帮助</h2>
+        <h3>帮助</h3>
         <ul>
           <li><a href="/about/index.html#firstPage">使用指南</a></li>
           <li><a href="/about/index.html#">意见反馈</a></li>
         </ul>
       </div>
       <div class="col-xs-2">
-        <h2>友情链接</h2>
+        <h3>友情链接</h3>
         <ul>
           <li><a href="http://www.sdut.edu.cn">山东理工大学</a></li>
           <li><a href="http://youthol.cn">青春在线</a></li>
         </ul>
       </div>
       <div class="col-xs-4">
-        <h2>网站信息</h2>
+        <h3>网站信息</h3>
         <ul>
           <li>Copyright &copy; 2015-2016 山东理工大学桃李街版权所有</li>
         </ul>
