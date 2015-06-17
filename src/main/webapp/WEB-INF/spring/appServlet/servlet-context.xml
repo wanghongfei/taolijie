@@ -18,7 +18,7 @@
     <!--<import resource="redis-config.xml" />-->
 
     <!-- Enables the Spring MVC @Controller programming model -->
-    <cache:annotation-driven />
+    <!--<cache:annotation-driven />-->
     <mvc:annotation-driven />
 
     <!--管理员后台资源路径-->
