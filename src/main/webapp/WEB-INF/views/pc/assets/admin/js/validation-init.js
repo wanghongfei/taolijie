@@ -33,7 +33,7 @@ var Script = function () {
                     data: formData,
                     success: function (data) {
                         if (data.result) {
-                            location.href = "/manage/index";
+                            location.href = "/manage";
                         }else{
                             console.log(data);
                             $('#add_err').html(data.message);
