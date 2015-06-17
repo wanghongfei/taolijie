@@ -1,6 +1,5 @@
 package com.fh.taolijie.servlet;
 
-import com.fh.taolijie.component.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -9,8 +8,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +29,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+/*        HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
         // 如果不是访问主页，放行
@@ -74,7 +71,8 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
         // 返回响应
         resp.setContentType("text/html; charset=utf-8");
-        resp.getWriter().print(html);
+        resp.getWriter().print(html);*/
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
