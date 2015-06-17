@@ -49,7 +49,7 @@ public class DefaultUserService implements UserService {
         shMapper.increaseLike(shId);
         memMapper.updateByPrimaryKeySelective(mem);
 
-        return false;
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.BulletinModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,5 +56,5 @@ public interface BulletinModelMapper {
      */
     int updateByPrimaryKey(BulletinModel record);
 
-    List<BulletinModel> getAll(int pageNumber, int pageSize);
+    List<BulletinModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }
