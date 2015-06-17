@@ -58,19 +58,33 @@ public interface ShPostModelMapper {
      */
     int updateByPrimaryKey(SHPostModel record);
 
+
     List<SHPostModel> getAll(Map<String, Integer> pageMap);
+    long countGetAll();
+
 
     List<SHPostModel> getInBatch(List<Integer> idList);
 
+
     List<SHPostModel> getByCategory(@Param("categoryId") Integer categoryId, @Param("orderByPageView") boolean orderByPageView, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countGetByCategory(Integer categoryId);
+
 
     List<SHPostModel> getByMember(@Param("memberId") Integer memberId, @Param("filtered") boolean filtered, @Param("pageNumber") int pageNumber ,@Param("pageSize") int pageSize);
+    long countGetByMember(@Param("memberId") Integer memberId, @Param("filtered") boolean filtered);
+
 
     List<SHPostModel> searchBy(SHPostModel model);
+    long countSearchBy(SHPostModel model);
+
 
     List<SHPostModel> findBy(SHPostModel model);
+    long countFindBy(SHPostModel model);
+
 
     List<SHPostModel> getSuedPost(@Param("pageSize") int pageSize, @Param("pageNumber") int pageNumber);
+    long countGetSuedPost();
+
 
     void increaseComplaint(Integer postId);
 

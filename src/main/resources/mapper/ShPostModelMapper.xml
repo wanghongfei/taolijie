@@ -332,6 +332,12 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetAll" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            second_hand_post post
+    </select>
 
     <select id="getInBatch" resultMap="BaseResultMap">
         SELECT
@@ -367,6 +373,14 @@
 
         LIMIT #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetByCategory" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            second_hand_post post
+        WHERE
+            post.second_hand_post_category_id = #{categoryId}
+    </select>
 
     <select id="getByMember" resultMap="BaseResultMap">
         SELECT
@@ -386,6 +400,15 @@
             post.post_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
+    </select>
+    <select id="countGetByMember" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            second_hand_post post
+        WHERE
+            post.member_id = #{memberId}
+            <if test="filtered == true">AND post.expired_time >= now()</if>
     </select>
 
     <select id="searchBy" resultMap="BaseResultMap">
@@ -456,6 +479,62 @@
             #{pageNumber}, #{pageSize}
 
     </select>
+    <select id="countSearchBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            second_hand_post post
+        <where>
+            <if test="title != null">
+                post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="expiredTime != null">
+                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+            </if>
+            <if test="postTime != null">
+                AND post.post_time = #{postTime,jdbcType=DATE}
+            </if>
+            <if test="depreciationRate != null">
+                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+            </if>
+            <if test="originalPrice != null">
+                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+            </if>
+            <if test="sellPrice != null">
+                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+            </if>
+            <if test="likes != null">
+                AND post.likes = #{likes,jdbcType=INTEGER}
+            </if>
+            <if test="dislikes != null">
+                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+            </if>
+            <if test="memberId != null">
+                AND post.member_id = #{memberId,jdbcType=INTEGER}
+            </if>
+            <if test="secondHandPostCategoryId != null">
+                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+            </if>
+            <if test="complaint != null">
+                AND post.complaint = #{complaint,jdbcType=INTEGER}
+            </if>
+            <if test="pageView != null">
+                AND post.page_view = #{pageView,jdbcType=INTEGER}
+            </if>
+            <if test="verified != null">
+                AND post.verified = #{verified,jdbcType=VARCHAR}
+            </if>
+            <if test="tradePlace != null">
+                AND post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="description != null">
+                AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
+            </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
+            </if>
+        </where>
+    </select>
 
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
@@ -525,6 +604,62 @@
             #{pageNumber}, #{pageSize}
 
     </select>
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+        second_hand_post post
+        <where>
+            <if test="title != null">
+                post.title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="expiredTime != null">
+                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+            </if>
+            <if test="postTime != null">
+                AND post.post_time = #{postTime,jdbcType=DATE}
+            </if>
+            <if test="depreciationRate != null">
+                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+            </if>
+            <if test="originalPrice != null">
+                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+            </if>
+            <if test="sellPrice != null">
+                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+            </if>
+            <if test="likes != null">
+                AND post.likes = #{likes,jdbcType=INTEGER}
+            </if>
+            <if test="dislikes != null">
+                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+            </if>
+            <if test="memberId != null">
+                AND post.member_id = #{memberId,jdbcType=INTEGER}
+            </if>
+            <if test="secondHandPostCategoryId != null">
+                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+            </if>
+            <if test="complaint != null">
+                AND post.complaint = #{complaint,jdbcType=INTEGER}
+            </if>
+            <if test="pageView != null">
+                AND post.page_view = #{pageView,jdbcType=INTEGER}
+            </if>
+            <if test="verified != null">
+                AND post.verified = #{verified,jdbcType=VARCHAR}
+            </if>
+            <if test="tradePlace != null">
+                AND post.trade_place = #{tradePlace,jdbcType=VARCHAR}
+            </if>
+            <if test="description != null">
+                AND post.description = #{description,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="deleted != null">
+                AND post.deleted = #{deleted}
+            </if>
+        </where>
+    </select>
 
     <select id="getSuedPost" resultMap="BaseResultMap">
         SELECT
@@ -542,6 +677,14 @@
         ORDER BY
             post.post_time
         LIMIT #{pageNumber}, #{pageSize}
+    </select>
+    <select id="countGetSuedPost" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            second_hand_post post
+        WHERE
+            post.complaint IS NOT NULL AND post.complaint > 0
     </select>
 
     <update id="increaseComplaint">
