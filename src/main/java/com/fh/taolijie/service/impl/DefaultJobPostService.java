@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -140,6 +141,10 @@ public class DefaultJobPostService implements JobPostService {
     public List<JobPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteJobIds();
+        if (null == allIds || allIds.isEmpty()) {
+            return new ArrayList<>(0);
+        }
+
         String[] ids = allIds.split(Constants.DELIMITER);
 
         List<Integer> idList = Arrays.stream(ids).map(id -> {
