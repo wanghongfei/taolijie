@@ -351,6 +351,10 @@ p {
 .header-content .logo {
     float: left; }
 
+.header-content .logo .logo-img{
+    vertical-align: middle;
+}
+
 .header-content .search-bar {
     width: 500px;
     margin: 30px 0 0 50px;
@@ -717,7 +721,7 @@ ul.bxslider li img {
     min-height: 200px;
     padding-top: 20px; }
 .footer .footer-content {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 25px;
     padding-bottom: 20px;
     margin: 0 auto;

@@ -12,7 +12,7 @@
   <div class="header-content">
     <div class="logo">
       <a href="/">
-        <img src="/images/logo.jpg" alt="">
+        <img src="/images/logo.jpg" alt="logo" class="logo-img">
       </a>
     </div>
     <form id="search-form" action="/search">
