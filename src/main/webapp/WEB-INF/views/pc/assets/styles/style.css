@@ -648,18 +648,17 @@ ul.bxslider li img {
 .side .services .menu_left > li:nth-child(4):hover ul.submenu {
     background-color: #f36362; }
 .side .services .menu_left .submenu {
-    width: 400px;
-    height: 59px;
-    margin: -60px 0 0 163px;
+    width: 100px;
+    margin: -65px 0 0 163px;
     background-color: red;
     display: none; }
 .side .services .menu_left .submenu > li {
-
-    float: left;
+    display: block;
     color: #fff;
     width: 100px;
-    margin: 5px 5px 5px 5px;
-    line-height: 30px; }
+    margin: 5px 0;
+    line-height: 30px; 
+}
 .side .services .menu_left .submenu > li:hover {
     background-color: #EEBC5B; }
 .side .services .menu_left .submenu > li > a {
