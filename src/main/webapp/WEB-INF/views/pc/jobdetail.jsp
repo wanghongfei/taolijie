@@ -42,7 +42,7 @@
     <div style="clean:both"></div>
     <div class="title">
       <p>${job.title}</p>
-      <span>兼职类型 : ${job.categoryName}</span>
+      <span>兼职类型 : ${job.category.name}</span>
       <span>${job.verified ? '已认证' : '未认证'}</span>
       <span>发布时间 : ${job.postTime}</span>
     </div>
