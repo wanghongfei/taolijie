@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.dao.mapper;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.impl.DefaultNotificationService;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-12.
@@ -28,7 +29,7 @@ public class NotificationServiceTest extends BaseSpringDataTestClass {
 
         noService.deletePriNotification(1);
         noService.deleteSysNotification(1);
-        noService.getPriNotification(1, 0, 100);
+        ListResult<PrivateNotificationModel> list = noService.getPriNotification(1, 0, 100);
         noService.getSysNotification(1, Arrays.asList("GLOBAL", "ADMIN"), 0, 100);
     }
 }
