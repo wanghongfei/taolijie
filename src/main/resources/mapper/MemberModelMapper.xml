@@ -485,8 +485,13 @@
 
     <select id="getMemberList" resultMap="BaseResultMap">
         SELECT
-            <include refid="Base_Column_List"/>
-        FROM member
+            <include refid="member_column" />,
+            r.*
+        FROM
+            member mem,
+            (SELECT role_rid AS role_id FROM member_role) info
+        LEFT JOIN
+            role r ON r.rid = info.rid
         LIMIT #{pageNumber}, #{pageSize}
     </select>
 
