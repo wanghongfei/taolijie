@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     @Transactional(readOnly = false)
     public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException {
         if (false == cateMapper.isCategoryEmpty(cateId)) {
-            throw new CategoryNotEmptyException("");
+            throw new CategoryNotEmptyException(Constants.ErrorType.CATE_NOT_EMPTY);
         }
 
         int row = cateMapper.deleteByPrimaryKey(cateId);

@@ -28,12 +28,12 @@
     <!-- page heading start-->
     <div class="page-heading">
       <h3>
-        ${isUpdate ? ('修改新闻 -- '.concat(member.username)):'添加新闻'}
+        ${isEdit ? ('修改新闻 -- '.concat(member.username)):'添加新闻'}
       </h3>
       <ul class="breadcrumb">
         <li><a href="/manage"><i class="fa fa-home"></i> 控制台</a></li>
         <li><a href=""></i> 新闻管理</a></li>
-        <li><a href="">${isUpdate ? ('修改新闻 -- '.concat(member.username)):'添加新闻'} </a></li>
+        <li><a href="">${isEdit ? ('修改新闻 -- '.concat(member.username)):'添加新闻'} </a></li>
       </ul>
 
     </div>
@@ -44,7 +44,7 @@
 
       <section class="panel panel-info">
         <header class="panel-heading">
-          <h3 class="panel-title">${isUpdate ? ('修改新闻 -- '.concat(member.username)):'添加新闻'}</h3>
+          <h3 class="panel-title">${isEdit ? ('修改新闻 -- '.concat(member.username)):'添加新闻'}</h3>
 
         </header>
         <div class="panel-body">
@@ -52,15 +52,19 @@
             <div class="form-group">
               <label class="control-label col-md-2" for="title">新闻标题</label>
               <div class="col-md-6 col-xs-11">
-                <input class="form-control" id="title" name="title" placeholder="输入新闻标题(30字以内)" type="text" value="${news.title}">
+                <input class="form-control" id="title" name="title" placeholder="输入新闻标题(30字以内)" type="text" value="${aNews.title}">
               </div>
             </div>
             <div class="form-group">
               <div class="col-md-offset-2 col-md-7">
-                <textarea name="content" id="content" class="wysihtml5 form-control" rows="9" value="${news.content}"></textarea>
+                <textarea name="content" id="content" class="wysihtml5 form-control" rows="9" ></textarea>
               </div>
             </div>
-            <button type="submit" style="margin-top:30px;margin-bottom:30px" class="col-md-offset-2 btn btn-warning">添加新闻</button>
+
+            <input type="hidden" id="newsId" value="${aNews.id}"/>
+            <input type="hidden" id="isEdit" value="${isEdit}"/>
+            <button type="submit" style="margin-top:30px;margin-bottom:30px" class="col-md-offset-2 btn btn-warning">
+              ${isEdit?'修改':'添加'}新闻</button>
           </form>
         </div>
       </section>
@@ -90,7 +94,27 @@
 <script type="text/javascript" src="/admin/js/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
 <script>
   jQuery(document).ready(function(){
-    $('.wysihtml5').wysihtml5();
+//
+//    var myCustomTemplates = {
+//      html : function(locale) {
+//        return "<li>" +
+//                "<div class='btn-group'>" +
+//                "<a class='btn' data-wysihtml5-action='change_view' title='" + locale.html.edit + "'>HTML</a>" +
+//                "</div>" +
+//                "</li>";
+//      }
+//    };
+
+// pass in your custom templates on init
+
+   $('.wysihtml5').wysihtml5({
+     customTemplates:"1212312"
+   });
+    $('.wysihtml5').html("${aNews.content}");
+
+//    var editor = new wysihtml5.Editor(".content",{
+//      placeholderText:'12313'
+//    });
   });
 </script>
 

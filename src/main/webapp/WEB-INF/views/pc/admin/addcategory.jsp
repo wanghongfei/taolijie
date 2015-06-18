@@ -27,12 +27,12 @@
     <!-- page heading start-->
     <div class="page-heading">
       <h3>
-        添加分类
+        ${isEdit?'编辑':'添加'}分类
       </h3>
       <ul class="breadcrumb">
         <li><a href="/manage"><i class="fa fa-home"></i> 控制台</a></li>
         <li><a href=""></i> 分类管理</a></li>
-        <li><a href="">添加分类 </a></li>
+        <li><a href=""> ${isEdit?'编辑':'添加'}分类 </a></li>
       </ul>
 
     </div>
@@ -54,8 +54,8 @@
               <div class="col-md-2 col-xs-11 icheck" style="text-align:center">
                 <div class="flat-blue">
                   <div class="radio ">
-                    <input tabindex="3" value="0" type="radio"  name="type"
-                    ${type == 0 ?'checked="checked"':''} >
+                    <input tabindex="3" value="job" type="radio"  name="type"
+                    ${type == 'job' ?'checked="checked"':''} >
                     <label>兼职分类</label>
                   </div>
                 </div>
@@ -63,8 +63,8 @@
               <div class="col-md-2 col-xs-11 icheck">
                 <div class="flat-purple">
                   <div class="radio ">
-                    <input tabindex="3" value="1" type="radio"  name="type"
-                    ${type == 1 ?'checked="checked"':''} >
+                    <input tabindex="3" value="sh" type="radio"  name="type"
+                    ${type == 'sh' ?'checked="checked"':''} >
                     <label>二手分类</label>
                   </div>
                 </div>
@@ -73,31 +73,46 @@
             <div class="form-group">
               <label class="control-label col-md-3" for="name">名称</label>
               <div class="col-md-4 col-xs-11">
-                <input class="form-control" id="name" name="name" placeholder="输入名称" type="text"  >
+                <input class="form-control"
+                       value="${cate.name}"
+                       id="name" name="name" placeholder="输入名称" type="text"  >
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="memo">描述</label>
               <div class="col-md-6 col-xs-11" >
-                <input class="form-control" id="memo" name="memo" placeholder="" type="text">
+                <input class="form-control"
+                       value="${cate.memo}"
+                       id="memo" name="memo" placeholder="" type="text">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="level">分类等级</label>
               <div class="col-md-4 col-xs-11" >
-                <input class="form-control" id="level" name="level" type="text">
+                <input class="form-control"
+                       value="${cate.level}"
+                       id="level" name="level" type="text">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="themeColor">颜色</label>
               <div class="col-md-4 col-xs-11" >
-                <input class="form-control" id="themeColor" name="themeColor" type="text">
-              </div>
+                <input class="form-control"
+                       value="${cate.themeColor}"
+                       id="themeColor" name="themeColor" type="text">
+          </div>
             </div>
 
+            <input type="hidden" name="id" value="${cate.id!=null?cate.id:'0'}"/>
+            <input type="hidden" name="isEdit" value="${isEdit}"/>
 
 
-            <button type="submit" style="margin-top:30px;margin-bottom:30px" class="col-md-offset-3 btn btn-primary">添加分类</button>
+            <button
+                    data-action="${isEdit?'edit':'add'}"
+                    style="margin-top:30px;margin-bottom:30px"
+                    class="add-btn col-md-offset-3 btn btn-primary">
+              ${isEdit?'修改':'添加'}分类
+            </button>
 
           </form>
         </div>

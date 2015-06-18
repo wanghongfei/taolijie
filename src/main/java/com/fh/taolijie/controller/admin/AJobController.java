@@ -40,9 +40,7 @@ public class AJobController {
         int pageSize = 9999;
         ObjWrapper objWrapper = new ObjWrapper();
         List<JobPostModel> jobs;
-            jobs = jobPostService.getAllJobPostList(page - 1, pageSize, objWrapper);
-
-        int totalPage = (Integer) objWrapper.getObj();
+        jobs = jobPostService.getAllJobPostList(page - 1, pageSize,objWrapper);
 
         model.addAttribute("jobs", jobs);
         return "pc/admin/jobs";
@@ -63,8 +61,4 @@ public class AJobController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
     }
-
-
-
-
 }
