@@ -45,11 +45,13 @@
     <!--<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"-->
                      <!--resource-ref="true" />-->
     <!--数据库连接采用jdbc驱动-->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
         <property name="username" value="root" />
-    <property name="password" value="wfc" />
+        <property name="password" value="wfc" />
+
+        <property name="maxActive" value="30" />
     </bean>
 
 

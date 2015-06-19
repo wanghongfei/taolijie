@@ -44,6 +44,7 @@
         <jstl-version>1.2</jstl-version>
 
         <h2db-version>1.4.182</h2db-version>
+        <tomcat-jdbc>8.0.23</tomcat-jdbc>
 
         <spring-redis>1.5.0.RELEASE</spring-redis>
         <jedis>2.6.2</jedis>
@@ -92,6 +93,11 @@
         </dependency>
 
         <!-- JDBC连接池 -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>${tomcat-jdbc}</version>
+        </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
