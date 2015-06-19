@@ -169,6 +169,15 @@ public class Constants {
         public static final String OTHER = "面议";*/
     }
 
+    public static class Produce {
+        public static final String JSON = "application/json; charset=utf-8";
+    }
+
+    public static class StatusMessage {
+        public static final String SUCCESS = "success";
+        public static final String FAILED = "failed";
+    }
+
 
     public static class ApplicationRecord {
         public static final String KEY_ID = "id";
