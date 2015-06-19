@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -44,6 +46,8 @@ public class SHPostModel extends Pageable {
      *
      * @mbggenerated
      */
+
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date expiredTime;
 
     /**

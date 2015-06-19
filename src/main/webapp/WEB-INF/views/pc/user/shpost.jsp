@@ -27,7 +27,7 @@
       </div>
       <div class="form-group">
         <label for="">商品分类</label>
-        <select name="categoryId" >
+        <select name="secondHandPostCategoryId" >
           <option value="">选择分类</option>
           <c:forEach items="${cates}" var="cate">
             <option value="${cate.id}">${cate.name}</option>

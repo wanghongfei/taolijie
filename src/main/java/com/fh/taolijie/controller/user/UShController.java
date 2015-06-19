@@ -51,7 +51,9 @@ public class UShController {
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
-        List<SHPostModel> shs =shPostService.getPostList(credential.getId(), page - 1, capacity, objWrapper);
+
+        List<SHPostModel> shs =shPostService.getPostList(credential.getId(),false, page - 1, capacity, objWrapper);
+
 //        totalPage = (Integer)objWrapper.getObj();
 
         model.addAttribute("shs",shs);
@@ -172,56 +174,90 @@ public class UShController {
 
 
 
+
+    /**
+     * 删除二手 post ajax
+     *
+     * @param session
+     * @return
+     */
+    //region 删除二手 ajax String post
+    @RequestMapping(value = "/del/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String delPost(@PathVariable  int id,
+                   @RequestParam(required = false) String ids,
+                   HttpSession session) {
+
+        int uid= CredentialUtils.getCredential(session).getId();
+
+        String [] delIds = {id+""};
+        //id=0视为多条删除
+        if(id==0){
+            delIds = ids.split(";");
+        }
+
+
+        for(String currId:delIds){
+            //查找兼这条兼职是不是用户发布的
+            SHPostModel sh =shPostService.findPost(Integer.parseInt(currId));
+            if(sh == null){
+                return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            }
+            if(sh.getMember().getId()!=uid){
+                return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            }
+            //删除兼职
+            shPostService.deletePost(Integer.parseInt(currId));
+        }
+
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+
+
     /**
      * 收藏一条简历
      */
     @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     //region 收藏一条简历 fav
-    public @ResponseBody String fav (@PathVariable int id,HttpSession session){
+    public @ResponseBody String fav (@PathVariable int id,
+                                     @RequestParam(required = false) String ids,
+                                     HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
-        if(shPostService.findPost(id) == null)
-            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
 
-        //遍历用户的收藏列表
-        //如果没有这条简历则添加,反之删除
-        MemberModel mem = accountService.findMember(credential.getId());
-        boolean isFav = shPostService.isPostFavorite(credential.getId(),id);
-        String status;
-        if(isFav){ //找到,删除收藏
-            shPostService.unfavoritePost(credential.getId(),id);
-            status = "1";
-        }else{ //没有找到,则添加收藏
-            shPostService.favoritePost(credential.getId(),id);
-            status = "0";
+        String [] delIds = {id+""};
+        //id=0视为多条删除
+        if(id==0){
+            delIds = ids.split(";");
         }
+
+        String status ="1";
+        for(String currId:delIds) {
+            //遍历用户的收藏列表
+            //如果没有这条简历则添加,反之删除
+            if(shPostService.findPost(Integer.parseInt(currId)) == null)
+                return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+
+            boolean isFav = shPostService.isPostFavorite(credential.getId(),Integer.parseInt(currId));
+            if(isFav){ //找到,删除收藏
+                shPostService.unfavoritePost(credential.getId(),Integer.parseInt(currId));
+                status = "1";
+            }else{ //没有找到,则添加收藏
+                shPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
+                status = "0";
+            }
+        }
+
+
 
         return new JsonWrapper(true, "status",status).getAjaxMessage();
     }
     //endregion
 
-
-    /**
-     * 取消收藏一条简历 或多条
-     */
-    @RequestMapping(value = "/fav/del",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String fav (HttpSession session,
-                                     @RequestParam(required = false) String ids){
-        Credential credential = CredentialUtils.getCredential(session);
-
-        /*删除一个或多个*/
-        try{
-            for(String i : ids.split(";")){
-                int currId = Integer.parseInt(i);
-                shPostService.unfavoritePost(credential.getId(), currId);
-            }
-        }catch (Exception e){
-            System.out.println("mutideleteError");
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
-        }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
 
     /**
      * 举报一条简历

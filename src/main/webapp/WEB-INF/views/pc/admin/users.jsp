@@ -49,7 +49,7 @@
               <div class="adv-table">
                 <div class="clearfix">
                   <div class="btn-group">
-                    <a href="/manage/adduser" class="btn btn-primary">
+                    <a href="/manage/user/add" class="btn btn-primary">
                       新增用户 <i class="fa fa-plus"></i>
                     </a>
                   </div>
@@ -64,11 +64,33 @@
                     <th>id</th>
                     <th>用户名</th>
                     <th class="hidden-phone">用户状态</th>
+                    <th class="hidden-phone">权限</th>
                     <th class="hidden-phone">修改</th>
                     <th class="hidden-phone">删除</th>
                   </tr>
                   </thead>
                   <tbody>
+                  <c:forEach items="${users}" var="user">
+                    <tr class="">
+                      <td>${user.id}</td>
+                      <td>${user.username}</td> <!-- 不超15字 -->
+                      <td class="hidden-phone">${user.valid?'正常':'封号'}</td>
+                      <td class="center hidden-phone">${user.id}</td>
+                      <td class="center hidden-phone">
+                        <a href="/manage/user/edit/${user.id}" class="btn btn-success btn-xs">修改</a>
+                      </td>
+                      <td class="center hidden-phone">
+                        <button href="javascript:void(0);"
+                                data-id="${user.id}"
+                                data-type="user"
+                                data-confirm-msg="确定${user.valid?'封号':'解封'}?"
+                                data-ok-msg="${user.valid?'封号':'解封'}成功"
+                                data- class="delete-btn btn ${user.valid?'btn-danger':'btn-warning'} btn-xs">
+                                ${user.valid?'封号':'解封'}
+                        </button>
+                      </td>
+                    </tr>
+                  </c:forEach>
                   </tbody>
                 </table>
 
@@ -93,69 +115,71 @@
 <script type="text/javascript" src="/admin/js/data-tables/DT_bootstrap.js"></script>
 
 <!--dynamic table initialization -->
-<script src="/admin/js/dynamic_table_init.js"></script>
+<!--dynamic table initialization -->
+<script src="/admin/js/acustom/table-init.js"></script>
+<script src="/admin/js/acustom/request.js"></script>
 
-<script>
-  jQuery(document).ready(function(){
-    var nCloneTd = InitDetailsColumn();
-    var url = '/manage/getuser';
-    var detailUrl = '/manage/findUser/';
-    var updateUrl = '/manage/updateUser/'
-    var deleteUrl = '/manage/deleteUser/';
-    var columns =  [
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function(o){ return nCloneTd.outerHTML}
-      },
-      { "mData":"id" },
-      { "mData": "username" },
-      { "mData": "valid",
-        "mRender": function(data,type,full){
-          if(full.valid == false){
-            return '<i class="text-danger">封号</i>';
-          }else{
-            return '正常';
-          }
-        }
-      },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a href="'+updateUrl+full.id+'" class="btn btn-xs btn-warning to-delete">修改</a>';
-        }
-      },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a href="javascript:void(0);" onclick="toDelete(this,'+full.id+',\''+deleteUrl+'\')" class="btn btn-xs btn-danger to-delete">删除</a>';
-        }
-      }
-    ];
-
-
-    var formatFunc = generateDetail;
-
-    initDataTable(url,detailUrl,columns,formatFunc);
-  });
+<%--<script>--%>
+  <%--jQuery(document).ready(function(){--%>
+    <%--var nCloneTd = InitDetailsColumn();--%>
+    <%--var url = '/manage/getuser';--%>
+    <%--var detailUrl = '/manage/findUser/';--%>
+    <%--var updateUrl = '/manage/updateUser/'--%>
+    <%--var deleteUrl = '/manage/deleteUser/';--%>
+    <%--var columns =  [--%>
+      <%--{--%>
+        <%--"mData": null,--%>
+        <%--"bSortable": false,--%>
+        <%--"mRender": function(o){ return nCloneTd.outerHTML}--%>
+      <%--},--%>
+      <%--{ "mData":"id" },--%>
+      <%--{ "mData": "username" },--%>
+      <%--{ "mData": "valid",--%>
+        <%--"mRender": function(data,type,full){--%>
+          <%--if(full.valid == false){--%>
+            <%--return '<i class="text-danger">封号</i>';--%>
+          <%--}else{--%>
+            <%--return '正常';--%>
+          <%--}--%>
+        <%--}--%>
+      <%--},--%>
+      <%--{--%>
+        <%--"mData": null,--%>
+        <%--"bSortable": false,--%>
+        <%--"mRender": function (data, type, full) {--%>
+          <%--return '<a href="'+updateUrl+full.id+'" class="btn btn-xs btn-warning to-delete">修改</a>';--%>
+        <%--}--%>
+      <%--},--%>
+      <%--{--%>
+        <%--"mData": null,--%>
+        <%--"bSortable": false,--%>
+        <%--"mRender": function (data, type, full) {--%>
+          <%--return '<a href="javascript:void(0);" onclick="toDelete(this,'+full.id+',\''+deleteUrl+'\')" class="btn btn-xs btn-danger to-delete">删除</a>';--%>
+        <%--}--%>
+      <%--}--%>
+    <%--];--%>
 
 
+    <%--var formatFunc = generateDetail;--%>
+
+    <%--initDataTable(url,detailUrl,columns,formatFunc);--%>
+  <%--});--%>
 
 
-  function generateDetail(data){
-    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-    console.log(data);
-    sOut += '<tr><td>age:</td><td>'+(data.age == undefined ? '未填写':data.age)+'</td></tr>';
-    sOut += '<tr><td>email:</td><td>'+(data.email == undefined ? '未填写':data.email)+'</td></tr>';
-    sOut += '<tr><td>name:</td><td>'+(data.name== undefined ? '未填写':data.name)+'</td></tr>';
-    sOut += '<tr><td>用户类型:</td><td>'+data.roleIdList[0]+'</td></tr>';
 
-    sOut += '</table>';
 
-    return sOut;
-  }
+  <%--function generateDetail(data){--%>
+    <%--var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';--%>
+    <%--console.log(data);--%>
+    <%--sOut += '<tr><td>age:</td><td>'+(data.age == undefined ? '未填写':data.age)+'</td></tr>';--%>
+    <%--sOut += '<tr><td>email:</td><td>'+(data.email == undefined ? '未填写':data.email)+'</td></tr>';--%>
+    <%--sOut += '<tr><td>name:</td><td>'+(data.name== undefined ? '未填写':data.name)+'</td></tr>';--%>
+    <%--sOut += '<tr><td>用户类型:</td><td>'+data.roleIdList[0]+'</td></tr>';--%>
+
+    <%--sOut += '</table>';--%>
+
+    <%--return sOut;--%>
+  <%--}--%>
 
 
 </script>

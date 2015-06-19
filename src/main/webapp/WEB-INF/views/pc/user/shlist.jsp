@@ -42,13 +42,13 @@
           <div class="col_choice" style="line-height:112px; width:45px;">
             <input name="collection" type="checkbox" value="" data-id="${sh.id}" class="col_del_check">
           </div>
-          <div class="col_style"}>${sh.categoryName}
+          <div class="col_style" style="background-color: ${sh.category.themeColor};">${sh.category.name}
 
           </div></a>
           <div class="col_main" style="margin-left:40px; width:630px;">
             <div class="col_main_top">
               <div class="title" style="width:450px;"><a href="/item/sh/${sh.id}" style="color: #333">${sh.title}</a></div>
-              <div class="style" style="width: 150px;">${job.memberDto.username}</div>
+              <div class="style" style="width: 150px;">${sh.member.username}</div>
             </div>
             <div class="col_main_bottom">
               <div class="location" style="width:140px;"><i class="fa fa-map-marker fa-lg"></i> ${sh.tradePlace}</div>
@@ -76,6 +76,7 @@
     </div>
     <%--</div>--%>
   </div>
+    </div>
 
   <jsp:include page="../block/user-footer.jsp"></jsp:include>
   <script src="/scripts/security.js"></script>

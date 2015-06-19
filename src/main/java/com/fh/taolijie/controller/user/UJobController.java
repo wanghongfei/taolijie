@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -173,31 +175,90 @@ public class UJobController {
     //endregion
 
 
+    /**
+     * 删除兼职 post ajax
+     *
+     * @param session
+     * @return
+     */
+    //region 删除兼职 ajax String post
+    @RequestMapping(value = "/del/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String delPost(@PathVariable  int id,
+                   @RequestParam(required = false) String ids,
+                HttpSession session) {
+
+        int uid= CredentialUtils.getCredential(session).getId();
+
+        String [] delIds = {id+""};
+        //id=0视为多条删除
+        if(id==0){
+            delIds = ids.split(";");
+        }
+
+
+        for(String currId:delIds){
+            //查找兼这条兼职是不是用户发布的
+            JobPostModel job =jobPostService.findJobPost(Integer.parseInt(currId));
+            if(job == null){
+                return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            }
+            if(job.getMember().getId()!=uid){
+                return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            }
+            //删除兼职
+            jobPostService.deleteJobPost(Integer.parseInt(currId));
+        }
+
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+    //endregion
+
+
 
     /**
      * 收藏一条兼职
      */
     @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     //region 收藏一条兼职 fav
-    public @ResponseBody String fav (@PathVariable int id,HttpSession session){
+    public @ResponseBody String fav (@PathVariable int id,
+                                     @RequestParam(required = false) String ids,
+                                     HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
             return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
-        if(jobPostService.findJobPost(id) == null)
-            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+//        MemberModel mem = accountService.findMember(credential.getId());
 
-        //遍历用户的收藏列表
-        //如果没有这条兼职则添加,反之删除
-        MemberModel mem = accountService.findMember(credential.getId());
-        boolean isFav = jobPostService.isPostFavorite(credential.getId(),id);
-        String status;
-        if(isFav){ //找到,删除收藏
-            jobPostService.unfavoritePost(credential.getId(),id);
-            status = "1";
-        }else{ //没有找到,则添加收藏
-            jobPostService.favoritePost(credential.getId(),id);
-            status = "0";
+
+        String [] delIds = {id+""};
+        //id=0视为多条删除
+        if(id==0){
+            delIds = ids.split(";");
         }
+
+
+        String status ="1";
+        for(String currId:delIds){
+            if(jobPostService.findJobPost(Integer.parseInt(currId)) == null)
+                return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+
+            //遍历用户的收藏列表
+            //如果没有这条兼职则添加,反之删除
+
+            boolean isFav = jobPostService.isPostFavorite(credential.getId(),Integer.parseInt(currId));
+
+            if(isFav){ //找到,删除收藏
+                jobPostService.unfavoritePost(credential.getId(),Integer.parseInt(currId));
+                status = "1";
+            }else{ //没有找到,则添加收藏
+                jobPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
+                status = "0";
+            }
+        }
+
+
+
 
         return new JsonWrapper(true, "status",status).getAjaxMessage();
     }

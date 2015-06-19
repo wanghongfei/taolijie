@@ -32,7 +32,7 @@
       <ul class="breadcrumb">
         <li><a href="/manage"><i class="fa fa-home"></i> 控制台</a></li>
         <li><a href="/manage/users"></i> 用户管理</a></li>
-        <li><a href=""> ${isUpdate ? '修改用户':'添加用户'}</a></li>
+        <li><a href=""> ${isEdit? '修改用户':'添加用户'}</a></li>
       </ul>
 
     </div>
@@ -43,7 +43,7 @@
 
       <section class="panel panel-info">
         <header class="panel-heading">
-          <h3 class="panel-title">${isUpdate ? ('修改用户 -- '.concat(member.username)):'添加用户'}</h3>
+          <h3 class="panel-title">${isEdit ? ('修改用户 -- '.concat(member.username)):'添加用户'}</h3>
 
         </header>
         <div class="panel-body">
@@ -58,36 +58,36 @@
               <div class="form-group">
                 <label class="control-label col-md-3" for="username">用户名</label>
                 <div class="col-md-4 col-xs-11">
-                   <input class="form-control" id="username" name="username" placeholder="输入用户名" type="text" value="${member.username}" ${isUpdate?'disabled="disabled"':''} >
+                   <input class="form-control" id="username" name="username" placeholder="输入用户名" type="text" value="${member.username}" ${isEdit?'disabled="disabled"':''} >
                 </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3" for="password">密码</label>
               <div class="col-md-4 col-xs-11" >
-                <input class="form-control" id="password" name="password" placeholder="${isUpdate ? '若不修改无需填写':'输入密码'}" type="password">
+                <input class="form-control" id="password" name="password" placeholder="${isEdit ? '若不修改无需填写':'输入密码'}" type="password">
               </div>
             </div>
 
 
             <div class="form-group">
               <label class="control-label col-md-3" for="role">类型</label>
-              <div class="col-md-2 col-xs-11 icheck" style="text-align:center">
+              <div class="col-md-2 col-xs-11" style="text-align:center">
                 <div class="flat-red">
                   <div class="radio ">
                     <%--role实体设计的有问题,在这里暂时用roleId判断--%>
-                    <input tabindex="3" type="radio" name="role" ${(!isUpdate||member.roleIdList[0] == 1)? 'checked="checked"':'' } value="ADMIN">
+                    <input tabindex="3" type="radio" name="roleName" ${(!isEdit||member.roleList.get(0).rolename=='ADMIN')? 'checked="checked"':'' } value="ADMIN">
                     <label>管理员</label>
                   </div>
                 </div>
                 <div class="flat-blue">
                   <div class="radio">
-                    <input tabindex="3" style="height:40px;width:100px" type="radio"  name="role" id="role" value="STUDENT" ${(isUpdate&&member.roleIdList[0]==3) ? 'checked="checked"':''}>学生
+                    <input tabindex="3" style="height:40px;width:100px" type="radio"  name="role" id="role" value="STUDENT" ${(isEdit&&member.roleList.get(0).rolename=='STUDENT') ? 'checked="checked"':''}>学生
                   </div>
 
                 </div>
                 <div class="flat-green">
                   <div class="radio ">
-                    <input tabindex="3" type="radio" name="role" value="EMPLOYER" ${(isUpdate&&member.roleIdList[0]==2) ? 'checked="checked"':''}>
+                    <input tabindex="3" type="radio" name="role" value="EMPLOYER" ${(isEdit&&member.roleList.get(0).rolename=='EMPLOYER') ? 'checked="checked"':''}>
                     <label>商家</label>
                   </div>
                 </div>
@@ -119,10 +119,10 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-2 col-xs-11 icheck">
+              <div class="col-md-2 col-xs-11">
                 <div class="flat-purple">
                   <div class="radio ">
-                    <input tabindex="3"  name="gender" value="女" type="radio"   ${member.gender.equals("女"?'checked="checked"':'')}>
+                    <input tabindex="3"  name="gender" value="女" type="radio"   ${member.gender == "女"?'checked="checked"':''}>
                     <label>女</label>
                   </div>
                 </div>
@@ -168,8 +168,10 @@
               </div>
             </div>
 
-            <button type="submit" style="margin-top:30px;margin-bottom:30px" class="col-md-offset-3 btn btn-primary">添加用户</button>
+            <button type="submit" style="margin-top:30px;margin-bottom:30px" class="col-md-offset-3 btn btn-primary">${isEdit?'修改':'添加'}用户</button>
 
+            <input id="isEdit" type="hidden" value="${isEdit}"/>
+            <input id="userId" type="hidden" value="${member.id}"/>
           </form>
         </div>
       </section>

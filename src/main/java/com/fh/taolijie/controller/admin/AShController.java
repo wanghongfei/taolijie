@@ -41,7 +41,7 @@ public class AShController {
         List<SHPostModel> shs;
         shs =shPostService.getAllPostList(page - 1, pageSize, objWrapper);
 
-        int totalPage = (Integer) objWrapper.getObj();
+//        int totalPage = (Integer) objWrapper.getObj();
 
         model.addAttribute("shs", shs);
         return "pc/admin/shs";
