@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -50,13 +51,14 @@
                     <div class="list">
                         <div class="list-type">
 
-                            <span>${job.categoryName}</span>
+                            <span>${job.category.name}</span>
                         </div>
                         <div class="list-title">${job.title}<span>${job.verified ? '已认证': ''}</span></div>
                         <span>${job.workPlace}</span>&nbsp;&nbsp;
-                        <span>${job.wage}元/${job.salaryUnit}</span>&nbsp;&nbsp;
+                        <span>${job.wage.intValue()}元/${job.salaryUnit}</span>&nbsp;&nbsp;
                         <span>${job.timeToPay}</span>
-                        <span>${job.postTime}</span>
+                        <span>
+                        <fmt:formatDate value="${job.postTime}" pattern="yyyy-MM-dd" /></span>
                     </div>
                 </a>
             </c:forEach>

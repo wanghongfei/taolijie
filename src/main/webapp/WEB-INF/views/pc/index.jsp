@@ -18,6 +18,9 @@
 <%--页首--%>
 <jsp:include page="block/header.jsp"/>
 
+<style>
+
+</style>
 
 <div class="container">
   <%--轮播--%>
@@ -38,7 +41,7 @@
       <c:forEach var="job" items="${jobs}">
         <a href="/item/job/${job.id}" style="color:#333333;">
           <div class="job-slip">
-            <span class="cate" style="">${job.category.name}</span>
+            <span class="cate" style="background-color: ${job.category.themeColor};">${job.category.name}</span>
             <span class="content">${job.title}</span>
           </div>
         </a>

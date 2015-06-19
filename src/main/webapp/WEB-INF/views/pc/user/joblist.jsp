@@ -43,9 +43,10 @@
                     <div class="col_choice" style="line-height:112px; width:45px;">
                         <input name="collection" type="checkbox" value="" data-id="${job.id}" class="col_del_check">
                     </div>
-                    <div class="col_style"}>${job.category.name}
+                    <div class="col_style" data-color="${job.category.themeColor}" style="">${job.category.name}
 
-                    </div></a>
+                    </div>
+
                     <div class="col_main" style="margin-left:40px; width:630px;">
                         <div class="col_main_top">
                             <div class="title" style="width:450px;"><a href="/item/job/${job.id}" style="color: #333">${job.title}</a></div>
@@ -76,9 +77,9 @@
 
     <%--</div>--%>
 </div>
-
+</div>
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
-<script src="/scripts/security.js"></script>
+
 </body>
 </html>
 
