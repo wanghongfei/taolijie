@@ -111,6 +111,7 @@ public class DefaultJobPostService implements JobPostService {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.addToString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
 
         memMapper.updateByPrimaryKeySelective(mem);
     }
@@ -121,6 +122,7 @@ public class DefaultJobPostService implements JobPostService {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getFavoriteJobIds();
         String newIds = StringUtils.removeFromString(oldIds, postId.toString());
+        mem.setFavoriteJobIds(newIds);
 
         memMapper.updateByPrimaryKeySelective(mem);
 
