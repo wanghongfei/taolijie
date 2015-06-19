@@ -876,4 +876,13 @@
         INSERT INTO resume_post_rel (resume_id, job_post_id, created_time, member_id)
         VALUES (#{resumeId}, #{jobPostId}, now(), #{memberId})
     </insert>
+
+    <update id="setDeleted">
+        UPDATE
+            job_post
+        SET
+            deleted = #{deleted}
+        WHERE
+            id = #{postId}
+    </update>
 </mapper>

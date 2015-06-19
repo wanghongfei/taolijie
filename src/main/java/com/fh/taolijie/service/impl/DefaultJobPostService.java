@@ -5,7 +5,6 @@ import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -179,7 +178,9 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteJobPost(Integer postId) {
-        //得到所有评论
+        return postMapper.setDeleted(postId, true) <= 0 ? false : true;
+
+/*        //得到所有评论
         ReviewModel revModel = new ReviewModel(0, Integer.MAX_VALUE);
         revModel.setPostId(postId);
 
@@ -195,7 +196,9 @@ public class DefaultJobPostService implements JobPostService {
         // 删除兼职本身
         int rows = postMapper.deleteByPrimaryKey(postId);
 
-        return rows <= 0 ? false : true;
+        return rows <= 0 ? false : true;*/
+
+
     }
 
     @Override
