@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -112,6 +113,10 @@ public class DefaultShPostService implements ShPostService {
     public List<SHPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteShIds();
+        if (null == allIds || allIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         String[] ids = allIds.split(Constants.DELIMITER);
 
         // id字符串数据转换成id整数数组
