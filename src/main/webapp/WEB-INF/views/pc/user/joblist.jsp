@@ -43,17 +43,17 @@
                     <div class="col_choice" style="line-height:112px; width:45px;">
                         <input name="collection" type="checkbox" value="" data-id="${job.id}" class="col_del_check">
                     </div>
-                    <div class="col_style"}>${job.categoryName}
+                    <div class="col_style"}>${job.category.name}
 
                     </div></a>
                     <div class="col_main" style="margin-left:40px; width:630px;">
                         <div class="col_main_top">
                             <div class="title" style="width:450px;"><a href="/item/job/${job.id}" style="color: #333">${job.title}</a></div>
-                            <div class="style" style="width: 150px;">${job.memberDto.username}</div>
+                            <div class="style" style="width: 150px;">${job.member.username}</div>
                         </div>
                         <div class="col_main_bottom">
                             <div class="location" style="width:140px;"><i class="fa fa-map-marker fa-lg"></i> ${job.workPlace}</div>
-                            <div class="salary" style="color:#a47e3c"><i class="fa fa-jpy fa-lg"></i> ${job.wage}/天</div>
+                            <div class="salary" style="color:#a47e3c"><i class="fa fa-jpy fa-lg"></i> ${job.wage.intValue()}/天</div>
                             <div class="salarystyle" >&nbsp;&nbsp;${job.timeToPay}</div>
                             <div class="time"><i class="fa fa-clock-o fa-lg"></i>
                                 <fmt:formatDate value="${job.postTime}" pattern ="yyyy-MM-dd hh:mm" />

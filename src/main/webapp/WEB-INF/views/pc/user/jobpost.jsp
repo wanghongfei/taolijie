@@ -30,7 +30,7 @@
       <div class="form-group">
         <label for="">选择分类</label>
 
-        <select name="categoryId" >
+        <select name="jobPostCategoryId" >
             <option value="">选择分类</option>
             <c:forEach items="${cates}" var="cate">
                 <option value="${cate.id}">${cate.name}</option>
