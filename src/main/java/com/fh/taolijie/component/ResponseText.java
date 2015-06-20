@@ -1,7 +1,6 @@
 package com.fh.taolijie.component;
 
 import com.fh.taolijie.utils.Constants;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -10,15 +9,14 @@ import java.util.List;
  */
 public class ResponseText {
     private String message;
-    private int status; // HTTP状态码
     private boolean isOk;
 
+    private Object data;
     private List<Object> dataList;
 
-    public ResponseText(boolean ok, String message, HttpStatus status, List dataList) {
+    public ResponseText(boolean ok, String message, List<Object> dataList) {
         this.isOk = ok;
         this.message = message;
-        this.status = status.value();
 
         this.dataList = dataList;
     }
@@ -27,23 +25,35 @@ public class ResponseText {
      * 该构造函数默认处理结果为成功, 状态码200
      * @param dataList
      */
-    public ResponseText(List dataList) {
+    public <T extends List> ResponseText(T dataList) {
         this.isOk = true;
         this.message = Constants.StatusMessage.SUCCESS;
-        this.status = HttpStatus.OK.value();
 
         this.dataList = dataList;
     }
+    public ResponseText(Object data) {
+        this.isOk = true;
+        this.message = Constants.StatusMessage.SUCCESS;
+
+        this.data = data;
+    }
+
 
     /**
      * 该构造函数默认处理结果为失败
      * @param message
-     * @param status
      */
-    public ResponseText(String message, HttpStatus status) {
+    public ResponseText(String message) {
         this.isOk = false;
         this.message = message;
-        this.status = status.value();
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 
     public List getDataList() {
@@ -62,13 +72,6 @@ public class ResponseText {
         this.message = message;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public boolean isOk() {
         return isOk;

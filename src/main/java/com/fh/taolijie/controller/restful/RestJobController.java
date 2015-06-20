@@ -1,15 +1,12 @@
 package com.fh.taolijie.controller.restful;
 
-import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,13 +25,11 @@ public class RestJobController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/get/all", produces = Constants.Produce.JSON)
-    public String getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageNumber, null);
-        ResponseText rt = new ResponseText(jobList);
-
-        return JSON.toJSONString(jobList);
+        return new ResponseText(jobList);
     }
 
     /**
@@ -44,18 +39,68 @@ public class RestJobController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/get/byMember", produces = Constants.Produce.JSON)
-    public String getPostByMember(@RequestParam Integer memberId,
+    @RequestMapping(value = "/user/{memberId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getPostByMember(@PathVariable("memberId") Integer memberId,
                                   @RequestParam(defaultValue = "0") int pageNumber,
                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         if (null == memberId) {
-            ResponseText rt = new ResponseText("memberId cannot be null", HttpStatus.BAD_REQUEST);
-            return JSON.toJSONString(rt);
+            return new ResponseText("memberId cannot be null");
         }
 
         List<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize, null);
-        ResponseText rt = new ResponseText(list);
-
-        return JSON.toJSONString(rt);
+        return new ResponseText(list);
     }
+
+    /**
+     * 根据分类查询post
+     * @param categoryId
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/category/{categoryId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getPostByCategory(@PathVariable("categoryId") Integer categoryId,
+                                    @RequestParam(defaultValue = "0") int pageNumber,
+                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        List<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize, null);
+
+        return new ResponseText(list);
+    }
+
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getPostInBatch(@RequestParam(value = "ids") String idString) {
+        List<Integer> idList = StringUtils.toIdList(idString);
+        if (null == idList) {
+            return new ResponseText("invalid id string");
+        }
+
+        List<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
+        return new ResponseText(postList);
+    }
+
+    /**
+     * 搜索
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText searchPost(JobPostModel model,
+                                   @RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        List<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
+        return new ResponseText(postList);
+    }
+
+    /**
+     * 根据id得到post
+     * @param postId
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getPostById(@PathVariable(value = "id") Integer postId) {
+
+        JobPostModel model = jobService.findJobPost(postId);
+        return new ResponseText(model);
+    }
+
 }

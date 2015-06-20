@@ -3,8 +3,10 @@ package com.fh.taolijie.utils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-3-30.
@@ -173,6 +175,17 @@ public class StringUtils {
         }
 
         return ids.split(Constants.DELIMITER);
+    }
+
+    public static List<Integer> toIdList(String idString) {
+        String[] ids = splitIds(idString);
+        if (null == ids) {
+            return null;
+        }
+
+        return Arrays.stream(ids)
+                .map((idStr) -> Integer.valueOf(idStr))
+                .collect(Collectors.toList());
     }
 
     public static boolean checkIdExists(String[] ids, String targetId) {

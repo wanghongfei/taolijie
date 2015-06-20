@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception ex) {
+        ex.printStackTrace();
+
         return new ModelAndView("pc/500");
     }
 }
