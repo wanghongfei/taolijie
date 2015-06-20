@@ -403,4 +403,16 @@ public class UShController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion
+
+    @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String like(@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        //先查看是否登陆,发偶泽返回错误信息
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+
+        return "";
+    }
+
 }

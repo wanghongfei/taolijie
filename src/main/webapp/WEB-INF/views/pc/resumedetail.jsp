@@ -58,7 +58,6 @@
           <p>性别 : ${resume.gender == '男' ? '男' : '女'}</p>
         <p>年龄 : ${resume.age}岁</p>
         <p>身高 : ${resume.height}cm</p>
-        <p>学校 : ${resume.school}</p>
       </div>
     </div>
     <br/>
@@ -66,7 +65,7 @@
       <div class="title">求职意向</div>
       <p>
         <c:forEach items="${intendJobs}" var="intendJob">
-          ${intendJob}
+          ${intendJob.jobPost.category.name}
         </c:forEach>
         &nbsp;&nbsp;&nbsp;&nbsp;
       </p>

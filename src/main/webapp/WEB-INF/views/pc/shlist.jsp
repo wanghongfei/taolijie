@@ -54,8 +54,8 @@
                           <img src="/images/pig.jpg" alt="">
                           <p class="titile">${sh.title}</p>
                           <div class="fl">
-                              <p>${sh.categoryName}</p>
-                              <span>${sh.memberDto.username}</span>
+                              <p>${sh.category.name}</p>
+                              <span>${sh.member.username}</span>
                               <%--换成member的role--%>
                               <%--<span class="theme-color">1</span>--%>
                           </div>

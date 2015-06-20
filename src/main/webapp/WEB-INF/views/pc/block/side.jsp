@@ -46,14 +46,22 @@
         </ul>
     </div>
     <div class="news">
-        <p>校园聚焦点
+
+        <p>  <a href="/list/news">校园聚焦点
             <i class="news-arrow"></i>
+        </a>
         </p>
+
         <ul>
             <c:forEach var="title" items="${titles}" varStatus="status">
-                <li class="news-${status.index+1}" style="padding-top: 50px;">
-                <%--${title.title}--%>
-                </li>
+                    <li class="news-${status.index+1}" style="">
+                        <a href="/detail/news/${title.id}">
+                            <%--${title.title}--%>
+                        <img src="/images/1.gif" alt="">
+                        </a>
+                    </li>
+
+
             </c:forEach>
         </ul>
     </div>

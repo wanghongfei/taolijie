@@ -110,26 +110,7 @@ public class HShController {
         return "pc/shdetail";
     }
 
-    /**
-     * 搜索一条兼职
-     * @return
-     */
-    @RequestMapping(value = "/search/sh", method = RequestMethod.GET)
-    public String search(@RequestParam SHPostModel shPostModel,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                         Model model) {
 
-
-        //TODO:没有分页
-        ObjWrapper objWrapper = new ObjWrapper();
-        List<SHPostModel> list =shPostService.runSearch(shPostModel, objWrapper);
-        int totalPage = (Integer) objWrapper.getObj();
-        model.addAttribute("shs", list);
-        model.addAttribute("page", page);
-//            model.addAttribute("totalPage", totalPage);
-        return "pc/joblist";
-    }
 
 
 }

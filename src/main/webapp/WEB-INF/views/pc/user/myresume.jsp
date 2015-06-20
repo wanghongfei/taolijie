@@ -44,11 +44,6 @@
         <input name="age" class="short-input form-control" type="text" placeholder="" value="${resume.age}">
         <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
       </div>
-      <div class="form-group">
-        <label for="">学校<i class="theme-color">*</i></label>
-        <input name="school" class=" form-control" type="text" placeholder="输入学校" value="${resume.school ? resume.school : '山东理工大学'}">
-        <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
-      </div>
         <div class="form-group">
             <input id="UserImg" title="浏览文件" type="file" />
         </div>

@@ -37,14 +37,14 @@ public class HNewsController {
                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY+"") int pageSize) {
 
         ObjWrapper objWrapper = new ObjWrapper();
-        List<NewsModel> newsList = newsService.getNewsList(page,pageSize,objWrapper);
-        int totalPage = (Integer)objWrapper.getObj();
+        List<NewsModel> newsList = newsService.getNewsList(page-1,pageSize,objWrapper);
+//        int totalPage = (Integer)objWrapper.getObj();
 
         model.addAttribute("page",page);
-        model.addAttribute("totalPage",totalPage);
+//        model.addAttribute("totalPage",totalPage);
         model.addAttribute("newsList",newsList);
 
-        return "pc/newslist";
+        return "pc/focus";
     }
 
     /**
@@ -54,6 +54,6 @@ public class HNewsController {
     public String news(@PathVariable int nid, Model model) {
         NewsModel news = newsService.findNews(nid);
         model.addAttribute("news", news);
-        return "pc/news";
+        return "pc/focusdetail";
     }
 }

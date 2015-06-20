@@ -138,8 +138,6 @@ public class UResumeController {
 
     }
 
-
-
     /**
      * 删除简历
      * 先判断有木有简历

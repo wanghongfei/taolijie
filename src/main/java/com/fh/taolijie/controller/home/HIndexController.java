@@ -51,4 +51,34 @@ public class HIndexController {
     }
 
 
+    /**
+     * 搜索一条兼职
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(@RequestParam(defaultValue = "") String content,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "job") String type,
+                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                         Model model) {
+
+        if(type.equals("job")){
+            JobPostModel jobPostModel = new JobPostModel();
+            jobPostModel.setTitle(content);
+            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, page-1, pageSize,new ObjWrapper());
+            model.addAttribute("jobs", list);
+            model.addAttribute("page", page);
+            return "pc/joblist";
+        } else{
+            SHPostModel shPostModel = new SHPostModel();
+            List<SHPostModel> list =shPostService.runSearch(shPostModel,new ObjWrapper());
+            model.addAttribute("shs", list);
+            model.addAttribute("page", page);
+            return "pc/joblist";
+        }
+    }
+
+
+
+
 }
