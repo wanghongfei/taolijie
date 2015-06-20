@@ -23,7 +23,9 @@ $(".submit-btn").click(function(){
             console.log($('.dialog'));
             $('.dialog').jqmShow();
             if(data.result){
-                location.href = "/user/job/mypost";
+                setTimeout(function(){
+                    location.href = "/user/job/mypost";
+                },500);
             }
         }
     });
