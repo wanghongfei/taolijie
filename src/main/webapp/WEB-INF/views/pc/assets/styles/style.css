@@ -1,7 +1,7 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
 .jqmWindow {
-    display: none;
+    display:none;
     position: fixed;
     top: 17%;
     left: 50%;

@@ -5,6 +5,9 @@
 
 $(".submit-btn").click(function(){
     var data = $("#ProfileForm").serialize();
+    $(".dialog").jqm({
+        overlayClass: 'jqmOverlay'
+    })
     $.ajax({
         type:"POST",
         url:"/user/profile",
@@ -12,11 +15,15 @@ $(".submit-btn").click(function(){
         success: function(data){
             console.log(data);
             if(data.result){
-                alert("修改资料成功");
-                window.location.href = "/user/profile";
+                $(".tlj_modal_content").html("资料修改成功!");
+                $('.dialog').jqmShow();
+                setTimeout(function(){
+                    location.reload();
+                },500);
+            }else{
+                $(".tlj_modal_content").html(data.message);
+                $('.dialog').jqmShow();
             }
-            else
-                alert(data.message);
         }
     });
 });

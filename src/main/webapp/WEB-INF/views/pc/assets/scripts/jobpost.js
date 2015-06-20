@@ -5,7 +5,13 @@
 
 //提交表单
 
+
 $(".submit-btn").click(function(){
+
+    $(".dialog").jqm({
+        overlayClass: 'jqmOverlay'
+    })
+
     var formdata = $("#JobPostForm").serialize();
     //console.log(formdata);
     $.ajax({
@@ -13,7 +19,12 @@ $(".submit-btn").click(function(){
         url:"/user/job/post",
         data:formdata,
         success:function(data){
-            console.log(data);
+            $(".tlj_modal_content").html(data.message);
+            console.log($('.dialog'));
+            $('.dialog').jqmShow();
+            if(data.result){
+                location.href = "/user/job/mypost";
+            }
         }
     });
 });
