@@ -13,7 +13,7 @@ $(".submit-btn").click(function(){
             console.log(data);
             if(data.result){
                 alert("修改资料成功");
-                window.location.href = "/user";
+                window.location.href = "/user/profile";
             }
             else
                 alert(data.message);

@@ -1,4 +1,39 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
+
+.jqmWindow {
+    display: none;
+    position: fixed;
+    top: 17%;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    height: 100px;
+    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+}
+.tlj_modal_header{
+    height: 40px;
+    background: #fa6a38;
+    font-size: 16px;
+    font-family: "微软雅黑";
+    line-height: 40px;
+    color: #fff;
+    padding-left: 10px;
+    border-radius: 10px 10px 0 0;
+}
+.tlj_modal_content{
+    height: 60px;
+    line-height: 60px;
+    padding-left: 10px;
+    font-size: 16px;
+    font-family: "微软雅黑";
+    background-color: #fff;
+}
+.jqmOverlay{
+    background-color: #000;
+}
+
+
 /**
 *
 * 常量
