@@ -78,7 +78,11 @@
                                           <td class="center hidden-phone">${job.likes}</td>
                                           <td class="center hidden-phone">${job.dislikes}</td>
                                           <td class="center hidden-phone">
-                                              <button href="" class="btn btn-danger btn-xs">删除</button>
+                                              <button href="javascript:;"
+                                                      data-id="${job.id}"
+                                                      data-type="job"
+                                                      class="delete-btn btn btn-danger btn-xs">
+                                                  删除</button>
                                           </td>
                                       </tr>
                                   </c:forEach>
@@ -117,61 +121,9 @@
 
 <!--dynamic table initialization -->
 <script src="/admin/js/acustom/table-init.js"></script>
-
-<%--<script>--%>
-  <%--$(document).ready(function(){--%>
-    <%--var nCloneTd = InitDetailsColumn();--%>
-    <%--var url = '/api/list/job/1';--%>
-    <%--var detailUrl = '/api/item/job/';--%>
-    <%--var deleteUrl = '/user/job/del/';--%>
-    <%--var columns =  [--%>
-      <%--{--%>
-        <%--"mData": null,--%>
-        <%--"bSortable": false,--%>
-        <%--"mRender": function(o){ return nCloneTd.outerHTML}--%>
-      <%--},--%>
-      <%--{ "mData":"id" },--%>
-      <%--{ "mData": "title" },--%>
-      <%--{ "mData": "memberId" },--%>
-      <%--{ "mData": "postTime" },--%>
-      <%--{ "mData": "expiredTime" },--%>
-      <%--{ "mData": "categoryName"},--%>
-      <%--{ "mData": "likes" },--%>
-      <%--{ "mData": "dislikes" },--%>
-      <%--{--%>
-        <%--"mData": null,--%>
-        <%--"bSortable": false,--%>
-        <%--"mRender": function (data, type, full) { @RequestMapping(value = "/job",method = RequestMethod.GET)
-    public String jobCategory(Model model){
-        int page = 1;
-        int capacity = 9999;
-        List<JobPostCategoryModel> list = jobPostCateService.getCategoryList(page-1, capacity, new ObjWrapper());
-        model.addAttribute("jobCates",list);
-        return "pc/admin/jobcategory";
-    }--%>
-          <%--return '<a href="javascript:void(0);" onclick="toDelete(this,'+full.id+',\''+deleteUrl+'\')" class="btn btn-xs btn-warning to-delete">删除</a>';--%>
-        <%--}--%>
-      <%--}--%>
-    <%--];--%>
+<script src="/admin/js/acustom/request.js"></script>
 
 
-    <%--var formatFunc = generateDetail;--%>
-
-    <%--initDataTable(url,detailUrl,columns,formatFunc);--%>
-  <%--});--%>
-
-  <%--function generateDetail(data){--%>
-    <%--var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';--%>
-    <%--sOut += '<tr><td>工作描述:</td><td>'+data.jobDetail+'</td></tr>';--%>
-    <%--sOut += '<tr><td>工作详情:</td><td>'+data.jobDescription+'</td></tr>';--%>
-    <%--sOut += '<tr><td>工资:</td><td>'+data.wage+data.salaryUnit+'/'+data.timeToPay+'</td></tr>';--%>
-    <%--sOut += '</table>';--%>
-
-    <%--return sOut;--%>
-  <%--}--%>
-
-
-<%--</script>--%>
 
 
 </body>
