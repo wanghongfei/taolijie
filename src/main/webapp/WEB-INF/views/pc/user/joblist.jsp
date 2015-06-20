@@ -63,17 +63,38 @@
                             <%--<div class="clickno">800</div>--%>
                         </div>
                     </div>
+
+
+
                     <div class="col_delete">
                         <a href="javascript:void(0);" class="UserDel" data-id="${job.id}" data-type="job"  data-option = "${isFav?'fav':''}" ><i class="fa fa-trash fa-2x"></i><br>删除</a>
                     </div>
                 </div>
             </c:forEach>
+
+
+            <div class="page">
+                <ul>
+                    <c:if test="${page != 1 && pageStatus !=0}">
+                        <li><a class="next" href="${isFav?'/user/job/myfav':'/user/job/mypost'}?page=${page-1}">上一页</a></li>
+                    </c:if>
+                    <c:if test="${pageStatus == 2}">
+                        <li><a class="next" href="${isFav?'/user/job/myfav':'/user/job/mypost'}?page=${page+1}">下一页</a></li>
+                    </c:if>
+                    <c:if test="${pageStatus == 0 }">
+                        <h2>没有更多了</h2>
+                    </c:if>
+                </ul>
+            </div>
+
+
             <div class="col_delete_all">
                 <div class="col_choice">
                     <input name="" type="checkbox" value="" id="checkAll">全选
                     <button class="del_all"  data-type="job"  data-option = "${isFav?'fav':''}">删除选中项</button>
                 </div>
             </div>
+
 
     <%--</div>--%>
 </div>

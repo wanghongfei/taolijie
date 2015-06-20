@@ -66,28 +66,21 @@
           </div>
 
           <div style="clear:both"></div>
+
           <div class="page">
-              <div class="page">
-                  <ul>
-                      <c:if test="${page != 1}">
-                          <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
-                      </c:if>
-                      <c:if test="${page == 1}">
-                          <c:forEach  begin="1" end="${totalPage}" var="item">
-                              <li><a class="${page == item ? 'active':''}" href="/list/sh?page=${item}">${item}</a></li>
-                          </c:forEach>
-                          <c:if test="${page < totalPage}">
-                              <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
-                          </c:if>
-                          <c:if test="${page > totalPage}">
-                              <h2>没有更多了</h2>
-                          </c:if>
-
-                      </c:if>
-
-                  </ul>
-              </div>
+              <ul>
+                  <c:if test="${page != 1 && pageStatus !=0}">
+                      <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
+                  </c:if>
+                  <c:if test="${pageStatus == 2}">
+                      <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
+                  </c:if>
+                  <c:if test="${pageStatus == 0 }">
+                      <h2>没有更多了</h2>
+                  </c:if>
+              </ul>
           </div>
+
       </div>
 
 
