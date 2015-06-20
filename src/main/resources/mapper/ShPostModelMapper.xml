@@ -327,6 +327,8 @@
         FROM second_hand_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
+        WHERE
+            post.deleted = false
         ORDER BY
             post.post_time DESC
         LIMIT
@@ -337,6 +339,8 @@
             COUNT(*)
         FROM
             second_hand_post post
+        WHERE
+            post.deleted = false
     </select>
 
     <select id="getInBatch" resultMap="BaseResultMap">
@@ -367,6 +371,7 @@
             second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         WHERE
             post.second_hand_post_category_id = #{categoryId}
+            AND post.deleted = false
         ORDER BY
             <if test="orderByPageView == false">post.post_time DESC</if>
             <if test="orderByPageView == true">post.page_view DESC</if>
@@ -380,6 +385,7 @@
             second_hand_post post
         WHERE
             post.second_hand_post_category_id = #{categoryId}
+            AND post.deleted = false
     </select>
 
     <select id="getByMember" resultMap="BaseResultMap">
@@ -395,6 +401,7 @@
             second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         WHERE
             post.member_id = #{memberId}
+            AND post.deleted = false
             <if test="filtered == true">AND post.expired_time >= now()</if>
         ORDER BY
             post.post_time DESC
@@ -408,6 +415,7 @@
             second_hand_post post
         WHERE
             post.member_id = #{memberId}
+            AND post.deleted = false
             <if test="filtered == true">AND post.expired_time >= now()</if>
     </select>
 
@@ -674,6 +682,7 @@
             second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         WHERE
             post.complaint IS NOT NULL AND post.complaint > 0
+            AND post.deleted = false
         ORDER BY
             post.post_time
         LIMIT #{pageNumber}, #{pageSize}
@@ -685,6 +694,7 @@
             second_hand_post post
         WHERE
             post.complaint IS NOT NULL AND post.complaint > 0
+            AND post.deleted = false
     </select>
 
     <update id="increaseComplaint">
