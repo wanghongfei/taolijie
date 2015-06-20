@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -56,7 +57,7 @@ public class HShController {
         if (cate > 0) {
             shs = shPostService.getAndFilter(cate, false, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper);
+            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
