@@ -3,19 +3,16 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:tx="http://www.springframework.org/schema/tx"
-             xmlns:cache="http://www.springframework.org/schema/cache"
              xsi:schemaLocation="
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
         >
     <!-- DispatcherServlet Context: defines this servlet's request-processing
         infrastructure -->
 
     <!--<import resource="redis-config.xml" />-->
+    <import resource="database-config.xml" />
 
     <!-- Enables the Spring MVC @Controller programming model -->
     <!--<cache:annotation-driven />-->
@@ -42,35 +39,6 @@
 
 
 
-    <!--<jee:jndi-lookup id="dataSource" jndi-name="java:jboss/datasources/taolijie"-->
-                     <!--resource-ref="true" />-->
-    <!--数据库连接采用jdbc驱动-->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/taolijie?characterEncoding=utf-8" />
-        <property name="username" value="root" />
-    <property name="password" value="wfc" />
-    </bean>
-
-
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
-
-    <!-- myBatis配置 -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="configLocation" value="classpath:mybatis-config.xml" />
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
-    <!-- myBatis配置 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
-        <property name="basePackage" value="com.fh.taolijie.dao.mapper"/>
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-    </bean>
-
     <!-- 文件上传 -->
     <bean id="multipartResolver"
                 class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -85,7 +53,6 @@
         </property>
     </bean>
 
-    <tx:annotation-driven />
 
 
     <context:component-scan base-package="com.fh.taolijie" />

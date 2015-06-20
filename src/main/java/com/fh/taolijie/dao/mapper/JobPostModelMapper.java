@@ -111,4 +111,10 @@ public interface JobPostModelMapper {
     void increaseLike(Integer postId);
 
     void postResume(@Param("resumeId") Integer resumeId, @Param("jobPostId") Integer jobPostId, @Param("memberId") Integer memberId);
+
+    /**
+     * set deleted = true
+     * @param postId
+     */
+    int setDeleted(@Param("postId") Integer postId, @Param("deleted") boolean deleted);
 }

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -42,13 +43,18 @@
     <div style="clean:both"></div>
     <div class="title">
       <p>${job.title}</p>
-      <span>兼职类型 : ${job.categoryName}</span>
+      <span>兼职类型 : ${job.category.name}</span>
       <span>${job.verified ? '已认证' : '未认证'}</span>
-      <span>发布时间 : ${job.postTime}</span>
+      <span>发布时间 :
+          <fmt:formatDate value="${job.postTime}" pattern="yyyy-MM-dd"/>
+
+  </span>
     </div>
     <div class="info">
-      <p class="money"><span>${job.wage}元/${job.salaryUnit}</span>${job.timeToPay}</p>
-      <p>有效日期 : <span>${job.expiredTime}</span></p>
+      <p class="money"><span>${job.wage.intValue()}元/${job.salaryUnit}</span>${job.timeToPay}</p>
+      <p>有效日期 : <span>
+        <fmt:formatDate value="${job.expiredTime}" pattern="yyyy-MM-dd"/>
+      </span></p>
       <p>工作时间 : <span>${job.workTime}</span></p>
       <p>工作地点 : <span>${job.workPlace}</span></p>
     </div>

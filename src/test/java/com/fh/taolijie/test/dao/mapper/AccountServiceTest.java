@@ -42,7 +42,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
         List<RoleModel> rList = mem.getRoleList();
         Assert.assertNotNull(rList);
-        Assert.assertTrue(rList.stream().anyMatch( role -> role.getRolename().equals("rolename2") ));
+        Assert.assertTrue(rList.stream().anyMatch( role -> role.getRolename().equals("ADMIN") ));
 
         memMapper.checkUserExist("hanxinxin");
     }
@@ -169,7 +169,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
         accountService.assignRole(2, "hanxinxin");
 
         MemberModel mem = memMapper.selectByUsername("hanxinxin");
-        Assert.assertTrue(mem.getRoleList().stream().anyMatch(r -> r.getRolename().equals("rolename2")));
+        Assert.assertTrue(mem.getRoleList().stream().anyMatch(r -> r.getRolename().equals("ADMIN")));
     }
 
     @Test

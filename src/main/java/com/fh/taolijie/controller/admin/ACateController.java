@@ -42,19 +42,40 @@ public class ACateController {
      * 添加二手/兼职分类页面
      * @param type
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String addCategoryPage(@RequestParam(defaultValue = "3") int type,
+    @RequestMapping(value = "{type}/add", method = RequestMethod.GET)
+    public String addCategoryPage(@PathVariable String type,
                                   CategoryDto dto, //二手或兼职分类dto
                                   Model model){
-        boolean isChange = false;
-        if(dto != null){
-            isChange = true;
-        }
+        boolean isEdit = false;
         model.addAttribute("type", type);
-        model.addAttribute("cate",dto);
-        model.addAttribute("isChange",isChange);
+        model.addAttribute("isEdit",isEdit);
         return "pc/admin/addcategory";
     }
+
+    /**
+     * 编辑兼职分类页面
+     */
+    @RequestMapping(value = "{type}/{id}/edit", method = RequestMethod.GET)
+    public String editJob(@PathVariable int id,
+                       @PathVariable String type,
+                       Model model){
+        if(type.equals("job")){
+            JobPostCategoryModel cate= jobPostCateService.findCategory(id);
+            model.addAttribute("cate",cate);
+            model.addAttribute("type", type);
+            model.addAttribute("isEdit",true);
+        }else if(type.equals("sh")){
+            SHPostCategoryModel cate = shPostCategoryService.findCategory(id);
+            model.addAttribute("cate",cate);
+            model.addAttribute("type", type);
+            model.addAttribute("isEdit",true);
+        }
+        return "pc/admin/addcategory";
+    }
+
+
+
+
 
     /**
      * 添加二手\兼职分类
@@ -62,19 +83,56 @@ public class ACateController {
      */
     @RequestMapping(value = "/add",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody
-    String addCategory(@RequestParam int type,
-                       JobPostCategoryModel jobCate,
-                       SHPostCategoryModel shCate){
-        if(type==0){
-            jobPostCateService.addCategory(jobCate);
-        }else if(type==1){
-            /*添加分类*/
-            shPostCategoryService.addCategory(shCate);
+    String addCategory(@RequestParam String type,
+                       @RequestParam boolean isEdit,
+                       @RequestParam(required = false) int id,
+                       CategoryDto cate){
+        if(type.equals("job")){
+            JobPostCategoryModel jobCate = new JobPostCategoryModel();
+            if(id!=0)
+                jobCate.setId(id);
+            jobCate.setName(cate.getName());
+            jobCate.setLevel(cate.getLevel());
+            jobCate.setThemeColor(cate.getThemeColor());
+            jobCate.setMemo(cate.getMemo());
+            if(isEdit)
+                jobPostCateService.updateCategory(jobCate.getId(),jobCate);
+            else
+                jobPostCateService.addCategory(jobCate);
+        }else if(type.equals("sh")){
+            SHPostCategoryModel shCate = new SHPostCategoryModel();
+            if(id!=0)
+                shCate.setId(id) ;
+            shCate.setName(cate.getName());
+            shCate.setLevel(cate.getLevel());
+            shCate.setThemeColor(cate.getThemeColor());
+            shCate.setMemo(cate.getMemo());
+            if(isEdit)
+                shPostCategoryService.updateCategory(shCate.getId(), shCate);
+            else
+                shPostCategoryService.addCategory(shCate);
         }else {
             return new JsonWrapper(true, Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+    /**
+     * 更新分类
+     * @param  id 要更新的id
+     * @param  dto 更新的数据
+     * @return
+     */
+    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String updateJobCate(@PathVariable int id,
+                                              @Valid JobPostCategoryModel dto,
+                                              BindingResult result){
+        if(!jobPostCateService.updateCategory(id,dto)){
+            return new JsonWrapper(true, Constants.ErrorType.ERROR).getAjaxMessage();
+        }
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
 
     /**
      * 管理兼职分类
@@ -112,15 +170,15 @@ public class ACateController {
      * @param id 分类id
      * @param type  0为兼职分类,1为二手分类
      */
-    @RequestMapping(value = "/del/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String delCate(@PathVariable int id,@RequestParam int type){
-        if(type == 0){
+    @RequestMapping(value = "{type}/del/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String delCate(@PathVariable int id,@PathVariable String type){
+        if(type.equals("job")){
             try {
                 jobPostCateService.deleteCategory(id);
             } catch (CategoryNotEmptyException e) {
                 return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
             }
-        }else if(type == 1){
+        }else if(type.equals("sh")){
             try {
                 shPostCategoryService.deleteCategory(id);
             } catch (CascadeDeleteException e) {
@@ -133,21 +191,9 @@ public class ACateController {
     }
 
 
-    /**
-     * 更新分类
-     * @param  id 要更新的id
-     * @param  dto 更新的数据
-     * @return
-     */
-    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String updateJobCate(@PathVariable int id,
-                                              @Valid JobPostCategoryModel dto,
-                                              BindingResult result){
-        if(!jobPostCateService.updateCategory(id,dto)){
-            return new JsonWrapper(true, Constants.ErrorType.ERROR).getAjaxMessage();
-        }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
-    }
+
+
+
 
 
 

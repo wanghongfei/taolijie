@@ -10,7 +10,7 @@
         <result column="am_job_post_category_id" property="jobPostCategoryId" jdbcType="INTEGER"/>
 
         <association property="resume" resultMap="com.fh.taolijie.dao.mapper.ResumeModelMapper.BaseResultMap" />
-        <association property="jobPost" resultMap="com.fh.taolijie.dao.mapper.JobPostModelMapper.BaseResultMap" />
+        <association property="category" resultMap="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.BaseResultMap" />
 
     </resultMap>
 

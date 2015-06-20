@@ -39,8 +39,8 @@ public class DefaultAccountService implements AccountService {
 /*    @Autowired
     RedisTemplate redisTemplate;*/
 
-/*    @Autowired
-    Mail mail;*/
+    @Autowired
+    Mail mail;
 
     @Override
     @Transactional(readOnly = false)
@@ -282,6 +282,6 @@ public class DefaultAccountService implements AccountService {
         memMapper.updateByPrimaryKeySelective(mem);
 
         // send email
-        //mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
+        mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
     }
 }

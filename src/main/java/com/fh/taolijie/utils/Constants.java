@@ -169,6 +169,15 @@ public class Constants {
         public static final String OTHER = "面议";*/
     }
 
+    public static class Produce {
+        public static final String JSON = "application/json; charset=utf-8";
+    }
+
+    public static class StatusMessage {
+        public static final String SUCCESS = "success";
+        public static final String FAILED = "failed";
+    }
+
 
     public static class ApplicationRecord {
         public static final String KEY_ID = "id";
@@ -198,6 +207,8 @@ public class Constants {
 
         public static final String REPASSWORD_ERROR = "密码不一致";
 
+        public static final String CATE_NOT_EMPTY = "该分类不是空的";
+
         public static final String EMAIL_ILLEGAL = "邮箱不合法";
         public static final String EMAIL_ERROR = "邮箱错误";
 
@@ -216,6 +227,10 @@ public class Constants {
         public static final String ERROR = "出现错误";
         public static final String NOT_FOUND = "没有找到";
         public static final String PERMISSION_ERROR = "权限不足";
+
+        public static final String ADD_SUCCESS = "添加成功";
+        public static final String EDIT_SUCCESS = "修改成功";
+        public static final String DEL_SUCCESS = "删除成功";
 
 
     }

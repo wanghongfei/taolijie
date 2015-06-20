@@ -79,17 +79,17 @@ var Script = function () {
                 }
             },
             submitHandler: function () {
-                console.log("heheh");
                 var formData = $("#categoryForm").serialize();
+
                 $.ajax({
-                    url: '/manage/addcategory',
+                    url: '/manage/cate/add',
                     type: 'POST',
                     data: formData,
                     success: function (data) {
                         if (data.result) {
-                            alert('添加成功')
+                            alert('操作成功')
                         }else{
-                            console.log(data);
+                            alert.log(data.message);
                         }
                     }
                 });
@@ -108,7 +108,7 @@ var Script = function () {
                     required: true,
                     minlength: 6
                 },
-                role: {
+                roleName: {
                     required:true
                 }
 
@@ -122,19 +122,25 @@ var Script = function () {
                     required: '请输入密码',
                     minlength: '密码太短,请重新输入'
                 },
-                role: {
+                roleName: {
                     required: '请选择类型'
                 }
             },
             submitHandler: function () {
                 var formData = $("#userForm").serialize();
+
+                var url = "/manage/user/add";
+                var id = $("#userId").val();
+                if($("#isEdit").val()){
+                    url ="/manage/user/edit/"+id;
+                }
                 $.ajax({
-                    url: '/manage/adduser',
+                    url: url,
                     type: 'POST',
                     data: formData,
                     success: function (data) {
                         if (data.result) {
-                            alert('添加成功')
+                            alert('操作成功')
                         }else{
                             console.log(data);
                         }
@@ -159,21 +165,23 @@ var Script = function () {
             submitHandler: function () {
                 var title = document.getElementById('title').val;
                 var content = document.getElementById('content').val;
+                var newsId = $("#newsId").val();
                 var formData = $("#newsForm").serialize();
-                console.log("content:"+content);
-                console.log(formData);
+
+
+                var url = '/manage/news/add';
+                if($("#isEdit").val() == 'true'){
+                    url = '/manage/news/edit/'+newsId;
+                }
+
 
                 $.ajax({
-                    url: '/manage/addnews',
+                    url: url,
                     type: 'POST',
                     data: formData,
                     success: function (data) {
-                        if (data.result) {
-                            alert('添加成功');
-                            console.log(data);
-                        }else{
-                            console.log(data);
-                        }
+                        alert(data.message);
+                        console.log(data);
                     }
                 });
             }

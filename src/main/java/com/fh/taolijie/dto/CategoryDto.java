@@ -8,7 +8,7 @@ public class CategoryDto {
     private String name;
     private String themeColor;
     private String memo;
-    private String level;
+    private int level;
 
     public String getName() {
         return name;
@@ -34,11 +34,11 @@ public class CategoryDto {
         this.memo = memo;
     }
 
-    public String getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(int level) {
         this.level = level;
     }
 }

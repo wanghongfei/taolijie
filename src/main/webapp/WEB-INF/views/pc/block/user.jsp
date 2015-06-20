@@ -35,7 +35,7 @@
 
 <div class="segment user-nav">
   <ul>
-    <li class="${param.navShow == 'profile'?'active':''}" ><a href="/user/" >个人资料</a></li>
+    <li class="${param.navShow == 'profile'?'active':''}" ><a href="/user/profile" >个人资料</a></li>
     <li class="${param.navShow == 'resume'?'active':''}" ><a href="/user/resume/create">我的简历</a></li>
     <li class="${param.navShow == 'favlist'?'active':''}" ><a href="/user/job/myfav">我的收藏</a></li>
     <li class="${param.navShow == 'postlist'?'active':''}" ><a href="/user/job/mypost">我的发布</a></li>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -70,6 +71,21 @@
                   </tr>
                   </thead>
                   <tbody id="table-body">
+                  <c:forEach items="${shs}" var="sh">
+                      <tr class="">
+                          <td>${sh.id}</td>
+                          <td>${sh.title}</td> <!-- 不超15字 -->
+                          <td class="hidden-phone">${sh.member.username}</td>
+                          <td class="center hidden-phone">${sh.postTime}</td>
+                          <td class="center hidden-phone">${sh.expiredTime}</td>
+                          <td class="center hidden-phone">${sh.category.name}</td>
+                          <td class="center hidden-phone">${sh.likes}</td>
+                          <td class="center hidden-phone">${sh.dislikes}</td>
+                          <td class="center hidden-phone">
+                              <button href="" class="btn btn-danger btn-xs">删除</button>
+                          </td>
+                      </tr>
+                  </c:forEach>
                   </tbody>
                 </table>
 
@@ -101,54 +117,7 @@
 
 <!--dynamic table initialization -->
 <script src="/admin/js/dynamic_table_init.js"></script>
-
-
-<script>
-  $(document).ready(function(){
-    var nCloneTd = InitDetailsColumn();
-    var url = '/api/list/sh/1';
-    var detailUrl = '/api/item/sh/';
-    var deleteUrl = '/user/sh/del/';
-    var columns =  [
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function(o){ return nCloneTd.outerHTML}
-      },
-      { "mData":"id" },
-      { "mData": "title" },
-      { "mData": "memberId" },
-      { "mData": "postTime" },
-      { "mData": "expiredTime" },
-      { "mData": "categoryName"},
-      { "mData": "likes" },
-      { "mData": "dislikes" },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a href="javascript:void(0);" onclick="toDelete(this,'+full.id+',\''+deleteUrl+'\')" class="btn btn-xs btn-warning to-delete">删除</a>';
-        }
-      }
-    ];
-
-    var formatFunc = generateDetail;
-
-    initDataTable(url,detailUrl,columns,formatFunc);
-  });
-
-  function generateDetail(data){
-    console.log(data);
-    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-    sOut += '<tr><td>工作描述:</td><td>'+data.jobDetail+'</td></tr>';
-    sOut += '<tr><td>工作详情:</td><td>'+data.jobDescription+'</td></tr>';
-    sOut += '<tr><td>工资:</td><td>'+data.wage+data.salaryUnit+'/'+data.timeToPay+'</td></tr>';
-    sOut += '</table>';
-
-    return sOut;
-  }
-
-</script>
+<script src="/admin/js/acustom/table-init.js"></script>
 
 
 </body>

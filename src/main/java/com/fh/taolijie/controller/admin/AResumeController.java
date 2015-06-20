@@ -37,8 +37,7 @@ public class AResumeController {
         List<ResumeModel> resumes;
         resumes =resumeService.getAllResumeList(page - 1, pageSize, objWrapper);
 
-        int totalPage = (Integer) objWrapper.getObj();
-
+//        int totalPage = (Integer) objWrapper.getObj();
         model.addAttribute("resumes", resumes);
         return "pc/admin/resumes";
     }

@@ -86,7 +86,7 @@ public class JobPostServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testDeletePost() {
-        //postService.deleteJobPost(1);
+        postService.deleteJobPost(1);
     }
 
     @Test

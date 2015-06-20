@@ -31,7 +31,7 @@
         二手分类
       </h3>
       <ul class="breadcrumb">
-        <li><a href="/manage/index"><i class="fa fa-home"></i> 控制台</a></li>
+        <li><a href="/manage/"><i class="fa fa-home"></i> 控制台</a></li>
         <li><a href=""></i> 二手分类</a></li>
       </ul>
 
@@ -55,7 +55,8 @@
               <div class="adv-table editable-table ">
                 <div class="clearfix">
                   <div class="btn-group">
-                    <a class="add-button btn btn-success" href="/manage/addcategory?type=1">
+                    <a class="add-button btn btn-success"
+                       href="/manage/cate/sh/add">
                       添加二手分类 <i class="fa fa-plus"></i>
                     </a>
                   </div>
@@ -75,6 +76,27 @@
                   </tr>
                   </thead>
                   <tbody>
+                  <c:forEach items="${shCates}" var="cate">
+                    <tr>
+                      <td>${cate.id}</td>
+                      <td>${cate.name}</td>
+                      <td>${cate.memo}</td>
+                      <td>${cate.level}</td>
+                      <td>${cate.themeColor}</td>
+                      <td class="center hidden-phone">
+                        <a href="/manage/cate/sh/${cate.id}/edit"
+                           class="btn btn-success btn-xs">编辑</a>
+                      </td>
+                      <td class="center hidden-phone">
+                        <button href="javascript:void(0);"
+                                data-id="${cate.id}"
+                                data-type="cate/sh"
+                                class="delete-btn btn btn-danger btn-xs">
+                          删除
+                        </button>
+                      </td>
+                    </tr>
+                  </c:forEach>
                   </tbody>
                 </table>
               </div>
@@ -98,61 +120,11 @@
 <script type="text/javascript" src="/admin/js/data-tables/DT_bootstrap.js"></script>
 
 <!--dynamic table initialization -->
-<script src="/admin/js/dynamic_table_init.js"></script>
-
+<script src="/admin/js/acustom/table-init.js"></script>
+<script src="/admin/js/acustom/request.js"></script>
 <!--script for editable table-->
 <%--<script src="/admin/js/editable-table.js"></script>--%>
 
-<script>
-  $(document).ready(function(){
-    var url = '/manage/shcatelist';
-    var deleteUrl = '/manage/deljobcate/';
-
-    var columns =  [
-      { "mData":"id" },
-      { "mData":"name" },
-      { "mData":"memo" },
-      { "mData":"level" },
-      { "mData":"themeColor" },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a class="edit" href="javascript:;" >编辑</a>';
-        }
-      },
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          return '<a class="delete" onclick="toDelete(this,'+full.id+',\''+deleteUrl+'\''+
-                  ',\''+'type=1'+'\')"  href="javascript:;" >删除</a>';
-        }
-      }
-    ];
-
-
-    var formatFunc = generateDetail;
-
-
-    initDataTable(url,undefined,columns,formatFunc,[[0,'desc']]);
-  });
-
-  function generateDetail(data){
-    var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-    console.log(data);
-    sOut += '<tr><td>age:</td><td>'+(data.age == undefined ? '未填写':data.age)+'</td></tr>';
-    sOut += '<tr><td>email:</td><td>'+(data.email == undefined ? '未填写':data.email)+'</td></tr>';
-    sOut += '<tr><td>name:</td><td>'+(data.name== undefined ? '未填写':data.name)+'</td></tr>';
-    sOut += '<tr><td>用户类型:</td><td>'+data.roleIdList[0]+'</td></tr>';
-
-    sOut += '</table>';
-
-    return sOut;
-  }
-
-
-</script>
 
 </body>
 </html>

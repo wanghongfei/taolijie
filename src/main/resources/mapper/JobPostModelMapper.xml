@@ -80,7 +80,8 @@
         -->
         select
             <include refid="Base_Column_List"/>,
-            <include refid="category_column"/>
+            <include refid="category_column"/>,
+            <include refid="member_column" />
         from job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -875,4 +876,13 @@
         INSERT INTO resume_post_rel (resume_id, job_post_id, created_time, member_id)
         VALUES (#{resumeId}, #{jobPostId}, now(), #{memberId})
     </insert>
+
+    <update id="setDeleted">
+        UPDATE
+            job_post
+        SET
+            deleted = #{deleted}
+        WHERE
+            id = #{postId}
+    </update>
 </mapper>

@@ -60,6 +60,18 @@ public class AUserController {
         return "pc/admin/adduser";
     }
 
+    /**
+     * 修改用户页面
+     */
+    @RequestMapping(value = "edit/{id}",method = RequestMethod.GET)
+    public String editUser(Model model,@PathVariable int id){
+        MemberModel user = accountService.findMember(id);
+
+        model.addAttribute("isEdit",true);
+        model.addAttribute("member",user);
+        return "pc/admin/adduser";
+    }
+
 
     /**
      * 添加用户
@@ -101,10 +113,11 @@ public class AUserController {
     /***
      * 修改账户(权限)
      */
-    @RequestMapping(value = "/update",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String updateUser(MemberModel member,@RequestParam String roleName){
+    @RequestMapping(value = "/edit/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    public @ResponseBody String updateUser(@PathVariable int id,MemberModel member,@RequestParam String roleName){
 
         RoleModel role = accountService.findRoleByName(roleName);
+        member.setId(id);
         member.setRoleList(Arrays.asList(role));
 
         accountService.updateMember(member);
@@ -141,16 +154,21 @@ public class AUserController {
     /**
      *删除用户
      */
-    @RequestMapping(value = "/delete/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/del/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String deleterUser(@PathVariable int id, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(id == credential.getId()){
-            return new JsonWrapper(true,Constants.ErrorType.CANT_DELETE_CURRENT_USER).getAjaxMessage();
+            return new JsonWrapper(false,Constants.ErrorType.CANT_DELETE_CURRENT_USER).getAjaxMessage();
         }
 
-        if(!accountService.deleteMember(id)){
-            return new JsonWrapper(true,Constants.ErrorType.DELETE_FAILED).getAjaxMessage();
+        MemberModel user = accountService.findMember(id);
+        if(user.getValid()){
+            user.setValid(false);
+        }else{
+            user.setValid(true);
         }
+
+        accountService.updateMember(user);
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
