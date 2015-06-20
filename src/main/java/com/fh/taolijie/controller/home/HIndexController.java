@@ -62,20 +62,39 @@ public class HIndexController {
                          @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                          Model model) {
 
+
         if(type.equals("job")){
             JobPostModel jobPostModel = new JobPostModel();
             jobPostModel.setTitle(content);
-            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, page-1, pageSize,new ObjWrapper());
+            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, (page - 1)*pageSize, pageSize,new ObjWrapper());
+
+            int pageStatus = 1;
+            if(list.size() == 0){
+                pageStatus = 0;
+            }else if(list.size() == pageSize){
+                pageStatus = 2;
+            }
+            model.addAttribute("pageStatus",pageStatus);
             model.addAttribute("jobs", list);
             model.addAttribute("page", page);
             return "pc/joblist";
         } else{
             SHPostModel shPostModel = new SHPostModel();
             List<SHPostModel> list =shPostService.runSearch(shPostModel,new ObjWrapper());
+
+            int pageStatus = 1;
+            if(list.size() == 0){
+                pageStatus = 0;
+            }else if(list.size() == pageSize){
+                pageStatus = 2;
+            }
+            model.addAttribute("pageStatus",pageStatus);
+
             model.addAttribute("shs", list);
             model.addAttribute("page", page);
             return "pc/joblist";
         }
+
     }
 
 

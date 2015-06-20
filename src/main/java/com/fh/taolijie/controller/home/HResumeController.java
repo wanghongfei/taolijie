@@ -43,6 +43,7 @@ public class HResumeController {
 
     /**
      * 简历库列表
+     *
      * @param page
      * @param cate
      * @param pageSize
@@ -58,21 +59,22 @@ public class HResumeController {
         List<ResumeModel> resumes;
         if (cate > 0) {
             //TODO: 按照分类查找没有分页!!
-            resumes = resumeService.getResumeListByIntend(cate, page-1, pageSize);
+            resumes = resumeService.getResumeListByIntend(cate, (page - 1)*pageSize, pageSize);
             //cate是兼职的cate
         } else {
-            resumes = resumeService.getAllResumeList(page-1, pageSize, objWrapper);
+            resumes = resumeService.getAllResumeList((page - 1)*pageSize, pageSize, objWrapper);
         }
 
-        int totalPage = 1;
-        if (objWrapper.getObj() != null) {
-            totalPage = (Integer) objWrapper.getObj();
+        int pageStatus = 1;
+        if(resumes.size() == 0){
+            pageStatus = 0;
+        }else if(resumes.size() == pageSize){
+            pageStatus = 2;
         }
-
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("resumes", resumes);
         model.addAttribute("page", page);
         model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPage", totalPage);
 
         return "pc/resumelist";
     }
@@ -95,7 +97,7 @@ public class HResumeController {
         System.out.println("resume:" + id);
         ResumeModel resumeDto = resumeService.findResume(id);
         //查询求职意向
-        List<ApplicationIntendModel> intends= resumeService.getIntendByResume(id);
+        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(id);
         //查询发布人的用户名
         MemberModel user = accountService.findMember(resumeDto.getMemberId());
 
@@ -104,7 +106,7 @@ public class HResumeController {
         if (credential == null)
             status = false;
         else { //查找有没有收藏
-            status =  resumeService.isAlreadyFavorite(credential.getId(),id);
+            status = resumeService.isAlreadyFavorite(credential.getId(), id);
         }
         model.addAttribute("resume", resumeDto);
         model.addAttribute("postUser", user);

@@ -67,6 +67,19 @@
         </div>
       </c:forEach>
 
+      <div class="page">
+        <ul>
+          <c:if test="${page != 1 && pageStatus !=0}">
+            <li><a class="next" href="${isFav?'/user/sh/myfav':'/user/sh/mypost'}?page=${page-1}">上一页</a></li>
+          </c:if>
+          <c:if test="${pageStatus == 2}">
+            <li><a class="next" href="${isFav?'/user/sh/myfav':'/user/sh/mypost'}?page=${page+1}">下一页</a></li>
+          </c:if>
+          <c:if test="${pageStatus == 0 }">
+            <h2>没有更多了</h2>
+          </c:if>
+        </ul>
+      </div>
       <div class="col_delete_all">
         <div class="col_choice">
           <input name="" type="checkbox" value="" id="checkAll">全选

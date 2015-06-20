@@ -57,13 +57,19 @@ public class HJobController {
         ObjWrapper objWrapper = new ObjWrapper();
         List<JobPostModel> jobs;
         if (cate > 0) {
-            jobs = jobPostService.getJobPostListByCategory(cate, page - 1, pageSize, objWrapper);
+            jobs = jobPostService.getJobPostListByCategory(cate, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            jobs = jobPostService.getAllJobPostList(page - 1, pageSize, objWrapper);
+            jobs = jobPostService.getAllJobPostList((page - 1)*pageSize, pageSize, objWrapper);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
-
+        int pageStatus = 1;
+        if(jobs.size() == 0){
+            pageStatus = 0;
+        }else if(jobs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs", jobs);
         model.addAttribute("page", page);
 //      model.addAttribute("totalPage", totalPage);
@@ -99,6 +105,7 @@ public class HJobController {
         else { //查找有没有收藏
             status = jobPostService.isPostFavorite(credential.getId(),id);
         }
+
 
         model.addAttribute("job", job);
         model.addAttribute("poster", poster);

@@ -54,13 +54,20 @@ public class HShController {
         ObjWrapper objWrapper = new ObjWrapper();
         List<SHPostModel> shs;
         if (cate > 0) {
-            shs = shPostService.getAndFilter(cate, false, page-1, pageSize, objWrapper);
+            shs = shPostService.getAndFilter(cate, false, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            shs = shPostService.getAllPostList(page-1, pageSize, objWrapper);
+            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
 
+        int pageStatus = 1;
+        if(shs.size() == 0){
+            pageStatus = 0;
+        }else if(shs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs", shs);
         model.addAttribute("page", page);
 //        model.addAttribute("totalPage", totalPage);
