@@ -60,10 +60,10 @@
       <i class="pin-arrow"></i>
     </p>
 
-      <div class="form-group">
-        <label for="">简历标题<i class="theme-color">*</i></label>
-        <input type="text" name="title" class="form-control" placeholder="例：兼职派单员" value="${resume.title}">
-      </div>
+      <%--<div class="form-group">--%>
+        <%--<label for="">简历标题<i class="theme-color">*</i></label>--%>
+        <%--<input type="text" name="title" class="form-control" placeholder="例：兼职派单员" value="${resume}">--%>
+      <%--</div>--%>
       <div class="form-group">
         <label for="">求职意向<i class="theme-color">*</i></label>
          <select name="intendCategoryId">
