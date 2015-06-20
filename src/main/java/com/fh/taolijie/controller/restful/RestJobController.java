@@ -83,7 +83,7 @@ public class RestJobController {
      * 搜索
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText searchPost(JobPostModel model,
                                    @RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
