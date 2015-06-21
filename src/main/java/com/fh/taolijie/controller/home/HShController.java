@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -54,13 +55,20 @@ public class HShController {
         ObjWrapper objWrapper = new ObjWrapper();
         List<SHPostModel> shs;
         if (cate > 0) {
-            shs = shPostService.getAndFilter(cate, false, page-1, pageSize, objWrapper);
+            shs = shPostService.getAndFilter(cate, false, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            shs = shPostService.getAllPostList(page-1, pageSize, objWrapper);
+            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
 
+        int pageStatus = 1;
+        if(shs.size() == 0){
+            pageStatus = 0;
+        }else if(shs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs", shs);
         model.addAttribute("page", page);
 //        model.addAttribute("totalPage", totalPage);
@@ -110,26 +118,7 @@ public class HShController {
         return "pc/shdetail";
     }
 
-    /**
-     * 搜索一条兼职
-     * @return
-     */
-    @RequestMapping(value = "/search/sh", method = RequestMethod.GET)
-    public String search(@RequestParam SHPostModel shPostModel,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                         Model model) {
 
-
-        //TODO:没有分页
-        ObjWrapper objWrapper = new ObjWrapper();
-        List<SHPostModel> list =shPostService.runSearch(shPostModel, objWrapper);
-        int totalPage = (Integer) objWrapper.getObj();
-        model.addAttribute("shs", list);
-        model.addAttribute("page", page);
-//            model.addAttribute("totalPage", totalPage);
-        return "pc/joblist";
-    }
 
 
 }

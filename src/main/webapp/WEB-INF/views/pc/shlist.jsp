@@ -54,8 +54,8 @@
                           <img src="/images/pig.jpg" alt="">
                           <p class="titile">${sh.title}</p>
                           <div class="fl">
-                              <p>${sh.categoryName}</p>
-                              <span>${sh.memberDto.username}</span>
+                              <p>${sh.category.name}</p>
+                              <span>${sh.member.username}</span>
                               <%--换成member的role--%>
                               <%--<span class="theme-color">1</span>--%>
                           </div>
@@ -66,28 +66,21 @@
           </div>
 
           <div style="clear:both"></div>
+
           <div class="page">
-              <div class="page">
-                  <ul>
-                      <c:if test="${page != 1}">
-                          <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
-                      </c:if>
-                      <c:if test="${page == 1}">
-                          <c:forEach  begin="1" end="${totalPage}" var="item">
-                              <li><a class="${page == item ? 'active':''}" href="/list/sh?page=${item}">${item}</a></li>
-                          </c:forEach>
-                          <c:if test="${page < totalPage}">
-                              <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
-                          </c:if>
-                          <c:if test="${page > totalPage}">
-                              <h2>没有更多了</h2>
-                          </c:if>
-
-                      </c:if>
-
-                  </ul>
-              </div>
+              <ul>
+                  <c:if test="${page != 1 && pageStatus !=0}">
+                      <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
+                  </c:if>
+                  <c:if test="${pageStatus == 2}">
+                      <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
+                  </c:if>
+                  <c:if test="${pageStatus == 0 }">
+                      <h2>没有更多了</h2>
+                  </c:if>
+              </ul>
           </div>
+
       </div>
 
 

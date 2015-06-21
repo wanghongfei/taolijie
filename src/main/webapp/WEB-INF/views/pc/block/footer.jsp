@@ -58,9 +58,12 @@
 <!-- endbuild -->
 <script src="/scripts/jquery.bxslider.min.js"></script>
 
+<script src="/scripts/jqModal.js"></script>
+
 <!-- build:js scripts/main.js -->
 <script src="/scripts/main.js"></script>
 <!-- endbuild -->
+
 
 
 

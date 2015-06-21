@@ -69,7 +69,7 @@
       <p>联系人 : <span>${job.contact}</span></p>
       <p class="phone" >联系电话 : <span >${job.contactPhone}</span></p>
     </div>
-    <div class="comment">
+  <!--  <div class="comment">
       <p class="pin-title">用户评论
         <i class="pin-arrow"></i>
       </p>
@@ -112,7 +112,7 @@
         <span class="review-span" id="review-btn" data-id="${job.id}" data-username="${poster.username}">评论</span>
       </div>
     </div>
-
+-->
   </div>
 
 

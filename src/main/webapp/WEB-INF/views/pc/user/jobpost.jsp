@@ -93,18 +93,23 @@
         <input type="text" class="form-control" name="contactQq" >
       </div>
 
+
     <div class="segment">
       <div class="submit-btn big-btn red-bg">
         <span href="javascript:void(0);">发布兼职</span>
       </div>
     </div>
     </form>
+
+    <div class="jqmWindow dialog" >
+      <div class="tlj_modal_header">桃李街提示</div>
+      <div class="tlj_modal_content"></div>
+    </div>
   </div>
 </div>
 
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script src="/scripts/jobpost.js"></script>
-
 </body>
 </html>

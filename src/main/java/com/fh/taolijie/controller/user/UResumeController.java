@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.ApplicationIntendService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,6 +43,8 @@ public class UResumeController {
     AccountService accountService;
     @Autowired
     JobPostCateService jobPostCateService;
+    @Autowired
+    ApplicationIntendService intendService;
 
     /**
      * 创建简历 get
@@ -65,6 +65,7 @@ public class UResumeController {
 
         List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page-1,capacity,new ObjWrapper());
         model.addAttribute("cates",jobCateList);
+        model.addAttribute("isChange",false);
         return "pc/user/myresume";
     }
 
@@ -80,6 +81,7 @@ public class UResumeController {
     public @ResponseBody
     String create(@Valid ResumeModel resume,
                   BindingResult result,
+                  @RequestParam int intend,
                   HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = null;
@@ -87,6 +89,10 @@ public class UResumeController {
         String roleName = credential.getRoleList().iterator().next();
         if(roleName.equals(Constants.RoleType.EMPLOYER.toString())){
             return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        if(rList.size() !=0){
+            return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
         }
 
         if (result.hasErrors()) {
@@ -100,6 +106,12 @@ public class UResumeController {
 
         resumeService.addResume(resume);
 
+
+        resume = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper()).get(0);
+        ApplicationIntendModel intendModel = new ApplicationIntendModel();
+        intendModel.setResumeId(resume.getId());
+        intendModel.setJobPostCategoryId(intend);
+        intendService.addIntend(intendModel);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
@@ -137,8 +149,6 @@ public class UResumeController {
         return  "pc/resumedetail";
 
     }
-
-
 
     /**
      * 删除简历
@@ -208,7 +218,7 @@ public class UResumeController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "change",method = RequestMethod.GET)
+    @RequestMapping(value = "/change",method = RequestMethod.GET)
     public String changeJob(HttpSession session,Model model) {
         /**
          * 先得到用户的简历
@@ -227,7 +237,10 @@ public class UResumeController {
             return "redirect:/user/resume/create";
         }
 
+        List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        model.addAttribute("cates",jobCateList);
         model.addAttribute("resume",resume);
+        model.addAttribute("isChange",true);
         return "pc/user/myresume";
     }
 
@@ -238,10 +251,18 @@ public class UResumeController {
      * @param session  用户的信息
      * @return
      */
-    @RequestMapping(value = "change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String change(@Valid ResumeModel resume,BindingResult result,HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
-        ResumeModel oldResume= resumeService.findResume(resume.getId());
+//        ResumeModel oldResume= resumeService.findResume(resume.getId());
+
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        if(rList.size()<1 ){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        }
+        ResumeModel oldResume = rList.get(0);
+
+
         resume.setMemberId(oldResume.getMemberId());
 
         /*因为简历只有一张,所以直接用遍历得到*/
@@ -255,7 +276,7 @@ public class UResumeController {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
 
-        if(!resumeService.updateResume(resume.getId(), resume)){
+        if(!resumeService.updateResume(oldResume.getId(), resume)){
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();

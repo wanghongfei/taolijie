@@ -258,7 +258,7 @@ public class HAuthController {
         mem.setValid(true);
         mem.setCreatedTime(new Date());
         mem.setRoleList(Arrays.asList(role));
-        mem.setProfilePhotoId(DEFAULT_INM_ID); // 默认用户头像,更改直接换图片id
+//        mem.setProfilePhotoId(DEFAULT_INM_ID); // 默认用户头像,更改直接换图片id
 
         //注册并且检查用户名是否存在
         try {

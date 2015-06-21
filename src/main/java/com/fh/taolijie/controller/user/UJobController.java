@@ -48,14 +48,21 @@ public class UJobController {
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
     public String myPost(@RequestParam(defaultValue = "1") int page,
-                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
+                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                          HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
-        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(),page-1,capacity,objWrapper);
+        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(),(page - 1)*pageSize,pageSize,objWrapper);
 //        totalPage = (Integer)objWrapper.getObj();
 
+        int pageStatus = 1;
+        if(jobs.size() == 0){
+            pageStatus = 0;
+        }else if(jobs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs",jobs);
         model.addAttribute("page",page);
 //        model.addAttribute("totalPage",totalPage);
@@ -68,14 +75,13 @@ public class UJobController {
     /**
      * 获取已收藏的列表
      * @param page
-     * @param capacity
      * @param session
      * @param model
      * @return
      */
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
     public String fav(@RequestParam (defaultValue = "1") int page,
-                      @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
+                      @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                       HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
@@ -83,6 +89,13 @@ public class UJobController {
 
         List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId());
 
+        int pageStatus = 1;
+        if(jobs.size() == 0){
+            pageStatus = 0;
+        }else if(jobs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs",jobs);
         model.addAttribute("page",page);
         model.addAttribute("isFav",true);

@@ -148,7 +148,7 @@ $("#del").on("click",function(){
         success:function(data){
             if(data.result){
                 alert("简历已删除");
-                window.location = '/user';
+                window.location = '/';
             }
         }
     });

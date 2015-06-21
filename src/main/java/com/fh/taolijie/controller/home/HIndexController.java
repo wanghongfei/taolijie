@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -40,8 +41,8 @@ public class HIndexController {
         if (credential != null) {
 
         }
-        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper());
-        List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper());
+        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper()).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
+        List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper()).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());;
 
         model.addAttribute("jobs", jobs);
         model.addAttribute("shs", shs);
@@ -49,6 +50,55 @@ public class HIndexController {
 
         return "pc/index";
     }
+
+
+    /**
+     * 搜索一条兼职
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(@RequestParam(defaultValue = "") String content,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "job") String type,
+                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                         Model model) {
+
+
+        if(type.equals("job")){
+            JobPostModel jobPostModel = new JobPostModel();
+            jobPostModel.setTitle(content);
+            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, (page - 1)*pageSize, pageSize,new ObjWrapper());
+
+            int pageStatus = 1;
+            if(list.size() == 0){
+                pageStatus = 0;
+            }else if(list.size() == pageSize){
+                pageStatus = 2;
+            }
+            model.addAttribute("pageStatus",pageStatus);
+            model.addAttribute("jobs", list);
+            model.addAttribute("page", page);
+            return "pc/joblist";
+        } else{
+            SHPostModel shPostModel = new SHPostModel();
+            List<SHPostModel> list =shPostService.runSearch(shPostModel,new ObjWrapper());
+
+            int pageStatus = 1;
+            if(list.size() == 0){
+                pageStatus = 0;
+            }else if(list.size() == pageSize){
+                pageStatus = 2;
+            }
+            model.addAttribute("pageStatus",pageStatus);
+
+            model.addAttribute("shs", list);
+            model.addAttribute("page", page);
+            return "pc/shlist";
+        }
+
+    }
+
+
 
 
 }

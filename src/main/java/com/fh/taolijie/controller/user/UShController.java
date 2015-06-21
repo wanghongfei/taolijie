@@ -46,16 +46,23 @@ public class UShController {
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
     public String myPost(@RequestParam(defaultValue = "1") int page,
-                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
+                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                          HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        List<SHPostModel> shs =shPostService.getPostList(credential.getId(),false, page - 1, capacity, objWrapper);
+        List<SHPostModel> shs =shPostService.getPostList(credential.getId(),false, (page - 1)*pageSize, pageSize, objWrapper);
 
 //        totalPage = (Integer)objWrapper.getObj();
 
+        int pageStatus = 1;
+        if(shs.size() == 0){
+            pageStatus = 0;
+        }else if(shs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs",shs);
         model.addAttribute("page",page);
 //        model.addAttribute("totalPage",totalPage);
@@ -68,21 +75,27 @@ public class UShController {
     /**
      * 获取已收藏的列表
      * @param page
-     * @param capacity
      * @param session
      * @param model
      * @return
      */
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
     public String fav(@RequestParam (defaultValue = "1") int page,
-                      @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int capacity,
+                      @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                       HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
-        int totalPage = 0;
 
         List<SHPostModel> shs =shPostService.getFavoritePost(credential.getId());
 
+
+        int pageStatus = 1;
+        if(shs.size() == 0){
+            pageStatus = 0;
+        }else if(shs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs",shs);
         model.addAttribute("page",page);
         model.addAttribute("isFav",true);
@@ -403,4 +416,16 @@ public class UShController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion
+
+    @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String like(@PathVariable int id,HttpSession session){
+        Credential credential = CredentialUtils.getCredential(session);
+        //先查看是否登陆,发偶泽返回错误信息
+        if(credential == null)
+            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+
+        return "";
+    }
+
 }

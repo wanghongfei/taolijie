@@ -46,12 +46,12 @@ $("#reg-form #sub-btn").click(function(){
 
 
 $("#search-job").on("click",function() {
-    $("#search-type").val(0);
+    $("#search-type").val("job");
     $("#search-form").submit();
 });
 
 $("#search-sh").on("click",function() {
-    $("#search-type").val(1);
+    $("#search-type").val("sh");
     $("#search-form").submit();
 });
 

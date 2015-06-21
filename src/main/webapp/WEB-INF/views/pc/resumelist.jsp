@@ -48,18 +48,18 @@
               <c:forEach items="${resumes}" var="resume">
                   <a href="/item/resume/${resume.id}">
                       <div class="list">
-                          <img src="${resume.phonePath}" alt="">
+                          <img src="${resume.photoPath}" alt="">
                           <div>
                               <div class="fl">
                                   <p class="info">${resume.name} <i class="fa fa-cog theme-color"></i> <span>${resume.age}岁</span></p>
                                   <p class="intent">
                                       <span class="intent-title">求职意向</span>
-                                      <span>${resume.intendCategoryId}</span>
+                                      <%--<span>${resume.}</span>--%>
                                   </p>
                               </div>
 
                               <div class="fr">
-                                  <p>${resume.title}</p>
+                                  <%--<p>${resume.}</p>--%>
                                   <p>
                                       <span>更新时间 ： ${resume.createdTime}</span>
                                   </p>
@@ -73,16 +73,13 @@
           <div style="clear:both"></div>
           <div class="page">
               <ul>
-                  <c:if test="${page != 1}">
+                  <c:if test="${page != 1 && pageStatus !=0}">
                       <li><a class="next" href="/list/resume?page=${page-1}">上一页</a></li>
                   </c:if>
-                  <c:forEach  begin="1" end="${totalPage}" var="item">
-                      <li><a class="${page == item ? 'active':''}" href="/list/job?resume=${item}">${item}</a></li>
-                  </c:forEach>
-                  <c:if test="${page < totalPage}">
+                  <c:if test="${pageStatus == 2}">
                       <li><a class="next" href="/list/resume?page=${page+1}">下一页</a></li>
                   </c:if>
-                  <c:if test="${page > totalPage}">
+                  <c:if test="${pageStatus == 0 }">
                       <h2>没有更多了</h2>
                   </c:if>
               </ul>

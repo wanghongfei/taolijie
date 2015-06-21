@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -57,13 +58,19 @@ public class HJobController {
         ObjWrapper objWrapper = new ObjWrapper();
         List<JobPostModel> jobs;
         if (cate > 0) {
-            jobs = jobPostService.getJobPostListByCategory(cate, page - 1, pageSize, objWrapper);
+            jobs = jobPostService.getJobPostListByCategory(cate, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            jobs = jobPostService.getAllJobPostList(page - 1, pageSize, objWrapper);
+            jobs = jobPostService.getAllJobPostList((page - 1)*pageSize, pageSize, objWrapper);
         }
 
-        int totalPage = (Integer) objWrapper.getObj();
-
+//        int totalPage = (Integer) objWrapper.getObj();
+        int pageStatus = 1;
+        if(jobs.size() == 0){
+            pageStatus = 0;
+        }else if(jobs.size() == pageSize){
+            pageStatus = 2;
+        }
+        model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs", jobs);
         model.addAttribute("page", page);
 //      model.addAttribute("totalPage", totalPage);
@@ -100,6 +107,7 @@ public class HJobController {
             status = jobPostService.isPostFavorite(credential.getId(),id);
         }
 
+
         model.addAttribute("job", job);
         model.addAttribute("poster", poster);
         model.addAttribute("posterRole", role);
@@ -109,26 +117,7 @@ public class HJobController {
     //endregion
 
 
-    /**
-    * 搜索一条兼职
-    * @return
-    */
-    @RequestMapping(value = "/search/job", method = RequestMethod.GET)
-    public String search(@RequestParam JobPostModel jobPostModel,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                         Model model) {
 
-
-        //TODO 把搜索内容按空格划分
-        ObjWrapper objWrapper = new ObjWrapper();
-            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, page-1, pageSize, objWrapper);
-            int totalPage = (Integer) objWrapper.getObj();
-            model.addAttribute("jobs", list);
-            model.addAttribute("page", page);
-//            model.addAttribute("totalPage", totalPage);
-            return "pc/joblist";
-        }
 
 
 

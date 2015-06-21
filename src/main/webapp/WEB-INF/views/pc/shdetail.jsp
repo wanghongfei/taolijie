@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -102,7 +103,9 @@
             <div style="clean:both"></div>
             <span class="sh-title">${sh.title}</span>
             <%--<span class="fr">浏览量 ：${sh.likes}</span>--%>
-            <span class="fr">发布时间：${sh.postTime}</span>
+            <span class="fr">发布时间：
+            <fmt:formatDate value="${sh.postTime}" pattern="yyyy-MM-dd"/>
+            </span>
             <!-- 分享（暂时不实现） -->
             <div class="share"></div>
         </div>
@@ -119,52 +122,51 @@
             </div>
         </div>
 
-        <%--<div class="comment">--%>
-        <%--<p class="pin-title dark-green-bg">用户评论--%>
-        <%--<i class="pin-arrow dark-green-arrow"></i>--%>
-        <%--</p>--%>
-        <%--<div class="operates">--%>
-        <%--<div class="operate">--%>
-        <%--<span class="fa fa-thumbs-up" id="like"></span>--%>
-        <%--<p>100</p>--%>
-        <%--</div>--%>
-        <%--<div class="operate">--%>
-        <%--<span class="fa fa-thumbs-down" id="dislike"></span>--%>
-        <%--<p>1</p>--%>
-        <%--</div>--%>
-        <%--<div class="operate">--%>
-        <%--<span class="fa fa-comment" id="comment"></span>--%>
-        <%--<p>3</p>--%>
-        <%--</div>--%>
-        <%--<div class="operate">--%>
-        <%--<span class="text" id="compaint">举报</span>--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="content">--%>
-        <%--<div class="no-border-bottom">--%>
-        <%--<img src="/images/pig.jpg" alt="">--%>
-        <%--<p>wynfrith</p>--%>
-        <%--<span>这里环境很好,还有跟孩子们一起特别高兴,在这里收获的不仅仅是快乐!</span>--%>
-        <%--</div>--%>
-        <%--<div class="no-border-bottom">--%>
-        <%--<img src="/images/miao.jpg" alt="">--%>
-        <%--<p>喵帕斯 </p>--%>
-        <%--<span>这里环境很好,还有跟孩子们一起特别高兴,在这里收获的不仅仅是快乐!</span>--%>
-        <%--</div>--%>
-        <%--<div>--%>
-        <%--<img src="/images/pig.jpg" alt="">--%>
-        <%--<p>wynfrith <span>回复 喵帕斯</span></p>--%>
-        <%--<span>这里环境很好,还有跟孩子们一起特别高兴,在这里收获的不仅仅是快乐!</span>--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="review-bar">--%>
-        <%--<img src="/images/pig.jpg" alt="">--%>
-        <%--<input type="text" class="review-input" placeholder="发表评论">--%>
-        <%--<span class="review-span">评论</span>--%>
-        <%--</div>--%>
-        <%--</div>--%>
+  <!--      <div class="comment">
+            <p class="pin-title">用户评论
+                <i class="pin-arrow"></i>
+            </p>
+            <div class="operates">
+                <div class="operate">
+                    <span id="like" data-id="${sh.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
+                    <p >${sh.likes==null?'0':sh.likes}</p>
+                </div>
+                <%--<div class="operate">--%>
+                <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
+                <%--<p >${job.dislikes}</p>--%>
+                <%--</div>--%>
+                <div class="operate">
+                    <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
+                    <p >${reviews.size()}</p>
+                </div>
+                <div class="operate">
+                    <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
+                </div>
+            </div>
+            <div class="content" id="contents">
+                <c:forEach var="review" items="${reviews}" varStatus="status">
+                    <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
+                        <img src="/images/pig.jpg" alt="">
+                        <p>${review.member.username}
+                                <%--判断是该用户发的显示删除按钮--%>
+                            <c:if test="${sessionScope.user.id == review.member.id}">
+                                <a class="red delete-review" href="javascript:void(0);"  data-id="${sh.id}" data-reviewId="${review.id}"> 删除</a>
+                            </c:if>
 
-    </div>
+                        </p>
+
+                        <span>${review.content}</span>
+                    </div>
+                </c:forEach>
+            </div>
+            <div class="review-bar">
+                <img src="/images/pig.jpg" alt="">
+                <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
+                <span class="review-span" id="review-btn" data-id="${sh.id}" data-username="${poster.username}">评论</span>
+            </div>
+        </div>
+ -->
+  </div>
 
 </div>
 

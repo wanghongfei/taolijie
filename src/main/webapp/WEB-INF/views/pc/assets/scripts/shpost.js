@@ -4,15 +4,22 @@
 
 $(".submit-btn").click(function(){
     var data = $("#ShPostForm").serialize();
-    console.log(data);
+    $(".dialog").jqm({
+        overlayClass: 'jqmOverlay'
+    })
+
     $.ajax({
         type:"POST",
         data:data,
         url:"/user/sh/post",
         success:function(data){
-            console.log(data);
-            if(data.result)
-                alert("发布成功");
+            $(".tlj_modal_content").html(data.message);
+            $('.dialog').jqmShow();
+            if(data.result){
+                setTimeout(function(){
+                    location.href = "/user/sh/mypost";
+                },500);
+            }
         }
     });
 });

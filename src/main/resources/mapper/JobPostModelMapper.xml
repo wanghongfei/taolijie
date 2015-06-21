@@ -432,6 +432,8 @@
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
+        WHERE
+            post.deleted = false
         ORDER BY
             post.post_time
         LIMIT
@@ -464,7 +466,7 @@
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
         WHERE
-            post.complaint IS NOT NULL AND post.complaint > 0
+            post.complaint IS NOT NULL AND post.complaint > 0 AND post.deleted = false
         ORDER BY
             post.complaint DESC
         LIMIT

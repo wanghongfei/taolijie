@@ -82,7 +82,11 @@
                           <td class="center hidden-phone">${sh.likes}</td>
                           <td class="center hidden-phone">${sh.dislikes}</td>
                           <td class="center hidden-phone">
-                              <button href="" class="btn btn-danger btn-xs">删除</button>
+                              <button href="javascript:;"
+                                      data-id="${sh.id}"
+                                      data-type="sh"
+                                      class="delete-btn btn btn-danger
+                                      class="btn btn-danger btn-xs">删除</button>
                           </td>
                       </tr>
                   </c:forEach>
@@ -116,8 +120,8 @@
 <script type="text/javascript" src="/admin/js/data-tables/DT_bootstrap.js"></script>
 
 <!--dynamic table initialization -->
-<script src="/admin/js/dynamic_table_init.js"></script>
 <script src="/admin/js/acustom/table-init.js"></script>
+<script src="/admin/js/acustom/request.js"></script>
 
 
 </body>

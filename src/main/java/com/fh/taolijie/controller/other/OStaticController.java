@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
  * Created by wynfrith on 15-6-11.
  */
 @Controller
+@RequestMapping("static")
 public class OStaticController {
 
 
@@ -56,8 +57,6 @@ public class OStaticController {
     @RequestMapping(value = "upload", method =RequestMethod.OPTIONS, produces = "application/json; charset=utf-8")
     public @ResponseBody
     String uploadOptions(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST");
         return "{code:0}";
     }
 
@@ -70,8 +69,7 @@ public class OStaticController {
                                        HttpServletResponse response) {
 
         ImageModel imageDto = new ImageModel();
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
+        Integer imageId = 0;
         try (InputStream inStream = file.getInputStream()) {
             // 读取byte数据
             byte[] imageByte = writeToBuffer(inStream, file.getSize());
@@ -90,7 +88,7 @@ public class OStaticController {
             imageDto.setExtension(fileExt);
 
             // 写入数据库
-            Integer imageId = imageService.saveImage(imageDto);
+            imageId = imageService.saveImage(imageDto);
             System.out.println(imageId);
             // 返回成功信息
 
@@ -99,7 +97,7 @@ public class OStaticController {
             System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
-        return "savepic";
+        return imageId+"";
     }
 
 

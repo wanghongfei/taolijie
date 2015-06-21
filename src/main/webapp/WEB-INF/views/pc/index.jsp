@@ -35,6 +35,7 @@
         <i class="pin-arrow"></i>
       </p>
     </div>
+    
 
     <div class="segment jobs">
       <%--兼职--%>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -9,7 +10,12 @@
 
 <div class="segment user-top">
   <div class="user-img" id="userImg">
-    <img src="/static/images/users/${sessionScope.user.profilePhotoId}" alt="">
+    <c:if  test="${sessionScope.user.profilePhotoId == 0}">
+      <img src="/images/default-img.jpg" alt="">
+    </c:if>
+    <c:if  test="${sessionScope.user.profilePhotoId != 0}">
+      <img src="/static/images/users/${sessionScope.user.profilePhotoId}" alt="">
+    </c:if>
   </div>
   <div class="fr big-btn">
     <a href="/user/job/post">发布信息</a>
@@ -39,7 +45,7 @@
     <li class="${param.navShow == 'resume'?'active':''}" ><a href="/user/resume/create">我的简历</a></li>
     <li class="${param.navShow == 'favlist'?'active':''}" ><a href="/user/job/myfav">我的收藏</a></li>
     <li class="${param.navShow == 'postlist'?'active':''}" ><a href="/user/job/mypost">我的发布</a></li>
-    <li class="${param.navShow == 'message'?'active':''}" ><a href="">消息通知</a></li>
+    <li class="${param.navShow == 'message'?'active':''}" ><a style="cursor: not-allowed" href="javascript:;">消息通知</a></li>
     <li class="${param.navShow == 'security'?'active':''}" ><a href="/user/setting/security">修改密码</a></li>
     <li class="${param.navShow == 'feedback'?'active':''}" ><a href="/user/feedback">意见反馈</a></li>
   </ul>

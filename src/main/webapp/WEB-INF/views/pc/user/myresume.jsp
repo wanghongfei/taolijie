@@ -44,11 +44,6 @@
         <input name="age" class="short-input form-control" type="text" placeholder="" value="${resume.age}">
         <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
       </div>
-      <div class="form-group">
-        <label for="">学校<i class="theme-color">*</i></label>
-        <input name="school" class=" form-control" type="text" placeholder="输入学校" value="${resume.school ? resume.school : '山东理工大学'}">
-        <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
-      </div>
         <div class="form-group">
             <input id="UserImg" title="浏览文件" type="file" />
         </div>
@@ -65,13 +60,13 @@
       <i class="pin-arrow"></i>
     </p>
 
-      <div class="form-group">
-        <label for="">简历标题<i class="theme-color">*</i></label>
-        <input type="text" name="title" class="form-control" placeholder="例：兼职派单员" value="${resume.title}">
-      </div>
+      <%--<div class="form-group">--%>
+        <%--<label for="">简历标题<i class="theme-color">*</i></label>--%>
+        <%--<input type="text" name="title" class="form-control" placeholder="例：兼职派单员" value="${resume}">--%>
+      <%--</div>--%>
       <div class="form-group">
         <label for="">求职意向<i class="theme-color">*</i></label>
-         <select name="intendCategoryId">
+         <select name="intend">
               <option value="">选择分类</option>
               <c:forEach items="${cates}" var="cate">
                   <option value="${cate.id}">${cate.name}</option>
@@ -84,9 +79,8 @@
       </div>
       <div class="form-group">
         <label for="">公开程度</label>
-        <input type="radio" name="publicType" value="${resume.accessAuthority}"> 公开
-        <input type="radio" name="publicType" value=""> 对商家公开
-        <input type="radio" name="publicType" value=""> 不公开
+        <input type="radio" name="accessAuthority" value="1"> 公开
+        <input type="radio" name="accessAuthority" value="0"> 不公开
       </div>
 
     <div class="user-photo">
@@ -123,9 +117,15 @@
 
   </div>
   <div class="segment">
-    <div class="submit-btn big-btn theme-color-bg">
-        <span href="javascript:void(0);">发布简历</span>
+    <div class="submit-btn big-btn theme-color-bg"
+         data-type="${isChange?'change':'create'}">
+        <span >保存简历</span>
     </div>
+  </div>
+
+  <div class="jqmWindow dialog" >
+    <div class="tlj_modal_header">桃李街提示</div>
+    <div class="tlj_modal_content"></div>
   </div>
 </div>
 
