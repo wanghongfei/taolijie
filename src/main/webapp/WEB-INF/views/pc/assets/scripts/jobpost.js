@@ -25,7 +25,7 @@ $(".submit-btn").click(function(){
             if(data.result){
                 setTimeout(function(){
                     location.href = "/user/job/mypost";
-                },500);
+                },1000);
             }
         }
     });

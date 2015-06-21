@@ -65,6 +65,7 @@ public class UResumeController {
 
         List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page-1,capacity,new ObjWrapper());
         model.addAttribute("cates",jobCateList);
+        model.addAttribute("isChange",false);
         return "pc/user/myresume";
     }
 
@@ -88,6 +89,10 @@ public class UResumeController {
         if(roleName.equals(Constants.RoleType.EMPLOYER.toString())){
             return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        if(rList.size() !=0){
+            return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
+        }
 
         if (result.hasErrors()) {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
@@ -98,7 +103,8 @@ public class UResumeController {
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
 
-        resumeService.addResume(resume);
+            resumeService.addResume(resume);
+
 
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
@@ -206,7 +212,7 @@ public class UResumeController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "change",method = RequestMethod.GET)
+    @RequestMapping(value = "/change",method = RequestMethod.GET)
     public String changeJob(HttpSession session,Model model) {
         /**
          * 先得到用户的简历
@@ -225,7 +231,10 @@ public class UResumeController {
             return "redirect:/user/resume/create";
         }
 
+        List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        model.addAttribute("cates",jobCateList);
         model.addAttribute("resume",resume);
+        model.addAttribute("isChange",true);
         return "pc/user/myresume";
     }
 
@@ -236,10 +245,18 @@ public class UResumeController {
      * @param session  用户的信息
      * @return
      */
-    @RequestMapping(value = "change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String change(@Valid ResumeModel resume,BindingResult result,HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
-        ResumeModel oldResume= resumeService.findResume(resume.getId());
+//        ResumeModel oldResume= resumeService.findResume(resume.getId());
+
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        if(rList.size()<1 ){
+            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+        }
+        ResumeModel oldResume = rList.get(0);
+
+
         resume.setMemberId(oldResume.getMemberId());
 
         /*因为简历只有一张,所以直接用遍历得到*/
@@ -253,7 +270,7 @@ public class UResumeController {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
 
-        if(!resumeService.updateResume(resume.getId(), resume)){
+        if(!resumeService.updateResume(oldResume.getId(), resume)){
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
