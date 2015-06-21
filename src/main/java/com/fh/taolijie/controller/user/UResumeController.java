@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.ApplicationIntendService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,6 +43,8 @@ public class UResumeController {
     AccountService accountService;
     @Autowired
     JobPostCateService jobPostCateService;
+    @Autowired
+    ApplicationIntendService intendService;
 
     /**
      * 创建简历 get
@@ -81,6 +81,7 @@ public class UResumeController {
     public @ResponseBody
     String create(@Valid ResumeModel resume,
                   BindingResult result,
+                  @RequestParam int intend,
                   HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = null;
@@ -103,9 +104,14 @@ public class UResumeController {
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
 
-            resumeService.addResume(resume);
+        resumeService.addResume(resume);
 
 
+        resume = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper()).get(0);
+        ApplicationIntendModel intendModel = new ApplicationIntendModel();
+        intendModel.setResumeId(resume.getId());
+        intendModel.setJobPostCategoryId(intend);
+        intendService.addIntend(intendModel);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

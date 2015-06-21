@@ -66,7 +66,7 @@
       <%--</div>--%>
       <div class="form-group">
         <label for="">求职意向<i class="theme-color">*</i></label>
-         <select name="intendCategoryId">
+         <select name="intend">
               <option value="">选择分类</option>
               <c:forEach items="${cates}" var="cate">
                   <option value="${cate.id}">${cate.name}</option>
@@ -79,9 +79,8 @@
       </div>
       <div class="form-group">
         <label for="">公开程度</label>
-        <input type="radio" name="publicType" value="${resume.accessAuthority}"> 公开
-        <input type="radio" name="publicType" value=""> 对商家公开
-        <input type="radio" name="publicType" value=""> 不公开
+        <input type="radio" name="accessAuthority" value="1"> 公开
+        <input type="radio" name="accessAuthority" value="0"> 不公开
       </div>
 
     <div class="user-photo">
@@ -120,7 +119,7 @@
   <div class="segment">
     <div class="submit-btn big-btn theme-color-bg"
          data-type="${isChange?'change':'create'}">
-        <span >${isChange?'修改':'发布'}简历</span>
+        <span >保存简历</span>
     </div>
   </div>
 

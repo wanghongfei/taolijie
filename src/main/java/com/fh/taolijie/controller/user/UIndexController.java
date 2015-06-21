@@ -2,13 +2,16 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.domain.ImageModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.dto.ChangePasswordDto;
 import com.fh.taolijie.dto.ProfileDto;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.UploadUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +21,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -35,6 +42,8 @@ public class UIndexController {
     AccountService accountService;
     @Autowired
     Mail mail;
+    @Autowired
+    ImageService imageService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(){
@@ -161,6 +170,72 @@ public class UIndexController {
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
+
+
+    /**
+     * 上传图片options方法验证
+     */
+    @RequestMapping(value = "changePhoto", method =RequestMethod.OPTIONS, produces = "application/json; charset=utf-8")
+    public @ResponseBody
+    String uploadOptions(HttpServletResponse response) {
+        return "{code:0}";
+    }
+
+    /**
+     * 用户上传图片
+     * @return
+     */
+    @RequestMapping(value = "changePhoto", method =RequestMethod.POST, produces = "application/json; charset=utf-8")
+    public @ResponseBody String upload(@RequestParam MultipartFile file,
+                                       HttpServletResponse response,
+                                       HttpSession session) {
+        Credential credential = CredentialUtils.getCredential(session);
+        if(credential == null){
+            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+        }
+        MemberModel user = accountService.findMember(credential.getId());
+
+
+        ImageModel imageDto = new ImageModel();
+        Integer imageId = 0;
+
+        try (InputStream inStream = file.getInputStream()) {
+            // 读取byte数据
+            byte[] imageByte = UploadUtil.writeToBuffer(inStream, file.getSize());
+            if (null == imageByte) {
+                // 不是图片文件
+                inStream.close();
+                return "invalid image!";
+            }
+
+            imageDto.setBinData(imageByte);
+
+            String fileName = file.getOriginalFilename();
+            String fileExt =UploadUtil.getExtensionName(fileName);
+
+            imageDto.setFileName(fileName);
+            imageDto.setExtension(fileExt);
+
+            // 写入数据库
+            imageId = imageService.saveImage(imageDto);
+            user.setId(credential.getId());
+            user.setProfilePhotoId(imageId);
+
+            accountService.updateMember(user);
+
+            session.setAttribute("user", user);
+
+            System.out.println(imageId);
+            // 返回成功信息
+
+        } catch (IOException ex) {
+            // 返回上传失败错误信息
+            System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+        return imageId+"";
+    }
+
 
 
 

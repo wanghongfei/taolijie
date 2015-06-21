@@ -5,9 +5,7 @@
 
 $(".submit-btn").click(function(){
     var data = $("#ProfileForm").serialize();
-    $(".dialog").jqm({
-        overlayClass: 'jqmOverlay'
-    })
+
     $.ajax({
         type:"POST",
         url:"/user/profile",

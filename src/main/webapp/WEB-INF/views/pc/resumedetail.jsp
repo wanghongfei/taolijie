@@ -70,7 +70,7 @@
       <div class="title">求职意向</div>
       <p>
         <c:forEach items="${intendJobs}" var="intendJob">
-          ${intendJob.jobPost.category.name}
+          ${intendJob.category.name}
         </c:forEach>
         &nbsp;&nbsp;&nbsp;&nbsp;
       </p>
