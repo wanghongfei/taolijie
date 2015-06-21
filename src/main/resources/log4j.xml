@@ -12,7 +12,7 @@
 
 	<!-- 错误日志写入到文件中 -->
 	<appender name="ERROR-APPENDER" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="/home/whf/log/taolijie-error.log" />
+		<param name="file" value="/data/taolijie/taolijie-error.log" />
 		<param name="append" value="true" />
 		<param name="encoding" value="UTF-8" />
 		<param name="threshold" value="error" />
