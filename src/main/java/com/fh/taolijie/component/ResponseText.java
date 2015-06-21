@@ -22,7 +22,7 @@ public class ResponseText {
     }
 
     /**
-     * 该构造函数默认处理结果为成功, 状态码200
+     * 该构造函数默认处理结果为成功, 带List数据
      * @param dataList
      */
     public <T extends List> ResponseText(T dataList) {
@@ -31,11 +31,24 @@ public class ResponseText {
 
         this.dataList = dataList;
     }
+
+    /**
+     * 该构造函数默认处理结果为成功, 带Object数据
+     * @param data
+     */
     public ResponseText(Object data) {
         this.isOk = true;
         this.message = Constants.StatusMessage.SUCCESS;
 
         this.data = data;
+    }
+
+    /**
+     * 默认处理结果为成功,无附带数据
+     */
+    public ResponseText() {
+        this.isOk = true;
+        this.message = Constants.StatusMessage.SUCCESS;
     }
 
 
