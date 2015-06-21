@@ -1,7 +1,9 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.List;
 public class RestShController {
     @Autowired
     ShPostService shService;
+    @Autowired
+    ShPostCategoryService cateService;
 
     @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
     public ResponseText getAll(@RequestParam(defaultValue = "0") Integer pageNumber,
@@ -93,4 +97,27 @@ public class RestShController {
         return new ResponseText(shList);
     }
 
+
+    /**
+     * 查询所有二手分类
+     * @return
+     */
+    @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getCategoryList() {
+        List<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+
+        return new ResponseText(list);
+    }
+
+    /**
+     * 根据id查找分类
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/cate/{id}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getCategoryById(@PathVariable Integer id) {
+        SHPostCategoryModel cate = cateService.findCategory(id);
+
+        return new ResponseText(cate);
+    }
 }

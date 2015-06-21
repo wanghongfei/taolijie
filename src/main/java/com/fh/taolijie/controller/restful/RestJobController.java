@@ -1,7 +1,9 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
@@ -18,6 +20,8 @@ import java.util.List;
 public class RestJobController {
     @Autowired
     JobPostService jobService;
+    @Autowired
+    JobPostCateService cateService;
 
     /**
      * 得到所有兼职信息, 最新的在前
@@ -103,4 +107,26 @@ public class RestJobController {
         return new ResponseText(model);
     }
 
+    /**
+     * 根据id查找分类
+     * @param cateId
+     * @return
+     */
+    @RequestMapping(value = "/cate/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getCategoryById(@PathVariable(value = "id") Integer cateId) {
+        JobPostCategoryModel cate = cateService.findCategory(cateId);
+
+        return new ResponseText(cate);
+    }
+
+    /**
+     * 查询所有兼职分类
+     * @return
+     */
+    @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getCategoryList() {
+        List<JobPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+
+        return new ResponseText(list);
+    }
 }
