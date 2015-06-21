@@ -118,9 +118,15 @@
 
   </div>
   <div class="segment">
-    <div class="submit-btn big-btn theme-color-bg">
-        <span href="javascript:void(0);">发布简历</span>
+    <div class="submit-btn big-btn theme-color-bg"
+         data-type="${isChange?'change':'create'}">
+        <span >${isChange?'修改':'发布'}简历</span>
     </div>
+  </div>
+
+  <div class="jqmWindow dialog" >
+    <div class="tlj_modal_header">桃李街提示</div>
+    <div class="tlj_modal_content"></div>
   </div>
 </div>
 

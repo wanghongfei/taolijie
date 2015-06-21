@@ -5,16 +5,26 @@
 
 $(".submit-btn").click(function(){
     var data = $("#CreateResumeForm").serialize();
-    console.log(data);
+    var type = this.getAttribute("data-type");
+    $(".dialog").jqm({
+        overlayClass: 'jqmOverlay'
+    })
     //首先先上传图片
+    console.log(type);
     $.ajax({
         type:"POST",
         data:data,
-        url:"/user/resume/create",
+        url:"/user/resume/"+type,
         success:function(data){
             console.log(data);
-            if(data.result)
-                alert("创建简历成功");
+            $(".tlj_modal_content").html(data.message);
+            console.log($('.dialog'));
+            $('.dialog').jqmShow();
+            if(data.result){
+                setTimeout(function(){
+                    location.href = "/user/resume/view";
+                },1000);
+            }
         }
     });
 });
