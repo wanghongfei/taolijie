@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<link rel="stylesheet" href="/admin/css/bootstrap.css">
+<link rel="stylesheet" href="/admin/js/bootstrap-datepicker/css/datepicker.css">
 <link rel="stylesheet" href="/styles/user/post.css">
 <div class="segment user-nav">
     <ul>

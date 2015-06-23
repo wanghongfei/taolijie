@@ -14,3 +14,14 @@
     float: left;
     line-height: 2em;
 }
+label {
+    font-weight: normal;
+}
+
+/*覆盖*/
+body {
+    background-color: #f4f4f4;
+}
+a:hover {
+    text-decoration: none;
+}

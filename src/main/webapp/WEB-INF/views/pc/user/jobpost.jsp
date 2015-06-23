@@ -55,7 +55,7 @@
       </div>
       <div class="form-group">
         <label for="">截止时间</label>
-        <input type="text" class="form-control" name="expiredTime" >
+        <input type="text" class="form-control datepicker" name="expiredTime" >
       </div>
 
     <p class="pin-title red-bg ">兼职详情
