@@ -676,28 +676,37 @@ ul.bxslider li img {
     line-height: 60px;
     border-bottom: 1px solid #d5d5d5;
     cursor: pointer; }
-.side .services .menu_left > li a{
+.side .services .menu_left > li > .submenu a,
+.side .services .menu_left > li > .menu-left-item{
     display: block;
     width: 100%;
+    height: 100%;
+}
+.side .services .menu_left > li > .menu-left-item i{
+    margin-right: 5px;
 }
 .side .services .menu_left > li:nth-child(n+1):hover {
     color: #FFF; }
 .side .services .menu_left > li:nth-child(n+1):hover ul.submenu {
     display: block; 
 }
+.side .services .menu_left > li:nth-child(1),
 .side .services .menu_left > li:nth-child(1) a{
     color: #84cc5c; 
 }
+.side .services .menu_left > li:nth-child(2),
 .side .services .menu_left > li:nth-child(2) a{
     color: #4ccda4; 
 }
+.side .services .menu_left > li:nth-child(3),
 .side .services .menu_left > li:nth-child(3) a{
     color: #3299de; 
 }
+.side .services .menu_left > li:nth-child(4),
 .side .services .menu_left > li:nth-child(4) a{
     color: #f36362; 
 }
-.side .services .menu_left > li:nth-child(1) a:hover {
+.side .services .menu_left > li:nth-child(1):hover a{
     background-color: #84cc5c; 
     color: #fff;
 }
@@ -705,22 +714,25 @@ ul.bxslider li img {
     background-color: #84cc5c; 
     color: #fff;
 }
-.side .services .menu_left > li:nth-child(2) a:hover {
+.side .services .menu_left > li:nth-child(2):hover a{
     background-color: #4ccda4; 
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(2) ul.submenu {
     background-color: #4ccda4; 
 }
-.side .services .menu_left > li:nth-child(3) a:hover {
+.side .services .menu_left > li:nth-child(3):hover a{
     background-color: #3299de; 
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(3) ul.submenu {
     background-color: #3299de; 
 }
-.side .services .menu_left > li:nth-child(4) a:hover {
+.side .services .menu_left > li:nth-child(4):hover a{
     background-color: #f36362; 
+    color: #fff;
+}
+.side .services .menu_left > li a:hover{
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(4) ul.submenu {
@@ -735,8 +747,8 @@ ul.bxslider li img {
     display: block;
     color: #fff;
     width: 100px;
-    margin: 5px 0;
-    line-height: 27px; 
+    margin: 7px 0;
+    line-height: 26px; 
 }
 .side .services .menu_left .submenu > li a:hover {
     background-color: #EEBC5B;
