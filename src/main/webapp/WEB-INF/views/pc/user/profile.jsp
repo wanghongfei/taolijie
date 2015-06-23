@@ -79,19 +79,22 @@
                 <input type="radio" name="gender" value="女" ${user.gender == "女"?'checked="checked"':''}>女
             </div>
 
-            <div id="uploader-demo" class="wu-example">
-                <div id="fileList" class="uploader-list"
-                     style="width: 75px;height: 75px; display: inline;">
-                    <c:if  test="${sessionScope.user.profilePhotoId == 0}">
-                        <img src="/images/default-img.jpg" alt="" style="border-radius: 10px" width="75" height="75" alt="">
-                    </c:if>
-                    <c:if  test="${sessionScope.user.profilePhotoId != 0}">
-                        <img src="/static/images/users/${sessionScope.user.profilePhotoId}" style="border-radius: 10px" width="75" height="75" alt=""/>
-                    </c:if>
+            <div class="form-group">
+                <div id="uploader-demo" class="wu-example">
+                    <div id="fileList" class="uploader-list"
+                         style="width: 75px;height: 75px; display: inline;">
+                        <c:if  test="${sessionScope.user.profilePhotoId == 0}">
+                            <img src="/images/default-img.jpg" alt="" style="border-radius: 10px" width="75" height="75" alt="">
+                        </c:if>
+                        <c:if  test="${sessionScope.user.profilePhotoId != 0}">
+                            <img src="/static/images/users/${sessionScope.user.profilePhotoId}" style="border-radius: 10px" width="75" height="75" alt=""/>
+                        </c:if>
 
+                    </div>
+                    <div id="filePicker" style="display: inline">修改头像</div>
                 </div>
-                <div id="filePicker" style="display: inline">修改头像</div>
             </div>
+
 
 
 
