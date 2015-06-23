@@ -174,6 +174,11 @@ public class UResumeController {
             response.sendRedirect("/user/resume/create");
             return null;
         }
+        List<ApplicationIntendModel> intend = intendService.getByResume(resume.getId());
+        intend.forEach(i->{
+            intendService.deleteIntend(i);
+        });
+
         if(!resumeService.deleteResume(resume.getId())){
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         }
