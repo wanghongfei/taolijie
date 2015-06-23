@@ -15,7 +15,9 @@
 <jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp"></jsp:include>
+  <jsp:include page="../block/post-nav.jsp">
+    <jsp:param name="navShow" value="sh"/>
+  </jsp:include>
   <div class="segment end-segment">
     <p class="pin-title dark-green-bg ">二手物品介绍
       <i class="pin-arrow  dark-green-arrow"></i>

@@ -53,7 +53,8 @@
                 </a>
             </div>
             <label class="checkbox">
-                <input type="checkbox" value="true" name="rememberMe" id="rememberMe"> 记住我
+                <input type="checkbox" value="true" name="rememberMe" id="rememberMe">
+                <label for="rememberMe">记住我</label>
                 <span class="pull-right">
                     <a data-toggle="modal" href="#myModal"> 忘记密码?</a>
                 </span>

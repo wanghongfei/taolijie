@@ -90,6 +90,7 @@
                     </c:if>
 
                 </div>
+                <div>${sessionScope.user.profilePhotoId}</div>
                 <div id="filePicker" style="display: inline">修改头像</div>
             </div>
 

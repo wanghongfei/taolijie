@@ -1,0 +1,16 @@
+/*post nav*/
+.user-nav ul .active{
+    background-color: #4ccda4;
+}
+.user-nav ul .active a{
+  color: #fff !important;
+}
+
+/* job post */
+.wage {
+    float: left;
+}
+.input-unit {
+    float: left;
+    line-height: 2em;
+}

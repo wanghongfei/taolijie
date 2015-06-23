@@ -15,7 +15,7 @@
 <jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp">
+    <jsp:include page="../block/post-nav.jsp">
       <jsp:param name="navShow" value="resume"/>
     </jsp:include>
   <div class="segment infos resume link-segment">

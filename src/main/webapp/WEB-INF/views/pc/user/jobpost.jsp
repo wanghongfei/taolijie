@@ -16,7 +16,9 @@
 
 
 <div class="container user">
-    <jsp:include page="../block/user.jsp"/>
+  <jsp:include page="../block/post-nav.jsp">
+    <jsp:param name="navShow" value="job"/>
+  </jsp:include>
 
   <div class="segment end-segment">
     <p class="pin-title red-bg ">基本信息
@@ -39,8 +41,8 @@
       </div>
       <div class="form-group">
         <label for="">工资待遇</label>
-        <input type="text" class="form-control short-input" name="wage">
-          <p style="float: left">元</p>
+        <input type="text" class="form-control short-input wage" name="wage">
+        <span class="input-unit">元</span>
       </div>
       <div class="form-group">
         <label for="">结算方式</label>
