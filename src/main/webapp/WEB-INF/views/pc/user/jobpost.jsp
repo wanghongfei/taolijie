@@ -54,7 +54,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="">有效时间</label>
+        <label for="">截止时间</label>
         <input type="text" class="form-control" name="expiredTime" >
       </div>
 
@@ -72,11 +72,11 @@
       </div>
       <div class="form-group">
         <label for="">工作内容</label>
-        <textarea name="jobDetail" id="" cols="30" rows="10"></textarea></textarea>
+        <textarea name="jobDetail" id="" cols="30" rows="10" class="form-control"></textarea>
       </div>
       <div class="form-group">
         <label for="">工作要求</label>
-        <textarea name="jobDescription" ></textarea>
+        <textarea name="jobDescription" class="form-control"></textarea>
       </div>
 
     <p class="pin-title red-bg ">兼职详情
