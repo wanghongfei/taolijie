@@ -10,7 +10,7 @@
 
 <%--html头部--%>
 <jsp:include page="block/start.jsp">
-  <jsp:param name="title" value="首页"/>
+  <jsp:param name="title" value='<%=java.net.URLEncoder.encode("首页", "UTF-8")%>'/>
 </jsp:include>
 <!doctype html>
 <html class="no-js">
