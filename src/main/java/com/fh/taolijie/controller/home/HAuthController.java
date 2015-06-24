@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.management.relation.Role;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,17 +99,15 @@ public class HAuthController {
         session.setAttribute("role",role);
 
 
-        /*如果选择自动登陆,加入cookie*/
-        if (loginDto.getRememberMe().equals("true")) {
+/*        if (loginDto.getRememberMe().equals("true")) {
             Cookie usernameCookie = new Cookie("username", mem.getUsername());
             usernameCookie.setMaxAge(cookieExpireTime);
             Cookie passwordCookie = new Cookie("password", mem.getPassword());
             passwordCookie.setMaxAge(cookieExpireTime);
             res.addCookie(usernameCookie);
             res.addCookie(passwordCookie);
-        }
+        }*/
 
-        /*如果自动登陆为true ,返回cookie*/
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion
