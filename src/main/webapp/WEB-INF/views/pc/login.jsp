@@ -84,10 +84,10 @@
           <div class="col-12" >
             <label class="red" id="error-box"></label>
           </div>
-          <div class="col-12 remember-me">
+<%--          <div class="col-12 remember-me">
               <input type="checkbox" class="checkbox" id="rememberMe" name="rememberMe" value="true">
               <label for="rememberMe">记住密码</label>
-          </div>
+          </div>--%>
           <div class="col-12 no-pd">
             <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登录</p>
           </div>
