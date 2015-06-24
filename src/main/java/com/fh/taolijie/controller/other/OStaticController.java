@@ -78,6 +78,8 @@ public class OStaticController {
             if (null == imageByte) {
                 // 不是图片文件
                 inStream.close();
+
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
                 return "invalid image!";
             }
 
