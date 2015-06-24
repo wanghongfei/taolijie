@@ -54,7 +54,6 @@ input[name=sellPrice] {
 .img-list-wrapper {
     background-color: #eee;
     padding: 10px;
-    margin-right: 20px;
 }
 .img-list-btn,
 .img-list-item {
@@ -65,6 +64,7 @@ input[name=sellPrice] {
 .img-list-img {
     width: 200px;
     height: 150px;
+    text-align: center;
 }
 .img-list-btn .btn-add {
     display: block;

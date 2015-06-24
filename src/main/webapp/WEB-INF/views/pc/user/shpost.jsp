@@ -52,8 +52,6 @@
   </jsp:include>
   <div class="img-list-wrapper">
       <ul>
-      	<li class="img-list-item"><img src="/static/images/users/5" alt="" class="img-list-img"></li>
-      	<li class="img-list-item"><img src="/static/images/users/5" alt="" class="img-list-img"></li>
         <li class="img-list-btn dark-green-bg">
             <span class="btn-add">添加照片</span>
         </li>
@@ -127,5 +125,6 @@
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script src="/scripts/shpost.js"></script>
+<script src="/scripts/uploader.js"></script>
 </body>
 </html>
