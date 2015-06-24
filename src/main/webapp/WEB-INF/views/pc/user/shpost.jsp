@@ -38,7 +38,8 @@
       </div>
       <div class="form-group">
         <label for="">价格</label>
-        <input name="sellPrice" type="text" class="form-control" >
+        <input name="sellPrice" type="text" class="form-control short-input">
+        <span class="input-unit">元</span>
       </div>
       <div class="form-group">
         <label for="">商品描述</label>

@@ -41,7 +41,7 @@
       <div class="form-group">
         <label for="">工资待遇<span class="asterisk-red">*</span></label>
         <input type="text" class="form-control short-input wage" name="wage" placeholder="请输入有效数字">
-        <span class="input-unit">元/时</span>
+        <span class="input-unit">元</span>
       </div>
       <div class="form-group">
         <label for="">结算方式<span class="asterisk-red">*</span></label>
@@ -71,7 +71,7 @@
       </div>
       <div class="form-group">
         <label for="">工作内容<span class="asterisk-red">*</span></label>
-        <textarea name="jobDetail" id="" cols="30" rows="10" class="form-control" placeholder="填写工作具体内容"></textarea>
+        <textarea name="jobDetail" id="" cols="30" class="form-control" placeholder="填写工作具体内容"></textarea>
       </div>
       <div class="form-group">
         <label for="">工作要求<span class="asterisk-red">*</span></label>

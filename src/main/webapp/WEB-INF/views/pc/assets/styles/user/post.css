@@ -30,3 +30,6 @@ a:hover {
 .asterisk-red {
     color: #fa6a38;
 }
+.input-short {
+    width: 140px;
+}
