@@ -1,10 +1,5 @@
 /*global*/
 
-.user form .form-group {
-    margin-left:    85px;
-}
-
-
 /*覆盖*/
 
 body {
@@ -48,6 +43,37 @@ a:hover {
 }
 label {
     font-weight: normal;
+}
+
+
+/*shpost*/
+
+input[name=sellPrice] {
+    float: left;
+}
+.img-list-wrapper {
+    background-color: #eee;
+    padding: 10px;
+    margin-right: 20px;
+}
+.img-list-btn,
+.img-list-item {
+    float: left;
+    margin-right: 10px;
+}
+.img-list-btn,
+.img-list-img {
+    width: 200px;
+    height: 150px;
+}
+.img-list-btn .btn-add {
+    display: block;
+    padding-top: 100px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+    background: url(/images/user/camera.png) no-repeat 48% 40%;
 }
 
 

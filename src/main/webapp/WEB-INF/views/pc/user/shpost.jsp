@@ -50,6 +50,16 @@
   <jsp:include page="../block/post-nav.jsp">
     <jsp:param name="navShow" value="sh"/>
   </jsp:include>
+  <div class="img-list-wrapper">
+      <ul>
+      	<li class="img-list-item"><img src="/static/images/users/5" alt="" class="img-list-img"></li>
+      	<li class="img-list-item"><img src="/static/images/users/5" alt="" class="img-list-img"></li>
+        <li class="img-list-btn dark-green-bg">
+            <span class="btn-add">添加照片</span>
+        </li>
+      </ul>
+      <div class="clearfix"></div>
+  </div>
   <div class="segment end-segment">
     <p class="pin-title dark-green-bg ">二手物品介绍
       <i class="pin-arrow  dark-green-arrow"></i>
@@ -77,14 +87,11 @@
         <label for="">商品描述</label>
         <textarea name="description" class="form-control"></textarea>
       </div>
+      <input name="picIds" class="form-control" type="hidden">
       <div class="form-group">
-        <label for="">图片</label>
-        <textarea name="picIds" class="form-control" value="11;12">11;12</textarea>
+        <label for="">交易地点</label>
+        <input name="" type="text" class="form-control" >
       </div>
-      <%--<div class="form-group">--%>
-        <%--<label for="">交易地点</label>--%>
-        <%--<input name="" type="text" class="form-control" >--%>
-      <%--</div>--%>
 
     <p class="pin-title dark-green-bg ">联系方式
       <i class="pin-arrow  dark-green-arrow"></i>

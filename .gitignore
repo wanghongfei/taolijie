@@ -6,3 +6,4 @@ target/
 
 .settings/
 deploy.sh
+**/*.swp

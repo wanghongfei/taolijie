@@ -1616,7 +1616,10 @@ ul.bxslider li img {
 .user form .form-group {
     display: table;
     width: 555px;
-    margin-left: 170px;
+    /*
+     * margin-left: 170px;
+     */
+    margin-left: 85px;
     padding-top: 7px;
     padding-bottom: 7px; }
 .user form .form-group label {
