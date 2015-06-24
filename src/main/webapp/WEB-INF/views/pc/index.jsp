@@ -9,11 +9,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%--html头部--%>
+<jsp:include page="block/start.jsp">
+  <jsp:param name="title" value="首页"/>
+</jsp:include>
 <!doctype html>
 <html class="no-js">
 <head>
   <meta charset="utf-8">
-  <title>首页</title>
+  <title>${param.title}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
