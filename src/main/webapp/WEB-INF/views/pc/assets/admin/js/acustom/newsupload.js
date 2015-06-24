@@ -1,3 +1,8 @@
+/**
+ *
+ * Created by wynfrith on 15-6-21.
+ */
+
 // 图片上传demo
 jQuery(function() {
     var $ = jQuery,
@@ -7,8 +12,8 @@ jQuery(function() {
         ratio = window.devicePixelRatio || 1,
 
     // 缩略图大小
-        thumbnailWidth = 100 * ratio,
-        thumbnailHeight = 100 * ratio,
+        thumbnailWidth = 1000 * ratio,
+        thumbnailHeight = 1000 * ratio,
 
     // Web Uploader实例
         uploader;
@@ -39,15 +44,6 @@ jQuery(function() {
 
     // 当有文件添加进来的时候
     uploader.on( 'fileQueued', function( file ) {
-        //var $li = $(
-        //        '<div id="' + file.id + '" class="file-item thumbnail">' +
-        //        '<img>' +
-        //        '<div class="info">' + file.name + '</div>' +
-        //        '</div>'
-        //    ),
-        //    $img = $li.find('img');
-        //
-        //$list.append( $li );
 
         // 创建缩略图
         uploader.makeThumb( file, function( error, src ) {

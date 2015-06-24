@@ -25,6 +25,42 @@
 
     <jsp:include page="block/header.jsp"></jsp:include>
 
+    <style>
+      .avatar{
+        width: 150px;
+        height: 150px;
+        padding: 10px;
+        /*border: 2px solid #66ccff;*/
+        background-color: #eee;
+        cursor: pointer;
+      }
+      .avatar:hover{
+        background-color: #666;
+      }
+      .avatar img{
+        border-radius: 100px;
+        width: 150px;
+        height: 150px;
+
+      }
+      .webuploader-element-invisible {
+        position: absolute !important;
+        clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+        clip: rect(1px,1px,1px,1px);
+      }
+      .webuploader-pick {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        background: #4ccda4;
+        padding: 10px 15px;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+    </style>
+
     <!-- page heading start-->
     <div class="page-heading">
       <h3>
@@ -55,10 +91,23 @@
                 <input class="form-control" id="title" name="title" placeholder="输入新闻标题(30字以内)" type="text" value="${aNews.title}">
               </div>
             </div>
+
             <div class="form-group">
               <div class="col-md-offset-2 col-md-7">
                 <textarea name="content" id="content" class="wysihtml5 form-control" rows="9" ></textarea>
               </div>
+            </div>
+
+
+            <div class="from-group" style="overflow: auto">
+              <div id="uploader" class="col-md-7 col-md-offset-2 wu-example" style="overflow: auto">
+                <div id="fileList" class="uploader-list" style="background-color: #eee; width: 600px;">
+                  <img src="/static/images/users/${sessionScope.user.profilePhotoId}" height="200"class="col-md-12" alt=""/>
+                </div>
+                <div id="filePicker" style="display: inline">新闻大图</div>
+
+              </div>
+
             </div>
 
             <input type="hidden" id="newsId" value="${aNews.id}"/>
@@ -88,10 +137,11 @@
 
 <script type="text/javascript" src="/admin/js/jquery.validate.min.js"></script>
 <script src="/admin/js/validation-init.js"></script>
-
+<script src="/scripts/webuploader.min.js"></script>
 <%--富文本--%>
 <script type="text/javascript" src="/admin/js/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
 <script type="text/javascript" src="/admin/js/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script src="/admin/js/acustom/newsupload.js"></script>
 <script>
   jQuery(document).ready(function(){
 //
@@ -107,9 +157,7 @@
 
 // pass in your custom templates on init
 
-   $('.wysihtml5').wysihtml5({
-     customTemplates:"1212312"
-   });
+   $('.wysihtml5').wysihtml5();
     $('.wysihtml5').html("${aNews.content}");
 
 //    var editor = new wysihtml5.Editor(".content",{

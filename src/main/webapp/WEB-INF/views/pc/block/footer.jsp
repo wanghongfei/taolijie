@@ -50,6 +50,28 @@
 
 </div>
 
+<div class="showbox">
+  <div class="weixin">
+    <span><img src="/images/erweima.png" alt=""></span>
+  </div>
+  <p>官方微信</p>
+  <div class="feedback">
+  </div>
+  <p>我要反馈</p>
+  <div class="feedbox">
+    <div class="logo"><img src="/images/xiaologo.png" alt=""></div>
+    <form action="">
+      <div class="textarea">
+        <textarea name="" id="" placeholder="亲，小桃该做哪些改进呢？情说，么么哒（200字以内）"></textarea>
+      </div>
+      <div class="email">
+        <input type="text" class="input_email" placeholder="留下你的邮箱方便我们沟通">
+        <input type="submit" value="确定" class="input_btn">
+      </div>
+    </form>
+  </div>
+</div>
+
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
@@ -63,6 +85,13 @@
 <!-- build:js scripts/main.js -->
 <script src="/scripts/main.js"></script>
 <!-- endbuild -->
+<script>
+  $(function(){
+    $(".feedback").click(function(){
+      $(".feedbox").toggle();
+    })
+  })
+</script>
 
 
 

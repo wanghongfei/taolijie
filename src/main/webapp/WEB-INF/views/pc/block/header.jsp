@@ -35,7 +35,7 @@
 
     <div class="text">
       <span><a href="">首页</a></span>
-      <span><a href="/user/job/post">发布简历</a></span>
+      <span><a href="/user/job/post">发布信息</a></span>
     </div>
   </div>
 

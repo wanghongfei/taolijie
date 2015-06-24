@@ -27,6 +27,12 @@
 <script src="/scripts/webuploader.min.js"></script>
 <script src="/scripts/upload.js"></script>
 <script src="/scripts/user.js"></script>
+<script src="/admin/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script>
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd'
+    })
+</script>
 
 
 

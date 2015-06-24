@@ -36,7 +36,7 @@
     <section class="error-wrapper text-center">
       <h1><img alt="" src="/admin/images/500-error.png"></h1>
       <h2>服务器出错了</h2>
-      <a class="back-btn" href="/index"> Back To Home</a>
+      <a class="back-btn" href="/"> Back To Home</a>
     </section>
 
   </div>

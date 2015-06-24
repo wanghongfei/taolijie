@@ -232,6 +232,8 @@ public class Constants {
         public static final String EDIT_SUCCESS = "修改成功";
         public static final String DEL_SUCCESS = "删除成功";
 
+        public static final String ALREADY_EXISTS = "已存在";
+
 
     }
 

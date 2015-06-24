@@ -16,7 +16,7 @@
     <meta name="author" content="ThemeBucket">
     <link rel="shortcut icon" href="#" type="image/png">
 
-    <title>登陆</title>
+    <title>登录</title>
 
     <link href="/admin/css/style.css" rel="stylesheet">
     <link href="/admin/css/style-responsive.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 
     <form class="form-signin" id="form-signin" >
         <div class="form-signin-heading text-center">
-            <h1 class="sign-title">用户登陆</h1>
+            <h1 class="sign-title">用户登录</h1>
             <img src="/admin/images/login-logo.png" alt=""/>
         </div>
         <div class="login-wrap">
@@ -53,7 +53,8 @@
                 </a>
             </div>
             <label class="checkbox">
-                <input type="checkbox" value="true" name="rememberMe" id="rememberMe"> 记住我
+                <input type="checkbox" value="true" name="rememberMe" id="rememberMe">
+                <label for="rememberMe">记住我</label>
                 <span class="pull-right">
                     <a data-toggle="modal" href="#myModal"> 忘记密码?</a>
                 </span>

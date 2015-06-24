@@ -13,7 +13,7 @@
         <p>我们的服务</p>
         <ul class="menu_left" id="menu_left">
             <li>
-                <a href="/list/job"><i class="fa fa-history fa-lg"></i> 学生兼职</a>
+                <a href="/list/job" class="menu-left-item"><i class="fa fa-history fa-lg"></i>学生兼职</a>
                 <ul class="submenu">
                     <c:forEach items="${sideJobCate}" var="jobCate">
                         <li><a href="/list/job?cate=${jobCate.id}">${jobCate.name}</a></li>
@@ -21,7 +21,7 @@
                 </ul>
             </li>
             <li>
-                <a href="/list/sh"><i class="fa fa-bicycle fa-lg"></i> 校园二手</a>
+                <a href="/list/sh" class="menu-left-item"><i class="fa fa-bicycle fa-lg"></i>校园二手</a>
                 <ul class="submenu">
                     <c:forEach items="${sideSHCate}" var="shCate">
                         <li><a href="/list/sh?cate=${shCate.id}">${shCate.name}</a></li>
@@ -29,7 +29,7 @@
                 </ul>
             </li>
             <li>
-                <a href="/list/resume"><i class="fa fa-paper-plane-o fa-lg"></i> 求职简历</a>
+                <a href="/list/resume" class="menu-left-item"><i class="fa fa-paper-plane-o fa-lg"></i>求职简历</a>
                 <ul class="submenu">
                     <c:forEach items="${sideResumeCate}" var="resumeCate">
                         <li><a href="/list/resume?cate=${resumeCate.id}">${resumeCate.name}</a></li>
@@ -37,7 +37,7 @@
                 </ul>
             </li>
             <li>
-                <a href="/user/job/post"><i class="fa fa-check-square-o fa-lg"></i> 发布信息</a>
+                <a href="/user/job/post" class="menu-left-item"><i class="fa fa-check-square-o fa-lg"></i>发布信息</a>
                 <ul class="submenu">
                     <li><a href="/user/job/post">发布兼职</a></li>
                     <li ><a href="/user/sh/post">发布二手</a></li>
