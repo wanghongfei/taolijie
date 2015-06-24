@@ -59,6 +59,7 @@ input[name=sellPrice] {
 .img-list-item {
     float: left;
     margin-right: 10px;
+    position: relative;
 }
 .img-list-btn,
 .img-list-img {
@@ -74,6 +75,18 @@ input[name=sellPrice] {
     text-align: center;
     color: #fff;
     background: url(/images/user/camera.png) no-repeat 48% 40%;
+}
+.btn-img-del {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    width: 12px;
+    background-color: #fff;
+    text-align: center;
+    line-height: 13px;
+    color: #4ccda4;
+    cursor: pointer;
 }
 
 

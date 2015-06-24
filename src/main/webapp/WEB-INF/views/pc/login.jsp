@@ -14,7 +14,7 @@
 <html class="no-js">
 <head>
   <meta charset="utf-8">
-  <title>登陆</title>
+  <title>登录</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
