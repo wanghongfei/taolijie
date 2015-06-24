@@ -4,7 +4,9 @@ import com.fh.taolijie.domain.ImageModel;
 import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ImageUtils;
+import com.fh.taolijie.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,6 +78,8 @@ public class OStaticController {
             if (null == imageByte) {
                 // 不是图片文件
                 inStream.close();
+
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
                 return "invalid image!";
             }
 
@@ -94,7 +98,11 @@ public class OStaticController {
 
         } catch (IOException ex) {
             // 返回上传失败错误信息
-            System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!");
+            String msg = LogUtils.getStackTrace(ex);
+            LogUtils.getErrorLogger().error(msg);
+
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return msg;
         }
 
         return imageId+"";

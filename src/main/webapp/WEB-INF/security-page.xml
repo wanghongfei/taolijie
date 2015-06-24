@@ -12,6 +12,8 @@
 	<request url="/user/feedback" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
 	<request url="/user/setting/*" role="STUDENT EMPLOYER ADMIN" to-url="/login"/>
 
+	<request url="/api/job/u/*" role="EMPLOYER ADMIN" />
+
 	<request url="/manage" role="ADMIN" to-url="/login/admin" />
 	<request url="/manage/*" role="ADMIN" to-url="/login/admin" />
 
