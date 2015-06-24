@@ -66,5 +66,8 @@
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
 
+	<session-config>
+		<session-timeout>10</session-timeout>
+	</session-config>
 
 </web-app>
