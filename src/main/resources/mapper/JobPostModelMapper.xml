@@ -435,7 +435,7 @@
         WHERE
             post.deleted = false
         ORDER BY
-            post.post_time
+            post.post_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
