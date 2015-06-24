@@ -1,4 +1,35 @@
+/*global*/
+
+.user form .form-group {
+    margin-left:    85px;
+}
+
+
+/*覆盖*/
+
+body {
+    background-color: #f4f4f4;
+}
+a:hover {
+    text-decoration: none;
+}
+
+
+/*post header*/
+
+.post-header-wrapper {
+    margin-bottom: 15px;
+    height: 80px;
+    background-color: #4ccda4;
+    text-align: center;
+    color: #fff;
+}
+.post-header {
+    display: inline-block;
+}
+
 /*post nav*/
+
 .user-nav ul .active{
     background-color: #4ccda4;
 }
@@ -7,6 +38,7 @@
 }
 
 /* job post */
+
 .wage {
     float: left;
 }
@@ -18,13 +50,6 @@ label {
     font-weight: normal;
 }
 
-/*覆盖*/
-body {
-    background-color: #f4f4f4;
-}
-a:hover {
-    text-decoration: none;
-}
 
 /* 通用 */
 .asterisk-red {
