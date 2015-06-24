@@ -23,3 +23,20 @@ $(".submit-btn").click(function(){
         }
     });
 });
+
+/*
+ * del img uploaded
+ *
+ */
+$('.img-list-wrapper').delegate('.btn-img-del','click', function(){
+    var $img = $(this).parent('li');
+    $img.remove()
+    var picIds = $('input[name=picIds]').val().split(';');
+    for( var i = 0;i < picIds; i++){
+        if( $img.data('pid') == picIds[i] ) { 
+            picIds.splice(i,1);
+            break;
+        }   
+    }
+    $('input[name=picIds]').val(picIds.join(';'));
+});

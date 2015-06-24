@@ -79,10 +79,13 @@ jQuery(function() {
 
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
     uploader.on( 'uploadSuccess', function( file , data) {
-        $('<li class="img-list-item">'
+        $('<li class="img-list-item" data-pid="'
+            + data
+            + '">'
             + '<img src="/static/images/users/'
             + data
             + '" class="img-list-img"/>'
+            + '<span class="btn-img-del">x</span>'
             + '</li>').insertBefore('.img-list-btn');
         var picIds = $('input[name=picIds]').val().split(';');
         if(picIds[0] === "") {
