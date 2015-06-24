@@ -12,6 +12,7 @@ import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -97,6 +99,18 @@ public class HAuthController {
         CredentialUtils.createCredential(session, credential);
         session.setAttribute("user", mem);
         session.setAttribute("role",role);
+
+        // 用户选择了remember me
+        if (loginDto.getRememberMe().equals("true")) {
+            String token = StringUtils.randomString(15);
+            mem.setLastTokenDate(new Date());
+            mem.setAutoLoginIdentifier(token);
+            accountService.updateMember(mem);
+
+            Cookie tokenCookie = new Cookie("token", token);
+            tokenCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
+            res.addCookie(tokenCookie);
+        }
 
 
 /*        if (loginDto.getRememberMe().equals("true")) {

@@ -1,0 +1,19 @@
+{
+    "loginUrl": "/loginURL",
+    "enableAutoLogin": false,
+    "loginCookieName": "token",
+    "authBeanName": "defaultAccountService",
+
+    "interceptRule": [
+        {
+            "roleList": ["ADMIN", "DATA"],
+            "toUrl": "/toUrl",
+            "url": "/url"
+        },
+        {
+            "roleList": ["ADMIN", "DATA"],
+            "toUrl": "/toUrl",
+            "url": "/url"
+        }
+    ]
+}
