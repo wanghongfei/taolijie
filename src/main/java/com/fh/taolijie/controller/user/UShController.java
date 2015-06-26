@@ -362,8 +362,7 @@ public class UShController {
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());
-        if(!reviewService.addReview(reviewDto))
-            return  new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
+        reviewService.addReview(reviewDto);
 
         List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
         for(int i = list.size()-1; i> 0; i--){

@@ -20,12 +20,14 @@ public interface ReviewService {
      */
     List<ReviewModel> getReviewList(Integer postId, int firstResult, int capacity, ObjWrapper wrapper);
 
+    ReviewModel getById(Integer reviewId);
+
     /**
      * 添加一条评论
      * @param reviewDto
      * @return
      */
-    boolean addReview(ReviewModel model);
+    Integer addReview(ReviewModel model);
 
     /**
      * 回复一条评论

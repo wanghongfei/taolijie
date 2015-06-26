@@ -29,11 +29,14 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public boolean addReview(ReviewModel model) {
-        int row = reMapper.insert(model);
+    public ReviewModel getById(Integer reviewId) {
+        return reMapper.selectByPrimaryKey(reviewId);
+    }
 
-        return row <= 0 ? false : true;
+    @Override
+    @Transactional(readOnly = false)
+    public Integer addReview(ReviewModel model) {
+        return reMapper.insert(model);
     }
 
     @Override

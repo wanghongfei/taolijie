@@ -5,10 +5,8 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.UserService;
+import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -40,6 +38,8 @@ public class UJobController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    ReviewService reviewService;
 
     /**
      * 我的发布 GET
@@ -374,7 +374,47 @@ public class UJobController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 发表评论
+     * @param jobId
+     * @param model
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "{jobId}/review/post", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String postReview(@PathVariable("jobId") Integer jobId,
+                             ReviewModel model,
+                             HttpSession session) {
+        Credential credential = CredentialUtils.getCredential(session);
+        if (null == credential) {
+            return new JsonWrapper(false, "未登陆").getAjaxMessage();
+        }
 
+        model.setMemberId(credential.getId());
+        model.setPostId(jobId);
+        model.setTime(new Date());
+
+        Integer newReviewId = reviewService.addReview(model);
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+    @RequestMapping(value = "{jobId}/review/delete/{reviewId}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String deleteReview(@PathVariable("jobId") Integer jobId,
+                               @PathVariable("reviewId") Integer reviewId,
+                               HttpSession session
+                               ) {
+        // 判断是不是自己发的评论
+        Integer curUserId = CredentialUtils.getCredential(session).getId();
+        Integer targetUserId = reviewService.getById(reviewId).getMember().getId();
+        if (false == curUserId.equals(targetUserId)) {
+            return new JsonWrapper(false, "非法操作").getAjaxMessage();
+        }
+
+        // 删除评论
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
 
 
 }
