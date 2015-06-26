@@ -121,7 +121,7 @@
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
         </div>--%>
       </div>
-      <div class="content" id="contents">
+<%--      <div class="content" id="contents">
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/images/pig.jpg" alt="">
@@ -136,7 +136,7 @@
            <span>${review.content}</span>
         </div>
         </c:forEach>
-      </div>
+      </div>--%>
 <%--      <div class="review-bar">
         <img src="/images/pig.jpg" alt="">
         <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
