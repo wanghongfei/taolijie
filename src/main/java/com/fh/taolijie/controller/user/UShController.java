@@ -359,6 +359,7 @@ public class UShController {
         //为该id的帖子创建一条评论
         ReviewModel reviewDto = new ReviewModel();
         reviewDto.setId(id);
+        reviewDto.setPostId(id);
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());

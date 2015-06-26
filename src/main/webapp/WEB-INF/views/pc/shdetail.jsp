@@ -176,12 +176,12 @@
                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
                 </div>--%>
             </div>
-<%--            <div class="content" id="contents">
+            <div class="content" id="contents">
                 <c:forEach var="review" items="${reviews}" varStatus="status">
                     <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
                         <img src="/images/pig.jpg" alt="">
                         <p>${review.member.username}
-                                &lt;%&ndash;判断是该用户发的显示删除按钮&ndash;%&gt;
+                                <%--判断是该用户发的显示删除按钮--%>
                             <c:if test="${sessionScope.user.id == review.member.id}">
                                 <a class="red delete-review" href="javascript:void(0);"  data-id="${sh.id}" data-reviewId="${review.id}"> 删除</a>
                             </c:if>
@@ -191,12 +191,12 @@
                         <span>${review.content}</span>
                     </div>
                 </c:forEach>
-            </div>--%>
-            <%--<div class="review-bar">
+            </div>
+            <div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
                 <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
                 <span class="review-span" id="review-btn" data-id="${sh.id}" data-username="${poster.username}">评论</span>
-            </div>--%>
+            </div>
         </div>
   </div>
 
