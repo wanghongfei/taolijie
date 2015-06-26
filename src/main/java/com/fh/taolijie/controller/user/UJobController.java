@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -20,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +38,9 @@ public class UJobController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    UserService userService;
+
     /**
      * 我的发布 GET
      *
@@ -53,7 +54,7 @@ public class UJobController {
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
-        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(),(page - 1)*pageSize,pageSize,objWrapper);
+        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), (page - 1) * pageSize, pageSize, objWrapper);
 //        totalPage = (Integer)objWrapper.getObj();
 
         int pageStatus = 1;
@@ -144,7 +145,7 @@ public class UJobController {
             return "redirect:/404";
         }
 
-        model.addAttribute("job",job);
+        model.addAttribute("job", job);
         return "mobile/jobdetail";
     }
     //endregion
@@ -296,6 +297,26 @@ public class UJobController {
             System.out.println("mutideleteError");
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+    @RequestMapping(value = "/{id}/like", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String likeJob(@PathVariable("id") Integer jobId,
+                          HttpSession session) {
+        // 判断是否重复赞
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+        Integer userId = cre.getId();
+        boolean liked = userService.isJobPostAlreadyLiked(userId, jobId);
+        if (liked) {
+            return new JsonWrapper(false, "already liked").getAjaxMessage();
+        }
+
+        userService.likeJobPost(userId, jobId);
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 

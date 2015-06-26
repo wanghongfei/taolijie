@@ -42,7 +42,7 @@ $("#like").click(function(){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             }else{
-                if(data.message == '已操作')
+                if(data.message == 'already liked')
                     alert('您已经喜欢过了!');
             }
         }

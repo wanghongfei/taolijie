@@ -34,6 +34,7 @@ public class DefaultUserService implements UserService {
         String newIds = StringUtils.addToString(oldIds, postId.toString());
 
         jobMapper.increaseLike(postId);
+        mem.setLikedJobIds(newIds);
         memMapper.updateByPrimaryKeySelective(mem);
 
         return true;
@@ -47,6 +48,7 @@ public class DefaultUserService implements UserService {
         String newIds = StringUtils.addToString(oldIds, shId.toString());
 
         shMapper.increaseLike(shId);
+        mem.setLikedShIds(newIds);
         memMapper.updateByPrimaryKeySelective(mem);
 
         return true;

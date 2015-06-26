@@ -155,7 +155,7 @@
             </div>
         </div>
 
-  <!--      <div class="comment">
+        <div class="comment">
             <p class="pin-title">用户评论
                 <i class="pin-arrow"></i>
             </p>
@@ -192,13 +192,12 @@
                     </div>
                 </c:forEach>
             </div>
-            <div class="review-bar">
+            <%--<div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
                 <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
                 <span class="review-span" id="review-btn" data-id="${sh.id}" data-username="${poster.username}">评论</span>
-            </div>
+            </div>--%>
         </div>
- -->
   </div>
 
 </div>
