@@ -18,6 +18,9 @@ $("#like").click(function(){
             }else{
                 if(data.message == 'already liked')
                     alert('您已经喜欢过了!');
+                if (data.message == 'not logged in now!') {
+                    alert('登陆后才能执行该操作!');
+                }
             }
         }
     });
