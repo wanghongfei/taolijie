@@ -117,9 +117,9 @@
           <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
           <p >${reviews.size()}</p>
         </div>
-        <div class="operate">
+<%--        <div class="operate">
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
-        </div>
+        </div>--%>
       </div>
       <div class="content" id="contents">
         <c:forEach var="review" items="${reviews}" varStatus="status">
