@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import cn.fh.security.credential.AuthLogic;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
@@ -19,14 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wanghongfei on 15-6-5.
  */
 @Service
-public class DefaultAccountService implements AccountService {
+public class DefaultAccountService implements AccountService, AuthLogic {
     @Autowired
     MemberModelMapper memMapper;
 
@@ -283,5 +286,22 @@ public class DefaultAccountService implements AccountService {
 
         // send email
         mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
+    }
+
+    @Override
+    public Map<String, Object> loginByToken(String s) {
+        MemberModel mem = memMapper.selectByIdentifier(s);
+        if (null == mem) {
+            return null;
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(AuthLogic.ROLE_NAME, mem.getRoleList().get(0).getRolename());
+        map.put(AuthLogic.ROLE_LIST, mem.getRoleList().get(0));
+        map.put(AuthLogic.USERNAME, mem.getUsername());
+        map.put(AuthLogic.ID, mem.getId());
+        map.put(AuthLogic.MODEL, mem);
+
+        return map;
     }
 }

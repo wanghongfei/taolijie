@@ -16,8 +16,11 @@ $("#like").click(function(){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             }else{
-                if(data.message == '已操作')
+                if(data.message == 'already liked')
                     alert('您已经喜欢过了!');
+                if (data.message == 'not logged in now!') {
+                    alert('登陆后才能执行该操作!');
+                }
             }
         }
     });

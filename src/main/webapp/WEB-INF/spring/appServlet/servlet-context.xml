@@ -42,7 +42,7 @@
     <!-- 文件上传 -->
     <bean id="multipartResolver"
                 class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="5242880" /> <!-- 5M -->
+        <property name="maxUploadSize" value="819200" /> <!-- 800KB -->
     </bean>
 
     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
@@ -52,6 +52,8 @@
             </props>
         </property>
     </bean>
+
+    <bean id="pageFilter" class="cn.fh.security.servlet.PageProtectionFilter" />
 
 
 

@@ -12,7 +12,7 @@
 
     <context-param>
         <param-name>STATIC_RESOURCE_PATH</param-name>
-        <param-value>/assets</param-value>
+        <param-value>/admin:/images:/scripts:/styles:/fonts:/about</param-value>
     </context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->

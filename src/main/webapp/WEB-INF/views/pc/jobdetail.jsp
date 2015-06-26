@@ -100,7 +100,7 @@
       <p>联系人 : <span>${job.contact}</span></p>
       <p class="phone" >联系电话 : <span >${job.contactPhone}</span></p>
     </div>
-  <!--  <div class="comment">
+    <div class="comment">
       <p class="pin-title">用户评论
         <i class="pin-arrow"></i>
       </p>
@@ -117,16 +117,16 @@
           <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
           <p >${reviews.size()}</p>
         </div>
-        <div class="operate">
+<%--        <div class="operate">
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
-        </div>
+        </div>--%>
       </div>
-      <div class="content" id="contents">
+<%--      <div class="content" id="contents">
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/images/pig.jpg" alt="">
            <p>${review.member.username}
-             <%--判断是该用户发的显示删除按钮--%>
+             &lt;%&ndash;判断是该用户发的显示删除按钮&ndash;%&gt;
              <c:if test="${sessionScope.user.id == review.member.id}">
                <a class="red delete-review" href="javascript:void(0);"  data-id="${job.id}" data-reviewId="${review.id}"> 删除</a>
              </c:if>
@@ -136,14 +136,14 @@
            <span>${review.content}</span>
         </div>
         </c:forEach>
-      </div>
-      <div class="review-bar">
+      </div>--%>
+<%--      <div class="review-bar">
         <img src="/images/pig.jpg" alt="">
         <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
         <span class="review-span" id="review-btn" data-id="${job.id}" data-username="${poster.username}">评论</span>
-      </div>
+      </div>--%>
     </div>
--->
+
   </div>
 
 

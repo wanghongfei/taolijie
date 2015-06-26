@@ -1,0 +1,60 @@
+{
+    "loginUrl": "/login",
+    "enableAutoLogin": true,
+    "loginCookieName": "token",
+    "authBeanName": "defaultAccountService",
+
+    "interceptRule": [
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/job/*"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/resume/*"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/sh/*"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/post/*"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/profile"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/feedback"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/setting/*"
+        },
+
+        {
+            "roleList": ["ADMIN", "EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/api/job/u/*"
+        },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login/admin",
+            "url": "/manage"
+        },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login/admin",
+            "url": "/manage/*"
+        }
+    ]
+}

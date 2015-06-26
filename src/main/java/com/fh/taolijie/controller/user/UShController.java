@@ -2,11 +2,11 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.*;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.ReviewService;
-import com.fh.taolijie.service.ShPostCategoryService;
-import com.fh.taolijie.service.ShPostService;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -37,6 +37,8 @@ public class UShController {
     AccountService accountService;
     @Autowired
     ReviewService reviewService;
+    @Autowired
+    UserService userService;
 
     /**
      * 我的发布 GET
@@ -419,13 +421,21 @@ public class UShController {
 
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String like(@PathVariable int id,HttpSession session){
+    public String like(@PathVariable Integer id,HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
             return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
 
-        return "";
+        // 判断是否重复喜欢
+        boolean liked = userService.isSHPostAlreadyLiked(credential.getId(), id);
+        if (liked) {
+            return new JsonWrapper(false, "already liked").getAjaxMessage();
+        }
+
+        // like +1
+        userService.likeSHPost(credential.getId(), id);
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
 }
