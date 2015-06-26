@@ -197,8 +197,12 @@ public class HAuthController {
      */
 
     @RequestMapping(value = "logout",method = RequestMethod.GET)
-    public String logout(HttpSession session){
+    public String logout(HttpServletResponse resp, HttpSession session){
         session.invalidate();
+        Cookie co = new Cookie("token", "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+
         return "redirect:/";
     }
 
