@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
@@ -86,7 +87,11 @@ public class HJobController {
      */
     @RequestMapping(value = "item/job/{id}", method = RequestMethod.GET)
     //region 查询一条兼职 jobItem
-    public String jobItem(@PathVariable int id, HttpSession session, Model model) {
+    public String jobItem(@PathVariable int id,
+                          HttpSession session,
+                          @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+                          @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize,
+                          Model model) {
         JobPostModel job = jobPostService.findJobPost(id);
 
         if (job == null) {
@@ -106,7 +111,11 @@ public class HJobController {
         }
 
         // 查询评论
-        List<ReviewModel> reviewList = reviewService.getReviewList(id, 0 ,10, null);
+        // 计算页数
+        pageNumber = pageNumber.intValue() * pageSize.intValue();
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, pageNumber, pageSize);
+        List<ReviewModel> reviewList = reviewResult.getList();
+        int reviewCount = reviewResult.getPageCount();
 
 
         model.addAttribute("job", job);
@@ -114,6 +123,7 @@ public class HJobController {
         model.addAttribute("posterRole", role);
         model.addAttribute("favStatus", status);
         model.addAttribute("reviews", reviewList);
+        model.addAttribute("reviewCount", reviewCount);
         return "pc/jobdetail";
     }
     //endregion
