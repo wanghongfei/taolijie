@@ -146,6 +146,11 @@ public class SHPostModel extends Pageable {
      */
     private String tradePlace;
 
+    private String contactName;
+    private String contactQq;
+    private String contactPhone;
+
+
     private MemberModel member;
     private SHPostCategoryModel category;
 
@@ -187,6 +192,30 @@ public class SHPostModel extends Pageable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactQq() {
+        return contactQq;
+    }
+
+    public void setContactQq(String contactQq) {
+        this.contactQq = contactQq;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     /**
