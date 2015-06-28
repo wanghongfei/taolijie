@@ -77,7 +77,8 @@ $("#review-btn").on("click",function(){
         data:data,
         success:function(data){
             if(data.result){
-                var reviewId =data.parm.reviewId;
+                //var reviewId =data.parm.reviewId;
+                var reviewId =data.message;
                 $parent.append('<img src="/images/pig.jpg" alt="">');
                 $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
                 $parent.append('<span>'+content+'</span>');

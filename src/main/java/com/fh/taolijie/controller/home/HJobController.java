@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -107,11 +105,15 @@ public class HJobController {
             status = jobPostService.isPostFavorite(credential.getId(),id);
         }
 
+        // 查询评论
+        List<ReviewModel> reviewList = reviewService.getReviewList(id, 0 ,10, null);
+
 
         model.addAttribute("job", job);
         model.addAttribute("poster", poster);
         model.addAttribute("posterRole", role);
         model.addAttribute("favStatus", status);
+        model.addAttribute("reviews", reviewList);
         return "pc/jobdetail";
     }
     //endregion

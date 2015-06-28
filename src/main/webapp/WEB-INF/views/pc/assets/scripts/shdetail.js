@@ -99,7 +99,7 @@ $("#review-btn").on("click",function(){
     };
     $.ajax({
         type:"POST",
-        url:"/user/job/"+id+"/review/post",
+        url:"/user/sh/"+id+"/review/post",
         data:data,
         success:function(data){
             if(data.result){
@@ -126,7 +126,7 @@ $(document).on("click",'.delete-review',function(){
     var $parent = $(this).parent().parent();
     $.ajax({
         type:"POST",
-        url:"/user/job/"+id+"/review/delete/"+reviewId,
+        url:"/user/sh/"+id+"/review/delete/"+reviewId,
         success:function(data){
             if(data.result){
                 $parent.remove();
