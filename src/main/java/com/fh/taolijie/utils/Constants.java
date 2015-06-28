@@ -83,6 +83,7 @@ public class Constants {
         PNG,
         JPG,
         GIF,
+        EXIF,
         UNSUPPORTED
     }
 
