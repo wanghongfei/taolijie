@@ -21,6 +21,10 @@ public class ImageUtils {
             return Constants.ImageType.GIF;
         }
 
+        if (tenBytes[6] == 'E' && tenBytes[7] == 'x' && tenBytes[8] == 'i' && tenBytes[9] == 'f') {
+            return Constants.ImageType.EXIF;
+        }
+
         return Constants.ImageType.UNSUPPORTED;
     }
 }
