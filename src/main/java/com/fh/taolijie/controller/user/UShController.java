@@ -404,17 +404,7 @@ public class UShController {
             return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
 
         //验证评论是否自己发布
-        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, 0, 999);
-        List<ReviewModel> list = reviewResult.getList();
-
-
-        ReviewModel reviewDto = null;
-        for(ReviewModel r : list){
-            if(r.getId() == reviewId){
-                reviewDto = r;
-                break;
-            }
-        }
+        ReviewModel reviewDto = reviewService.getById(reviewId);
         if(reviewDto == null)
             return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
         if(reviewDto.getMemberId() != credential.getId())
