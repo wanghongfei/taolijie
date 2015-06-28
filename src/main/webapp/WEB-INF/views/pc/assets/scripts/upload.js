@@ -76,9 +76,9 @@ jQuery(function() {
     });
 
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
-    uploader.on( 'uploadSuccess', function( file , data) {
+    uploader.on( 'uploadSuccess', function( file , imgId) {
         $( '#'+file.id ).addClass('upload-state-done');
-
+        $('#userImg img').attr('src','/static/images/users/' + imgId);
         $(".tlj_modal_content").html("头像修改成功!");
         $('.dialog').jqmShow();
     });
