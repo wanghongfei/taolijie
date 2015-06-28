@@ -29,6 +29,9 @@ $(".submit-btn").click(function(){
  *
  */
 $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
+    if( $('.img-list-item').length == 4) {
+        $('.img-list-btn').toggle();
+    }
     var $img = $(this).parent('li');
     $img.remove()
     var picIds = $('input[name=picIds]').val().split(';');
