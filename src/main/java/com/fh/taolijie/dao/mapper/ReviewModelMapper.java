@@ -60,4 +60,5 @@ public interface ReviewModelMapper {
     List<ReviewModel> getInBatch(List<Integer> idList);
 
     List<ReviewModel> findBy(ReviewModel model);
+    int countFindBy(ReviewModel model);
 }

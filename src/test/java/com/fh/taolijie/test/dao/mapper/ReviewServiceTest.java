@@ -26,7 +26,7 @@ public class ReviewServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testGet() {
-        List<ReviewModel> list = service.getReviewList(1, 0, 100, null);
+        List<ReviewModel> list = service.getReviewList(1, 0, 100).getList();
         Assert.assertFalse(list.isEmpty());
         boolean hasMember = list.stream().allMatch(rev -> rev.getMember() != null && rev.getMember().getName().isEmpty() == false);
         Assert.assertTrue(hasMember);

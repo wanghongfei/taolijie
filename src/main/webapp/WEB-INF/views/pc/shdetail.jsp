@@ -170,7 +170,7 @@
                 <%--</div>--%>
                 <div class="operate">
                     <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
-                    <p >${reviews.size()}</p>
+                    <p >${reviewCount}</p>
                 </div>
 <%--                <div class="operate">
                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>

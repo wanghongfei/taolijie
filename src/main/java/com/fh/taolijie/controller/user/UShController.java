@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
@@ -365,7 +366,12 @@ public class UShController {
         reviewDto.setTime(new Date());
         reviewService.addReview(reviewDto);
 
-        List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
+        //List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, page - 1, 999);
+        List<ReviewModel> list = reviewResult.getList();
+        int pageCount = reviewResult.getPageCount();
+
+
         for(int i = list.size()-1; i> 0; i--){
             ReviewModel r = list.get(i);
             if(r.getContent().equals(content)){
@@ -398,7 +404,10 @@ public class UShController {
             return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
 
         //验证评论是否自己发布
-        List<ReviewModel> list= reviewService.getReviewList(id,0,9999,new ObjWrapper());
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, 0, 999);
+        List<ReviewModel> list = reviewResult.getList();
+
+
         ReviewModel reviewDto = null;
         for(ReviewModel r : list){
             if(r.getId() == reviewId){

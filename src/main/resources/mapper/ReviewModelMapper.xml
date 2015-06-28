@@ -210,4 +210,28 @@
             #{pageNumber}, #{pageSize}
     </select>
 
+    <select id="countFindBy" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            review rev
+        <where>
+            <if test="postId != null">
+                rev.post_id = #{postId,jdbcType=INTEGER}
+            </if>
+            <if test="memberId != null">
+                AND rev.member_id = #{memberId,jdbcType=INTEGER}
+            </if>
+            <if test="time != null">
+                AND rev.time = #{time,jdbcType=DATE}
+            </if>
+            <if test="repliedReviewId != null">
+                AND rev.replied_review_id = #{repliedReviewId,jdbcType=INTEGER}
+            </if>
+            <if test="content != null">
+                AND rev.content = #{content,jdbcType=LONGVARCHAR}
+            </if>
+        </where>
+    </select>
+
 </mapper>

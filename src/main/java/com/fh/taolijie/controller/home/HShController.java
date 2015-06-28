@@ -2,7 +2,11 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.domain.RoleModel;
+import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.ShPostCategoryService;
@@ -80,12 +84,22 @@ public class HShController {
      * 查询一条二手
      */
     @RequestMapping(value = "item/sh/{id}", method = RequestMethod.GET)
-    public String shItem(@PathVariable int id, HttpSession session, Model model) {
+    public String shItem(@PathVariable int id,
+                         HttpSession session,
+                         @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+                         @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize,
+                         Model model) {
         SHPostModel sh = shPostService.findPost(id);
         if (sh == null) {
             return "redirect:/404";
         }
-        List<ReviewModel> reviews = reviewService.getReviewList(id, 0, 9999, new ObjWrapper());
+
+        // 查询二手的评论
+        pageNumber = pageNumber.intValue() * pageSize.intValue();
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, pageNumber, pageSize);
+        List<ReviewModel> reviews = reviewResult.getList();
+        int pageCount = reviewResult.getPageCount();
+
         //对应的用户和用户类别
         MemberModel poster = accountService.findMember(sh.getMemberId());
         RoleModel role = poster.getRoleList().iterator().next();
@@ -110,6 +124,7 @@ public class HShController {
 
         model.addAttribute("sh", sh);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("reviewCount", pageCount);
         model.addAttribute("poster", poster);
         model.addAttribute("posterRole", role);
         model.addAttribute("pids", picIds);
