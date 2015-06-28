@@ -1,0 +1,103 @@
+/** global **/
+.user form .form-group input[type=radio] {
+    margin: 0;
+    padding: 0;
+}
+.user form .form-group .label-radio {
+    text-align: left;
+    width: initial;
+}
+
+/*
+*	个人资料
+*/
+.segment.personal {
+    padding-bottom: 50px; }
+.segment.personal .accout-info {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 110px;
+    font-size: 18px; 
+}
+.segment.personal .accout-info span {
+    display: inline-block;
+    margin-left: 20px; }
+
+.segment.resume {
+    min-height: 800px; }
+.segment.resume .fl {
+    width: 520px; }
+.segment.resume .fl .form-control {
+    width: 400px; }
+.segment.resume .fl .form-control label {
+    width: 25%; }
+.segment.resume .fr {
+    margin-right: 12px;
+    width: 436px;
+    height: 100px; }
+.segment.resume .fr .user-photo {
+    width: 100px;
+    height: 100px;
+    background-color: #ddd;
+    border-radius: 140px;
+    margin: 0 auto; }
+.segment.resume .fr .form-control {
+    width: 400px; }
+.segment.resume .fr .form-control label {
+    width: 25%; }
+
+.user .feedback form {
+    width: 70%; }
+.user .feedback .form-group {
+    width: 100%; }
+.user .feedback textarea {
+    height: 230px;
+    font-size: 17px; }
+.user .feedback input {
+    height: 53px;
+    width: 500px;
+    margin-top: 12px;
+    font-size: 17px;
+    padding-left: 15px;
+    border: 2px solid #ccc; }
+.user .feedback span {
+    margin-top: 12px;
+    border-radius: 0; }
+
+/***********/
+.avatar{
+    width: 150px;
+    height: 150px;
+    padding: 10px;
+    /*border: 2px solid #66ccff;*/
+    background-color: #eee;
+    cursor: pointer;
+}
+.avatar:hover{
+    background-color: #666;
+}
+.avatar img{
+    border-radius: 100px;
+    width: 150px;
+    height: 150px;
+
+}
+#uploader-demo {
+    margin-left: 25px;
+}
+.webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #4ccda4;
+    padding: 10px 15px;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;
+}
