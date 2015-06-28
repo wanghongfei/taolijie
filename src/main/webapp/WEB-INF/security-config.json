@@ -13,6 +13,11 @@
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
             "toUrl": "/login",
+            "url": "/user/job/change/*"
+        },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
             "url": "/user/resume/*"
         },
         {
