@@ -107,9 +107,22 @@ public class HAuthController {
             mem.setAutoLoginIdentifier(token);
             accountService.updateMember(mem);
 
+            // 将自动登陆用的token放到cookie中
             Cookie tokenCookie = new Cookie("token", token);
             tokenCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
             res.addCookie(tokenCookie);
+
+            // 将用户名放到cookie中
+            // 过期时间为7天
+            Cookie nameCookie = new Cookie("un", mem.getUsername());
+            nameCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
+            res.addCookie(nameCookie);
+
+        } else {
+            // 将用户名放到cookie中
+            // 浏览器关闭就过期
+            Cookie nameCookie = new Cookie("un", mem.getUsername());
+            res.addCookie(nameCookie);
         }
 
 
@@ -199,7 +212,13 @@ public class HAuthController {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(HttpServletResponse resp, HttpSession session){
         session.invalidate();
+
+        // 删除cookie
         Cookie co = new Cookie("token", "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+
+        co = new Cookie("un", "");
         co.setMaxAge(0);
         resp.addCookie(co);
 
