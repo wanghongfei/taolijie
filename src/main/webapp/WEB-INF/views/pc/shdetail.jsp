@@ -109,6 +109,18 @@
                 <div class="sh-block">
                     <div class="title">
                         <span class="dot"></span>
+                        <span>交易地点</span>
+
+                        <div class="bubble-arrow"></div>
+                        <div class="bubble-arrow-inner"></div>
+                    </div>
+                    <div class="place">
+                        <p>${sh.tradePlace}</p>
+                    </div>
+                </div>
+                <div class="sh-block">
+                    <div class="title">
+                        <span class="dot"></span>
                         <span>联系方式</span>
 
                         <div class="bubble-arrow"></div>
@@ -118,18 +130,6 @@
                         <p><i class="fa fa-phone red"></i> ${poster.phone}</p>
 
                         <p><i class="fa fa-qq blue"></i> ${poster.qq}</p>
-                    </div>
-                </div>
-                <div class="sh-block">
-                    <div class="title">
-                        <span class="dot"></span>
-                        <span>交易地点</span>
-
-                        <div class="bubble-arrow"></div>
-                        <div class="bubble-arrow-inner"></div>
-                    </div>
-                    <div class="place">
-                        <p>${sh.tradePlace}</p>
                     </div>
                 </div>
             </div>

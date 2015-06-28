@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="/styles/jquery.bxslider.css">
     <%--<link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">--%>
     <link rel="stylesheet" href="/styles/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/styles/user/profile.css">
 
     <!-- build:js /scripts/vendor/modernizr.js -->
     <script src="/scripts/modernizr.js"></script>
@@ -44,44 +45,6 @@
 <!--[if lt IE 10]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
-
-
-
-<style>
-    .avatar{
-        width: 150px;
-        height: 150px;
-        padding: 10px;
-        /*border: 2px solid #66ccff;*/
-        background-color: #eee;
-        cursor: pointer;
-    }
-    .avatar:hover{
-        background-color: #666;
-    }
-    .avatar img{
-        border-radius: 100px;
-        width: 150px;
-        height: 150px;
-
-    }
-    .webuploader-element-invisible {
-        position: absolute !important;
-        clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-        clip: rect(1px,1px,1px,1px);
-    }
-    .webuploader-pick {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-        background: #4ccda4;
-        padding: 10px 15px;
-        color: #fff;
-        text-align: center;
-        border-radius: 3px;
-        overflow: hidden;
-    }
-</style>
 
 <jsp:include page="../block/top-bar-reverse.jsp"></jsp:include>
 
@@ -99,19 +62,6 @@
             <i class="pin-arrow  dark-green-arrow"></i>
         </p>
         <form action="" id="ProfileForm">
-
-
-
-            <div class="form-group">
-                <label for="">昵称<i class="theme-color">*</i></label>
-                <input type="text" name="name" class="form-control" placeholder="姓名" value="${user.name}">
-            </div>
-            <div class="form-group">
-                <label for="">性别<i class="star-symbol">*</i></label>
-                <input type="radio" name="gender" value="男" ${user.gender == "男"?'checked="checked"':''}>男
-                <input type="radio" name="gender" value="女" ${user.gender == "女"?'checked="checked"':''}>女
-            </div>
-
             <div class="form-group">
                 <div id="uploader-demo" class="wu-example">
                     <div id="fileList" class="uploader-list"
@@ -127,10 +77,17 @@
                     <div id="filePicker" style="display: inline">修改头像</div>
                 </div>
             </div>
-
-
-
-
+            <div class="form-group">
+                <label for="">昵称<i class="theme-color">*</i></label>
+                <input type="text" name="name" class="form-control" placeholder="姓名" value="${user.name}">
+            </div>
+            <div class="form-group">
+                <label for="">性别<i class="star-symbol">*</i></label>
+                <input type="radio" name="gender" value="男" ${user.gender == "男"?'checked="checked"':''} id="gender-m">
+                <label for="gender-m" class="label-radio">男</label>
+                <input type="radio" name="gender" value="女" ${user.gender == "女"?'checked="checked"':''} id="gender-f">
+                <label for="gender-f" class="label-radio">女</label>
+            </div>
             <div class="segment">
                 <div class="submit-btn big-btn dark-green-bg">
                     <span href="javascript:void(0);">保存资料</span>

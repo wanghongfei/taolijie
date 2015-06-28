@@ -64,7 +64,7 @@
     </p>
     <form action="" id="ShPostForm">
       <div class="form-group">
-        <label for="">商品名称</label>
+        <label for="">标题</label>
         <input name="title" type="text" class="form-control" >
       </div>
       <div class="form-group">
@@ -96,15 +96,15 @@
     </p>
 
       <div class="form-group">
-        <label for="">联系人(暂无)</label>
+        <label for="">联系人</label>
         <input type="text" class="form-control" >
       </div>
       <div class="form-group">
-        <label for="">手机号(暂无)</label>
+        <label for="">手机号</label>
         <input type="text" class="form-control" >
       </div>
       <div class="form-group">
-        <label for="">QQ号(暂无)</label>
+        <label for="">QQ号</label>
         <input type="text" class="form-control" >
       </div>
     </form>

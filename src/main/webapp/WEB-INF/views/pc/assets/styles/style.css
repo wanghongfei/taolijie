@@ -1628,7 +1628,7 @@ ul.bxslider li img {
     vertical-align: middle;
     display: table-cell;
     /*border-right: 1px solid #eee;*/ }
-.user form .form-group input {
+.user form .form-group input[type=text] {
     color: #666;
     width: 60%;
     font-size: 17px;
@@ -1651,7 +1651,6 @@ ul.bxslider li img {
     border-radius: 4px;
     padding: 6px 12px; }
 .user form .form-group input[type=radio] {
-    width: auto;
     display: inline-block;
     margin-left: 10px; }
 .user form .form-group .short-input {
@@ -1799,63 +1798,3 @@ ul.bxslider li img {
     transition: 0.4s ease-out; }
 .segment.user-nav ul li a:hover {
     color: #666; }
-
-/*
-*	个人资料
-*/
-.segment.personal {
-    padding-bottom: 50px; }
-.segment.personal .accout-info {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 18px; }
-.segment.personal .accout-info span {
-    display: inline-block;
-    margin-left: 20px; }
-
-.segment.resume {
-    min-height: 800px; }
-.segment.resume .fl {
-    width: 520px; }
-.segment.resume .fl .form-control {
-    width: 400px; }
-.segment.resume .fl .form-control label {
-    width: 25%; }
-.segment.resume .fr {
-    margin-right: 12px;
-    width: 436px;
-    height: 100px; }
-.segment.resume .fr .user-photo {
-    width: 100px;
-    height: 100px;
-    background-color: #ddd;
-    border-radius: 140px;
-    margin: 0 auto; }
-.segment.resume .fr .form-control {
-    width: 400px; }
-.segment.resume .fr .form-control label {
-    width: 25%; }
-
-.user .feedback form {
-    width: 70%; }
-.user .feedback .form-group {
-    width: 100%; }
-.user .feedback textarea {
-    height: 230px;
-    font-size: 17px; }
-.user .feedback input {
-    height: 53px;
-    width: 500px;
-    margin-top: 12px;
-    font-size: 17px;
-    padding-left: 15px;
-    border: 2px solid #ccc; }
-.user .feedback span {
-    margin-top: 12px;
-    border-radius: 0; }
-
-/***********/
-<<<<<<< HEAD
-=======
-
->>>>>>> 6c66dfac329cc50a99b08b0579ecb0f5e7f1dfb4
