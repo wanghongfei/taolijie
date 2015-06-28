@@ -146,7 +146,8 @@ public class UJobController {
         }
 
         model.addAttribute("job", job);
-        return "mobile/jobdetail";
+        //return "mobile/jobdetail";
+        return "pc/user/jobpost";
     }
     //endregion
 
