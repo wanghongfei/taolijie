@@ -35,7 +35,7 @@
 
         <junit-version>4.12</junit-version>
         <mockito-version>1.10.19</mockito-version>
-        <web-security-version>2.0.RELEASE</web-security-version>
+        <web-security-version>2.0.1.RELEASE</web-security-version>
 
         <el-api-version>3.0.0</el-api-version>
         <el-impl-version>2.2</el-impl-version>

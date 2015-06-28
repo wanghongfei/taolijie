@@ -13,11 +13,13 @@ import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
@@ -55,7 +57,7 @@ public class UShController {
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        List<SHPostModel> shs =shPostService.getPostList(credential.getId(),false, (page - 1)*pageSize, pageSize, objWrapper);
+        List<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, (page - 1) * pageSize, pageSize, objWrapper);
 
 //        totalPage = (Integer)objWrapper.getObj();
 
@@ -128,8 +130,8 @@ public class UShController {
 
 
     /**
-     * 修改简历页面
-     * 与发布简历用同一个页面，只不过修改该简历会填充好之前的字段
+     * 修改二手页面
+     * 与发布二手用同一个页面，只不过修改该二手会填充好之前的字段
      *
      * @param id 传入要修改的sh的id
      * @param session    用户的信息
@@ -153,7 +155,7 @@ public class UShController {
     //endregion
 
     /**
-     * 发布简历信息 post ajax
+     * 发布二手信息 post ajax
      *
      * @param session
      * @return
@@ -189,6 +191,35 @@ public class UShController {
     //endregion
 
 
+    /**
+     * 更新二手信息
+     * @return
+     */
+    @RequestMapping(value = "/change",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public @ResponseBody String change(SHPostModel shPostModel,
+                                       HttpSession session,
+                                       HttpServletResponse resp ){
+        Credential credential = CredentialUtils.getCredential(session);
+
+        if (null == shPostModel) {
+            resp.setStatus(HttpStatus.BAD_REQUEST.value());
+            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+        }
+
+        // 检查是不是本用户发布的信息
+        SHPostModel sh = shPostService.findPost(shPostModel.getId());
+        if (null == sh) {
+            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+        }
+
+        // 更新信息
+        boolean operationResult = shPostService.updatePost(shPostModel.getId(), shPostModel);
+        if (false == operationResult) {
+            return new JsonWrapper(false, "update failed").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
 
 
     /**

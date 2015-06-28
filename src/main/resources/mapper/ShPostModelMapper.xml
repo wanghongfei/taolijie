@@ -26,6 +26,10 @@
         <result column="sh_post_description" property="description" jdbcType="LONGVARCHAR"/>
         <result column="sh_post_deleted" property="deleted" />
 
+        <result column="sh_post_contact_qq" property="contactQq" jdbcType="VARCHAR"/>
+        <result column="sh_post_contact_name" property="contactName" jdbcType="VARCHAR"/>
+        <result column="sh_post_contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
+
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
                      resultMap="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.BaseResultMap"/>
@@ -49,7 +53,10 @@
         post.trade_place AS sh_post_trade_place,
         post.picture_path AS sh_post_picture_path,
         post.description AS sh_post_description,
-        post.deleted AS sh_post_deleted
+        post.deleted AS sh_post_deleted,
+        post.contact_qq AS sh_post_contact_qq,
+        post.contact_phone AS sh_post_contact_phone,
+        post.contact_name AS sh_post_contact_name
     </sql>
 
     <sql id="member_column">
@@ -110,14 +117,15 @@
         sell_price, likes, dislikes,
         member_id, second_hand_post_category_id, complaint,
         page_view, verified, trade_place,
-        picture_path, description, deleted)
+        picture_path, description, deleted, contact_name,
+        contact_phone, contact_qq)
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime,jdbcType=DATE},
         #{postTime,jdbcType=DATE}, #{depreciationRate,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL},
         #{sellPrice,jdbcType=DECIMAL}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER},
         #{memberId,jdbcType=INTEGER}, #{secondHandPostCategoryId,jdbcType=INTEGER}, #{complaint,jdbcType=INTEGER},
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{tradePlace,jdbcType=VARCHAR},
         #{picturePath,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR},
-        #{deleted})
+        #{deleted}, #{contactName}, #{contactPhone}, #{contactQq})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -177,6 +185,15 @@
             <if test="deleted != null">
                 deleted,
             </if>
+            <if test="contactName != null">
+                contact_name,
+            </if>
+            <if test="contactQq != null">
+                contact_qq,
+            </if>
+            <if test="contactPhone != null">
+                contact_phone,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -229,6 +246,16 @@
             </if>
             <if test="deleted != null">
                 #{deleted},
+            </if>
+
+            <if test="contactName != null">
+                #{contactName},
+            </if>
+            <if test="contactQq != null">
+                #{contactQq},
+            </if>
+            <if test="contactPhone != null">
+                #{contactPhone},
             </if>
         </trim>
     </insert>
@@ -290,6 +317,16 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
+
+            <if test="contactName != null">
+                contact_name = #{contactName},
+            </if>
+            <if test="contactQq != null">
+                contact_qq = #{contactQq},
+            </if>
+            <if test="contactPhone != null">
+                contact_phone, = #{contactPhone},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -315,7 +352,10 @@
         trade_place = #{tradePlace,jdbcType=VARCHAR},
         picture_path = #{picturePath,jdbcType=LONGVARCHAR},
         description = #{description,jdbcType=LONGVARCHAR},
-        deleted = #{deleted}
+        deleted = #{deleted},
+        contactName = #{contactName},
+        contactPhone = #{contactPhone},
+        contactQq = #{contactQq}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -479,6 +519,15 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            <if test="contactName != null">
+                AND post.contact_name = #{contactName}
+            </if>
+            <if test="contactQq != null">
+                AND post.contact_qq = #{contactQq}
+            </if>
+            <if test="contactPhone != null">
+                AND post.contact_phone = #{contactPhone}
+            </if>
         </where>
 
         ORDER BY
@@ -540,6 +589,15 @@
             </if>
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
+            </if>
+            <if test="contactName != null">
+                AND post.contact_name = #{contactName}
+            </if>
+            <if test="contactQq != null">
+                AND post.contact_qq = #{contactQq}
+            </if>
+            <if test="contactPhone != null">
+                AND post.contact_phone = #{contactPhone}
             </if>
         </where>
     </select>
@@ -604,6 +662,15 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            <if test="contactName != null">
+                AND post.contact_name = #{contactName}
+            </if>
+            <if test="contactQq != null">
+                AND post.contact_qq = #{contactQq}
+            </if>
+            <if test="contactPhone != null">
+                AND post.contact_phone = #{contactPhone}
+            </if>
         </where>
 
         ORDER BY
@@ -665,6 +732,15 @@
             </if>
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
+            </if>
+            <if test="contactName != null">
+                AND post.contact_name = #{contactName}
+            </if>
+            <if test="contactQq != null">
+                AND post.contact_qq = #{contactQq}
+            </if>
+            <if test="contactPhone != null">
+                AND post.contact_phone = #{contactPhone}
             </if>
         </where>
     </select>

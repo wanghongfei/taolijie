@@ -2,21 +2,20 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
@@ -146,7 +145,8 @@ public class UJobController {
         }
 
         model.addAttribute("job", job);
-        return "mobile/jobdetail";
+        //return "mobile/jobdetail";
+        return "pc/user/jobpost";
     }
     //endregion
 
@@ -341,6 +341,35 @@ public class UJobController {
         return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 更新兼职信息
+     * @return
+     */
+    @RequestMapping(value = "/change",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public @ResponseBody String change(JobPostModel jobPostModel,
+                                       HttpSession session,
+                                       HttpServletResponse resp){
+        Credential credential = CredentialUtils.getCredential(session);
+
+        if (null == jobPostModel) {
+            resp.setStatus(HttpStatus.BAD_REQUEST.value());
+            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+        }
+
+        // 检查是不是本用户发布的信息
+        JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
+        if (null == job) {
+            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+        }
+
+        // 更新信息
+        boolean operationResult = jobPostService.updateJobPost(jobPostModel.getId(), jobPostModel);
+        if (false == operationResult) {
+            return new JsonWrapper(false, "update failed").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
 
     /**
      * 刷新兼职数据 ajax

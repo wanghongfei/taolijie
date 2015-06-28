@@ -13,13 +13,35 @@
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
             "toUrl": "/login",
+            "url": "/user/job/change/*"
+        },
+
+
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
             "url": "/user/resume/*"
         },
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
             "toUrl": "/login",
+            "url": "/user/resume/change/*"
+        },
+
+
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
             "url": "/user/sh/*"
         },
+        {
+            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
+            "toUrl": "/login",
+            "url": "/user/sh/change/*"
+        },
+
+
+
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
             "toUrl": "/login",
