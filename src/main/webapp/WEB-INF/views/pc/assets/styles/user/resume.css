@@ -1,0 +1,6 @@
+input[name=height] {
+    float: left;
+}
+input[type=radio] {
+    margin-right: 5px;
+}

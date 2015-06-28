@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="/styles/jquery.bxslider.css">
   <%--<link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">--%>
   <link rel="stylesheet" href="/styles/font-awesome.min.css"/>
+  <link rel="stylesheet" href="/styles/user/resume.css"/>
 
   <!-- build:js /scripts/vendor/modernizr.js -->
   <script src="/scripts/modernizr.js"></script>
@@ -56,29 +57,27 @@
     </p>
     <form id="CreateResumeForm">
       <div class="form-group">
+          <input id="UserImg" title="浏览文件" type="file" />
+      </div>
+      <div class="form-group">
         <label for="">真实姓名<i class="theme-color">*</i> </label>
         <input type="text" class="form-control" placeholder="姓名" name="name" value="${resume.name}">
       </div>
       <div class="form-group">
-        <label for="">性&nbsp;&nbsp;&nbsp;&nbsp;别<i class="theme-color">*</i></label>
+        <label for="">性别<i class="theme-color">*</i></label>
         <input type="radio" name="gender" value="男" ${resume.gender == '男' ? 'checked = "checked"':''}>男
         <input type="radio" name="gender" value="女" ${resume.gender == '女' ? 'checked = "checked"' : ''}>女
-        <!-- <input type="radio" value="">女 -->
       </div>
-      <div></div>
       <div class="form-group">
-        <label for="">身&nbsp;&nbsp;&nbsp;&nbsp;高<i class="theme-color">*</i></label>
+        <label for="">身高<i class="theme-color">*</i></label>
         <input name="height" class="short-input form-control" type="text" placeholder="填写有效数字" value="${resume.height}">
-        <span for=""> cm</span>
+        <span for="" calss="input-unit">cm</span>
       </div>
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
         <input name="age" class="short-input form-control" type="text" placeholder="" value="${resume.age}">
         <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
       </div>
-        <div class="form-group">
-            <input id="UserImg" title="浏览文件" type="file" />
-        </div>
 
       <%--<div class="form-group">--%>
         <%--<label for="">城&nbsp;&nbsp;&nbsp;&nbsp;市<i class="theme-color">*</i></label>--%>
@@ -110,44 +109,41 @@
         <input type="text" name="time" value="" class="form-control" placeholder="自己具体填写">
       </div>
       <div class="form-group">
-        <label for="">公开程度</label>
-        <input type="radio" name="accessAuthority" value="1"> 公开
-        <input type="radio" name="accessAuthority" value="0"> 不公开
+          <label for="">公开程度</label>
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL"> 公开
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY"> 不公开
       </div>
-
-    <div class="user-photo">
-      <i></i>
-    </div>
       <div class="form-group text">
         <label for="">自我介绍</label>
-        <textarea name="introduce" class="form-control" placeholder="200字以内"></textarea>
+        <textarea name="introduce" class="form-control" placeholder="200字以内">${resume.introduce}</textarea>
       </div>
       <div class="form-group text">
         <label for="">工作经历<i class="theme-color">*</i></label>
-        <textarea name="experience"  class="form-control" placeholder="工作经历（200字以内）"></textarea>
+        <textarea name="experience"  class="form-control" placeholder="工作经历（200字以内）">${resume.experience}</textarea>
       </div>
-      <p class="pin-title no-offset">联系方式</p>
+      <p class="pin-title no-offset">
+         联系方式
+         <i class="pin-arrow"></i>
+      </p>
       <div class="form-group ">
-        <label for=""><i class="fa fa-phone red"></i>&nbsp;&nbsp;手机<i class="theme-color">*</i></label>
-        <input name="phoneNumber" type="text" class="form-control" placeholder="">
+        <label for=""><i class="fa fa-phone red"></i>手机<i class="theme-color">*</i></label>
+        <input name="phoneNumber" type="text" class="form-control" placeholder="" value="${resume.phoneNumber}">
       </div>
       <div class="form-group ">
-        <label for=""><i class="fa fa-qq blue"></i>&nbsp;&nbsp;QQ</label>
-        <input name="qq" type="text" class="form-control" placeholder="">
+        <label for=""><i class="fa fa-qq blue"></i>QQ</label>
+        <input name="qq" type="text" class="form-control" placeholder="" value="${resume.qq}">
       </div>
       <div class="form-group">
-        <label for=""><i class="fa fa-weixin light-green"></i>&nbsp;&nbsp;微信</label>
-        <input name="wechatAccount" type="text" class="form-control" placeholder="">
+        <label for=""><i class="fa fa-weixin light-green"></i>微信</label>
+        <input name="wechatAccount" type="text" class="form-control" placeholder="" value="${resume.wechatAccount}">
       </div>
       <div class="form-group">
-        <label for=""><i class="fa fa-envelope-o theme-color"></i>&nbsp;&nbsp;邮箱</label>
-        <input name="email" type="text" class="form-control" placeholder="">
+        <label for=""><i class="fa fa-envelope-o theme-color"></i>邮箱</label>
+        <input name="email" type="text" class="form-control" placeholder="" value="${resume.email}">
       </div>
     </form>
-
-
-
   </div>
+
   <div class="segment">
     <div class="submit-btn big-btn theme-color-bg"
          data-type="${isChange?'change':'create'}">
