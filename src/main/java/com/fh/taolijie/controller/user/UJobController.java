@@ -2,7 +2,10 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.*;
+import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
@@ -145,7 +148,7 @@ public class UJobController {
         }
 
         model.addAttribute("job", job);
-        //return "mobile/jobdetail";
+
         return "pc/user/jobpost";
     }
     //endregion
@@ -345,10 +348,12 @@ public class UJobController {
      * 更新兼职信息
      * @return
      */
-    @RequestMapping(value = "/change",method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public @ResponseBody String change(JobPostModel jobPostModel,
+    @RequestMapping(value = "/change/{jobId}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public @ResponseBody String change(@PathVariable("jobId") Integer jobId,
+                                       JobPostModel jobPostModel,
                                        HttpSession session,
                                        HttpServletResponse resp){
+        System.out.println("$$$$$$$$$$$$$$$$$$$4");
         Credential credential = CredentialUtils.getCredential(session);
 
         if (null == jobPostModel) {
@@ -357,6 +362,7 @@ public class UJobController {
         }
 
         // 检查是不是本用户发布的信息
+        jobPostModel.setId(jobId);
         JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
         if (null == job) {
             return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();

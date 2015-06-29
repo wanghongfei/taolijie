@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -86,7 +87,7 @@
       </div>
       <div class="form-group">
         <label for="">截止时间<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期" value="${job.expiredTime}">
+        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期" value="<fmt:formatDate value='${job.expiredTime}' pattern='yyyy-MM-dd' />">
       </div>
 
     <p class="pin-title red-bg ">兼职详情
