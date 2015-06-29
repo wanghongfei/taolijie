@@ -127,9 +127,9 @@
                         <div class="bubble-arrow-inner"></div>
                     </div>
                     <div class="sh-contact">
-                        <p><i class="fa fa-phone red"></i> ${poster.phone}</p>
+                        <p><i class="fa fa-phone red"></i> ${sh.contactPhone}</p>
 
-                        <p><i class="fa fa-qq blue"></i> ${poster.qq}</p>
+                        <p><i class="fa fa-qq blue"></i> ${sh.contactQq}</p>
                     </div>
                 </div>
             </div>
