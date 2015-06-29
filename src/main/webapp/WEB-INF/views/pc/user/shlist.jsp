@@ -92,7 +92,13 @@
             </div>
           </div>
           <div class="col_delete">
-            <a href="javascript:void(0);" class="UserDel" data-id="${sh.id}" data-type="sh"  data-option = "${isFav?'fav':''}" ><i class="fa fa-trash fa-2x"></i><br>删除</a>
+            <a href="/user/sh/change/${sh.id}">修改</a>
+            <a href="javascript:void(0);" class="UserDel" data-id="${sh.id}" data-type="sh"  data-option = "${isFav?'fav':''}" >
+                <%--
+                <i class="fa fa-trash fa-2x"></i>
+                --%>
+                删除
+            </a>
           </div>
         </div>
       </c:forEach>
@@ -112,8 +118,9 @@
       </div>
       <div class="col_delete_all">
         <div class="col_choice">
-          <input name="" type="checkbox" value="" id="checkAll">全选
-          <button class="del_all"  data-type="sh"  data-option = "${isFav?'fav':''}">删除选中项</button>
+            <input name="" type="checkbox" value="" id="checkAll">
+            <label for="checkAll" class="label-checkbox">全选</label>
+            <a class="del_all" data-type="sh" data-option= "${isFav?'fav':''}">删除选中项</a>
         </div>
       </div>
     </div>

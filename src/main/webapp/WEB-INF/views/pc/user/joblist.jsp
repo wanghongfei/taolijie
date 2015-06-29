@@ -65,7 +65,6 @@
                 <li><a href="/user/job/${isFav?'myfav':'mypost'}" style="border-bottom: 2px #4ccda4 solid;">兼职信息</a></li>
                 <li><a href="/user/sh/${isFav?'myfav':'mypost'}">二手物品</a></li>
                 <%--${isFav?'<li><a href="/user/resume/myfav">兼职简历</a></li>':''}--%>
-
             </ul>
         </div>
         <div style="clear:both"></div>
@@ -75,10 +74,7 @@
                     <div class="col_choice" style="line-height:112px; width:45px;">
                         <input name="collection" type="checkbox" value="" data-id="${job.id}" class="col_del_check">
                     </div>
-                    <div class="col_style" data-color="${job.category.themeColor}" style="">${job.category.name}
-
-                    </div>
-
+                    <div class="col_style" data-color="${job.category.themeColor}" style="">${job.category.name}</div>
                     <div class="col_main" style="margin-left:40px; width:630px;">
                         <div class="col_main_top">
                             <div class="title" style="width:450px;"><a href="/item/job/${job.id}" style="color: #333">${job.title}</a></div>
@@ -97,12 +93,15 @@
                     </div>
                     <div class="col_delete">
                         <a href="/user/job/change/${job.id}">修改</a>
-                        <a href="javascript:void(0);" class="UserDel" data-id="${job.id}" data-type="job"  data-option = "${isFav?'fav':''}" ><i class="fa fa-trash fa-2x"></i><br>删除</a>
+                        <a href="javascript:void(0);" class="UserDel" data-id="${job.id}" data-type="job"  data-option = "${isFav?'fav':''}" >
+                            <%--
+                            <i class="fa fa-trash fa-2x"></i>
+                            --%>
+                            删除
+                        </a>
                     </div>
                 </div>
             </c:forEach>
-
-
             <div class="page">
                 <ul>
                     <c:if test="${page != 1 && pageStatus !=0}">
@@ -116,16 +115,13 @@
                     </c:if>
                 </ul>
             </div>
-
-
             <div class="col_delete_all">
                 <div class="col_choice">
-                    <input name="" type="checkbox" value="" id="checkAll">全选
-                    <button class="del_all"  data-type="job"  data-option = "${isFav?'fav':''}">删除选中项</button>
+                    <input name="" type="checkbox" value="" id="checkAll">
+                    <label for="checkAll" class="label-checkbox">全选</label>
+                    <a class="del_all" data-type="job" data-option="${isFav?'fav':''}">删除选中项</a>
                 </div>
             </div>
-
-
     <%--</div>--%>
 </div>
 </div>

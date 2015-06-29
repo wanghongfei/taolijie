@@ -107,10 +107,10 @@
               </c:forEach>
          </select>
       </div>
-      <%--
-      <div class="form-group">
-        <label for="">空闲时间<i class="theme-color">*</i></label>
-        <input type="text" name="time" value="" class="form-control" placeholder="自己具体填写">
+      <%-->
+      <div class="form-group text">
+        <label for="">空闲时间</label>
+        <textarea name="spareTime" class="form-control" placeholder="">${resume.spareTime}</textarea>
       </div>
       --%>
       <div class="form-group">
