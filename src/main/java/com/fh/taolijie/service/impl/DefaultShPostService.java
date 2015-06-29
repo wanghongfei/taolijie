@@ -155,6 +155,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean updatePost(Integer postId, SHPostModel model) {
         model.setId(postId);
         int row = postMapper.updateByPrimaryKeySelective(model);

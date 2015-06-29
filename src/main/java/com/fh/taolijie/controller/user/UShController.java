@@ -199,8 +199,9 @@ public class UShController {
      * 更新二手信息
      * @return
      */
-    @RequestMapping(value = "/change",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/change/{shId}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public @ResponseBody String change(SHPostModel shPostModel,
+                                       @PathVariable("shId") Integer shId,
                                        HttpSession session,
                                        HttpServletResponse resp ){
         Credential credential = CredentialUtils.getCredential(session);
@@ -211,6 +212,7 @@ public class UShController {
         }
 
         // 检查是不是本用户发布的信息
+        shPostModel.setId(shId);
         SHPostModel sh = shPostService.findPost(shPostModel.getId());
         if (null == sh) {
             return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
