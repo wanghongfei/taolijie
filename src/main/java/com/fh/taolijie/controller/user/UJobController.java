@@ -147,7 +147,10 @@ public class UJobController {
             return "redirect:/404";
         }
 
+        // 查询兼职分类
+        List<JobPostCategoryModel> cateList = jobPostCateService.getCategoryList(0, 100, null);
         model.addAttribute("job", job);
+        model.addAttribute("cates", cateList);
 
         return "pc/user/jobpost";
     }
@@ -303,6 +306,12 @@ public class UJobController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 赞
+     * @param jobId
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/{id}/like", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
     public String likeJob(@PathVariable("id") Integer jobId,
@@ -353,7 +362,6 @@ public class UJobController {
                                        JobPostModel jobPostModel,
                                        HttpSession session,
                                        HttpServletResponse resp){
-        System.out.println("$$$$$$$$$$$$$$$$$$$4");
         Credential credential = CredentialUtils.getCredential(session);
 
         if (null == jobPostModel) {
@@ -434,6 +442,10 @@ public class UJobController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 删除评论
+     * @return
+     */
     @RequestMapping(value = "{jobId}/review/delete/{reviewId}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
     public String deleteReview(@PathVariable("jobId") Integer jobId,
