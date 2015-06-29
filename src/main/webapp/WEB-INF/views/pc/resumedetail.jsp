@@ -67,7 +67,7 @@
   <!-- 正文 -->
   <div class="detail main white-bg">
     <div class="detail-bar">
-      <span>${postUser.username}的简历</span>
+      <span>${postUser.name}的简历</span>
         <a href="/" style="color: #fa6a38"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
 
       <c:if test="${!isShow}">
@@ -85,11 +85,11 @@
     </div>
     <div style="clean:both"></div>
     <div class="resume-info">
-      <c:if test="${resume.photoId == null}">
+      <c:if test="${resume.photoPath == null}">
         <img src="/images/miao.jpg" alt="">
       </c:if>
-      <c:if test="${resume.photoId != null}">
-        <img src="/static/images/users/${resume.photoId}" alt=""/>
+      <c:if test="${resume.photoPath != null}">
+        <img src="/static/images/users/${resume.photoPath}" alt=""/>
       </c:if>
       <div class="infos">
           <p>姓名 : ${resume.name}</p>

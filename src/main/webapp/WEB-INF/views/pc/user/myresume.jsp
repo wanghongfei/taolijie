@@ -57,7 +57,10 @@
     </p>
     <form id="CreateResumeForm">
       <div class="form-group">
-          <input id="UserImg" title="浏览文件" type="file" />
+          <label for="">照片<i class="theme-color">*</i> </label>
+          <img src="/static/images/users/${resume.photoPath}" alt="" class="resume-photo">
+          <input type="hidden" name="photoPath" value="${resume.photoPath}">
+          <div id="upload-btn">选择文件</div>
       </div>
       <div class="form-group">
         <label for="">真实姓名<i class="theme-color">*</i> </label>
@@ -104,10 +107,12 @@
               </c:forEach>
          </select>
       </div>
+      <%--
       <div class="form-group">
         <label for="">空闲时间<i class="theme-color">*</i></label>
         <input type="text" name="time" value="" class="form-control" placeholder="自己具体填写">
       </div>
+      --%>
       <div class="form-group">
           <label for="">公开程度</label>
         <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL"> 公开
@@ -159,5 +164,6 @@
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script src="/scripts/myresume.js"></script>
+<script src="/scripts/uploader-resume.js"></script>
 </body>
 </html>

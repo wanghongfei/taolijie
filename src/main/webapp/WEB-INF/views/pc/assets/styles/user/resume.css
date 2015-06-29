@@ -1,6 +1,26 @@
 input[name=height] {
     float: left;
 }
-input[type=radio] {
+.form-group input[type=radio] {
     margin-right: 5px;
+}
+.input-unit {
+    line-height: 2em;
+}
+.resume-photo {
+    width: 100px;
+}
+.webuploader-pick {
+    padding: 5px;
+    background-color: #4ccda4;
+}
+#upload-btn {
+    margin-left: 5px;
+    padding: 5px;
+}
+label i{
+    margin-right: 10px;
+}
+.user form .form-group label {
+    text-align: left;
 }
