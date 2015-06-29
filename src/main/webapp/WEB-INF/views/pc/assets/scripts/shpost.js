@@ -35,7 +35,7 @@ $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
     var $img = $(this).parent('li');
     $img.remove()
     var picIds = $('input[name=picIds]').val().split(';');
-    for( var i = 0;i < picIds; i++){
+    for( var i = 0;i < picIds.length; i++){
         if( $img.data('pid') == picIds[i] ) { 
             picIds.splice(i,1);
             break;
@@ -58,6 +58,9 @@ var initImgList = function() {
                 + '<span class="btn-img-del">x</span>'
                 + '</li>').insertBefore('.img-list-btn');
         })
+        if(ids.length > 3) {
+            $('.img-list-btn').toggle();
+        }
     }
 }
 initImgList();
