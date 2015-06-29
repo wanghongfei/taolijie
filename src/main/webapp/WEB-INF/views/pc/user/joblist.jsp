@@ -82,8 +82,8 @@
                         </div>
                         <div class="col_main_bottom">
                             <div class="location" style="width:140px;"><i class="fa fa-map-marker fa-lg"></i> ${job.workPlace}</div>
-                            <div class="salary" style="color:#a47e3c"><i class="fa fa-jpy fa-lg"></i> ${job.wage.intValue()}/天</div>
-                            <div class="salarystyle" >&nbsp;&nbsp;${job.timeToPay}</div>
+                            <div class="salary" style="color:#a47e3c"><i class="fa fa-jpy fa-lg"></i> ${job.wage.intValue()}</div>
+                            <div class="salarystyle">${job.timeToPay}</div>
                             <div class="time"><i class="fa fa-clock-o fa-lg"></i>
                                 <fmt:formatDate value="${job.postTime}" pattern ="yyyy-MM-dd hh:mm" />
                             </div>

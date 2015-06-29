@@ -47,15 +47,17 @@ $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
 /* upload img list init*/
 var initImgList = function() {
     var ids = $('input[name=picIds]').val().split(';');
-    ids.forEach(function(data) {
-        $('<li class="img-list-item" data-pid="'
-            + data
-            + '">'
-            + '<img src="/static/images/users/'
-            + data
-            + '" class="img-list-img"/>'
-            + '<span class="btn-img-del">x</span>'
-            + '</li>').insertBefore('.img-list-btn');
-    })
+    if(ids[0] != '') {
+        ids.forEach(function(data) {
+            $('<li class="img-list-item" data-pid="'
+                + data
+                + '">'
+                + '<img src="/static/images/users/'
+                + data
+                + '" class="img-list-img"/>'
+                + '<span class="btn-img-del">x</span>'
+                + '</li>').insertBefore('.img-list-btn');
+        })
+    }
 }
 initImgList();

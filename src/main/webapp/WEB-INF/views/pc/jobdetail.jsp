@@ -82,7 +82,10 @@
   </span>
     </div>
     <div class="info">
-      <p class="money"><span>${job.wage.intValue()}元/${job.salaryUnit}</span>${job.timeToPay}</p>
+        <p class="money"><span>${job.wage.intValue()}元</span>${job.timeToPay}</p>
+        <%--
+            /${job.salaryUnit}
+        --%>
       <p>有效日期 : <span>
         <fmt:formatDate value="${job.expiredTime}" pattern="yyyy-MM-dd"/>
       </span></p>
