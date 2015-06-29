@@ -201,6 +201,7 @@ public class UShController {
      */
     @RequestMapping(value = "/change/{shId}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public @ResponseBody String change(SHPostModel shPostModel,
+                                       @RequestParam("picIds") String picIds,
                                        @PathVariable("shId") Integer shId,
                                        HttpSession session,
                                        HttpServletResponse resp ){
@@ -213,6 +214,7 @@ public class UShController {
 
         // 检查是不是本用户发布的信息
         shPostModel.setId(shId);
+        shPostModel.setPicturePath(picIds);
         SHPostModel sh = shPostService.findPost(shPostModel.getId());
         if (null == sh) {
             return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
