@@ -1,5 +1,11 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
+/*global start*/
+.label-checkbox {
+    font-size: 0.8em;
+}
+/*global* end*/
+
 .jqmWindow {
     display:none;
     position: fixed;
@@ -415,6 +421,10 @@ p {
 
 .header-content .logo {
     float: left; }
+
+.header-content .logo-img {
+    vertical-align: middle;
+}
 
 .header-content .search-bar {
     width: 500px;
@@ -1716,8 +1726,9 @@ ul.bxslider li img {
 .user .col_content .col_list > div .col_main_bottom > div {
     float: left;
     color: #c1c1c1;
-    font-size: 18px;
-    width: 100px; }
+    font-size: 14px;
+    width: 100px; 
+}
 .user .col_content .col_list > div .col_main_bottom .time {
     width: 200px; }
 .user .col_list .col_delete {
@@ -1733,12 +1744,17 @@ ul.bxslider li img {
 .user .col_delete_all {
     margin-top: 20px; }
 .user .col_delete_all .del_all {
-    width: 98px;
-    height: 33px;
-    color: #fff;
-    margin-left: 30px;
+    display: inline-block;
+    vertical-align: middle;
     border-radius: 5px;
-    background-color: #ff503d; }
+    margin-left: 30px;
+    padding: 0 5px;
+    background-color: #ff503d;
+    line-height: 33px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+}
 
 /*用户头部公共部分*/
 .segment.user-top {
