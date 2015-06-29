@@ -14,9 +14,14 @@ $(".submit-btn").click(function(){
 
     var formdata = $("#JobPostForm").serialize();
     //console.log(formdata);
+    var url = '/user/job/post';
+    var path = location.pathname;
+    if(path.indexOf('change') > -1) {
+        url = path;
+    }
     $.ajax({
         type:"POST",
-        url:"/user/job/post",
+        url: url,
         data:formdata,
         success:function(data){
             $(".tlj_modal_content").html(data.message);

@@ -58,8 +58,8 @@
     </p>
     <form action="" id="JobPostForm">
       <div class="form-group">
-          <label for="">兼职标题<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="title" placeholder="20字以内">
+        <label for="">兼职标题<span class="asterisk-red">*</span></label>
+        <input type="text" class="form-control" name="title" placeholder="20字以内" value="${job.title}">
       </div>
       <div class="form-group">
         <label for="">选择分类<span class="asterisk-red">*</span></label>
@@ -72,7 +72,7 @@
       </div>
       <div class="form-group">
         <label for="">工资待遇<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control short-input wage" name="wage" placeholder="请输入有效数字">
+        <input type="text" class="form-control short-input wage" name="wage" placeholder="请输入有效数字" value="${job.wage}">
         <span class="input-unit">元</span>
       </div>
       <div class="form-group">
@@ -86,7 +86,7 @@
       </div>
       <div class="form-group">
         <label for="">截止时间<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期">
+        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期" value="${job.expiredTime}">
       </div>
 
     <p class="pin-title red-bg ">兼职详情
@@ -95,19 +95,19 @@
 
       <div class="form-group">
         <label for="">工作时间<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="workTime" placeholder="请填写具体的工作时间">
+        <input type="text" class="form-control" name="workTime" placeholder="请填写具体的工作时间" value="${job.workTime}">
       </div>
       <div class="form-group">
         <label for="">工作地点<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="workPlace" placeholder="填写一定要详细哟">
+        <input type="text" class="form-control" name="workPlace" placeholder="填写一定要详细哟" value="${job.workPlace}">
       </div>
       <div class="form-group">
         <label for="">工作内容<span class="asterisk-red">*</span></label>
-        <textarea name="jobDetail" id="" cols="30" class="form-control" placeholder="填写工作具体内容"></textarea>
+        <textarea name="jobDetail" id="" cols="30" class="form-control" placeholder="填写工作具体内容">${job.jobDetail}</textarea>
       </div>
       <div class="form-group">
         <label for="">工作要求<span class="asterisk-red">*</span></label>
-        <textarea name="jobDescription" class="form-control"></textarea>
+        <textarea name="jobDescription" class="form-control">${job.jobDescription}</textarea>
       </div>
 
     <p class="pin-title red-bg ">兼职详情
@@ -115,15 +115,15 @@
     </p>
       <div class="form-group">
         <label for="">联系人<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="contact" >
+        <input type="text" class="form-control" name="contact" value="${job.contact}">
       </div>
       <div class="form-group">
         <label for="">手机号<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="contactPhone">
+        <input type="text" class="form-control" name="contactPhone" value="${job.contactPhone}">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>
-        <input type="text" class="form-control" name="contactQq" >
+        <input type="text" class="form-control" name="contactQq" value="${job.contactQq}">
       </div>
 
 
