@@ -23,6 +23,8 @@
         <result column="resume_phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
         <result column="resume_wechat_account" property="wechatAccount" jdbcType="VARCHAR"/>
 
+        <result column="resume_spare_time" property="spareTime" jdbcType="VARCHAR"/>
+
         <result column="resume_experience" property="experience" jdbcType="LONGVARCHAR"/>
         <result column="resume_introduce" property="introduce" jdbcType="LONGVARCHAR"/>
 
@@ -45,7 +47,8 @@
         qq AS resume_qq, member_id AS resume_member_id, access_authority AS resume_access_authority,
         page_view AS resume_page_view, verified AS resume_verified, photo_id AS resume_photo_id,
         phone_number AS resume_phone_number, wechat_account AS resume_wechat_account, created_time AS resume_created_time,
-        experience AS resume_experience, introduce AS resume_introduce
+        experience AS resume_experience, introduce AS resume_introduce,
+        spare_time AS resume_spare_time
     </sql>
 
     <sql id="resume_column">
@@ -54,7 +57,8 @@
         re.qq AS resume_qq, re.member_id AS resume_member_id, re.access_authority AS resume_access_authority,
         re.page_view AS resume_page_view, re.verified AS resume_verified, re.photo_id AS resume_photo_id,
         re.phone_number AS resume_phone_number, re.wechat_account AS resume_wechat_account, re.created_time AS resume_created_time,
-        re.experience AS resume_experience, re.introduce AS resume_introduce
+        re.experience AS resume_experience, re.introduce AS resume_introduce,
+        re.spare_time AS resume_spare_time
 
     </sql>
 
@@ -115,13 +119,15 @@
         email, qq, member_id,
         access_authority, page_view, verified,
         photo_id, phone_number, wechat_account,
-        experience, introduce, created_time)
+        experience, introduce, created_time,
+        spare_time)
         VALUES (#{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{age,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{photoPath,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER},
         #{accessAuthority,jdbcType=VARCHAR}, #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR},
         #{photoId,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR},
-        #{experience,jdbcType=LONGVARCHAR}, #{introduce,jdbcType=LONGVARCHAR}, #{createdTime})
+        #{experience,jdbcType=LONGVARCHAR}, #{introduce,jdbcType=LONGVARCHAR}, #{createdTime},
+        #{spareTime})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -179,7 +185,11 @@
                 introduce,
             </if>
             <if test="createdTime != null">
-                created_time
+                created_time,
+            </if>
+
+            <if test="spareTime != null">
+                spare_time
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -232,7 +242,10 @@
                 #{introduce,jdbcType=LONGVARCHAR},
             </if>
             <if test="createdTime != null">
-                #{createdTime}
+                #{createdTime},
+            </if>
+            <if test="spareTime != null">
+                #{spareTime}
             </if>
         </trim>
     </insert>
@@ -292,7 +305,10 @@
                 introduce = #{introduce,jdbcType=LONGVARCHAR},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime}
+                created_time = #{createdTime},
+            </if>
+            <if test="spareTime != null">
+                spare_time = #{spareTime}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -319,7 +335,8 @@
         wechat_account = #{wechatAccount,jdbcType=VARCHAR},
         experience = #{experience,jdbcType=LONGVARCHAR},
         introduce = #{introduce,jdbcType=LONGVARCHAR},
-        created_time = #{createdTime}
+        created_time = #{createdTime},
+        spare_time = #{spareTime}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -412,6 +429,9 @@
             </if>
             <if test="createdTime != null">
                 AND re.created_time = #{createdTime}
+            </if>
+            <if test="spareTime != null">
+                AND re.spare_time = #{spareTime}
             </if>
         </where>
         LIMIT
