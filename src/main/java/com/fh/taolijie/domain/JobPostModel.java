@@ -1,10 +1,10 @@
 package com.fh.taolijie.domain;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -40,7 +40,7 @@ public class JobPostModel extends Pageable {
      * @mbggenerated
      */
     @NotEmpty
-    @Size(min = 1, max = 20)
+    @Length(min = 1, max = 20)
     private String title;
 
     /**
@@ -49,7 +49,6 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date expiredTime;
 
@@ -68,7 +67,7 @@ public class JobPostModel extends Pageable {
      * @mbggenerated
      */
     @NotEmpty
-    @Size(min = 0, max = 128)
+    @Length(min = 0, max = 128)
     private String workPlace;
 
     /**
@@ -77,8 +76,6 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @DecimalMin("0.00")
     private BigDecimal wage;
 
     /**
@@ -97,8 +94,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @Size(min = 1, max = 500)
+    @NotNull
+    @Length(min = 1, max = 500)
     private String jobDescription;
 
     /**
@@ -106,8 +103,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @Size(min = 1, max = 10)
+    @NotNull
+    @Length(min = 1, max = 10)
     private String contact;
 
     /**
@@ -116,8 +113,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @Size(min = 7, max = 20)
+    @NotNull
+    @Length(min = 7, max = 20)
     private String contactPhone;
 
     /**
@@ -142,8 +139,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @Size(min = 1, max = 500)
+    @NotNull
+    @Length(min = 1, max = 500)
     private String jobDetail;
 
     /**
@@ -168,7 +165,7 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
+    @NotNull
     private Integer jobPostCategoryId;
 
     /**
@@ -201,8 +198,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
-    @NotEmpty
-    @Size(min = 1, max = 64)
+    @NotNull
+    @Length(min = 1, max = 64)
     private String workTime;
 
     /**
