@@ -325,7 +325,7 @@
                 contact_qq = #{contactQq},
             </if>
             <if test="contactPhone != null">
-                contact_phone, = #{contactPhone},
+                contact_phone = #{contactPhone},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
