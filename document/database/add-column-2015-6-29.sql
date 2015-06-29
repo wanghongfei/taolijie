@@ -1,0 +1,1 @@
+alter table taolijie.resume add column spare_time varchar(50);

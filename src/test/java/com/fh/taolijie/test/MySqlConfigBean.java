@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -59,6 +60,13 @@ public class MySqlConfigBean {
         session.setDataSource(this.dataSource);
 
         return session;
+    }
+
+
+    @Bean
+    public JavaMailSenderImpl mailSender() {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        return sender;
     }
 
 
