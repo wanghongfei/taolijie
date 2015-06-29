@@ -67,7 +67,7 @@
         <select name="jobPostCategoryId" >
             <option value="">选择分类</option>
             <c:forEach items="${cates}" var="cate">
-                <option value="${cate.id}">${cate.name}</option>
+            <option value="${cate.id}" ${job.jobPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
             </c:forEach>
         </select>
       </div>
@@ -79,10 +79,10 @@
       <div class="form-group">
         <label for="">结算方式<span class="asterisk-red">*</span></label>
         <select name="timeToPay">
-          <option value="-1">选择分类</option>
-          <option value="日结">日结</option>
-          <option value="周结">周结</option>
-          <option value="月结">月结</option>
+          <option value="-1" ${job.timeToPay == '-1' ? 'selected="selected"' : ''}>选择分类</option>
+          <option value="日结" ${job.timeToPay == '日结' ? 'selected="selected"' : ''}>日结</option>
+          <option value="周结" ${job.timeToPay == '周结' ? 'selected="selected"' : ''}>周结</option>
+          <option value="月结" ${job.timeToPay == '月结' ? 'selected="selected"' : ''}>月结</option>
         </select>
       </div>
       <div class="form-group">
