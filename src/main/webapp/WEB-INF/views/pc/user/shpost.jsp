@@ -72,7 +72,7 @@
         <select name="secondHandPostCategoryId" >
           <option value="">选择分类</option>
           <c:forEach items="${cates}" var="cate">
-            <option value="${cate.id}">${cate.name}</option>
+            <option value="${cate.id}" ${sh.secondHandPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
           </c:forEach>
         </select>
       </div>
