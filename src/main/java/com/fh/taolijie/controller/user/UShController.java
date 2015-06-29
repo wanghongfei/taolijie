@@ -149,7 +149,11 @@ public class UShController {
             return "redirect:/404";
         }
 
+        // 查询分类
+        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100 ,null);
+
         model.addAttribute("sh",sh);
+        model.addAttribute("cates",cateList);
         return "pc/user/shpost";
     }
     //endregion
