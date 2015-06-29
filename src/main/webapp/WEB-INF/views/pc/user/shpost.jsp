@@ -65,7 +65,7 @@
     <form action="" id="ShPostForm">
       <div class="form-group">
         <label for="">标题</label>
-        <input name="title" type="text" class="form-control" >
+        <input name="title" type="text" class="form-control" value="${sh.title}">
       </div>
       <div class="form-group">
         <label for="">商品分类</label>
@@ -78,17 +78,17 @@
       </div>
       <div class="form-group">
         <label for="">价格</label>
-        <input name="sellPrice" type="text" class="form-control short-input">
+        <input name="sellPrice" type="text" class="form-control short-input" value="${sh.sellPrice}">
         <span class="input-unit">元</span>
       </div>
       <div class="form-group">
         <label for="">商品描述</label>
-        <textarea name="description" class="form-control"></textarea>
+        <textarea name="description" class="form-control">${sh.description}</textarea>
       </div>
-      <input name="picIds" class="form-control" type="hidden">
+      <input name="picIds" class="form-control" type="hidden" value="${sh.picturePath}">
       <div class="form-group">
         <label for="">交易地点</label>
-        <input name="" type="text" class="form-control" >
+        <input name="tradePlace" type="text" class="form-control" value="${sh.tradePlace}">
       </div>
 
     <p class="pin-title dark-green-bg ">联系方式
@@ -97,15 +97,15 @@
 
       <div class="form-group">
         <label for="">联系人</label>
-        <input type="text" class="form-control" >
+        <input type="text" class="form-control" name="contactName" value="${sh.contactName}">
       </div>
       <div class="form-group">
         <label for="">手机号</label>
-        <input type="text" class="form-control" >
+        <input type="text" class="form-control" name="contactPhone" value="${sh.contactPhone}">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>
-        <input type="text" class="form-control" >
+        <input type="text" class="form-control" name="contactQq" value="${sh.contactQq}">
       </div>
     </form>
 

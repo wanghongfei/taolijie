@@ -11,7 +11,7 @@ $(".submit-btn").click(function(){
     $.ajax({
         type:"POST",
         data:data,
-        url:"/user/sh/post",
+        url: location.pathname,
         success:function(data){
             $(".tlj_modal_content").html(data.message);
             $('.dialog').jqmShow();
@@ -43,3 +43,19 @@ $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
     }
     $('input[name=picIds]').val(picIds.join(';'));
 });
+
+/* upload img list init*/
+var initImgList = function() {
+    var ids = $('input[name=picIds]').val().split(';');
+    ids.forEach(function(data) {
+        $('<li class="img-list-item" data-pid="'
+            + data
+            + '">'
+            + '<img src="/static/images/users/'
+            + data
+            + '" class="img-list-img"/>'
+            + '<span class="btn-img-del">x</span>'
+            + '</li>').insertBefore('.img-list-btn');
+    })
+}
+initImgList();
