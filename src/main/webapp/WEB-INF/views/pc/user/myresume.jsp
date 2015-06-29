@@ -74,7 +74,7 @@
       <div class="form-group">
         <label for="">身高<i class="theme-color">*</i></label>
         <input name="height" class="short-input form-control" type="text" placeholder="填写有效数字" value="${resume.height}">
-        <span for="" calss="input-unit">cm</span>
+        <span for="" class="input-unit">cm</span>
       </div>
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
