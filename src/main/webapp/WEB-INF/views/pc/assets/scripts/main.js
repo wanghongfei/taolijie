@@ -1,11 +1,13 @@
-
-
-$('.nav-bar>.choose').mouseover(function(){
-	$('.choose-menu').addClass('show');
+$('.nav-bar > .choose').on('click',function(){
+	$('.choose-menu').toggle();
 });
-$('.nav-bar>li').mouseout(function(){
-	$('.choose-menu').removeClass('show');
-});
+
+//$('.nav-bar>.choose').mouseover(function(){
+//	$('.choose-menu').addClass('show');
+//});
+//$('.nav-bar>li').mouseout(function(){
+//	$('.choose-menu').removeClass('show');
+//});
 
 //登陆验证
 $("#login-form #sub-btn").click(function(){
