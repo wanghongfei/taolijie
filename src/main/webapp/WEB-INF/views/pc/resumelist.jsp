@@ -83,7 +83,7 @@
               <c:forEach items="${resumes}" var="resume">
                   <a href="/item/resume/${resume.id}">
                       <div class="list">
-                          <img src="${resume.photoPath}" alt="">
+                          <img src="/static/images/users/${resume.photoPath}" alt="">
                           <div>
                               <div class="fl">
                                   <p class="info">${resume.name} <i class="fa fa-cog theme-color"></i> <span>${resume.age}岁</span></p>
