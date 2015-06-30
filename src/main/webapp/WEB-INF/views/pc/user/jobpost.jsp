@@ -60,11 +60,11 @@
     <form action="" id="JobPostForm">
       <div class="form-group">
         <label for="">兼职标题<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="title" placeholder="20字以内" value="${job.title}">
+        <input type="text" class="form-control" name="title" placeholder="20字以内" value="${job.title}" required>
       </div>
       <div class="form-group">
         <label for="">选择分类<span class="asterisk-red">*</span></label>
-        <select name="jobPostCategoryId" >
+        <select name="jobPostCategoryId" required>
             <option value="">选择分类</option>
             <c:forEach items="${cates}" var="cate">
             <option value="${cate.id}" ${job.jobPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
@@ -73,12 +73,12 @@
       </div>
       <div class="form-group">
         <label for="">工资待遇<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control short-input wage" name="wage" placeholder="请输入有效数字" value="${job.wage}">
+        <input type="number" class="form-control short-input wage" name="wage" placeholder="请输入有效数字" value="${job.wage}" required>
         <span class="input-unit">元</span>
       </div>
       <div class="form-group">
         <label for="">结算方式<span class="asterisk-red">*</span></label>
-        <select name="timeToPay">
+        <select name="timeToPay" required>
           <option value="-1" ${job.timeToPay == '-1' ? 'selected="selected"' : ''}>选择分类</option>
           <option value="日结" ${job.timeToPay == '日结' ? 'selected="selected"' : ''}>日结</option>
           <option value="周结" ${job.timeToPay == '周结' ? 'selected="selected"' : ''}>周结</option>
@@ -87,7 +87,7 @@
       </div>
       <div class="form-group">
         <label for="">截止时间<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期" value="<fmt:formatDate value='${job.expiredTime}' pattern='yyyy-MM-dd' />">
+        <input type="text" class="form-control datepicker" name="expiredTime" placeholder="保留该信息的截止日期" value="<fmt:formatDate value='${job.expiredTime}' pattern='yyyy-MM-dd' />" required>
       </div>
 
     <p class="pin-title red-bg ">兼职详情
@@ -96,19 +96,19 @@
 
       <div class="form-group">
         <label for="">工作时间<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="workTime" placeholder="请填写具体的工作时间" value="${job.workTime}">
+        <input type="text" class="form-control" name="workTime" placeholder="请填写具体的工作时间" value="${job.workTime}" required>
       </div>
       <div class="form-group">
         <label for="">工作地点<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="workPlace" placeholder="填写一定要详细哟" value="${job.workPlace}">
+        <input type="text" class="form-control" name="workPlace" placeholder="填写一定要详细哟" value="${job.workPlace}" required>
       </div>
       <div class="form-group">
         <label for="">工作内容<span class="asterisk-red">*</span></label>
-        <textarea name="jobDetail" id="" cols="30" class="form-control" placeholder="填写工作具体内容">${job.jobDetail}</textarea>
+        <textarea name="jobDetail" id="" cols="30" class="form-control" placeholder="填写工作具体内容" required>${job.jobDetail}</textarea>
       </div>
       <div class="form-group">
         <label for="">工作要求<span class="asterisk-red">*</span></label>
-        <textarea name="jobDescription" class="form-control">${job.jobDescription}</textarea>
+        <textarea name="jobDescription" class="form-control" required>${job.jobDescription}</textarea>
       </div>
 
     <p class="pin-title red-bg ">兼职详情
@@ -116,23 +116,25 @@
     </p>
       <div class="form-group">
         <label for="">联系人<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="contact" value="${job.contact}">
+        <input type="text" class="form-control" name="contact" value="${job.contact}" required>
       </div>
       <div class="form-group">
         <label for="">手机号<span class="asterisk-red">*</span></label>
-        <input type="text" class="form-control" name="contactPhone" value="${job.contactPhone}">
+        <input type="text" class="form-control" name="contactPhone" value="${job.contactPhone}" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>
-        <input type="text" class="form-control" name="contactQq" value="${job.contactQq}">
+        <input type="number" class="form-control medium-input" name="contactQq" value="${job.contactQq}">
       </div>
 
-
-    <div class="segment">
-      <div class="submit-btn big-btn red-bg">
-        <span href="javascript:void(0);">发布兼职</span>
+      <div class="segment">
+        <div class="submit-btn big-btn red-bg">
+          <span href="javascript:void(0);">发布兼职</span>
+        </div>
+          <%--
+          <input type="submit" value="发布兼职" />
+          --%>
       </div>
-    </div>
     </form>
 
     <div class="jqmWindow dialog" >

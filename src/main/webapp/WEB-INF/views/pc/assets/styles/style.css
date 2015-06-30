@@ -1667,6 +1667,9 @@ ul.bxslider li img {
 .user form .form-group .short-input {
     width: 140px;
     margin-right: 8px; }
+.user form .form-group .medium-input {
+    width: 60%;
+}
 .user form .form-group.text {
     padding-bottom: 0;
     border-bottom: none; }
