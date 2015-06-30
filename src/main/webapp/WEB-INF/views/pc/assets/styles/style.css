@@ -1171,10 +1171,11 @@ ul.bxslider li img {
 /*评论部分*/
 .comment {
     padding-top: 20px;
+    padding-bottom: 20px;
     position: relative;
     margin-top: 20px;
     background-color: #fff;
-    height: 590px; }
+}
 
 .comment .operates {
     position: relative;

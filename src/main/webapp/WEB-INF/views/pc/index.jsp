@@ -93,7 +93,7 @@
         <a href="/item/sh/${sh.id}" style="color:#333333;">
 
         <div class="sh-slip fl ${status.index == 2 ? 'no-margin':null}">
-          <div class="shs_pic"><img src="${ (sh.picturePath) ? sh.picturePath : "/images/pig.jpg"}" alt=""></div>
+          <div class="shs_pic"><img src="" data-pid="${sh.picturePath}" alt="" class="sh-item"></div>
           <p class="titile">${sh.title}</p>
           <div class="fl">
             <p>${sh.category.name}</p>
@@ -140,5 +140,6 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/sh-pic.js"></script>
 </body>
 </html>

@@ -85,7 +85,7 @@
               <c:forEach var="sh" items="${shs}" varStatus="status">
                   <a href="/item/sh/${sh.id}" style="color: #333333">
                       <div class="sh-slip fl ${(status.index+1)%3 == 0 ? 'no-margin-right':''}" >
-                          <img src="/images/pig.jpg" alt="">
+                          <img src="" data-pid="${sh.picturePath}" alt="" class="sh-item">
                           <p class="titile">${sh.title}</p>
                           <div class="fl">
                               <p>${sh.category.name}</p>
@@ -122,7 +122,7 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-
+<script src="/scripts/sh-pic.js"></script>
 </body>
 </html>
 
