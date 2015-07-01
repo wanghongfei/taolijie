@@ -15,5 +15,15 @@ $.tlj = {
                           }
                       });
                   }
-              }
+              },
+    notify(msg, type) {
+        var $notify = $('.notify');
+        if($notify.length < 1) {
+            $('body').append('<div class="notify"></div>');
+            $notify = $('.notify');
+        }
+        $notify.text(msg).fadeIn(200, function(){
+            $notify.fadeOut(3000);
+        });;
+    }
 }

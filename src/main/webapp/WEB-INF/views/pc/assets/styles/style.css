@@ -1,6 +1,17 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
 /*global start*/
+.notify {
+    display: none;
+    position: fixed;
+    top: 50px;
+    right: 100px;
+    background: lightsalmon;
+    padding: 10px 40px;
+    color: lightyellow;
+    opacity: 0.8;
+    border-radius: 5px;
+}
 .label-checkbox {
     font-size: 0.8em;
 }

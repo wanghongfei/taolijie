@@ -76,6 +76,7 @@
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
 <script src="/scripts/jquery11.js"></script>
+<script src="/scripts/jquery_extend.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 <script src="/scripts/jquery.bxslider.min.js"></script>
@@ -92,8 +93,3 @@
     })
   })
 </script>
-
-
-
-
-

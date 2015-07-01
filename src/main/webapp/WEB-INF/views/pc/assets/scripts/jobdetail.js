@@ -87,7 +87,7 @@ $("#review-btn").on("click",function(){
                 //更新评论条数
                 $commetCount.text(parseInt($commetCount.text())+1);
             }else{
-                alert(data.message);
+                $.tlj.notify(data.message);
             }
         }
     });
