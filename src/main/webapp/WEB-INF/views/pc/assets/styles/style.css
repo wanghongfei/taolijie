@@ -1250,6 +1250,7 @@ ul.bxslider li img {
     font-size: 19px;
     float: left;
     color: #80d0b7; }
+.comment .review-bar .submit-review,
 .comment .review-bar span {
     display: inline-block;
     background-color: #80d0b7;

@@ -60,38 +60,69 @@ $("#complaint").click(function(){
 });
 
 //评论
-$("#review-btn").on("click",function(){
+$('.review-bar').submit(function(e) {
+    e.preventDefault();
     var $contents = $("#contents");
     var $parent = $('<div class="no-border-bottom"></div>');
     var $commetCount = $("#toComment").next();
-    console.log($commetCount);
-    var id = this.dataset.id;
+    var $data = $('#review-btn');
+    var id = $data.data('id');
     var username = $("#user-name-label").text();
     var content = $("#comment-input").val();
+
     var data = {
         content:content
     };
-    $.ajax({
-        type:"POST",
-        url:"/user/job/"+id+"/review/post",
-        data:data,
-        success:function(data){
-            if(data.result){
-                //var reviewId =data.parm.reviewId;
-                var reviewId =data.message;
-                $parent.append('<img src="/images/pig.jpg" alt="">');
-                $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
-                $parent.append('<span>'+content+'</span>');
-                $contents.append($parent);
-                $("#comment-input").val('');
-                //更新评论条数
-                $commetCount.text(parseInt($commetCount.text())+1);
-            }else{
-                $.tlj.notify(data.message);
-            }
+
+    $.tlj.post("/user/job/"+id+"/review/post", data, function(data) {
+        if(data.result){
+            //var reviewId =data.parm.reviewId;
+            var reviewId =data.message;
+            $parent.append('<img src="/images/pig.jpg" alt="">');
+            $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
+            $parent.append('<span>'+content+'</span>');
+            $contents.append($parent);
+            $("#comment-input").val('');
+            //更新评论条数
+            $commetCount.text(parseInt($commetCount.text())+1);
+        }else{
+            $.tlj.notify(data.message);
         }
     });
 });
+
+//$("#review-btn").on("click",function(){
+//    var $contents = $("#contents");
+//    var $parent = $('<div class="no-border-bottom"></div>');
+//    var $commetCount = $("#toComment").next();
+//    console.log($commetCount);
+//    var id = this.dataset.id;
+//    var username = $("#user-name-label").text();
+//    var content = $("#comment-input").val();
+//    var data = {
+//        content:content
+//    };
+//    $.ajax({
+//        type:"POST",
+//        url:"/user/job/"+id+"/review/post",
+//        data:data,
+//        success:function(data){
+//            if(data.result){
+//                //var reviewId =data.parm.reviewId;
+//                var reviewId =data.message;
+//                $parent.append('<img src="/images/pig.jpg" alt="">');
+//                $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
+//                $parent.append('<span>'+content+'</span>');
+//                $contents.append($parent);
+//                $("#comment-input").val('');
+//                //更新评论条数
+//                $commetCount.text(parseInt($commetCount.text())+1);
+//            }else{
+//                $.tlj.notify(data.message);
+//            }
+//        }
+//    });
+//});
 
 //删除一条评论
 $(document).on("click",'.delete-review',function(){
@@ -157,5 +188,3 @@ $("#del").on("click",function(){
         }
     });
 });
-
-

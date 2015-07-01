@@ -1,4 +1,15 @@
 $.tlj = {
+    post: function(url, data, callback) {
+              $.ajax({
+                  type:"POST",
+                  url: url,
+                  data: data,
+                  success:function(data){
+                      callback(data);
+                  }
+              });
+          },
+
     postForm: function(elem, url, callback) {
                   var $form = $(elem);
                   var form = $form[0];
@@ -6,16 +17,10 @@ $.tlj = {
                   if(!form.checkValidity()) {
                       form.reportValidity();
                   }else{
-                      $.ajax({
-                          type:"POST",
-                          url: url,
-                          data:formdata,
-                          success:function(data){
-                              callback();
-                          }
-                      });
+                      $.tlj.post(url, formdata, callback);
                   }
               },
+
     notify(msg, type) {
         var $notify = $('.notify');
         if($notify.length < 1) {
