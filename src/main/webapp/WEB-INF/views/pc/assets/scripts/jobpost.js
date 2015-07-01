@@ -7,12 +7,13 @@
 
 
 $(".submit-btn").click(function(){
-    var url = '/user/job/post';
-    var path = location.pathname;
-    if(path.indexOf('change') > -1) {
-        url = path;
-    }
-    $.tlj.postForm('#JobPostForm', url, function(){
+    //var url = '/user/job/post';
+    //var path = location.pathname;
+    //if(path.indexOf('change') > -1) {
+    //    url = path;
+    //}
+    //$.tlj.postForm('#JobPostForm', url, function(){
+    $.tlj.postForm('#JobPostForm', location.pathname, function(){
         location.href = '/user/job/mypost';
     });
 });

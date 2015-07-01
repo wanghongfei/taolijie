@@ -85,10 +85,10 @@
     </div>
     <div style="clean:both"></div>
     <div class="resume-info">
-      <c:if test="${resume.photoPath == null}">
+      <c:if test="${resume.photoPath == ''}">
         <img src="/images/miao.jpg" alt="">
       </c:if>
-      <c:if test="${resume.photoPath != null}">
+      <c:if test="${resume.photoPath != ''}">
         <img src="/static/images/users/${resume.photoPath}" alt=""/>
       </c:if>
       <div class="infos">

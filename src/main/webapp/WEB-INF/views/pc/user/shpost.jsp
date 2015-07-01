@@ -64,12 +64,12 @@
     </p>
     <form action="" id="ShPostForm">
       <div class="form-group">
-        <label for="">标题</label>
-        <input name="title" type="text" class="form-control" value="${sh.title}">
+        <label for="">标题<span class="theme-color">*</span></label>
+        <input name="title" type="text" class="form-control" value="${sh.title}" placeholder="请填写物品名称" required>
       </div>
       <div class="form-group">
-        <label for="">商品分类</label>
-        <select name="secondHandPostCategoryId" >
+        <label for="">商品分类<span class="theme-color">*</span></label>
+        <select name="secondHandPostCategoryId" required>
           <option value="">选择分类</option>
           <c:forEach items="${cates}" var="cate">
             <option value="${cate.id}" ${sh.secondHandPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
@@ -77,18 +77,18 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="">价格</label>
-        <input name="sellPrice" type="text" class="form-control short-input" value="${sh.sellPrice}">
+        <label for="">价格<span class="theme-color">*</span></label>
+        <input name="sellPrice" type="number" class="form-control short-input" value="${sh.sellPrice}" required>
         <span class="input-unit">元</span>
       </div>
       <div class="form-group">
-        <label for="">商品描述</label>
-        <textarea name="description" class="form-control">${sh.description}</textarea>
+        <label for="">商品描述<span class="theme-color">*</span></label>
+        <textarea name="description" class="form-control" placeholder="如：2015年1月购买，九成新……" required>${sh.description}</textarea>
       </div>
       <input name="picIds" class="form-control" type="hidden" value="${sh.picturePath}">
       <div class="form-group">
-        <label for="">交易地点</label>
-        <input name="tradePlace" type="text" class="form-control" value="${sh.tradePlace}">
+        <label for="">交易地点<span class="theme-color">*</span></label>
+        <input name="tradePlace" type="text" class="form-control" value="${sh.tradePlace}" required>
       </div>
 
     <p class="pin-title dark-green-bg ">联系方式
@@ -96,16 +96,16 @@
     </p>
 
       <div class="form-group">
-        <label for="">联系人</label>
-        <input type="text" class="form-control" name="contactName" value="${sh.contactName}">
+        <label for="">联系人<span class="theme-color">*</span></label>
+        <input type="text" class="form-control" name="contactName" value="${sh.contactName}" required>
       </div>
       <div class="form-group">
-        <label for="">手机号</label>
-        <input type="text" class="form-control" name="contactPhone" value="${sh.contactPhone}">
+        <label for="">手机号<span class="theme-color">*</span></label>
+        <input type="text" class="form-control" name="contactPhone" value="${job.contactPhone}" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>
-        <input type="text" class="form-control" name="contactQq" value="${sh.contactQq}">
+        <input type="number" class="form-control medium-input" name="contactQq" value="${sh.contactQq}">
       </div>
     </form>
 

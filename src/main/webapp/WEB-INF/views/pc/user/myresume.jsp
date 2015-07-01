@@ -58,27 +58,32 @@
     <form id="CreateResumeForm">
       <div class="form-group">
           <label for="">照片<i class="theme-color">*</i> </label>
+          <c:if test="${resume.photoPath == null}">
+            <img src="/images/miao.jpg" alt="resume photo" class="resume-photo">
+          </c:if>
+          <c:if test="${resume.photoPath != null}">
           <img src="/static/images/users/${resume.photoPath}" alt="" class="resume-photo">
-          <input type="hidden" name="photoPath" value="${resume.photoPath}">
+          </c:if>
+          <input type="text" name="photoPath" value="${resume.photoPath == null?'':resume.photoPath}" required style="width: 0;height: 0;position: relative;top: 100px;right: 50px;">
           <div id="upload-btn">选择文件</div>
       </div>
       <div class="form-group">
         <label for="">真实姓名<i class="theme-color">*</i> </label>
-        <input type="text" class="form-control" placeholder="姓名" name="name" value="${resume.name}">
+        <input type="text" class="form-control" placeholder="姓名" name="name" value="${resume.name}" required>
       </div>
       <div class="form-group">
         <label for="">性别<i class="theme-color">*</i></label>
-        <input type="radio" name="gender" value="男" ${resume.gender == '男' ? 'checked = "checked"':''}>男
-        <input type="radio" name="gender" value="女" ${resume.gender == '女' ? 'checked = "checked"' : ''}>女
+        <input type="radio" name="gender" value="男" ${resume.gender == '男' ? 'checked = "checked"':''} required>男
+        <input type="radio" name="gender" value="女" ${resume.gender == '女' ? 'checked = "checked"' : ''} required>女
       </div>
       <div class="form-group">
-        <label for="">身高<i class="theme-color">*</i></label>
-        <input name="height" class="short-input form-control" type="text" placeholder="填写有效数字" value="${resume.height}">
+        <label for="">身高</label>
+        <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" value="${resume.height}" min="50" max="250">
         <span for="" class="input-unit">cm</span>
       </div>
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
-        <input name="age" class="short-input form-control" type="text" placeholder="" value="${resume.age}">
+        <input name="age" class="short-input form-control" type="number" placeholder="" value="${resume.age}" min="14" max="80">
         <%--<span> 例如 <span class="dark-green">(1993-1-1)</span></span>--%>
       </div>
 
@@ -100,10 +105,13 @@
       <%--</div>--%>
       <div class="form-group">
         <label for="">求职意向<i class="theme-color">*</i></label>
-         <select name="intend">
+         <select name="intend" required>
               <option value="">选择分类</option>
               <c:forEach items="${cates}" var="cate">
-                  <option value="${cate.id}">${cate.name}</option>
+              <%--
+              <option value="${cate.id}" ${resume.intend == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
+              --%>
+              <option value="${cate.id}">${cate.name}</option>
               </c:forEach>
          </select>
       </div>
@@ -115,8 +123,8 @@
       --%>
       <div class="form-group">
           <label for="">公开程度</label>
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL"> 公开
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY"> 不公开
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL" required> 公开
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY" required> 不公开
       </div>
       <div class="form-group text">
         <label for="">自我介绍</label>
@@ -124,7 +132,7 @@
       </div>
       <div class="form-group text">
         <label for="">工作经历<i class="theme-color">*</i></label>
-        <textarea name="experience"  class="form-control" placeholder="工作经历（200字以内）">${resume.experience}</textarea>
+        <textarea name="experience"  class="form-control" placeholder="工作经历（200字以内）" required>${resume.experience}</textarea>
       </div>
       <p class="pin-title no-offset">
          联系方式
@@ -132,11 +140,11 @@
       </p>
       <div class="form-group ">
         <label for=""><i class="fa fa-phone red"></i>手机<i class="theme-color">*</i></label>
-        <input name="phoneNumber" type="text" class="form-control" placeholder="" value="${resume.phoneNumber}">
+        <input name="phoneNumber" type="text" class="form-control" placeholder="" value="${resume.phoneNumber}" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group ">
         <label for=""><i class="fa fa-qq blue"></i>QQ</label>
-        <input name="qq" type="text" class="form-control" placeholder="" value="${resume.qq}">
+        <input name="qq" type="number" class="form-control medium-input" placeholder="" value="${resume.qq}">
       </div>
       <div class="form-group">
         <label for=""><i class="fa fa-weixin light-green"></i>微信</label>
@@ -144,7 +152,7 @@
       </div>
       <div class="form-group">
         <label for=""><i class="fa fa-envelope-o theme-color"></i>邮箱</label>
-        <input name="email" type="text" class="form-control" placeholder="" value="${resume.email}">
+        <input name="email" type="email" class="form-control" placeholder="" value="${resume.email}">
       </div>
     </form>
   </div>
