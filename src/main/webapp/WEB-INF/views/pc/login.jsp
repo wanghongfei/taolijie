@@ -70,14 +70,14 @@
           <div class="form-group horizontal">
             <label for="username" class="col-3 label-control">用户名</label>
             <div class="col-9">
-              <input type="text" class="form-control" placeholder="输入用户名" id="username" name="username" >
+              <input type="text" class="form-control" placeholder="输入用户名" id="username" name="username" required>
             </div>
           </div>
           <div class="clear:both"></div>
           <div class="form-group horizontal">
             <label  for="password" class="label-control col-3" >密码</label>
             <div class="col-9">
-              <input type="password" style="" class="form-control" placeholder="输入密码" id="password" name="password">
+              <input type="password" style="" class="form-control" placeholder="输入密码" id="password" name="password" required>
             </div>
           </div>
 
@@ -89,7 +89,7 @@
               <label for="rememberMe">记住密码</label>
           </div>
           <div class="col-12 no-pd">
-            <p class="login-btn btn theme-color-bg" id="sub-btn" >立即登录</p>
+            <input type="submit" class="login-btn btn theme-color-bg" id="sub-btn" value="立即登录">
           </div>
           <div class="col-12 no-pd">
             <a class="login-btn btn dark-green-bg" href="/register">没有账号?赶紧去注册吧</a>

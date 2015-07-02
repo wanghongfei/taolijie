@@ -56,7 +56,7 @@
   <div class="login-container">
     <div class="login-box">
       <div class="login-body">
-        <form action="" id="reg-form">
+        <form id="reg-form">
 
           <div class="form-group role-choose">
                 <div class="col-6">
@@ -69,27 +69,27 @@
           <div class="form-group">
             <label for="" class="col-4 label-control">用户名</label>
             <div class="col-8">
-              <input type="text" class="form-control" name="username" placeholder="推荐使用常用邮箱">
+                <input type="text" class="form-control" name="username" placeholder="推荐使用常用邮箱" pattern=".{6,}" title="至少6位" required>
             </div>
 
           </div>
           <div class="form-group">
             <label for="" class="col-4 label-control" name="password">密码</label>
-            <div class="col-8	">
-              <input type="password" class="form-control" name="password">
+            <div class="col-8">
+              <input type="password" class="form-control" name="password" pattern=".{6,}" title="至少6位" required>
             </div>
           </div>
           <div class="form-group">
             <label for="" class="col-4 label-control" name="rePassword">确认密码</label>
             <div class="col-8">
-              <input type="password" class="form-control" name="rePassword">
+              <input type="password" class="form-control" name="rePassword" pattern=".{6,}" title="至少6位" required>
             </div>
           </div>
             <div class="col-12" >
                 <label class="red" id="error-box"></label>
             </div>
           <div class="col-12 no-pd">
-            <p class="login-btn btn theme-color-bg" id="sub-btn">注册</p>
+            <input type="submit" class="login-btn btn theme-color-bg" id="sub-btn" value="注册">
           </div>
         </form>
       </div>

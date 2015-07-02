@@ -1,6 +1,10 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
 /*global start*/
+form input[type=submit] {
+    border: none;
+    font-size: 1em;
+}
 .notify {
     display: none;
     position: fixed;
