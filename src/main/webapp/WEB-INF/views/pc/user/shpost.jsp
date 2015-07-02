@@ -27,6 +27,7 @@
   <!-- build:css({.tmp,app}) /styles/css/style.css -->
   <link rel="stylesheet" href="/styles/animate.css"/>
   <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/styles/user/shpost.css">
   <%--图片上传美化--%>
   <link rel="stylesheet" href="/styles/webuploader.css"/>
   <!-- endbuild -->
@@ -50,10 +51,12 @@
   <jsp:include page="../block/post-nav.jsp">
     <jsp:param name="navShow" value="sh"/>
   </jsp:include>
+    <form action="" id="ShPostForm">
   <div class="img-list-wrapper">
       <ul>
         <li class="img-list-btn dark-green-bg">
             <span class="btn-add">添加照片</span>
+            <input name="picIds" class="form-control" type="text" value="${sh.picturePath}" required title="请上传至少一张图片">
         </li>
       </ul>
       <div class="clearfix"></div>
@@ -62,7 +65,6 @@
     <p class="pin-title dark-green-bg ">二手物品介绍
       <i class="pin-arrow  dark-green-arrow"></i>
     </p>
-    <form action="" id="ShPostForm">
       <div class="form-group">
         <label for="">标题<span class="theme-color">*</span></label>
         <input name="title" type="text" class="form-control" value="${sh.title}" placeholder="请填写物品名称" required>
@@ -85,7 +87,6 @@
         <label for="">商品描述<span class="theme-color">*</span></label>
         <textarea name="description" class="form-control" placeholder="如：2015年1月购买，九成新……" required>${sh.description}</textarea>
       </div>
-      <input name="picIds" class="form-control" type="hidden" value="${sh.picturePath}">
       <div class="form-group">
         <label for="">交易地点<span class="theme-color">*</span></label>
         <input name="tradePlace" type="text" class="form-control" value="${sh.tradePlace}" required>
@@ -107,7 +108,6 @@
         <label for="">QQ号</label>
         <input type="number" class="form-control medium-input" name="contactQq" value="${sh.contactQq}">
       </div>
-    </form>
 
     <div class="segment">
       <div class="submit-btn big-btn dark-green-bg">
@@ -121,6 +121,7 @@
     </div>
 
   </div>
+    </form>
 </div>
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
