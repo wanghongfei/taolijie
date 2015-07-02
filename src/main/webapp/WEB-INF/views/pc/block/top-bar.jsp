@@ -16,7 +16,11 @@
     <ul>
       <c:if test="${not empty sessionScope.user}">
         <li><a href="/user/profile" id="user-name-label">${sessionScope.user.username}</a>&nbsp;|&nbsp;</li>
-        <li><a href="/logout">注销 <i class="fa fa-caret-down"> </i></a></li>
+        <li><a href="/logout">注销 
+            <%--
+            <i class="fa fa-caret-down"> </i>
+            --%>
+        </a></li>
       </c:if>
 
       <c:if test="${empty sessionScope.user}">

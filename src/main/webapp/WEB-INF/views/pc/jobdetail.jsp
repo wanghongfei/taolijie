@@ -140,16 +140,9 @@
         </div>
         </c:forEach>
       </div>
-      <form class="review-bar">
-          <img src="/images/default-img.jpg" alt="user photo">
-          <%--
-          <c:if  test="${sessionScope.user.profilePhotoId != 0}">
-          <img src="/static/images/users/${sessionScope.user.profilePhotoId}" alt="user photo">
-          </c:if>
-          --%>
-        <input type="text" class="review-input" placeholder="发表评论" id="comment-input" required>
-        <input type="submit" value="评论" class="submit-review" id="review-btn" data-id="${job.id}" data-username="${poster.username}">
-      </form>
+      <jsp:include page="block/comment.jsp">
+        <jsp:param name="postId" value="${job.id}"/>
+      </jsp:include>
     </div>
 
   </div>
@@ -159,6 +152,7 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/comment.js"></script>
 <script src="/scripts/jobdetail.js"></script>
 </body>
 </html>

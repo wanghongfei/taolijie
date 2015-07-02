@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <div class="comment">
+        <div class="comment clearfix">
             <p class="pin-title">用户评论
                 <i class="pin-arrow"></i>
             </p>
@@ -179,7 +179,7 @@
             <div class="content" id="contents">
                 <c:forEach var="review" items="${reviews}" varStatus="status">
                     <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
-                        <img src="/images/pig.jpg" alt="">
+                    <img src="/static/images/users/${review.member.profilePhotoId}" alt="user photo">
                         <p>${review.member.username}
                                 <%--判断是该用户发的显示删除按钮--%>
                             <c:if test="${sessionScope.user.id == review.member.id}">
@@ -192,11 +192,16 @@
                     </div>
                 </c:forEach>
             </div>
+            <jsp:include page="block/comment.jsp">
+              <jsp:param name="postId" value="${sh.id}"/>
+            </jsp:include>
+            <%--
             <div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
                 <input type="text" class="review-input" placeholder="发表评论" id="comment-input">
                 <span class="review-span" id="review-btn" data-id="${sh.id}" data-username="${poster.username}">评论</span>
             </div>
+            --%>
         </div>
   </div>
 
@@ -204,6 +209,7 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/comment.js"></script>
 <script src="/scripts/shdetail.js"></script>
 <script src="/scripts/responsiveslides.min.js"></script>
 

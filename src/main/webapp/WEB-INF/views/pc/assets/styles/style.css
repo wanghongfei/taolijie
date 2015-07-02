@@ -15,6 +15,9 @@
 .label-checkbox {
     font-size: 0.8em;
 }
+.delete-review {
+    font-size: 12px;
+}
 /*global* end*/
 
 .jqmWindow {
