@@ -8,6 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<span class="loading-page"></span>
 <div class="top-bar top-bar-reverse">
   <div class="top-bar-content">
     <p  ><a href="/" style="color: #fff;">桃李街首页</a></p>

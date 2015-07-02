@@ -1,11 +1,14 @@
 $.tlj = {
     post: function(url, data, callback) {
+              $loading = $('.loading-page');
+              $loading.show();
               $.ajax({
                   type:"POST",
                   url: url,
                   data: data,
                   success:function(data){
                       callback(data);
+                      $loading.hide();
                   }
               });
           },
