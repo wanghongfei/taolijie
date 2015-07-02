@@ -10,9 +10,8 @@
 <!-- 图片轮播 -->
 <div class="slider">
   <ul class="bxslider">
-    <li><img src="/images/s1.jpg"  /></li>
-    <li><img src="/images/s3.jpg" /></li>
-    <li><img src="/images/s1.jpg" /></li>
-    <li><img src="/images/s3.jpg" /></li>
+    <li><img src="https://placeimg.com/1000/196/tech" /></li>
+    <li><img src="https://placeimg.com/1000/196/tech/grey" /></li>
+    <li><img src="https://placeimg.com/1000/196/tech/sepia" /></li>
   </ul>
 </div>
