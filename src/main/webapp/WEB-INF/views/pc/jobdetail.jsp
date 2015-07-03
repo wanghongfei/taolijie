@@ -15,10 +15,10 @@
 <%request.setCharacterEncoding("UTF-8") ;%>
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="jobCtrl">
 <head>
   <meta charset="utf-8">
-  <title>兼职-${job.title}</title>
+  <title>兼职-{{ job.title }}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -67,42 +67,36 @@
       <span>兼职详情</span>
       <a href="/" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
       <%--<p class="fr">分享</p>--%>
-      <p class="fr" id="fav" data-id="${job.id}" data-type="job">
-          <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
+      <p class="fr" id="fav" ng-attr-data-id="{{ job.id }}" data-type="job">
+      <i class="fa"  ng-class="{'fa-heart': job.favStatus, 'fa-heart-o': !job.favStatus}">&nbsp;&nbsp;</i>
           ${favStatus? '已收藏':'收藏'}
-      </p>
     </div>
     <div style="clean:both"></div>
     <div class="title">
-      <p>${job.title}</p>
-      <span>兼职类型 : ${job.category.name}</span>
-      <span>${job.verified ? '已认证' : '未认证'}</span>
-      <span>发布时间 :
-          <fmt:formatDate value="${job.postTime}" pattern="yyyy-MM-dd"/>
-
-  </span>
+      <p>{{ job.title }}</p>
+      <span>兼职类型 : {{ job.category.name }}</span>
+      <span>{{job.verified ? '已认证' : '未认证'}}</span>
+      <span>发布时间 : {{ job.postTime | date:'yyyy-MM-dd' }}</span>
     </div>
     <div class="info">
-        <p class="money"><span>${job.wage.intValue()}元</span>${job.timeToPay}</p>
+        <p class="money"><span>{{ job.wage }}元</span>{{ job.timeToPay }}</p>
         <%--
             /${job.salaryUnit}
         --%>
-      <p>有效日期 : <span>
-        <fmt:formatDate value="${job.expiredTime}" pattern="yyyy-MM-dd"/>
-      </span></p>
-      <p>工作时间 : <span>${job.workTime}</span></p>
-      <p>工作地点 : <span>${job.workPlace}</span></p>
+      <p>有效日期 : <span> {{ job.expiredTime | date:'yyyy-MM-dd' }}</span></p>
+      <p>工作时间 : <span>{{ job.workTime }}</span></p>
+      <p>工作地点 : <span>{{ job.workPlace }}</span></p>
     </div>
     <div class="description">
       <p class="pin-title">工作详情
         <i class="pin-arrow"></i>
       </p>
-      <p>工作内容 : <span>${job.jobDetail}</span></p>
-      <p>工作要求 : <span>${job.jobDescription}</span></p>
+      <p>工作内容 : <span>{{ job.jobDetail }}</span></p>
+      <p>工作要求 : <span>{{ job.jobDescription }}</span></p>
     </div>
     <div class="contact">
-      <p>联系人 : <span>${job.contact}</span></p>
-      <p class="phone" >联系电话 : <span >${job.contactPhone}</span></p>
+      <p>联系人 : <span>{{ job.contact }}</span></p>
+      <p class="phone" >联系电话 : <span >{{ job.contactPhone }}</span></p>
     </div>
     <div class="comment clearfix">
       <p class="pin-title">用户评论
@@ -110,8 +104,8 @@
       </p>
       <div class="operates">
         <div class="operate">
-          <span id="like" data-id="${job.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
-          <p >${job.likes}</p>
+          <span id="like" ng-attr-data-id="{{ job.id }}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
+          <p >{{ job.likes }}</p>
         </div>
         <%--<div class="operate">--%>
           <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
@@ -119,36 +113,39 @@
         <%--</div>--%>
         <div class="operate">
           <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
-          <p >${reviewCount}</p>
+          <p>{{ job.reviewCount }}</p>
         </div>
 <%--        <div class="operate">
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
         </div>--%>
       </div>
       <div class="content" id="contents">
+        <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
+            <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+            <p>{{ review.member.username }}
+               <a class="red delete-review" href="javascript:void(0);" data-id="${job.id}" data-reviewId="${review.id}" ng-show="{{ job.userId == review.member.id }}"> 删除</a>
+           </p>
+           <span>{{ review.content }}</span>
+        </div>
+          <%--
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
            <img src="/static/images/users/${review.member.profilePhotoId}" alt="user photo">
            <p>${review.member.username}
-             <%--判断是该用户发的显示删除按钮--%>
              <c:if test="${sessionScope.user.id == review.member.id}">
-               <a class="red delete-review" href="javascript:void(0);"  data-id="${job.id}" data-reviewId="${review.id}"> 删除</a>
+               <a class="red delete-review" href="javascript:void(0);" data-id="${job.id}" data-reviewId="${review.id}"> 删除</a>
              </c:if>
-
            </p>
-
            <span>${review.content}</span>
         </div>
         </c:forEach>
+          --%>
       </div>
       <jsp:include page="block/comment.jsp">
         <jsp:param name="postId" value="${job.id}"/>
       </jsp:include>
     </div>
-
   </div>
-
-
 </div>
 
 <%--脚部--%>
@@ -156,7 +153,11 @@
 <script src="/scripts/comment.js"></script>
 <script src="/scripts/jobdetail.js"></script>
 <script>
-    var job = ${ju:toJson(job)};
+    var job = JSON.parse('${ju:toJson(job)}');
+    job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
+    job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
+    job.reviews = JSON.parse('${ju:toJson(reviews)}');
+    job.userId = '${sessionScope.user.id}';
 </script>
 </body>
 </html>

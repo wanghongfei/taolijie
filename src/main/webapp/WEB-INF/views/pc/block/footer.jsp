@@ -75,6 +75,7 @@
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
+<script src="/scripts/angular/angular.js"></script>
 <script src="/scripts/jquery11.js"></script>
 <script src="/scripts/jquery_extend.js"></script>
 <!-- endbower -->

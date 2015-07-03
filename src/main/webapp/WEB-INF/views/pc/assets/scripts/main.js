@@ -1,3 +1,5 @@
+var tlj = angular.module('tljApp',[]);
+
 $('.nav-bar > .choose').on('click',function(){
 	$('.choose-menu').toggle();
 });
@@ -48,5 +50,3 @@ $(function(){
     });
 
 });
-
-
