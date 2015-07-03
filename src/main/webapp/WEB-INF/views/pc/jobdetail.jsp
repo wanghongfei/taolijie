@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -154,5 +155,8 @@
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/comment.js"></script>
 <script src="/scripts/jobdetail.js"></script>
+<script>
+    var job = ${ju:toJson(job)};
+</script>
 </body>
 </html>

@@ -7,3 +7,7 @@ target/
 .settings/
 deploy.sh
 **/*.swp
+**/*.swo
+**/*.swl
+**/*.swm
+**/*.swn
