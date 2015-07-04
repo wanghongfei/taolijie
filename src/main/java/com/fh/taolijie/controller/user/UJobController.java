@@ -439,7 +439,7 @@ public class UJobController {
         model.setTime(new Date());
 
         Integer newReviewId = reviewService.addReview(model);
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, newReviewId.toString()).getAjaxMessage();
     }
 
     /**
