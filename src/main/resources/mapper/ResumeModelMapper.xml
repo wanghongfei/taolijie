@@ -18,7 +18,9 @@
         <result column="resume_access_authority" property="accessAuthority" jdbcType="VARCHAR"/>
         <result column="resume_page_view" property="pageView" jdbcType="INTEGER"/>
         <result column="resume_verified" property="verified" jdbcType="VARCHAR"/>
-        <result column="resume_created_time" property="createdTime"/>
+
+        <result column="resume_created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+
         <result column="resume_photo_id" property="photoId" jdbcType="INTEGER"/>
         <result column="resume_phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
         <result column="resume_wechat_account" property="wechatAccount" jdbcType="VARCHAR"/>
@@ -126,7 +128,7 @@
         #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER},
         #{accessAuthority,jdbcType=VARCHAR}, #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR},
         #{photoId,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR},
-        #{experience,jdbcType=LONGVARCHAR}, #{introduce,jdbcType=LONGVARCHAR}, #{createdTime},
+        #{experience,jdbcType=LONGVARCHAR}, #{introduce,jdbcType=LONGVARCHAR}, #{createdTime, jdbcType=TIMESTAMP},
         #{spareTime})
     </insert>
     <insert id="insertSelective">

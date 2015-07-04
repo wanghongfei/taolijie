@@ -8,8 +8,10 @@
         -->
         <id column="sh_post_id" property="id" jdbcType="INTEGER"/>
         <result column="sh_post_title" property="title" jdbcType="VARCHAR"/>
-        <result column="sh_post_expired_time" property="expiredTime" jdbcType="DATE"/>
-        <result column="sh_post_post_time" property="postTime" jdbcType="DATE"/>
+
+        <result column="sh_post_expired_time" property="expiredTime" jdbcType="TIMESTAMP"/>
+        <result column="sh_post_post_time" property="postTime" jdbcType="TIMESTAMP"/>
+
         <result column="sh_post_depreciation_rate" property="depreciationRate" jdbcType="VARCHAR"/>
         <result column="sh_post_original_price" property="originalPrice" jdbcType="DECIMAL"/>
         <result column="sh_post_sell_price" property="sellPrice" jdbcType="DECIMAL"/>
@@ -119,8 +121,8 @@
         page_view, verified, trade_place,
         picture_path, description, deleted, contact_name,
         contact_phone, contact_qq)
-        VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime,jdbcType=DATE},
-        #{postTime,jdbcType=DATE}, #{depreciationRate,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL},
+        VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime},
+        #{postTime}, #{depreciationRate,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL},
         #{sellPrice,jdbcType=DECIMAL}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER},
         #{memberId,jdbcType=INTEGER}, #{secondHandPostCategoryId,jdbcType=INTEGER}, #{complaint,jdbcType=INTEGER},
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{tradePlace,jdbcType=VARCHAR},
@@ -200,10 +202,10 @@
                 #{title,jdbcType=VARCHAR},
             </if>
             <if test="expiredTime != null">
-                #{expiredTime,jdbcType=DATE},
+                #{expiredTime},
             </if>
             <if test="postTime != null">
-                #{postTime,jdbcType=DATE},
+                #{postTime},
             </if>
             <if test="depreciationRate != null">
                 #{depreciationRate,jdbcType=VARCHAR},
@@ -270,10 +272,10 @@
                 title = #{title,jdbcType=VARCHAR},
             </if>
             <if test="expiredTime != null">
-                expired_time = #{expiredTime,jdbcType=DATE},
+                expired_time = #{expiredTime},
             </if>
             <if test="postTime != null">
-                post_time = #{postTime,jdbcType=DATE},
+                post_time = #{postTime},
             </if>
             <if test="depreciationRate != null">
                 depreciation_rate = #{depreciationRate,jdbcType=VARCHAR},
@@ -337,8 +339,8 @@
         -->
         UPDATE second_hand_post
         SET title = #{title,jdbcType=VARCHAR},
-        expired_time = #{expiredTime,jdbcType=DATE},
-        post_time = #{postTime,jdbcType=DATE},
+        expired_time = #{expiredTime},
+        post_time = #{postTime},
         depreciation_rate = #{depreciationRate,jdbcType=VARCHAR},
         original_price = #{originalPrice,jdbcType=DECIMAL},
         sell_price = #{sellPrice,jdbcType=DECIMAL},
@@ -475,10 +477,10 @@
                 post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
                 AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
@@ -546,10 +548,10 @@
                 post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
                 AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
@@ -618,10 +620,10 @@
                 post.title = #{title,jdbcType=VARCHAR}
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
                 AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
@@ -689,10 +691,10 @@
                 post.title = #{title,jdbcType=VARCHAR}
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
                 AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}

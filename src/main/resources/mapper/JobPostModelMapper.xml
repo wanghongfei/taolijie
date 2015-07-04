@@ -8,8 +8,10 @@
         -->
         <id column="job_id" property="id" jdbcType="INTEGER"/>
         <result column="job_title" property="title" jdbcType="VARCHAR"/>
-        <result column="job_expired_time" property="expiredTime" jdbcType="DATE"/>
-        <result column="job_post_time" property="postTime" jdbcType="DATE"/>
+
+        <result column="job_expired_time" property="expiredTime" jdbcType="TIMESTAMP"/>
+        <result column="job_post_time" property="postTime" jdbcType="TIMESTAMP"/>
+
         <result column="job_work_place" property="workPlace" jdbcType="VARCHAR"/>
         <result column="job_wage" property="wage" jdbcType="DECIMAL"/>
         <result column="job_time_to_pay" property="timeToPay" jdbcType="VARCHAR"/>
@@ -111,8 +113,8 @@
         applicant_amount, introduce, application_resume_ids,
         deleted
         )
-        VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime,jdbcType=DATE},
-        #{postTime,jdbcType=DATE}, #{workPlace,jdbcType=VARCHAR}, #{wage,jdbcType=DECIMAL},
+        VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime},
+        #{postTime}, #{workPlace,jdbcType=VARCHAR}, #{wage,jdbcType=DECIMAL},
         #{timeToPay,jdbcType=VARCHAR}, #{jobDescription,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR},
         #{contactPhone,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactQq,jdbcType=VARCHAR},
         #{jobDetail,jdbcType=VARCHAR}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER},
@@ -218,10 +220,10 @@
                 #{title,jdbcType=VARCHAR},
             </if>
             <if test="expiredTime != null">
-                #{expiredTime,jdbcType=DATE},
+                #{expiredTime},
             </if>
             <if test="postTime != null">
-                #{postTime,jdbcType=DATE},
+                #{postTime},
             </if>
             <if test="workPlace != null">
                 #{workPlace,jdbcType=VARCHAR},
@@ -308,10 +310,10 @@
                 title = #{title,jdbcType=VARCHAR},
             </if>
             <if test="expiredTime != null">
-                expired_time = #{expiredTime,jdbcType=DATE},
+                expired_time = #{expiredTime},
             </if>
             <if test="postTime != null">
-                post_time = #{postTime,jdbcType=DATE},
+                post_time = #{postTime},
             </if>
             <if test="workPlace != null">
                 work_place = #{workPlace,jdbcType=VARCHAR},
@@ -395,8 +397,8 @@
         -->
         UPDATE job_post
         SET title = #{title,jdbcType=VARCHAR},
-        expired_time = #{expiredTime,jdbcType=DATE},
-        post_time = #{postTime,jdbcType=DATE},
+        expired_time = #{expiredTime},
+        post_time = #{postTime},
         work_place = #{workPlace,jdbcType=VARCHAR},
         wage = #{wage,jdbcType=DECIMAL},
         time_to_pay = #{timeToPay,jdbcType=VARCHAR},
@@ -487,10 +489,10 @@
                 post.title LIKE CONCAT('%', #{title}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
                 AND post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
@@ -582,10 +584,10 @@
                 post.title LIKE CONCAT('%', #{title}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
                 AND post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
@@ -677,10 +679,10 @@
                 post.title = #{title,jdbcType=VARCHAR}
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
                 AND post.work_place = #{workPlace,jdbcType=VARCHAR}
@@ -773,10 +775,10 @@
                 post.title = #{title,jdbcType=VARCHAR}
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime,jdbcType=DATE}
+                AND post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime,jdbcType=DATE}
+                AND post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
                 AND post.work_place = #{workPlace,jdbcType=VARCHAR}
