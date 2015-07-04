@@ -759,13 +759,13 @@
 
         </where>
         ORDER BY
-        <choose>
-            <when test="orderByDate == true">post.post_time DESC</when>
-            <when test="orderByVisit == true">post.page_view DESC</when>
-            <otherwise>post.post_time DESC</otherwise>
-        </choose>
+            <choose>
+                <when test="orderByDate == true">post.post_time DESC</when>
+                <when test="orderByVisit == true">post.page_view DESC</when>
+                <otherwise>post.post_time DESC</otherwise>
+            </choose>
         LIMIT
-        #{pageNumber}, #{pageSize}
+            #{pageNumber}, #{pageSize}
     </select>
 
     <select id="countFindBy" resultType="long">
