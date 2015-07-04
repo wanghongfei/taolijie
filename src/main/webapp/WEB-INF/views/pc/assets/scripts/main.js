@@ -1,5 +1,14 @@
 var tlj = angular.module('tljApp',[]);
 
+var num = 40;
+$(window).bind('scroll', function () {
+    if ($(window).scrollTop() > num) {
+        $('.header').addClass('fixed');
+    } else {
+        $('.header').removeClass('fixed');
+    }
+});
+
 $('.nav-bar > .choose').on('click',function(){
 	$('.choose-menu').toggle();
 });
