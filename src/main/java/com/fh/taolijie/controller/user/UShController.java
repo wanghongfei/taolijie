@@ -398,28 +398,15 @@ public class UShController {
 
         //为该id的帖子创建一条评论
         ReviewModel reviewDto = new ReviewModel();
-        reviewDto.setId(id);
-        reviewDto.setPostId(id);
+        //reviewDto.setId(id);
+        reviewDto.setShPostId(id);
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());
-        reviewService.addReview(reviewDto);
+        Integer newId = reviewService.addReview(reviewDto);
 
-        //List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
-        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, page - 1, 999);
-        List<ReviewModel> list = reviewResult.getList();
-        int pageCount = reviewResult.getPageCount();
-
-
-        for(int i = list.size()-1; i> 0; i--){
-            ReviewModel r = list.get(i);
-            if(r.getContent().equals(content)){
-                reviewDto = r;
-                break;
-            }
-        }
         //返回帖子id
-        return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
+        return new JsonWrapper(true,"reviewId", newId.toString()).getAjaxMessage();
     }
     //endregion
 

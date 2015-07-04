@@ -435,7 +435,7 @@ public class UJobController {
         }
 
         model.setMemberId(credential.getId());
-        model.setPostId(jobId);
+        model.setJobPostId(jobId);
         model.setTime(new Date());
 
         Integer newReviewId = reviewService.addReview(model);

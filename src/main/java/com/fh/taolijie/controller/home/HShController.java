@@ -96,7 +96,9 @@ public class HShController {
 
         // 查询二手的评论
         pageNumber = pageNumber.intValue() * pageSize.intValue();
-        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, pageNumber, pageSize);
+        ReviewModel reviewCommand = new ReviewModel(pageNumber, pageSize);
+        reviewCommand.setShPostId(id);
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(reviewCommand);
         List<ReviewModel> reviews = reviewResult.getList();
         int pageCount = reviewResult.getPageCount();
 

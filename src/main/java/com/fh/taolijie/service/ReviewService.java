@@ -14,12 +14,9 @@ import java.util.List;
 public interface ReviewService {
     /**
      * 获取某个帖子的评论
-     * @param postId {@link JobPostModel}的主键值
-     * @param firstResult See {@link com.fh.taolijie.service.ResumeService#getResumeList}
-     * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    ListResult<ReviewModel> getReviewList(Integer postId, int firstResult, int capacity);
+    ListResult<ReviewModel> getReviewList(ReviewModel model);
 
     ReviewModel getById(Integer reviewId);
 
