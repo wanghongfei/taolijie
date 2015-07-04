@@ -206,6 +206,15 @@
         FROM image_resource img
         WHERE member_id = #{memberId}
     </select>
+    <select id="getImageIdByMemberId" resultType="int">
+        SELECT
+            id AS id
+        FROM
+            image_resource
+        WHERE
+            member_id = #{memberId}
+
+    </select>
     <select id="getImageByJob" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>

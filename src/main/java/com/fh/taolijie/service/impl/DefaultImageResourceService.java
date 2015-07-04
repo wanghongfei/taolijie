@@ -42,6 +42,13 @@ public class DefaultImageResourceService implements ImageService {
         return imgMapper.getImageByMember(memberId);
     }
 
+
+    @Override
+    public Integer getImageIdByMember(Integer memberId) {
+
+        return null;
+    }
+
     @Override
     public List<ImageModel> getImageByJob(Integer postId) {
         return imgMapper.getImageByJob(postId);
