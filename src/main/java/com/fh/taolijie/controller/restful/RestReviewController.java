@@ -40,4 +40,22 @@ public class RestReviewController {
 
         return new ResponseText(lr);
     }
+
+    /**
+     * 得到二手的评论
+     * @return
+     */
+    @RequestMapping(value = "/sh/{id}", produces = Constants.Produce.JSON)
+    public ResponseText getReviewsByShPost(@PathVariable("id") Integer shId,
+                                            @RequestParam(defaultValue = "0") int pageNumber,
+                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                                            HttpSession session) {
+
+        pageNumber = pageNumber * pageSize;
+        ReviewModel reviewCommand = new ReviewModel(pageNumber, pageSize);
+        reviewCommand.setShPostId(shId);
+        ListResult<ReviewModel> lr = reviewService.getReviewList(reviewCommand);
+
+        return new ResponseText(lr);
+    }
 }
