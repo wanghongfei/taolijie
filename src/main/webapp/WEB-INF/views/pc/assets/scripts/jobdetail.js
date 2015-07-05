@@ -1,6 +1,7 @@
 tlj.controller('jobCtrl', function($scope) {
     $scope.job = job;
 });
+
 /**
  * Created by wynfrith on 15-5-18.
  */

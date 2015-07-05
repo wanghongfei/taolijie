@@ -68,8 +68,9 @@
       <a href="/" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
       <%--<p class="fr">分享</p>--%>
       <p class="fr" id="fav" ng-attr-data-id="{{ job.id }}" data-type="job">
-      <i class="fa"  ng-class="{'fa-heart': job.favStatus, 'fa-heart-o': !job.favStatus}">&nbsp;&nbsp;</i>
-          ${favStatus? '已收藏':'收藏'}
+      <i class="fa"  ng-class="{'fa-heart': job.favStatus, 'fa-heart-o': !job.favStatus}"></i>
+      ${favStatus? '已收藏':'收藏'}
+      </p>
     </div>
     <div style="clean:both"></div>
     <div class="title">
@@ -123,7 +124,7 @@
         <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
             <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
             <p>{{ review.member.username }}
-               <a class="red delete-review" href="javascript:void(0);" data-id="${job.id}" data-reviewId="${review.id}" ng-show="{{ job.userId == review.member.id }}"> 删除</a>
+            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="{{ job.userId == review.member.id }}"> 删除</a>
            </p>
            <span>{{ review.content }}</span>
         </div>

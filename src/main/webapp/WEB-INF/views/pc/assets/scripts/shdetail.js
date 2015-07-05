@@ -1,9 +1,25 @@
+tlj.controller('shCtrl', function($scope) {
+    $scope.sh = sh;
+    $scope.$on('onRepeatLast', function() {
+        rslides();
+    })
+});
+
+tlj.directive('onLastRepeat', function() {
+    return function(scope) {
+        if(scope.$last) setTimeout(function() {
+            scope.$emit('onRepeatLast');
+        }, 1);
+    }
+});
+
 /**
  *
  * Created by wynfrith on 15-6-6.
  */
 
 
+(function(){
 //收藏/取消收藏一条兼职或简历
 $("#fav").on("click",function(){
     var jobId = this.getAttribute("data-id");
@@ -21,7 +37,7 @@ $("#fav").on("click",function(){
                     $this.html('<i class="fa fa-heart-o">&nbsp;&nbsp;</i>收藏');
                 }
             }else{
-                alert(data.message);
+                $.tlj.notify(data.message);
             }
         }
     });
@@ -43,9 +59,9 @@ $("#like").click(function(){
                 p.text(parseInt(p.text())+1) ;
             } else {
                 if(data.message == 'already liked')
-                    alert('您已经喜欢过了!');
+                    $.tlj.notify('您已经喜欢过了!');
                 if (data.message == 'not logged in now!') {
-                    alert('登陆后才能执行该操作!');
+                    $.tlj.notify('登陆后才能执行该操作!');
                 }
             }
         }
@@ -65,7 +81,7 @@ $("#dislike").click(function(){
                 p.text(parseInt(p.text())+1) ;
             }else{
                 if(data.message == '已操作')
-                    alert('您已经喜欢过了!');
+                    $.tlj.notify('您已经喜欢过了!');
             }
         }
     });
@@ -79,8 +95,26 @@ $("#complaint").click(function(){
         success:function(data){
             console.log(data);
             if(data.result){
-                alert("举报成功");
+                $.tlj.notify("举报成功");
             }
         }
     });
 });
+
+})();
+
+var rslides = function(){
+    $(".rslides").responsiveSlides({
+        auto: true,
+        pager: false,
+        nav: true,
+        speed: 500,
+        namespace: "callbacks",
+        before: function () {
+            $('.events').append("<li>before event fired.</li>");
+        },
+        after: function () {
+                   $('.events').append("<li>after event fired.</li>");
+               }
+    });
+}
