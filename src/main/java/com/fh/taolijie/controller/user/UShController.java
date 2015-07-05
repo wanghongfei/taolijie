@@ -123,7 +123,7 @@ public class UShController {
             return "redirect:/login";
         }
         List<SHPostCategoryModel> cateList=shPostCategoryService.getCategoryList(page - 1, pageSize, new ObjWrapper());
-        model.addAttribute("cates",cateList);
+        model.addAttribute("cates", cateList);
         return "pc/user/shpost";
     }
     //endregion
@@ -150,7 +150,7 @@ public class UShController {
         }
 
         // 查询分类
-        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100 ,null);
+        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100, null);
 
         model.addAttribute("sh",sh);
         model.addAttribute("cates",cateList);
@@ -504,5 +504,24 @@ public class UShController {
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
 
+    }
+
+    /**
+     * 检查是否已赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String checkLike(@PathVariable("id") Integer shId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        boolean liked = userService.isSHPostAlreadyLiked(cre.getId(), shId);
+
+        return new JsonWrapper(true, Boolean.toString(liked)).getAjaxMessage();
     }
 }

@@ -359,6 +359,25 @@ public class UJobController {
     }
 
     /**
+     * 检查是否已赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String checkLike(@PathVariable("id") Integer jobId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        boolean liked = userService.isJobPostAlreadyLiked(cre.getId(), jobId);
+
+        return new JsonWrapper(true, Boolean.toString(liked)).getAjaxMessage();
+    }
+
+    /**
      * 举报一条兼职
      */
     @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST,
