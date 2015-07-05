@@ -158,7 +158,7 @@
 
     <select id="findBy" resultMap="BaseResultMap" >
         SELECT * FROM private_notification noti
-            INNER JOIN member mem ON mem.id = noti.member_id
+            LEFT JOIN member mem ON mem.id = noti.member_id
         <where>
             <if test="memberId != null">
                 noti.member_id = #{memberId,jdbcType=INTEGER}

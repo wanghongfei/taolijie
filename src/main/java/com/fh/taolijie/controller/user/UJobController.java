@@ -2,10 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
@@ -42,6 +39,9 @@ public class UJobController {
     UserService userService;
     @Autowired
     ReviewService reviewService;
+
+    @Autowired
+    NotificationService notiService;
 
     /**
      * 我的发布 GET
@@ -439,6 +439,20 @@ public class UJobController {
         model.setTime(new Date());
 
         Integer newReviewId = reviewService.addReview(model);
+
+        // 发送被评论通知
+        // 得到兼职的发送者
+        JobPostModel job = jobPostService.findJobPost(jobId);
+        Integer toMemberId = job.getMemberId();
+        // 创建通知实体
+        PrivateNotificationModel priNoti = new PrivateNotificationModel();
+        priNoti.setToMemberId(toMemberId);
+        priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
+        priNoti.setTime(new Date());
+        // 保存到db
+        notiService.addNotification(priNoti);
+
+
         return new JsonWrapper(true, newReviewId.toString()).getAjaxMessage();
     }
 

@@ -12,12 +12,14 @@ import java.util.List;
  */
 public interface NotificationService {
     ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize);
-
-    void deleteSysNotification(Integer sysId);
-
-
     ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize);
 
+    PrivateNotificationModel findPriById(Integer priNotiId);
+
+    void addNotification(PrivateNotificationModel model);
+
+    void deleteSysNotification(Integer sysId);
     void deletePriNotification(Integer priId);
+
     void markPriAsRead(Integer sysId);
 }
