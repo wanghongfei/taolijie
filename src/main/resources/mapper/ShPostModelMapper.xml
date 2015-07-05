@@ -370,7 +370,7 @@
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
         WHERE
-            post.deleted = false
+            post.deleted = false AND post.expired_time >= now()
         ORDER BY
             post.post_time DESC
         LIMIT
@@ -382,7 +382,7 @@
         FROM
             second_hand_post post
         WHERE
-            post.deleted = false
+            post.deleted = false AND post.expired_time >= now()
     </select>
 
     <select id="getInBatch" resultMap="BaseResultMap">
@@ -414,6 +414,7 @@
         WHERE
             post.second_hand_post_category_id = #{categoryId}
             AND post.deleted = false
+            AND post.expired_time >= now()
         ORDER BY
             <if test="orderByPageView == false">post.post_time DESC</if>
             <if test="orderByPageView == true">post.page_view DESC</if>
@@ -428,6 +429,7 @@
         WHERE
             post.second_hand_post_category_id = #{categoryId}
             AND post.deleted = false
+            AND post.expired_time >= now()
     </select>
 
     <select id="getByMember" resultMap="BaseResultMap">
@@ -530,6 +532,7 @@
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
             </if>
+            AND post.expired_time >= now()
         </where>
 
         ORDER BY
@@ -601,6 +604,7 @@
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
             </if>
+            AND post.expired_time >= now()
         </where>
     </select>
 
@@ -673,6 +677,7 @@
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
             </if>
+            AND post.expired_time >= now()
         </where>
 
         ORDER BY
@@ -744,6 +749,7 @@
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
             </if>
+            AND post.expired_time >= now()
         </where>
     </select>
 

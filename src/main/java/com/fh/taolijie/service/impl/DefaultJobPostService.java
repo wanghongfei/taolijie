@@ -43,6 +43,7 @@ public class DefaultJobPostService implements JobPostService {
     public List<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
+        model.setFilterExpiredPost(false);
 
         return postMapper.findBy(model);
     }

@@ -54,15 +54,22 @@ public class HResumeController {
     public String resumeList(@RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "0") int cate,
                              @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                             Model model) {
+                             Model model,
+                             HttpSession session) {
         ObjWrapper objWrapper = new ObjWrapper();
-        List<ResumeModel> resumes;
+        List<ResumeModel> resumes = new ArrayList<>(10);
         if (cate > 0) {
-            //TODO: 按照分类查找没有分页!!
+            // 按求职意向查找
             resumes = resumeService.getResumeListByIntend(cate, (page - 1)*pageSize, pageSize);
-            //cate是兼职的cate
         } else {
-            resumes = resumeService.getAllResumeList((page - 1)*pageSize, pageSize, objWrapper);
+            // 查找所有简历
+            Credential credential = CredentialUtils.getCredential(session);
+            // 如果是商家
+            if (Constants.RoleType.EMPLOYER.toString().equals(credential.getRoleList().get(0))) {
+                resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL, Constants.AccessAuthority.EMPLOYER);
+            } else {
+                resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL);
+            }
         }
 
         int pageStatus = 1;

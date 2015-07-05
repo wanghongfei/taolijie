@@ -50,6 +50,15 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    public List<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList) {
+        List<String> authStrings = Arrays.stream(authList)
+                .map(auth -> auth.toString())
+                .collect(Collectors.toList());
+
+        return reMapper.findByAuth(authStrings, pageNumber, pageSize);
+    }
+
+    @Override
     public List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);

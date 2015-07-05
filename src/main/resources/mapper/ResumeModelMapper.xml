@@ -442,6 +442,22 @@
         #{pageNumber}, #{pageSize}
     </select>
 
+    <select id="findByAuth" resultMap="BaseResultMap">
+        SELECT
+            <include refid="resume_column"/>,
+            <include refid="member_column"/>
+        FROM
+            resume re
+        INNER JOIN
+            member mem ON mem.id = re.member_id
+        WHERE
+            re.access_authority IN <foreach collection="authList" item="auth_name" open="(" separator="," close=")">#{auth_name}</foreach>
+        ORDER BY
+            re.created_time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
     <select id="findPostRecordByMember" resultMap="PostRecord">
         SELECT
             <include refid="member_column"/>,
