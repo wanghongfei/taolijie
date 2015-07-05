@@ -15,5 +15,9 @@ rm -rf /opt/apache-tomcat-7.0.62/webapps/ROOT/*
 cp /root/projects/taolijie/target/taolijie.war /tmp
 cd /tmp
 unzip taolijie.war
-mv taolijie/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
+mv WEB-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
+mv META-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
+rm -rf WEB-INF/
+rm -rf META-INF/
+rm taolijie.war
 echo "done"
