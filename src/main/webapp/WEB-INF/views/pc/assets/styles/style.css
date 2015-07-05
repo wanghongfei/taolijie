@@ -13,8 +13,8 @@ form input[type=submit] {
     background: lightsalmon;
     padding: 10px 40px;
     color: lightyellow;
-    opacity: 0.8;
     border-radius: 5px;
+    z-index: 101;
 }
 .label-checkbox {
     font-size: 0.8em;
@@ -1013,9 +1013,6 @@ ul.bxslider li img {
 
 .detail .pin-title {
     margin-left: -50px; }
-
-.detail p > span {
-    color: #474747; }
 
 .detail > .detail-bar {
     background-color: #fff;

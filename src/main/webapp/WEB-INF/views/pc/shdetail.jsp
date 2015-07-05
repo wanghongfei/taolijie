@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -12,10 +13,10 @@
 <%request.setCharacterEncoding("UTF-8");%>
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="shCtrl">
 <head>
     <meta charset="utf-8">
-    <title>兼职-${sh.title}</title>
+    <title ng-bind="sh.title"></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -78,17 +79,15 @@
             <!-- 二手物品图片轮播 -->
             <div class="pics fl" style="position: relative">
                 <ul class="rslides">
-                    <c:forEach items="${pids}" var="pid">
-                        <li>
-                            <img src="/static/images/users/${pid}" alt="">
-                            <%--<p class="caption"></p>--%>
-                        </li>
-                    </c:forEach>
+                    <li ng-repeat="pid in sh.pids track by $index" on-last-repeat>
+                        <img src="/static/images/users/{{ pid }}" alt="good photo">
+                        <%--<p class="caption"></p>--%>
+                    </li>
                 </ul>
             </div>
             <!-- 二手物品详细信息 （右侧）-->
             <div class="fr sh-info">
-                <p class="sh-price dark-green-bg">￥${sh.sellPrice.intValue()}</p>
+                <p class="sh-price dark-green-bg">￥<span ng-bind="sh.sellPrice"></span></p>
 
                 <div class="sh-block">
                     <div class="title">
@@ -101,8 +100,8 @@
                     <div class="name">
                         <img src="/images/pig.jpg" alt="">
 
-                        <p>${poster.username}</p>
-                        <span>${posterRole.memo}</span>
+                        <p ng-bind="poster.username"></p>
+                        <span ng-bind="posterRole.memo"></span>
 
                     </div>
                 </div>
@@ -115,7 +114,7 @@
                         <div class="bubble-arrow-inner"></div>
                     </div>
                     <div class="place">
-                        <p>${sh.tradePlace}</p>
+                        <p ng-bind="sh.tradePlace"></p>
                     </div>
                 </div>
                 <div class="sh-block">
@@ -127,17 +126,16 @@
                         <div class="bubble-arrow-inner"></div>
                     </div>
                     <div class="sh-contact">
-                        <p><i class="fa fa-phone red"></i> ${sh.contactPhone}</p>
-
-                        <p><i class="fa fa-qq blue"></i> ${sh.contactQq}</p>
+                        <p><i class="fa fa-phone red"></i> <span ng-bind="sh.contactPhone"></span></p>
+                        <p><i class="fa fa-qq blue"></i> <span ng-bind="sh.contactQq"></span></p>
                     </div>
                 </div>
             </div>
             <div style="clean:both"></div>
-            <span class="sh-title">${sh.title}</span>
+            <span class="sh-title" ng-bind="sh.title"></span>
             <%--<span class="fr">浏览量 ：${sh.likes}</span>--%>
             <span class="fr">发布时间：
-            <fmt:formatDate value="${sh.postTime}" pattern="yyyy-MM-dd"/>
+                <span ng-bind="sh.postTime | date:'yyyy-MM-dd'"></span>
             </span>
             <!-- 分享（暂时不实现） -->
             <div class="share"></div>
@@ -147,11 +145,12 @@
             <p class="pin-title dark-green-bg">详情描述
                 <i class="pin-arrow dark-green-arrow"></i>
             </p>
-            <p class="fr sh-fav" id="fav" data-id="${sh.id}" data-type="sh"><i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}"> ${favStatus? '已':''}收藏</i></p>
-
+            <p class="fr" id="fav" ng-attr-data-id="{{ sh.id }}" data-type="sh">
+                <i class="fa"  ng-class="{'fa-heart': sh.favStatus, 'fa-heart-o': !sh.favStatus}"></i>
+                ${favStatus? '已收藏':'收藏'}
+            </p>
             <div>
-				<span>${sh.description}
-                </span>
+				<span ng-bind="sh.description"></span>
             </div>
         </div>
 
@@ -162,7 +161,8 @@
             <div class="operates">
                 <div class="operate">
                     <span id="like" data-id="${sh.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
-                    <p >${sh.likes==null?'0':sh.likes}</p>
+                    <p ng-bind="sh.likes" ng-show="sh.likes"></p>
+                    <p ng-show="!sh.likes">0</p>
                 </div>
                 <%--<div class="operate">--%>
                 <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
@@ -170,7 +170,8 @@
                 <%--</div>--%>
                 <div class="operate">
                     <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
-                    <p >${reviewCount}</p>
+                    <p ng-bind="reviewCount" ng-show="reviewCount"></p>
+                    <p ng-show="!reviewCount">0</p>
                 </div>
 <%--                <div class="operate">
                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
@@ -212,22 +213,14 @@
 <script src="/scripts/comment.js"></script>
 <script src="/scripts/shdetail.js"></script>
 <script src="/scripts/responsiveslides.min.js"></script>
-
 <script>
-    $(".rslides").responsiveSlides({
-        auto: true,
-        pager: false,
-        nav: true,
-        speed: 500,
-        namespace: "callbacks",
-        before: function () {
-            $('.events').append("<li>before event fired.</li>");
-        },
-        after: function () {
-            $('.events').append("<li>after event fired.</li>");
-        }
-    });
+    var sh = JSON.parse('${ju:toJson(sh)}');
+    var pids = '${pids}';
+    pids_arr = pids.substr(1, pids.length-2).replace(/ /g,'').split(',');
+    sh.pids = pids_arr;
+    sh.poster = JSON.parse('${ju:toJson(poster)}');
+    sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
+    sh.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
 </script>
-
 </body>
 </html>
