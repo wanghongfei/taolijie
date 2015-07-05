@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,6 +69,12 @@ public class DefaultResumeService implements ResumeService {
     @Override
     public List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
         List<ApplicationIntendModel> intendList = intendMapper.getByIntend(categoryId, firstResult, CollectionUtils.determineCapacity(capacity));
+        // 如果为空，直接返回空List
+        // 继续执行会导致错误的SQL
+        if (intendList.isEmpty()) {
+            return new ArrayList<>(0);
+        }
+
         List<Integer> idList = intendList.stream().map(ApplicationIntendModel::getResumeId).collect(Collectors.toList());
 
 
