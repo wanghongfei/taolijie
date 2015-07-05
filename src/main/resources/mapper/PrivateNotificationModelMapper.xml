@@ -11,7 +11,7 @@
         <result column="to_member_id" property="toMemberId" jdbcType="INTEGER"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="is_read" property="isRead" jdbcType="INTEGER"/>
-        <result column="time" property="time" jdbcType="DATE"/>
+        <result column="time" property="time" jdbcType="TIMESTAMP"/>
         <result column="access_range" property="accessRange" jdbcType="VARCHAR"/>
 
         <result column="content" property="content" jdbcType="LONGVARCHAR"/>
@@ -53,7 +53,7 @@
         is_read, time, access_range,
         content, to_member_id)
         VALUES (#{memberId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
-        #{isRead,jdbcType=INTEGER}, #{time,jdbcType=DATE}, #{accessRange,jdbcType=VARCHAR},
+        #{isRead,jdbcType=INTEGER}, #{time}, #{accessRange,jdbcType=VARCHAR},
         #{content,jdbcType=LONGVARCHAR}, #{toMemberId})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.PrivateNotificationModel">
@@ -99,7 +99,7 @@
                 #{isRead,jdbcType=INTEGER},
             </if>
             <if test="time != null">
-                #{time,jdbcType=DATE},
+                #{time},
             </if>
             <if test="accessRange != null">
                 #{accessRange,jdbcType=VARCHAR},
@@ -129,7 +129,7 @@
                 is_read = #{isRead,jdbcType=INTEGER},
             </if>
             <if test="time != null">
-                time = #{time,jdbcType=DATE},
+                time = #{time},
             </if>
             <if test="accessRange != null">
                 access_range = #{accessRange,jdbcType=VARCHAR},
@@ -149,7 +149,7 @@
         SET member_id = #{memberId,jdbcType=INTEGER},
         title = #{title,jdbcType=VARCHAR},
         is_read = #{isRead,jdbcType=INTEGER},
-        time = #{time,jdbcType=DATE},
+        time = #{time},
         access_range = #{accessRange,jdbcType=VARCHAR},
         content = #{content,jdbcType=LONGVARCHAR},
         to_member_id = #{toMemberId}
@@ -173,7 +173,7 @@
                 AND noti.is_read = #{isRead,jdbcType=INTEGER}
             </if>
             <if test="time != null">
-                AND noti.time = #{time,jdbcType=DATE}
+                AND noti.time = #{time}
             </if>
             <if test="accessRange != null">
                 AND noti.access_range = #{accessRange,jdbcType=VARCHAR}
@@ -183,6 +183,8 @@
             </if>
 
         </where>
+        ORDER BY
+            noti.time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>

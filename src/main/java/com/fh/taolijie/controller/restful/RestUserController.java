@@ -15,38 +15,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user")
 public class RestUserController {
-    @Autowired
-    AccountService accService;
-
-    /**
-     * 根据用户名查询用户
-     * @param username
-     * @return
-     */
-    @RequestMapping(value = "/name/{username}", produces = Constants.Produce.JSON)
-    public ResponseText getByUsername(@PathVariable String username) {
-        MemberModel mem = accService.findMember(username, true);
-        if (null == mem) {
-            return new ResponseText("not found");
-        }
-
-        mem.setPassword(null);
-
-        return new ResponseText(mem);
-    }
-
-    /**
-     * 根据id查询用户
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
-    public ResponseText getById(@PathVariable Integer id) {
-        MemberModel mem = accService.findMember(id);
-        mem.setPassword(null);
-
-        return new ResponseText(mem);
-    }
+//    @Autowired
+//    AccountService accService;
+//
+//    /**
+//     * 根据用户名查询用户
+//     * @param username
+//     * @return
+//     */
+//    @RequestMapping(value = "/name/{username}", produces = Constants.Produce.JSON)
+//    public ResponseText getByUsername(@PathVariable String username) {
+//        MemberModel mem = accService.findMember(username, true);
+//        if (null == mem) {
+//            return new ResponseText("not found");
+//        }
+//
+//        mem.setPassword(null);
+//
+//        return new ResponseText(mem);
+//    }
+//
+//    /**
+//     * 根据id查询用户
+//     * @param id
+//     * @return
+//     */
+//    @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
+//    public ResponseText getById(@PathVariable Integer id) {
+//        MemberModel mem = accService.findMember(id);
+//        mem.setPassword(null);
+//
+//        return new ResponseText(mem);
+//    }
 
 /*    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
     public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,

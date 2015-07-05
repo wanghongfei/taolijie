@@ -12,28 +12,26 @@ public class ResponseText {
     private boolean isOk;
 
     private Object data;
-    private List<Object> dataList;
 
-    public ResponseText(boolean ok, String message, List<Object> dataList) {
+    public ResponseText(boolean ok, String message, Object data) {
         this.isOk = ok;
         this.message = message;
 
-        this.dataList = dataList;
+        this.data = data;
     }
 
     /**
      * 该构造函数默认处理结果为成功, 带List数据
-     * @param dataList
      */
-    public <T extends List> ResponseText(T dataList) {
+    public <T extends List> ResponseText(T data) {
         this.isOk = true;
         this.message = Constants.StatusMessage.SUCCESS;
 
-        this.dataList = dataList;
+        this.data = data;
     }
 
     /**
-     * 该构造函数默认处理结果为成功, 带Object数据
+     * 该构造函数默认处理结果为成功, 带单条数据
      * @param data
      */
     public ResponseText(Object data) {
@@ -67,14 +65,6 @@ public class ResponseText {
 
     public void setData(Object data) {
         this.data = data;
-    }
-
-    public List getDataList() {
-        return dataList;
-    }
-
-    public void setDataList(List dataList) {
-        this.dataList = dataList;
     }
 
     public String getMessage() {
