@@ -66,6 +66,8 @@ public interface ImageModelMapper {
     List<ImageModel> getInBatch(List<Integer> idList);
 
     List<ImageModel> getImageByMember(Integer memberId);
+    Integer getImageIdByMemberId(Integer memberId);
+
     List<ImageModel> getImageByJob(Integer postId);
     List<ImageModel> getImageByNews(Integer newsId);
 }

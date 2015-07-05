@@ -2,10 +2,8 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ReviewModel;
+import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
@@ -42,6 +40,9 @@ public class UJobController {
     UserService userService;
     @Autowired
     ReviewService reviewService;
+
+    @Autowired
+    NotificationService notiService;
 
     /**
      * 我的发布 GET
@@ -333,6 +334,50 @@ public class UJobController {
     }
 
     /**
+     * 取消赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String unlikeJob(@PathVariable("id") Integer jobId,
+                                  HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        // 执行操作
+        boolean opsResult = userService.unLikeJobPost(cre.getId(), jobId);
+        // 返回false说明用户本来就没有点过赞
+        if (false == opsResult) {
+            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
+
+    /**
+     * 检查是否已赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String checkLike(@PathVariable("id") Integer jobId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        boolean liked = userService.isJobPostAlreadyLiked(cre.getId(), jobId);
+
+        return new JsonWrapper(true, Boolean.toString(liked)).getAjaxMessage();
+    }
+
+    /**
      * 举报一条兼职
      */
     @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST,
@@ -435,11 +480,25 @@ public class UJobController {
         }
 
         model.setMemberId(credential.getId());
-        model.setPostId(jobId);
+        model.setJobPostId(jobId);
         model.setTime(new Date());
 
         Integer newReviewId = reviewService.addReview(model);
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+        // 发送被评论通知
+        // 得到兼职的发送者
+        JobPostModel job = jobPostService.findJobPost(jobId);
+        Integer toMemberId = job.getMemberId();
+        // 创建通知实体
+        PrivateNotificationModel priNoti = new PrivateNotificationModel();
+        priNoti.setToMemberId(toMemberId);
+        priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
+        priNoti.setTime(new Date());
+        // 保存到db
+        notiService.addNotification(priNoti);
+
+
+        return new JsonWrapper(true, newReviewId.toString()).getAjaxMessage();
     }
 
     /**

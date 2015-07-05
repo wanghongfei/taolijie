@@ -109,6 +109,7 @@ public interface JobPostModelMapper {
 
     @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
     void increaseLike(Integer postId);
+    void decreaseLike(Integer postId);
 
     void postResume(@Param("resumeId") Integer resumeId, @Param("jobPostId") Integer jobPostId, @Param("memberId") Integer memberId);
 

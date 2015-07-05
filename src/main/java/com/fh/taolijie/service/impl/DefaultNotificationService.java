@@ -65,6 +65,17 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    public PrivateNotificationModel findPriById(Integer priNotiId) {
+        return priMapper.selectByPrimaryKey(priNotiId);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addNotification(PrivateNotificationModel model) {
+        priMapper.insertSelective(model);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void markPriAsRead(Integer sysId) {
         PrivateNotificationModel model = new PrivateNotificationModel();

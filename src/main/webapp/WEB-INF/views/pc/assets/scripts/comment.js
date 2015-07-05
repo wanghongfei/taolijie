@@ -23,7 +23,8 @@ $('.review-bar').submit(function(e) {
     $.tlj.post(url, data, function(data) {
         if(data.result){
             console.log(data);
-            var reviewId =data.parm.reviewId;
+            //var reviewId =data.parm.reviewId;
+            var reviewId = data.message;
             $parent.append('<img src="/static/images/users/" alt="">');
             $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
             $parent.append('<span>'+content+'</span>');

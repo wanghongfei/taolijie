@@ -113,7 +113,9 @@ public class HJobController {
         // 查询评论
         // 计算页数
         pageNumber = pageNumber.intValue() * pageSize.intValue();
-        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, pageNumber, pageSize);
+        ReviewModel reviewCommand = new ReviewModel(pageNumber, pageSize);
+        reviewCommand.setJobPostId(id);
+        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(reviewCommand);
         List<ReviewModel> reviewList = reviewResult.getList();
         int reviewCount = reviewResult.getPageCount();
 

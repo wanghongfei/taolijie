@@ -247,8 +247,8 @@ public class JobPostModel extends Pageable {
 
 
     /* 查询用 */
-    private boolean orderByDate;
-    private boolean orderByVisit;
+    private boolean orderByDate = true;
+    private boolean orderByVisit = false;
 
     public JobPostModel() {}
 

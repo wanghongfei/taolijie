@@ -3,10 +3,7 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ReviewModel;
-import com.fh.taolijie.domain.SHPostCategoryModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
@@ -42,6 +39,9 @@ public class UShController {
     ReviewService reviewService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    NotificationService notificationService;
 
     /**
      * 我的发布 GET
@@ -123,7 +123,7 @@ public class UShController {
             return "redirect:/login";
         }
         List<SHPostCategoryModel> cateList=shPostCategoryService.getCategoryList(page - 1, pageSize, new ObjWrapper());
-        model.addAttribute("cates",cateList);
+        model.addAttribute("cates", cateList);
         return "pc/user/shpost";
     }
     //endregion
@@ -150,7 +150,7 @@ public class UShController {
         }
 
         // 查询分类
-        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100 ,null);
+        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100, null);
 
         model.addAttribute("sh",sh);
         model.addAttribute("cates",cateList);
@@ -398,28 +398,29 @@ public class UShController {
 
         //为该id的帖子创建一条评论
         ReviewModel reviewDto = new ReviewModel();
-        reviewDto.setId(id);
-        reviewDto.setPostId(id);
+        //reviewDto.setId(id);
+        reviewDto.setShPostId(id);
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());
-        reviewService.addReview(reviewDto);
-
-        //List<ReviewModel> list= reviewService.getReviewList(id,page-1,capacity,new ObjWrapper());
-        ListResult<ReviewModel> reviewResult = reviewService.getReviewList(id, page - 1, 999);
-        List<ReviewModel> list = reviewResult.getList();
-        int pageCount = reviewResult.getPageCount();
+        Integer newId = reviewService.addReview(reviewDto);
 
 
-        for(int i = list.size()-1; i> 0; i--){
-            ReviewModel r = list.get(i);
-            if(r.getContent().equals(content)){
-                reviewDto = r;
-                break;
-            }
-        }
+
+        // 发送被评论通知
+        // 得到兼职的发送者
+        SHPostModel job = shPostService.findPost(id);
+        Integer toMemberId = job.getMemberId();
+        // 创建通知实体
+        PrivateNotificationModel priNoti = new PrivateNotificationModel();
+        priNoti.setToMemberId(toMemberId);
+        priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
+        priNoti.setTime(new Date());
+        // 保存到db
+        notificationService.addNotification(priNoti);
+
         //返回帖子id
-        return new JsonWrapper(true,"reviewId",reviewDto.getId().toString()).getAjaxMessage();
+        return new JsonWrapper(true,"reviewId", newId.toString()).getAjaxMessage();
     }
     //endregion
 
@@ -457,6 +458,10 @@ public class UShController {
     }
     //endregion
 
+    /**
+     * 点赞
+     * @return
+     */
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String like(@PathVariable Integer id,HttpSession session){
@@ -476,4 +481,47 @@ public class UShController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 取消赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String unlikeSh(@PathVariable("id") Integer shId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        // 执行操作
+        boolean opsResult = userService.unlikeShPost(cre.getId(), shId);
+        // 返回false说明用户本来就没有点过赞
+        if (false == opsResult) {
+            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
+
+    /**
+     * 检查是否已赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String checkLike(@PathVariable("id") Integer shId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        boolean liked = userService.isSHPostAlreadyLiked(cre.getId(), shId);
+
+        return new JsonWrapper(true, Boolean.toString(liked)).getAjaxMessage();
+    }
 }

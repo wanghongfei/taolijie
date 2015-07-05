@@ -21,10 +21,7 @@ public class DefaultReviewService implements ReviewService {
     ReviewModelMapper reMapper;
 
     @Override
-    public ListResult<ReviewModel> getReviewList(Integer postId, int firstResult, int capacity) {
-        ReviewModel model = new ReviewModel(firstResult, CollectionUtils.determineCapacity(capacity));
-        model.setPostId(postId);
-
+    public ListResult<ReviewModel> getReviewList(ReviewModel model) {
         List<ReviewModel> list = reMapper.findBy(model);
         int count = reMapper.countFindBy(model);
         return new ListResult<>(list, count);
