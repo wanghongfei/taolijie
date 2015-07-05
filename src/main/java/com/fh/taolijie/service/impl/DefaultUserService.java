@@ -42,6 +42,26 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(readOnly = false)
+    public boolean unLikeJobPost(Integer memId, Integer postId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getLikedJobIds();
+
+        // 如果本来就没有点赞，无法执行取消赞操作
+        if (false == StringUtils.checkIdExists(oldIds, postId.toString())) {
+            return false;
+        }
+
+        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
+
+        jobMapper.decreaseLike(postId);
+        mem.setLikedJobIds(newIds);
+        memMapper.updateByPrimaryKeySelective(mem);
+
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public boolean likeSHPost(Integer memId, Integer shId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
@@ -51,6 +71,25 @@ public class DefaultUserService implements UserService {
         mem.setLikedShIds(newIds);
         memMapper.updateByPrimaryKeySelective(mem);
 
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean unlikeShPost(Integer memId, Integer shId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String oldIds = mem.getLikedShIds();
+
+        // 如果本来就没有点赞，无法执行取消赞操作
+        if (false == StringUtils.checkIdExists(oldIds, shId.toString())) {
+            return false;
+        }
+
+        String newIds = StringUtils.removeFromString(oldIds, shId.toString());
+
+        shMapper.decreaseLike(shId);
+        mem.setLikedShIds(newIds);
+        memMapper.updateByPrimaryKeySelective(mem);
         return true;
     }
 

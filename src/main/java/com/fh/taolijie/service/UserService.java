@@ -14,12 +14,23 @@ public interface UserService {
     boolean likeJobPost(Integer memId, Integer postId);
 
     /**
+     * 取消赞工作信息
+     */
+    boolean unLikeJobPost(Integer memId, Integer postId);
+
+    /**
      * 赞二手信息
      * @param memId
      * @param shId
      * @return
      */
     boolean likeSHPost(Integer memId, Integer shId);
+
+    /**
+     * 取消赞二手信息
+     * @return
+     */
+    boolean unlikeShPost(Integer memId, Integer shId);
 
     /**
      * 判断兼职信息是否已赞

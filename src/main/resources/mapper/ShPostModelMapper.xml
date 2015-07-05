@@ -796,4 +796,10 @@
         SET likes = likes + 1
         WHERE id = #{postId}
     </update>
+
+    <update id="decreaseLike">
+        UPDATE second_hand_post
+        SET likes = likes - 1
+        WHERE id = #{postId}
+    </update>
 </mapper>

@@ -458,6 +458,10 @@ public class UShController {
     }
     //endregion
 
+    /**
+     * 点赞
+     * @return
+     */
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String like(@PathVariable Integer id,HttpSession session){
@@ -477,4 +481,28 @@ public class UShController {
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
+    /**
+     * 取消赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String unlikeSh(@PathVariable("id") Integer shId,
+                            HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        // 执行操作
+        boolean opsResult = userService.unlikeShPost(cre.getId(), shId);
+        // 返回false说明用户本来就没有点过赞
+        if (false == opsResult) {
+            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
+    }
 }

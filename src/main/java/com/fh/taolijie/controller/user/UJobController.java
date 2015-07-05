@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
@@ -330,6 +331,31 @@ public class UJobController {
         userService.likeJobPost(userId, jobId);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+    /**
+     * 取消赞
+     * @return
+     */
+    @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String unlikeJob(@PathVariable("id") Integer jobId,
+                                  HttpSession session) {
+        // 登陆判断
+        Credential cre = CredentialUtils.getCredential(session);
+        if (null == cre) {
+            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+        }
+
+        // 执行操作
+        boolean opsResult = userService.unLikeJobPost(cre.getId(), jobId);
+        // 返回false说明用户本来就没有点过赞
+        if (false == opsResult) {
+            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+
     }
 
     /**

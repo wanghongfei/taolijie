@@ -875,6 +875,15 @@
         WHERE id = #{postId}
     </update>
 
+    <update id="decreaseLike">
+        UPDATE
+            job_post
+        SET
+            likes = likes - 1
+        WHERE
+            id = #{postId}
+    </update>
+
     <!-- 向简历投递表中添加记录 -->
     <insert id="postResume">
         INSERT INTO resume_post_rel (resume_id, job_post_id, created_time, member_id)
