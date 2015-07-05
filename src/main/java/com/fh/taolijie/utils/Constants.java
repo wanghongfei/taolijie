@@ -74,8 +74,21 @@ public class Constants {
         EMPLOYER
     }
 
+    /**
+     * 简历的公开度
+     */
     public static enum AccessAuthority {
+        /**
+         * 仅自己可看
+         */
         ME_ONLY,
+        /**
+         * 仅仅商家可见
+         */
+        EMPLOYER,
+        /**
+         * 完全公开
+         */
         ALL
     }
 
