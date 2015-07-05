@@ -348,6 +348,8 @@
             <include refid="member_column"/>
         FROM resume re
             LEFT JOIN member mem ON mem.id = re.member_id
+        ORDER BY
+            re.created_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
