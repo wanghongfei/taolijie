@@ -8,6 +8,7 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.TimeUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -184,6 +185,7 @@ public class UShController {
         shDto.setPostTime(new Date());
         //图片列表  用分号隔开
         shDto.setPicturePath(picIds);
+        //shDto.setExpiredTime(TimeUtil.getMaxDate());
 
         if(shDto.getSecondHandPostCategoryId()!=null){
             shPostService.addPost(shDto);
