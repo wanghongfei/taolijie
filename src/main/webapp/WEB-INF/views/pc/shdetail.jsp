@@ -161,7 +161,8 @@
             <div class="operates">
                 <div class="operate">
                     <span id="like" data-id="${sh.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
-                    <p >${sh.likes==null?'0':sh.likes}</p>
+                    <p ng-bind="sh.likes" ng-show="sh.likes"></p>
+                    <p ng-show="!sh.likes">0</p>
                 </div>
                 <%--<div class="operate">--%>
                 <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
@@ -169,7 +170,8 @@
                 <%--</div>--%>
                 <div class="operate">
                     <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
-                    <p >${reviewCount}</p>
+                    <p ng-bind="reviewCount" ng-show="reviewCount"></p>
+                    <p ng-show="!reviewCount">0</p>
                 </div>
 <%--                <div class="operate">
                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
@@ -218,6 +220,7 @@
     sh.pids = pids_arr;
     sh.poster = JSON.parse('${ju:toJson(poster)}');
     sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
+    sh.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
 </script>
 </body>
 </html>
