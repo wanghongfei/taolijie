@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.service.StatisticsService;
+import com.fh.taolijie.servlet.OnlineListener;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,12 @@ public class RestStatisticsController {
         Map<String, Integer> map = staService.getPageViewStatistics();
 
         return new ResponseText(map);
+    }
+
+    @RequestMapping(value = "/online", produces = Constants.Produce.JSON)
+    public ResponseText onlineStatistics() {
+        Integer tot = OnlineListener.getAOnlineAmount();
+        return new ResponseText(tot);
     }
 
 }
