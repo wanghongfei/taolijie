@@ -1,5 +1,6 @@
 tlj.controller('shCtrl', function($scope) {
     $scope.sh = sh;
+    $scope.currentUser = currentUser;
     $scope.$on('onRepeatLast', function() {
         rslides();
     })
@@ -51,18 +52,18 @@ $("#like").click(function(){
     var p = $(this).next();
     $.ajax({
         type:"post",
-        url:"/user/sh/"+id+"/like",
+        url:"/user/sh/" + id + "/like",
         success:function(data){
-            console.log(data);
             if(data.result){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             } else {
-                if(data.message == 'already liked')
-                    $.tlj.notify('您已经喜欢过了!');
-                if (data.message == 'not logged in now!') {
-                    $.tlj.notify('登陆后才能执行该操作!');
-                }
+                $.tlj.notify(data.message);
+                //if(data.message == 'already liked')
+                //    $.tlj.notify('您已经喜欢过了!');
+                //if (data.message == 'not logged in now!') {
+                //    $.tlj.notify('登陆后才能执行该操作!');
+                //}
             }
         }
     });
