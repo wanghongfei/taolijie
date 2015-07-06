@@ -467,7 +467,7 @@
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
         WHERE
-            post.deleted = false AND post.expired_time >= now()
+            post.deleted = false
         ORDER BY
             post.post_time DESC
         LIMIT
@@ -500,7 +500,7 @@
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
         WHERE
-            post.complaint IS NOT NULL AND post.complaint > 0 AND post.deleted = false
+            post.complaint IS NOT NULL AND post.complaint > 0
         ORDER BY
             post.complaint DESC
         LIMIT
@@ -604,9 +604,6 @@
             <if test="deleted != null">
                 AND post.expired = #{expired}
             </if>
-
-            AND post.expired_time >= now()
-
         </where>
         ORDER BY
             <choose>
@@ -707,9 +704,6 @@
             <if test="expired != null">
                 AND post.expired = #{expired}
             </if>
-
-            AND post.expired_time >= now()
-
         </where>
     </select>
 
