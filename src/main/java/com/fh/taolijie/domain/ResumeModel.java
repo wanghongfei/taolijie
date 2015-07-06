@@ -1,5 +1,10 @@
 package com.fh.taolijie.domain;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class ResumeModel extends Pageable {
@@ -16,6 +21,8 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 15, max = 500)
     private String experience;
 
     /**
@@ -24,6 +31,8 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 15, max = 200)
     private String introduce;
 
     /**
@@ -32,6 +41,8 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(max = 10)
     private String name;
 
     /**
@@ -56,6 +67,8 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Size(min = 50, max = 260)
     private Integer height;
 
     /**
@@ -72,6 +85,7 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @Email
     private String email;
 
     /**
@@ -80,6 +94,7 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @Length(max = 20)
     private String qq;
 
     /**
@@ -130,6 +145,8 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(max = 30)
     private String phoneNumber;
 
     private String spareTime;
@@ -140,6 +157,7 @@ public class ResumeModel extends Pageable {
      *
      * @mbggenerated
      */
+    @Length(max = 20)
     private String wechatAccount;
 
     private MemberModel member;

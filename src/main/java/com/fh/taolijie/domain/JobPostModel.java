@@ -23,6 +23,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 15, max = 500)
     private String introduce;
 
     /**
@@ -69,7 +71,7 @@ public class JobPostModel extends Pageable {
      * @mbggenerated
      */
     @NotEmpty
-    @Length(min = 0, max = 128)
+    @Length(min = 1, max = 100)
     private String workPlace;
 
     private String workRegion;
@@ -118,7 +120,7 @@ public class JobPostModel extends Pageable {
      * @mbggenerated
      */
     @NotNull
-    @Length(min = 7, max = 20)
+    @Length(min = 7, max = 30)
     private String contactPhone;
 
     /**
@@ -135,6 +137,8 @@ public class JobPostModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 3, max = 20)
     private String contactQq;
 
     /**
@@ -203,7 +207,7 @@ public class JobPostModel extends Pageable {
      * @mbggenerated
      */
     @NotNull
-    @Length(min = 1, max = 64)
+    @Length(min = 1, max = 100)
     private String workTime;
 
     /**

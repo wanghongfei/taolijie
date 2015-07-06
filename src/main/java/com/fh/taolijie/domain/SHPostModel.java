@@ -1,7 +1,9 @@
 package com.fh.taolijie.domain;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -27,6 +29,8 @@ public class SHPostModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 15, max = 150)
     private String description;
 
 
@@ -36,6 +40,8 @@ public class SHPostModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(min = 1, max = 20)
     private String title;
 
     private boolean deleted = false;
@@ -149,10 +155,18 @@ public class SHPostModel extends Pageable {
      *
      * @mbggenerated
      */
+    @NotNull
+    @Length(max = 36)
     private String tradePlace;
 
+    @NotNull
+    @Length(max = 10)
     private String contactName;
+    @NotNull
+    @Length(max = 20)
     private String contactQq;
+    @NotNull
+    @Length(max = 10)
     private String contactPhone;
 
 
