@@ -40,6 +40,8 @@
         <result column="job_application_resume_ids" property="applicationResumeIds" jdbcType="LONGVARCHAR"/>
         <result column="job_deleted" property="deleted" />
 
+        <result column="job_expired" property="expired" jdbcType="BOOLEAN"/>
+
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
                      resultMap="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.BaseResultMap"/>
@@ -63,7 +65,8 @@
         post.member_id AS job_member_id, post.education_level AS job_education_level, post.complaint AS job_complaint, post.work_time AS job_work_time, post.salary_unit AS job_salary_unit, post.page_view AS job_page_view,
         post.verified AS job_verified,
         post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids,
-        post.deleted AS job_deleted
+        post.deleted AS job_deleted,
+        post.expired AS job_expired
     </sql>
 
     <sql id="member_column">
@@ -119,7 +122,8 @@
         complaint, work_time, salary_unit,
         page_view, verified, job_postcol,
         applicant_amount, introduce, application_resume_ids,
-        deleted
+        deleted,
+        expired
         )
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime},
         #{postTime}, #{workPlace,jdbcType=VARCHAR}, #{workRegion}, #{wage,jdbcType=DECIMAL},
@@ -131,7 +135,7 @@
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{jobPostcol,jdbcType=VARCHAR},
         #{applicantAmount,jdbcType=INTEGER}, #{introduce,jdbcType=LONGVARCHAR},
         #{applicationResumeIds,jdbcType=LONGVARCHAR},
-        #{deleted}
+        #{deleted}, #{expired}
         )
     </insert>
     <insert id="insertSelective">
@@ -225,6 +229,9 @@
             <if test="deleted != null">
                 deleted,
             </if>
+            <if test="expired != null">
+                expired,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -310,6 +317,9 @@
             </if>
             <if test="deleted != null">
                 #{deleted},
+            </if>
+            <if test="expired != null">
+                #{expired},
             </if>
         </trim>
     </insert>
@@ -404,6 +414,9 @@
             <if test="deleted != null">
                 deleted = #{deleted},
             </if>
+            <if test="expired != null">
+                expired = #{expired},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -440,7 +453,8 @@
         applicant_amount = #{applicantAmount,jdbcType=INTEGER},
         introduce = #{introduce,jdbcType=LONGVARCHAR},
         application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR},
-        deleted = #{deleted}
+        deleted = #{deleted},
+        expired = #{expired}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -587,6 +601,10 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            <if test="deleted != null">
+                AND post.expired = #{expired}
+            </if>
+
             AND post.expired_time >= now()
 
         </where>
@@ -686,6 +704,10 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            <if test="expired != null">
+                AND post.expired = #{expired}
+            </if>
+
             AND post.expired_time >= now()
 
         </where>
@@ -788,6 +810,9 @@
             <if test="filterExpiredPost == true">
                 AND post.expired_time >= now()
             </if>
+            <if test="expired != null">
+                AND post.expired = #{expired}
+            </if>
         </where>
         ORDER BY
             <choose>
@@ -888,6 +913,9 @@
             </if>
             <if test="filterExpiredPost == true">
                 AND post.expired_time >= now()
+            </if>
+            <if test="expired != null">
+                AND post.expired = #{expired}
             </if>
         </where>
     </select>
