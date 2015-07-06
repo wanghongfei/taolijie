@@ -100,8 +100,8 @@
                     <div class="name">
                         <img src="/images/pig.jpg" alt="">
 
-                        <p ng-bind="poster.username"></p>
-                        <span ng-bind="posterRole.memo"></span>
+                        <p ng-bind="sh.contactName"></p>
+                        <%--<span ng-bind="posterRole.memo"></span>--%>
 
                     </div>
                 </div>
