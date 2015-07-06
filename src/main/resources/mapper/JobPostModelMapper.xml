@@ -521,88 +521,88 @@
                 post.title LIKE CONCAT('%', #{title}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
-                AND post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
+                OR post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="workRegion != null">
-                AND post.work_region = #{workRegion,jdbcType=VARCHAR}
+                OR post.work_region = #{workRegion,jdbcType=VARCHAR}
             </if>
             <if test="wage != null">
-                AND post.wage = #{wage,jdbcType=DECIMAL}
+                OR post.wage = #{wage,jdbcType=DECIMAL}
             </if>
             <if test="timeToPay != null">
-                AND post.time_to_pay = #{timeToPay,jdbcType=VARCHAR}
+                OR post.time_to_pay = #{timeToPay,jdbcType=VARCHAR}
             </if>
             <if test="jobDescription != null">
-                AND post.job_description LIKE CONCAT('%', #{jobDescription,jdbcType=VARCHAR}, '%')
+                OR post.job_description LIKE CONCAT('%', #{jobDescription,jdbcType=VARCHAR}, '%')
             </if>
             <if test="contact != null">
-                AND post.contact = #{contact,jdbcType=VARCHAR}
+                OR post.contact = #{contact,jdbcType=VARCHAR}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone,jdbcType=VARCHAR}
+                OR post.contact_phone = #{contactPhone,jdbcType=VARCHAR}
             </if>
             <if test="contactEmail != null">
-                AND post.contact_email = #{contactEmail,jdbcType=VARCHAR}
+                OR post.contact_email = #{contactEmail,jdbcType=VARCHAR}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq,jdbcType=VARCHAR}
+                OR post.contact_qq = #{contactQq,jdbcType=VARCHAR}
             </if>
             <if test="jobDetail != null">
-                AND post.job_detail LIKE CONCAT('%', #{jobDetail,jdbcType=VARCHAR}, '%')
+                OR post.job_detail LIKE CONCAT('%', #{jobDetail,jdbcType=VARCHAR}, '%')
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="jobPostCategoryId != null">
-                AND post.job_post_category_id = #{jobPostCategoryId,jdbcType=INTEGER}
+                OR post.job_post_category_id = #{jobPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="educationLevel != null">
-                AND post.education_level = #{educationLevel,jdbcType=VARCHAR}
+                OR post.education_level = #{educationLevel,jdbcType=VARCHAR}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="workTime != null">
-                AND post.work_time LIKE CONCAT('%', #{workTime,jdbcType=VARCHAR}, '%')
+                OR post.work_time LIKE CONCAT('%', #{workTime,jdbcType=VARCHAR}, '%')
             </if>
             <if test="salaryUnit != null">
-                AND post.salary_unit = #{salaryUnit,jdbcType=VARCHAR}
+                OR post.salary_unit = #{salaryUnit,jdbcType=VARCHAR}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="jobPostcol != null">
-                AND post.job_postcol = #{jobPostcol,jdbcType=VARCHAR}
+                OR post.job_postcol = #{jobPostcol,jdbcType=VARCHAR}
             </if>
             <if test="applicantAmount != null">
-                AND post.applicant_amount = #{applicantAmount,jdbcType=INTEGER}
+                OR post.applicant_amount = #{applicantAmount,jdbcType=INTEGER}
             </if>
             <if test="introduce != null">
-                AND post.introduce LIKE CONCAT('%', #{introduce,jdbcType=LONGVARCHAR}, '%')
+                OR post.introduce LIKE CONCAT('%', #{introduce,jdbcType=LONGVARCHAR}, '%')
             </if>
             <if test="applicationResumeIds != null">
-                AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
+                OR post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
             <if test="deleted != null">
-                AND post.deleted = #{deleted}
+                OR post.deleted = #{deleted}
             </if>
             <if test="expired != null">
-                AND post.expired = #{expired}
+                OR post.expired = #{expired}
             </if>
         </where>
         ORDER BY
@@ -621,88 +621,88 @@
                 post.title LIKE CONCAT('%', #{title}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="workPlace != null">
-                AND post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
+                OR post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="workRegion != null">
-                AND post.work_region = #{workRegion}
+                OR post.work_region = #{workRegion}
             </if>
             <if test="wage != null">
-                AND post.wage = #{wage,jdbcType=DECIMAL}
+                OR post.wage = #{wage,jdbcType=DECIMAL}
             </if>
             <if test="timeToPay != null">
-                AND post.time_to_pay = #{timeToPay,jdbcType=VARCHAR}
+                OR post.time_to_pay = #{timeToPay,jdbcType=VARCHAR}
             </if>
             <if test="jobDescription != null">
-                AND post.job_description LIKE CONCAT('%', #{jobDescription,jdbcType=VARCHAR}, '%')
+                OR post.job_description LIKE CONCAT('%', #{jobDescription,jdbcType=VARCHAR}, '%')
             </if>
             <if test="contact != null">
-                AND post.contact = #{contact,jdbcType=VARCHAR}
+                OR post.contact = #{contact,jdbcType=VARCHAR}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone,jdbcType=VARCHAR}
+                OR post.contact_phone = #{contactPhone,jdbcType=VARCHAR}
             </if>
             <if test="contactEmail != null">
-                AND post.contact_email = #{contactEmail,jdbcType=VARCHAR}
+                OR post.contact_email = #{contactEmail,jdbcType=VARCHAR}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq,jdbcType=VARCHAR}
+                OR post.contact_qq = #{contactQq,jdbcType=VARCHAR}
             </if>
             <if test="jobDetail != null">
-                AND post.job_detail LIKE CONCAT('%', #{jobDetail,jdbcType=VARCHAR}, '%')
+                OR post.job_detail LIKE CONCAT('%', #{jobDetail,jdbcType=VARCHAR}, '%')
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="jobPostCategoryId != null">
-                AND post.job_post_category_id = #{jobPostCategoryId,jdbcType=INTEGER}
+                OR post.job_post_category_id = #{jobPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="educationLevel != null">
-                AND post.education_level = #{educationLevel,jdbcType=VARCHAR}
+                OR post.education_level = #{educationLevel,jdbcType=VARCHAR}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="workTime != null">
-                AND post.work_time LIKE CONCAT('%', #{workTime,jdbcType=VARCHAR}, '%')
+                OR post.work_time LIKE CONCAT('%', #{workTime,jdbcType=VARCHAR}, '%')
             </if>
             <if test="salaryUnit != null">
-                AND post.salary_unit = #{salaryUnit,jdbcType=VARCHAR}
+                OR post.salary_unit = #{salaryUnit,jdbcType=VARCHAR}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="jobPostcol != null">
-                AND post.job_postcol = #{jobPostcol,jdbcType=VARCHAR}
+                OR post.job_postcol = #{jobPostcol,jdbcType=VARCHAR}
             </if>
             <if test="applicantAmount != null">
-                AND post.applicant_amount = #{applicantAmount,jdbcType=INTEGER}
+                OR post.applicant_amount = #{applicantAmount,jdbcType=INTEGER}
             </if>
             <if test="introduce != null">
-                AND post.introduce LIKE CONCAT('%', #{introduce,jdbcType=LONGVARCHAR}, '%')
+                OR post.introduce LIKE CONCAT('%', #{introduce,jdbcType=LONGVARCHAR}, '%')
             </if>
             <if test="applicationResumeIds != null">
-                AND post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
+                OR post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
             <if test="deleted != null">
-                AND post.deleted = #{deleted}
+                OR post.deleted = #{deleted}
             </if>
             <if test="expired != null">
-                AND post.expired = #{expired}
+                OR post.expired = #{expired}
             </if>
         </where>
     </select>

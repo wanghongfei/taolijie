@@ -566,61 +566,61 @@
                 post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
-                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+                OR post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
             </if>
             <if test="originalPrice != null">
-                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+                OR post.original_price = #{originalPrice,jdbcType=DECIMAL}
             </if>
             <if test="sellPrice != null">
-                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+                OR post.sell_price = #{sellPrice,jdbcType=DECIMAL}
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="secondHandPostCategoryId != null">
-                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+                OR post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="tradePlace != null">
-                AND post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
+                OR post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="description != null">
-                AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
+                OR post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
             </if>
             <if test="deleted != null">
-                AND post.deleted = #{deleted}
+                OR post.deleted = #{deleted}
             </if>
             <if test="contactName != null">
-                AND post.contact_name = #{contactName}
+                OR post.contact_name = #{contactName}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq}
+                OR post.contact_qq = #{contactQq}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone}
+                OR post.contact_phone = #{contactPhone}
             </if>
             <if test="expired != null">
-                AND post.expired = #{expired}
+                OR post.expired = #{expired}
             </if>
         </where>
     </select>
@@ -641,61 +641,61 @@
                 post.title = #{title,jdbcType=VARCHAR}
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
-                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+                OR post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
             </if>
             <if test="originalPrice != null">
-                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+                OR post.original_price = #{originalPrice,jdbcType=DECIMAL}
             </if>
             <if test="sellPrice != null">
-                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+                OR post.sell_price = #{sellPrice,jdbcType=DECIMAL}
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="secondHandPostCategoryId != null">
-                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+                OR post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="tradePlace != null">
-                AND post.trade_place = #{tradePlace,jdbcType=VARCHAR}
+                OR post.trade_place = #{tradePlace,jdbcType=VARCHAR}
             </if>
             <if test="description != null">
-                AND post.description = #{description,jdbcType=LONGVARCHAR}
+                OR post.description = #{description,jdbcType=LONGVARCHAR}
             </if>
             <if test="deleted != null">
-                AND post.deleted = #{deleted}
+                OR post.deleted = #{deleted}
             </if>
             <if test="contactName != null">
-                AND post.contact_name = #{contactName}
+                OR post.contact_name = #{contactName}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq}
+                OR post.contact_qq = #{contactQq}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone}
+                OR post.contact_phone = #{contactPhone}
             </if>
             <if test="expired != null">
-                AND post.expired = #{expired}
+                OR post.expired = #{expired}
             </if>
         </where>
 

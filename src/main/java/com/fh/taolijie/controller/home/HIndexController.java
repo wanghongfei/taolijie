@@ -65,9 +65,11 @@ public class HIndexController {
 
 
         if(type.equals("job")){
-            JobPostModel jobPostModel = new JobPostModel();
-            jobPostModel.setTitle(content);
-            List<JobPostModel> list = jobPostService.runSearch(jobPostModel, (page - 1)*pageSize, pageSize,new ObjWrapper());
+            JobPostModel jobCommand = new JobPostModel();
+            // 根据标题或内容匹配
+            jobCommand.setTitle(content);
+            jobCommand.setJobDetail(content);
+            List<JobPostModel> list = jobPostService.runSearch(jobCommand, (page - 1)*pageSize, pageSize,new ObjWrapper());
 
             int pageStatus = 1;
             if(list.size() == 0){
@@ -79,9 +81,12 @@ public class HIndexController {
             model.addAttribute("jobs", list);
             model.addAttribute("page", page);
             return "pc/joblist";
-        } else{
-            SHPostModel shPostModel = new SHPostModel();
-            List<SHPostModel> list =shPostService.runSearch(shPostModel,new ObjWrapper());
+        } else {
+            SHPostModel shCommand = new SHPostModel();
+            // 根据标题或内容匹配
+            shCommand.setTitle(content);
+            shCommand.setDescription(content);
+            List<SHPostModel> list =shPostService.runSearch(shCommand,new ObjWrapper());
 
             int pageStatus = 1;
             if(list.size() == 0){
