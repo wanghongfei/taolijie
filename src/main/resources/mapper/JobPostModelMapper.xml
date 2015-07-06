@@ -453,7 +453,7 @@
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
         WHERE
-            post.deleted = false
+            post.deleted = false AND post.expired_time >= now()
         ORDER BY
             post.post_time DESC
         LIMIT
@@ -587,16 +587,17 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            AND post.expired_time >= now()
 
         </where>
         ORDER BY
-        <choose>
-            <when test="orderByDate == true">post.post_time DESC</when>
-            <when test="orderByVisit == true">post.page_view DESC</when>
-            <otherwise>post.post_time DESC</otherwise>
-        </choose>
+            <choose>
+                <when test="orderByDate == true">post.post_time DESC</when>
+                <when test="orderByVisit == true">post.page_view DESC</when>
+                <otherwise>post.post_time DESC</otherwise>
+            </choose>
         LIMIT
-        #{pageNumber}, #{pageSize}
+            #{pageNumber}, #{pageSize}
     </select>
     <select id="countSearchBy" resultType="long">
         SELECT COUNT(*) FROM job_post post
@@ -685,6 +686,7 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
+            AND post.expired_time >= now()
 
         </where>
     </select>
@@ -783,7 +785,9 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
-
+            <if test="filterExpiredPost == true">
+                AND post.expired_time >= now()
+            </if>
         </where>
         ORDER BY
             <choose>
@@ -882,7 +886,9 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
-
+            <if test="filterExpiredPost == true">
+                AND post.expired_time >= now()
+            </if>
         </where>
     </select>
 

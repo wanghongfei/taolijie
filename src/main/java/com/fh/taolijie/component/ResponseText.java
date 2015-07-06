@@ -20,18 +20,9 @@ public class ResponseText {
         this.data = data;
     }
 
-    /**
-     * 该构造函数默认处理结果为成功, 带List数据
-     */
-    public <T extends List> ResponseText(T data) {
-        this.isOk = true;
-        this.message = Constants.StatusMessage.SUCCESS;
-
-        this.data = data;
-    }
 
     /**
-     * 该构造函数默认处理结果为成功, 带单条数据
+     * 该构造函数默认处理结果为成功
      * @param data
      */
     public ResponseText(Object data) {

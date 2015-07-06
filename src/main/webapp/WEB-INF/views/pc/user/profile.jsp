@@ -57,7 +57,14 @@
         <p class="pin-title  dark-green-bg">账号信息
             <i class="pin-arrow  dark-green-arrow"></i>
         </p>
-        <p  class="accout-info">账号： ${sessionScope.user.username}<span>${sessionScope.role.memo}</span></p>
+        <p  class="accout-info">
+            账号： ${sessionScope.user.username}
+            <span>
+                <c:if test="${sessionScope.role.rolename == 'ADMIN'}">管理员</c:if>
+                <c:if test="${sessionScope.role.rolename == 'STUDENT'}">学生</c:if>
+                <c:if test="${sessionScope.role.rolename == 'EMPLOYER'}">商家</c:if>
+            </span>
+        </p>
         <p class="pin-title  dark-green-bg">基本信息
             <i class="pin-arrow  dark-green-arrow"></i>
         </p>

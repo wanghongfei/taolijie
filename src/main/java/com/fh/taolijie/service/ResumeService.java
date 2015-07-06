@@ -25,6 +25,8 @@ public interface ResumeService extends PageService {
      */
     List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
+    List<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList);
+
     /**
      * 获取某个用户的部分简历.
      *

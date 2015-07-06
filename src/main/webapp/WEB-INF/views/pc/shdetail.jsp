@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
-<%--
+            <%--
   Created by IntelliJ IDEA.
   User: wynfrith
   Date: 15-5-18
@@ -99,10 +99,8 @@
                     </div>
                     <div class="name">
                         <img src="/images/pig.jpg" alt="">
-
-                        <p ng-bind="sh.poster.username"></p>
-                        <span ng-bind="sh.posterRole.memo"></span>
-
+                        <p ng-bind="sh.contactName"></p>
+                        <%--<span ng-bind="posterRole.memo"></span>--%>
                     </div>
                 </div>
                 <div class="sh-block">

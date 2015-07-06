@@ -60,6 +60,7 @@ public interface ResumeModelMapper {
     List<ResumeModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
     List<ResumeModel> findBy(ResumeModel model);
+    List<ResumeModel> findByAuth(@Param("authList") List<String> authList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
     List<ResumeModel> getInBatch(List<Integer> idList);
 

@@ -117,7 +117,7 @@ public class HJobController {
         reviewCommand.setJobPostId(id);
         ListResult<ReviewModel> reviewResult = reviewService.getReviewList(reviewCommand);
         List<ReviewModel> reviewList = reviewResult.getList();
-        int reviewCount = reviewResult.getPageCount();
+        int reviewCount = reviewResult.getResultCount();
 
 
         model.addAttribute("job", job);

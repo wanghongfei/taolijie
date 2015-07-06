@@ -7,12 +7,12 @@ import java.util.List;
  */
 public class ListResult<T> {
     private List<T> list;
-    private int pageCount;
+    private int resultCount;
 
     public ListResult(List<T> list, int pageCount) {
         this(list);
 
-        this.pageCount = pageCount;
+        this.resultCount = pageCount;
     }
 
     public ListResult(List<T> list) {
@@ -29,11 +29,11 @@ public class ListResult<T> {
         this.list = list;
     }
 
-    public int getPageCount() {
-        return pageCount;
+    public int getResultCount() {
+        return resultCount;
     }
 
-    public void setPageCount(int pageCount) {
-        this.pageCount = pageCount;
+    public void setResultCount(int resultCount) {
+        this.resultCount = resultCount;
     }
 }

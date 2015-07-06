@@ -251,6 +251,7 @@ public class JobPostModel extends Pageable {
     /* 查询用 */
     private boolean orderByDate = true;
     private boolean orderByVisit = false;
+    private boolean filterExpiredPost = true;
 
     public JobPostModel() {}
 
@@ -280,6 +281,14 @@ public class JobPostModel extends Pageable {
 
     public void setOrderByDate(boolean orderByDate) {
         this.orderByDate = orderByDate;
+    }
+
+    public boolean isFilterExpiredPost() {
+        return filterExpiredPost;
+    }
+
+    public void setFilterExpiredPost(boolean filterExpiredPost) {
+        this.filterExpiredPost = filterExpiredPost;
     }
 
     public boolean isOrderByVisit() {
