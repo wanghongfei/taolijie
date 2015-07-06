@@ -601,7 +601,7 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
-            <if test="deleted != null">
+            <if test="expired != null">
                 AND post.expired = #{expired}
             </if>
         </where>
