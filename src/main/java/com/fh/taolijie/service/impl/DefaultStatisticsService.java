@@ -3,6 +3,7 @@ package com.fh.taolijie.service.impl;
 import com.fh.taolijie.service.StatisticsService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.Map;
  */
 @Service
 public class DefaultStatisticsService implements StatisticsService {
+
+    @Qualifier("redisTemplateForString")
     @Autowired
     RedisTemplate rt;
 

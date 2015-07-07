@@ -35,9 +35,6 @@
     <bean id="jacksonSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer">
         <constructor-arg name="type" value="java.lang.Object" />
     </bean>
-<!--    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" >
-        <beans:constructor-arg name="type" value="com.fh.taolijie.domain.MemberModel" />
-    </beans:bean>-->
 
 
     <!-- redis template -->
@@ -46,6 +43,12 @@
         <property name="connectionFactory" ref="redisConnectionFactory" />
         <property name="keySerializer" ref="stringSerializer" />
         <property name="valueSerializer" ref="jacksonSerializer" />
+    </bean>
+    <bean id="redisTemplateForString"
+          class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+        <property name="keySerializer" ref="stringSerializer" />
+        <property name="valueSerializer" ref="stringSerializer" />
     </bean>
 
     <!-- cache manager -->

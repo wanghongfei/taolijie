@@ -4,6 +4,7 @@ import cn.fh.security.servlet.PageProtectionContextListener;
 import cn.fh.security.servlet.PageProtectionFilter;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 @Component
 public class StatisticsInterceptor extends HandlerInterceptorAdapter {
     @Autowired
+    @Qualifier("redisTemplateForString")
     RedisTemplate rt;
 
     /**
