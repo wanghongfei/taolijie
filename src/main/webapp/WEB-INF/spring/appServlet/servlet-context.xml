@@ -10,13 +10,15 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
         >
-    <!-- DispatcherServlet Context: defines this servlet's request-processing
-        infrastructure -->
 
-    <import resource="redis-config.xml" />
+    <context:component-scan base-package="com.fh.taolijie" />
+    <aop:aspectj-autoproxy />
+
     <import resource="database-config.xml" />
+    <import resource="redis-config.xml" />
+    <import resource="mail-config.xml" />
 
-    <!--<aop:aspectj-autoproxy proxy-target-class="false"/>-->
+
     <!-- Enables the Spring MVC @Controller programming model -->
     <!--<cache:annotation-driven />-->
     <mvc:annotation-driven />
@@ -60,25 +62,9 @@
 
 
 
-    <context:component-scan base-package="com.fh.taolijie" />
     <!--<context:component-scan base-package="com.fh.taolijie.controller com.fh.taolijie.service com.fh.taolijie.interceptor com.fh.taolijie.dao" />-->
 
 
-    <!-- Email -->
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.126.com"/>
-        <property name="port" value="25"/>
-        <property name="username" value="wfc5582563@126.com"/>
-        <property name="password" value="wang700327"/>
-        <property name="javaMailProperties">
-            <props>
-                <prop key="mail.transport.protocol">smtp</prop>
-                <prop key="mail.smtp.auth">true</prop>
-                <prop key="mail.smtp.starttls.enable">true</prop>
-                <prop key="mail.debug">true</prop>
-            </props>
-        </property>
-    </bean>
 
     <!-- 拦截器 -->
     <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
@@ -99,5 +85,6 @@
             <bean class="com.fh.taolijie.interceptor.StatisticsInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
+
 
 </beans>

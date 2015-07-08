@@ -24,18 +24,25 @@ public class RedisCacheAspect {
     @Autowired
     StringRedisTemplate rt;
 
-    @Pointcut("@annotation(com.fh.taolijie.cache.annotation.RedisCache)")
+    //@Pointcut("@annotation(com.fh.taolijie.cache.annotation.RedisCache)")
+/*    @Pointcut("execution(* select*(..))")
     public void cacheMethod() {
+    }*/
+
+    @Around("@annotation(com.fh.taolijie.cache.annotation.RedisCache)")
+    public void before() {
+        LogUtils.getInfoLogger().info("!!!!!!!!!!!! this is before!");
     }
 
-    @Around("cacheMethod()")
+
+    @Around("@annotation(com.fh.taolijie.cache.annotation.RedisCache)")
     public Object around(ProceedingJoinPoint jp) throws Throwable {
 
         String clazzName = jp.getTarget().getClass().getName();
         String methodName = jp.getSignature().getName();
         Object[] args = jp.getArgs();
 
-        LogUtils.getInfoLogger().info("缓存方法{}", methodName);
+        LogUtils.getInfoLogger().info("!!!!!!!!!!!!!!!!!!缓存方法{}", methodName);
 
         String key = genKey(clazzName, methodName, args);
 
@@ -45,7 +52,7 @@ public class RedisCacheAspect {
         if (null == value) {
             // cache wasn't hit
             // invoke target method
-            result = jp.proceed();
+            result = jp.proceed(args);
 
             // serialize result
             value = JSON.toJSONString(result);
@@ -69,7 +76,7 @@ public class RedisCacheAspect {
      * @param args
      * @return
      */
-    private String genKey(String clazzName, String methodName, Object[] args) {
+    protected String genKey(String clazzName, String methodName, Object[] args) {
         StringBuilder sb = new StringBuilder(clazzName);
         sb.append(Constants.DELIMITER);
         sb.append(methodName);
