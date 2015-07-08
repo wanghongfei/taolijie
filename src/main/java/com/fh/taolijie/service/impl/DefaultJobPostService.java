@@ -97,7 +97,6 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @RedisCache
     public JobPostModel findJobPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }

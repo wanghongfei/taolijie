@@ -9,7 +9,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		"
         >
-    <cache:annotation-driven />
+    <!--<cache:annotation-driven />-->
 
 
 
@@ -50,6 +50,8 @@
         <property name="connectionFactory" ref="redisConnectionFactory" />
         <property name="keySerializer" ref="stringSerializer" />
         <property name="valueSerializer" ref="stringSerializer" />
+        <property name="hashKeySerializer" ref="stringSerializer" />
+        <property name="hashValueSerializer" ref="stringSerializer" />
     </bean>
 
     <!-- cache manager -->
