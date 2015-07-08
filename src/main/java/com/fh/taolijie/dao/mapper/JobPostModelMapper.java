@@ -1,5 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.domain.JobPostModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;

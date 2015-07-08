@@ -3,9 +3,11 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:mvc="http://www.springframework.org/schema/mvc"
              xmlns:context="http://www.springframework.org/schema/context"
+                xmlns:aop="http://www.springframework.org/schema/aop"
              xsi:schemaLocation="
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
         >
     <!-- DispatcherServlet Context: defines this servlet's request-processing
@@ -14,6 +16,7 @@
     <import resource="redis-config.xml" />
     <import resource="database-config.xml" />
 
+    <!--<aop:aspectj-autoproxy proxy-target-class="false"/>-->
     <!-- Enables the Spring MVC @Controller programming model -->
     <!--<cache:annotation-driven />-->
     <mvc:annotation-driven />

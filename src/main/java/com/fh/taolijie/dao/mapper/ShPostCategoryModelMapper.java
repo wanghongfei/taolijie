@@ -17,12 +17,12 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
                     @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -31,7 +31,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
+    //@CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
     int insert(SHPostCategoryModel record);
 
     /**
@@ -40,7 +40,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
+    //@CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
     int insertSelective(SHPostCategoryModel record);
 
     /**
@@ -49,7 +49,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Cacheable(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)")
+    //@Cacheable(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)")
     SHPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -58,12 +58,12 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
                     @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int updateByPrimaryKeySelective(SHPostCategoryModel record);
 
     /**
@@ -72,14 +72,14 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
                     @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int updateByPrimaryKey(SHPostCategoryModel record);
 
-    @Cacheable(value = "shPostCategoryListCache", key = "'ShPostCategory:all:'.concat(#p0).concat(':').concat(#p1)")
+    //@Cacheable(value = "shPostCategoryListCache", key = "'ShPostCategory:all:'.concat(#p0).concat(':').concat(#p1)")
     List<SHPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }
