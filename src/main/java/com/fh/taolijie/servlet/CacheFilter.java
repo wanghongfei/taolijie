@@ -59,7 +59,10 @@ public class CacheFilter implements Filter, ApplicationContextAware {
         if (null == html) {
             // 缓存中没有
             // 截取生成的html并放入缓存
-            log.info("缓存不存在，生成缓存");
+            if (log.isDebugEnabled()) {
+                log.debug("缓存不存在，生成缓存");
+
+            }
             ResponseWrapper wrapper = new ResponseWrapper(resp);
             // ***** 以上代码在请求被处理之前执行 *****
 
@@ -75,7 +78,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
         // 返回响应
         resp.setContentType("text/html; charset=utf-8");
-        resp.getWriter().print(html);
+        //resp.getWriter().print(html);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
