@@ -530,7 +530,7 @@
                 OR post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="workRegion != null">
-                OR post.work_region = #{workRegion,jdbcType=VARCHAR}
+                OR post.work_region LIKE CONCAT('%', #{workRegion}, '%')
             </if>
             <if test="wage != null">
                 OR post.wage = #{wage,jdbcType=DECIMAL}
@@ -598,12 +598,14 @@
             <if test="applicationResumeIds != null">
                 OR post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
-            <if test="deleted != null">
+<!--            <if test="deleted != null">
                 OR post.deleted = #{deleted}
-            </if>
+            </if>-->
             <if test="expired != null">
                 OR post.expired = #{expired}
             </if>
+
+            AND post.deleted = #{deleted}
         </where>
         ORDER BY
             <choose>
@@ -630,7 +632,7 @@
                 OR post.work_place LIKE CONCAT('%', #{workPlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="workRegion != null">
-                OR post.work_region = #{workRegion}
+                OR post.work_region LIKE CONCAT('%', #{workRegion}, '%')
             </if>
             <if test="wage != null">
                 OR post.wage = #{wage,jdbcType=DECIMAL}
@@ -698,12 +700,13 @@
             <if test="applicationResumeIds != null">
                 OR post.application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR}
             </if>
-            <if test="deleted != null">
+<!--            <if test="deleted != null">
                 OR post.deleted = #{deleted}
-            </if>
+            </if>-->
             <if test="expired != null">
                 OR post.expired = #{expired}
             </if>
+            AND post.deleted = #{deleted}
         </where>
     </select>
 

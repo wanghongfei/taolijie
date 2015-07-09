@@ -82,19 +82,19 @@ public class RestJobController {
 //        List<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
 //        return new ResponseText(postList);
 //    }
-//
-//    /**
-//     * 搜索
-//     * @return
-//     */
-//    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-//    public ResponseText searchPost(JobPostModel model,
-//                                   @RequestParam(defaultValue = "0") int pageNumber,
-//                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
-//        List<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
-//        return new ResponseText(postList);
-//    }
-//
+
+    /**
+     * 搜索
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText searchPost(JobPostModel model,
+                                   @RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        List<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
+        return new ResponseText(postList);
+    }
+
 //    /**
 //     * 根据id得到post
 //     * @param postId
