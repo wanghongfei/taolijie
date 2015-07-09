@@ -41,6 +41,20 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Image Generator</servlet-name>
+		<servlet-class>com.fh.taolijie.servlet.ImageGenServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Image Generator</servlet-name>
+		<url-pattern>/gen.do</url-pattern>
+	</servlet-mapping>
 
 	<filter>
 		<filter-name>Cache Filter</filter-name>
@@ -56,10 +70,7 @@
 		<filter-name>Cache Filter</filter-name>
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
-	<servlet-mapping>
-		<servlet-name>appServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+
 
 	<filter-mapping>
 		<filter-name>Page Protection Filter</filter-name>

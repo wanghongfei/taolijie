@@ -59,6 +59,7 @@
     </bean>
 
     <bean id="pageFilter" class="cn.fh.security.servlet.PageProtectionFilter" />
+    <bean id="imgServlet" class="com.fh.taolijie.servlet.ImageGenServlet" />
 
 
 

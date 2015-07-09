@@ -97,7 +97,7 @@
     </div>
     <div class="contact">
       <p>联系人 : <span>{{ job.contact }}</span></p>
-      <p class="phone" >联系电话 : <span >{{ job.contactPhone }}</span></p>
+      <p class="phone" >联系电话 : <span ><img src="/gen.do?jobId={{ job.id }}"></span></p>
     </div>
     <div class="comment clearfix">
       <p class="pin-title">用户评论
