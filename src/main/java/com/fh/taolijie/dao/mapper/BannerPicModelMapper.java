@@ -58,4 +58,5 @@ public interface BannerPicModelMapper {
     int updateByPrimaryKey(BannerPicModel record);
 
     List<BannerPicModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    int countGetAll();
 }

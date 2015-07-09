@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.BannerPicModelMapper;
 import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.service.BannerPicService;
@@ -21,8 +22,11 @@ public class DefaultBannerPicService implements BannerPicService {
     BannerPicModelMapper banMapper;
 
     @Override
-    public List<BannerPicModel> getBannerList(int firstResult, int capacity, ObjWrapper wrap) {
-        return banMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<BannerPicModel> getBannerList(int firstResult, int capacity) {
+        List<BannerPicModel> banList =  banMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+        int tot = banMapper.countGetAll();
+
+        return new ListResult<>(banList, tot);
     }
 
     @Override
@@ -41,10 +45,8 @@ public class DefaultBannerPicService implements BannerPicService {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean addBanner(BannerPicModel model) {
-        banMapper.insert(model);
-
-        return true;
+    public int addBanner(BannerPicModel model) {
+        return banMapper.insert(model);
     }
 
     @Override

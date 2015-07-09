@@ -78,6 +78,11 @@
             "toUrl": "/login/admin",
             "url": "/manage/*"
         },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login/admin",
+            "url": "/manage/banner/*"
+        },
 
         {
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
