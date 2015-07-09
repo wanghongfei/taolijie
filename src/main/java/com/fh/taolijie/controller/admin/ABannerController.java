@@ -70,8 +70,8 @@ public class ABannerController {
 
         ListResult<BannerPicModel> banners = bannerPicService.getBannerList(page-1, pageSize);
 
-        model.addAttribute("banners",banners.getList());
-        model.addAttribute("bannersCount", banners.getResultCount());
+        model.addAttribute("bannerList",banners.getList());
+        model.addAttribute("bannerCount", banners.getResultCount());
 
         return "pc/admin/banner";
     }
