@@ -172,7 +172,9 @@ public class UJobController {
                 HttpSession session) {
 
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            JsonWrapper jw = null;
+            jw =  new JsonWrapper(false, result.getAllErrors());
+            return jw.getAjaxMessage();
         }
         String username = CredentialUtils.getCredential(session).getUsername();
         MemberModel mem = accountService.findMember(username, false);

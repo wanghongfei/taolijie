@@ -70,22 +70,27 @@ public interface JobPostModelMapper {
 
     @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    @RedisCache(type = JobPostModel.class)
     long countGetAll();
 
     @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getInBatch(List<Integer> idList);
 
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getByComplaint(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
 
     @RedisCache(type = JobPostModel.class)
     List<JobPostModel> findBy(JobPostModel model);
+    @RedisCache(type = JobPostModel.class)
     long countFindBy(JobPostModel model);
 
     @RedisCache(type = JobPostModel.class)
     List<JobPostModel> searchBy(JobPostModel model);
+    @RedisCache(type = JobPostModel.class)
     long countSearchBy(JobPostModel model);
 
+    @RedisEvict(type = JobPostModel.class)
     void complaint(Integer postId);
 
 
