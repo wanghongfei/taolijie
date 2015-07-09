@@ -23,11 +23,11 @@ public class BannerServiceTest extends BaseSpringDataTestClass {
 
     @Test
     public void testAll() {
-        service.getBannerList(0, 100, null);
+        service.getBannerList(0, 100);
 
         BannerPicModel ban = new BannerPicModel();
         ban.setId(1);
-        ban.setTime(new Date());
+        ban.setCreatedTime(new Date());
         service.updateBanner(1, ban);
 
         service.deleteBanner(1);

@@ -17,12 +17,12 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
                     @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -31,7 +31,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true)
+    //@CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true)
     int insert(JobPostCategoryModel record);
 
     /**
@@ -40,7 +40,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
+    //@CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
     int insertSelective(JobPostCategoryModel record);
 
     /**
@@ -49,7 +49,7 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Cacheable(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)")
+    //@Cacheable(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)")
     JobPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -58,12 +58,12 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
                     @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int updateByPrimaryKeySelective(JobPostCategoryModel record);
 
 
@@ -73,15 +73,15 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
+/*    @Caching(
             evict = {
                     @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
                     @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
             }
-    )
+    )*/
     int updateByPrimaryKey(JobPostCategoryModel record);
 
-    @Cacheable(value = "jobCategoryListCache", key = "'JobPostCategory:query:all:'.concat(#p0).concat(':').concat(#p1)")
+    //@Cacheable(value = "jobCategoryListCache", key = "'JobPostCategory:query:all:'.concat(#p0).concat(':').concat(#p1)")
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
     boolean isCategoryEmpty(Integer categoryId);

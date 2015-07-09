@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.admin;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.service.BannerPicService;
 import com.fh.taolijie.utils.Constants;
@@ -37,10 +38,10 @@ public class ABannerController {
     @RequestMapping(value = "/add",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String add(BannerPicModel pic){
-        pic.setTime(new Date());
-        if(!bannerPicService.addBanner(pic)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
-        }
+
+        pic.setCreatedTime(new Date());
+        bannerPicService.addBanner(pic);
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
@@ -66,9 +67,11 @@ public class ABannerController {
     public String manage(Model model){
         int page = 1;
         int pageSize = 9999;
-        List<BannerPicModel> banners = bannerPicService.getBannerList(page-1, pageSize, new ObjWrapper());
 
-        model.addAttribute("banners",banners);
+        ListResult<BannerPicModel> banners = bannerPicService.getBannerList(page-1, pageSize);
+
+        model.addAttribute("bannerList",banners.getList());
+        model.addAttribute("bannerCount", banners.getResultCount());
 
         return "pc/admin/banner";
     }

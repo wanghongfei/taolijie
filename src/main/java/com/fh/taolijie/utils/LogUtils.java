@@ -13,8 +13,10 @@ public class LogUtils {
     private LogUtils() {}
 
     public static final String ERROR_LOGGER = "error";
+    public static final String INFO_LOG = "info";
 
     private static Logger errorLog = LoggerFactory.getLogger(ERROR_LOGGER);
+    private static Logger infoLog = LoggerFactory.getLogger(INFO_LOG);
 
     /**
      * 得到错误级别的logger.
@@ -23,6 +25,14 @@ public class LogUtils {
      */
     public static Logger getErrorLogger() {
         return errorLog;
+    }
+
+    /**
+     * 得到info级别的logger
+     * @return
+     */
+    public static Logger getInfoLogger() {
+        return infoLog;
     }
 
     /**

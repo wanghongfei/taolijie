@@ -32,6 +32,8 @@
         <result column="sh_post_contact_name" property="contactName" jdbcType="VARCHAR"/>
         <result column="sh_post_contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
 
+        <result column="sh_post_expired" property="expired" jdbcType="BOOLEAN"/>
+
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
                      resultMap="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.BaseResultMap"/>
@@ -58,7 +60,8 @@
         post.deleted AS sh_post_deleted,
         post.contact_qq AS sh_post_contact_qq,
         post.contact_phone AS sh_post_contact_phone,
-        post.contact_name AS sh_post_contact_name
+        post.contact_name AS sh_post_contact_name,
+        post.expired AS sh_post_expired
     </sql>
 
     <sql id="member_column">
@@ -70,7 +73,9 @@
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
         mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.creadits AS mem_creadits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids, mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids, mem.favorite_job_ids AS mem_favorite_job_ids,
-        mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids
+        mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids,
+        mem.last_sh_date AS mem_last_sh_date,
+        mem.last_job_date AS mem_last_job_date
     </sql>
 
     <sql id="sh_post_category_column">
@@ -120,14 +125,16 @@
         member_id, second_hand_post_category_id, complaint,
         page_view, verified, trade_place,
         picture_path, description, deleted, contact_name,
-        contact_phone, contact_qq)
+        contact_phone, contact_qq,
+        expired)
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime},
         #{postTime}, #{depreciationRate,jdbcType=VARCHAR}, #{originalPrice,jdbcType=DECIMAL},
         #{sellPrice,jdbcType=DECIMAL}, #{likes,jdbcType=INTEGER}, #{dislikes,jdbcType=INTEGER},
         #{memberId,jdbcType=INTEGER}, #{secondHandPostCategoryId,jdbcType=INTEGER}, #{complaint,jdbcType=INTEGER},
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{tradePlace,jdbcType=VARCHAR},
         #{picturePath,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR},
-        #{deleted}, #{contactName}, #{contactPhone}, #{contactQq})
+        #{deleted}, #{contactName}, #{contactPhone}, #{contactQq},
+        #{expired})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -196,6 +203,9 @@
             <if test="contactPhone != null">
                 contact_phone,
             </if>
+            <if test="expired != null">
+                expired,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -258,6 +268,9 @@
             </if>
             <if test="contactPhone != null">
                 #{contactPhone},
+            </if>
+            <if test="expired != null">
+                #{expired},
             </if>
         </trim>
     </insert>
@@ -329,6 +342,9 @@
             <if test="contactPhone != null">
                 contact_phone = #{contactPhone},
             </if>
+            <if test="expired != null">
+                expired = #{expired},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -357,7 +373,8 @@
         deleted = #{deleted},
         contactName = #{contactName},
         contactPhone = #{contactPhone},
-        contactQq = #{contactQq}
+        contactQq = #{contactQq},
+        expired = #{expired}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -477,59 +494,63 @@
                 post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
-                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+                OR post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
             </if>
             <if test="originalPrice != null">
-                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+                OR post.original_price = #{originalPrice,jdbcType=DECIMAL}
             </if>
             <if test="sellPrice != null">
-                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+                OR post.sell_price = #{sellPrice,jdbcType=DECIMAL}
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="secondHandPostCategoryId != null">
-                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+                OR post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="tradePlace != null">
-                AND post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
+                OR post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="description != null">
-                AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
+                OR post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
             </if>
-            <if test="deleted != null">
+<!--            <if test="deleted != null">
                 AND post.deleted = #{deleted}
-            </if>
+            </if>-->
             <if test="contactName != null">
-                AND post.contact_name = #{contactName}
+                OR post.contact_name = #{contactName}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq}
+                OR post.contact_qq = #{contactQq}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone}
+                OR post.contact_phone = #{contactPhone}
             </if>
+            <if test="expired != null">
+                OR post.expired = #{expired}
+            </if>
+            AND post.deleted = #{deleted}
         </where>
 
         ORDER BY
@@ -548,59 +569,63 @@
                 post.title LIKE CONCAT('%', #{title,jdbcType=VARCHAR}, '%')
             </if>
             <if test="expiredTime != null">
-                AND post.expired_time = #{expiredTime}
+                OR post.expired_time = #{expiredTime}
             </if>
             <if test="postTime != null">
-                AND post.post_time = #{postTime}
+                OR post.post_time = #{postTime}
             </if>
             <if test="depreciationRate != null">
-                AND post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
+                OR post.depreciation_rate = #{depreciationRate,jdbcType=VARCHAR}
             </if>
             <if test="originalPrice != null">
-                AND post.original_price = #{originalPrice,jdbcType=DECIMAL}
+                OR post.original_price = #{originalPrice,jdbcType=DECIMAL}
             </if>
             <if test="sellPrice != null">
-                AND post.sell_price = #{sellPrice,jdbcType=DECIMAL}
+                OR post.sell_price = #{sellPrice,jdbcType=DECIMAL}
             </if>
             <if test="likes != null">
-                AND post.likes = #{likes,jdbcType=INTEGER}
+                OR post.likes = #{likes,jdbcType=INTEGER}
             </if>
             <if test="dislikes != null">
-                AND post.dislikes = #{dislikes,jdbcType=INTEGER}
+                OR post.dislikes = #{dislikes,jdbcType=INTEGER}
             </if>
             <if test="memberId != null">
-                AND post.member_id = #{memberId,jdbcType=INTEGER}
+                OR post.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="secondHandPostCategoryId != null">
-                AND post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
+                OR post.second_hand_post_category_id = #{secondHandPostCategoryId,jdbcType=INTEGER}
             </if>
             <if test="complaint != null">
-                AND post.complaint = #{complaint,jdbcType=INTEGER}
+                OR post.complaint = #{complaint,jdbcType=INTEGER}
             </if>
             <if test="pageView != null">
-                AND post.page_view = #{pageView,jdbcType=INTEGER}
+                OR post.page_view = #{pageView,jdbcType=INTEGER}
             </if>
             <if test="verified != null">
-                AND post.verified = #{verified,jdbcType=VARCHAR}
+                OR post.verified = #{verified,jdbcType=VARCHAR}
             </if>
             <if test="tradePlace != null">
-                AND post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
+                OR post.trade_place LIKE CONCAT('%', #{tradePlace,jdbcType=VARCHAR}, '%')
             </if>
             <if test="description != null">
-                AND post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
+                OR post.description LIKE CONCAT('%', #{description,jdbcType=LONGVARCHAR}, '%')
             </if>
-            <if test="deleted != null">
-                AND post.deleted = #{deleted}
-            </if>
+<!--            <if test="deleted != null">
+                OR post.deleted = #{deleted}
+            </if>-->
             <if test="contactName != null">
-                AND post.contact_name = #{contactName}
+                OR post.contact_name = #{contactName}
             </if>
             <if test="contactQq != null">
-                AND post.contact_qq = #{contactQq}
+                OR post.contact_qq = #{contactQq}
             </if>
             <if test="contactPhone != null">
-                AND post.contact_phone = #{contactPhone}
+                OR post.contact_phone = #{contactPhone}
             </if>
+            <if test="expired != null">
+                OR post.expired = #{expired}
+            </if>
+            AND post.deleted = #{deleted}
         </where>
     </select>
 
@@ -673,6 +698,9 @@
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
             </if>
+            <if test="expired != null">
+                AND post.expired = #{expired}
+            </if>
         </where>
 
         ORDER BY
@@ -743,6 +771,9 @@
             </if>
             <if test="contactPhone != null">
                 AND post.contact_phone = #{contactPhone}
+            </if>
+            <if test="expired != null">
+                AND post.expired = #{expired}
             </if>
         </where>
     </select>

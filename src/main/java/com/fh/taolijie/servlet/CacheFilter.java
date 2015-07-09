@@ -1,5 +1,6 @@
 package com.fh.taolijie.servlet;
 
+import com.fh.taolijie.component.ResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -8,6 +9,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +25,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     private static final Logger log = LoggerFactory.getLogger(CacheFilter.class);
 
     private static ApplicationContext ctx;
+    private static StringRedisTemplate redis;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -29,7 +33,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-/*        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
         // 如果不是访问主页，放行
@@ -55,7 +59,10 @@ public class CacheFilter implements Filter, ApplicationContextAware {
         if (null == html) {
             // 缓存中没有
             // 截取生成的html并放入缓存
-            log.info("缓存不存在，生成缓存");
+            if (log.isDebugEnabled()) {
+                log.debug("缓存不存在，生成缓存");
+
+            }
             ResponseWrapper wrapper = new ResponseWrapper(resp);
             // ***** 以上代码在请求被处理之前执行 *****
 
@@ -71,7 +78,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
 
         // 返回响应
         resp.setContentType("text/html; charset=utf-8");
-        resp.getWriter().print(html);*/
+        //resp.getWriter().print(html);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
@@ -83,15 +90,14 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ctx = applicationContext;
+        redis = (StringRedisTemplate)ctx.getBean("redisTemplateForString");
     }
 
     private String getHtmlFromCache() {
-        StringRedisTemplate redis = (StringRedisTemplate)ctx.getBean("redisTemplate");
         return redis.opsForValue().get("home");
     }
 
     private void putIntoCache(String html) {
-        StringRedisTemplate redis = (StringRedisTemplate)ctx.getBean("redisTemplate");
         redis.opsForValue().set("home", html, 10, TimeUnit.MINUTES); // 10分钟
     }
 }

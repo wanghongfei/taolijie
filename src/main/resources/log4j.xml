@@ -28,6 +28,10 @@
 		<appender-ref ref="ERROR-APPENDER" />
 	</logger>
 
+	<logger name="info">
+		<level value="debug" />
+	</logger>
+
 	<!-- Application Loggers -->
 	<logger name="com.fh.taolijie">
 		<level value="debug" />

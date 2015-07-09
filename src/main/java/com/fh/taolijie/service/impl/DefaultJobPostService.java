@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;

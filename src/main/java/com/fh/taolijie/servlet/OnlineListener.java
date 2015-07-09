@@ -2,6 +2,7 @@ package com.fh.taolijie.servlet;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 用于统计在线人数
@@ -9,17 +10,21 @@ import javax.servlet.http.HttpSessionListener;
  */
 public class OnlineListener implements HttpSessionListener {
     /**
-     * 使用volatile进行轻量级同步
+     * 使用原子整数避免线程安全问题
      */
-    public static volatile int onlineAmount = 0;
+    private static AtomicInteger onlineAmount;
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-        onlineAmount++;
+        onlineAmount.incrementAndGet();
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-        onlineAmount--;
+        onlineAmount.decrementAndGet();
+    }
+
+    public static int getAOnlineAmount() {
+        return onlineAmount.get();
     }
 }

@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -14,7 +15,7 @@ public interface BannerPicService {
      * 获取所有banner信息
      * @return
      */
-    List<BannerPicModel> getBannerList(int firstResult, int capacity, ObjWrapper wrap);
+    ListResult<BannerPicModel> getBannerList(int firstResult, int capacity);
 
     /**
      * 更新banner信息
@@ -32,9 +33,9 @@ public interface BannerPicService {
 
     /**
      * 添加一个banner
-     * @return
+     * @return 刚刚添加的banner的主键
      */
-    boolean addBanner(BannerPicModel model);
+    int addBanner(BannerPicModel model);
 
     /**
      * 根据id查找banner

@@ -65,7 +65,7 @@ public class HResumeController {
             // 查找所有简历
             Credential credential = CredentialUtils.getCredential(session);
             // 如果是商家
-            if (Constants.RoleType.EMPLOYER.toString().equals(credential.getRoleList().get(0))) {
+            if (null != credential && Constants.RoleType.EMPLOYER.toString().equals(credential.getRoleList().get(0))) {
                 resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL, Constants.AccessAuthority.EMPLOYER);
             } else {
                 resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL);

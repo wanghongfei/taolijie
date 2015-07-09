@@ -2,34 +2,40 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:cache="http://www.springframework.org/schema/cache"
+                xmlns:aop="http://www.springframework.org/schema/aop"
              xsi:schemaLocation="
 		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		"
         >
-    <!-- Enables the Spring MVC @Controller programming model -->
-    <cache:annotation-driven />
+    <!--<cache:annotation-driven />-->
 
 
 
     <bean id="cacheFilter" class="com.fh.taolijie.servlet.CacheFilter" />
 
+    <!-- redis连接池配置 -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="50" />
+    </bean>
 
-    <!-- Redis缓存配置 -->
+    <!-- Redis连接配置 -->
     <bean id="redisConnectionFactory"
                 class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-        <property name="hostName" value="120.24.218.56" />
+        <property name="hostName" value="127.0.0.1" />
         <property name="password" value="111111" />
+
+        <property name="usePool" value="true" />
+        <property name="timeout" value="2000" />
+        <property name="poolConfig" ref="jedisPoolConfig" />
     </bean>
 
     <!-- Serializer -->
     <bean id="stringSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <bean id="jacksonSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer">
-        <constructor-arg name="type" value="java.lang.Object" />
+    <bean id="jacksonSerializer" class="com.fh.taolijie.component.GenericJackson2JsonRedisSerializer">
     </bean>
-<!--    <beans:bean id="valueSerializer" class="org.springframework.data.redis.serializer.JacksonJsonRedisSerializer" >
-        <beans:constructor-arg name="type" value="com.fh.taolijie.domain.MemberModel" />
-    </beans:bean>-->
+    <bean id="jdkSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
 
 
     <!-- redis template -->
@@ -38,6 +44,14 @@
         <property name="connectionFactory" ref="redisConnectionFactory" />
         <property name="keySerializer" ref="stringSerializer" />
         <property name="valueSerializer" ref="jacksonSerializer" />
+    </bean>
+    <bean id="redisTemplateForString"
+          class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+        <property name="keySerializer" ref="stringSerializer" />
+        <property name="valueSerializer" ref="stringSerializer" />
+        <property name="hashKeySerializer" ref="stringSerializer" />
+        <property name="hashValueSerializer" ref="stringSerializer" />
     </bean>
 
     <!-- cache manager -->

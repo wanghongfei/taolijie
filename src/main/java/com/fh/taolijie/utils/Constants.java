@@ -183,6 +183,13 @@ public class Constants {
         public static final String OTHER = "面议";*/
     }
 
+    /**
+     * Redis Key
+     */
+    public static class RedisKey {
+        public static final String PAGE_STATISTICS = "page-statistics";
+    }
+
     public static class Produce {
         public static final String JSON = "application/json; charset=utf-8";
     }

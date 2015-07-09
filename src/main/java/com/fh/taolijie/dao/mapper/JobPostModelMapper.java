@@ -1,5 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.RedisCache;
+import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.JobPostModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,13 +19,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
-            }
-
-    )
+    @RedisEvict(type = JobPostModel.class)
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -32,7 +28,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
+    @RedisEvict(type = JobPostModel.class)
     int insert(JobPostModel record);
 
     /**
@@ -41,7 +37,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
+    @RedisEvict(type = JobPostModel.class)
     int insertSelective(JobPostModel record);
 
     /**
@@ -50,7 +46,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @Cacheable(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)")
+    @RedisCache(type = JobPostModel.class)
     JobPostModel selectByPrimaryKey(Integer id);
 
     /**
@@ -59,13 +55,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)", beforeInvocation = true),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
-            }
-
-    )
+    @RedisEvict(type = JobPostModel.class)
     int updateByPrimaryKeySelective(JobPostModel record);
 
 
@@ -75,40 +65,41 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0.id)", beforeInvocation = true),
-                    @CacheEvict(value = "jobPostListCache", allEntries = true, beforeInvocation = true)
-            }
-
-    )
+    @RedisEvict(type = JobPostModel.class)
     int updateByPrimaryKey(JobPostModel record);
 
-    @Cacheable(value = "jobPostListCache", key = "'JobPost:'.concat(#root.methodName).concat(':').concat(#p0).concat(':').concat(#p1)")
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    @RedisCache(type = JobPostModel.class)
     long countGetAll();
 
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getInBatch(List<Integer> idList);
 
-    @Cacheable(value = "jobPostListCache", key = "'JobPost:'.concat(#root.methodName).concat(':').concat(#p0).concat(':').concat(#p1)")
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> getByComplaint(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
 
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> findBy(JobPostModel model);
+    @RedisCache(type = JobPostModel.class)
     long countFindBy(JobPostModel model);
 
+    @RedisCache(type = JobPostModel.class)
     List<JobPostModel> searchBy(JobPostModel model);
+    @RedisCache(type = JobPostModel.class)
     long countSearchBy(JobPostModel model);
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
+    @RedisEvict(type = JobPostModel.class)
     void complaint(Integer postId);
 
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
+    @RedisEvict(type = JobPostModel.class)
     void increasePageView(Integer postId);
 
-    @CacheEvict(value = "jobPostCache", key = "'JobPost:id:'.concat(#p0)", beforeInvocation = true)
+    @RedisEvict(type = JobPostModel.class)
     void increaseLike(Integer postId);
+    @RedisEvict(type = JobPostModel.class)
     void decreaseLike(Integer postId);
 
     void postResume(@Param("resumeId") Integer resumeId, @Param("jobPostId") Integer jobPostId, @Param("memberId") Integer memberId);
@@ -117,5 +108,6 @@ public interface JobPostModelMapper {
      * set deleted = true
      * @param postId
      */
+    @RedisEvict(type = JobPostModel.class)
     int setDeleted(@Param("postId") Integer postId, @Param("deleted") boolean deleted);
 }
