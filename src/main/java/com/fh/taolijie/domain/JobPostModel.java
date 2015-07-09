@@ -138,8 +138,8 @@ public class JobPostModel extends Pageable implements Serializable {
      *
      * @mbggenerated
      */
-    @NotNull
-    @Length(min = 3, max = 20)
+    //@NotNull
+    //@Length(min = 3, max = 20)
     private String contactQq;
 
     /**

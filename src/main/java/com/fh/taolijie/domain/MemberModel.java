@@ -245,6 +245,9 @@ public class MemberModel extends Pageable implements Serializable {
      */
     private Integer creadits;
 
+    private Date lastShDate;
+    private Date lastJobDate;
+
     private String readSysNotificationIds;
 
     private List<RoleModel> roleList;
@@ -271,6 +274,22 @@ public class MemberModel extends Pageable implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Date getLastShDate() {
+        return lastShDate;
+    }
+
+    public void setLastShDate(Date lastShDate) {
+        this.lastShDate = lastShDate;
+    }
+
+    public Date getLastJobDate() {
+        return lastJobDate;
+    }
+
+    public void setLastJobDate(Date lastJobDate) {
+        this.lastJobDate = lastJobDate;
     }
 
     public String getReadSysNotificationIds() {

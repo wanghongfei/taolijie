@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -179,6 +180,25 @@ public class UShController {
         }
         String username = CredentialUtils.getCredential(session).getUsername();
         mem = accountService.findMember(username, false);
+
+
+        // 检查距离上次发布的时间间隔
+        Date lastJobTime = mem.getLastShDate();
+        Date nowTime = new Date();
+        // 如果时间为空，说明这是用户第一次发帖
+        if (null != lastJobTime) {
+            boolean enoughInterval = TimeUtil.intervalGreaterThan(nowTime, lastJobTime, 1, TimeUnit.MINUTES);
+
+            // 时间间隔少于1min
+            // 返回错误信息
+            if (false == enoughInterval) {
+                return new JsonWrapper(false, "too frequent!").getAjaxMessage();
+            }
+        }
+
+        // 写入最新的发布时间
+        mem.setLastShDate(nowTime);
+        accountService.updateMember(mem);
 
         /*创建二手信息*/
         shDto.setMemberId(mem.getId());

@@ -40,6 +40,9 @@
 
         <result column="mem_read_global_noti_ids" property="readSysNotificationIds"/>
 
+        <result column="mem_last_job_date" property="lastJobDate" jdbcType="TIMESTAMP" />
+        <result column="mem_last_sh_date" property="lastShDate" jdbcType="TIMESTAMP" />
+
         <collection property="roleList" resultMap="com.fh.taolijie.dao.mapper.RoleModelMapper.BaseResultMap"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -51,7 +54,9 @@
         qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, created_time AS mem_created_time, valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
         last_post_time AS mem_last_post_time, reset_password_token AS mem_reset_password_token, last_token_date AS mem_last_token_date, school_organization AS mem_school_organization, creadits AS mem_creadits,
         student_id AS mem_student_id, block_list AS mem_block_list, applied_job_ids AS mem_applied_job_ids, liked_job_ids AS mem_liked_job_ids, liked_sh_ids AS mem_liked_sh_ids, favorite_job_ids AS mem_favorite_job_ids,
-        favorite_sh_ids AS mem_favorite_sh_ids, favorite_resume_ids AS mem_favorite_resume_ids,read_global_noti_ids AS mem_read_global_noti_ids
+        favorite_sh_ids AS mem_favorite_sh_ids, favorite_resume_ids AS mem_favorite_resume_ids,read_global_noti_ids AS mem_read_global_noti_ids,
+        last_sh_date AS mem_last_sh_date,
+        last_job_date AS mem_last_job_date
     </sql>
     <sql id="member_column">
         <!--
@@ -62,7 +67,9 @@
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
         mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.creadits AS mem_creadits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids, mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids, mem.favorite_job_ids AS mem_favorite_job_ids,
-        mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids
+        mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids,
+        mem.last_sh_date AS mem_last_sh_date,
+        mem.last_job_date AS mem_last_job_date
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--

@@ -8,6 +8,7 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.TimeUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -172,15 +174,34 @@ public class UJobController {
                 HttpSession session) {
 
         if (result.hasErrors()) {
-            JsonWrapper jw = null;
-            jw =  new JsonWrapper(false, result.getAllErrors());
+            JsonWrapper jw = new JsonWrapper(false, result.getAllErrors());
             return jw.getAjaxMessage();
         }
-        String username = CredentialUtils.getCredential(session).getUsername();
+
+        Credential credential = CredentialUtils.getCredential(session);
+        String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
+        // 检查上次发布的时间间隔
+        Date lastJobTime = mem.getLastJobDate();
+        Date nowTime = new Date();
+        // 如果时间为空，说明这是用户第一次发帖
+        if (null != lastJobTime) {
+            boolean enoughInterval = TimeUtil.intervalGreaterThan(nowTime, lastJobTime, 1, TimeUnit.MINUTES);
+
+            // 时间间隔少于1min
+            // 返回错误信息
+            if (false == enoughInterval) {
+                return new JsonWrapper(false, "too frequent!").getAjaxMessage();
+            }
+        }
+
+        // 写入最新的发布时间
+        mem.setLastJobDate(nowTime);
+        accountService.updateMember(mem);
+
         /*创建兼职信息*/
-        job.setMemberId(mem.getId());
+        job.setMemberId(credential.getId());
         job.setPostTime(new Date());
         job.setLikes(0);
         job.setDislikes(0);
