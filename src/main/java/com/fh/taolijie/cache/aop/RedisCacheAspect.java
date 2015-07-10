@@ -3,6 +3,7 @@ package com.fh.taolijie.cache.aop;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.classmate.Annotations;
+import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.utils.Constants;
@@ -53,6 +54,18 @@ public class RedisCacheAspect {
             "|| execution(* com.fh.taolijie.dao.mapper.*Post*.find*(..))" +
             "|| execution(* com.fh.taolijie.dao.mapper.*Post*.search*(..))")
     public Object cache(ProceedingJoinPoint jp) throws Throwable {
+        // 得到被代理的方法
+        Method me = ((MethodSignature) jp.getSignature()).getMethod();
+
+        // 判断是否存在NoCache注解
+        // 如果存在，跳过逻辑逻辑
+        if (me.isAnnotationPresent(NoCache.class)) {
+            if (infoLog.isDebugEnabled()) {
+                infoLog.debug("方法{}标有@NoCache注解, 禁止缓存", jp.getSignature().getName());
+            }
+            return jp.proceed(jp.getArgs());
+        }
+
         // 得到类名、方法名和参数
         String clazzName = jp.getTarget().getClass().getName();
         String methodName = jp.getSignature().getName();
@@ -64,8 +77,6 @@ public class RedisCacheAspect {
             infoLog.debug("生成key:{}", key);
         }
 
-        // 得到被代理的方法
-        Method me = ((MethodSignature) jp.getSignature()).getMethod();
         // 得到被代理的方法上的注解
         Class modelType = me.getAnnotation(RedisCache.class).value();
 
