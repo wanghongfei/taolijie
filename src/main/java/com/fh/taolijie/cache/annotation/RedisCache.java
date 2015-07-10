@@ -9,5 +9,8 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 public @interface RedisCache {
-    Class type();
+    /**
+     * 指定在Redis Hash Set数据结构中的Set名
+     */
+    Class value();
 }

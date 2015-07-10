@@ -44,10 +44,10 @@ public class RedisCacheAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.select*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.get*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.find*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.search*(..))")
+    @Around("execution(* com.fh.taolijie.dao.mapper.*Post*.select*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.get*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.find*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.search*(..))")
     public Object cache(ProceedingJoinPoint jp) throws Throwable {
         // 得到类名、方法名和参数
         String clazzName = jp.getTarget().getClass().getName();
@@ -63,7 +63,7 @@ public class RedisCacheAspect {
         // 得到被代理的方法
         Method me = ((MethodSignature) jp.getSignature()).getMethod();
         // 得到被代理的方法上的注解
-        Class modelType = me.getAnnotation(RedisCache.class).type();
+        Class modelType = me.getAnnotation(RedisCache.class).value();
 
         // 检查redis中是否有缓存
         String value = (String)rt.opsForHash().get(modelType.getName(), key);
@@ -110,26 +110,29 @@ public class RedisCacheAspect {
      * @return
      * @throws Throwable
      */
-    @Around("execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.insert*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.update*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.delete*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.increase*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.decrease*(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.complaint(..))" +
-            "|| execution(* com.fh.taolijie.dao.mapper.JobPostModelMapper.set*(..))")
+    @Around("execution(* com.fh.taolijie.dao.mapper.*Post*.insert*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.update*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.delete*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.increase*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.decrease*(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.complaint(..))" +
+            "|| execution(* com.fh.taolijie.dao.mapper.*Post*.set*(..))")
     public Object evictCache(ProceedingJoinPoint jp) throws Throwable {
 
         // 得到被代理的方法
         Method me = ((MethodSignature) jp.getSignature()).getMethod();
         // 得到被代理的方法上的注解
-        Class modelType = me.getAnnotation(RedisEvict.class).type();
+        Class[] modelType = me.getAnnotation(RedisEvict.class).value();
 
-        if (infoLog.isDebugEnabled()) {
-            infoLog.debug("清空缓存:{}", modelType.getName());
+        for (Class clazz : modelType) {
+            if (infoLog.isDebugEnabled()) {
+                infoLog.debug("清空缓存:{}", clazz.getName());
+            }
+
+            // 清除对应缓存
+            rt.delete(clazz.getName());
         }
 
-        // 清除对应缓存
-        rt.delete(modelType.getName());
 
         return jp.proceed(jp.getArgs());
     }

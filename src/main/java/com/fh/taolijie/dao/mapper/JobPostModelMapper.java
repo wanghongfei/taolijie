@@ -19,7 +19,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -28,7 +28,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int insert(JobPostModel record);
 
     /**
@@ -37,7 +37,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int insertSelective(JobPostModel record);
 
     /**
@@ -46,7 +46,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     JobPostModel selectByPrimaryKey(Integer id);
 
     /**
@@ -55,7 +55,7 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int updateByPrimaryKeySelective(JobPostModel record);
 
 
@@ -65,41 +65,41 @@ public interface JobPostModelMapper {
      *
      * @mbggenerated
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int updateByPrimaryKey(JobPostModel record);
 
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     List<JobPostModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     long countGetAll();
 
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     List<JobPostModel> getInBatch(List<Integer> idList);
 
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     List<JobPostModel> getByComplaint(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
 
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     List<JobPostModel> findBy(JobPostModel model);
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     long countFindBy(JobPostModel model);
 
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     List<JobPostModel> searchBy(JobPostModel model);
-    @RedisCache(type = JobPostModel.class)
+    @RedisCache(JobPostModel.class)
     long countSearchBy(JobPostModel model);
 
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     void complaint(Integer postId);
 
 
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     void increasePageView(Integer postId);
 
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     void increaseLike(Integer postId);
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     void decreaseLike(Integer postId);
 
     void postResume(@Param("resumeId") Integer resumeId, @Param("jobPostId") Integer jobPostId, @Param("memberId") Integer memberId);
@@ -108,6 +108,6 @@ public interface JobPostModelMapper {
      * set deleted = true
      * @param postId
      */
-    @RedisEvict(type = JobPostModel.class)
+    @RedisEvict(JobPostModel.class)
     int setDeleted(@Param("postId") Integer postId, @Param("deleted") boolean deleted);
 }

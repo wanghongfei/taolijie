@@ -11,6 +11,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface RedisEvict {
-    Class type();
+    /**
+     * 指定需要清除哪些缓存
+     */
+    Class[] value();
 }
 
