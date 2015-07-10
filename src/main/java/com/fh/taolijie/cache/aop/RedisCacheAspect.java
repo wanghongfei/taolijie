@@ -14,6 +14,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -82,8 +86,26 @@ public class RedisCacheAspect {
             // 序列化查询结果
             String json = serialize(result);
 
+            String hashName = modelType.getName();
+
             // 序列化结果放入缓存
-            rt.opsForHash().put(modelType.getName(), key, json);
+            rt.execute(new RedisCallback<Object>() {
+                @Override
+                public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
+                    // 配置文件中指定了这是一个String类型的连接
+                    // 所以这里向下强制转换一定是安全的
+                    StringRedisConnection conn = (StringRedisConnection) redisConn;
+
+                    // 判断hash名是否存在
+                    // 如果不存在，创建该hash并设置过期时间
+                    if (false == conn.exists(hashName) ){
+                        conn.hSet(hashName, key, json);
+                        conn.expire(hashName, Constants.HASH_EXPIRE_TIME);
+                    }
+
+                    return null;
+                }
+            });
         } else {
             // 缓存命中
             if (infoLog.isDebugEnabled()) {
