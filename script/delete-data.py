@@ -15,6 +15,7 @@ parser.add_argument('--port', dest='port', help='连接端口')
 parser.add_argument('--host', dest='host', help='连接地址')
 parser.add_argument('--username', dest='username', help='用户名')
 parser.add_argument('--password', dest='password', help='密码')
+parser.add_argument('--log', dest='log_path', help='日志文件路径')
 
 args = parser.parse_args()
 
@@ -22,6 +23,7 @@ HOST = '127.0.0.1'
 PORT = 3306
 USERNAME = 'root'
 PASSWORD = ''
+LOG_PATH = ''
 
 # 读取命令行参数
 if args.port:
@@ -32,11 +34,13 @@ if args.username:
     USERNAME = args.username
 if args.password:
     PASSWORD = args.password
+if args.log_path:
+    LOG_PATH = args.log_path
 
 
 # configure logger
 cur_time = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
-logging.basicConfig(filename='deletion-%s.log' % cur_time, level=logging.DEBUG)
+logging.basicConfig(filename='%s/deletion-%s.log' % (LOG_PATH, cur_time), level=logging.DEBUG)
 
 
 print '连接参数:'
@@ -54,6 +58,8 @@ conn_config = {
     'raise_on_warnings': True
 }
 
+logging.info(conn_config)
+
 # establish connection
 conn = None
 try:
@@ -61,9 +67,11 @@ try:
 except Exception as e:
     print e
     print '连接失败'
+    logging.debug('连接失败')
     sys.exit(1)
 
 print '连接MySQL成功'
+logging.debug('连接MYSQL成功')
 
 
 cursor = conn.cursor()
@@ -89,6 +97,7 @@ def delete_data(table_name, id_list):
         cursor.execute(sql, sql_data)
         count += 1
         print '成功删除数据 id = %d, 来自%s表' % job_id, table_name
+        logging.info('成功删除数据 id = %d, 来自%s表',  job_id, table_name)
 
     return count
 
