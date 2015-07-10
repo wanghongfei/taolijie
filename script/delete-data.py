@@ -96,7 +96,7 @@ def delete_data(table_name, id_list):
         sql_data = [id]
         cursor.execute(sql, sql_data)
         count += 1
-        print '成功删除数据 id = %d, 来自%s表' % job_id, table_name
+        print '成功删除数据 id = %d, 来自%s表' % (job_id, table_name)
         logging.info('成功删除数据 id = %d, 来自%s表',  job_id, table_name)
 
     return count
