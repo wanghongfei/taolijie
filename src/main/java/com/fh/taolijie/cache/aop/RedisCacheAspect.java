@@ -96,11 +96,14 @@ public class RedisCacheAspect {
                     // 所以这里向下强制转换一定是安全的
                     StringRedisConnection conn = (StringRedisConnection) redisConn;
 
+
                     // 判断hash名是否存在
                     // 如果不存在，创建该hash并设置过期时间
                     if (false == conn.exists(hashName) ){
                         conn.hSet(hashName, key, json);
                         conn.expire(hashName, Constants.HASH_EXPIRE_TIME);
+                    } else {
+                        conn.hSet(hashName, key, json);
                     }
 
                     return null;
