@@ -5,7 +5,7 @@
 <generatorConfiguration>
 
     <!-- Class Driver Path -->
-    <classPathEntry location="/home/whf/Downloads/lib/mysql-connector-java-5.1.6.jar"/>
+    <classPathEntry location="/Users/whf/.m2/repository/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" />
 
     <context id="context" targetRuntime="MyBatis3">
         <commentGenerator>
@@ -43,8 +43,10 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />
+<!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" />-->
 
 <!--        <table tableName="taoli_ivy_category" domainObjectName="TaoliIvyCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />

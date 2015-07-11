@@ -39,6 +39,7 @@
         <mapper resource="mapper/SchoolModelMapper.xml" />
         <mapper resource="mapper/ShPostCategoryModelMapper.xml" />
         <mapper resource="mapper/ShPostModelMapper.xml" />
+        <mapper resource="mapper/RecommendedPostModelMapper.xml" />
 
         <mapper resource="mapper/v2/IvyActImgModelMapper.xml" />
         <mapper resource="mapper/v2/MemberVerifyRelModelMapper.xml" />
