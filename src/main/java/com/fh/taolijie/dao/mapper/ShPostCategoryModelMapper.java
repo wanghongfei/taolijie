@@ -1,6 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.RedisCache;
+import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.SHPostModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,12 +20,10 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-/*    @Caching(
-            evict = {
-                    @CacheEvict(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
-                    @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
-            }
-    )*/
+    @RedisEvict({
+            SHPostCategoryModel.class,
+            SHPostModel.class
+    })
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -32,6 +33,10 @@ public interface ShPostCategoryModelMapper {
      * @mbggenerated
      */
     //@CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
+    @RedisEvict({
+            SHPostCategoryModel.class,
+            SHPostModel.class
+    })
     int insert(SHPostCategoryModel record);
 
     /**
@@ -41,6 +46,10 @@ public interface ShPostCategoryModelMapper {
      * @mbggenerated
      */
     //@CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
+    @RedisEvict({
+            SHPostCategoryModel.class,
+            SHPostModel.class
+    })
     int insertSelective(SHPostCategoryModel record);
 
     /**
@@ -49,7 +58,7 @@ public interface ShPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-    //@Cacheable(value = "shPostCategoryCache", key = "'ShPostCategory:id:'.concat(#p0)")
+    @RedisCache(SHPostCategoryModel.class)
     SHPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -64,6 +73,10 @@ public interface ShPostCategoryModelMapper {
                     @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )*/
+    @RedisEvict({
+            SHPostCategoryModel.class,
+            SHPostModel.class
+    })
     int updateByPrimaryKeySelective(SHPostCategoryModel record);
 
     /**
@@ -78,8 +91,12 @@ public interface ShPostCategoryModelMapper {
                     @CacheEvict(value = "shPostCategoryListCache", allEntries = true, beforeInvocation = true )
             }
     )*/
+    @RedisEvict({
+            SHPostCategoryModel.class,
+            SHPostModel.class
+    })
     int updateByPrimaryKey(SHPostCategoryModel record);
 
-    //@Cacheable(value = "shPostCategoryListCache", key = "'ShPostCategory:all:'.concat(#p0).concat(':').concat(#p1)")
+    @RedisCache(SHPostCategoryModel.class)
     List<SHPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 }

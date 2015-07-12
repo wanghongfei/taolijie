@@ -13,6 +13,7 @@
 
         <result column="job_cate_memo" property="memo" jdbcType="LONGVARCHAR"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
@@ -21,6 +22,12 @@
         id AS job_cate_id, name AS job_cate_name, level AS job_cate_level, theme_color AS job_cate_theme_color, memo AS
         job_cate_memo
     </sql>
+    <sql id="category_column">
+        cate.id AS job_cate_id, cate.name AS job_cate_name, cate.level AS job_cate_level, cate.theme_color AS job_cate_theme_color, cate.memo AS
+        job_cate_memo
+    </sql>
+
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated

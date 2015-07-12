@@ -93,6 +93,17 @@
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
             "toUrl": "/login",
             "url": "/api/noti/pri/*"
+        },
+
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login",
+            "url": "/api/recommend/u/*"
+        },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login",
+            "url": "/api/recommend/u"
         }
     ]
 }

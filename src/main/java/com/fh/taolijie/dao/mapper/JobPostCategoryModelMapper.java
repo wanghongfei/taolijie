@@ -1,6 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.RedisCache;
+import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.JobPostModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,12 +20,10 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-/*    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)", beforeInvocation = true ),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
-            }
-    )*/
+    @RedisEvict({
+            JobPostCategoryModel.class,
+            JobPostModel.class
+    })
     int deleteByPrimaryKey(Integer id);
 
     /**
@@ -32,6 +33,10 @@ public interface JobPostCategoryModelMapper {
      * @mbggenerated
      */
     //@CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true)
+    @RedisEvict({
+            JobPostCategoryModel.class,
+            JobPostModel.class
+    })
     int insert(JobPostCategoryModel record);
 
     /**
@@ -41,6 +46,10 @@ public interface JobPostCategoryModelMapper {
      * @mbggenerated
      */
     //@CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
+    @RedisEvict({
+            JobPostCategoryModel.class,
+            JobPostModel.class
+    })
     int insertSelective(JobPostCategoryModel record);
 
     /**
@@ -50,6 +59,7 @@ public interface JobPostCategoryModelMapper {
      * @mbggenerated
      */
     //@Cacheable(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0)")
+    @RedisCache(JobPostCategoryModel.class)
     JobPostCategoryModel selectByPrimaryKey(Integer id);
 
     /**
@@ -58,12 +68,10 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-/*    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
-            }
-    )*/
+    @RedisEvict({
+            JobPostCategoryModel.class,
+            JobPostModel.class
+    })
     int updateByPrimaryKeySelective(JobPostCategoryModel record);
 
 
@@ -73,15 +81,13 @@ public interface JobPostCategoryModelMapper {
      *
      * @mbggenerated
      */
-/*    @Caching(
-            evict = {
-                    @CacheEvict(value = "jobCategoryCache", key = "'JobPostCategory:id:'.concat(#p0.id)", beforeInvocation = true ),
-                    @CacheEvict(value = "jobCategoryListCache", allEntries = true, beforeInvocation = true )
-            }
-    )*/
+    @RedisEvict({
+            JobPostCategoryModel.class,
+            JobPostModel.class
+    })
     int updateByPrimaryKey(JobPostCategoryModel record);
 
-    //@Cacheable(value = "jobCategoryListCache", key = "'JobPostCategory:query:all:'.concat(#p0).concat(':').concat(#p1)")
+    @RedisCache(JobPostCategoryModel.class)
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
     boolean isCategoryEmpty(Integer categoryId);

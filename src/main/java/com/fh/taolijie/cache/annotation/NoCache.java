@@ -6,14 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by whf on 7/8/15.
+ * 标有该注解的方法不会执行切面代码
+ * Created by whf on 7/11/15.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RedisEvict {
-    /**
-     * 指定需要清除哪些缓存
-     */
-    Class[] value();
+public @interface NoCache {
 }
-
