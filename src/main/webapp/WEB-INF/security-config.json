@@ -33,6 +33,6 @@
             "roleList": ["ADMIN"],
             "toUrl": "/login",
             "url": "/api/recommend/u**"
-        },
+        }
     ]
 }
