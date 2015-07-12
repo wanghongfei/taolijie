@@ -74,4 +74,15 @@ public class DefaultRecommendService implements RecommendService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    public ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validatoin, int pageNumber, int pageSize) {
+        RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
+        cmd.setValidation(validatoin);
+
+        List<RecommendedPostModel> list = recoMapper.findBy(cmd);
+        int tot = recoMapper.countFindBy(cmd);
+
+        return new ListResult<>(list, tot);
+    }
 }
