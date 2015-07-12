@@ -433,9 +433,9 @@
 
     <select id="findPostRecordByMember" resultMap="PostRecord">
         SELECT
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.ReviewModelMapper.job_post_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List"/>
         FROM
             resume_post_rel rp
               INNER JOIN
