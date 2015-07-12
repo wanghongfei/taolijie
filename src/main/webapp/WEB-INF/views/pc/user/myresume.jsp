@@ -121,11 +121,6 @@
         <textarea name="spareTime" class="form-control" placeholder="">${resume.spareTime}</textarea>
       </div>
       --%>
-      <div class="form-group">
-          <label for="">公开程度</label>
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL" required> 公开
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY" required> 不公开
-      </div>
       <div class="form-group text">
         <label for="">自我介绍</label>
         <textarea name="introduce" class="form-control" placeholder="200字以内">${resume.introduce}</textarea>
@@ -153,6 +148,11 @@
       <div class="form-group">
         <label for=""><i class="fa fa-envelope-o theme-color"></i>邮箱</label>
         <input name="email" type="email" class="form-control" placeholder="" value="${resume.email}">
+      </div>
+      <div class="form-group">
+          <label for="">公开程度</label>
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL" required> 公开
+        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'EMPLOYER' ? 'checked = "checked"':''} value="EMPLOYER" required> 对商家用户公开        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY" required> 不公开
       </div>
     </form>
   </div>
