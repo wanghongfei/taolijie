@@ -7,13 +7,13 @@
     "interceptRule": [
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
+            "toUrl": "/404",
             "url": "/user**"
         },
 
         {
             "roleList": ["ADMIN", "EMPLOYER"],
-            "toUrl": "/login",
+            "toUrl": "/404",
             "url": "/api/job/u**"
         },
 
@@ -25,13 +25,13 @@
 
         {
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
-            "toUrl": "/login",
+            "toUrl": "/404",
             "url": "/api/noti**"
         },
 
         {
             "roleList": ["ADMIN"],
-            "toUrl": "/login",
+            "toUrl": "/404",
             "url": "/api/recommend/u**"
         }
     ]
