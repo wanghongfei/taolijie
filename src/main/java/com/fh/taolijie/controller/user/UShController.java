@@ -253,6 +253,30 @@ public class UShController {
 
 
     /**
+     * 商品下架
+     * @return
+     */
+    @RequestMapping(value = "/expire/{shId}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public String expirePost(@PathVariable("shId") Integer shId) {
+        // 检查是不否是本用户发的信息
+        SHPostModel sh = shPostService.findPost(shId);
+        if (null == sh) {
+            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+        }
+
+        SHPostModel cmd = new SHPostModel();
+        cmd.setId(shId);
+        cmd.setExpired(true);
+
+        if (false == shPostService.updatePost(shId, cmd) ) {
+            return new JsonWrapper(false, "failed").getAjaxMessage();
+        }
+
+        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+    }
+
+    /**
      * 删除二手 post ajax
      *
      * @param session
