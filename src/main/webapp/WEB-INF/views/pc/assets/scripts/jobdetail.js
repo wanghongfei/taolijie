@@ -1,5 +1,6 @@
 tlj.controller('jobCtrl', function($scope) {
     $scope.job = job;
+    $scope.currentUser = currentUser;
 });
 
 /**
@@ -21,9 +22,9 @@ $("#like").click(function(){
                 p.text(parseInt(p.text())+1) ;
             }else{
                 if(data.message == 'already liked')
-                    alert('您已经喜欢过了!');
+                    $.tlj.notify('您已经喜欢过了!');
                 if (data.message == 'not logged in now!') {
-                    alert('登陆后才能执行该操作!');
+                    $.tlj.notify('登陆后才能执行该操作!');
                 }
             }
         }
@@ -43,7 +44,7 @@ $("#dislike").click(function(){
                 p.text(parseInt(p.text())+1) ;
             }else{
                 if(data.message == '已操作')
-                    alert('您已经喜欢过了!');
+                    $.tlj.notify('您已经喜欢过了!');
             }
         }
     });
@@ -57,7 +58,7 @@ $("#complaint").click(function(){
         success:function(data){
             console.log(data);
             if(data.result){
-                alert("举报成功");
+                $.tlj.notify("举报成功");
             }
         }
     });
@@ -80,7 +81,7 @@ $("#fav").on("click",function(){
                     $this.html('<i class="fa fa-heart-o">&nbsp;&nbsp;</i>收藏');
                 }
             }else{
-                alert(data.message);
+                $.tlj.notify(data.message);
             }
         }
     });
@@ -95,7 +96,7 @@ $("#del").on("click",function(){
         url:"/user/"+type+"/del",
         success:function(data){
             if(data.result){
-                alert("简历已删除");
+                $.tlj.notify("简历已删除");
                 window.location = '/';
             }
         }
