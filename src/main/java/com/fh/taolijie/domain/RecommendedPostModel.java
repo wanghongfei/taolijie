@@ -1,7 +1,5 @@
 package com.fh.taolijie.domain;
 
-import sun.jvm.hotspot.debugger.Page;
-
 import java.util.Date;
 
 public class RecommendedPostModel extends Pageable {
