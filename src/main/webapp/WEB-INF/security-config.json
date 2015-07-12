@@ -7,103 +7,32 @@
     "interceptRule": [
         {
             "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/job/*"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/job/change/*"
-        },
-
-
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/resume/*"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/resume/change/*"
-        },
-
-
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/sh/*"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/sh/change/*"
-        },
-
-
-
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/post/*"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/profile"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/feedback"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT" ,"EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/user/setting/*"
+            "toUrl": "/404",
+            "url": "/user**"
         },
 
         {
             "roleList": ["ADMIN", "EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/api/job/u/*"
-        },
-        {
-            "roleList": ["ADMIN"],
-            "toUrl": "/login/admin",
-            "url": "/manage"
-        },
-        {
-            "roleList": ["ADMIN"],
-            "toUrl": "/login/admin",
-            "url": "/manage/*"
-        },
-        {
-            "roleList": ["ADMIN"],
-            "toUrl": "/login/admin",
-            "url": "/manage/banner/*"
-        },
-
-        {
-            "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/api/noti/*"
-        },
-        {
-            "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
-            "toUrl": "/login",
-            "url": "/api/noti/pri/*"
+            "toUrl": "/404",
+            "url": "/api/job/u**"
         },
 
         {
             "roleList": ["ADMIN"],
-            "toUrl": "/login",
-            "url": "/api/recommend/u/*"
+            "toUrl": "/login/admin",
+            "url": "/manage**"
         },
+
+        {
+            "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
+            "toUrl": "/404",
+            "url": "/api/noti**"
+        },
+
         {
             "roleList": ["ADMIN"],
-            "toUrl": "/login",
-            "url": "/api/recommend/u"
+            "toUrl": "/404",
+            "url": "/api/recommend/u**"
         }
     ]
 }
