@@ -92,7 +92,9 @@
                         </div>
                     </div>
                     <div class="col_delete">
-                        <a href="/user/job/change/${job.id}">修改</a>
+                        <c:if test="${!isFav}">
+                            <a href="/user/job/change/${job.id}">修改</a>
+                        </c:if>
                         <a href="javascript:void(0);" class="UserDel" data-id="${job.id}" data-type="job"  data-option = "${isFav?'fav':''}" >
                             <%--
                             <i class="fa fa-trash fa-2x"></i>
