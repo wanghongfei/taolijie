@@ -162,11 +162,11 @@ public class SHPostModel extends Pageable {
     @NotNull
     @Length(max = 10)
     private String contactName;
-    @NotNull
-    @Length(max = 20)
+    //@NotNull
+    //@Length(max = 20)
     private String contactQq;
     @NotNull
-    @Length(max = 10)
+    @Length(max = 20)
     private String contactPhone;
 
 

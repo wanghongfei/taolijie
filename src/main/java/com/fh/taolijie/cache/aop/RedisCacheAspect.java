@@ -67,12 +67,12 @@ public class RedisCacheAspect {
         }
 
         // 得到类名、方法名和参数
-        String clazzName = jp.getTarget().getClass().getName();
+        //String clazzName = jp.getTarget().getClass().getName();
         String methodName = jp.getSignature().getName();
         Object[] args = jp.getArgs();
 
         // 根据类名，方法名和参数生成key
-        String key = genKey(clazzName, methodName, args);
+        String key = genKey("", methodName, args);
         if (infoLog.isDebugEnabled()) {
             infoLog.debug("生成key:{}", key);
         }
