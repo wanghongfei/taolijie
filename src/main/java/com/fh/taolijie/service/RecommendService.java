@@ -57,4 +57,12 @@ public interface RecommendService {
      * @return
      */
     ListResult<RecommendedPostModel> getResumeList(int pageNumber, int pageSize);
+
+    /**
+     * 查询推荐申请
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validation, int pageNumber, int pageSize);
 }

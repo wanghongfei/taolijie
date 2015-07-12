@@ -21,7 +21,7 @@ public class RestCommendController {
     RecommendService recoService;
 
     /**
-     * 查询推荐列表
+     * 查询通过审核的推荐列表
      * @param type
      * @param pageNumber
      * @param pageSize

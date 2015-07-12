@@ -1,14 +1,12 @@
 package com.fh.taolijie.controller.restful;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.service.RecommendService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by whf on 7/11/15.
@@ -60,5 +58,22 @@ public class RestCommendUpdateController {
         recoService.updateByIdSelective(model);
 
         return new ResponseText();
+    }
+
+
+    /**
+     * 查询推荐申请
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/request", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText findRequest(@RequestParam(value = "validation", defaultValue = "false") boolean validation,
+                                    @RequestParam(defaultValue = "0") int pageNumber,
+                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+
+        ListResult<RecommendedPostModel> result = recoService.findNewAppliedRequest(validation, pageNumber, pageSize);
+
+        return new ResponseText(result);
     }
 }

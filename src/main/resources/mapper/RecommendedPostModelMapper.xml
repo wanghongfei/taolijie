@@ -275,7 +275,7 @@
             </if>
         </where>
         ORDER BY
-            reco.order_index ASC
+            reco.apply_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
@@ -356,6 +356,7 @@
         <if test="isResume == true">
             reco.resume_id IS NOT NULL
         </if>
+            AND reco.validation = true
         ORDER BY
             reco.order_index ASC
         LIMIT
