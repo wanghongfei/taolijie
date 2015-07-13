@@ -5,12 +5,21 @@
 
 $(".submit-btn").click(function(){
     var msg = '';
+
     var photo = document.querySelector( "input[name=photoPath]");
     if(!photo.value) {
         msg = '请上传头像。';
     }
     photo.setCustomValidity(msg);
-    $.tlj.postForm('#CreateResumeForm', location.pathname, function(){
+
+    var introduce = document.querySelector('textarea[name=introduce]');
+    intro_len = introduce.value.length;
+    if(intro_len < 15 || intro_len > 200) {
+        msg = '长度在15-200字之间';
+    }
+    introduce.setCustomValidity(msg);
+    $.tlj.postForm('#CreateResumeForm', location.pathname, function(data){
+        console.log(JSON.stringify(data));
         location.href = '/user/resume/view';
     });
 });

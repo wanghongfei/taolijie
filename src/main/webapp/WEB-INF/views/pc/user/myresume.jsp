@@ -123,11 +123,11 @@
       --%>
       <div class="form-group text">
         <label for="">自我介绍</label>
-        <textarea name="introduce" class="form-control" placeholder="200字以内">${resume.introduce}</textarea>
+        <textarea name="introduce" class="form-control" placeholder="15-200字" pattern=".{15,}" required>${resume.introduce}</textarea>
       </div>
       <div class="form-group text">
         <label for="">工作经历<i class="theme-color">*</i></label>
-        <textarea name="experience"  class="form-control" placeholder="工作经历（200字以内）" required>${resume.experience}</textarea>
+        <textarea name="experience"  class="form-control" placeholder="15-200字" required pattern=".{15,}">${resume.experience}</textarea>
       </div>
       <p class="pin-title no-offset">
          联系方式

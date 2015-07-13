@@ -1,5 +1,11 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
+/* stage start */
+#fav {
+    width: 120px;
+}
+
+/* stage end* /
 /*global start*/
 form input[type=submit] {
     border: none;

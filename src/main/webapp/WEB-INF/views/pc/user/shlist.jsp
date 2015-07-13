@@ -85,7 +85,7 @@
               <div class="salary" style="color:#a47e3c;width: 120px;" ><i class="fa fa-jpy fa-lg"></i> ${sh.sellPrice.intValue()}元</div>
               <%--<div class="salarystyle" >&nbsp;&nbsp;${job.timeToPay}</div>--%>
               <div class="time"><i class="fa fa-clock-o fa-lg"></i>
-                <fmt:formatDate value="${sh.postTime}" pattern ="yyyy-MM-dd hh:mm" />
+                <fmt:formatDate value="${sh.postTime}" pattern ="yyyy-MM-dd HH:mm" />
               </div>
 
                 <%--<div class="clickno">800</div>--%>
