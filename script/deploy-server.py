@@ -12,8 +12,8 @@ import logging
 
 # 配置logger
 FORMAT = "%(asctime)-15s %(message)s"
-CUR_TIME = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
-logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server-%s.log" % CUR_TIME, format=FORMAT, level=logging.DEBUG)
+CUR_TIME = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server_%s.log" % CUR_TIME, format=FORMAT, level=logging.DEBUG)
 
 
 # 该函数用于执行外部命令来部署工程
