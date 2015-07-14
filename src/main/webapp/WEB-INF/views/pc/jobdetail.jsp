@@ -65,7 +65,7 @@
   <div class="detail main">
     <div class="detail-bar">
       <span>兼职详情</span>
-      <a href="/" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
+      <a href="javascript:history.back();return false;" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
       <%--<p class="fr">分享</p>--%>
       <p class="fr" id="fav" ng-attr-data-id="{{ job.id }}" data-type="job">
       <i class="fa"  ng-class="{'fa-heart': job.favStatus, 'fa-heart-o': !job.favStatus}"></i>
@@ -124,7 +124,7 @@
         <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
             <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
             <p>{{ review.member.username }}
-            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="{{ job.userId == review.member.id }}"> 删除</a>
+            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="{{ currentUser.id == review.member.id }}"> 删除</a>
            </p>
            <span>{{ review.content }}</span>
         </div>
@@ -158,7 +158,7 @@
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
-    job.userId = '${sessionScope.user.id}';
+    var currentUser = JSON.parse('${ju:toJson(sessionScope.user)}');
 </script>
 </body>
 </html>

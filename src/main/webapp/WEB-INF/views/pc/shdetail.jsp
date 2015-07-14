@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
-<%--
+            <%--
   Created by IntelliJ IDEA.
   User: wynfrith
   Date: 15-5-18
@@ -99,10 +99,8 @@
                     </div>
                     <div class="name">
                         <img src="/images/pig.jpg" alt="">
-
                         <p ng-bind="sh.contactName"></p>
                         <%--<span ng-bind="posterRole.memo"></span>--%>
-
                     </div>
                 </div>
                 <div class="sh-block">
@@ -178,20 +176,15 @@
                 </div>--%>
             </div>
             <div class="content" id="contents">
-                <c:forEach var="review" items="${reviews}" varStatus="status">
-                    <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
-                    <img src="/static/images/users/${review.member.profilePhotoId}" alt="user photo">
-                        <p>${review.member.username}
-                                <%--判断是该用户发的显示删除按钮--%>
-                            <c:if test="${sessionScope.user.id == review.member.id}">
-                                <a class="red delete-review" href="javascript:void(0);"  data-id="${sh.id}" data-reviewId="${review.id}"> 删除</a>
-                            </c:if>
-
-                        </p>
-
-                        <span>${review.content}</span>
-                    </div>
-                </c:forEach>
+                <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
+                    <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+                    
+                    <p>
+                        <span ng-bind="review.member.username"></span>                    <%--判断是该用户发的显示删除按钮--%>
+                        <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}" data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
+                    </p>
+                    <span ng-bind="review.content"></span>
+                </div>
             </div>
             <jsp:include page="block/comment.jsp">
               <jsp:param name="postId" value="${sh.id}"/>
@@ -221,6 +214,9 @@
     sh.poster = JSON.parse('${ju:toJson(poster)}');
     sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
     sh.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
+    sh.reviews = JSON.parse('${ju:toJson(reviews)}');
+    sh.userId = '${sessionScope.user.id}';
+    var currentUser = JSON.parse('${ju:toJson(sessionScope.user)}');
 </script>
 </body>
 </html>

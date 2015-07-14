@@ -1,5 +1,11 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
+/* stage start */
+#fav {
+    width: 120px;
+}
+
+/* stage end* /
 /*global start*/
 form input[type=submit] {
     border: none;
@@ -14,6 +20,7 @@ form input[type=submit] {
     padding: 10px 40px;
     color: lightyellow;
     border-radius: 5px;
+    opacity: 0.8;
     z-index: 101;
 }
 .label-checkbox {
@@ -85,7 +92,6 @@ form input[type=submit] {
 /* component start */
 /* Custom page header */
 .header {
-    transition: 0.8s opacity ease;
     background-color: #fff;
     height: 113px;
     line-height: 113px; }
@@ -186,7 +192,6 @@ form input[type=submit] {
 .fixed.header {
     height: 85px;
     line-height: 85px;
-    opacity: 0.8;
 }
 .fixed .logo-img {
     vertical-align: top;
