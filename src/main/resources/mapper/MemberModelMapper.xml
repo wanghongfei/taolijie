@@ -489,9 +489,8 @@
             r.*
         FROM
             member mem,
-            (SELECT role_rid AS role_id FROM member_role) info
-        LEFT JOIN
-            role r ON r.rid = info.role_id
+        INNER JOIN
+            role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
         WHERE
             mem.auto_login_identifier = #{identifier}
     </select>
