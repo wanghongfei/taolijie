@@ -50,7 +50,7 @@ shutil.copytree(ASSET_PATH + '/styles', STATIC_RESOURCE_PATH + 'styles')
 
 print '[INFO] shut tomcat down'
 TOMCAT_HOME = os.getenv('TOMCAT_HOME')
-TOMCAT_PATH = os.getenv('TOMCAT_HOME') + '/bin'
+TOMCAT_PATH = os.getenv('TOMCAT_HOME') + '/bin/'
 outcome = exe_cmd((TOMCAT_PATH + 'shutdown.sh'))
 print outcome
 
