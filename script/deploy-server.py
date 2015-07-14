@@ -2,8 +2,10 @@
 __author__ = 'whf'
 
 import sys
+import os
 import thread
 import time
+
 import BaseHTTPServer
 import subprocess
 import logging
@@ -16,6 +18,7 @@ logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server-%s.log" %
 
 # 该函数用于执行外部命令来部署工程
 def deploy():
+    os.chdir('/root/projects/taolijie')
     outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'))
     logging.info(outcome)
     return outcome
@@ -33,6 +36,9 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
         thread.start_new_thread(deploy, ())
 
         self.send_response(200)
+
+    def log_message(self, format, *args):
+        logging.error(args)
 
 
 # 启动HTTP Server
