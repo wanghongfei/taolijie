@@ -44,6 +44,6 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 # 启动HTTP Server
-server_addr = ('', 9001)
+server_addr = ('', 10000)
 httpd = BaseHTTPServer.HTTPServer(server_addr, Handler)
 httpd.serve_forever()
