@@ -37,8 +37,8 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         self.send_response(200)
 
-    def log_message(self, format, *args):
-        logging.error(args)
+    def log_error(self, format, *args):
+        logging.error(format, args)
 
 
 # 启动HTTP Server
