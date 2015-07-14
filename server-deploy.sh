@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "building project..."
+git pull origin master
+mvn clean install -Dmaven.test.skip=true
+
 echo "deploying static resources..."
 rm -rf /www/resources/*
 cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/about /www/resources
