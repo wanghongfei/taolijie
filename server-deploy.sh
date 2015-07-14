@@ -33,7 +33,7 @@ echo "deploying war file..."
 rm -rf /opt/apache-tomcat-7.0.62/webapps/ROOT/*
 cp /root/projects/taolijie/target/taolijie.war /tmp
 cd /tmp
-unzip taolijie.war
+unzip -q taolijie.war
 mv WEB-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
 mv META-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
 rm -rf WEB-INF/
