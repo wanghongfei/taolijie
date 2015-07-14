@@ -34,7 +34,6 @@ outcome = exe_cmd(('mvn', 'clean', 'install', '-Dmaven.test.skip=true'))
 print outcome
 
 
-
 print '[INFO] deploy static resources'
 STATIC_RESOURCE_PATH = '/www/resources/'
 for dir_name in os.listdir(STATIC_RESOURCE_PATH):
