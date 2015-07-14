@@ -7,7 +7,7 @@ import shutil
 
 import subprocess
 
-if sys.argv:
+if sys.argv[1]:
     if sys.argv[1] == 'pull':
         print '[INFO] pulling code from github'
         outcome = subprocess.check_output(('git', 'pull', 'origin', 'master'), stderr=subprocess.STDOUT)
@@ -16,13 +16,22 @@ if sys.argv:
         print 'invalid argument. try pull'
         sys.exit(0)
 
+def exe_cmd(args):
+    try:
+        outcome = subprocess.check_output(args)
+    except subprocess.CalledProcessError as e:
+        print '[ERROR] failed!!!!'
+        print 'output:\n' + e.output
+        sys.exit(1)
+
+    return outcome
+
+
 
 print '[INFO] rebuild project'
-try:
-    outcome = subprocess.check_output(('mvn', 'clean', 'install', '-Dmaven.test.skip=true'))
-except subprocess.CalledProcessError as e:
-    print '[ERROR] rebuild project failed!!!!'
-    print 'output:\n' + e.output
+os.chdir('/root/projects/taolijie')
+outcome = exe_cmd(('mvn', 'clean, install', '-Dmaven.test.skip=true'))
+print outcome
 
 
 
@@ -42,12 +51,8 @@ shutil.copytree(ASSET_PATH.join('/styles'), STATIC_RESOURCE_PATH)
 print '[INFO] shut tomcat down'
 TOMCAT_HOME = os.getenv('TOMCAT_HOME')
 TOMCAT_PATH = os.getenv('TOMCAT_HOME').join('/bin')
-try:
-    outcome = subprocess.check_output((TOMCAT_PATH.join('shutdown.sh')))
-except subprocess.CalledProcessError as e:
-    print '[ERROR] shut down failed!!'
-    print 'message:\n'.join(e.output)
-
+outcome = exe_cmd((TOMCAT_PATH.join('shutdown.sh')))
+print outcome
 
 print '[INFO] deploy WAR file'
 shutil.rmtree(TOMCAT_HOME.join('/webapps/ROOT'))
@@ -58,11 +63,8 @@ shutil.copytree('WEB-INF', TOMCAT_HOME.join('/webapps/ROOT'))
 shutil.copytree('META-INF', TOMCAT_HOME.join('/webapps/ROOT'))
 
 print '[INFO] start tomcat'
-try:
-    outcome = subprocess.check_output((TOMCAT_PATH.join('startup.sh')))
-except subprocess.CalledProcessError as e:
-    print '[ERROR] starting Tomcat failed!!'
-    print 'message:\n'.join(e.output)
+outcome = exe_cmd(('startup.sh'))
+print outcome
 
 print '[INFO] clean up'
 shutil.rmtree('WEB-INF')
