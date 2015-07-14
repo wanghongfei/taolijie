@@ -30,12 +30,12 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
         logging.info('method:%s', self.command)
 
         # 启动新线程执行命令
-        thread.start_new_thread(deploy)
+        thread.start_new_thread(deploy, '')
 
         self.send_response(200)
 
 
 # 启动HTTP Server
-server_addr = ('127.0.0.1', 9001)
+server_addr = ('', 9001)
 httpd = BaseHTTPServer.HTTPServer(server_addr, Handler)
 httpd.serve_forever()
