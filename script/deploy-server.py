@@ -22,7 +22,7 @@ def deploy():
     os.chdir('/root/projects/taolijie')
     outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'))
     logging.info(outcome)
-    print outcome
+    print 'OUTCOME:\n' + outcome
     return outcome
 
 
