@@ -10,6 +10,9 @@ cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/scripts /w
 cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/styles /www/resources
 echo "done"
 
+# shut server down
+/opt/apache-tomcat-7.0.62/bin/shutdown.sh
+
 echo "deploying war file..."
 rm -rf /opt/apache-tomcat-7.0.62/webapps/ROOT/*
 cp /root/projects/taolijie/target/taolijie.war /tmp
@@ -20,4 +23,7 @@ mv META-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
 rm -rf WEB-INF/
 rm -rf META-INF/
 rm taolijie.war
+
+# start server
+/opt/apache-tomcat-7.0.62/bin/startup.sh
 echo "done"
