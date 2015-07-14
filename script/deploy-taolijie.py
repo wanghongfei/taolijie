@@ -40,12 +40,12 @@ STATIC_RESOURCE_PATH = '/www/resources/'
 for dir_name in os.listdir(STATIC_RESOURCE_PATH):
     shutil.rmtree(STATIC_RESOURCE_PATH + dir_name)
 ASSET_PATH = '/root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets'
-shutil.copytree(ASSET_PATH.join('/about'), STATIC_RESOURCE_PATH + 'about')
-shutil.copytree(ASSET_PATH.join('/admin'), STATIC_RESOURCE_PATH + 'admin')
-shutil.copytree(ASSET_PATH.join('/fonts'), STATIC_RESOURCE_PATH + 'fonts')
-shutil.copytree(ASSET_PATH.join('/images'), STATIC_RESOURCE_PATH + 'images')
-shutil.copytree(ASSET_PATH.join('/scripts'), STATIC_RESOURCE_PATH + 'scripts')
-shutil.copytree(ASSET_PATH.join('/styles'), STATIC_RESOURCE_PATH + 'styles')
+shutil.copytree(ASSET_PATH + 'about', STATIC_RESOURCE_PATH + 'about')
+shutil.copytree(ASSET_PATH + 'admin', STATIC_RESOURCE_PATH + 'admin')
+shutil.copytree(ASSET_PATH + 'fonts', STATIC_RESOURCE_PATH + 'fonts')
+shutil.copytree(ASSET_PATH + 'images', STATIC_RESOURCE_PATH + 'images')
+shutil.copytree(ASSET_PATH + 'scripts', STATIC_RESOURCE_PATH + 'scripts')
+shutil.copytree(ASSET_PATH + 'styles', STATIC_RESOURCE_PATH + 'styles')
 
 
 print '[INFO] shut tomcat down'
