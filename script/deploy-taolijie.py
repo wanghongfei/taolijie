@@ -60,7 +60,7 @@ shutil.copy('/root/projects/taolijie/target/taolijie.war', '/tmp')
 os.chdir('/tmp')
 subprocess.call(('unzip', '-q', 'taolijie.war'))
 shutil.copytree('WEB-INF', TOMCAT_HOME + '/webapps/ROOT/WEB-INF')
-shutil.copytree('META-INF', TOMCAT_HOME + '/webapps/ROOT/WEB-INF')
+shutil.copytree('META-INF', TOMCAT_HOME + '/webapps/ROOT/META-INF')
 
 print '[INFO] start tomcat'
 outcome = exe_cmd((TOMCAT_PATH + 'startup.sh'))
