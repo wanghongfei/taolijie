@@ -129,4 +129,13 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            second_hand_post_category
+        WHERE
+            name = #{name}
+    </select>
 </mapper>

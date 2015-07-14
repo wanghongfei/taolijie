@@ -90,5 +90,8 @@ public interface JobPostCategoryModelMapper {
     @RedisCache(JobPostCategoryModel.class)
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
 
+    @RedisCache(JobPostCategoryModel.class)
+    JobPostCategoryModel findByName(@Param("name") String name);
+
     boolean isCategoryEmpty(Integer categoryId);
 }

@@ -59,4 +59,9 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     public JobPostCategoryModel findCategory(Integer cateId) {
         return cateMapper.selectByPrimaryKey(cateId);
     }
+
+    @Override
+    public JobPostCategoryModel findByName(String name) {
+        return cateMapper.findByName(name);
+    }
 }

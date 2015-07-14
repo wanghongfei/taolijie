@@ -53,4 +53,9 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
 
         return true;
     }
+
+    @Override
+    public SHPostCategoryModel findByName(String name) {
+        return cateMapper.findByName(name);
+    }
 }

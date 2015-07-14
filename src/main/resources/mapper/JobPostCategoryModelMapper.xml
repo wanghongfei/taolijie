@@ -133,6 +133,15 @@
         LIMIT #{pageNumber},#{pageSize}
     </select>
 
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            job_post_category
+        WHERE
+            name = #{name}
+    </select>
+
 
     <select id="isCategoryEmpty" resultType="boolean">
         SELECT NOT EXISTS(SELECT 1 FROM job_post WHERE job_post_category_id = #{categoryId})
