@@ -18,9 +18,11 @@ logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server-%s.log" %
 
 # 该函数用于执行外部命令来部署工程
 def deploy():
+    print 'deploy() method invoked!'
     os.chdir('/root/projects/taolijie')
     outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'))
     logging.info(outcome)
+    print outcome
     return outcome
 
 
