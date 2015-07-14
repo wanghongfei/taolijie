@@ -44,4 +44,6 @@ public interface ShPostCategoryService {
      * @return
      */
     boolean deleteCategory(Integer cateId) throws CascadeDeleteException;
+
+    SHPostCategoryModel findByName(String name);
 }

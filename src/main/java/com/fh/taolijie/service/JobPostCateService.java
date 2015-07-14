@@ -45,4 +45,6 @@ public interface JobPostCateService {
      * @return
      */
     JobPostCategoryModel findCategory(Integer cateId);
+
+    JobPostCategoryModel findByName(String name);
 }

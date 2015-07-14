@@ -3,12 +3,9 @@ package com.fh.taolijie.controller.home;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.BannerPicModel;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.service.BannerPicService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ShPostService;
+import com.fh.taolijie.domain.*;
+import com.fh.taolijie.service.*;
+import com.fh.taolijie.service.impl.DefaultJobPostCategoryService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.slf4j.Logger;
@@ -35,7 +32,11 @@ public class HIndexController {
     @Autowired
     JobPostService jobPostService;
     @Autowired
+    JobPostCateService jobCateService;
+    @Autowired
     ShPostService shPostService;
+    @Autowired
+    ShPostCategoryService shCateService;
 
     @Autowired
     BannerPicService banService;
@@ -69,7 +70,7 @@ public class HIndexController {
 
 
     /**
-     * 搜索一条兼职
+     * 搜索
      * @return
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -82,9 +83,17 @@ public class HIndexController {
 
         if(type.equals("job")){
             JobPostModel jobCommand = new JobPostModel();
+
             // 根据标题或内容匹配
             jobCommand.setTitle(content);
             jobCommand.setJobDetail(content);
+
+            // 检查关键字是不是分类名
+            JobPostCategoryModel cate = jobCateService.findByName(content);
+            if (null != cate) {
+                jobCommand.setJobPostCategoryId(cate.getId());
+            }
+
             List<JobPostModel> list = jobPostService.runSearch(jobCommand, (page - 1)*pageSize, pageSize,new ObjWrapper());
 
             int pageStatus = 1;
@@ -102,6 +111,13 @@ public class HIndexController {
             // 根据标题或内容匹配
             shCommand.setTitle(content);
             shCommand.setDescription(content);
+
+            // 查询关键字是不是分类名
+            SHPostCategoryModel cate = shCateService.findByName(content);
+            if (null != cate) {
+                shCommand.setSecondHandPostCategoryId(cate.getId());
+            }
+
             List<SHPostModel> list =shPostService.runSearch(shCommand,new ObjWrapper());
 
             int pageStatus = 1;
