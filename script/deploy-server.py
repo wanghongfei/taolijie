@@ -30,7 +30,7 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
         logging.info('method:%s', self.command)
 
         # 启动新线程执行命令
-        thread.start_new_thread(deploy, '')
+        thread.start_new_thread(deploy, ())
 
         self.send_response(200)
 
