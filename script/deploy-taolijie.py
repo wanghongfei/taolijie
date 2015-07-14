@@ -38,7 +38,7 @@ print outcome
 print '[INFO] deploy static resources'
 STATIC_RESOURCE_PATH = '/www/resources/'
 for dir_name in os.listdir(STATIC_RESOURCE_PATH):
-    shutil.rmtree(dir_name)
+    shutil.rmtree(STATIC_RESOURCE_PATH + dir_name)
 ASSET_PATH = '/root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets'
 shutil.copytree(ASSET_PATH.join('/about'), STATIC_RESOURCE_PATH + 'about')
 shutil.copytree(ASSET_PATH.join('/admin'), STATIC_RESOURCE_PATH + 'admin')
