@@ -488,7 +488,7 @@
             <include refid="member_column" />,
             r.*
         FROM
-            member mem,
+            member mem
         INNER JOIN
             role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
         WHERE
