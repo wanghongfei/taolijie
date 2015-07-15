@@ -113,11 +113,8 @@ public class UResumeController {
         /*创建信息*/
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
+        Integer resumeId = resumeService.addResume(resume);
 
-        resumeService.addResume(resume);
-
-
-        resume = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper()).get(0);
 
         // 设置求职意向
         ApplicationIntendModel intendModel = null;
@@ -125,7 +122,7 @@ public class UResumeController {
         String[] ids = intendIds.split(Constants.DELIMITER);
         for (String idStr : ids) {
             intendModel = new ApplicationIntendModel();
-            intendModel.setResumeId(resume.getId());
+            intendModel.setResumeId(resumeId);
             intendModel.setJobPostCategoryId(Integer.valueOf(idStr));
 
             intendService.addIntend(intendModel);

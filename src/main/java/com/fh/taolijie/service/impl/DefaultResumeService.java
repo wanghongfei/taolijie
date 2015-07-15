@@ -159,8 +159,8 @@ public class DefaultResumeService implements ResumeService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addResume(ResumeModel model) {
-        reMapper.insert(model);
+    public int addResume(ResumeModel model) {
+        return reMapper.insert(model);
     }
 
     @Override

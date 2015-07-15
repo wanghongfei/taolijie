@@ -104,8 +104,9 @@ public interface ResumeService extends PageService {
 
     /**
      * 创建新简历
+     * @return 刚创建的简历的id
      */
-    void addResume(ResumeModel model);
+    int addResume(ResumeModel model);
 
     /**
      * 给简历添加求职意向
