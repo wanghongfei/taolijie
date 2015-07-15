@@ -214,7 +214,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />,
 
             <if test="jobId != null">
                 <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />
@@ -321,7 +321,7 @@
     <select id="findRecommendList" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />,
 
             <if test="jobId != null">
                 <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />

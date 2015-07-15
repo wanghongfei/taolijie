@@ -77,7 +77,7 @@
         select
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         from job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -445,7 +445,7 @@
         SELECT
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -465,7 +465,7 @@
         SELECT
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -478,7 +478,7 @@
         SELECT
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -495,7 +495,7 @@
         SELECT
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id
@@ -698,7 +698,7 @@
         SELECT
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.category_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
         FROM job_post post
             LEFT JOIN member mem ON mem.id = post.member_id
             LEFT JOIN job_post_category cate ON cate.id = post.job_post_category_id

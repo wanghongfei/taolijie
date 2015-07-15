@@ -72,7 +72,7 @@
         -->
         select
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         from
             second_hand_post post
@@ -357,7 +357,7 @@
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM second_hand_post post
             LEFT JOIN member mem ON mem.id = post.member_id
@@ -381,7 +381,7 @@
     <select id="getInBatch" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post
@@ -396,7 +396,7 @@
     <select id="getByCategory" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post
@@ -426,7 +426,7 @@
     <select id="getByMember" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post
@@ -457,7 +457,7 @@
     <select id="searchBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post
@@ -608,7 +608,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post
@@ -757,7 +757,7 @@
     <select id="getSuedPost" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper.Base_Column_List"/>
         FROM
             second_hand_post post

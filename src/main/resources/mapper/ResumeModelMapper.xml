@@ -71,7 +71,7 @@
         -->
         select
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         from resume re
             LEFT JOIN member mem ON mem.id = re.member_id
         where re.id = #{id,jdbcType=INTEGER}
@@ -318,7 +318,7 @@
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             LEFT JOIN member mem ON mem.id = re.member_id
         ORDER BY
@@ -330,7 +330,7 @@
     <select id="getInBatch" resultMap="BaseResultMap">
         SELECT
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             LEFT JOIN member mem ON mem.id = re.member_id
         WHERE re.id IN
@@ -352,7 +352,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             INNER JOIN member mem ON mem.id = re.member_id
         <where>
@@ -418,7 +418,7 @@
     <select id="findByAuth" resultMap="BaseResultMap">
         SELECT
             <include refid="resume_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM
             resume re
         INNER JOIN
@@ -433,7 +433,7 @@
 
     <select id="findPostRecordByMember" resultMap="PostRecord">
         SELECT
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
             <include refid="resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List"/>
         FROM
