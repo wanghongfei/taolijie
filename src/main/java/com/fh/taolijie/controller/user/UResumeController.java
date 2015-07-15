@@ -82,7 +82,7 @@ public class UResumeController {
     String create(@Valid ResumeModel resume,
                   BindingResult result,
                   @RequestParam int intend,
-                  @RequestParam String intendIds,
+                  @RequestParam(required = false) String intendIds,
                   HttpSession session){
         if (null == intendIds || intendIds.isEmpty()) {
             return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
