@@ -82,7 +82,13 @@ public class UResumeController {
     String create(@Valid ResumeModel resume,
                   BindingResult result,
                   @RequestParam int intend,
+                  @RequestParam String intendIds,
                   HttpSession session){
+        if (null == intendIds || intendIds.isEmpty()) {
+            return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
+        }
+
+        // 判断角色权限
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = null;
 
@@ -90,6 +96,9 @@ public class UResumeController {
         if(roleName.equals(Constants.RoleType.EMPLOYER.toString())){
             return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
         }
+
+        // 判断是否已经有简历了
+        // 如果已经有了则不允许创建新简历
         List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
         if(rList.size() !=0){
             return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
@@ -98,6 +107,7 @@ public class UResumeController {
         if (result.hasErrors()) {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
+
         mem = accountService.findMember(credential.getUsername(), false);
 
         /*创建信息*/
@@ -108,10 +118,19 @@ public class UResumeController {
 
 
         resume = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper()).get(0);
-        ApplicationIntendModel intendModel = new ApplicationIntendModel();
-        intendModel.setResumeId(resume.getId());
-        intendModel.setJobPostCategoryId(intend);
-        intendService.addIntend(intendModel);
+
+        // 设置求职意向
+        ApplicationIntendModel intendModel = null;
+        // 可能有多个求职意向
+        String[] ids = intendIds.split(Constants.DELIMITER);
+        for (String idStr : ids) {
+            intendModel = new ApplicationIntendModel();
+            intendModel.setResumeId(resume.getId());
+            intendModel.setJobPostCategoryId(Integer.valueOf(idStr));
+
+            intendService.addIntend(intendModel);
+        }
+
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
