@@ -150,4 +150,22 @@
             #{pageNumber}, #{pageSize}
     </select>
 
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            system_notification sys
+        ORDER BY
+            sys.time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+
+    </select>
+    <select id="countFindAll" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            system_notification sys
+    </select>
+
 </mapper>

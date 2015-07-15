@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.PrivateNotificationModel;
@@ -48,6 +49,24 @@ public class RestNotificationController {
 
         return new ResponseText(list);
     }
+
+    /**
+     * 查询当前用户的系统通知
+     * @return
+     */
+    public ResponseText getSysNotification(@RequestParam("memberId") Integer memberId,
+                                           @RequestParam(defaultValue = "0") int pageNumber,
+                                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                                           HttpSession session
+                                           ) {
+        // 得到当前用户的role
+        Credential credential = CredentialUtils.getCredential(session);
+        String roleName = credential.getRoleList().get(0);
+
+        ListResult<SysNotificationModel> list = notiService.getSysNotification(memberId, Arrays.asList(roleName), pageNumber, pageSize);
+        return new ResponseText(list);
+    }
+
 
     /**
      * 标记个人通知为已读

@@ -16,6 +16,11 @@
             "toUrl": "/404",
             "url": "/api/job/u**"
         },
+        {
+            "roleList": ["ADMIN", "EMPLOYER", "STUDENT"],
+            "toUrl": "/404",
+            "url": "/api/sh/u**"
+        },
 
         {
             "roleList": ["ADMIN"],
@@ -27,6 +32,11 @@
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
             "toUrl": "/404",
             "url": "/api/noti**"
+        },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/404",
+            "url": "/api/manage**"
         },
 
         {
