@@ -1,14 +1,34 @@
-/**
- *
- * Created by wynfrith on 15-5-18.
- */
+tlj.controller('myresumeCtrl', function($scope) {
+    $scope.resume = resume;
+    $scope.cates = cates
+    $scope.intendIds = intendIds;
+    $scope.setIntendIds = function(index) {
+        var cate = $scope.cates[index];
+        if(cate.selected == false && $scope.intendIds.length < 4) {
+            $scope.intendIds.push(cate.id);
+        } else {
+            for(i in $scope.intendIds) {
+                if($scope.intendIds[i] == cate.id) {
+                    $scope.intendIds.splice(i, 1);
+                }
+            }
+        }
+        cate.selected = !cate.selected;
+        $('input[name=intendIds]')[0].value = $scope.intendIds.join(';');
+    }
+    //$scope.currentUser = currentUser;
+    //$scope.$on('onRepeatLast', function() {
+    //    rslides();
+    //})
+});
+
 
 $(".submit-btn").click(function(){
     var msg = '';
 
     var photo = document.querySelector( "input[name=photoPath]");
     if(!photo.value) {
-        msg = '请上传头像。';
+        msg = '来一张最美的你吧';
     }
     photo.setCustomValidity(msg);
 
