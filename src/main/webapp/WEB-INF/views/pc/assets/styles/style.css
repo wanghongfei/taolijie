@@ -3,6 +3,31 @@
 /* stage start */
 #fav {
     width: 120px;
+    cursor: pointer;
+}
+.right-tip {
+    font-size: 0.8em;
+}
+.select-area {
+    margin-right: 10px;
+}
+.select-multiple {
+    margin-top: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 275px;
+    font-size: 12px;
+}
+.option-multiple {
+    margin-right: 5px;
+    border-radius: 3px;
+    padding: 3px;
+    cursor: pointer;
+}
+.option-selected {
+    color: #fff;
+    background-color: darksalmon;
 }
 
 /* stage end* /
