@@ -1,0 +1,7 @@
+.detail-bar p:hover,
+.detail-bar p > a:hover{
+    color: #666 !important;
+}
+.resume-contact .fa {
+    margin-right: 5px;
+}

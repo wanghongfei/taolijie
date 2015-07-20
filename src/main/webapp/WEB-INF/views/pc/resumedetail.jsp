@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -11,7 +12,7 @@
 
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="resumeCtrl">
 <head>
   <meta charset="utf-8">
   <title>${postUser.username}的简历</title>
@@ -33,6 +34,7 @@
   <link rel="stylesheet" href="/styles/jquery.bxslider.css">
   <%--<link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">--%>
   <link rel="stylesheet" href="/styles/font-awesome.min.css"/>
+  <link rel="stylesheet" href="/styles/resumedetail.css"/>
 
   <!-- build:js /scripts/vendor/modernizr.js -->
   <script src="/scripts/modernizr.js"></script>
@@ -49,12 +51,6 @@
 <jsp:include page="block/top-bar.jsp"/>
 <%--页首--%>
 <jsp:include page="block/header.jsp"/>
-<style>
-  .detail-bar p:hover,
-  .detail-bar p>a:hover{
-    color: #666 !important;
-  }
-</style>
 
 <div class="container">
 
@@ -70,32 +66,26 @@
       <span>${postUser.name}的简历</span>
         <a href="/" style="color: #fa6a38"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
 
-      <c:if test="${!isShow}">
-        <p class="fr" id="del" data-id="${resume.id}" data-type="resume" style="cursor: pointer">删除</p>
-    <p class="fr" id="edit" data-id="${resume.id}" data-type="resume" style="cursor: pointer"><a href="/user/resume/change" style="color: #fa6a38">编辑</a></p>
-      </c:if>
+      <p class="fr" id="del" ng-attr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">删除</p>
+      <p class="fr" id="edit" ng-atr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">
+        <a href="/user/resume/change" style="color: #fa6a38">编辑</a>
+      </p>
 
-      <c:if test="${isShow}">
-        <p class="fr" id="fav" data-id="${resume.id}" data-type="resume">
+      <p class="fr" id="fav" ng-atrr-data-id="{{ resume.id }}" data-type="resume" ng-if="isShow">
           <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
             ${favStatus? '已收藏':'收藏'}
-        </p>
-      </c:if>
+      </p>
 
     </div>
     <div style="clean:both"></div>
     <div class="resume-info">
-      <c:if test="${resume.photoPath == ''}">
-        <img src="/images/miao.jpg" alt="">
-      </c:if>
-      <c:if test="${resume.photoPath != ''}">
-        <img src="/static/images/users/${resume.photoPath}" alt=""/>
-      </c:if>
+        <img src="/static/images/users/{{ resume.photoPath }}" alt="photo" ng-show="{{ resume.photoPath != ''}}"/>
+        <img src="/images/miao.jpg" alt="" ng-show="{{ resume.photoPath == ''}}">
       <div class="infos">
-          <p>姓名 : ${resume.name}</p>
-          <p>性别 : ${resume.gender == '男' ? '男' : '女'}</p>
-        <p>年龄 : ${resume.age}岁</p>
-        <p>身高 : ${resume.height}cm</p>
+          <p>姓名 : <span ng-bind="resume.name"></span></p>
+          <p>性别 : <span ng-bind="resume.gender"></span></p>
+          <p>年龄 : <span ng-bind="resume.age"></span>岁</p>
+          <p>身高 : <span ng-bind="resume.height"></span>cm</p>
       </div>
     </div>
     <br/>
@@ -113,24 +103,24 @@
 
     <div class="resume-detail light-green-bg light-green-bd" >
       <div class="title">自我介绍</div>
-      <p>${resume.introduce}</p>
+      <p ng-bind="resume.introduce"></p>
       <div style="clear:both"></div>
     </div>
     <i class="resume-arrow light-green"></i>
 
     <div class="resume-detail dark-green-bg dark-green-bd" >
       <div class="title">工作经验</div>
-      <p>${resume.experience}</p>
+      <p ng-bind="resume.experience"></p>
       <div style="clear:both"></div>
     </div>
     <i class="resume-arrow dark-green"></i>
 
     <div class="resume-detail red-bg red-bd resume-contact" >
       <div class="title">联系方式</div>
-      <p><i class="fa fa-phone orange"></i> ${resume.phoneNumber}</p>
-      <p><i class="fa fa-qq blue"></i> ${resume.qq}</p>
-      <p><i class="fa fa-weixin green"></i> ${resume.wechatAccount}</p>
-      <p><i class="fa fa-envelope-o red"></i> ${resume.email}</p>
+      <p><i class="fa fa-phone orange"></i><span ng-bind="resume.phoneNumber"></span></p>
+      <p ng-if="resume.qq"><i class="fa fa-qq blue"></i><span ng-bind="resume.qq"></span></p>
+      <p ng-if="resume.wechatAccount"><i class="fa fa-weixin green"></i> <span ng-bind="resume.wechatAccount"></span></p>
+      <p ng-if="resume.email"><i class="fa fa-envelope-o red"></i> <span ng-bind="resume.email"></span></p>
       <div style="clear:both"></div>
     </div>
 
@@ -142,6 +132,12 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-<script src="/scripts/jobdetail.js"></script>
+<script>
+    var resume = JSON.parse('${ju:toJson(resume)}');
+    var postUser = JSON.parse('${ju:toJson(postUser)}');
+    var isShow = JSON.parse('${ju:toJson(isShow)}');
+    var intendJobs = JSON.parse('${ju:toJson(intendJobs)}');
+</script>
+<script src="/scripts/resumedetail.js"></script>
 </body>
 </html>
