@@ -116,7 +116,7 @@
               <span ng-repeat="cate in cates" ng-attr-data-id="{{ cate. id }}" class="option-multiple" ng-class="{'option-selected': cate.selected}" ng-click="setIntendIds($index)">{{cate.name}}</span>
           </div>
           <span class="right-tip">（最多选3个）</span>
-          <input type="hidden" name="intendIds" value="">
+          <input type="hidden" name="intendIds" value="${intendJobs}">
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
