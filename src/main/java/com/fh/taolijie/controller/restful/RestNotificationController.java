@@ -72,7 +72,7 @@ public class RestNotificationController {
      * 标记个人通知为已读
      * @return
      */
-    @RequestMapping(value = "/pri/mark", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/pri/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText markPriAsRead(@RequestParam("notiId") Integer notiId,
                                       HttpSession session) {
         // 检查通知是不是发给自己的
