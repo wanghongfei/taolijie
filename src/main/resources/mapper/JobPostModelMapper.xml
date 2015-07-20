@@ -42,6 +42,10 @@
 
         <result column="job_expired" property="expired" jdbcType="BOOLEAN"/>
 
+        <result column="job_province" property="province" jdbcType="VARCHAR"/>
+        <result column="job_city" property="city" jdbcType="VARCHAR"/>
+        <result column="job_region" property="region" jdbcType="VARCHAR"/>
+
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
         <association property="category"
                      resultMap="com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper.BaseResultMap"/>
@@ -66,7 +70,10 @@
         post.verified AS job_verified,
         post.job_postcol AS job_job_postcol, post.applicant_amount AS job_applicant_amount, post.introduce AS job_introduce, post.application_resume_ids AS job_application_resume_ids,
         post.deleted AS job_deleted,
-        post.expired AS job_expired
+        post.expired AS job_expired,
+        post.province AS job_province,
+        post.city AS job_city,
+        post.region AS job_region
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -106,7 +113,10 @@
         page_view, verified, job_postcol,
         applicant_amount, introduce, application_resume_ids,
         deleted,
-        expired
+        expired,
+        province,
+        city,
+        region
         )
         VALUES (#{title,jdbcType=VARCHAR}, #{expiredTime},
         #{postTime}, #{workPlace,jdbcType=VARCHAR}, #{workRegion}, #{wage,jdbcType=DECIMAL},
@@ -118,7 +128,10 @@
         #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR}, #{jobPostcol,jdbcType=VARCHAR},
         #{applicantAmount,jdbcType=INTEGER}, #{introduce,jdbcType=LONGVARCHAR},
         #{applicationResumeIds,jdbcType=LONGVARCHAR},
-        #{deleted}, #{expired}
+        #{deleted}, #{expired},
+        #{province},
+        #{city},
+        #{region}
         )
     </insert>
     <insert id="insertSelective">
@@ -215,6 +228,18 @@
             <if test="expired != null">
                 expired,
             </if>
+
+
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="region != null">
+                region,
+            </if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -303,6 +328,18 @@
             </if>
             <if test="expired != null">
                 #{expired},
+            </if>
+
+
+
+            <if test="province != null">
+                #{province},
+            </if>
+            <if test="city != null">
+                #{city},
+            </if>
+            <if test="region != null">
+                #{region},
             </if>
         </trim>
     </insert>
@@ -400,6 +437,17 @@
             <if test="expired != null">
                 expired = #{expired},
             </if>
+
+
+            <if test="province != null">
+                province = #{province},
+            </if>
+            <if test="city != null">
+                city = #{city},
+            </if>
+            <if test="region != null">
+                region = #{region},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -437,7 +485,11 @@
         introduce = #{introduce,jdbcType=LONGVARCHAR},
         application_resume_ids = #{applicationResumeIds,jdbcType=LONGVARCHAR},
         deleted = #{deleted},
-        expired = #{expired}
+        expired = #{expired},
+
+        province = #{province},
+        city = #{city},
+        region = #{region}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -588,6 +640,17 @@
                 OR post.expired = #{expired}
             </if>
 
+
+            <if test="province != null">
+                OR post.province = #{province},
+            </if>
+            <if test="city != null">
+                OR post.city = #{city},
+            </if>
+            <if test="region != null">
+                OR post.region = #{region},
+            </if>
+
             AND post.deleted = #{deleted}
         </where>
         ORDER BY
@@ -688,6 +751,17 @@
             </if>-->
             <if test="expired != null">
                 OR post.expired = #{expired}
+            </if>
+
+
+            <if test="province != null">
+                OR post.province = #{province},
+            </if>
+            <if test="city != null">
+                OR post.city = #{city},
+            </if>
+            <if test="region != null">
+                OR post.region = #{region},
             </if>
             AND post.deleted = #{deleted}
         </where>
@@ -793,6 +867,16 @@
             <if test="expired != null">
                 AND post.expired = #{expired}
             </if>
+
+            <if test="province != null">
+                AND post.province = #{province},
+            </if>
+            <if test="city != null">
+                AND post.city = #{city},
+            </if>
+            <if test="region != null">
+                AND post.region = #{region},
+            </if>
         </where>
         ORDER BY
             <choose>
@@ -896,6 +980,17 @@
             </if>
             <if test="expired != null">
                 AND post.expired = #{expired}
+            </if>
+
+
+            <if test="province != null">
+                AND post.province = #{province},
+            </if>
+            <if test="city != null">
+                AND post.city = #{city},
+            </if>
+            <if test="region != null">
+                AND post.region = #{region},
             </if>
         </where>
     </select>

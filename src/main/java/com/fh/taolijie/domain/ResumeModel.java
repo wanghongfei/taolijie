@@ -162,6 +162,12 @@ public class ResumeModel extends Pageable {
     @Length(max = 20)
     private String wechatAccount;
 
+    private String major;
+    private String school;
+    private String preferredProvince;
+    private String preferredCity;
+    private String preferredRegion;
+
     private MemberModel member;
 
     public ResumeModel() {}
@@ -183,6 +189,46 @@ public class ResumeModel extends Pageable {
 
     public void setMember(MemberModel member) {
         this.member = member;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getPreferredProvince() {
+        return preferredProvince;
+    }
+
+    public void setPreferredProvince(String preferredProvince) {
+        this.preferredProvince = preferredProvince;
+    }
+
+    public String getPreferredCity() {
+        return preferredCity;
+    }
+
+    public void setPreferredCity(String preferredCity) {
+        this.preferredCity = preferredCity;
+    }
+
+    public String getPreferredRegion() {
+        return preferredRegion;
+    }
+
+    public void setPreferredRegion(String preferredRegion) {
+        this.preferredRegion = preferredRegion;
     }
 
     /**

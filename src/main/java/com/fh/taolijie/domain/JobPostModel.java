@@ -251,6 +251,10 @@ public class JobPostModel extends Pageable implements Serializable {
      */
     private Integer applicantAmount;
 
+    private String province;
+    private String city;
+    private String region;
+
     private MemberModel member;
     private JobPostCategoryModel category;
 
@@ -264,6 +268,30 @@ public class JobPostModel extends Pageable implements Serializable {
 
     public JobPostModel(int pageNumber, int pageSize) {
         super(pageNumber, pageSize);
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getWorkRegion() {
