@@ -65,6 +65,22 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    public ListResult<SysNotificationModel> getAllSysNotification(int pageNumber, int pageSize) {
+        List<SysNotificationModel> list = sysMapper.findAll(pageNumber, pageSize);
+        int tot = sysMapper.countFindAll();
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    public ListResult<PrivateNotificationModel> getAllPriNotification(int pageNumber, int pageSize) {
+        PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
+        List<PrivateNotificationModel> list = priMapper.findBy(model);
+
+        return new ListResult<>(list);
+    }
+
+    @Override
     public PrivateNotificationModel findPriById(Integer priNotiId) {
         return priMapper.selectByPrimaryKey(priNotiId);
     }
@@ -73,6 +89,12 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = false)
     public void addNotification(PrivateNotificationModel model) {
         priMapper.insertSelective(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addNotification(SysNotificationModel model) {
+        sysMapper.insertSelective(model);
     }
 
     @Override

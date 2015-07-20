@@ -489,7 +489,7 @@
 
     <select id="selectByIdentifier" resultMap="BaseResultMap">
         SELECT
-            <include refid="member_column" />,
+            <include refid="member_column_without_password" />,
             r.*
         FROM
             member mem
@@ -501,7 +501,7 @@
 
     <select id="getMemberList" resultMap="BaseResultMap">
         SELECT
-            <include refid="member_column" />,
+            <include refid="member_column_without_password" />,
             r.*
         FROM
             member mem,

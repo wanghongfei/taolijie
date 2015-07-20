@@ -71,7 +71,7 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean addPost(SHPostModel model) {
-        postMapper.insert(model);
+        postMapper.insertSelective(model);
 
         return true;
     }
