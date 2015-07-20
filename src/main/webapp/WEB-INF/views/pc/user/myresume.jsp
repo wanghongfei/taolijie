@@ -120,13 +120,13 @@
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
-         <select name="intend" required class="select-area short_select">
+         <select name="province" required class="select-area short_select">
               <option value="山东省">山东省</option>
           </select>
-         <select name="intend" required class="select-area short_select">
+         <select name="city" required class="select-area short_select">
               <option value="淄博市">淄博市</option>
           </select>
-         <select name="intend" required class="select-area short_select">
+         <select name="region" required class="select-area short_select">
               <option value="张店区">张店区</option>
               <option value="周村区">周村区</option>
               <option value="淄川区">淄川区</option>
