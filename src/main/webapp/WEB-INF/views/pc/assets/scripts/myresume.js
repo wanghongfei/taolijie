@@ -5,6 +5,8 @@ tlj.controller('myresumeCtrl', function($scope) {
     $scope.setIntendIds = function(index) {
         var cate = $scope.cates[index];
         if(cate.selected == false && $scope.intendIds.length < 4) {
+            console.log($scope.intendIds);
+            console.log(cate.id);
             $scope.intendIds.push(cate.id);
         } else {
             for(i in $scope.intendIds) {
@@ -14,6 +16,7 @@ tlj.controller('myresumeCtrl', function($scope) {
             }
         }
         cate.selected = !cate.selected;
+        console.log($scope.intendIds);
         $('input[name=intendIds]')[0].value = $scope.intendIds.join(';');
     }
     //$scope.currentUser = currentUser;

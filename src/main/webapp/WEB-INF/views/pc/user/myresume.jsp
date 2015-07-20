@@ -116,7 +116,7 @@
               <span ng-repeat="cate in cates" ng-attr-data-id="{{ cate. id }}" class="option-multiple" ng-class="{'option-selected': cate.selected}" ng-click="setIntendIds($index)">{{cate.name}}</span>
           </div>
           <span class="right-tip">（最多选3个）</span>
-          <input type="hidden" name="intendIds" value="1;2">
+          <input type="hidden" name="intendIds" value="">
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
@@ -188,11 +188,17 @@
     var resume = JSON.parse('${ju:toJson(resume)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');
+    if(intendIds[0] == "") {
+        intendIds = [];
+    }
     for(var i = 0; i < cates.length; i++) {
         for(var j = 0; j < intendIds.length; j++) {
             cates[i].selected = intendIds[j] == cates[i].id ? true: false;
             if(cates[i].selected)
                 break;
+        }
+        if(!cates[i].selected) {
+            cates[i].selected = false;
         }
     }
 </script>
