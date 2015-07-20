@@ -81,8 +81,11 @@ public class UResumeController {
     public @ResponseBody
     String create(@Valid ResumeModel resume,
                   BindingResult result,
-                  @RequestParam int intend,
+                  @RequestParam(required = false) Integer intend, // 留着这个只是为了兼容以前的接口，防止400
                   @RequestParam(required = false) String intendIds,
+                  @RequestParam(required = false) String province,
+                  @RequestParam(required = false) String city,
+                  @RequestParam(required = false) String region,
                   HttpSession session){
         if (null == intendIds || intendIds.isEmpty()) {
             return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
@@ -113,7 +116,8 @@ public class UResumeController {
         /*创建信息*/
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
-        Integer resumeId = resumeService.addResume(resume);
+        resumeService.addResume(resume);
+        Integer resumeId = resume.getId();
 
 
         // 设置求职意向
