@@ -88,11 +88,11 @@
       </div>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的学校">
+        <input type="text" class="form-control" placeholder="填写您的学校" name="school">
       </div>
       <div class="form-group">
         <label for="">专业<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的专业">
+        <input type="text" class="form-control" placeholder="填写您的专业" name="major">
       </div>
       <div class="form-group text">
         <label for="">自我介绍</label>
@@ -120,13 +120,13 @@
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
-         <select name="province" required class="select-area short_select">
+         <select name="preferredProvince" required class="select-area short_select">
               <option value="山东省">山东省</option>
           </select>
-         <select name="city" required class="select-area short_select">
+         <select name="preferredCity" required class="select-area short_select">
               <option value="淄博市">淄博市</option>
           </select>
-         <select name="region" required class="select-area short_select">
+         <select name="preferredRegion" required class="select-area short_select">
               <option value="张店区">张店区</option>
               <option value="周村区">周村区</option>
               <option value="淄川区">淄川区</option>
