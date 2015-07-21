@@ -83,9 +83,6 @@ public class UResumeController {
                   BindingResult result,
                   @RequestParam(required = false) Integer intend, // 留着这个只是为了兼容以前的接口，防止400
                   @RequestParam(required = false) String intendIds,
-                  @RequestParam(required = false) String province,
-                  @RequestParam(required = false) String city,
-                  @RequestParam(required = false) String region,
                   HttpSession session){
         if (null == intendIds || intendIds.isEmpty()) {
             return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
