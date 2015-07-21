@@ -506,7 +506,8 @@ public class UJobController {
         model.setJobPostId(jobId);
         model.setTime(new Date());
 
-        Integer newReviewId = reviewService.addReview(model);
+        reviewService.addReview(model);
+        Integer newReviewId = model.getId();
 
         // 发送被评论通知
         // 得到兼职的发送者
