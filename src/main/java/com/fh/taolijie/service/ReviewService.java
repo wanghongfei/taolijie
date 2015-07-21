@@ -18,6 +18,13 @@ public interface ReviewService {
      */
     ListResult<ReviewModel> getReviewList(ReviewModel model);
 
+    /**
+     * 得到指定评论的回复
+     * @param reviewId
+     * @return
+     */
+    ListResult<ReviewModel> getReply(Integer reviewId, int pageNumber, int pageSize);
+
     ReviewModel getById(Integer reviewId);
 
     /**

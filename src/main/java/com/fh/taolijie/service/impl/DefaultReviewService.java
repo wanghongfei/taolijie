@@ -28,6 +28,17 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
+    public ListResult<ReviewModel> getReply(Integer reviewId, int pageNumber, int pageSize) {
+        ReviewModel cmd = new ReviewModel(pageNumber, pageSize);
+        cmd.setRepliedReviewId(reviewId);
+
+        List<ReviewModel> list = reMapper.findBy(cmd);
+        int count = reMapper.countFindBy(cmd);
+
+        return new ListResult<>(list, count);
+    }
+
+    @Override
     public ReviewModel getById(Integer reviewId) {
         return reMapper.selectByPrimaryKey(reviewId);
     }
@@ -44,7 +55,7 @@ public class DefaultReviewService implements ReviewService {
         model.setMemberId(memId);
         model.setRepliedReviewId(reviewId);
 
-        reMapper.insert(model);
+        reMapper.insertSelective(model);
     }
 
     @Override
