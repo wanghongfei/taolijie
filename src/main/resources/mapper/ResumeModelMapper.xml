@@ -344,7 +344,7 @@
                 created_time = #{createdTime},
             </if>
             <if test="spareTime != null">
-                spare_time = #{spareTime}
+                spare_time = #{spareTime},
             </if>
 
 
