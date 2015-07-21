@@ -13,4 +13,10 @@ public interface ApplicationIntendService {
 
     void addIntend(ApplicationIntendModel model);
     void deleteIntend(ApplicationIntendModel model);
+
+    /**
+     * 删除指定简历下的所有意向
+     * @param resumeId
+     */
+    void deleteByResume(Integer resumeId);
 }

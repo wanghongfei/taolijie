@@ -80,6 +80,13 @@
         WHERE resume_id = #{resumeId} AND job_post_category_id = #{jobPostCategoryId}
     </delete>
 
+    <delete id="deleteByResumeId">
+        DELETE FROM
+            resume_job_post_category
+        WHERE
+            resume_id = #{resumeId}
+    </delete>
+
     <select id="getByIntend" resultMap="BaseResultMap">
         SELECT
             am.resume_id AS am_resume_id,

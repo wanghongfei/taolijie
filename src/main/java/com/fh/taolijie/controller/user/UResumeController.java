@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.ApplicationIntendService;
 import com.fh.taolijie.service.JobPostCateService;
@@ -99,7 +100,7 @@ public class UResumeController {
 
         // 判断是否已经有简历了
         // 如果已经有了则不允许创建新简历
-        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1, new ObjWrapper());
         if(rList.size() !=0){
             return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
         }
@@ -114,21 +115,16 @@ public class UResumeController {
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
         resumeService.addResume(resume);
-        Integer resumeId = resume.getId();
 
 
         // 设置求职意向
-        ApplicationIntendModel intendModel = null;
-        // 可能有多个求职意向
-        String[] ids = intendIds.split(Constants.DELIMITER);
-        for (String idStr : ids) {
-            intendModel = new ApplicationIntendModel();
-            intendModel.setResumeId(resumeId);
-            intendModel.setJobPostCategoryId(Integer.valueOf(idStr));
+        try {
+            List<Integer> idList = splitIntendIds(intendIds);
+            setNewIntend(idList, resume.getId());
 
-            intendService.addIntend(intendModel);
+        } catch (InvalidNumberStringException e) {
+            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
         }
-
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
@@ -162,7 +158,7 @@ public class UResumeController {
         model.addAttribute("intendJobs",intends);
         model.addAttribute("resume",resume);
         model.addAttribute("isShow",false);
-        model.addAttribute("postUser",user);
+        model.addAttribute("postUser", user);
         return  "pc/resumedetail";
 
     }
@@ -279,9 +275,15 @@ public class UResumeController {
      * @return
      */
     @RequestMapping(value = "/change",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String change(@Valid ResumeModel resume,BindingResult result,HttpSession session){
+    public @ResponseBody String change(@Valid ResumeModel resume,
+                                       BindingResult result,
+                                       @RequestParam(required = false) String intendIds,
+                                       HttpSession session){
+        if (null == intendIds || intendIds.isEmpty()) {
+            return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
+        }
+
         Credential credential = CredentialUtils.getCredential(session);
-//        ResumeModel oldResume= resumeService.findResume(resume.getId());
 
         List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
         if(rList.size()<1 ){
@@ -306,6 +308,19 @@ public class UResumeController {
         if(!resumeService.updateResume(oldResume.getId(), resume)){
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
         }
+
+        // 删除老意向
+        intendService.deleteByResume(oldResume.getId());
+
+        // 设置求职意向
+        try {
+            List<Integer> idList = splitIntendIds(intendIds);
+            setNewIntend(idList, resume.getId());
+        } catch (InvalidNumberStringException e) {
+            // 此异常说明字符串非数字
+            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+        }
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
@@ -377,5 +392,47 @@ public class UResumeController {
 
     }
 
+    /**
+     * 为简历设置新的意向
+     * @param intendIds
+     * @param resumeId
+     */
+    private void setNewIntend(List<Integer> intendIds, Integer resumeId) {
+        ApplicationIntendModel intendModel = null;
+        // 可能有多个求职意向
+        for (Integer id : intendIds) {
+            intendModel = new ApplicationIntendModel();
+            intendModel.setResumeId(resumeId);
+            intendModel.setJobPostCategoryId(id);
+
+            intendService.addIntend(intendModel);
+        }
+
+    }
+
+    /**
+     * 将以分号分隔的id字符串转换成id List
+     * @param intendIds
+     * @return
+     * @throws InvalidNumberStringException
+     */
+    private List<Integer> splitIntendIds(String intendIds) throws InvalidNumberStringException {
+        String[] ids = intendIds.split(Constants.DELIMITER);
+        if (null == ids || 0 == ids.length) {
+            throw new InvalidNumberStringException("intendIds格式错误");
+        }
+
+        List<Integer> idList = new ArrayList<>(10);
+        for (String idStr : ids) {
+            try {
+                Integer id = Integer.valueOf(idStr);
+                idList.add(id);
+            } catch (NumberFormatException ex) {
+                throw new InvalidNumberStringException("intendIds参数非数字");
+            }
+        }
+
+        return idList;
+    }
 
 }
