@@ -522,7 +522,7 @@ public class UJobController {
         notiService.addNotification(priNoti);
 
 
-        return new JsonWrapper(true, newReviewId.toString(), Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, "reviewId", newReviewId.toString()).getAjaxMessage();
     }
 
     /**
