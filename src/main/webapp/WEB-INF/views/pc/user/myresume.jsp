@@ -88,11 +88,11 @@
       </div>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的学校" name="school">
+        <input type="text" class="form-control" placeholder="填写您的学校" name="school" required maxlength="20" value="${resume.school}">
       </div>
       <div class="form-group">
         <label for="">专业<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的专业" name="major">
+        <input type="text" class="form-control" placeholder="填写您的专业" name="major" required maxlength="20" value="${resume.major}">
       </div>
       <div class="form-group text">
         <label for="">自我介绍</label>
@@ -126,7 +126,7 @@
          <select name="preferredCity" required class="select-area short_select">
               <option value="淄博市">淄博市</option>
           </select>
-         <select name="preferredRegion" required class="select-area short_select">
+         <select name="preferredRegion" required class="select-area short_select" ng-model="resume.preferredRegion">
               <option value="张店区">张店区</option>
               <option value="周村区">周村区</option>
               <option value="淄川区">淄川区</option>
