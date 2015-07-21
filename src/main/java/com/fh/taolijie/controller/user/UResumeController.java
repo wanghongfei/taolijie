@@ -259,6 +259,11 @@ public class UResumeController {
             return "redirect:/user/resume/create";
         }
 
+
+        //查询求职意向
+        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
+        model.addAttribute("intendJobs",intends);
+
         List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
         model.addAttribute("cates",jobCateList);
         model.addAttribute("resume",resume);
