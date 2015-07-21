@@ -2,10 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.domain.ApplicationIntendModel;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.ApplicationIntendService;
@@ -28,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -152,10 +150,16 @@ public class UResumeController {
         ResumeModel resume = list.get(0);
 
         MemberModel user = accountService.findMember(resume.getMemberId());
-        //查询求职意向
-        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
 
-        model.addAttribute("intendJobs",intends);
+
+        //查询求职意向(new)
+        String intendIdString = queryIntend(resume.getId());
+        model.addAttribute("resumeIntendIds",intendIdString);
+
+        //查询求职意向(old)
+        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
+        model.addAttribute("intendJobs", intends);
+
         model.addAttribute("resume",resume);
         model.addAttribute("isShow",false);
         model.addAttribute("postUser", user);
@@ -188,7 +192,7 @@ public class UResumeController {
             return null;
         }
         List<ApplicationIntendModel> intend = intendService.getByResume(resume.getId());
-        intend.forEach(i->{
+        intend.forEach(i -> {
             intendService.deleteIntend(i);
         });
 
@@ -255,15 +259,18 @@ public class UResumeController {
             return "redirect:/user/resume/create";
         }
 
-
-        //查询求职意向
+        //查询求职意向(old)
         List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resume.getId());
-        model.addAttribute("intendJobs",intends);
+        model.addAttribute("intendJobs", intends);
+
+        //查询求职意向(new)
+        String intendIdString = queryIntend(resume.getId());
+        model.addAttribute("resumeIntendJobs",intendIdString);
 
         List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
         model.addAttribute("cates",jobCateList);
         model.addAttribute("resume",resume);
-        model.addAttribute("isChange",true);
+        model.addAttribute("isChange", true);
         return "pc/user/myresume";
     }
 
@@ -433,6 +440,22 @@ public class UResumeController {
         }
 
         return idList;
+    }
+
+    /**
+     * 转换为id;id;id格式的字符串
+     * @param resumeId
+     * @return
+     */
+    private String queryIntend(Integer resumeId) {
+        List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resumeId);
+        StringBuilder intendIdString = new StringBuilder();
+        intends.stream().forEach( (ai) -> {
+            intendIdString.append(ai.getJobPostCategoryId());
+            intendIdString.append(Constants.DELIMITER);
+        });
+
+        return intendIdString.toString();
     }
 
 }

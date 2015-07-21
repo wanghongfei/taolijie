@@ -109,10 +109,8 @@
         SELECT
             intend.resume_id AS am_resume_id,
             intend.job_post_category_id AS am_job_post_category_id,
-            <include refid="resume_column" />,
             <include refid="category_column" />
         FROM resume_job_post_category intend
-          INNER JOIN resume re ON re.id = intend.resume_id
           INNER JOIN job_post_category cate ON cate.id = intend.job_post_category_id
         WHERE intend.resume_id = #{resumeId}
     </select>
