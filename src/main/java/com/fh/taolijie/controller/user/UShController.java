@@ -449,7 +449,8 @@ public class UShController {
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());
-        Integer newId = reviewService.addReview(reviewDto);
+        reviewService.addReview(reviewDto);
+        Integer newId = reviewDto.getId();
 
 
 
