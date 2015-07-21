@@ -25,6 +25,7 @@ public interface ApplicationIntendModelMapper {
     int insertSelective(ApplicationIntendModel record);
 
     void delete(ApplicationIntendModel model);
+    void deleteByResumeId(Integer resumeId);
 
     List<ApplicationIntendModel> getByIntend(@Param("categoryId") Integer categoryId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     List<ApplicationIntendModel> getByResume(@Param("resumeId") Integer resumeId);
