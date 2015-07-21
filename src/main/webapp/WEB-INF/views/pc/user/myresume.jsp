@@ -188,7 +188,7 @@
     var resume = JSON.parse('${ju:toJson(resume)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');
-    if(intendIds[0] == "") {
+    if(intendIds[0] == "" || intendIds[0] == "[]") {
         intendIds = [];
     }
     for(var i = 0; i < cates.length; i++) {
