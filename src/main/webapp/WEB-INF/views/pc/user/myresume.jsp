@@ -82,9 +82,15 @@
         <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" value="${resume.height}" min="50" max="250">
         <span for="" class="input-unit">cm</span>
       </div>
+      <%--
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
         <input name="age" class="short-input form-control" type="number" placeholder="" value="${resume.age}" min="14" max="80">
+      </div>
+      --%>
+      <div class="form-group">
+        <label for="">出生日期<i class="theme-color">*</i></label>
+        <input name="birthday" class="short-input form-control datepicker" type="text" placeholder="" ng-model="resume.birthday">
       </div>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
@@ -95,7 +101,7 @@
         <input type="text" class="form-control" placeholder="填写您的专业" name="major" required maxlength="20" value="${resume.major}">
       </div>
       <div class="form-group text">
-        <label for="">自我介绍</label>
+        <label for="">自我介绍<i class="theme-color">*</i></label>
         <textarea name="introduce" class="form-control" placeholder="来个自我介绍呗，来亮瞎他们的眼(15字以上)" pattern=".{15,}" required maxlength="200">${resume.introduce}</textarea>
       </div>
       <div class="form-group text">
