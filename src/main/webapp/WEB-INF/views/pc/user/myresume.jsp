@@ -82,20 +82,26 @@
         <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" value="${resume.height}" min="50" max="250">
         <span for="" class="input-unit">cm</span>
       </div>
+      <%--
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
         <input name="age" class="short-input form-control" type="number" placeholder="" value="${resume.age}" min="14" max="80">
       </div>
+      --%>
+      <div class="form-group">
+        <label for="">出生日期<i class="theme-color">*</i></label>
+        <input name="birthday" class="short-input form-control datepicker" type="text" placeholder="" ng-model="resume.birthday">
+      </div>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的学校" name="school">
+        <input type="text" class="form-control" placeholder="填写您的学校" name="school" required maxlength="20" value="${resume.school}">
       </div>
       <div class="form-group">
         <label for="">专业<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的专业" name="major">
+        <input type="text" class="form-control" placeholder="填写您的专业" name="major" required maxlength="20" value="${resume.major}">
       </div>
       <div class="form-group text">
-        <label for="">自我介绍</label>
+        <label for="">自我介绍<i class="theme-color">*</i></label>
         <textarea name="introduce" class="form-control" placeholder="来个自我介绍呗，来亮瞎他们的眼(15字以上)" pattern=".{15,}" required maxlength="200">${resume.introduce}</textarea>
       </div>
       <div class="form-group text">
@@ -126,7 +132,7 @@
          <select name="preferredCity" required class="select-area short_select">
               <option value="淄博市">淄博市</option>
           </select>
-         <select name="preferredRegion" required class="select-area short_select">
+         <select name="preferredRegion" required class="select-area short_select" ng-model="resume.preferredRegion">
               <option value="张店区">张店区</option>
               <option value="周村区">周村区</option>
               <option value="淄川区">淄川区</option>
@@ -186,6 +192,7 @@
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script>
     var resume = JSON.parse('${ju:toJson(resume)}');
+    var resumeIntendIds = JSON.parse('${ju:toJson(resumeIntendIds)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');
     if(intendIds[0] == "" || intendIds[0] == "[]") {

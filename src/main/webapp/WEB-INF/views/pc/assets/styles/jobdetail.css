@@ -1,0 +1,14 @@
+.detail .title .label {
+    font-size: 16px;
+    color: #fa6a38;
+}
+.detail .info .money .wage{
+    display: inline-block;
+    color: #fa6a38;
+    font-size: 42px;
+    padding-right: 5px;
+}
+.detail .info .money .time-to-pay{
+    color: #333;
+    font-size: 1em;
+}
