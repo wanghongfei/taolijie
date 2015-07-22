@@ -2,6 +2,7 @@ package com.fh.taolijie.domain;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -92,6 +93,7 @@ public class ResumeModel extends Pageable {
     /**
      * 出生日期
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
     /**
