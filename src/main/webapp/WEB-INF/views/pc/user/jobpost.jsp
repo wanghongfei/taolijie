@@ -11,7 +11,7 @@
 <%request.setCharacterEncoding("UTF-8");%>
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp">
 <head>
     <meta charset="utf-8">
     <title>兼职发布</title>
@@ -67,20 +67,21 @@
         }
     </style>
 
-    <div class="segment end-segment">
+    <div class="segment end-segment" ng-controller="jobPostCtrl" >
         <p class="pin-title red-bg ">基本信息
             <i class="pin-arrow  dark-red-arrow"></i>
         </p>
 
-        <form action="" id="JobPostForm" class="form-horizontal" novalidate>
+        <form name="JobPostForm" id="JobPostForm" class="form-horizontal" ng-submit="doSubmit(JobPostForm);">
             <div class="form-group">
                 <label for="">兼职标题<span class="asterisk-red">*</span></label>
-                <input type="text" class="form-control large-input" name="title" placeholder="20字以内" value="${job.title}" required>
+                <input type="text" class="form-control large-input" name="title" placeholder="20字以内" value="${job.title}"
+                       required>
             </div>
             <div class="form-group">
                 <label for="">选择分类<span class="asterisk-red">*</span></label>
-                <select name="jobPostCategoryId" class="form-control" required>
-                    <option value="">选择分类</option>
+                <select name="jobPostCategoryId" class="form-control" ng-model="job.jobPostCategoryId" required>
+                    <option value="" style="display: none">选择分类</option>
                     <c:forEach items="${cates}" var="cate">
                         <option value="${cate.id}" ${job.jobPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
                     </c:forEach>
@@ -88,22 +89,20 @@
             </div>
             <div class="form-group wage">
                 <label for="">工资待遇<span class="asterisk-red">*</span></label>
-                <input type="text" class="form-control short-input fl" name="wage" placeholder="请输入有效数字"
+                <input type="number" class="form-control short-input fl" name="wage" placeholder="输入有效数字"
                        value="${job.wage}" required>
-                <select name=""  class="form-control fl"
-                        ng-model="address.province"
-                        ng-options="key as key for (key, value) in division">
-                    <option value="">元/时</option>
-                    <option value="">元/天</option>
-                    <option value="">元/周</option>
-                    <option value="">元/月</option>
+                <select ng-model="job.salaryUnit" name="salaryUnit" class="form-control fl" required>
+                    <option value="时">元/时</option>
+                    <option value="天">元/天</option>
+                    <option value="周">元/周</option>
+                    <option value="月">元/月</option>
                 </select>
                 <%--<span class="input-unit">元</span>--%>
             </div>
             <div class="form-group">
                 <label for="">结算方式<span class="asterisk-red">*</span></label>
-                <select name="timeToPay" class="form-control" required>
-                    <option value="-1" ${job.timeToPay == '-1' ? 'selected="selected"' : ''}>选择分类</option>
+                <select name="timeToPay" class="form-control" ng-model="job.timeToPay" required>
+                    <option value="" style="display: none" ${job.timeToPay == '-1' ? 'selected="selected"' : ''}>选择分类</option>
                     <option value="日结" ${job.timeToPay == '日结' ? 'selected="selected"' : ''}>日结</option>
                     <option value="周结" ${job.timeToPay == '周结' ? 'selected="selected"' : ''}>周结</option>
                     <option value="月结" ${job.timeToPay == '月结' ? 'selected="selected"' : ''}>月结</option>
@@ -111,8 +110,10 @@
             </div>
             <div class="form-group">
                 <label for="">截止时间<span class="asterisk-red">*</span></label>
-                <input type="text" class="form-control datepicker medium-input" name="expiredTime" placeholder="保留该信息的截止日期"
-                       value="<fmt:formatDate value='${job.expiredTime}' pattern='yyyy-MM-dd' />" required>
+                <input type="text" class="form-control datepicker medium-input" name="expiredTime" id="expiredTime"
+                       ng-model="job.expiredTime" required
+                       placeholder="保留该信息的截止日期"
+                       value="<fmt:formatDate value='${job.expiredTime}' pattern='yyyy-MM-dd' />" >
             </div>
 
             <p class="pin-title red-bg ">兼职详情
@@ -122,40 +123,41 @@
             <div class="form-group">
                 <label for="">工作时间<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control large-input" name="workTime" placeholder="请填写具体的工作时间" value="${job.workTime}"
-                       required>
+                       ng-model="job.workTime" required>
             </div>
             <div class="form-group division">
                 <label for="" class="">工作区域<span class="asterisk-red">*</span></label>
-                <select name=""  class="form-control fl"
-                        ng-model="address.province"
-                        ng-options="key as key for (key, value) in division">
+                <select name="province"  class="form-control fl" required
+                        ng-model="job.province"
+                        ng-options="key as key for (key, value) in division" >
                     <option value="" style="display: none">省</option>
                 </select>
-                <select name="" id="b" class="form-control fl"
-                        ng-model="address.city"
-                        ng-options="key as key for (key, value) in division[address.province]">
-                    <option value="" style="display: none">市</option>
+                <select name="city" id="b" class="form-control fl" required
+                        ng-model="job.city"
+                        ng-options="key as key for (key, value) in division[job.province]">
+                    <option value="" style="display: none">市</option >
                 </select>
-                <select name="" id="c" class="form-control fl"
-                        ng-model="address.district"
-                        ng-options="value as value for value in division[address.province][address.city]">
+                <select name="region" id="c" class="form-control fl" required
+                        ng-model="job.region"
+                        ng-options="value as value for value in division[job.province][job.city]">
                     <option value="" style="display: none">区</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="">工作地点<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control large-input" name="workPlace" placeholder="填写一定要详细哟" value="${job.workPlace}"
-                       required>
+                       ng-model="job.workPlace"  required>
             </div>
             <div class="form-group">
                 <label for="">工作内容<span class="asterisk-red">*</span></label>
-                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(15字以上)"
-                          required>${job.jobDetail}</textarea>
+                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(10字以上)"
+                          ng-model="job.jobDetail" required>${job.jobDetail}</textarea>
             </div>
             <div class="form-group">
                 <label for="">工作要求<span class="asterisk-red">*</span></label>
                 <textarea name="jobDescription" class="form-control large-input" required
-                          placeholder="请填写工作具体要求(15字以上)">${job.jobDescription}</textarea>
+                          ng-model="job.jobDescription"
+                          placeholder="请填写工作具体要求(10字以上)">${job.jobDescription}</textarea>
             </div>
 
             <p class="pin-title red-bg ">兼职详情
@@ -165,24 +167,25 @@
             <div class="form-group">
                 <label for="">联系人<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control medium-input" name="contact" value="${job.contact}" placeholder="请输入联系人的姓名"
-                       required>
+                       ng-model="job.contact" required>
             </div>
             <div class="form-group">
                 <label for="">手机号<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control medium-input" name="contactPhone" value="${job.contactPhone}"
                        placeholder="请输入联系人的手机号" required
+                       ng-model="job.contactPhone"
                        pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
             </div>
             <div class="form-group">
                 <label for="">QQ号</label>
                 <input type=text" class="form-control medium-input" name="contactQq" value="${job.contactQq}"
-                       ng-maxlength="15"
+                       ng-model="job.contactQq"
                        placeholder="请输入您的qq号">
             </div>
 
             <div class="segment">
                 <div class="submit-btn big-btn red-bg">
-                    <span href="javascript:void(0);">发布兼职</span>
+                    <span>提交</span>
                 </div>
                 <%--
                 <input type="submit" value="发布兼职" />
