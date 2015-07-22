@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +56,7 @@ public class RestNotificationUpdateController {
     public ResponseText findAllPriNotification(@RequestParam(defaultValue = "0") int pageNumber,
                                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<PrivateNotificationModel> listResult = noService.getAllPriNotification(pageNumber, pageSize);
         return new ResponseText(listResult);
 

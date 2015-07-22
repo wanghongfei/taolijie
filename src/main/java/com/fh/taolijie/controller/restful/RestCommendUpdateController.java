@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.service.RecommendService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,6 +73,7 @@ public class RestCommendUpdateController {
                                     @RequestParam(defaultValue = "0") int pageNumber,
                                     @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<RecommendedPostModel> result = recoService.findNewAppliedRequest(validation, pageNumber, pageSize);
 
         return new ResponseText(result);

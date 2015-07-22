@@ -10,6 +10,7 @@ import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +45,7 @@ public class RestNotificationController {
             return new ResponseText("invalid operation!");
         }
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<PrivateNotificationModel> list = notiService.getPriNotification(memberId, pageNumber, pageSize)
                 .getList();
 
@@ -59,6 +61,7 @@ public class RestNotificationController {
                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                                            HttpSession session
                                            ) {
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         // 得到当前用户的role
         Credential credential = CredentialUtils.getCredential(session);
         String roleName = credential.getRoleList().get(0);

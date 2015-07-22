@@ -230,4 +230,12 @@
         </where>
     </select>
 
+    <!-- 删除评论下的所有回复 -->
+    <delete id="deleteReplyByReviewId">
+        DELETE FROM
+            review
+        WHERE
+            replied_review_id = #{reviewId}
+    </delete>
+
 </mapper>

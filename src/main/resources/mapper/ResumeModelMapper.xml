@@ -35,6 +35,7 @@
         <result column="resume_preferred_province" property="preferredProvince" jdbcType="VARCHAR"/>
         <result column="resume_preferred_city" property="preferredCity" jdbcType="VARCHAR"/>
         <result column="resume_preferred_region" property="preferredRegion" jdbcType="VARCHAR"/>
+        <result column="resume_birthday" property="birthday" jdbcType="TIMESTAMP" />
 
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
     </resultMap>
@@ -61,7 +62,8 @@
         major AS resume_major,
         preferred_province AS resume_preferred_province,
         preferred_city AS resume_preferred_city,
-        preferred_region AS resume_preferred_region
+        preferred_region AS resume_preferred_region,
+        birthday AS resume_birthday
     </sql>
 
     <sql id="resume_column">
@@ -76,7 +78,8 @@
         re.major AS resume_major,
         re.preferred_province AS resume_preferred_province,
         re.preferred_city AS resume_preferred_city,
-        re.preferred_region AS resume_preferred_region
+        re.preferred_region AS resume_preferred_region,
+        re.birthday AS resume_birthday
 
     </sql>
 
@@ -116,7 +119,8 @@
         major,
         preferred_province,
         preferred_city,
-        preferred_region)
+        preferred_region,
+        birthday)
         VALUES (#{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{age,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{photoPath,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER},
@@ -128,7 +132,8 @@
         #{major},
         #{preferredProvince},
         #{preferredCity},
-        #{preferredRegion})
+        #{preferredRegion}),
+        #{birthday}
     </insert>
     <insert id="insertSelective">
         <!--
@@ -209,6 +214,9 @@
             <if test="preferredRegion != null">
                 preferred_region,
             </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null">
@@ -281,6 +289,9 @@
             </if>
             <if test="preferredRegion != null">
                 #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                #{birthday},
             </if>
 
         </trim>
@@ -363,6 +374,9 @@
             <if test="preferredRegion != null">
                 preferred_region = #{preferredRegion},
             </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -395,7 +409,8 @@
         major = #{major},
         preferred_province = #{preferredProvince},
         preferred_city = #{preferredCity},
-        preferred_region = #{preferredRegion}
+        preferred_region = #{preferredRegion},
+        birthday = #{birthday}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -510,6 +525,9 @@
             </if>
             <if test="preferredRegion != null">
                 AND re.preferredRegion = #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                AND re.birthday = #{birthday},
             </if>
         </where>
         LIMIT
