@@ -1769,16 +1769,22 @@ padding-bottom: 7px; }
     vertical-align: middle;
     display: table-cell;
     /*border-right: 1px solid #eee;*/ }
+    .user form .form-group input,.user form .form-group select,.user form .form-group textarea{
+        margin-left: 10px;
+    }
     .user form .form-group input[type=text] {
         color: #666;
         width: 60%;
-        font-size: 17px;
+        font-size: 16px;
         padding-left: 12px;
+        margin-left: 10px;
         outline: 0;
-        height: 38px; }
+        /*height: 38px; */
+    }
     .user form .form-group select {
         width: 150px;
-        height: 35px; }
+        /*height: 35px; */
+    }
     .user form .form-group .short_select {
         width: 100px; }
     .user form .form-group input[type="text"]:focus, .user form .form-group input[type="password"]:focus, .user form .form-group textarea:focus {
@@ -1794,11 +1800,17 @@ padding-bottom: 7px; }
 .user form .form-group input[type=radio] {
     display: inline-block;
     margin-left: 10px; }
+.user form .form-group .tiny-input {
+    width: 100px !important;
+}
 .user form .form-group .short-input {
-    width: 140px;
-    margin-right: 8px; }
+    width: 150px !important;
+    }
 .user form .form-group .medium-input {
-    width: 60%;
+    width: 250px !important;
+}
+.user form .form-group .large-input {
+    width: 430px !important;
 }
 .user form .form-group.text {
     padding-bottom: 0;
