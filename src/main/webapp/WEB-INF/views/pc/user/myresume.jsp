@@ -192,6 +192,7 @@
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script>
     var resume = JSON.parse('${ju:toJson(resume)}');
+    var resumeIntendIds = JSON.parse('${ju:toJson(resumeIntendIds)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');
     if(intendIds[0] == "" || intendIds[0] == "[]") {
