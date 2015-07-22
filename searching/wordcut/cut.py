@@ -1,6 +1,7 @@
 # encoding=UTF-8
 __author__ = 'whf'
 
+import codecs
 import jieba
 
 '''
@@ -33,23 +34,23 @@ class KeywordGenerator:
     逐行从文件中读取stop words
     '''
     def __read_word__(self):
-        for line in open(self.file_path):
+        for line in codecs.open(self.file_path, 'r', 'utf-8'):
             self.stop_words.append(line.strip('\n'))
 
     # 从key_list中删除stop-word
     def __trim_stop_word__(self, key_list):
         # 记录下标点的下标
-        index = 0
-        index_list = []
+        key_deleted = []
         for key in key_list:
             print 'test trim? = ' + key
             if key in self.stop_words:
-                print 'trim added'
-                index_list.append(index)
-            index += 1
-        # 删除标点
-        for ix in index_list:
-            key_list.remove(ix)
+                print 'trimmed'
+                key_deleted.append(key)
+
+        # 删除stop-word
+        for sw in key_deleted:
+            key_list.remove(sw)
+
         return key_list
 
     '''
@@ -58,3 +59,7 @@ class KeywordGenerator:
     def __get_stop_words__(self):
         return self.stop_words
 
+
+if __name__ == '__main__':
+    gen_key = KeywordGenerator('../stop-words.txt')
+    print gen_key.__get_stop_words__()
