@@ -34,7 +34,7 @@ public class RestJobController {
     public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageNumber, null);
+        List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
 
         return new ResponseText(jobList);
     }
