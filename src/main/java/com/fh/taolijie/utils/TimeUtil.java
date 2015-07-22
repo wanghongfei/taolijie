@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 public class TimeUtil {
     private TimeUtil() {}
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 2030-12-30
@@ -19,12 +18,18 @@ public class TimeUtil {
      */
     public static Date getMaxDate() {
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // SimpleDateFormat不是线程安全的
             return sdf.parse("2030-12-30");
         } catch (ParseException e) {
             e.printStackTrace();
             String msg = LogUtils.getStackTrace(e);
             throw new IllegalStateException(e);
         }
+    }
+
+    public static String date2String(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // SimpleDateFormat不是线程安全的
+        return sdf.format(date);
     }
 
     public static boolean intervalGreaterThan(Date newerDate, Date olderDate, long interval, TimeUnit timeUnit) {
