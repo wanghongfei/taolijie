@@ -58,4 +58,19 @@ public class RestReviewController {
 
         return new ResponseText(lr);
     }
+
+    /**
+     * 得到评论回复
+     * @return
+     */
+    @RequestMapping(value = "/reply", produces = Constants.Produce.JSON)
+    public ResponseText getReply(@RequestParam("reviewId") Integer reviewId,
+                                 @RequestParam(defaultValue = "0") int pageNumber,
+                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize
+                                 ) {
+        pageNumber = pageNumber * pageSize;
+        ListResult<ReviewModel> lr = reviewService.getReply(reviewId, pageNumber, pageSize);
+
+        return new ResponseText(lr);
+    }
 }

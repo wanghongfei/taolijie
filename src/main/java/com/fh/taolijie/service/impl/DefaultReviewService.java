@@ -39,6 +39,12 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public int deleteReplyByReview(Integer resumeId) {
+        return reMapper.deleteReplyByReviewId(resumeId);
+    }
+
+    @Override
     public ReviewModel getById(Integer reviewId) {
         return reMapper.selectByPrimaryKey(reviewId);
     }

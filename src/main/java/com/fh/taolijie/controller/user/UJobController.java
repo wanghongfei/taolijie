@@ -544,6 +544,8 @@ public class UJobController {
 
         // 删除评论
         reviewService.deleteReview(reviewId);
+        // 删除评论回复
+        reviewService.deleteReplyByReview(reviewId);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

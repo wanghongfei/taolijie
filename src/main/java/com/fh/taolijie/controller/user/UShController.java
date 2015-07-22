@@ -501,6 +501,9 @@ public class UShController {
         if(!reviewService.deleteReview(reviewId))
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
 
+        // 删除评论回复
+        reviewService.deleteReplyByReview(reviewId);
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
     //endregion

@@ -25,6 +25,13 @@ public interface ReviewService {
      */
     ListResult<ReviewModel> getReply(Integer reviewId, int pageNumber, int pageSize);
 
+    /**
+     * 删除指定评论的所有回复
+     * @param resumeId
+     * @return 返回被删除的条数
+     */
+    int deleteReplyByReview(Integer resumeId);
+
     ReviewModel getById(Integer reviewId);
 
     /**
