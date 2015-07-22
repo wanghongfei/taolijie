@@ -42,9 +42,7 @@ class KeywordGenerator:
         # 记录下标点的下标
         key_deleted = []
         for key in key_list:
-            print 'test trim? = ' + key
             if key in self.stop_words:
-                print 'trimmed'
                 key_deleted.append(key)
 
         # 删除stop-word
