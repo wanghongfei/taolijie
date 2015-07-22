@@ -27,6 +27,7 @@ public class RestShController {
     public ResponseText getAll(@RequestParam(defaultValue = "0") Integer pageNumber,
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
 
         return new ResponseText(shList);
