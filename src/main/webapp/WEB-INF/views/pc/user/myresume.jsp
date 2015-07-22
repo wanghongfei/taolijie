@@ -63,14 +63,14 @@
             <img src="/images/miao.jpg" alt="resume photo" class="resume-photo">
           </c:if>
           <c:if test="${resume.photoPath != null}">
-          <img src="/static/images/users/${resume.photoPath}" alt="" class="resume-photo">
+          <img src="/static/images/users/{{ resume.photoPath }}" alt="" class="resume-photo">
           </c:if>
-          <input type="text" name="photoPath" value="${resume.photoPath == null?'':resume.photoPath}" required style="width: 0;height: 0;position: relative;top: 100px;right: 50px;">
+          <input type="text" name="photoPath" ng-model="resume.photoPath" required style="width: 0;height: 0;position: relative;top: 100px;right: 50px;">
           <div id="upload-btn">选择文件</div>
       </div>
       <div class="form-group">
         <label for="">真实姓名<i class="theme-color">*</i> </label>
-        <input type="text" class="form-control" placeholder="姓名" name="name" value="${resume.name}" required maxlength="10">
+        <input type="text" class="form-control" placeholder="姓名" name="name" ng-model="resume.name" required maxlength="10">
       </div>
       <div class="form-group">
         <label for="">性别<i class="theme-color">*</i></label>
@@ -122,7 +122,7 @@
               <span ng-repeat="cate in cates" ng-attr-data-id="{{ cate. id }}" class="option-multiple" ng-class="{'option-selected': cate.selected}" ng-click="setIntendIds($index)">{{cate.name}}</span>
           </div>
           <span class="right-tip">（最多选3个）</span>
-          <input type="hidden" name="intendIds" value="${intendJobs}">
+          <input type="hidden" name="intendIds" value="${resumeIntendJobs}">
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
