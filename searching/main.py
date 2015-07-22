@@ -30,6 +30,8 @@ REDIS_PORT = 6379
 
 EACH_FETCH_AMOUNT = 10
 
+STOP_WORD_FILE_PATH = 'stop-words.txt'
+
 
 def connect_redis(host, port, password):
     return redis.Redis(host, port, password=password)
@@ -46,7 +48,7 @@ def connect_mysql(username, password, host, database):
     return mysql.connector.connect(**mysql_config)
 
 
-word_gen = KeywordGenerator('stop-words.txt')
+word_gen = KeywordGenerator(STOP_WORD_FILE_PATH)
 
 # 连接redis
 redis_conn = connect_redis(REDIS_HOST, REDIS_PORT, REDIS_PASSWORD)
@@ -65,6 +67,7 @@ sql = '''
     LIMIT
         0, %s
     ''' % EACH_FETCH_AMOUNT
+logging.info('Execute: %s' % sql)
 mysql_cursor.execute(sql)
 # 遍历结果集
 job_id_list = []
@@ -92,11 +95,16 @@ if job_id_list:
         WHERE
             id IN %s
         ''' % str(tuple(job_id_list))
-    print str(tuple(job_id_list))
+
+    logging.info('Execute: %s', sql)
     mysql_cursor.execute(sql)
+
     print '%s rows of job post updated' % mysql_cursor.rowcount
+    logging.info('%s rows of job post updated' % mysql_cursor.rowcount)
+
     mysql_cursor.close()
 else:
+    logging.info('There is no data this time')
     print 'There is no data'
 
 mysql_conn.commit()
