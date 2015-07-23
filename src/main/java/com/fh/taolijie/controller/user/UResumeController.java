@@ -450,10 +450,18 @@ public class UResumeController {
     private String queryIntend(Integer resumeId) {
         List<ApplicationIntendModel> intends = resumeService.getIntendByResume(resumeId);
         StringBuilder intendIdString = new StringBuilder();
-        intends.stream().forEach( (ai) -> {
-            intendIdString.append(ai.getJobPostCategoryId());
-            intendIdString.append(Constants.DELIMITER);
-        });
+
+
+        int LEN = intends.size();
+        ApplicationIntendModel it = null;
+        for (int ix = 0 ; ix < LEN ; ++ix) {
+            it = intends.get(ix);
+            intendIdString.append(it.getJobPostCategoryId());
+
+            if (ix != LEN - 1) {
+                intendIdString.append(Constants.DELIMITER);
+            }
+        }
 
         return intendIdString.toString();
     }
