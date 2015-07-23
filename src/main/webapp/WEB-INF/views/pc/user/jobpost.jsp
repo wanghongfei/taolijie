@@ -72,15 +72,17 @@
             <i class="pin-arrow  dark-red-arrow"></i>
         </p>
 
-        <form name="JobPostForm" id="JobPostForm" class="form-horizontal" ng-submit="doSubmit(JobPostForm);">
+        <form name="JobPostForm" id="JobPostForm" class="form-horizontal">
             <div class="form-group">
                 <label for="">兼职标题<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control large-input" name="title" placeholder="20字以内" value="${job.title}"
+                       ng-model="job.title"
                        required>
             </div>
             <div class="form-group">
                 <label for="">选择分类<span class="asterisk-red">*</span></label>
-                <select name="jobPostCategoryId" class="form-control" ng-model="job.jobPostCategoryId" required>
+                <select name="jobPostCategoryId" class="form-control" ng-model="job.jobPostCategoryId" required
+                        ng-change="checkInput(JobPostForm.jobPostCategoryId);">
                     <option value="" style="display: none">选择分类</option>
                     <c:forEach items="${cates}" var="cate">
                         <option value="${cate.id}" ${job.jobPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>

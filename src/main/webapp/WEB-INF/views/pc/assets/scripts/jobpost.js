@@ -29,12 +29,63 @@ tlj.controller('jobPostCtrl', function($scope, $http){
 //
 //});
 $(".submit-btn").click(function(){
+    var msg = '';
     //var url = '/user/job/post';
     //var path = location.pathname;
     //if(path.indexOf('change') > -1) {
     //    url = path;
     //}
     //$.tlj.postForm('#JobPostForm', url, function(){
+
+    var title = document.querySelector("input[name=title]"); //小于20字
+    var wage  = document.querySelector("input[name=wage]");  //>0
+    var workTime = document.querySelector("input[name=workTime]"); //小于25字
+    var workPlace = document.querySelector("input[name=workPlace]"); //小于25字
+    var jobDetail = document.querySelector("textarea[name=jobDetail]"); //10 500
+    var jobDescription = document.querySelector("textarea[name=jobDescription]"); //10 500
+    var contact = document.querySelector("input[name=contact]"); //<10
+    var qq = document.querySelector("input[name=contactQq]"); //<15
+
+    if(title.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    title.setCustomValidity(msg);
+
+    if(parseInt(wage.value) <= 0) {
+        msg = '数字不符合要求,请检查';
+    }
+    wage.setCustomValidity(msg);
+
+    if(workTime.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    workTime.setCustomValidity(msg);
+
+    if(workPlace.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    workPlace.setCustomValidity(msg);
+
+    if(jobDetail.value.length <10 || jobDetail.value.length > 500) {
+        msg = '长度应在10-500之间';
+    }
+    jobDetail.setCustomValidity(msg);
+
+    if(jobDescription.value.length <10 || jobDescription.value.length > 500) {
+        msg = '长度应在10-500之间';
+    }
+    jobDescription.setCustomValidity(msg);
+
+    if(contact.value.length > 10) {
+        msg = '联系人姓名过长';
+    }
+    contact.setCustomValidity(msg);
+
+    if(qq.value.length >15){
+        msg = 'qq号不合法';
+    }
+    qq.setCustomValidity(msg);
+
 
     $.tlj.postForm('#JobPostForm', location.pathname, function(){
         location.href = '/user/job/mypost';
