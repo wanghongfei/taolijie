@@ -132,8 +132,9 @@
         #{major},
         #{preferredProvince},
         #{preferredCity},
-        #{preferredRegion}),
+        #{preferredRegion},
         #{birthday}
+        )
     </insert>
     <insert id="insertSelective">
         <!--
