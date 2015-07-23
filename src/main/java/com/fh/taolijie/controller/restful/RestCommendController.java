@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.service.RecommendService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ public class RestCommendController {
             return new ResponseText("invalid request");
         }
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<RecommendedPostModel> result = null;
         if ("job".equals(type)) {
             result = recoService.getJobList(pageNumber, pageSize);

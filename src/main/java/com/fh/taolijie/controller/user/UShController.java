@@ -449,7 +449,8 @@ public class UShController {
         reviewDto.setContent(content);
         reviewDto.setMemberId(memId);
         reviewDto.setTime(new Date());
-        Integer newId = reviewService.addReview(reviewDto);
+        reviewService.addReview(reviewDto);
+        Integer newId = reviewDto.getId();
 
 
 
@@ -499,6 +500,9 @@ public class UShController {
         //删除评论
         if(!reviewService.deleteReview(reviewId))
             return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+
+        // 删除评论回复
+        reviewService.deleteReplyByReview(reviewId);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

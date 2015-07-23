@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class RestShController {
     public ResponseText getAll(@RequestParam(defaultValue = "0") Integer pageNumber,
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
 
         return new ResponseText(shList);
@@ -43,6 +45,8 @@ public class RestShController {
                                       @RequestParam(defaultValue = "false") Boolean pageView,
                                       @RequestParam(defaultValue = "0") Integer pageNumber,
                                       @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         List<SHPostModel> shList = null;
         if (false == pageView) {
@@ -68,6 +72,7 @@ public class RestShController {
                                     @RequestParam(defaultValue = "true") Boolean filter,
                                       @RequestParam(defaultValue = "0") Integer pageNumber,
                                       @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         List<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize, null);
         return new ResponseText(shList);

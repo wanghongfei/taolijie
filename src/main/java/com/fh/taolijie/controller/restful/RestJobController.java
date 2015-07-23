@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,9 @@ public class RestJobController {
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
-        List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageNumber, null);
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
+
         return new ResponseText(jobList);
     }
 
@@ -51,6 +54,7 @@ public class RestJobController {
             return new ResponseText("memberId cannot be null");
         }
 
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize, null);
         return new ResponseText(list);
     }
@@ -66,6 +70,7 @@ public class RestJobController {
     public ResponseText getPostByCategory(@PathVariable("categoryId") Integer categoryId,
                                     @RequestParam(defaultValue = "0") int pageNumber,
                                     @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize, null);
 
         return new ResponseText(list);
@@ -91,6 +96,7 @@ public class RestJobController {
     public ResponseText searchPost(JobPostModel model,
                                    @RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
         return new ResponseText(postList);
     }

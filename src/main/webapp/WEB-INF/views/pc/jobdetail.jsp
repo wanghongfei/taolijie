@@ -31,6 +31,7 @@
   <!-- build:css({.tmp,app}) /styles/css/style.css -->
   <link rel="stylesheet" href="/styles/animate.css"/>
   <link rel="stylesheet" href="/styles/style.css">
+  <link rel="stylesheet" href="/styles/jobdetail.css">
   <%--图片上传美化--%>
   <link rel="stylesheet" href="/styles/webuploader.css"/>
   <!-- endbuild -->
@@ -74,29 +75,33 @@
     </div>
     <div style="clean:both"></div>
     <div class="title">
-      <p>{{ job.title }}</p>
-      <span>兼职类型 : {{ job.category.name }}</span>
-      <span>{{job.verified ? '已认证' : '未认证'}}</span>
-      <span>发布时间 : {{ job.postTime | date:'yyyy-MM-dd' }}</span>
+      <p ng-bind="job.title"></p>
+      <label class="label">兼职类型 : </label><span ng-bind="job.category.name"></span>
+      <span ng-if="job.verified">已认证</span>
+      <span ng-if="!job.verified">未认证</span>
+      <label class="label">发布时间 : {{ job.postTime | date:'yyyy-MM-dd' }}</label>
     </div>
     <div class="info">
-        <p class="money"><span>{{ job.wage }}元</span>{{ job.timeToPay }}</p>
+        <p class="money">
+            <span ng-bind="job.wage" class="wage">元</span>元
+            <span ng-bind="job.timeToPay" class="time-to-pay"></span>
+        </p>
         <%--
             /${job.salaryUnit}
         --%>
       <p>有效日期 : <span> {{ job.expiredTime | date:'yyyy-MM-dd' }}</span></p>
-      <p>工作时间 : <span>{{ job.workTime }}</span></p>
-      <p>工作地点 : <span>{{ job.workPlace }}</span></p>
+      <p>工作时间 : <span ng-bind="job.workTime"></span></p>
+      <p>工作地点 : <span ng-bind="job.workPlace"></span></p>
     </div>
     <div class="description">
       <p class="pin-title">工作详情
         <i class="pin-arrow"></i>
       </p>
-      <p>工作内容 : <span>{{ job.jobDetail }}</span></p>
-      <p>工作要求 : <span>{{ job.jobDescription }}</span></p>
+      <p>工作内容 : <span ng-bind="job.jobDetail"></span></p>
+      <p>工作要求 : <span ng-bind="job.jobDescription"></span></p>
     </div>
     <div class="contact">
-      <p>联系人 : <span>{{ job.contact }}</span></p>
+      <p>联系人 : <span ng-bind="job.contact"></span></p>
       <p class="phone" >联系电话 : <span ><img src="/gen.do?jobId={{ job.id }}"></span></p>
     </div>
     <div class="comment clearfix">
@@ -106,7 +111,7 @@
       <div class="operates">
         <div class="operate">
           <span id="like" ng-attr-data-id="{{ job.id }}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
-          <p >{{ job.likes }}</p>
+          <p ng-bind="job.likes"></p>
         </div>
         <%--<div class="operate">--%>
           <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
@@ -114,7 +119,7 @@
         <%--</div>--%>
         <div class="operate">
           <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
-          <p>{{ job.reviewCount }}</p>
+          <p ng-bind="job.reviewCount"></p>
         </div>
 <%--        <div class="operate">
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>

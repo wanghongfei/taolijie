@@ -506,7 +506,8 @@ public class UJobController {
         model.setJobPostId(jobId);
         model.setTime(new Date());
 
-        Integer newReviewId = reviewService.addReview(model);
+        reviewService.addReview(model);
+        Integer newReviewId = model.getId();
 
         // 发送被评论通知
         // 得到兼职的发送者
@@ -521,7 +522,7 @@ public class UJobController {
         notiService.addNotification(priNoti);
 
 
-        return new JsonWrapper(true, newReviewId.toString(), Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, "reviewId", newReviewId.toString()).getAjaxMessage();
     }
 
     /**
@@ -543,6 +544,8 @@ public class UJobController {
 
         // 删除评论
         reviewService.deleteReview(reviewId);
+        // 删除评论回复
+        reviewService.deleteReplyByReview(reviewId);
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

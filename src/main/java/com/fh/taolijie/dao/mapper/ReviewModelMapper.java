@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.ReviewModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -61,4 +62,6 @@ public interface ReviewModelMapper {
 
     List<ReviewModel> findBy(ReviewModel model);
     int countFindBy(ReviewModel model);
+
+    int deleteReplyByReviewId(@Param("reviewId") Integer reviewId);
 }

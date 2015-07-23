@@ -30,6 +30,13 @@
         <result column="resume_experience" property="experience" jdbcType="LONGVARCHAR"/>
         <result column="resume_introduce" property="introduce" jdbcType="LONGVARCHAR"/>
 
+        <result column="resume_school" property="school" jdbcType="VARCHAR"/>
+        <result column="resume_major" property="major" jdbcType="VARCHAR"/>
+        <result column="resume_preferred_province" property="preferredProvince" jdbcType="VARCHAR"/>
+        <result column="resume_preferred_city" property="preferredCity" jdbcType="VARCHAR"/>
+        <result column="resume_preferred_region" property="preferredRegion" jdbcType="VARCHAR"/>
+        <result column="resume_birthday" property="birthday" jdbcType="TIMESTAMP" />
+
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
     </resultMap>
 
@@ -50,7 +57,13 @@
         page_view AS resume_page_view, verified AS resume_verified, photo_id AS resume_photo_id,
         phone_number AS resume_phone_number, wechat_account AS resume_wechat_account, created_time AS resume_created_time,
         experience AS resume_experience, introduce AS resume_introduce,
-        spare_time AS resume_spare_time
+        spare_time AS resume_spare_time,
+        school AS resume_school,
+        major AS resume_major,
+        preferred_province AS resume_preferred_province,
+        preferred_city AS resume_preferred_city,
+        preferred_region AS resume_preferred_region,
+        birthday AS resume_birthday
     </sql>
 
     <sql id="resume_column">
@@ -60,7 +73,13 @@
         re.page_view AS resume_page_view, re.verified AS resume_verified, re.photo_id AS resume_photo_id,
         re.phone_number AS resume_phone_number, re.wechat_account AS resume_wechat_account, re.created_time AS resume_created_time,
         re.experience AS resume_experience, re.introduce AS resume_introduce,
-        re.spare_time AS resume_spare_time
+        re.spare_time AS resume_spare_time,
+        re.school AS resume_school,
+        re.major AS resume_major,
+        re.preferred_province AS resume_preferred_province,
+        re.preferred_city AS resume_preferred_city,
+        re.preferred_region AS resume_preferred_region,
+        re.birthday AS resume_birthday
 
     </sql>
 
@@ -95,14 +114,27 @@
         access_authority, page_view, verified,
         photo_id, phone_number, wechat_account,
         experience, introduce, created_time,
-        spare_time)
+        spare_time,
+        school,
+        major,
+        preferred_province,
+        preferred_city,
+        preferred_region,
+        birthday)
         VALUES (#{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{age,jdbcType=INTEGER}, #{height,jdbcType=INTEGER}, #{photoPath,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{memberId,jdbcType=INTEGER},
         #{accessAuthority,jdbcType=VARCHAR}, #{pageView,jdbcType=INTEGER}, #{verified,jdbcType=VARCHAR},
         #{photoId,jdbcType=INTEGER}, #{phoneNumber,jdbcType=VARCHAR}, #{wechatAccount,jdbcType=VARCHAR},
         #{experience,jdbcType=LONGVARCHAR}, #{introduce,jdbcType=LONGVARCHAR}, #{createdTime, jdbcType=TIMESTAMP},
-        #{spareTime})
+        #{spareTime},
+        #{school},
+        #{major},
+        #{preferredProvince},
+        #{preferredCity},
+        #{preferredRegion},
+        #{birthday}
+        )
     </insert>
     <insert id="insertSelective">
         <!--
@@ -164,7 +196,27 @@
             </if>
 
             <if test="spareTime != null">
-                spare_time
+                spare_time,
+            </if>
+
+
+            <if test="school != null">
+                school,
+            </if>
+            <if test="major != null">
+                major,
+            </if>
+            <if test="preferredProvince != null">
+                preferred_province,
+            </if>
+            <if test="preferredCity != null">
+                preferred_city,
+            </if>
+            <if test="preferredRegion != null">
+                preferred_region,
+            </if>
+            <if test="birthday != null">
+                birthday,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -222,6 +274,27 @@
             <if test="spareTime != null">
                 #{spareTime}
             </if>
+
+
+            <if test="school != null">
+                #{school},
+            </if>
+            <if test="major != null">
+                #{major},
+            </if>
+            <if test="preferredProvince != null">
+                #{preferredProvince},
+            </if>
+            <if test="preferredCity != null">
+                #{preferredCity},
+            </if>
+            <if test="preferredRegion != null">
+                #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                #{birthday},
+            </if>
+
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -283,7 +356,27 @@
                 created_time = #{createdTime},
             </if>
             <if test="spareTime != null">
-                spare_time = #{spareTime}
+                spare_time = #{spareTime},
+            </if>
+
+
+            <if test="school != null">
+                school = #{school},
+            </if>
+            <if test="major != null">
+                major = #{major},
+            </if>
+            <if test="preferredProvince != null">
+                preferred_province = #{preferredProvince},
+            </if>
+            <if test="preferredCity != null">
+                preferred_city = #{preferredCity},
+            </if>
+            <if test="preferredRegion != null">
+                preferred_region = #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -311,7 +404,14 @@
         experience = #{experience,jdbcType=LONGVARCHAR},
         introduce = #{introduce,jdbcType=LONGVARCHAR},
         created_time = #{createdTime},
-        spare_time = #{spareTime}
+        spare_time = #{spareTime},
+
+        school = #{school},
+        major = #{major},
+        preferred_province = #{preferredProvince},
+        preferred_city = #{preferredCity},
+        preferred_region = #{preferredRegion},
+        birthday = #{birthday}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -409,6 +509,26 @@
             </if>
             <if test="spareTime != null">
                 AND re.spare_time = #{spareTime}
+            </if>
+
+
+            <if test="school != null">
+                AND re.school = #{school},
+            </if>
+            <if test="major != null">
+                AND re.major = #{major},
+            </if>
+            <if test="preferredProvince != null">
+                AND re.preferredProvince = #{preferredProvince},
+            </if>
+            <if test="preferredCity != null">
+                AND re.preferredCity = #{preferredCity},
+            </if>
+            <if test="preferredRegion != null">
+                AND re.preferredRegion = #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                AND re.birthday = #{birthday},
             </if>
         </where>
         LIMIT

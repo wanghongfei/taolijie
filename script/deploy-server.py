@@ -14,7 +14,7 @@ import json
 # 配置logger
 FORMAT = "%(asctime)-15s %(message)s"
 CUR_TIME = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server_%s.log" % CUR_TIME, format=FORMAT, level=logging.DEBUG)
+logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server.log", format=FORMAT, level=logging.DEBUG)
 #logging.basicConfig(filename="deploy-server_%s.log" % CUR_TIME, format=FORMAT, level=logging.DEBUG)
 
 
