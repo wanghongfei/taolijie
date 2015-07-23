@@ -206,7 +206,6 @@ public class UJobController {
         job.setLikes(0);
         job.setDislikes(0);
         job.setComplaint(0);
-        job.setSalaryUnit("元");
 
         if(job.getJobPostCategoryId()!=null){
             jobPostService.addJobPost(job);
