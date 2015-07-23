@@ -89,7 +89,7 @@
             /${job.salaryUnit}
         --%>
       <p><span class="context-title">有效日期 : </span><span ng-bind="job.expiredTime | date:'yyyy-MM-dd' "></span></p>
-      <p><span class="context-title">工作时间 : </span></span> <span ng-bind="job.workTime"></span></p>
+      <p><span class="context-title">工作时间 : </span></span><span ng-bind="job.workTime"></span></p>
       <p><span class="context-title">工作区域 : </span><span ng-bind="job.region.substring(7)"></span></p>
       <p><span class="context-title">工作地点 : </span><span ng-bind="job.workPlace"></span></p>
     </div>
