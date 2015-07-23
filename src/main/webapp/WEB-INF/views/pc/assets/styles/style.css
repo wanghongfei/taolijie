@@ -1353,6 +1353,7 @@ ul.bxslider li img {
     padding-bottom: 8px; }
 .comment .content span {
     color: #676767;
+    word-break: break-all;
     font-size: 17px; }
 
 .comment .review-bar {
@@ -1367,7 +1368,7 @@ ul.bxslider li img {
     border: 2px solid #80d0b7;
     font-size: 19px;
     float: left;
-    color: #80d0b7; }
+    color: #439376; }
 .comment .review-bar .submit-review,
 .comment .review-bar span {
     display: inline-block;
