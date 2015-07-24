@@ -4,17 +4,93 @@
  */
 
 //提交表单
+tlj.controller('jobPostCtrl', function($scope, $http){
+    //省市区不完整
+    $scope.division = {
+        "山东省":{
+            "淄博市":["张店区","淄川区","博山区","临淄区","周村区","桓台县","沂源县","高青县"]
+        }
+    };
+    $scope.job= {
+        province: "山东省",
+        city: "淄博市",
+        region: "张店区",
+        salaryUnit:"时"
+    };
+});
 
-
+//tlj.controller('jobPostCtrl', function($scope) {
+//    $scope.sh = sh;
+//    $scope.currentUser = currentUser;
+//
+//});
 $(".submit-btn").click(function(){
+    var msg = '';
     //var url = '/user/job/post';
     //var path = location.pathname;
     //if(path.indexOf('change') > -1) {
     //    url = path;
     //}
     //$.tlj.postForm('#JobPostForm', url, function(){
-    $.tlj.postForm('#JobPostForm', location.pathname, function(){
-        location.href = '/user/job/mypost';
+
+    var title = document.querySelector("input[name=title]"); //小于20字
+    var wage  = document.querySelector("input[name=wage]");  //>0
+    var workTime = document.querySelector("input[name=workTime]"); //小于25字
+    var workPlace = document.querySelector("input[name=workPlace]"); //小于25字
+    var jobDetail = document.querySelector("textarea[name=jobDetail]"); //10 500
+    var jobDescription = document.querySelector("textarea[name=jobDescription]"); //10 500
+    var contact = document.querySelector("input[name=contact]"); //<10
+    var qq = document.querySelector("input[name=contactQq]"); //<15
+
+    if(title.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    title.setCustomValidity(msg);
+
+    if(parseInt(wage.value) <= 0) {
+        msg = '数字不符合要求,请检查';
+    }
+    wage.setCustomValidity(msg);
+
+    if(workTime.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    workTime.setCustomValidity(msg);
+
+    if(workPlace.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    workPlace.setCustomValidity(msg);
+
+    if(jobDetail.value.length <15 || jobDetail.value.length > 500) {
+        msg = '长度应在15-500之间';
+    }
+    jobDetail.setCustomValidity(msg);
+
+    if(jobDescription.value.length <15 || jobDescription.value.length > 500) {
+        msg = '长度应在15-500之间';
+    }
+    jobDescription.setCustomValidity(msg);
+
+    if(contact.value.length > 10) {
+        msg = '联系人姓名过长';
+    }
+    contact.setCustomValidity(msg);
+
+    if(qq.value.length >15){
+        msg = 'qq号不合法';
+    }
+    qq.setCustomValidity(msg);
+
+
+    $.tlj.postForm('#JobPostForm', location.pathname, function(data){
+        //console.log(data);
+        if(data.result){
+            location.href = '/user/job/mypost';
+        }else{
+            alert("表单提交失败...");
+        }
+        //
     });
 });
 //JobPostForm.submit(functon(e){

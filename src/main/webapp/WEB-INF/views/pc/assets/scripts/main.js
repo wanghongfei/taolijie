@@ -9,17 +9,6 @@ $(window).bind('scroll', function () {
     }
 });
 
-$('.nav-bar > .choose').on('click',function(){
-	$('.choose-menu').toggle();
-});
-
-//$('.nav-bar>.choose').mouseover(function(){
-//	$('.choose-menu').addClass('show');
-//});
-//$('.nav-bar>li').mouseout(function(){
-//	$('.choose-menu').removeClass('show');
-//});
-
 $('#login-form').submit(function(e) {
     e.preventDefault();
     $.tlj.postForm('#login-form', '/login', function(data) {

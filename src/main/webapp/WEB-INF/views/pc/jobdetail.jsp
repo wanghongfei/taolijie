@@ -18,7 +18,7 @@
 <html class="no-js" ng-app="tljApp" ng-controller="jobCtrl">
 <head>
   <meta charset="utf-8">
-  <title>兼职-{{ job.title }}</title>
+  <title ng-bind="'兼职-'+job.title"></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -75,35 +75,43 @@
     </div>
     <div style="clean:both"></div>
     <div class="title">
-      <p ng-bind="job.title"></p>
-      <label class="label">兼职类型 : </label><span ng-bind="job.category.name"></span>
-      <span ng-if="job.verified">已认证</span>
-      <span ng-if="!job.verified">未认证</span>
-      <label class="label">发布时间 : {{ job.postTime | date:'yyyy-MM-dd' }}</label>
+      <p ng-bind="job.title">&nbsp;&nbsp;</p>
+      <label class="label">兼职类型 : </label><span ng-bind="job.category.name">&nbsp;&nbsp;</span>
+      <label class="label" ng-bind="'发布时间 : '+ (job.postTime|date:'yyyy-MM-dd hh:mm:ss')"></label>
+
     </div>
     <div class="info">
         <p class="money">
-            <span ng-bind="job.wage" class="wage">元</span>元
+            <span ng-bind="job.wage+'元/'+job.salaryUnit" class="wage"></span>
             <span ng-bind="job.timeToPay" class="time-to-pay"></span>
         </p>
         <%--
             /${job.salaryUnit}
         --%>
-      <p>有效日期 : <span> {{ job.expiredTime | date:'yyyy-MM-dd' }}</span></p>
-      <p>工作时间 : <span ng-bind="job.workTime"></span></p>
-      <p>工作地点 : <span ng-bind="job.workPlace"></span></p>
+      <p><span class="context-title">有效日期 : </span><span ng-bind="job.expiredTime | date:'yyyy-MM-dd' "></span></p>
+      <p><span class="context-title">工作时间 : </span></span><span ng-bind="job.workTime"></span></p>
+      <p><span class="context-title">工作区域 : </span><span ng-bind="job.region.substring(7)"></span></p>
+      <p><span class="context-title">工作地点 : </span><span ng-bind="job.workPlace"></span></p>
     </div>
     <div class="description">
       <p class="pin-title">工作详情
         <i class="pin-arrow"></i>
       </p>
-      <p>工作内容 : <span ng-bind="job.jobDetail"></span></p>
-      <p>工作要求 : <span ng-bind="job.jobDescription"></span></p>
+      <p><span class="context-title">工作内容 : </span><span ng-bind="job.jobDetail"></span></p>
+      <p><span class="context-title">工作要求 : </span><span ng-bind="job.jobDescription"></span></p>
     </div>
-    <div class="contact">
-      <p>联系人 : <span ng-bind="job.contact"></span></p>
-      <p class="phone" >联系电话 : <span ><img src="/gen.do?jobId={{ job.id }}"></span></p>
-    </div>
+      <div class="description">
+          <p class="pin-title">联系方式
+              <i class="pin-arrow"></i>
+          </p>
+          <p><span class="context-title" style="letter-spacing: 5px;">联系人 :</span><span ng-bind="job.contact"></span></p>
+          <p><span class="context-title">联系电话 :</span><span><img src="/gen.do?jobId={{ job.id }}"></span></p>
+          <p><span class="context-title" style="letter-spacing: 7px;">QQ号 :</span><span ng-bind="job.contactQq"></span></p>
+      </div>
+<%--    <div class="contact">
+      <p><span class="context-title">联系人 : </span><span ng-bind="job.contact"></span></p>
+      <p class="phone" ><span class="context-title">联系电话 : </span><span ><img src="/gen.do?jobId={{ job.id }}"></span></p>
+    </div>--%>
     <div class="comment clearfix">
       <p class="pin-title">用户评论
         <i class="pin-arrow"></i>
@@ -129,9 +137,9 @@
         <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
             <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
             <p>{{ review.member.username }}
-            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="{{ currentUser.id == review.member.id }}"> 删除</a>
+            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="currentUser.id == review.member.id"> 删除</a>
            </p>
-           <span>{{ review.content }}</span>
+            <div class="span"><span>{{ review.content }}</span></div>
         </div>
           <%--
         <c:forEach var="review" items="${reviews}" varStatus="status">

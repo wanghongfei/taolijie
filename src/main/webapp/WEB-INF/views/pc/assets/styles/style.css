@@ -695,7 +695,7 @@ ul.bxslider li img {
 
 /*导航*/
 .main .nav-bar {
-    background-color: #fa6a38;
+    background-color: #fa8057;
     height: 60px;
     display: block; }
 .main .nav-bar > li {
@@ -706,32 +706,51 @@ ul.bxslider li img {
     font-size: 18px;
     line-height: 60px;
     color: #fff;
-    border-left: #fb7447 solid 1px;
-    border-right: #e46135 solid 1px;
+    border-left: #fa845d solid 1px;
+    border-right: #ed7b55 solid 1px;
     cursor: pointer;
     position: relative; }
+.main .nav-bar > li:hover{
+    background-color: #ff6c3b;
+}
+.joblist .nav-bar > li.active {
+    background-color: #f96a39;
+}
 .main .nav-bar .show {
     opacity: 1 !important; }
 .main .nav-bar .choose-menu {
+
     transition: all 0.2s ease-out;
     display: none;
     position: absolute;
     width: 100%;
-    height: 200px;
-    background-color: #f4f4f4;
-    /*边框效果*/
-    border-radius: 0px;
-    box-shadow: #e1e1e1 -3px 2px 3px; }
-.main .nav-bar .choose-menu li {
-    line-height: 50px;
-    font-size: 17px;
+    background-color: #f8f8f8;
+    line-height: 25px;
+    padding: 10px 0 0px 0;
     text-align: left;
-    padding-left: 35px;
-    display: block;
-    color: #333;
-    border-bottom: 1px solid #d3d3d3; }
-.main .nav-bar .choose-menu li.actived {
-    color: #fa6a38; }
+    cursor: default;
+    /*边框效果*/
+    border: 1px solid #e1e1e1;
+    box-shadow: #e1e1e1 1px 1px 0px 0px;
+}
+.main .nav-bar .choose-menu span{
+    /*margin: 0px 10px 10px 25px;*/
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #989fa0;
+    cursor: pointer;
+    text-align: center;
+    width: 32%;
+    border-bottom: 2px solid #f8f8f8;
+}
+.main .nav-bar .choose-menu span:hover{
+    border-bottom: 2px solid #f9a487;
+}
+.main .nav-bar .choose-menu span.active {
+    color: #f9a487;
+
+    /*border-bottom-color:#f9a487;*/
+}
 
 /* 块 */
 .segment {
@@ -1372,6 +1391,7 @@ ul.bxslider li img {
     padding-bottom: 8px; }
 .comment .content span {
     color: #676767;
+    word-break: break-all;
     font-size: 17px; }
 
 .comment .review-bar {
@@ -1386,7 +1406,7 @@ ul.bxslider li img {
     border: 2px solid #80d0b7;
     font-size: 19px;
     float: left;
-    color: #80d0b7; }
+    color: #439376; }
 .comment .review-bar .submit-review,
 .comment .review-bar span {
     display: inline-block;
@@ -1601,7 +1621,7 @@ ul.bxslider li img {
     transition: all 0.2s ease-in; }
 
 .joblist .lists .list {
-    padding: 10px 0 10px 0;
+    padding: 17px 0 17px 0;
     overflow: auto;
     border-bottom: 1px solid #d5d5d5; }
 .joblist .lists .list .list-type {
@@ -1610,7 +1630,7 @@ ul.bxslider li img {
     width: 65px;
     height: 65px;
     border-radius: 65px;
-    margin: 0 15px 0 15px;
+    margin: 0 32px 0 20px;
     text-align: center; }
 .joblist .lists .list .list-type span {
     line-height: 65px;
@@ -1618,15 +1638,23 @@ ul.bxslider li img {
     color: #fff; }
 .joblist .lists .list .list-title {
     font-weight: bold;
-    font-size: 16px;
-    padding-top: 13px; }
+    font-size: 18px;
+    padding-top: 5px;
+    margin-bottom: 10px;}
 .joblist .lists .list .list-title span {
-    font-size: 14px;
     font-weight: normal;
     color: #fa6a38; }
 .joblist .lists .list > span {
-    color: #c1c1c1;
-    font-size: 15px; }
+    /*display: inline-block;*/
+    color: #c1c1c1;}
+.joblist .lists .workplace {
+    display: inline-block;
+    width: 200px;
+   }
+.joblist .lists .right-span{
+    float: right;
+    margin-right: 100px;
+}
 
 .login {
     background: url("/images/loginpic.jpg");
@@ -1788,16 +1816,22 @@ padding-bottom: 7px; }
     vertical-align: middle;
     display: table-cell;
     /*border-right: 1px solid #eee;*/ }
+    .user form .form-group input,.user form .form-group select,.user form .form-group textarea{
+        margin-left: 10px;
+    }
     .user form .form-group input[type=text] {
         color: #666;
         width: 60%;
-        font-size: 17px;
+        font-size: 16px;
         padding-left: 12px;
+        margin-left: 10px;
         outline: 0;
-        height: 38px; }
+        /*height: 38px; */
+    }
     .user form .form-group select {
         width: 150px;
-        height: 35px; }
+        /*height: 35px; */
+    }
     .user form .form-group .short_select {
         width: 100px; }
     .user form .form-group input[type="text"]:focus, .user form .form-group input[type="password"]:focus, .user form .form-group textarea:focus {
@@ -1813,11 +1847,17 @@ padding-bottom: 7px; }
 .user form .form-group input[type=radio] {
     display: inline-block;
     margin-left: 10px; }
+.user form .form-group .tiny-input {
+    width: 100px !important;
+}
 .user form .form-group .short-input {
-    width: 140px;
-    margin-right: 8px; }
+    width: 150px !important;
+    }
 .user form .form-group .medium-input {
-    width: 60%;
+    width: 250px !important;
+}
+.user form .form-group .large-input {
+    width: 430px !important;
 }
 .user form .form-group.text {
     padding-bottom: 0;
