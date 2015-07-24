@@ -26,7 +26,6 @@ $(function(){
 $('.nav-bar').on('mouseenter',".choose", function(){
     console.log($(this).children());
     $(this).children().last().show();
-
 });
 
 $('.nav-bar').on('mouseleave',".choose", function(){
