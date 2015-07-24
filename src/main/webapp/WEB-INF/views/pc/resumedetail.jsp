@@ -83,9 +83,12 @@
         <img src="/images/miao.jpg" alt="" ng-show="{{ resume.photoPath == ''}}">
       <div class="infos">
           <p>姓名 : <span ng-bind="resume.name"></span></p>
-          <p>性别 : <span ng-bind="resume.gender"></span></p>
+          <p ng-if="resume.gender == 'm'">性别 : <span>男</span></p>
+          <p ng-if="resume.gender == 'f'">性别 : <span>女</span></p>
           <p>年龄 : <span ng-bind="resume.age"></span>岁</p>
           <p>身高 : <span ng-bind="resume.height"></span>cm</p>
+          <p>学校 : <span ng-bind="resume.school"></span></p>
+          <p>专业 : <span ng-bind="resume.major"></span></p>
       </div>
     </div>
     <br/>
@@ -100,6 +103,18 @@
       <div style="clear:both"></div>
     </div>
     <i class="resume-arrow theme-color"></i>
+    <div class="resume-detail yellow-bd yellow-bg" >
+      <div class="title">意向地区</div>
+      <p ng-bind="resume.preferredRegion"></p>
+      <div style="clear:both"></div>
+    </div>
+    <i class="resume-arrow yellow"></i>
+    <div class="resume-detail purple-bd purple-bg" >
+      <div class="title">空闲时间</div>
+      <p ng-bind="resume.spareTime"></p>
+      <div style="clear:both"></div>
+    </div>
+    <i class="resume-arrow purple"></i>
 
     <div class="resume-detail light-green-bg light-green-bd" >
       <div class="title">自我介绍</div>

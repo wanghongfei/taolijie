@@ -330,6 +330,25 @@ form input[type=submit] {
 .red-bg {
     background-color: #f36362 !important; }
 
+.yellow {
+    color: #feb800;
+}
+.yellow-bg {
+    background-color: #feb800;
+}
+body .yellow-bd {
+    border-color: #feb800;
+}
+.purple {
+    color: #d32bd1;
+}
+.purple-bg {
+    background-color: #d32bd1;
+}
+body .purple-bd {
+    border-color: #d32bd1;
+}
+
 /*左侧物品摆动效果*/
 @-webkit-keyframes hinge {
     0% {
