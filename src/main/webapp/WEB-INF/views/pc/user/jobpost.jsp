@@ -62,7 +62,7 @@
             width: 110px !important;
         }
         .form-group.wage select{
-            width: 85px !important;
+            width: 90px !important;
             margin-left: 15px !important;
         }
     </style>
@@ -108,6 +108,7 @@
                     <option value="日结" ${job.timeToPay == '日结' ? 'selected="selected"' : ''}>日结</option>
                     <option value="周结" ${job.timeToPay == '周结' ? 'selected="selected"' : ''}>周结</option>
                     <option value="月结" ${job.timeToPay == '月结' ? 'selected="selected"' : ''}>月结</option>
+                    <option value="完工结算" ${job.timeToPay == '完工结算' ? 'selected="selected"' : ''}>完工结算</option>
                 </select>
             </div>
             <div class="form-group">
