@@ -31,6 +31,7 @@
     <!-- build:css({.tmp,app}) /styles/css/style.css -->
     <link rel="stylesheet" href="/styles/animate.css"/>
     <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/joblist.css"/>
     <%--图片上传美化--%>
     <link rel="stylesheet" href="/styles/webuploader.css"/>
     <!-- endbuild -->
@@ -45,7 +46,8 @@
 </head>
 <body>
 <!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
 <![endif]-->
 
 
@@ -65,34 +67,46 @@
     <!-- 正文 -->
     <div class="joblist main">
         <ul class="nav-bar">
-            <li>最新发布</li>
-            <li>最热兼职</li>
+            <li class="">热门推荐</li>
+            <li class="choose">区域选择 &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
+                <div class="choose-menu" >
+                <span class="active">全部</span>
+                <span>张店区</span>
+                <span>周村区</span>
+                <span>淄川区</span>
+                <span>临淄区</span>
+                <span>博山区</span>
+                <span>桓台县</span>
+                <span>高青县</span>
+                <span>沂源县</span>
+                </div>
+
+            </li>
             <li class="choose">结算方式&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
 
-                <div class="choose-menu">
-                    <ul>
-                        <li class="actived">全部</li>
-                        <li>日结</li>
-                        <li>周结</li>
-                        <li class="no-border">月结</li>
-                    </ul>
+                <div class="choose-menu" >
+                    <span class="active">全部</span>
+                    <span>日结</span>
+                    <span>周结</span>
+                    <span>月结</span>
+                    <span>完工结算</span>
                 </div>
             </li>
         </ul>
         <div class="lists">
             <c:forEach var="job" items="${jobs}" varStatus="status">
                 <a href="/item/job/${job.id}" style="color: #353f4f">
-                    <div class="list">
-                        <div class="list-type">
-
+                    <div class="list" data-color="${job.category.themeColor}">
+                        <div class="list-type" style="background-color: ${job.category.themeColor};">
                             <span>${job.category.name}</span>
                         </div>
-                        <div class="list-title">${job.title}<span>${job.verified ? '已认证': ''}</span></div>
-                        <span>${job.workPlace}</span>&nbsp;&nbsp;
-                        <span>${job.wage.intValue()}元/${job.salaryUnit}</span>&nbsp;&nbsp;
-                        <span>${job.timeToPay}</span>
-                        <span>
-                        <fmt:formatDate value="${job.postTime}" pattern="yyyy-MM-dd" /></span>
+                        <div class="list-title">${job.title}
+                            <span class="right-span">￥${job.wage}元/${job.salaryUnit}</span>
+                        </div>
+                        <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region.substring(7)}</span>&nbsp;&nbsp;
+                        <span><i class="fa fa-clock-o"></i> <fmt:formatDate value="${job.postTime}"
+                                                                            pattern="yyyy-MM-dd hh:mm:ss"/></span>
+                        <span class="right-span">${job.timeToPay}</span>
                     </div>
                 </a>
             </c:forEach>
@@ -118,6 +132,6 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-
+<script src="/scripts/joblist.js"></script>
 </body>
 </html>
