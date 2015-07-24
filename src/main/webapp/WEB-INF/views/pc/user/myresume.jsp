@@ -74,12 +74,12 @@
       </div>
       <div class="form-group">
         <label for="">性别<i class="theme-color">*</i></label>
-        <input type="radio" name="gender" value="男" ${resume.gender == '男' ? 'checked = "checked"':''} required>男
-        <input type="radio" name="gender" value="女" ${resume.gender == '女' ? 'checked = "checked"' : ''} required>女
+        <input type="radio" name="gender" value="m" ng-model="resume.gender" required>男
+        <input type="radio" name="gender" value="f" ng-model="resume.gender" required>女
       </div>
       <div class="form-group">
         <label for="">身高</label>
-        <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" value="${resume.height}" min="50" max="250">
+        <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" ng-model="resume.height" min="50" max="250">
         <span for="" class="input-unit">cm</span>
       </div>
       <%--
@@ -94,11 +94,11 @@
       </div>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的学校" name="school" required maxlength="20" value="${resume.school}">
+        <input type="text" class="form-control" placeholder="填写您的学校" name="school" required maxlength="20" ng-model="resume.school">
       </div>
       <div class="form-group">
         <label for="">专业<i class="theme-color">*</i></label>
-        <input type="text" class="form-control" placeholder="填写您的专业" name="major" required maxlength="20" value="${resume.major}">
+        <input type="text" class="form-control" placeholder="填写您的专业" name="major" required maxlength="20" ng-model="resume.major">
       </div>
       <div class="form-group text">
         <label for="">自我介绍<i class="theme-color">*</i></label>
@@ -122,7 +122,7 @@
               <span ng-repeat="cate in cates" ng-attr-data-id="{{ cate. id }}" class="option-multiple" ng-class="{'option-selected': cate.selected}" ng-click="setIntendIds($index)">{{cate.name}}</span>
           </div>
           <span class="right-tip">（最多选3个）</span>
-          <input type="hidden" name="intendIds" value="${resumeIntendJobs}">
+          <input type="hidden" name="intendIds" value="${ resumeIntendJobs }">
       </div>
       <div class="form-group">
         <label for="">求职地区<i class="theme-color">*</i></label>
@@ -145,13 +145,13 @@
       </div>
       <div class="form-group">
         <label for="">空闲时间<i class="theme-color">*</i></label>
-        <input type="text" name="spareTime" class="form-control" placeholder="请填写自己的空闲时间" value="${resume.spareTime}" required maxlength="100">
+        <input type="text" name="spareTime" class="form-control" placeholder="请填写自己的空闲时间" ng-model="resume.spareTime" required maxlength="100">
       </div>
       <div class="form-group">
         <label for="">公开程度</label>
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ALL' ? 'checked = "checked"':''} value="ALL" required> 公开
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'EMPLOYER' ? 'checked = "checked"':''} value="EMPLOYER" required> 对商家用户公开 
-        <input type="radio" name="accessAuthority" ${resume.accessAuthority == 'ME_ONLY' ? 'checked = "checked"':''} value="ME_ONLY" required> 不公开
+        <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="ALL" required> 公开
+        <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="EMPLOYER" required> 对商家用户公开 
+        <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="ME_ONLY" required> 不公开
       </div>
       <p class="pin-title">
          联系方式
@@ -159,19 +159,19 @@
       </p>
       <div class="form-group ">
         <label for=""><i class="fa fa-phone red"></i>手机<i class="theme-color">*</i></label>
-        <input name="phoneNumber" type="text" class="form-control" placeholder="请输入您的手机号" value="${resume.phoneNumber}" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
+        <input name="phoneNumber" type="text" class="form-control" placeholder="请输入您的手机号" ng-model="resume.phoneNumber" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group ">
         <label for=""><i class="fa fa-qq blue"></i>QQ</label>
-        <input name="qq" type="number" class="form-control medium-input" placeholder="请输入您的QQ号" value="${resume.qq}" maxlength="15">
+        <input name="qq" type="number" class="form-control medium-input" placeholder="请输入您的QQ号" ng-model="resume.qq" maxlength="15">
       </div>
       <div class="form-group">
         <label for=""><i class="fa fa-weixin light-green"></i>微信</label>
-        <input name="wechatAccount" type="text" class="form-control" placeholder="请输入的您的微信" value="${resume.wechatAccount}" maxlength="20">
+        <input name="wechatAccount" type="text" class="form-control" placeholder="请输入的您的微信" ng-model="resume.wechatAccount" maxlength="20">
       </div>
       <div class="form-group">
         <label for=""><i class="fa fa-envelope-o theme-color"></i>邮箱</label>
-        <input name="email" type="email" class="form-control medium-input" placeholder="请输入您的邮箱" value="${resume.email}">
+        <input name="email" type="email" class="form-control medium-input" placeholder="请输入您的邮箱" ng-model="resume.email">
       </div>
     </form>
   </div>
@@ -192,6 +192,7 @@
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script>
     var resume = JSON.parse('${ju:toJson(resume)}');
+    resume.qq = parseInt(resume.qq);
     var resumeIntendIds = JSON.parse('${ju:toJson(resumeIntendIds)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');
