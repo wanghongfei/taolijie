@@ -174,7 +174,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM
             review rev
         LEFT JOIN
