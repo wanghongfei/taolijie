@@ -66,7 +66,7 @@
   <div class="detail main">
     <div class="detail-bar">
       <span>兼职详情</span>
-      <a href="javascript:history.back();return false;" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
+      <a href="javascript:history.back(-1);" style="color:#fa6a38;"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
       <%--<p class="fr">分享</p>--%>
       <p class="fr" id="fav" ng-attr-data-id="{{ job.id }}" data-type="job">
       <i class="fa"  ng-class="{'fa-heart': job.favStatus, 'fa-heart-o': !job.favStatus}"></i>

@@ -95,9 +95,21 @@
         </ul>
         <div class="lists">
             <c:forEach var="job" items="${jobs}" varStatus="status">
+                <style>
+                    .list[data-color="${job.category.themeColor}"] .list-type{
+                        background-color: ${job.category.themeColor};
+                    }
+                    .list[data-color="${job.category.themeColor}"]:hover .list-type{
+                        background-color: #fff;
+                        border: 2px solid  ${job.category.themeColor};
+                    }
+                    .list[data-color="${job.category.themeColor}"]:hover .list-type span{
+                        color: ${job.category.themeColor};
+                    }
+                </style>
                 <a href="/item/job/${job.id}" style="color: #353f4f">
-                    <div class="list" data-color="${job.category.themeColor}">
-                        <div class="list-type" style="background-color: ${job.category.themeColor};">
+                    <div class="list " data-color="${job.category.themeColor}">
+                        <div class="list-type">
                             <span>${job.category.name}</span>
                         </div>
                         <div class="list-title">${job.title}

@@ -63,15 +63,14 @@ $(".submit-btn").click(function(){
     workPlace.setCustomValidity(msg);
 
     if(jobDetail.value.length <15 || jobDetail.value.length > 500) {
-        msg = '长度应在15-500之间';
+        msg = '长度应在10-500之间';
     }
     jobDetail.setCustomValidity(msg);
 
     if(jobDescription.value.length <15 || jobDescription.value.length > 500) {
-        msg = '长度应在15-500之间';
+        msg = '长度应在10-500之间';
     }
     jobDescription.setCustomValidity(msg);
-
     if(contact.value.length > 10) {
         msg = '联系人姓名过长';
     }
@@ -84,7 +83,6 @@ $(".submit-btn").click(function(){
 
 
     $.tlj.postForm('#JobPostForm', location.pathname, function(data){
-        //console.log(data);
         if(data.result){
             location.href = '/user/job/mypost';
         }else{
