@@ -71,7 +71,7 @@ $(".submit-btn").click(function(){
         msg = '长度应在10-500之间';
     }
     jobDescription.setCustomValidity(msg);
-
+src/main/webapp/WEB-INF/views/pc/assets/scripts/jobpost.js
     if(contact.value.length > 10) {
         msg = '联系人姓名过长';
     }
