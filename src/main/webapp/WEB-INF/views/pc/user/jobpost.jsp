@@ -153,14 +153,14 @@
             </div>
             <div class="form-group">
                 <label for="">工作内容<span class="asterisk-red">*</span></label>
-                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(15字以上)"
+                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(10字以上)"
                           ng-model="job.jobDetail" required>${job.jobDetail}</textarea>
             </div>
             <div class="form-group">
                 <label for="">工作要求<span class="asterisk-red">*</span></label>
                 <textarea name="jobDescription" class="form-control large-input" required
                           ng-model="job.jobDescription"
-                          placeholder="请填写工作具体要求(15字以上)">${job.jobDescription}</textarea>
+                          placeholder="请填写工作具体要求(10字以上)">${job.jobDescription}</textarea>
             </div>
 
             <p class="pin-title red-bg ">兼职详情
