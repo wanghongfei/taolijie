@@ -83,7 +83,7 @@ public class RestShController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText search(SHPostModel model) {
 
         List<SHPostModel> shList = shService.runSearch(model, null);
