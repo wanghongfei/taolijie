@@ -49,7 +49,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private boolean deleted = false;
 
     @NotNull
-    @Length(min = 15, max = 500)
+    @Length(min = 10, max = 500)
     private String jobDescription;
 
     /**
@@ -70,7 +70,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String contactQq;
 
     @NotNull
-    @Length(min = 15, max = 500)
+    @Length(min = 10, max = 500)
     private String jobDetail;
 
     private Integer likes;

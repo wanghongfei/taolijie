@@ -62,7 +62,7 @@
             width: 110px !important;
         }
         .form-group.wage select{
-            width: 85px !important;
+            width: 90px !important;
             margin-left: 15px !important;
         }
     </style>
@@ -108,6 +108,7 @@
                     <option value="日结" ${job.timeToPay == '日结' ? 'selected="selected"' : ''}>日结</option>
                     <option value="周结" ${job.timeToPay == '周结' ? 'selected="selected"' : ''}>周结</option>
                     <option value="月结" ${job.timeToPay == '月结' ? 'selected="selected"' : ''}>月结</option>
+                    <option value="完工结算" ${job.timeToPay == '完工结算' ? 'selected="selected"' : ''}>完工结算</option>
                 </select>
             </div>
             <div class="form-group">
@@ -152,14 +153,14 @@
             </div>
             <div class="form-group">
                 <label for="">工作内容<span class="asterisk-red">*</span></label>
-                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(15字以上)"
+                <textarea name="jobDetail" id="" cols="30" class="form-control large-input" placeholder="填写工作具体内容(10字以上)"
                           ng-model="job.jobDetail" required>${job.jobDetail}</textarea>
             </div>
             <div class="form-group">
                 <label for="">工作要求<span class="asterisk-red">*</span></label>
                 <textarea name="jobDescription" class="form-control large-input" required
                           ng-model="job.jobDescription"
-                          placeholder="请填写工作具体要求(15字以上)">${job.jobDescription}</textarea>
+                          placeholder="请填写工作具体要求(10字以上)">${job.jobDescription}</textarea>
             </div>
 
             <p class="pin-title red-bg ">兼职详情

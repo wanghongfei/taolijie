@@ -20,6 +20,7 @@
     font-size: 12px;
 }
 .option-multiple {
+    display: inline-block;
     margin-right: 5px;
     border-radius: 3px;
     padding: 3px;
@@ -329,6 +330,25 @@ form input[type=submit] {
 
 .red-bg {
     background-color: #f36362 !important; }
+
+.yellow {
+    color: #feb800;
+}
+.yellow-bg {
+    background-color: #feb800;
+}
+body .yellow-bd {
+    border-color: #feb800;
+}
+.purple {
+    color: #d32bd1;
+}
+.purple-bg {
+    background-color: #d32bd1;
+}
+body .purple-bd {
+    border-color: #d32bd1;
+}
 
 /*左侧物品摆动效果*/
 @-webkit-keyframes hinge {
@@ -1588,16 +1608,16 @@ ul.bxslider li img {
 
 .joblist .lists .list:hover {
     /*变色*/
-    background-color: #f6f6f6;
-    border-bottom: 1px solid #fb8a8c; }
+    background-color: #f9f9f9;
+}
 
 .joblist .lists .list:hover .list-type {
-    background-color: #fff;
-    border: 2px solid #eebc5b;
+    /*background-color: #fff;*/
+    /*border: 2px solid #eebc5b;*/
     transition: all 0.2s ease-in; }
 
 .joblist .lists .list:hover .list-type span {
-    color: #eebc5b;
+    /*color: #eebc5b;*/
     line-height: 61px;
     transition: all 0.2s ease-in; }
 
@@ -1607,7 +1627,6 @@ ul.bxslider li img {
     border-bottom: 1px solid #d5d5d5; }
 .joblist .lists .list .list-type {
     float: left;
-    background-color: #eebc5b;
     width: 65px;
     height: 65px;
     border-radius: 65px;

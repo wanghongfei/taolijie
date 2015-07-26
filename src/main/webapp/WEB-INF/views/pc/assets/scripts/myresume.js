@@ -4,16 +4,18 @@ tlj.controller('myresumeCtrl', function($scope) {
     $scope.intendIds = intendIds;
     $scope.setIntendIds = function(index) {
         var cate = $scope.cates[index];
-        if(cate.selected == false && $scope.intendIds.length < 4) {
+        console.log($scope.intendIds.length);
+        if(cate.selected == false && $scope.intendIds.length < 3) {
             $scope.intendIds.push(cate.id);
-        } else {
+            cate.selected = !cate.selected;
+        } else if(cate.selected == true){
             for(i in $scope.intendIds) {
                 if($scope.intendIds[i] == cate.id) {
                     $scope.intendIds.splice(i, 1);
                 }
             }
+            cate.selected = !cate.selected;
         }
-        cate.selected = !cate.selected;
         $('input[name=intendIds]')[0].value = $scope.intendIds.join(';');
     }
     //$scope.currentUser = currentUser;
