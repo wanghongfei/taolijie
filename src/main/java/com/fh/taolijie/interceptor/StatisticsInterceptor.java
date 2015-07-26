@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,13 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
         rt.opsForHash().increment(Constants.RedisKey.PAGE_STATISTICS, uri, 1);
 
         return super.preHandle(request, response, handler);
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        super.postHandle(request, response, handler, modelAndView);
     }
 
     private boolean isStaticResource(String uri) {
