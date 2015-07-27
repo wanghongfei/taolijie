@@ -9,13 +9,14 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
 
 <%request.setCharacterEncoding("UTF-8");%>
 <%--html头部--%>
 
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="resumeListCtrl">
 <head>
     <meta charset="utf-8">
     <title>兼职</title>
@@ -66,44 +67,42 @@
 
       <div class="resumelist main">
           <ul class="nav-bar">
+              <li>热门推荐</li>
               <li>求职意向</li>
-              <li>选择性别</li>
-              <li class="choose">选择专业&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+              <li class="choose">性别选择<i class="fa fa-caret-down"></i>
                   <div class="choose-menu">
                       <ul>
-                          <li class="actived">全部</li>
-                          <li>日结</li>
-                          <li>周结</li>
-                          <li class="no-border">月结</li>
+                          <li class="actived">男</li>
+                          <li>女</li>
                       </ul>
                   </div>
               </li>
           </ul>
           <div class="lists">
-              <c:forEach items="${resumes}" var="resume">
-                  <a href="/item/resume/${resume.id}">
+                  <a href="/item/resume/{{resume.id}{}" ng-repeat="resume in resumes">
                       <div class="list">
-                          <img src="/static/images/users/${resume.photoPath}" alt="">
+                          <img src="/static/images/users/{{resume.photoPath}}" alt="">
                           <div>
                               <div class="fl">
-                                  <p class="info">${resume.name} <i class="fa fa-cog theme-color"></i> <span>${resume.age}岁</span></p>
+                                  <p class="info">
+                                      <span ng-bind="resume.name" class="name"></span>
+                                      <i class="fa fa-cog theme-color"></i>
+                                      <span ng-bind="resume.age"></span>岁
+                                  </p>
                                   <p class="intent">
                                       <span class="intent-title">求职意向</span>
                                       <%--<span>${resume.}</span>--%>
                                   </p>
                               </div>
-
                               <div class="fr">
                                   <%--<p>${resume.}</p>--%>
                                   <p>
-                                      <span>更新时间 ： ${resume.createdTime}</span>
+                                      <span class="time" ng-bind="resume.createdTime"></span>
                                   </p>
                               </div>
                           </div>
                       </div>
                   </a>
-
-              </c:forEach>
           </div>
           <div style="clear:both"></div>
           <div class="page">
@@ -120,13 +119,14 @@
               </ul>
           </div>
       </div>
-
-
-
 </div>
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/list/resumelist.js"></script>
+<script>
+    var resumes = JSON.parse('${ju:toJson(resumes)}');
+</script>
 
 </body>
 </html>
