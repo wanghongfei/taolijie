@@ -95,7 +95,7 @@ public class RestShController {
      * 查询所有二手分类
      * @return
      */
-    @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryList() {
         List<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
 
