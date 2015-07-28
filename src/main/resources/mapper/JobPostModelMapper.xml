@@ -648,7 +648,7 @@
                 OR post.city = #{city},
             </if>
             <if test="region != null">
-                OR post.region = #{region},
+                OR post.region = #{region}
             </if>
 
             AND post.deleted = #{deleted}
