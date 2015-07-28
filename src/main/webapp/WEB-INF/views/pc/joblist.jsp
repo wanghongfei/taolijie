@@ -117,7 +117,7 @@
                         </div>
                         <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region.substring(7)}</span>&nbsp;&nbsp;
                         <span><i class="fa fa-clock-o"></i> <fmt:formatDate value="${job.postTime}"
-                                                                            pattern="yyyy-MM-dd hh:mm:ss"/></span>
+                                                                            pattern="yyyy-MM-dd HH:mm:ss"/></span>
                         <span class="right-span">${job.timeToPay}</span>
                     </div>
                 </a>

@@ -714,11 +714,20 @@ ul.bxslider li img {
 .main .nav-bar > li:hover{
     background-color: #ff6c3b;
 }
+.main .nav-bar > li i {
+    transition: all 0.3s ease 0s;
+}
+.main .nav-bar > li:hover i{
+    transform: rotate(180deg);
+}
 .joblist .nav-bar > li.active {
     background-color: #f96a39;
 }
 .main .nav-bar .show {
     opacity: 1 !important; }
+.oose i:hover{
+
+}
 .main .nav-bar .choose-menu {
 
     transition: all 0.2s ease-out;

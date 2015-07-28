@@ -168,6 +168,7 @@
 <script src="/scripts/jobdetail.js"></script>
 <script>
     var job = JSON.parse('${ju:toJson(job)}');
+    console.log(job);
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
