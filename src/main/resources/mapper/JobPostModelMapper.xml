@@ -642,10 +642,10 @@
 
 
             <if test="province != null">
-                OR post.province = #{province},
+                OR post.province = #{province}
             </if>
             <if test="city != null">
-                OR post.city = #{city},
+                OR post.city = #{city}
             </if>
             <if test="region != null">
                 OR post.region = #{region}
