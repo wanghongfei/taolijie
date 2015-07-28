@@ -41,6 +41,9 @@ $(".submit-btn").click(function(){
     var jobDescription = document.querySelector("textarea[name=jobDescription]"); //10 500
     var contact = document.querySelector("input[name=contact]"); //<10
     var qq = document.querySelector("input[name=contactQq]"); //<15
+    var expiredTime =document.querySelector("input[name=expiredTime]"); //不能小于今天的时间
+
+
 
     if(title.value.length > 20) {
         msg = '长度在20字以内';
@@ -51,6 +54,11 @@ $(".submit-btn").click(function(){
         msg = '数字不符合要求,请检查';
     }
     wage.setCustomValidity(msg);
+
+    if((new Date(expiredTime.value)).getTime()<new Date().getTime()){
+        msg = '不能选择过去的时间';
+    }
+    expiredTime.setCustomValidity(msg);
 
     if(workTime.value.length > 20) {
         msg = '长度在20字以内';
