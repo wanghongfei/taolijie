@@ -70,12 +70,12 @@ $(".submit-btn").click(function(){
     }
     workPlace.setCustomValidity(msg);
 
-    if(jobDetail.value.length <15 || jobDetail.value.length > 500) {
+    if(jobDetail.value.length <10 || jobDetail.value.length > 500) {
         msg = '长度应在10-500之间';
     }
     jobDetail.setCustomValidity(msg);
 
-    if(jobDescription.value.length <15 || jobDescription.value.length > 500) {
+    if(jobDescription.value.length <10 || jobDescription.value.length > 500) {
         msg = '长度应在10-500之间';
     }
     jobDescription.setCustomValidity(msg);
