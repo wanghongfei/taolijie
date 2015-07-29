@@ -19,7 +19,7 @@ public class RecommendedPostModel extends Pageable {
 
     private Date applyTime;
 
-    private Boolean validation;
+    private Boolean validation = false;
 
     private Integer memberId;
     private MemberModel member;

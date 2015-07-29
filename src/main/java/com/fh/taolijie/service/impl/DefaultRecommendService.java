@@ -49,6 +49,8 @@ public class DefaultRecommendService implements RecommendService {
     public ListResult<RecommendedPostModel> getJobList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsJob(true);
+        cmd.setValidation(true);
+
         List<RecommendedPostModel> list = recoMapper.findRecommendList(cmd);
         int tot = recoMapper.countFindRecommendList(cmd);
 
@@ -59,6 +61,8 @@ public class DefaultRecommendService implements RecommendService {
     public ListResult<RecommendedPostModel> getShList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsSh(true);
+        cmd.setValidation(true);
+
         List<RecommendedPostModel> list = recoMapper.findRecommendList(cmd);
         int tot = recoMapper.countFindRecommendList(cmd);
 
@@ -69,6 +73,8 @@ public class DefaultRecommendService implements RecommendService {
     public ListResult<RecommendedPostModel> getResumeList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsResume(true);
+        cmd.setValidation(true);
+
         List<RecommendedPostModel> list = recoMapper.findRecommendList(cmd);
         int tot = recoMapper.countFindRecommendList(cmd);
 
