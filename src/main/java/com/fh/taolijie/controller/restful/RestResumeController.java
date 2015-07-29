@@ -1,15 +1,20 @@
 package com.fh.taolijie.controller.restful;
 
+import cn.fh.security.credential.Credential;
+import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +25,30 @@ import java.util.List;
 public class RestResumeController {
     @Autowired
     ResumeService resumeService;
+
+    /**
+     * 简历库
+     * @return
+     */
+    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
+    public ResponseText allResumes(@RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                                    HttpSession session) {
+        List<ResumeModel> resumes = new ArrayList<>(10);
+
+        pageNumber = pageNumber * pageSize;
+
+        // 查找所有简历
+        Credential credential = CredentialUtils.getCredential(session);
+        // 如果是商家
+        if (null != credential && Constants.RoleType.EMPLOYER.toString().equals(credential.getRoleList().get(0))) {
+            resumes = resumeService.findByAuthes(pageNumber, pageSize, Constants.AccessAuthority.ALL, Constants.AccessAuthority.EMPLOYER);
+        } else {
+            resumes = resumeService.findByAuthes(pageNumber, pageSize, Constants.AccessAuthority.ALL);
+        }
+
+        return new ResponseText(resumes);
+    }
 
     /**
      * 根据id查询简历

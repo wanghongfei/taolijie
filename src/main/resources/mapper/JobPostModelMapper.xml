@@ -861,9 +861,9 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
-            <if test="filterExpiredPost == true">
+<!--            <if test="filterExpiredPost == true">
                 AND post.expired_time >= now()
-            </if>
+            </if>-->
             <if test="expired != null">
                 AND post.expired = #{expired}
             </if>
