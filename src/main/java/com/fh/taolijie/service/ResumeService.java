@@ -55,6 +55,9 @@ public interface ResumeService extends PageService {
      */
     List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
 
+
+    List<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize);
+
     /**
      * 根据简历查找意向
      * @param resumeId
