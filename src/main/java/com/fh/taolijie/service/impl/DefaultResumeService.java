@@ -91,6 +91,14 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    public List<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize) {
+        ResumeModel example = new ResumeModel(pageNumber, pageSize);
+        example.setGender(gender);
+
+        return reMapper.findBy(example);
+    }
+
+    @Override
     public List<ApplicationIntendModel> getIntendByResume(Integer resumeId) {
         return intendMapper.getByResume(resumeId);
     }
