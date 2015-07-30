@@ -51,7 +51,7 @@ public class HResumeController {
      * @return
      */
     @RequestMapping(value = {"list/resume"}, method = RequestMethod.GET)
-    public String resumeList(@RequestParam(defaultValue = "1") int page,
+    public String resumeList(@RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "0") int cate,
                              @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                              Model model,
@@ -60,7 +60,7 @@ public class HResumeController {
         List<ResumeModel> resumes = new ArrayList<>(10);
         if (cate > 0) {
             // 按求职意向查找
-            resumes = resumeService.getResumeListByIntend(cate, (page - 1)*pageSize, pageSize);
+            resumes = resumeService.getResumeListByIntend(cate, page * pageSize, pageSize);
         } else {
             // 查找所有简历
             Credential credential = CredentialUtils.getCredential(session);
