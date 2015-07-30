@@ -64,14 +64,14 @@
   <div class="detail main white-bg">
     <div class="detail-bar">
       <span>${postUser.name}的简历</span>
-        <a href="/" style="color: #fa6a38"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
+        <a href="/list/resume" style="color: #fa6a38"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
 
       <p class="fr" id="del" ng-attr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">删除</p>
-      <p class="fr" id="edit" ng-atr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">
+      <p class="fr" id="edit" ng-attr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">
         <a href="/user/resume/change" style="color: #fa6a38">编辑</a>
       </p>
 
-      <p class="fr" id="fav" ng-atrr-data-id="{{ resume.id }}" data-type="resume" ng-if="isShow">
+      <p class="fr" id="fav" ng-attr-data-id="{{ resume.id }}" data-type="resume" ng-if="isShow" ng-click="fav()">
           <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
             ${favStatus? '已收藏':'收藏'}
       </p>

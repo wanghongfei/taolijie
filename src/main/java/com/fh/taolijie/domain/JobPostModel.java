@@ -875,6 +875,9 @@ public class JobPostModel extends Pageable implements Serializable {
                 category +
                 orderByDate +
                 orderByVisit +
+                province +
+                city +
+                region +
                 filterExpiredPost;
     }
 
