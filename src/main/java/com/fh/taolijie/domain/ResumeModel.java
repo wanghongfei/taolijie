@@ -590,4 +590,36 @@ public class ResumeModel extends Pageable {
     public void setWechatAccount(String wechatAccount) {
         this.wechatAccount = wechatAccount == null ? null : wechatAccount.trim();
     }
+
+    @Override
+    public String toString() {
+        return "ResumeModel{" +
+                "id=" + id +
+                ", experience='" + experience + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", height=" + height +
+                ", photoPath='" + photoPath + '\'' +
+                ", email='" + email + '\'' +
+                ", qq='" + qq + '\'' +
+                ", memberId=" + memberId +
+                ", accessAuthority='" + accessAuthority + '\'' +
+                ", pageView=" + pageView +
+                ", verified='" + verified + '\'' +
+                ", photoId=" + photoId +
+                ", createdTime=" + createdTime +
+                ", birthday=" + birthday +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", spareTime='" + spareTime + '\'' +
+                ", wechatAccount='" + wechatAccount + '\'' +
+                ", major='" + major + '\'' +
+                ", school='" + school + '\'' +
+                ", preferredProvince='" + preferredProvince + '\'' +
+                ", preferredCity='" + preferredCity + '\'' +
+                ", preferredRegion='" + preferredRegion + '\'' +
+                ", member=" + member +
+                "} " + super.toString();
+    }
 }

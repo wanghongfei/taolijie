@@ -29,4 +29,13 @@ public abstract class Pageable {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
+    @Override
+    public String toString() {
+        return "Pageable{" +
+                "pageNumber=" + pageNumber +
+                ", pageSize=" + pageSize +
+                '}';
+    }
+
 }

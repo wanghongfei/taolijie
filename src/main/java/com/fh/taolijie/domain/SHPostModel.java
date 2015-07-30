@@ -534,6 +534,8 @@ public class SHPostModel extends Pageable {
         sb.append(", member=").append(member);
         sb.append(", category=").append(category);
         sb.append('}');
+        sb.append(pageNumber);
+        sb.append(pageSize);
         return sb.toString();
     }
 

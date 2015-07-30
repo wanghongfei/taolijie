@@ -878,6 +878,8 @@ public class JobPostModel extends Pageable implements Serializable {
                 province +
                 city +
                 region +
+                pageNumber +
+                pageSize +
                 filterExpiredPost;
     }
 
