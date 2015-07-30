@@ -80,11 +80,26 @@ public class RedisCacheAspect {
         // 得到被代理的方法上的注解
         Class modelType = me.getAnnotation(RedisCache.class).value();
 
-        // 检查redis中是否有缓存
-        String value = (String)rt.opsForHash().get(modelType.getName(), key);
-
         // result是方法的最终返回结果
         Object result = null;
+
+        // 检查redis中是否有缓存
+        String value = null;
+        try {
+            value = (String)rt.opsForHash().get(modelType.getName(), key);
+        } catch (Exception ex) {
+            // 如果扔异常，说明Redis出了问题
+            // 此时直接查数据库，绕开Redis
+
+            // 日志记录
+            String errMsg = LogUtils.getStackTrace(ex);
+            LogUtils.getErrorLogger().error(errMsg);
+
+            // 执行数据库查询方法
+            result = jp.proceed(args);
+            return result;
+        }
+
         if (null == value) {
             // 缓存未命中
             if (infoLog.isDebugEnabled()) {
@@ -100,26 +115,39 @@ public class RedisCacheAspect {
             String hashName = modelType.getName();
 
             // 序列化结果放入缓存
-            rt.execute(new RedisCallback<Object>() {
-                @Override
-                public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
-                    // 配置文件中指定了这是一个String类型的连接
-                    // 所以这里向下强制转换一定是安全的
-                    StringRedisConnection conn = (StringRedisConnection) redisConn;
+            try {
+                rt.execute(new RedisCallback<Object>() {
+                    @Override
+                    public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
+                        // 配置文件中指定了这是一个String类型的连接
+                        // 所以这里向下强制转换一定是安全的
+                        StringRedisConnection conn = (StringRedisConnection) redisConn;
 
 
-                    // 判断hash名是否存在
-                    // 如果不存在，创建该hash并设置过期时间
-                    if (false == conn.exists(hashName) ){
-                        conn.hSet(hashName, key, json);
-                        conn.expire(hashName, Constants.HASH_EXPIRE_TIME);
-                    } else {
-                        conn.hSet(hashName, key, json);
+                        // 判断hash名是否存在
+                        // 如果不存在，创建该hash并设置过期时间
+                        if (false == conn.exists(hashName) ){
+                            conn.hSet(hashName, key, json);
+                            conn.expire(hashName, Constants.HASH_EXPIRE_TIME);
+                        } else {
+                            conn.hSet(hashName, key, json);
+                        }
+
+                        return null;
                     }
+                });
+            } catch (Exception ex) {
+                // 如果扔异常，说明Redis出了问题
+                // 此时直接查数据库，绕开Redis
 
-                    return null;
-                }
-            });
+                // 日志记录
+                String errMsg = LogUtils.getStackTrace(ex);
+                LogUtils.getErrorLogger().error(errMsg);
+
+                // 执行数据库查询方法
+                result = jp.proceed(args);
+                return result;
+            }
         } else {
             // 缓存命中
             if (infoLog.isDebugEnabled()) {

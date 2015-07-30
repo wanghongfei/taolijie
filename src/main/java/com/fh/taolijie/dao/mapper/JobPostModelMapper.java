@@ -86,9 +86,11 @@ public interface JobPostModelMapper {
     @RedisCache(JobPostModel.class)
     long countFindBy(JobPostModel model);
 
-    @RedisCache(JobPostModel.class)
+    //@RedisCache(JobPostModel.class)
+    @NoCache
     List<JobPostModel> searchBy(JobPostModel model);
-    @RedisCache(JobPostModel.class)
+    //@RedisCache(JobPostModel.class)
+    @NoCache
     long countSearchBy(JobPostModel model);
 
     @RedisEvict(JobPostModel.class)
