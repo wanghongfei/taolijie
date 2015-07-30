@@ -216,28 +216,28 @@
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />,
 
-            <if test="jobId != null">
+            <if test="isJob == true">
                 <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />
             </if>
-            <if test="shId != null">
+            <if test="isSh == true">
                 <include refid="com.fh.taolijie.dao.mapper.ShPostModelMapper.Base_Column_List" />
             </if>
-            <if test="resumeId != null">
-                <include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.Base_Column_List" />
+            <if test="isResume == true">
+                <include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.resume_column" />
             </if>
         FROM
             recommended_post reco
         INNER JOIN
             member mem
-        <if test="jobId != null">
+        <if test="isJob == null">
         INNER JOIN
             job_post post
         </if>
-        <if test="shId != null">
+        <if test="isSh == null">
         INNER JOIN
             second_hand_post post
         </if>
-        <if test="resumeId != null">
+        <if test="isResume == null">
         INNER JOIN
             resume re
         </if>
@@ -323,14 +323,14 @@
             <include refid="Base_Column_List"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />,
 
-            <if test="jobId != null">
+            <if test="isJob == true">
                 <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />
             </if>
-            <if test="shId != null">
+            <if test="isSh == true">
                 <include refid="com.fh.taolijie.dao.mapper.ShPostModelMapper.Base_Column_List" />
             </if>
-            <if test="resumeId != null">
-                <include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.Base_Column_List" />
+            <if test="isResume == true">
+                <include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.resume_column" />
             </if>
         FROM
             recommended_post reco
@@ -346,6 +346,8 @@
         INNER JOIN
             resume re
         </if>
+        INNER JOIN
+            member mem
         WHERE
         <if test="isJob == true">
             reco.job_id IS NOT NULL
