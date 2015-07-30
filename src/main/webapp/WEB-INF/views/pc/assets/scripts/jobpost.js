@@ -41,6 +41,9 @@ $(".submit-btn").click(function(){
     var jobDescription = document.querySelector("textarea[name=jobDescription]"); //10 500
     var contact = document.querySelector("input[name=contact]"); //<10
     var qq = document.querySelector("input[name=contactQq]"); //<15
+    var expiredTime =document.querySelector("input[name=expiredTime]"); //不能小于今天的时间
+
+
 
     if(title.value.length > 20) {
         msg = '长度在20字以内';
@@ -52,6 +55,11 @@ $(".submit-btn").click(function(){
     }
     wage.setCustomValidity(msg);
 
+    if((new Date(expiredTime.value)).getTime()<new Date().getTime()){
+        msg = '不能选择过去的时间';
+    }
+    expiredTime.setCustomValidity(msg);
+
     if(workTime.value.length > 20) {
         msg = '长度在20字以内';
     }
@@ -62,12 +70,12 @@ $(".submit-btn").click(function(){
     }
     workPlace.setCustomValidity(msg);
 
-    if(jobDetail.value.length <15 || jobDetail.value.length > 500) {
+    if(jobDetail.value.length <10 || jobDetail.value.length > 500) {
         msg = '长度应在10-500之间';
     }
     jobDetail.setCustomValidity(msg);
 
-    if(jobDescription.value.length <15 || jobDescription.value.length > 500) {
+    if(jobDescription.value.length <10 || jobDescription.value.length > 500) {
         msg = '长度应在10-500之间';
     }
     jobDescription.setCustomValidity(msg);

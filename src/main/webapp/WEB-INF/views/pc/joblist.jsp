@@ -70,15 +70,15 @@
             <li class="">热门推荐</li>
             <li class="choose">区域选择 &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
                 <div class="choose-menu" >
-                <span class="active">全部</span>
+                <span class="active"><a href="">全部</a></span>
                 <span>张店区</span>
-                <span>周村区</span>
-                <span>淄川区</span>
-                <span>临淄区</span>
-                <span>博山区</span>
-                <span>桓台县</span>
-                <span>高青县</span>
-                <span>沂源县</span>
+                <span><a href="">周村区</a></span>
+                <span><a href="">淄川区</a></span>
+                <span><a href="">临淄区</a></span>
+                <span><a href="">博山区</a></span>
+                <span><a href="">桓台县</a></span>
+                <span><a href="">高青县</a></span>
+                <span><a href="">沂源县</a></span>
                 </div>
 
             </li>
@@ -117,7 +117,7 @@
                         </div>
                         <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region.substring(7)}</span>&nbsp;&nbsp;
                         <span><i class="fa fa-clock-o"></i> <fmt:formatDate value="${job.postTime}"
-                                                                            pattern="yyyy-MM-dd hh:mm:ss"/></span>
+                                                                            pattern="yyyy-MM-dd HH:mm:ss"/></span>
                         <span class="right-span">${job.timeToPay}</span>
                     </div>
                 </a>

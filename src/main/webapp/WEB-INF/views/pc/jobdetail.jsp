@@ -88,7 +88,8 @@
         <%--
             /${job.salaryUnit}
         --%>
-      <p><span class="context-title">有效日期 : </span><span ng-bind="job.expiredTime | date:'yyyy-MM-dd' "></span></p>
+
+      <p><span class="context-title">有效日期 : </span><span ng-bind="job.expiredTime|date:'yyyy-MM-dd'"></span></p>
       <p><span class="context-title">工作时间 : </span></span><span ng-bind="job.workTime"></span></p>
       <p><span class="context-title">工作区域 : </span><span ng-bind="job.region.substring(7)"></span></p>
       <p><span class="context-title">工作地点 : </span><span ng-bind="job.workPlace"></span></p>
@@ -168,6 +169,8 @@
 <script src="/scripts/jobdetail.js"></script>
 <script>
     var job = JSON.parse('${ju:toJson(job)}');
+    job.expiredTime = new Date(job.expiredTime);
+    console.log(job.expiredTime);
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');

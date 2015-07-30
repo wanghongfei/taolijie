@@ -20,7 +20,7 @@ public final class JsonUtils {
     }
 
     public static String toJson(Object value) throws JsonGenerationException, JsonMappingException, IOException {
-        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         return mapper.writeValueAsString(value);
     }
 }
