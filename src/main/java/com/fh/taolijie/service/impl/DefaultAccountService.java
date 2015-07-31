@@ -109,7 +109,6 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     //@CachePut(value = "memberCache", key = "#username")
     public MemberModel findMember(String username, boolean isWired) {
         MemberModel mem = memMapper.selectByUsername(username);
-        CheckUtils.nullCheck(mem);
 
         return mem;
     }
