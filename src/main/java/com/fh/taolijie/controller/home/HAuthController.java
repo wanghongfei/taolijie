@@ -2,7 +2,6 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
@@ -15,9 +14,7 @@ import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
-import com.fh.taolijie.utils.json.JsonUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
-import com.sun.tools.javac.code.Attribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
