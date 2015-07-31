@@ -21,8 +21,22 @@ logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server.log", for
 # 该函数用于执行外部命令来部署工程
 def deploy():
     os.chdir('/root/projects/taolijie')
-    outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'), stderr=subprocess.STDOUT)
-    logging.info(outcome)
+
+    try:
+        outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'), stderr=subprocess.STDOUT)
+        logging.info(outcome)
+    except Exception as e:
+        logging.error('deploy failed! Retry')
+
+        # 如果第一次失败，则再尝试一次
+        try:
+            outcome = subprocess.check_output(('/root/projects/taolijie/server-deploy.sh'), stderr=subprocess.STDOUT)
+            logging.info(outcome)
+        except Exception as e:
+            # 两次都失败，拉倒
+            logging.error('deploy failed again, abort!')
+            return
+
     logging.info('deployment finished without error')
 
     return outcome
