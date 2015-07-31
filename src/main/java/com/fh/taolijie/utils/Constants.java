@@ -11,6 +11,9 @@ public class Constants {
     public static final String API_VERSION = "v1.1";
     public static final String SENDER_EMAIL = "wfc5582563@126.com";
 
+    public static final String CLIENT_MOBILE = "1";
+    public static final String CLIENT_PC = "0";
+
     /**
      * 缓存过期时间: 30min
      */
