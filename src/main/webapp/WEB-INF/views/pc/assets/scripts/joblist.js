@@ -1,11 +1,29 @@
 /**
+ *
  * Created by wyn on 15-7-24.
  */
 
+var $ctrlScope;
+tlj.controller('jobDetailCtrl', function($scope, $http) {
+    $ctrlScope = $scope;
+    //初始化jobList
+    $scope.jobList = jobList;
+
+    $scope.hello = function(){
+        console.log($scope.jobList);
+    };
+    $scope.lastPage = function(){
+        return $scope.jobList.pageNumber != 0;
+    };
+    $scope.nextPage = function(){
+        return $scope.jobList.length < jobList.pageSize;
+    }
+});
 
 $(function () {
+    var searchObj = {};
+
     $('.nav-bar').on('mouseenter', ".choose", function () {
-        console.log($(this).children());
         $(this).children().last().show();
     });
 
@@ -15,15 +33,83 @@ $(function () {
 
     $('.choose-menu').on('click','span',function(){
         var $this = $(this);
-        var region = $this.val();
-        $.ajax({
-            url:"/api/job/search?workRegion=张店",
-            type:"get",
-            success:function(data){
-                console.log(data);
+        var key = $this.parent().attr("data-type");
+        var value = $this.text();
+        var isAll = false;
+        if(key!=null&&value!=null){
+            //判断value为空的话从对象中移除改属性
+            if(value === "全部"){
+                delete searchObj[key];
+                isAll = true;
+            }else{
+                searchObj[key] = value;
+            }
+        }else{
+            console.log("error");
+        }
+
+        //点击后的用户反馈
+        $this.parent().children().each(function(){
+            $(this).removeClass("active");
+        });
+        $this.addClass("active");
+        var $chooseTitle = $this.parent().parent().children().first();
+        if(isAll){
+            $chooseTitle.text($chooseTitle.attr("data-default"));
+        }else{
+            $chooseTitle.text(value);
+        }
+
+        search(searchObj,function(data){
+            if(data.ok){
+                $ctrlScope.jobList = data.data;
+                $ctrlScope.$digest();
             }
         });
+
+
     });
+
+    /**
+     * 根据指定的键筛选
+     * @param searchObj 如{"region":"张店","timeToPay":"月结"}
+     * @param callback
+     */
+
+    function search(searchObj, callback){
+        //首先遍历searchObj拼接url
+        var param = urlEncode(searchObj);
+        console.log(param);
+        //发送ajax请求
+        $.ajax({
+            url:"/api/job/filter?"+param,
+            type:"get",
+            success:callback
+        });
+    }
+
+    /**
+     * 转换对象为url参数
+     * @param obj
+     * @param key
+     * @param encode
+     * @returns {string}
+     */
+    function urlEncode(obj, key, encode) {
+        if(obj==null) return '';
+        var paramStr = '';
+        var t = typeof (obj);
+        if (t == 'string' || t == 'number' || t == 'boolean') {
+            paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(obj) : obj);
+        } else {
+            for (var i in obj) {
+                var k = key == null ? i : key + (obj instanceof Array ? '[' + i + ']' : '.' + i);
+                paramStr += urlEncode(obj[i], k, encode);
+            }
+        }
+        return paramStr;
+    };
+
 
 });
 
