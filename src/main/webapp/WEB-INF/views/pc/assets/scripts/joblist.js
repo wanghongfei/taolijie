@@ -59,12 +59,16 @@ $(function () {
         }else{
             $chooseTitle.text(value);
         }
+        var $loading = $(".lists .loading-page");
+        console.log($loading);
+        $loading.show();
 
         search(searchObj,function(data){
             if(data.ok){
                 $ctrlScope.jobList = data.data;
                 $ctrlScope.$digest();
             }
+            $loading.hide();
         });
 
 

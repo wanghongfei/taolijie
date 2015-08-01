@@ -96,6 +96,7 @@
         </ul>
 
         <div class="lists">
+            <span class="loading-page"></span>
 
             <style ng-repeat-start="job in jobList">
                 .list[data-color="{{job.category.themeColor}}"] .list-type{
