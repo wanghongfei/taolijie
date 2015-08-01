@@ -4,23 +4,41 @@
  */
 
 var $ctrlScope;
+var $loading = $(".lists .loading-page");
+$loading.show();
+
 tlj.controller('jobDetailCtrl', function($scope, $http) {
     $ctrlScope = $scope;
-    //初始化jobList
-    $scope.jobList = jobList;
+
+
+
+    var jobListRes = $http.get('/api/job/filter');
+    jobListRes.success(function(data, status){
+        $scope.jobList = data.data;
+        $loading.hide();
+    });
 
     $scope.hello = function(){
         console.log($scope.jobList);
     };
+    $scope.pageChange = function(isNext){
+        //解析pageNumber字段
+        if(isNext){
+            //下一页
+        }
+    };
     $scope.lastPage = function(){
-        return $scope.jobList.pageNumber != 0;
+        return $scope.jobList != null;
     };
     $scope.nextPage = function(){
-        return $scope.jobList.length < jobList.pageSize;
+        return $scope.jobList != null;
     }
+
+
 });
 
 $(function () {
+
     var searchObj = {};
 
     $('.nav-bar').on('mouseenter', ".choose", function () {
@@ -60,7 +78,6 @@ $(function () {
             $chooseTitle.text(value);
         }
         var $loading = $(".lists .loading-page");
-        console.log($loading);
         $loading.show();
 
         search(searchObj,function(data){
