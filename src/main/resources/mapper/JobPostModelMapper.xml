@@ -877,6 +877,10 @@
             <if test="region != null">
                 AND post.region = #{region}
             </if>
+
+            <if test="cateId != null">
+                AND post.job_post_category_id = #{cateId}
+            </if>
         </where>
         ORDER BY
             <choose>
@@ -991,6 +995,10 @@
             </if>
             <if test="region != null">
                 AND post.region = #{region}
+            </if>
+
+            <if test="cateId != null">
+                AND post.job_post_category_id = #{cateId}
             </if>
         </where>
     </select>
