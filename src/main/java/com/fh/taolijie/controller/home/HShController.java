@@ -73,7 +73,7 @@ public class HShController {
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);
-        model.addAttribute("shs", shs);
+        model.addAttribute("shs", shs.getList());
         model.addAttribute("page", page);
 //        model.addAttribute("totalPage", totalPage);
         return "pc/shlist";

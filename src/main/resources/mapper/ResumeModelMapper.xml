@@ -646,7 +646,7 @@
     </select>
     <select id="countFindByAuth" resultType="long">
         SELECT
-            COUNT (*)
+            COUNT(*)
         FROM
             resume re
         WHERE
