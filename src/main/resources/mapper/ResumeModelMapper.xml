@@ -460,7 +460,7 @@
 
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
-            <include refid="less_resume_column"/>,
+            <include refid="resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             INNER JOIN member mem ON mem.id = re.member_id

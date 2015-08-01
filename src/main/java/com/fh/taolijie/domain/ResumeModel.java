@@ -606,27 +606,6 @@ public class ResumeModel extends Pageable {
         this.wechatAccount = wechatAccount == null ? null : wechatAccount.trim();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (false == o instanceof ResumeModel) {
-            return false;
-        }
-
-        ResumeModel other = (ResumeModel) o;
-        return (other.id != null) && (other.id.equals(this.id));
-    }
-
-    @Override
-    public int hashCode() {
-        int num = 31;
-        num = num + this.id.hashCode();
-
-        return num;
-    }
 
     @Override
     public String toString() {
