@@ -5,7 +5,6 @@ import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
-import sun.jvm.hotspot.debugger.cdbg.basic.ResolveListener;
 
 import java.util.List;
 
