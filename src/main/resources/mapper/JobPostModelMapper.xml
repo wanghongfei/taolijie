@@ -869,13 +869,13 @@
             </if>
 
             <if test="province != null">
-                AND post.province = #{province},
+                AND post.province = #{province}
             </if>
             <if test="city != null">
-                AND post.city = #{city},
+                AND post.city = #{city}
             </if>
             <if test="region != null">
-                AND post.region = #{region},
+                AND post.region = #{region}
             </if>
         </where>
         ORDER BY
@@ -984,13 +984,13 @@
 
 
             <if test="province != null">
-                AND post.province = #{province},
+                AND post.province = #{province}
             </if>
             <if test="city != null">
-                AND post.city = #{city},
+                AND post.city = #{city}
             </if>
             <if test="region != null">
-                AND post.region = #{region},
+                AND post.region = #{region}
             </if>
         </where>
     </select>
