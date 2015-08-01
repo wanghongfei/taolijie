@@ -17,21 +17,21 @@ public interface JobPostService extends PageService {
      * 查找所有兼职
      * @return
      */
-    List<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某个用户发的所有兼职帖子
      * @param memId 用户id
      * @return
      */
-    List<JobPostModel> getJobPostListByMember(Integer memId , int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getJobPostListByMember(Integer memId , int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 获取某分类下所有的兼职帖子
      * @param cateId
      * @return
      */
-    List<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 查询未审核的post
@@ -76,7 +76,7 @@ public interface JobPostService extends PageService {
      * @param includeString
      * @return
      */
-    List<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper);
 
     ListResult<JobPostModel> findByExample(JobPostModel example);
 
@@ -114,7 +114,7 @@ public interface JobPostService extends PageService {
      */
     boolean isPostFavorite(Integer memId, Integer postId);
 
-    List<JobPostModel> getFavoritePost(Integer memberId);
+    ListResult<JobPostModel> getFavoritePost(Integer memberId);
 
     /**
      * @deprecated

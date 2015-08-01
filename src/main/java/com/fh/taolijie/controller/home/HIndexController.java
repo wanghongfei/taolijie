@@ -52,8 +52,12 @@ public class HIndexController {
         Credential credential = CredentialUtils.getCredential(session);
 
         // 放入兼职二手信息
-        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper()).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
-        List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper()).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());;
+        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper())
+                .getList()
+                .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
+        List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper())
+                .getList()
+                .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
 
         // 放入banner
         ListResult<BannerPicModel> banResult = banService.getBannerList(0, Integer.MAX_VALUE);
@@ -94,7 +98,7 @@ public class HIndexController {
                 jobCommand.setJobPostCategoryId(cate.getId());
             }
 
-            List<JobPostModel> list = jobPostService.runSearch(jobCommand, (page - 1)*pageSize, pageSize,new ObjWrapper());
+            List<JobPostModel> list = jobPostService.runSearch(jobCommand, (page - 1)*pageSize, pageSize,new ObjWrapper()).getList();
 
             int pageStatus = 1;
             if(list.size() == 0){
@@ -118,12 +122,12 @@ public class HIndexController {
                 shCommand.setSecondHandPostCategoryId(cate.getId());
             }
 
-            List<SHPostModel> list =shPostService.runSearch(shCommand,new ObjWrapper());
+            ListResult<SHPostModel> list =shPostService.runSearch(shCommand,new ObjWrapper());
 
             int pageStatus = 1;
-            if(list.size() == 0){
+            if(list.getList().size() == 0){
                 pageStatus = 0;
-            }else if(list.size() == pageSize){
+            }else if(list.getList().size() == pageSize){
                 pageStatus = 2;
             }
             model.addAttribute("pageStatus",pageStatus);

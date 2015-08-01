@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
@@ -22,8 +23,11 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
     ShPostCategoryModelMapper cateMapper;
 
     @Override
-    public List<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
-        return cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
+        List<SHPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = cateMapper.countGetAll();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

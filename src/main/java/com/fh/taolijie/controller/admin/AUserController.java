@@ -40,7 +40,7 @@ public class AUserController {
     public String list(Model model){
         int page = 1;
         int pageSize = 9999;
-        List<MemberModel> users = accountService.getMemberList(page-1, pageSize, new ObjWrapper());
+        List<MemberModel> users = accountService.getMemberList(page-1, pageSize, null).getList();
         model.addAttribute("users",users);
         return "pc/admin/users";
     }

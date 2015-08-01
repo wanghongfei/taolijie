@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -15,7 +16,7 @@ public interface JobPostCateService {
      * 获取所有分类
      * @return
      */
-    List<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 添加一个分类

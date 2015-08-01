@@ -128,9 +128,17 @@
 
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM job_post_category
-        LIMIT #{pageNumber},#{pageSize}
+            <include refid="Base_Column_List"/>
+        FROM
+            job_post_category
+        LIMIT
+            #{pageNumber},#{pageSize}
+    </select>
+    <select id="countGetAll" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            job_post_category
     </select>
 
     <select id="findByName" resultMap="BaseResultMap">

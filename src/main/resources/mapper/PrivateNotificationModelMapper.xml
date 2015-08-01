@@ -200,6 +200,36 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countFindBy" resultType="long" >
+        SELECT
+            COUNT(*)
+        FROM
+            private_notification pri_no
+        <where>
+            <if test="memberId != null">
+                pri_no.member_id = #{memberId,jdbcType=INTEGER}
+            </if>
+            <if test="toMemberId != null">
+                AND pri_no.to_member_id = #{toMemberId,jdbcType=INTEGER}
+            </if>
+            <if test="title != null">
+                AND pri_no.title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="isRead != null">
+                AND pri_no.is_read = #{isRead,jdbcType=INTEGER}
+            </if>
+            <if test="time != null">
+                AND pri_no.time = #{time}
+            </if>
+            <if test="accessRange != null">
+                AND pri_no.access_range = #{accessRange,jdbcType=VARCHAR}
+            </if>
+            <if test="content != null">
+                AND pri_no.content = #{content,jdbcType=LONGVARCHAR}
+            </if>
+
+        </where>
+    </select>
 
 
 </mapper>

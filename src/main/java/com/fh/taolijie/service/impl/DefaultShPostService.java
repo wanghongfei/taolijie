@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
 import com.fh.taolijie.domain.MemberModel;
@@ -32,30 +33,45 @@ public class DefaultShPostService implements ShPostService {
     MemberModelMapper memMapper;
 
     @Override
-    public List<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper) {
         Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
 
-        return postMapper.getAll(page.getMap());
+        List<SHPostModel> list = postMapper.getAll(page.getMap());
+        long tot = postMapper.countGetAll();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
+        List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetByCategory(cateId);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getByMember(memId, filtered, firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper) {
+        List<SHPostModel> list = postMapper.getByMember(memId, filtered, firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetByMember(memId, filtered);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getByCategory(cateId, pageView, firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper) {
+        List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetByCategory(cateId);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper) {
-        return postMapper.searchBy(model);
+    public ListResult<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper) {
+        List<SHPostModel> list = postMapper.searchBy(model);
+        long tot = postMapper.countSearchBy(model);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -110,11 +126,11 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public List<SHPostModel> getFavoritePost(Integer memberId) {
+    public ListResult<SHPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteShIds();
         if (null == allIds || allIds.isEmpty()) {
-            return new ArrayList<>();
+            return new ListResult<>();
         }
 
         String[] ids = allIds.split(Constants.DELIMITER);
@@ -124,7 +140,8 @@ public class DefaultShPostService implements ShPostService {
                 return Integer.parseInt(id);
         }).collect(Collectors.toList());
 
-        return postMapper.getInBatch(idList);
+        List<SHPostModel> list = postMapper.getInBatch(idList);
+        return new ListResult<>(list, list.size());
     }
 
     @Override

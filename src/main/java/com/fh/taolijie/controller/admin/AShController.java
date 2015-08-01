@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.admin;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.ShPostCategoryService;
@@ -34,9 +35,9 @@ public class AShController {
     public String jobs(Model model){
         int page = 1;
         int pageSize = 9999;
+
         ObjWrapper objWrapper = new ObjWrapper();
-        List<SHPostModel> shs;
-        shs =shPostService.getAllPostList(page - 1, pageSize, objWrapper);
+        ListResult<SHPostModel> shs =shPostService.getAllPostList(page - 1, pageSize, objWrapper);
 
 //        int totalPage = (Integer) objWrapper.getObj();
 

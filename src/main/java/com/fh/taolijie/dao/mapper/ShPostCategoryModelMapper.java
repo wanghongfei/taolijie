@@ -99,6 +99,8 @@ public interface ShPostCategoryModelMapper {
 
     @RedisCache(SHPostCategoryModel.class)
     List<SHPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    @RedisCache(SHPostCategoryModel.class)
+    long countGetAll();
 
     @RedisCache(SHPostCategoryModel.class)
     SHPostCategoryModel findByName(@Param("name") String name);

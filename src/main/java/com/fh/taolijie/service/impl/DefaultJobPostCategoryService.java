@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
@@ -26,8 +27,11 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     JobPostModelMapper postMapper;
 
     @Override
-    public List<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
-        return cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
+        List<JobPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = cateMapper.countGetAll();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

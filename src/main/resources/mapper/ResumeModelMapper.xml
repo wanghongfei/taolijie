@@ -435,6 +435,13 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetAll" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            resume re
+    </select>
+
 
     <select id="getInBatch" resultMap="BaseResultMap">
         SELECT
@@ -543,6 +550,84 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            resume re
+        <where>
+            <if test="name != null">re.name = #{name,jdbcType=VARCHAR}</if>
+            <if test="gender != null">AND re.gender = #{gender,jdbcType=VARCHAR}</if>
+            <if test="age != null">
+                AND re.age = #{age,jdbcType=INTEGER}
+            </if>
+            <if test="height != null">
+                AND re.height = #{height,jdbcType=INTEGER}
+            </if>
+            <if test="photoPath != null">
+                AND re.photo_path = #{photoPath,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null">
+                AND re.email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="qq != null">
+                AND re.qq = #{qq,jdbcType=VARCHAR}
+            </if>
+            <if test="memberId != null">
+                AND re.member_id = #{memberId,jdbcType=INTEGER}
+            </if>
+            <if test="accessAuthority != null">
+                AND re.access_authority = #{accessAuthority,jdbcType=VARCHAR}
+            </if>
+            <if test="pageView != null">
+                AND re.page_view = #{pageView,jdbcType=INTEGER}
+            </if>
+            <if test="verified != null">
+                AND re.verified = #{verified,jdbcType=VARCHAR}
+            </if>
+            <if test="photoId != null">
+                AND re.photo_id = #{photoId,jdbcType=INTEGER}
+            </if>
+            <if test="phoneNumber != null">
+                AND re.phone_number = #{phoneNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="wechatAccount != null">
+                AND re.wechat_account = #{wechatAccount,jdbcType=VARCHAR}
+            </if>
+            <if test="experience != null">
+                AND re.experience = #{experience,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="introduce != null">
+                AND re.introduce = #{introduce,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="createdTime != null">
+                AND re.created_time = #{createdTime}
+            </if>
+            <if test="spareTime != null">
+                AND re.spare_time = #{spareTime}
+            </if>
+
+
+            <if test="school != null">
+                AND re.school = #{school},
+            </if>
+            <if test="major != null">
+                AND re.major = #{major},
+            </if>
+            <if test="preferredProvince != null">
+                AND re.preferredProvince = #{preferredProvince},
+            </if>
+            <if test="preferredCity != null">
+                AND re.preferredCity = #{preferredCity},
+            </if>
+            <if test="preferredRegion != null">
+                AND re.preferredRegion = #{preferredRegion},
+            </if>
+            <if test="birthday != null">
+                AND re.birthday = #{birthday},
+            </if>
+        </where>
+    </select>
 
     <select id="findByAuth" resultMap="BaseResultMap">
         SELECT
@@ -558,6 +643,14 @@
             re.created_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
+    </select>
+    <select id="countFindByAuth" resultType="long">
+        SELECT
+            COUNT (*)
+        FROM
+            resume re
+        WHERE
+            re.access_authority IN <foreach collection="authList" item="auth_name" open="(" separator="," close=")">#{auth_name}</foreach>
     </select>
 
     <select id="findPostRecordByMember" resultMap="PostRecord">
@@ -577,5 +670,13 @@
             re.member_id = #{memberId}
         LIMIT
             #{pageNumber}, #{pageSize}
+    </select>
+    <select id="countFindPostRecordByMember" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            resume_post_rel rp
+        WHERE
+            re.member_id = #{memberId}
     </select>
 </mapper>

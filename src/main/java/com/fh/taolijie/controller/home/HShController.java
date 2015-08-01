@@ -57,19 +57,19 @@ public class HShController {
                          Model model) {
 
         ObjWrapper objWrapper = new ObjWrapper();
-        List<SHPostModel> shs;
+        ListResult<SHPostModel> shs;
         if (cate > 0) {
             shs = shPostService.getAndFilter(cate, false, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
-            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper).stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
+            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
 
         int pageStatus = 1;
-        if(shs.size() == 0){
+        if(shs.getList().size() == 0){
             pageStatus = 0;
-        }else if(shs.size() == pageSize){
+        }else if(shs.getList().size() == pageSize){
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);

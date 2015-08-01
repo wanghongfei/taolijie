@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
@@ -55,7 +56,7 @@ public interface AccountService {
      * @param capacity
      * @return
      */
-    public List<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
+    public ListResult<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
 
     MemberModel findMember(Integer memId);
 

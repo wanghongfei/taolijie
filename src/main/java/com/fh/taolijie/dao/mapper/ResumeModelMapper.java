@@ -58,13 +58,18 @@ public interface ResumeModelMapper {
     int updateByPrimaryKey(ResumeModel record);
 
     List<ResumeModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countGetAll();
 
     List<ResumeModel> findBy(ResumeModel model);
+    long countFindBy(ResumeModel model);
+
     List<ResumeModel> findByAuth(@Param("authList") List<String> authList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countFindByAuth(@Param("authList") List<String> authList);
 
     List<ResumeModel> getInBatch(List<Integer> idList);
 
     List<ResumePostRecord> findPostRecordByMember(@Param("memberId") Integer memberId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countFindPostRecordByMember(@Param("memberId") Integer memberId);
 
     void updateTime(Integer resumeId);
 

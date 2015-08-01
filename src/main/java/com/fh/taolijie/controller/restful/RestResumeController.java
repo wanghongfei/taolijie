@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.ResumeService;
@@ -34,7 +35,7 @@ public class RestResumeController {
     public ResponseText allResumes(@RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                                     HttpSession session) {
-        List<ResumeModel> resumes = new ArrayList<>(10);
+        ListResult<ResumeModel> resumes;
 
         pageNumber = pageNumber * pageSize;
 
@@ -77,7 +78,7 @@ public class RestResumeController {
                                      @RequestParam(defaultValue = "0") int pageNumber,
                                      @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = pageNumber * pageSize;
-        List<ResumeModel> reList = resumeService.getResumeListByIntend(cateId, pageNumber, pageSize);
+        ListResult<ResumeModel> reList = resumeService.getResumeListByIntend(cateId, pageNumber, pageSize);
 
         return new ResponseText(reList);
     }
@@ -92,7 +93,7 @@ public class RestResumeController {
                                 @RequestParam(defaultValue = "0") int pageNumber,
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = pageNumber * pageSize;
-        List<ResumeModel> reList = resumeService.getResumeByGender(gender, pageNumber, pageSize);
+        ListResult<ResumeModel> reList = resumeService.getResumeByGender(gender, pageNumber, pageSize);
 
         return new ResponseText(reList);
     }

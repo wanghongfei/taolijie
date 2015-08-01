@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.domain.SHPostModel;
@@ -28,7 +29,7 @@ public class RestShController {
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
+        ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
 
         return new ResponseText(shList);
     }
@@ -48,9 +49,9 @@ public class RestShController {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
-        List<SHPostModel> shList = null;
+        ListResult<SHPostModel> shList = null;
         if (false == pageView) {
-            shService.getPostList(categoryId, pageNumber, pageSize, null);
+            shList = shService.getPostList(categoryId, pageNumber, pageSize, null);
         } else {
             shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize, null);
         }
@@ -74,7 +75,7 @@ public class RestShController {
                                       @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
-        List<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize, null);
+        ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize, null);
         return new ResponseText(shList);
     }
 
@@ -86,7 +87,7 @@ public class RestShController {
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText search(SHPostModel model) {
 
-        List<SHPostModel> shList = shService.runSearch(model, null);
+        ListResult<SHPostModel> shList = shService.runSearch(model, null);
         return new ResponseText(shList);
     }
 
@@ -97,7 +98,7 @@ public class RestShController {
      */
     @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryList() {
-        List<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+        ListResult<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
 
         return new ResponseText(list);
     }

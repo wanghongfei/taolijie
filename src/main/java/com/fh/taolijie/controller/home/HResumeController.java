@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
@@ -59,7 +60,7 @@ public class HResumeController {
                              Model model,
                              HttpSession session) {
         ObjWrapper objWrapper = new ObjWrapper();
-        List<ResumeModel> resumes = new ArrayList<>(10);
+        ListResult<ResumeModel> resumes;
         if (cate > 0) {
             // 按求职意向查找
             resumes = resumeService.getResumeListByIntend(cate, page * pageSize, pageSize);
@@ -74,17 +75,17 @@ public class HResumeController {
             }
         }
 
-        if (false == resumes.isEmpty()) {
+        if (false == resumes.getList().isEmpty()) {
             // 查询求职意向
             // 先将简历中的id提取出来
-            List<Integer> resumeIdList = resumes.stream()
+            List<Integer> resumeIdList = resumes.getList().stream()
                     .map(ResumeModel::getId)
                     .collect(Collectors.toList());
             // 再根据简历的id一次批量查询出对应所有意向
             List<ApplicationIntendModel> intendList = intendservice.getByResumeInBatch(resumeIdList);
             // 最后遍历这些意向，将意向添加到对应的简历model中
             for (ApplicationIntendModel ai : intendList) {
-                ResumeModel re = CollectionUtils.findFromCollection(resumes, resume -> resume.getId().equals(ai.getResumeId()));
+                ResumeModel re = CollectionUtils.findFromCollection(resumes.getList(), resume -> resume.getId().equals(ai.getResumeId()));
                 if (null != re) {
                     re.getIntend().add(ai.getCategory().getName());
                 }
@@ -94,9 +95,9 @@ public class HResumeController {
 
 
         int pageStatus = 1;
-        if(resumes.size() == 0){
+        if(resumes.getList().size() == 0){
             pageStatus = 0;
-        }else if(resumes.size() == pageSize){
+        }else if(resumes.getList().size() == pageSize){
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);

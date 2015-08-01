@@ -1,5 +1,6 @@
 package com.fh.taolijie.interceptor;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
@@ -36,12 +37,13 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         //首页新闻
         List<NewsModel> list = newsService.getNewsList(0,3, new ObjWrapper());
         //首页兼职二手分类(简历和兼职分类相同)
-        List<JobPostCategoryModel> jobs = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
-        List<SHPostCategoryModel> shs = shPostCategoryService.getCategoryList(0,9999,new ObjWrapper());
+        ListResult<JobPostCategoryModel> jobs = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        ListResult<SHPostCategoryModel> shs = shPostCategoryService.getCategoryList(0,9999,new ObjWrapper());
+
         request.setAttribute("titles",list);
-        request.setAttribute("sideJobCate",jobs);
-        request.setAttribute("sideSHCate",shs);
-        request.setAttribute("sideResumeCate",jobs);
+        request.setAttribute("sideJobCate",jobs.getList());
+        request.setAttribute("sideSHCate",shs.getList());
+        request.setAttribute("sideResumeCate",jobs.getList());
         return  true;
     }
 

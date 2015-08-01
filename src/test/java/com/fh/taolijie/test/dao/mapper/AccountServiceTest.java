@@ -47,7 +47,7 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
         memMapper.checkUserExist("hanxinxin");
     }
 
-    @Test
+    /*@Test
     public void testAdd() {
         MemberModel mem = new MemberModel();
         mem.setUsername("hanxinxin");
@@ -178,5 +178,5 @@ public class AccountServiceTest extends BaseSpringDataTestClass {
 
         MemberModel mem = memMapper.selectByUsername("hanxinxin");
         Assert.assertTrue(mem.getRoleList().stream().noneMatch(r -> r.getRolename().equals("STUDENT")));
-    }
+    }*/
 }

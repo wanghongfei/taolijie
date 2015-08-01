@@ -57,6 +57,9 @@ public interface SysNotificationModelMapper {
     int updateByPrimaryKey(SysNotificationModel record);
 
     List<SysNotificationModel> findSysByAccessRange(@Param("list") List<String> roleList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countFindSysByAccessRange(List<String> roleList);
+
+
     List<SysNotificationModel> findAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     int countFindAll();
 

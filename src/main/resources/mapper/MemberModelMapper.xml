@@ -510,6 +510,12 @@
             role r ON r.rid = info.role_id
         LIMIT #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetMemberList" resultType="long">
+        SELECT
+            COUNT (*)
+        FROM
+            member mem
+    </select>
 
     <update id="validMemberById">
         UPDATE member

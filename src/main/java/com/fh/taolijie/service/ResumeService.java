@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModel;
@@ -25,7 +26,7 @@ public interface ResumeService extends PageService {
      */
     List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
 
-    List<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList);
+    ListResult<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList);
 
     /**
      * 获取某个用户的部分简历.
@@ -53,10 +54,10 @@ public interface ResumeService extends PageService {
      * @param capacity
      * @return
      */
-    List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
+    ListResult<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity);
 
 
-    List<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize);
+    ListResult<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize);
 
     /**
      * 根据简历查找意向
@@ -70,7 +71,7 @@ public interface ResumeService extends PageService {
      * 查询投递记录
      * @return
      */
-    List<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
+    ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
 
 
     /**

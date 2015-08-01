@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.AccountService;
@@ -62,8 +63,8 @@ public class UResumeController {
             return "redirect:/user/resume/view";
         }
 
-        List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page-1,capacity,new ObjWrapper());
-        model.addAttribute("cates",jobCateList);
+        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page-1,capacity,new ObjWrapper());
+        model.addAttribute("cates",jobCateList.getList());
         model.addAttribute("isChange",false);
         return "pc/user/myresume";
     }
@@ -267,8 +268,8 @@ public class UResumeController {
         String intendIdString = queryIntend(resume.getId());
         model.addAttribute("resumeIntendJobs",intendIdString);
 
-        List<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
-        model.addAttribute("cates",jobCateList);
+        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        model.addAttribute("cates",jobCateList.getList());
         model.addAttribute("resume",resume);
         model.addAttribute("isChange", true);
         return "pc/user/myresume";
