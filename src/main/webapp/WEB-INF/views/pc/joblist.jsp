@@ -160,8 +160,8 @@
         <div style="clear:both"></div>
         <div class="page">
             <ul>
-                <li ng-cloak class="ng-cloak"><a class="next" ng-if="lastPage()" href="javascript:;">上一页</a></li>
-                <li ng-cloak class="ng-cloak"><a class="next" ng-if="nextPage()" href="javascript:;">下一页</a></li>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(false)" ng-if="lastPage()" href="javascript:;">上一页</a></li>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(true)" ng-if="nextPage()" href="javascript:;">下一页</a></li>
             </ul>
             </li>
             <%--<ul>--%>
@@ -182,11 +182,8 @@
 </div>
 
 <%--脚部--%>
+
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/joblist.js"></script>
-<script>
-    var jobList = JSON.parse('${ju:toJson(jobs)}');
-    console.log(jobList);
-</script>
 </body>
 </html>
