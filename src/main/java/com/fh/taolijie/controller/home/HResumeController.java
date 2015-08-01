@@ -75,10 +75,13 @@ public class HResumeController {
         }
 
         // 查询求职意向
+        // 先将简历中的id提取出来
         List<Integer> resumeIdList = resumes.stream()
                 .map(ResumeModel::getId)
                 .collect(Collectors.toList());
+        // 再根据简历的id一次批量查询出对应所有意向
         List<ApplicationIntendModel> intendList = intendservice.getByResumeInBatch(resumeIdList);
+        // 最后遍历这些意向，将意向添加到对应的简历model中
         for (ApplicationIntendModel ai : intendList) {
             ResumeModel re = CollectionUtils.findFromCollection(resumes, resume -> resume.getId().equals(ai.getResumeId()));
             if (null != re) {

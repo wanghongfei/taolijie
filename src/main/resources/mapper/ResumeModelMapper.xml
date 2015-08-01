@@ -80,7 +80,16 @@
         re.preferred_city AS resume_preferred_city,
         re.preferred_region AS resume_preferred_region,
         re.birthday AS resume_birthday
+    </sql>
 
+    <!-- 只包含简历的头信息 -->
+    <sql id="less_resume_column">
+        re.id AS resume_id, re.name AS resume_name, re.gender AS resume_gender, re.age AS resume_age,
+        re.photo_path AS resume_photo_path,
+        re.member_id AS resume_member_id, re.access_authority AS resume_access_authority,
+        re.verified AS resume_verified, re.photo_id AS resume_photo_id,
+        re.school AS resume_school,
+        re.major AS resume_major
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -417,7 +426,7 @@
 
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
-            <include refid="resume_column"/>,
+            <include refid="less_resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             LEFT JOIN member mem ON mem.id = re.member_id
@@ -451,7 +460,7 @@
 
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
-            <include refid="resume_column"/>,
+            <include refid="less_resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM resume re
             INNER JOIN member mem ON mem.id = re.member_id
@@ -532,12 +541,12 @@
             </if>
         </where>
         LIMIT
-        #{pageNumber}, #{pageSize}
+            #{pageNumber}, #{pageSize}
     </select>
 
     <select id="findByAuth" resultMap="BaseResultMap">
         SELECT
-            <include refid="resume_column"/>,
+            <include refid="less_resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
         FROM
             resume re
@@ -554,7 +563,7 @@
     <select id="findPostRecordByMember" resultMap="PostRecord">
         SELECT
             <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>,
-            <include refid="resume_column"/>,
+            <include refid="less_resume_column"/>,
             <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List"/>
         FROM
             resume_post_rel rp

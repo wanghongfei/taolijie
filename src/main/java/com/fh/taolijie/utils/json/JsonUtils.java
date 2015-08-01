@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 //import com.nestorurquiza.serialization.JacksonObjectMapper;
 
@@ -20,6 +21,8 @@ public final class JsonUtils {
     }
 
     public static String toJson(Object value) throws JsonGenerationException, JsonMappingException, IOException {
+        // NULL字段不序列化
+        mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         return mapper.writeValueAsString(value);
     }
