@@ -79,6 +79,8 @@ public interface JobPostModelMapper {
 
     @RedisCache(JobPostModel.class)
     List<JobPostModel> getByComplaint(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    @RedisCache(JobPostModel.class)
+    long countGetByComplaint();
 
 
     @RedisCache(JobPostModel.class)

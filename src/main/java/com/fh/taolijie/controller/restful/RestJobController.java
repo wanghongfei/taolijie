@@ -98,7 +98,7 @@ public class RestJobController {
             return new ResponseText("invalid id string");
         }
 
-        List<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
+        ListResult<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
         return new ResponseText(postList);
     }
 

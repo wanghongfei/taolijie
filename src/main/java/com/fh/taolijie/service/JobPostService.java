@@ -47,13 +47,13 @@ public interface JobPostService extends PageService {
      * @param ids
      * @return
      */
-    List<JobPostModel> getPostListByIds(Integer... ids);
+    ListResult<JobPostModel> getPostListByIds(Integer... ids);
 
     /**
      * 查询被投诉的兼职信息，值最高的在前
      * @return
      */
-    List<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据条件查找兼职信息.

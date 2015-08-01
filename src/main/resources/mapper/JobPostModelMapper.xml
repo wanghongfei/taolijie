@@ -541,6 +541,14 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetByComplaint" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            job_post post
+        WHERE
+            post.complaint IS NOT NULL AND post.complaint > 0
+    </select>
 
 
     <select id="searchBy" resultMap="BaseResultMap">

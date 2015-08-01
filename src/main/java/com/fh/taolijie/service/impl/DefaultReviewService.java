@@ -57,10 +57,7 @@ public class DefaultReviewService implements ReviewService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addComment(Integer memId, Integer reviewId, ReviewModel model) {
-        model.setMemberId(memId);
-        model.setRepliedReviewId(reviewId);
-
+    public void addComment(ReviewModel model) {
         reMapper.insertSelective(model);
     }
 

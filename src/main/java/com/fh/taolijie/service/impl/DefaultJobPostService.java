@@ -76,13 +76,18 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> getPostListByIds(Integer... ids) {
-        return postMapper.getInBatch(Arrays.asList(ids));
+    public ListResult<JobPostModel> getPostListByIds(Integer... ids) {
+        List<JobPostModel> list = postMapper.getInBatch(Arrays.asList(ids));
+
+        return new ListResult<>(list, list.size());
     }
 
     @Override
-    public List<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
+        List<JobPostModel> list = postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetByComplaint();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

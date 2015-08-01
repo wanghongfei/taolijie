@@ -12,7 +12,7 @@
         },
 
         {
-            "roleList": ["ADMIN", "EMPLOYER"],
+            "roleList": ["ADMIN", "EMPLOYER", "STUDENT"],
             "toUrl": "/404",
             "url": "/api/job/u**"
         },
