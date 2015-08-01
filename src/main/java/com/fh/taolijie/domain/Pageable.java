@@ -1,11 +1,13 @@
 package com.fh.taolijie.domain;
 
+import com.fh.taolijie.utils.Constants;
+
 /**
  * Created by wanghongfei on 15-5-30.
  */
 public abstract class Pageable {
     protected int pageNumber = 0;
-    protected int pageSize = 10;
+    protected int pageSize = Constants.PAGE_CAPACITY;
 
     protected Pageable() {}
 
