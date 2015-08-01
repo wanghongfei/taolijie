@@ -182,6 +182,7 @@
 </div>
 
 <%--脚部--%>
+
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/joblist.js"></script>
 </body>

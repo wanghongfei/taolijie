@@ -6,15 +6,12 @@
 var $ctrlScope;
 var $loading = $(".lists .loading-page");
 $loading.show();
-
 tlj.controller('jobDetailCtrl', function($scope, $http) {
     $ctrlScope = $scope;
 
-
-
     var jobListRes = $http.get('/api/job/filter');
     jobListRes.success(function(data, status){
-        $scope.jobList = data.data;
+        $scope.jobList = data.data.list;
         $loading.hide();
     });
 
@@ -77,12 +74,11 @@ $(function () {
         }else{
             $chooseTitle.text(value);
         }
-        var $loading = $(".lists .loading-page");
         $loading.show();
 
         search(searchObj,function(data){
             if(data.ok){
-                $ctrlScope.jobList = data.data;
+                $ctrlScope.jobList = data.data.list;
                 $ctrlScope.$digest();
             }
             $loading.hide();
