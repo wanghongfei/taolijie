@@ -29,4 +29,5 @@ public interface ApplicationIntendModelMapper {
 
     List<ApplicationIntendModel> getByIntend(@Param("categoryId") Integer categoryId, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     List<ApplicationIntendModel> getByResume(@Param("resumeId") Integer resumeId);
+    List<ApplicationIntendModel> getByResumeInBatch(List<Integer> resumeIdList);
 }

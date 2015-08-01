@@ -9,7 +9,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ResumeModel extends Pageable {
     /**
@@ -136,6 +138,11 @@ public class ResumeModel extends Pageable {
     @Length(max = 10)
     private String preferredRegion;
 
+
+
+
+    List<String> intend = new ArrayList<>(5);
+
     private MemberModel member;
 
     public ResumeModel() {}
@@ -261,6 +268,14 @@ public class ResumeModel extends Pageable {
      */
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public List<String> getIntend() {
+        return intend;
+    }
+
+    public void setIntend(List<String> intend) {
+        this.intend = intend;
     }
 
     /**
@@ -589,6 +604,28 @@ public class ResumeModel extends Pageable {
      */
     public void setWechatAccount(String wechatAccount) {
         this.wechatAccount = wechatAccount == null ? null : wechatAccount.trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (false == o instanceof ResumeModel) {
+            return false;
+        }
+
+        ResumeModel other = (ResumeModel) o;
+        return (other.id != null) && (other.id.equals(this.id));
+    }
+
+    @Override
+    public int hashCode() {
+        int num = 31;
+        num = num + this.id.hashCode();
+
+        return num;
     }
 
     @Override

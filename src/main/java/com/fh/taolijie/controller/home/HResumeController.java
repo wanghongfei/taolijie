@@ -6,10 +6,8 @@ import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.*;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.
@@ -39,6 +38,9 @@ public class HResumeController {
     JobPostService jobPostService;
     @Autowired
     JobPostCateService jobPostCateService;
+
+    @Autowired
+    ApplicationIntendService intendservice;
 
 
     /**
@@ -71,6 +73,19 @@ public class HResumeController {
                 resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL);
             }
         }
+
+        // 查询求职意向
+        List<Integer> resumeIdList = resumes.stream()
+                .map(ResumeModel::getId)
+                .collect(Collectors.toList());
+        List<ApplicationIntendModel> intendList = intendservice.getByResumeInBatch(resumeIdList);
+        for (ApplicationIntendModel ai : intendList) {
+            ResumeModel re = CollectionUtils.findFromCollection(resumes, resume -> resume.getId().equals(ai.getResumeId()));
+            if (null != re) {
+                re.getIntend().add(ai.getCategory().getName());
+            }
+        }
+
 
         int pageStatus = 1;
         if(resumes.size() == 0){

@@ -331,5 +331,23 @@ public class CollectionUtils {
         }
     }
 
+    /**
+     * 从一个可以迭代的集合中查找指定元素
+     * @param collection
+     * @param test
+     * @param <T>
+     * @return
+     */
+    public static <T> T findFromCollection(Iterable<T> collection, Predicate<T> test) {
+        Iterator<T> it = collection.iterator();
+        while (it.hasNext()) {
+            T obj = it.next();
+            if (test.test(obj)) {
+                return obj;
+            }
+        }
+
+        return null;
+    }
 
 }

@@ -29,6 +29,11 @@ public class DefaultAppIntendService implements ApplicationIntendService {
     }
 
     @Override
+    public List<ApplicationIntendModel> getByResumeInBatch(List<Integer> resumeIdList) {
+        return aiMapper.getByResumeInBatch(resumeIdList);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void addIntend(ApplicationIntendModel model) {
         aiMapper.insert(model);
