@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.cache.annotation.RedisCache;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
@@ -94,6 +95,11 @@ public class DefaultJobPostService implements JobPostService {
         model.setPageSize(CollectionUtils.determineCapacity(capacity));
 
         return postMapper.searchBy(model);
+    }
+
+    @Override
+    public List<JobPostModel> findByExample(JobPostModel example) {
+        return postMapper.findBy(example);
     }
 
     @Override

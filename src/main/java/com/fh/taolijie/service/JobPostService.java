@@ -1,9 +1,11 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import sun.jvm.hotspot.debugger.cdbg.basic.ResolveListener;
 
 import java.util.List;
 
@@ -76,6 +78,8 @@ public interface JobPostService extends PageService {
      * @return
      */
     List<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper);
+
+    List<JobPostModel> findByExample(JobPostModel example);
 
     /**
      * 根据id查找某个兼职帖子

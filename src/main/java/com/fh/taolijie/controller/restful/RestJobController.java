@@ -32,11 +32,23 @@ public class RestJobController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
-                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
 
         return new ResponseText(jobList);
+    }
+
+    /**
+     * 过虑查询
+     * @return
+     */
+    @RequestMapping(value = "/filter", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText filter(JobPostModel model) {
+        model.setPageNumber(PageUtils.getFirstResult(model.getPageNumber(), model.getPageSize()));
+        List<JobPostModel> list = jobService.findByExample(model);
+
+        return new ResponseText(list);
     }
 
     /**
