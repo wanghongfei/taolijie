@@ -119,7 +119,7 @@
                         <span class="right-span" ng-bind="'￥'+job.wage+'元/'+job.salaryUnit"></span>
                     </div>
                     <span class="workplace"><i class="fa fa-map-marker"></i> {{job.region}}</span>&nbsp;&nbsp;
-                        <span><i class="fa fa-clock-o"></i> {{job.postTime}}</span>
+                        <span><i class="fa fa-clock-o"></i> {{job.postTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
                     <span class="right-span" ng-bind="job.timeToPay"></span>
                 </div>
             </a>
