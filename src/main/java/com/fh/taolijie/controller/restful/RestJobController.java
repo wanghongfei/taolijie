@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
@@ -46,7 +47,7 @@ public class RestJobController {
     @RequestMapping(value = "/filter", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText filter(JobPostModel model) {
         model.setPageNumber(PageUtils.getFirstResult(model.getPageNumber(), model.getPageSize()));
-        List<JobPostModel> list = jobService.findByExample(model);
+        ListResult<JobPostModel> list = jobService.findByExample(model);
 
         return new ResponseText(list);
     }

@@ -98,8 +98,11 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> findByExample(JobPostModel example) {
-        return postMapper.findBy(example);
+    public ListResult<JobPostModel> findByExample(JobPostModel example) {
+        List<JobPostModel> list = postMapper.findBy(example);
+        long tot = postMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

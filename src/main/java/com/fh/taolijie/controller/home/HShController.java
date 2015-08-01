@@ -100,7 +100,7 @@ public class HShController {
         reviewCommand.setShPostId(id);
         ListResult<ReviewModel> reviewResult = reviewService.getReviewList(reviewCommand);
         List<ReviewModel> reviews = reviewResult.getList();
-        int pageCount = reviewResult.getResultCount();
+        long pageCount = reviewResult.getResultCount();
 
         //对应的用户和用户类别
         MemberModel poster = accountService.findMember(sh.getMemberId());

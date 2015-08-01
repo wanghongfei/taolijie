@@ -78,7 +78,7 @@ public interface JobPostService extends PageService {
      */
     List<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper);
 
-    List<JobPostModel> findByExample(JobPostModel example);
+    ListResult<JobPostModel> findByExample(JobPostModel example);
 
     /**
      * 根据id查找某个兼职帖子
