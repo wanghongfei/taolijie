@@ -5,9 +5,7 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by wanghongfei on 15-6-21.
@@ -23,8 +21,8 @@ public class RestUserController {
      * @param username
      * @return
      */
-    @RequestMapping(value = "/name/{username}", produces = Constants.Produce.JSON)
-    public ResponseText getByUsername(@PathVariable String username) {
+    @RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getByUsername(@RequestParam String username) {
         MemberModel mem = accService.findMember(username, true);
         if (null == mem) {
             return new ResponseText("not found");
