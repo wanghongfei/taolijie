@@ -24,6 +24,10 @@ public class RestShController {
     @Autowired
     ShPostCategoryService cateService;
 
+    /**
+     * 查询全部j
+     * @return
+     */
     @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
     public ResponseText getAll(@RequestParam(defaultValue = "0") Integer pageNumber,
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
@@ -32,6 +36,24 @@ public class RestShController {
         ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
 
         return new ResponseText(shList);
+    }
+
+    /**
+     * 过虑查询
+     * @return
+     */
+    @RequestMapping(value = "/filter", produces = Constants.Produce.JSON)
+    public ResponseText filter( SHPostModel example,
+                                @RequestParam(defaultValue = "0") Integer pageNumber,
+                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        example.setPageNumber(pageNumber);
+        example.setPageSize(pageSize);
+
+        ListResult<SHPostModel> lr = shService.filterQuery(example);
+
+        return new ResponseText(lr);
     }
 
     /**

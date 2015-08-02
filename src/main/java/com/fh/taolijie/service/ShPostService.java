@@ -48,6 +48,13 @@ public interface ShPostService extends PageService {
     ListResult<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper);
 
     /**
+     * 根据条件过虑查询
+     * @param model
+     * @return
+     */
+    ListResult<SHPostModel> filterQuery(SHPostModel model);
+
+    /**
      * 查询还未审核的二手信息
      * @return
      */
