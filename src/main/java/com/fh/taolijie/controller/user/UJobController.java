@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
@@ -209,9 +210,11 @@ public class UJobController {
         job.setDislikes(0);
         job.setComplaint(0);
 
-        if(job.getJobPostCategoryId()!=null){
+        if (job.getJobPostCategoryId() != null) {
             jobPostService.addJobPost(job);
-        }else {
+            // 加分
+            userService.changeCredits(mem.getId(), OperationType.POST, 0);
+        } else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
 

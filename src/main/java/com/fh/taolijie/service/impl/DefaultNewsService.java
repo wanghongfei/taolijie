@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.NewsModelMapper;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
@@ -22,13 +23,20 @@ public class DefaultNewsService implements NewsService {
     NewsModelMapper newsMapper;
 
     @Override
-    public List<NewsModel> getNewsList(int firstResult, int capacity, ObjWrapper wrapper) {
-        return newsMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<NewsModel> getNewsList(int firstResult, int capacity) {
+        List<NewsModel> list = newsMapper.getAll(firstResult, capacity);
+        long tot = newsMapper.countGetAll();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<NewsModel> getNewsList(Date uptime, int firstResult, int capacity, ObjWrapper wrapper) {
-        return newsMapper.getByInterval(uptime, new Date(), firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<NewsModel> getNewsList(Date uptime, int firstResult, int capacity) {
+        Date now = new Date();
+        List<NewsModel> list = newsMapper.getByInterval(uptime, now, firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = newsMapper.countGetByInterval(uptime, now);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

@@ -74,5 +74,5 @@ public interface MemberModelMapper {
 
     MemberModel findByEmail(String email);
 
-    void addCredits(Integer memId, int value);
+    void addCredits(@Param("memId") Integer memId, @Param("value") int value);
 }

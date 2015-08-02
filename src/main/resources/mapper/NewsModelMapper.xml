@@ -179,6 +179,12 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetAll" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            news news
+    </select>
 
     <select id="getByInterval" resultMap="BaseResultMap">
         SELECT
@@ -194,7 +200,17 @@
             news.time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
-  </select>
+    </select>
+    <select id="countGetByInterval" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            news news
+        WHERE
+            <![CDATA[
+            news.time >= #{startTime} AND news.time <= #{endTime}
+            ]]>
+    </select>
 
     <select id="findBy" resultMap="BaseResultMap">
         SELECT

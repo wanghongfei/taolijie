@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.admin;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.Constants;
@@ -34,8 +35,10 @@ public class ANewsController {
     public String news(Model model){
         int page = 1;
         int pageSize = 9999;
-        List<NewsModel> news = newsService.getNewsList(page-1, pageSize, new ObjWrapper());
-        model.addAttribute("news",news);
+
+        ListResult<NewsModel> news = newsService.getNewsList(page-1, pageSize);
+        model.addAttribute("news",news.getList());
+
         return "pc/admin/news";
     }
 

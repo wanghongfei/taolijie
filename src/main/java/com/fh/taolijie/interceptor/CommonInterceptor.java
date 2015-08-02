@@ -35,12 +35,12 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //首页新闻
-        List<NewsModel> list = newsService.getNewsList(0,3, new ObjWrapper());
+        ListResult<NewsModel> list = newsService.getNewsList(0,3);
         //首页兼职二手分类(简历和兼职分类相同)
         ListResult<JobPostCategoryModel> jobs = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
         ListResult<SHPostCategoryModel> shs = shPostCategoryService.getCategoryList(0,9999,new ObjWrapper());
 
-        request.setAttribute("titles",list);
+        request.setAttribute("titles",list.getList());
         request.setAttribute("sideJobCate",jobs.getList());
         request.setAttribute("sideSHCate",shs.getList());
         request.setAttribute("sideResumeCate",jobs.getList());

@@ -1,9 +1,11 @@
 package com.fh.taolijie.controller.home;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,22 +35,20 @@ public class HNewsController {
      */
     @RequestMapping(value = "list/news", method = RequestMethod.GET)
     public String newsList(Model model,
-                           @RequestParam(defaultValue = "1") int page,
+                           @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY+"") int pageSize) {
 
-        ObjWrapper objWrapper = new ObjWrapper();
-        List<NewsModel> newsList = newsService.getNewsList((page - 1)*pageSize,pageSize,objWrapper);
-//        int totalPage = (Integer)objWrapper.getObj();
+        page = PageUtils.getFirstResult(page, pageSize);
+        ListResult<NewsModel> newsList = newsService.getNewsList(page, pageSize);
 
         int pageStatus = 1;
-        if(newsList.size() == 0){
+        if(newsList.getList().size() == 0){
             pageStatus = 0;
-        }else if(newsList.size() == pageSize){
+        }else if(newsList.getList().size() == pageSize){
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("page",page);
-//        model.addAttribute("totalPage",totalPage);
         model.addAttribute("newsList",newsList);
 
         return "pc/focus";

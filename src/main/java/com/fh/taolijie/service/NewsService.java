@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -15,14 +16,14 @@ public interface NewsService {
      * 得到所有新闻
      * @return
      */
-    List<NewsModel> getNewsList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<NewsModel> getNewsList(int firstResult, int capacity);
 
     /**
      * 获取从<code>uptime</code>到现在的所有新闻
      * @param uptime
      * @return
      */
-    List<NewsModel> getNewsList(Date uptime, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<NewsModel> getNewsList(Date uptime, int firstResult, int capacity);
 
     /**
      * 根据id查找新闻
