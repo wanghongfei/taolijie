@@ -1705,55 +1705,6 @@ ul.bxslider li img {
     color: #fa6a38;
     font-size: 18px; }
 
-.resumelist .list {
-    display: table;
-    width: 100%; }
-
-.resumelist .list:hover {
-    border-bottom: 1px solid #b68879 !important;
-    background-color: #f6f6f6; }
-
-.resumelist .lists .list {
-    cursor: pointer;
-    padding: 10px 0 10px 0;
-    overflow: auto;
-    border-bottom: 1px solid #d5d5d5; }
-.resumelist .lists .list img {
-    float: left;
-    background-color: #eebc5b;
-    width: 107px;
-    height: 107px;
-    border-radius: 107px;
-    margin: 0 15px 0 15px;
-    text-align: center; }
-.resumelist .lists .list img span {
-    line-height: 65px;
-    font-size: 18px;
-    color: #fff; }
-.resumelist .lists .list > div {
-    display: table-cell;
-    vertical-align: middle;
-    min-width: 650px; }
-.resumelist .lists .list .intent-title {
-    background-color: #fa6a38;
-    color: #fff;
-    display: inline-block;
-    padding: 2px;
-    border-radius: 5px; }
-.resumelist .lists .list .info, .resumelist .lists .list p {
-    margin-top: 10px;
-    margin-bottom: 8px;
-    font-size: 20px; }
-.resumelist .lists .list .info i, .resumelist .lists .list .info span, .resumelist .lists .list p i, .resumelist .lists .list p span {
-    font-weight: normal;
-    font-size: 17px; }
-.resumelist .lists .list .fr {
-    margin-right: 30px;
-    text-align: right; }
-.resumelist .lists .list .fr span {
-    font-size: 15px;
-    color: #9a9a9a;
-    padding-left: 30px; }
 
 .shlist .nav-bar {
     background-color: #5fc4a4; }
