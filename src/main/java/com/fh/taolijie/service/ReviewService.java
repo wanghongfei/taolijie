@@ -46,7 +46,7 @@ public interface ReviewService {
      * @param memId
      * @param reviewId
      */
-    void addComment(Integer memId, Integer reviewId, ReviewModel model);
+    void addComment(ReviewModel model);
 
     /**
      * 删除一条评论

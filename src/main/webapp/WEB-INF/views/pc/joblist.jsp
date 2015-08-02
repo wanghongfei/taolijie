@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ju" uri="JsonUtils" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -15,7 +16,7 @@
 
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="jobDetailCtrl">
 <head>
     <meta charset="utf-8">
     <title>兼职</title>
@@ -57,7 +58,7 @@
 <jsp:include page="block/header.jsp"/>
 
 <div class="container">
-
+    <style>.ng-cloak{display: none}</style>
 
     <%--轮播--%>
     <jsp:include page="block/silder.jsp"/>
@@ -66,25 +67,25 @@
 
     <!-- 正文 -->
     <div class="joblist main">
+
         <ul class="nav-bar">
             <li class="">热门推荐</li>
-            <li class="choose">区域选择 &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
-                <div class="choose-menu" >
-                <span class="active"><a href="">全部</a></span>
-                <span>张店区</span>
-                <span><a href="">周村区</a></span>
-                <span><a href="">淄川区</a></span>
-                <span><a href="">临淄区</a></span>
-                <span><a href="">博山区</a></span>
-                <span><a href="">桓台县</a></span>
-                <span><a href="">高青县</a></span>
-                <span><a href="">沂源县</a></span>
+            <li class="choose"><span class="choose-title" data-default="区域选择">区域选择</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
+                <div class="choose-menu" data-type="region" >
+                <span class="active">全部</span>
+                <span ng-click="hello();">张店区</span>
+                <span>周村区</span>
+                <span>淄川区</span>
+                <span>临淄区</span>
+                <span>博山区</span>
+                <span>桓台县</span>
+                <span>高青县</span>
+                <span>沂源县</span>
                 </div>
 
             </li>
-            <li class="choose">结算方式&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-
-                <div class="choose-menu" >
+            <li class="choose"><span class="choose-title" data-default="结算方式">结算方式</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                <div class="choose-menu" data-type="timeToPay">
                     <span class="active">全部</span>
                     <span>日结</span>
                     <span>周结</span>
@@ -93,8 +94,41 @@
                 </div>
             </li>
         </ul>
+
         <div class="lists">
-            <c:forEach var="job" items="${jobs}" varStatus="status">
+            <span class="loading-page"></span>
+
+            <style ng-repeat-start="job in jobList">
+                .list[data-color="{{job.category.themeColor}}"] .list-type{
+                    background-color:{{job.category.themeColor}};
+                }
+                .list[data-color="{{job.category.themeColor}}"]:hover .list-type{
+                    background-color: #fff;
+                    border: 2px solid  {{job.category.themeColor}};
+                }
+                .list[data-color="{{job.category.themeColor}}"]:hover .list-type span{
+                    color: {{job.category.themeColor}};
+                }
+            </style>
+            <a ng-repeat-end href="/item/job/{{job.id}}" style="color: #353f4f"
+               ng-cloak class="ng-cloak">
+                <div class="list " data-color="{{job.category.themeColor}}">
+                    <div class="list-type">
+                        <span ng-bind="job.category.name"></span>
+                    </div>
+                    <div class="list-title">{{job.title}}
+                        <span class="right-span" ng-bind="'￥'+job.wage+'元/'+job.salaryUnit"></span>
+                    </div>
+                    <span class="workplace"><i class="fa fa-map-marker"></i> {{job.region}}</span>&nbsp;&nbsp;
+                        <span><i class="fa fa-clock-o"></i> {{job.postTime | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                    <span class="right-span" ng-bind="job.timeToPay"></span>
+                </div>
+            </a>
+
+
+
+
+          <%--  <c:forEach var="job" items="${jobs}" varStatus="status">
                 <style>
                     .list[data-color="${job.category.themeColor}"] .list-type{
                         background-color: ${job.category.themeColor};
@@ -115,27 +149,32 @@
                         <div class="list-title">${job.title}
                             <span class="right-span">￥${job.wage}元/${job.salaryUnit}</span>
                         </div>
-                        <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region.substring(7)}</span>&nbsp;&nbsp;
+                        <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region}</span>&nbsp;&nbsp;
                         <span><i class="fa fa-clock-o"></i> <fmt:formatDate value="${job.postTime}"
                                                                             pattern="yyyy-MM-dd HH:mm:ss"/></span>
                         <span class="right-span">${job.timeToPay}</span>
                     </div>
                 </a>
-            </c:forEach>
+            </c:forEach>--%>
         </div>
         <div style="clear:both"></div>
         <div class="page">
             <ul>
-                <c:if test="${page != 1 && pageStatus !=0}">
-                    <li><a class="next" href="/list/job?page=${page-1}">上一页</a></li>
-                </c:if>
-                <c:if test="${pageStatus == 2}">
-                    <li><a class="next" href="/list/job?page=${page+1}">下一页</a></li>
-                </c:if>
-                <c:if test="${pageStatus == 0 }">
-                    <h2>没有更多了</h2>
-                </c:if>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(false)" ng-if="lastPage()" href="javascript:;">上一页</a></li>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(true)" ng-if="nextPage()" href="javascript:;">下一页</a></li>
             </ul>
+            </li>
+            <%--<ul>--%>
+            <%--<c:if test="${page != 1 && pageStatus !=0}">--%>
+            <%--<li><a class="next" href="/list/job?page=${page-1}">上一页</a></li>--%>
+            <%--</c:if>--%>
+            <%--<c:if test="${pageStatus == 2}">--%>
+            <%--<li><a class="next" href="/list/job?page=${page+1}">下一页</a></li>--%>
+            <%--</c:if>--%>
+            <%--<c:if test="${pageStatus == 0 }">--%>
+            <%--<h2>没有更多了</h2>--%>
+            <%--</c:if>--%>
+            <%--</ul>--%>
         </div>
     </div>
 
@@ -143,6 +182,7 @@
 </div>
 
 <%--脚部--%>
+
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/joblist.js"></script>
 </body>

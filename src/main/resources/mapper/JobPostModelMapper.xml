@@ -541,6 +541,14 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countGetByComplaint" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            job_post post
+        WHERE
+            post.complaint IS NOT NULL AND post.complaint > 0
+    </select>
 
 
     <select id="searchBy" resultMap="BaseResultMap">
@@ -869,13 +877,17 @@
             </if>
 
             <if test="province != null">
-                AND post.province = #{province},
+                AND post.province = #{province}
             </if>
             <if test="city != null">
-                AND post.city = #{city},
+                AND post.city = #{city}
             </if>
             <if test="region != null">
-                AND post.region = #{region},
+                AND post.region = #{region}
+            </if>
+
+            <if test="cateId != null">
+                AND post.job_post_category_id = #{cateId}
             </if>
         </where>
         ORDER BY
@@ -975,22 +987,26 @@
             <if test="deleted != null">
                 AND post.deleted = #{deleted}
             </if>
-            <if test="filterExpiredPost == true">
+<!--            <if test="filterExpiredPost == true">
                 AND post.expired_time >= now()
-            </if>
+            </if>-->
             <if test="expired != null">
                 AND post.expired = #{expired}
             </if>
 
 
             <if test="province != null">
-                AND post.province = #{province},
+                AND post.province = #{province}
             </if>
             <if test="city != null">
-                AND post.city = #{city},
+                AND post.city = #{city}
             </if>
             <if test="region != null">
-                AND post.region = #{region},
+                AND post.region = #{region}
+            </if>
+
+            <if test="cateId != null">
+                AND post.job_post_category_id = #{cateId}
             </if>
         </where>
     </select>

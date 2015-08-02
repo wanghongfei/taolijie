@@ -59,18 +59,18 @@ public class UShController {
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        List<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, (page - 1) * pageSize, pageSize, objWrapper);
+        ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, (page - 1) * pageSize, pageSize, objWrapper);
 
 //        totalPage = (Integer)objWrapper.getObj();
 
         int pageStatus = 1;
-        if(shs.size() == 0){
+        if(shs.getList().size() == 0){
             pageStatus = 0;
-        }else if(shs.size() == pageSize){
+        }else if(shs.getList().size() == pageSize){
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);
-        model.addAttribute("shs",shs);
+        model.addAttribute("shs",shs.getList());
         model.addAttribute("page",page);
 //        model.addAttribute("totalPage",totalPage);
         model.addAttribute("isFav",false);
@@ -93,7 +93,8 @@ public class UShController {
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
 
-        List<SHPostModel> shs =shPostService.getFavoritePost(credential.getId());
+        List<SHPostModel> shs = shPostService.getFavoritePost(credential.getId())
+                .getList();
 
 
         int pageStatus = 1;
@@ -124,8 +125,8 @@ public class UShController {
         if (credential == null) {
             return "redirect:/login";
         }
-        List<SHPostCategoryModel> cateList=shPostCategoryService.getCategoryList(page - 1, pageSize, new ObjWrapper());
-        model.addAttribute("cates", cateList);
+        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(page - 1, pageSize, new ObjWrapper());
+        model.addAttribute("cates", cateList.getList());
         return "pc/user/shpost";
     }
     //endregion
@@ -152,10 +153,10 @@ public class UShController {
         }
 
         // 查询分类
-        List<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100, null);
+        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100, null);
 
         model.addAttribute("sh",sh);
-        model.addAttribute("cates",cateList);
+        model.addAttribute("cates",cateList.getList());
         return "pc/user/shpost";
     }
     //endregion

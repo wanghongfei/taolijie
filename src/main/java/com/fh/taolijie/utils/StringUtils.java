@@ -220,6 +220,11 @@ public class StringUtils {
         return str1.equals(str2);
     }
 
+    /**
+     * 是空串返回false
+     * @param str
+     * @return
+     */
     public static boolean checkNotEmpty(String str) {
         if (null == str || str.isEmpty()) {
             return false;

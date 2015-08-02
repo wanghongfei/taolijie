@@ -742,6 +742,7 @@ ul.bxslider li img {
     /*边框效果*/
     border: 1px solid #e1e1e1;
     box-shadow: #e1e1e1 1px 1px 0px 0px;
+    z-index: 100;
 }
 .main .nav-bar .choose-menu span{
     /*margin: 0px 10px 10px 25px;*/
@@ -1613,7 +1614,12 @@ ul.bxslider li img {
 
 /*兼职二级页面*/
 .joblist .lists, .resumelist .lists {
+    position: relative;
     background-color: #fff; }
+.joblist .lists .loading-page::before,.joblist .lists .loading-page::after{
+    position: absolute;
+    top:150px;
+}
 
 .joblist .lists .list:hover {
     /*变色*/

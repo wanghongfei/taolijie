@@ -149,6 +149,14 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
+    <select id="countFindSysByAccessRange" resultMap="BaseResultMap">
+        SELECT
+            COUNT(*)
+        FROM
+            system_notification sys
+        WHERE
+        sys.access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
+    </select>
 
     <select id="findAll" resultMap="BaseResultMap">
         SELECT

@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
@@ -32,11 +33,23 @@ public class RestJobController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
-                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
+        ListResult<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
 
         return new ResponseText(jobList);
+    }
+
+    /**
+     * 过虑查询
+     * @return
+     */
+    @RequestMapping(value = "/filter", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText filter(JobPostModel model) {
+        model.setPageNumber(PageUtils.getFirstResult(model.getPageNumber(), model.getPageSize()));
+        ListResult<JobPostModel> list = jobService.findByExample(model);
+
+        return new ResponseText(list);
     }
 
     /**
@@ -55,7 +68,8 @@ public class RestJobController {
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize, null);
+        ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize, null);
+
         return new ResponseText(list);
     }
 
@@ -71,7 +85,7 @@ public class RestJobController {
                                     @RequestParam(defaultValue = "0") int pageNumber,
                                     @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize, null);
+        ListResult<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize, null);
 
         return new ResponseText(list);
     }
@@ -84,7 +98,7 @@ public class RestJobController {
             return new ResponseText("invalid id string");
         }
 
-        List<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
+        ListResult<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
         return new ResponseText(postList);
     }
 
@@ -97,7 +111,7 @@ public class RestJobController {
                                    @RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
+        ListResult<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
         return new ResponseText(postList);
     }
 
@@ -131,7 +145,7 @@ public class RestJobController {
      */
     @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryList() {
-        List<JobPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+        ListResult<JobPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
 
         return new ResponseText(list);
     }

@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
@@ -59,7 +60,7 @@ public class UJobController {
         Credential credential = CredentialUtils.getCredential(session);
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
-        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), (page - 1) * pageSize, pageSize, objWrapper);
+        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), (page - 1) * pageSize, pageSize, objWrapper).getList();
 //        totalPage = (Integer)objWrapper.getObj();
 
         int pageStatus = 1;
@@ -93,7 +94,8 @@ public class UJobController {
         ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId());
+        List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId())
+                .getList();
 
         int pageStatus = 1;
         if(jobs.size() == 0){
@@ -123,8 +125,8 @@ public class UJobController {
         if (credential == null) {
             return "redirect:/login";
         }
-        List<JobPostCategoryModel> cateList= jobPostCateService.getCategoryList(page-1, pageSize, new ObjWrapper());
-        model.addAttribute("cates",cateList);
+        ListResult<JobPostCategoryModel> cateList= jobPostCateService.getCategoryList(page-1, pageSize, new ObjWrapper());
+        model.addAttribute("cates",cateList.getList());
         return "pc/user/jobpost";
     }
     //endregion
@@ -151,9 +153,9 @@ public class UJobController {
         }
 
         // 查询兼职分类
-        List<JobPostCategoryModel> cateList = jobPostCateService.getCategoryList(0, 100, null);
+        ListResult<JobPostCategoryModel> cateList = jobPostCateService.getCategoryList(0, 100, null);
         model.addAttribute("job", job);
-        model.addAttribute("cates", cateList);
+        model.addAttribute("cates", cateList.getList());
 
         return "pc/user/jobpost";
     }

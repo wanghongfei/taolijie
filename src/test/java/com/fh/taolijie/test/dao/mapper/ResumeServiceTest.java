@@ -32,7 +32,7 @@ public class ResumeServiceTest extends BaseSpringDataTestClass {
         list = service.getAllResumeList(Constants.AccessAuthority.ALL, 0, 100, null);
         list = service.getResumeList(1, 0, 100, null);
         list = service.getResumeList(1, Constants.AccessAuthority.ALL, 0, 100, null);
-        list = service.getResumeListByIntend(1, 0, 100);
+        list = service.getResumeListByIntend(1, 0, 100).getList();
         service.getIntendByResume(1);
         service.getPostRecord(1, 0, 100, null);
         service.getResumesByIds(0, 100, null, 1, 2);

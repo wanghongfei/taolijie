@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -17,7 +18,7 @@ public interface ShPostCategoryService {
      * @param capacity
      * @return
      */
-    List<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据id查找分类

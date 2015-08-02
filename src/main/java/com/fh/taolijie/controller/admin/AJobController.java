@@ -37,7 +37,7 @@ public class AJobController {
         int pageSize = 9999;
         ObjWrapper objWrapper = new ObjWrapper();
         List<JobPostModel> jobs;
-        jobs = jobPostService.getAllJobPostList(page - 1, pageSize,objWrapper);
+        jobs = jobPostService.getAllJobPostList(page - 1, pageSize,objWrapper).getList();
 
         model.addAttribute("jobs", jobs);
         return "pc/admin/jobs";

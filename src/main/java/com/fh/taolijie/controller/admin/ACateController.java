@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.admin;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.dto.CategoryDto;
@@ -141,8 +142,8 @@ public class ACateController {
     public String jobCategory(Model model){
         int page = 1;
         int capacity = 9999;
-        List<JobPostCategoryModel> list = jobPostCateService.getCategoryList(page-1, capacity, new ObjWrapper());
-        model.addAttribute("jobCates",list);
+        ListResult<JobPostCategoryModel> list = jobPostCateService.getCategoryList(page-1, capacity, new ObjWrapper());
+        model.addAttribute("jobCates",list.getList());
         return "pc/admin/jobcategory";
     }
 
@@ -154,8 +155,8 @@ public class ACateController {
     public String shCategory(Model model){
         int page = 1;
         int capacity = 9999;
-        List<SHPostCategoryModel> list =shPostCategoryService.getCategoryList(page-1, capacity, new ObjWrapper());
-        model.addAttribute("shCates",list);
+        ListResult<SHPostCategoryModel> list =shPostCategoryService.getCategoryList(page-1, capacity, new ObjWrapper());
+        model.addAttribute("shCates",list.getList());
         return "pc/admin/shcategory";
     }
 

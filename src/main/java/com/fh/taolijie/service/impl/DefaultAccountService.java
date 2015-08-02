@@ -2,6 +2,7 @@ package com.fh.taolijie.service.impl;
 
 import cn.fh.security.credential.AuthLogic;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
@@ -115,9 +116,12 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap) {
+    public ListResult<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap) {
         Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
-        return memMapper.getMemberList(page.getMap());
+        List<MemberModel> list = memMapper.getMemberList(page.getMap());
+        long tot = memMapper.countGetMemberList();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

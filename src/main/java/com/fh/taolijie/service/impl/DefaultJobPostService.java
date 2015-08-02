@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.cache.annotation.RedisCache;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
@@ -36,25 +37,34 @@ public class DefaultJobPostService implements JobPostService {
     ReviewModelMapper revMapper;
 
     @Override
-    public List<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+        List<JobPostModel> list =  postMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetAll();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setFilterExpiredPost(false);
 
-        return postMapper.findBy(model);
+        List<JobPostModel> list = postMapper.findBy(model);
+        long tot = postMapper.countFindBy(model);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setJobPostCategoryId(cateId);
 
-        return postMapper.findBy(model);
+        List<JobPostModel> list = postMapper.findBy(model);
+        long tot = postMapper.countFindBy(model);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -66,13 +76,18 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> getPostListByIds(Integer... ids) {
-        return postMapper.getInBatch(Arrays.asList(ids));
+    public ListResult<JobPostModel> getPostListByIds(Integer... ids) {
+        List<JobPostModel> list = postMapper.getInBatch(Arrays.asList(ids));
+
+        return new ListResult<>(list, list.size());
     }
 
     @Override
-    public List<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
-        return postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
+    public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
+        List<JobPostModel> list = postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
+        long tot = postMapper.countGetByComplaint();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -89,11 +104,22 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper) {
         model.setPageNumber(firstResult);
         model.setPageSize(CollectionUtils.determineCapacity(capacity));
 
-        return postMapper.searchBy(model);
+        List<JobPostModel> list = postMapper.searchBy(model);
+        long tot = postMapper.countSearchBy(model);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    public ListResult<JobPostModel> findByExample(JobPostModel example) {
+        List<JobPostModel> list = postMapper.findBy(example);
+        long tot = postMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -141,11 +167,11 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = false)
-    public List<JobPostModel> getFavoritePost(Integer memberId) {
+    public ListResult<JobPostModel> getFavoritePost(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteJobIds();
         if (null == allIds || allIds.isEmpty()) {
-            return new ArrayList<>(0);
+            return new ListResult<>();
         }
 
         String[] ids = allIds.split(Constants.DELIMITER);
@@ -154,7 +180,8 @@ public class DefaultJobPostService implements JobPostService {
             return Integer.parseInt(id);
         }).collect(Collectors.toList());
 
-        return postMapper.getInBatch(idList);
+        List<JobPostModel> list = postMapper.getInBatch(idList);
+        return new ListResult<>(list, list.size());
     }
 
     @Deprecated

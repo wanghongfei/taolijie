@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.ApplicationIntendModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ResumeModelMapper;
@@ -50,12 +51,15 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList) {
+    public ListResult<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList) {
         List<String> authStrings = Arrays.stream(authList)
                 .map(auth -> auth.toString())
                 .collect(Collectors.toList());
 
-        return reMapper.findByAuth(authStrings, pageNumber, pageSize);
+        List<ResumeModel> list = reMapper.findByAuth(authStrings, pageNumber, pageSize);
+        long tot = reMapper.countFindByAuth(authStrings);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -76,26 +80,32 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
+    public ListResult<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
         List<ApplicationIntendModel> intendList = intendMapper.getByIntend(categoryId, firstResult, CollectionUtils.determineCapacity(capacity));
         // 如果为空，直接返回空List
         // 继续执行会导致错误的SQL
         if (intendList.isEmpty()) {
-            return new ArrayList<>(0);
+            return new ListResult<>();
         }
 
         List<Integer> idList = intendList.stream().map(ApplicationIntendModel::getResumeId).collect(Collectors.toList());
 
 
-        return reMapper.getInBatch(idList);
+        List<ResumeModel> list = reMapper.getInBatch(idList);
+        long tot = list.size();
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
-    public List<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize) {
+    public ListResult<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize) {
         ResumeModel example = new ResumeModel(pageNumber, pageSize);
         example.setGender(gender);
 
-        return reMapper.findBy(example);
+        List<ResumeModel> list = reMapper.findBy(example);
+        long tot=  reMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
@@ -104,8 +114,11 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
-        return reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
+    public ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
+        List<ResumePostRecord> list = reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
+        long tot = reMapper.countFindPostRecordByMember(memId);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

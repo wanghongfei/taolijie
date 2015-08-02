@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -15,7 +16,7 @@ public interface ShPostService extends PageService {
      * 查找所有二手帖子
      * @return
      */
-    List<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 得到某分类下的二手帖子
@@ -24,7 +25,7 @@ public interface ShPostService extends PageService {
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    List<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 得到某个用户发的二手帖子信息
@@ -34,7 +35,7 @@ public interface ShPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
      * 根据分类查找二手
@@ -42,9 +43,9 @@ public interface ShPostService extends PageService {
      * @param pageView 传递true为最火的在前
      * @return
      */
-    List<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
 
-    List<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper);
+    ListResult<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper);
 
     /**
      * 查询还未审核的二手信息
@@ -82,7 +83,7 @@ public interface ShPostService extends PageService {
      * @param pageNumber 从0开始
      * @return
      */
-    List<SHPostModel> getFavoritePost(Integer memberId);
+    ListResult<SHPostModel> getFavoritePost(Integer memberId);
 
     boolean isPostAlreadyFavorite(Integer memId, Integer postId);
 

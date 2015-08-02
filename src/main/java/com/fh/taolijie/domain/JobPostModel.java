@@ -139,6 +139,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private boolean orderByDate = true;
     private boolean orderByVisit = false;
     private boolean filterExpiredPost = true;
+    private Integer cateId;
 
     public JobPostModel() {}
 
@@ -164,6 +165,14 @@ public class JobPostModel extends Pageable implements Serializable {
 
     public String getRegion() {
         return region;
+    }
+
+    public Integer getCateId() {
+        return cateId;
+    }
+
+    public void setCateId(Integer cateId) {
+        this.cateId = cateId;
     }
 
     public void setRegion(String region) {

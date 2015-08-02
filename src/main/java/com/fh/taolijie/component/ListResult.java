@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class ListResult<T> {
     private List<T> list;
-    private int resultCount;
+    private long resultCount;
 
-    public ListResult(List<T> list, int pageCount) {
+    public ListResult(List<T> list, long pageCount) {
         this(list);
 
         this.resultCount = pageCount;
@@ -29,7 +29,7 @@ public class ListResult<T> {
         this.list = list;
     }
 
-    public int getResultCount() {
+    public long getResultCount() {
         return resultCount;
     }
 

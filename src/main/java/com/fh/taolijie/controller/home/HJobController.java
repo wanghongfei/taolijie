@@ -55,7 +55,7 @@ public class HJobController {
                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                           Model model) {
         ObjWrapper objWrapper = new ObjWrapper();
-        List<JobPostModel> jobs;
+        ListResult<JobPostModel> jobs;
         if (cate > 0) {
             jobs = jobPostService.getJobPostListByCategory(cate, (page - 1)*pageSize, pageSize, objWrapper);
         } else {
@@ -64,9 +64,9 @@ public class HJobController {
 
 //        int totalPage = (Integer) objWrapper.getObj();
         int pageStatus = 1;
-        if(jobs.size() == 0){
+        if(jobs.getList().size() == 0){
             pageStatus = 0;
-        }else if(jobs.size() == pageSize){
+        }else if(jobs.getList().size() == pageSize){
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);
@@ -117,7 +117,7 @@ public class HJobController {
         reviewCommand.setJobPostId(id);
         ListResult<ReviewModel> reviewResult = reviewService.getReviewList(reviewCommand);
         List<ReviewModel> reviewList = reviewResult.getList();
-        int reviewCount = reviewResult.getResultCount();
+        long reviewCount = reviewResult.getResultCount();
 
 
         model.addAttribute("job", job);
