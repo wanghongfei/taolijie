@@ -75,6 +75,14 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    public ListResult<SHPostModel> filterQuery(SHPostModel model) {
+        List<SHPostModel> list = postMapper.findBy(model);
+        long tot = postMapper.countFindBy(model);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
     public List<SHPostModel> getUnverifiedPostList(SHPostModel model, ObjWrapper wrapper) {
         return postMapper.findBy(model);
     }

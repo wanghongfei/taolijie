@@ -85,6 +85,7 @@
     <!-- 只包含简历的头信息 -->
     <sql id="less_resume_column">
         re.id AS resume_id, re.name AS resume_name, re.gender AS resume_gender, re.age AS resume_age,
+        re.created_time AS resume_created_time,
         re.photo_path AS resume_photo_path,
         re.member_id AS resume_member_id, re.access_authority AS resume_access_authority,
         re.verified AS resume_verified, re.photo_id AS resume_photo_id,
