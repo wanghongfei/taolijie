@@ -1,0 +1,24 @@
+/* reset */
+.container a:link,
+.container a:visited,
+.container a:hover,
+.container a:active {
+    color: #000;
+    text-decoration: none;
+}
+.resumelist .lists .list .intent-title {
+    padding: 2px 5px;
+}
+/* page */
+.info {
+    font-size: 16px;
+}
+.info .info-item {
+    margin-right: 10px;
+}
+.intent-title {
+    margin-right: 10px;
+}
+.intent-title .intend-item {
+    margin-right: 10px;
+}

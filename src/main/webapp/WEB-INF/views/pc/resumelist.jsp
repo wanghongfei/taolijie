@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="/styles/jquery.bxslider.css">
     <%--<link rel="stylesheet" href="http://libs.useso.com/js/font-awesome/4.2.0/css/font-awesome.min.css">--%>
     <link rel="stylesheet" href="/styles/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/styles/root/resumelist.css"/>
 
     <!-- build:js /scripts/vendor/modernizr.js -->
     <script src="/scripts/modernizr.js"></script>
@@ -85,13 +86,18 @@
                           <div>
                               <div class="fl">
                                   <p class="info">
-                                      <span ng-bind="resume.name" class="name"></span>
-                                      <i class="fa fa-cog theme-color"></i>
-                                      <span ng-bind="resume.age"></span>岁
+                                      <span ng-bind="resume.name" class="name info-item"></span>
+                                      <span ng-if="resume.gender == 'f'" class="info-item red">女</span>
+                                      <span ng-if="resume.gender == 'm'" class="info-item light-green">男</span>
+                                      <span ng-bind="(resume.age) + '岁'" class="info-item"></span>
+                                      <span ng-bind="resume.major" class="f-r"></span>
                                   </p>
                                   <p class="intent">
-                                      <span class="intent-title">求职意向</span>
-                                      <%--<span>${resume.}</span>--%>
+                                      <span class="intent-title theme-color-bg">求职意向</span>
+                                      <%--
+                                      <span ng-repeat="i in resume.intend" ng-bind="i" class="intend-item"></span>
+                                      --%>
+                                      <span ng-bind="resume.intend.join('、')" class="intend-item"></span>
                                   </p>
                               </div>
                               <div class="fr">
