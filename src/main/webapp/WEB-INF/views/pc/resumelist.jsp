@@ -90,7 +90,6 @@
                                       <span ng-if="resume.gender == 'f'" class="info-item red">女</span>
                                       <span ng-if="resume.gender == 'm'" class="info-item light-green">男</span>
                                       <span ng-bind="(resume.age) + '岁'" class="info-item"></span>
-                                      <span ng-bind="resume.major" class="f-r"></span>
                                   </p>
                                   <p class="intent">
                                       <span class="intent-title theme-color-bg">求职意向</span>
@@ -101,7 +100,9 @@
                                   </p>
                               </div>
                               <div class="fr">
-                                  <%--<p>${resume.}</p>--%>
+                                  <p>
+                                      <span ng-bind="resume.major"></span>
+                                  </p>
                                   <p>
                                       <span class="time" ng-bind="resume.createdTime"></span>
                                   </p>
@@ -131,7 +132,11 @@
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/list/resumelist.js"></script>
 <script>
-    var resumes = JSON.parse('${ju:toJson(resumes)}');
+    var resumes = JSON.parse('${ju:toJson(resumes.list)}');
+    var pages = {};
+    pages.page = JSON.parse('${ju:toJson(page)}');
+    pages.pageStatus = JSON.parse('${ju:toJson(pageStatus)}');
+    pages.pageSize = JSON.parse('${ju:toJson(pageSize)}');
 </script>
 
 </body>
