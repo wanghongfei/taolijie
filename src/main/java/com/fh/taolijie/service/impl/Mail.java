@@ -2,6 +2,7 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.service.pool.FixSizeThreadPool;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,15 +58,21 @@ public class Mail {
             try {
                 sendMail(content,type, toAddresses);
             } catch (MailException ex) {
-                // 尝试重新发送一次
                 logger.info("发送失败，尝试重新发送");
                 ex.printStackTrace();
 
+                // 写入错误日志
+                String msg = LogUtils.getStackTrace(ex);
+                LogUtils.getErrorLogger().error("一次发送失败. type = {},  content = {}, msg = {}", type, content, msg);
+
+                // 尝试重新发送一次
                 try {
                     sendMail(content,type, toAddresses);
                 } catch (MailException e) {
-                    logger.error("二次邮件发送失败");
-                    ex.printStackTrace();
+                    // 写入错误日志
+                    // 不再尝试重新发送
+                    msg = LogUtils.getStackTrace(ex);
+                    LogUtils.getErrorLogger().error("二次发送失败. type = {},  content = {}, msg = {}", type, content, msg);
                 }
             }
         });
