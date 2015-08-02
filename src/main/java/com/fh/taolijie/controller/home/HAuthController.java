@@ -298,6 +298,7 @@ public class HAuthController {
         mem.setUsername(registerDto.getUsername());
         mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
         mem.setValid(true);
+        mem.setVerified(Constants.VerifyStatus.NONE.toString());
         mem.setCreatedTime(new Date());
         mem.setRoleList(Arrays.asList(role));
 //        mem.setProfilePhotoId(DEFAULT_INM_ID); // 默认用户头像,更改直接换图片id

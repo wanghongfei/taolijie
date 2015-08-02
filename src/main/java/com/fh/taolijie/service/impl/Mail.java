@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.service.pool.FixSizeThreadPool;
 import com.fh.taolijie.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,9 @@ public class Mail {
 
     @Autowired
     MailSender sender;
+
+    @Autowired
+    FixSizeThreadPool pool;
 
     /**
      * 发送邮件，该方法会block直到发送完成
@@ -43,8 +47,13 @@ public class Mail {
      * @param toAddresses
      */
     public void sendMailAsync(String content, Constants.MailType type, String... toAddresses) {
-        logger.info("发送邮件");
-        new Thread( () -> {
+        logger.info("发送邮件给");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("类型 = {}, 内容 = {}", type, content);
+        }
+
+        Thread worker = new Thread( () -> {
             try {
                 sendMail(content,type, toAddresses);
             } catch (MailException ex) {
@@ -59,6 +68,9 @@ public class Mail {
                     ex.printStackTrace();
                 }
             }
-        }).start();
+        });
+
+        // 向线程池提交一个任务
+        pool.getPool().submit(worker);
     }
 }
