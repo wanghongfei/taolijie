@@ -2,6 +2,7 @@ package com.fh.taolijie.service.pool;
 
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,5 +22,10 @@ public class FixSizeThreadPool {
 
     public ExecutorService getPool() {
         return this.pool;
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        pool.shutdownNow();
     }
 }
