@@ -200,8 +200,10 @@ public class UJobController {
         }
 
         // 写入最新的发布时间
-        mem.setLastJobDate(nowTime);
-        accountService.updateMember(mem);
+        MemberModel memExample = new MemberModel();
+        memExample.setId(mem.getId());
+        memExample.setLastJobDate(nowTime);
+        accountService.updateMember(memExample);
 
         /*创建兼职信息*/
         job.setMemberId(credential.getId());

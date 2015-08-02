@@ -46,9 +46,7 @@ public class UShController {
     NotificationService notificationService;
 
     /**
-     * 我的发布 GET
-     *
-     * @param session 用户的角色
+     * 我的发布
      * @return
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
@@ -81,9 +79,6 @@ public class UShController {
 
     /**
      * 获取已收藏的列表
-     * @param page
-     * @param session
-     * @param model
      * @return
      */
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
@@ -112,12 +107,10 @@ public class UShController {
     }
 
     /**
-     * 发布简历页面 get
-     * @param
+     * 发布二手页面 get
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    //region 发布简历 String post
     public String post(HttpSession session,Model model) {
         int page = 1;
         int pageSize = 9999;
@@ -167,7 +160,6 @@ public class UShController {
      * @param session
      * @return
      */
-    //region 发布二手 ajax String post
     @RequestMapping(value = "/post", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody
     String postSh(@RequestParam String picIds,
@@ -198,8 +190,10 @@ public class UShController {
         }
 
         // 写入最新的发布时间
-        mem.setLastShDate(nowTime);
-        accountService.updateMember(mem);
+        MemberModel memExample = new MemberModel();
+        memExample.setId(mem.getId());
+        memExample.setLastShDate(nowTime);
+        accountService.updateMember(memExample);
 
         /*创建二手信息*/
         shDto.setMemberId(mem.getId());

@@ -226,6 +226,9 @@
             <if test="favoriteResumeIds != null">
                 favorite_resume_ids,
             </if>
+
+            <if test="lastJobDate != null" >last_job_date,</if>
+            <if test="lastShDate != null" >last_sh_date,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -316,8 +319,11 @@
                 #{favoriteResumeIds,jdbcType=LONGVARCHAR},
             </if>
             <if test="readSysNotificationIds != null" >
-                #{readSysNotificationIds}
+                #{readSysNotificationIds},
             </if>
+
+            <if test="lastJobDate != null" >#{lastJobDate},</if>
+            <if test="lastShDate != null" >#{lastShDate},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -417,8 +423,11 @@
             <if test="readSysNotificationIds != null" >
                 read_global_noti_ids = #{readSysNotificationIds},
             </if>
+
+            <if test="lastJobDate != null" >last_job_date = #{lastJobDate},</if>
+            <if test="lastShDate != null" >last_sh_date = #{lastShDate},</if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.fh.taolijie.domain.MemberModel">
         <!--
@@ -455,7 +464,10 @@
         favorite_job_ids = #{favoriteJobIds,jdbcType=LONGVARCHAR},
         favorite_sh_ids = #{favoriteShIds,jdbcType=LONGVARCHAR},
         favorite_resume_ids = #{favoriteResumeIds,jdbcType=LONGVARCHAR},
-        read_global_noti_ids = #{readSysNotificationIds}
+        read_global_noti_ids = #{readSysNotificationIds},
+
+        last_sh_date = #{lastShDate},
+        last_job_date = #{lastJobDate}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
