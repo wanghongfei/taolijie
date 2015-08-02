@@ -73,4 +73,6 @@ public interface MemberModelMapper {
     void validMemberById(@Param("memberId") Integer memberId, @Param("valid") boolean valid);
 
     MemberModel findByEmail(String email);
+
+    void addCredits(Integer memId, int value);
 }

@@ -1,5 +1,7 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.constant.OperationType;
+
 /**
  * 规定与用户业务逻辑相关操作
  * Created by wanghongfei on 15-4-3.
@@ -47,4 +49,18 @@ public interface UserService {
      * @return
      */
     boolean isSHPostAlreadyLiked(Integer memId, Integer shId);
+
+    /**
+     * 加减分
+     * @param memberId
+     * @return 返回新的积分
+     */
+    int changeCredits(Integer memberId, OperationType type, int oldCredits);
+
+    /**
+     * 查询当前积分对应等级
+     * @param credits
+     * @return
+     */
+    String queryLevel(int credits);
 }

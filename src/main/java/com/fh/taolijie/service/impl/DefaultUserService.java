@@ -1,5 +1,7 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.constant.OperationType;
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
@@ -7,8 +9,13 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by wanghongfei on 15-6-7.
@@ -24,6 +31,11 @@ public class DefaultUserService implements UserService {
 
     @Autowired
     ShPostModelMapper shMapper;
+
+
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    StringRedisTemplate rt;
 
 
     @Override
@@ -107,5 +119,36 @@ public class DefaultUserService implements UserService {
         String oldIds = mem.getLikedShIds();
 
         return StringUtils.checkIdExists(oldIds, shId.toString());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public int changeCredits(Integer memberId, OperationType type, int oldCredits) {
+        String valueString = (String) rt.opsForHash().get(RedisKey.CREDITS_OPERATION.toString(), type.toString());
+        int value = Integer.valueOf(valueString);
+
+        memMapper.addCredits(memberId, value);
+
+        return oldCredits + value;
+    }
+
+    @Override
+    public String queryLevel(int credits) {
+        Map<Object, Object> map = rt.opsForHash().entries(RedisKey.CREDITS_LEVEL.toString());
+
+        Set<Map.Entry<Object, Object>> entrySet = map.entrySet();
+        for (Map.Entry<Object, Object> entry : entrySet) {
+            String key = (String) entry.getKey();
+            String[] valueStr = key.split("-");
+
+            int min = Integer.parseInt(valueStr[0]);
+            int max = Integer.parseInt(valueStr[1]);
+
+            if (credits >= min && credits <= max) {
+                return (String) entry.getValue();
+            }
+        }
+
+        return "LV0";
     }
 }

@@ -530,4 +530,13 @@
         WHERE email = #{email}
     </select>
 
+    <update id="addCredits">
+        UPDATE
+            member
+        SET
+            creadits = creadits + #{value}
+        WHERE
+            id = #{memId}
+    </update>
+
 </mapper>
