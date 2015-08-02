@@ -68,7 +68,7 @@
 
       <div class="resumelist main">
           <ul class="nav-bar">
-              <li>热门推荐</li>
+              <li ng-click="getRecommend()">热门推荐</li>
               <li>求职意向</li>
               <li class="choose">性别选择<i class="fa fa-caret-down"></i>
                   <div class="choose-menu">
@@ -134,7 +134,7 @@
 <script>
     var resumes = JSON.parse('${ju:toJson(resumes.list)}');
     var pages = {};
-    pages.page = JSON.parse('${ju:toJson(page)}');
+    pages.page = JSON.parse('${ju:toJson(page)}');;
     pages.pageStatus = JSON.parse('${ju:toJson(pageStatus)}');
     pages.pageSize = JSON.parse('${ju:toJson(pageSize)}');
 </script>
