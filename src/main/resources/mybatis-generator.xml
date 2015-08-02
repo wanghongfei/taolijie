@@ -43,8 +43,10 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
+<!--        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" />-->
+        <table tableName="feedback" domainObjectName="FeedbackModel" enableCountByExample="true" enableDeleteByExample="false" enableSelectByExample="true"
+               enableUpdateByExample="true" />
 <!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
 
