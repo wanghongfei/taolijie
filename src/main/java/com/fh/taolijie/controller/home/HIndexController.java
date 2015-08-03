@@ -132,7 +132,7 @@ public class HIndexController {
             }
             model.addAttribute("pageStatus",pageStatus);
 
-            model.addAttribute("shs", list);
+            model.addAttribute("shs", list.getList());
             model.addAttribute("page", page);
             return "pc/shlist";
         }
