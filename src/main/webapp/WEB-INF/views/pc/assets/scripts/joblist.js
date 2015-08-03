@@ -28,26 +28,26 @@ tlj.controller('jobDetailCtrl', function($scope, $http) {
             currPageNumber +=1;
             searchObj['pageNumber'] = currPageNumber;
             $(document.body).animate({'scrollTop':160},200);
-            $loading.show();
+           // $loading.show();
             search(searchObj,function(data){
                 if(data.ok){
                     $ctrlScope.jobList = data.data.list;
                     $ctrlScope.$digest();
                 }
-                $loading.hide();
+            //    $loading.hide();
             });
         }else{ //上一页
             if(currPageNumber > 0){
                 currPageNumber -= 1;
                 searchObj['pageNumber'] = currPageNumber;
                 $(document.body).animate({'scrollTop':160},200);
-                $loading.show();
+             //   $loading.show();
                 search(searchObj,function(data){
                     if(data.ok){
                         $ctrlScope.jobList = data.data.list;
                         $ctrlScope.$digest();
                     }
-                    $loading.hide();
+              //      $loading.hide();
                 });
             }
         }
