@@ -73,7 +73,7 @@
             <li class="choose"><span class="choose-title" data-default="区域选择">区域选择</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
                 <div class="choose-menu" data-type="region" >
                 <span class="active">全部</span>
-                <span ng-click="hello();">张店区</span>
+                <span>张店区</span>
                 <span>周村区</span>
                 <span>淄川区</span>
                 <span>临淄区</span>
