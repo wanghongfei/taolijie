@@ -4,39 +4,109 @@
  */
 
 var $ctrlScope;
+var searchObj = {};
+var maxSize = 8;
+var currPageNumber = 0;
+
 var $loading = $(".lists .loading-page");
 $loading.show();
 tlj.controller('jobDetailCtrl', function($scope, $http) {
     $ctrlScope = $scope;
 
+
+
     var jobListRes = $http.get('/api/job/filter');
     jobListRes.success(function(data, status){
         $scope.jobList = data.data.list;
+        $scope.resultCount = data.data.resultCount;
         $loading.hide();
     });
 
-    $scope.hello = function(){
-        console.log($scope.jobList);
-    };
     $scope.pageChange = function(isNext){
-        //解析pageNumber字段
-        if(isNext){
-            //下一页
+
+        if(isNext){//下一页
+            currPageNumber +=1;
+            searchObj['pageNumber'] = currPageNumber;
+            $(document.body).animate({'scrollTop':160},200);
+            $loading.show();
+            search(searchObj,function(data){
+                if(data.ok){
+                    $ctrlScope.jobList = data.data.list;
+                    $ctrlScope.$digest();
+                }
+                $loading.hide();
+            });
+        }else{ //上一页
+            if(currPageNumber > 0){
+                currPageNumber -= 1;
+                searchObj['pageNumber'] = currPageNumber;
+                $(document.body).animate({'scrollTop':160},200);
+                $loading.show();
+                search(searchObj,function(data){
+                    if(data.ok){
+                        $ctrlScope.jobList = data.data.list;
+                        $ctrlScope.$digest();
+                    }
+                    $loading.hide();
+                });
+            }
         }
     };
     $scope.lastPage = function(){
-        return $scope.jobList != null;
+        return $scope.jobList != null && currPageNumber != 0;
     };
     $scope.nextPage = function(){
-        return $scope.jobList != null;
+        console.log(currPageNumber);
+        return $scope.jobList != null&&(currPageNumber+1)*maxSize <$scope.resultCount;
     }
 
 
 });
 
+
+/**
+ * 根据指定的键筛选
+ * @param searchObj 如{"region":"张店","timeToPay":"月结"}
+ * @param callback
+ */
+
+function search(searchObj, callback){
+    //首先遍历searchObj拼接url
+    var param = urlEncode(searchObj);
+    //发送ajax请求
+    $.ajax({
+        url:"/api/job/filter?"+param,
+        type:"get",
+        success:callback
+    });
+}
+/**
+ * 转换对象为url参数
+ * @param obj
+ * @param key
+ * @param encode
+ * @returns {string}
+ */
+function urlEncode(obj, key, encode) {
+    if(obj==null) return '';
+    var paramStr = '';
+    var t = typeof (obj);
+    if (t == 'string' || t == 'number' || t == 'boolean') {
+        paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(obj) : obj);
+    } else {
+        for (var i in obj) {
+            var k = key == null ? i : key + (obj instanceof Array ? '[' + i + ']' : '.' + i);
+            paramStr += urlEncode(obj[i], k, encode);
+        }
+    }
+    return paramStr;
+};
+
+
+
 $(function () {
 
-    var searchObj = {};
+
 
     $('.nav-bar').on('mouseenter', ".choose", function () {
         $(this).children().last().show();
@@ -59,8 +129,11 @@ $(function () {
             }else{
                 searchObj[key] = value;
             }
+            //回到第一页
+            delete searchObj['pageNumber'];
+            currPageNumber = 0;
         }else{
-            console.log("error");
+            console.error("error");
         }
 
         //点击后的用户反馈
@@ -75,10 +148,10 @@ $(function () {
             $chooseTitle.text(value);
         }
         $loading.show();
-
         search(searchObj,function(data){
             if(data.ok){
                 $ctrlScope.jobList = data.data.list;
+                $ctrlScope.resultCount = data.data.resultCount;
                 $ctrlScope.$digest();
             }
             $loading.hide();
@@ -87,45 +160,7 @@ $(function () {
 
     });
 
-    /**
-     * 根据指定的键筛选
-     * @param searchObj 如{"region":"张店","timeToPay":"月结"}
-     * @param callback
-     */
 
-    function search(searchObj, callback){
-        //首先遍历searchObj拼接url
-        var param = urlEncode(searchObj);
-        console.log(param);
-        //发送ajax请求
-        $.ajax({
-            url:"/api/job/filter?"+param,
-            type:"get",
-            success:callback
-        });
-    }
-
-    /**
-     * 转换对象为url参数
-     * @param obj
-     * @param key
-     * @param encode
-     * @returns {string}
-     */
-    function urlEncode(obj, key, encode) {
-        if(obj==null) return '';
-        var paramStr = '';
-        var t = typeof (obj);
-        if (t == 'string' || t == 'number' || t == 'boolean') {
-            paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(obj) : obj);
-        } else {
-            for (var i in obj) {
-                var k = key == null ? i : key + (obj instanceof Array ? '[' + i + ']' : '.' + i);
-                paramStr += urlEncode(obj[i], k, encode);
-            }
-        }
-        return paramStr;
-    };
 
 
 });
