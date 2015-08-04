@@ -110,7 +110,7 @@
                     color: {{job.category.themeColor}};
                 }
             </style>
-            <a ng-repeat-end href="/item/job/{{job.id}}" style="color: #353f4f"
+            <a ng-repeat-end href="/item/job/{{job.id}}" target="_blank" style="color: #353f4f"
                ng-cloak class="ng-cloak">
                 <div class="list " data-color="{{job.category.themeColor}}">
                     <div class="list-type">
