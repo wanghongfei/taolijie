@@ -21,8 +21,8 @@ public class RestUserController {
      * @param username
      * @return
      */
-    @RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText getByUsername(@RequestParam String username) {
+    @RequestMapping(value = "/name/{username}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getByUsername(@PathVariable String username) {
         MemberModel mem = accService.findMember(username, true);
         if (null == mem) {
             return new ResponseText("not found");
