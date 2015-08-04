@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,9 +93,25 @@ public class RestResumeController {
     public ResponseText findByGender(@PathVariable("gender") String gender,
                                 @RequestParam(defaultValue = "0") int pageNumber,
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
-        pageNumber = pageNumber * pageSize;
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<ResumeModel> reList = resumeService.getResumeByGender(gender, pageNumber, pageSize);
 
         return new ResponseText(reList);
+    }
+
+    /**
+     * 过虑查询
+     * @return
+     */
+    @RequestMapping(value = "/filter", produces = Constants.Produce.JSON)
+    public ResponseText filter( ResumeModel model,
+                                @RequestParam(defaultValue = "0") int pageNumber,
+                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        ListResult<ResumeModel> lr = resumeService.findBy(model);
+
+        return new ResponseText(lr);
+
     }
 }

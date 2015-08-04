@@ -109,6 +109,14 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    public ListResult<ResumeModel> findBy(ResumeModel example) {
+        List<ResumeModel> list = reMapper.findBy(example);
+        long tot = reMapper.countFindBy(example);
+        
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
     public List<ApplicationIntendModel> getIntendByResume(Integer resumeId) {
         return intendMapper.getByResume(resumeId);
     }
