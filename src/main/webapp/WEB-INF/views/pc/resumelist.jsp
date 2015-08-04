@@ -73,7 +73,7 @@
               <li class="choose">求职意向
                 <div class="choose-menu" data-type="region" >
                     <span class="active">全部</span>
-                    <span ng-repeat="c in cates" ng-bind="c.name"></span>
+                    <span ng-repeat="c in cates" ng-bind="c.name" ng-click="getIntend(c.id)"></span>
                 </div>
               </li>
               <li class="choose">性别选择<i class="fa fa-caret-down"></i>

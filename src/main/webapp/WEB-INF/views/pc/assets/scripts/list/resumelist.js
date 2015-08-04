@@ -19,6 +19,15 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
             }
         })
     }
+    $scope.getIntend = function(id) {
+        $http.get('/api/resume/intend/' + id)
+        .success(function(data) {
+            if(data.ok) {
+                $scope.resumes = data.data.list || [];
+            }
+
+        })
+    }
 
     $scope.getCates()
 });
