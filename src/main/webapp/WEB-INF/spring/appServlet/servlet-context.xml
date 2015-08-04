@@ -42,6 +42,15 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
+    <!-- 配置Jackson不序列化为null的字段 -->
+    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                <property name="serializationInclusion" value="NON_NULL" />
+            </bean>
+        </property>
+    </bean>
+
 
 
     <!-- 文件上传 -->
