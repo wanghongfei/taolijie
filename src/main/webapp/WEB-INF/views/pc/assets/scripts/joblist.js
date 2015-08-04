@@ -13,12 +13,19 @@ $loading.show();
 tlj.controller('jobDetailCtrl', function($scope, $http) {
     $ctrlScope = $scope;
 
+    var param = urlToObj(window.location.search);
+    if(param.cate){
+        searchObj['jobPostCategoryId'] = param.cate;
+    }else{
+        delete searchObj['jobPostCategoryId'];
+    }
 
-
-    var jobListRes = $http.get('/api/job/filter');
-    jobListRes.success(function(data, status){
-        $scope.jobList = data.data.list;
-        $scope.resultCount = data.data.resultCount;
+    search(searchObj,function(data){
+        if(data.ok){
+            $ctrlScope.jobList = data.data.list;
+            $scope.resultCount = data.data.resultCount;
+            $ctrlScope.$digest();
+        }
         $loading.hide();
     });
 
@@ -72,6 +79,7 @@ tlj.controller('jobDetailCtrl', function($scope, $http) {
 
 function search(searchObj, callback){
     //首先遍历searchObj拼接url
+    console.log(searchObj);
     var param = urlEncode(searchObj);
     //发送ajax请求
     $.ajax({
@@ -101,6 +109,24 @@ function urlEncode(obj, key, encode) {
     }
     return paramStr;
 };
+
+/**
+ * 转换url参数为js对象
+ * @param search
+ * @returns {{}}
+ */
+function urlToObj(search){
+    var obj = {};
+    var key,value,a;
+    if(search == null) return obj;
+    var arrays = search.substring(1).split("&");
+    arrays.forEach(function(str){
+        a =str.split("=");
+        key = a[0], value = a[1];
+        obj[key] = value;
+    });
+    return obj;
+}
 
 
 
