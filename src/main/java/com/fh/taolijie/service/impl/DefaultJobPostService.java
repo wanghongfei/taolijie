@@ -171,7 +171,7 @@ public class DefaultJobPostService implements JobPostService {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteJobIds();
         if (null == allIds || allIds.isEmpty()) {
-            return new ListResult<>();
+            return new ListResult<>(new ArrayList<>(0), 0);
         }
 
         String[] ids = allIds.split(Constants.DELIMITER);
