@@ -138,7 +138,7 @@ public class DefaultShPostService implements ShPostService {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         String allIds = mem.getFavoriteShIds();
         if (null == allIds || allIds.isEmpty()) {
-            return new ListResult<>();
+            return new ListResult<>(new ArrayList<>(0), 0);
         }
 
         String[] ids = allIds.split(Constants.DELIMITER);
