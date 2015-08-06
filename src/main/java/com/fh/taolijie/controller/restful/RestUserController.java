@@ -28,8 +28,6 @@ public class RestUserController {
             return new ResponseText("not found");
         }
 
-        mem.setPassword(null);
-
         return new ResponseText(mem);
     }
 
