@@ -72,15 +72,15 @@
               </li>
               <li class="choose">求职意向
                 <div class="choose-menu" data-type="region" >
-                    <span class="active">全部</span>
-                    <span ng-repeat="c in cates" ng-bind="c.name" ng-click="getIntend(c.id)"></span>
+                    <span class="active" ng-click="listFilter('list')">全部</span>
+                    <span ng-repeat="c in cates" ng-bind="c.name" ng-click="listFilter('intend', c.id)"></span>
                 </div>
               </li>
               <li class="choose">性别选择<i class="fa fa-caret-down"></i>
                   <div class="choose-menu">
-                      <span class="active">全部</span>
-                      <span>男</span>
-                      <span>女</span>
+                      <span class="active" ng-click="listFilter('list')">全部</span>
+                      <span ng-click="listFilter('gender', 'm')">男</span>
+                      <span ng-click="listFilter('gender', 'f')">女</span>
                   </div>
               </li>
           </ul>
