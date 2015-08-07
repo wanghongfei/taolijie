@@ -215,7 +215,7 @@ public class UJobController {
         if (job.getJobPostCategoryId() != null) {
             jobPostService.addJobPost(job);
             // 加分
-            userService.changeCredits(mem.getId(), OperationType.POST, 0);
+            //userService.changeCredits(mem.getId(), OperationType.POST, 0);
         } else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
