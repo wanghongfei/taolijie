@@ -175,7 +175,7 @@ public class UShController {
         mem = accountService.findMember(username, false);
 
 
-        // 检查距离上次发布的时间间隔
+/*        // 检查距离上次发布的时间间隔
         Date lastJobTime = mem.getLastShDate();
         Date nowTime = new Date();
         // 如果时间为空，说明这是用户第一次发帖
@@ -193,7 +193,7 @@ public class UShController {
         MemberModel memExample = new MemberModel();
         memExample.setId(mem.getId());
         memExample.setLastShDate(nowTime);
-        accountService.updateMember(memExample);
+        accountService.updateMember(memExample);*/
 
         /*创建二手信息*/
         shDto.setMemberId(mem.getId());

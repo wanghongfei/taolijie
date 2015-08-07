@@ -185,7 +185,7 @@ public class UJobController {
         String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
-        // 检查上次发布的时间间隔
+/*        // 检查上次发布的时间间隔
         Date lastJobTime = mem.getLastJobDate();
         Date nowTime = new Date();
         // 如果时间为空，说明这是用户第一次发帖
@@ -203,7 +203,7 @@ public class UJobController {
         MemberModel memExample = new MemberModel();
         memExample.setId(mem.getId());
         memExample.setLastJobDate(nowTime);
-        accountService.updateMember(memExample);
+        accountService.updateMember(memExample);*/
 
         /*创建兼职信息*/
         job.setMemberId(credential.getId());
