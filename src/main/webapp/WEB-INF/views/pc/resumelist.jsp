@@ -68,48 +68,53 @@
 
       <div class="resumelist main">
           <ul class="nav-bar">
-              <li ng-click="getRecommend()">热门推荐</li>
-              <li>求职意向</li>
+              <li ng-click="getRecommend()">热门推荐
+              </li>
+              <li class="choose">求职意向
+                <div class="choose-menu" data-type="region" >
+                    <span class="active" ng-click="listFilter('list')">全部</span>
+                    <span ng-repeat="c in cates" ng-bind="c.name" ng-click="listFilter('intend', c.id)"></span>
+                </div>
+              </li>
               <li class="choose">性别选择<i class="fa fa-caret-down"></i>
                   <div class="choose-menu">
-                      <ul>
-                          <li class="actived">男</li>
-                          <li>女</li>
-                      </ul>
+                      <span class="active" ng-click="listFilter('list')">全部</span>
+                      <span ng-click="listFilter('gender', 'm')">男</span>
+                      <span ng-click="listFilter('gender', 'f')">女</span>
                   </div>
               </li>
           </ul>
           <div class="lists">
-                  <a href="/item/resume/{{resume.id}}" ng-repeat="resume in resumes">
-                      <div class="list">
-                          <img src="/static/images/users/{{resume.photoPath}}" alt="">
-                          <div>
-                              <div class="fl">
-                                  <p class="info">
-                                      <span ng-bind="resume.name" class="name info-item"></span>
-                                      <span ng-if="resume.gender == 'f'" class="info-item red">女</span>
-                                      <span ng-if="resume.gender == 'm'" class="info-item light-green">男</span>
-                                      <span ng-bind="(resume.age) + '岁'" class="info-item"></span>
-                                  </p>
-                                  <p class="intent">
-                                      <span class="intent-title theme-color-bg">求职意向</span>
-                                      <%--
-                                      <span ng-repeat="i in resume.intend" ng-bind="i" class="intend-item"></span>
-                                      --%>
-                                      <span ng-bind="resume.intend.join('、')" class="intend-item"></span>
-                                  </p>
-                              </div>
-                              <div class="fr">
-                                  <p>
-                                      <span ng-bind="resume.major"></span>
-                                  </p>
-                                  <p>
-                                      <span class="time" ng-bind="resume.createdTime"></span>
-                                  </p>
-                              </div>
+              <a href="/item/resume/{{resume.id}}" ng-repeat="resume in resumes">
+                  <div class="list">
+                      <img src="/static/images/users/{{resume.photoPath}}" alt="">
+                      <div>
+                          <div class="fl">
+                              <p class="info">
+                              <span ng-bind="resume.name" class="name info-item"></span>
+                              <span ng-if="resume.gender == 'f'" class="info-item red">女</span>
+                              <span ng-if="resume.gender == 'm'" class="info-item light-green">男</span>
+                              <span ng-bind="(resume.age) + '岁'" class="info-item"></span>
+                              </p>
+                              <p class="intent">
+                              <span class="intent-title theme-color-bg">求职意向</span>
+                              <%--
+                              <span ng-repeat="i in resume.intend" ng-bind="i" class="intend-item"></span>
+                              --%>
+                              <span ng-bind="resume.intend.join('、')" class="intend-item"></span>
+                              </p>
+                          </div>
+                          <div class="fr">
+                              <p>
+                              <span ng-bind="resume.major"></span>
+                              </p>
+                              <p>
+                              <span class="time" ng-bind="resume.createdTime"></span>
+                              </p>
                           </div>
                       </div>
-                  </a>
+                  </div>
+              </a>
           </div>
           <div style="clear:both"></div>
           <div class="page">
