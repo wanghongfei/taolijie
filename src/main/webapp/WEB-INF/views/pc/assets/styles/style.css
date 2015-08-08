@@ -1549,6 +1549,27 @@ ul.bxslider li img {
 .index .shs, .shlist .shs {
     overflow: auto; }
 
+.shs .sh-cate{
+    color: #4ccda4;
+}
+.shs .sh-cate span{
+    border: 1px solid;
+    padding: 2px;
+    border-radius: 3px;
+    margin-left: 5px !important;
+}
+.shs .sh-info{
+    color: #9da4a5;
+    margin: 0 0 0 10px !important;
+    width: 170px !important;
+    height: auto;
+}
+.shs .sh-info span{
+    float: right;
+    margin: 0 !important;
+
+}
+
 .index .sh-slip, .shlist .sh-slip {
     margin-bottom: 20px;
     width: 261px;

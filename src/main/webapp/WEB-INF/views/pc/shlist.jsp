@@ -10,8 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-
-<%request.setCharacterEncoding("UTF-8") ;%>
+<%request.setCharacterEncoding("UTF-8");%>
 <%--html头部--%>
 
 
@@ -47,7 +46,8 @@
 </head>
 <body>
 <!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
 <![endif]-->
 
 
@@ -57,75 +57,87 @@
 <jsp:include page="block/header.jsp"/>
 
 <div class="container">
-    <style>.ng-cloak{display: none}</style>
+    <style>.ng-cloak {
+        display: none
+    }</style>
 
 
-  <%--轮播--%>
-  <jsp:include page="block/silder.jsp"/>
-  <%--侧边栏--%>
-  <jsp:include page="block/side.jsp"/>
+    <%--轮播--%>
+    <jsp:include page="block/silder.jsp"/>
+    <%--侧边栏--%>
+    <jsp:include page="block/side.jsp"/>
 
-  <!-- 正文 -->
+    <!-- 正文 -->
 
-      <div class="shlist main">
+    <div class="shlist main">
 
-          <ul class="nav-bar">
-              <li>热门推荐</li>
-              <li class="choose"><span class="choose-title" data-default="新旧程度">新旧程度</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                  <div class="choose-menu" data-type="depreciationRate" >
-                      <span class="active">全部</span>
-                      <span>全新</span>
-                      <span>九成新</span>
-                      <span>八成新</span>
-                      <span>七成新</span>
-                      <span>六成新</span>
-                  </div>
-              </li>
-              <li class="choose"><span class="choose-title" data-default="价格筛选">价格筛选</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                  <div class="choose-menu menu2" data-type="price" >
-                      <span class="active">全部</span>
-                      <span data-min="0" data-max="10">￥0-10</span>
-                      <span data-min="10" data-max="50">￥10-50</span>
-                      <span data-min="50" data-max="100">￥50-100</span>
-                      <span data-min="100" data-max="500">￥100-500</span>
-                      <span data-min="500" data-max="1000">￥500-1000</span>
-                      <span data-min="1000" data-max="5000">￥1000-5000</span>
-                      <span data-min="5000" data-max="5000">￥5000以上</span>
-                  </div>
-              </li>
-          </ul>
-          <div class="shs">
-              <span class="loading-page"></span>
-              <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" ng-cloak class="ng-cloak" style="color: #333333">
-                  <div class="sh-slip fl" ng-class="" >
-                      <img src="/static/images/users/{{sh.picturePath}}" data-pid="{{sh.picturePath}}" alt="" class="sh-item">
-                      <p class="titile">{{sh.title | omit:'12'}}</p>
-                      <div class="fl">
-                          <p class="sh-cate">{{sh.category.name}}<span>九成新</span></p>
-                          <p class="sh-info">{{sh.member.username}}<span ng-bind="sh.postTime | dateShow"></span></p>
-                      </div>
-                      <span class="fr">￥{{sh.sellPrice}}</span>
-                  </div>
-              </a>
-          </div>
+        <ul class="nav-bar">
+            <li>热门推荐</li>
+            <li class="choose"><span class="choose-title" data-default="新旧程度">新旧程度</span>&nbsp;&nbsp;&nbsp;&nbsp;<i
+                    class="fa fa-caret-down"></i>
 
-          <div style="clear:both"></div>
+                <div class="choose-menu" data-type="depreciationRate">
+                    <span class="active">全部</span>
+                    <span>全新</span>
+                    <span>九成新</span>
+                    <span>八成新</span>
+                    <span>七成新</span>
+                    <span>六成新</span>
+                </div>
+            </li>
+            <li class="choose"><span class="choose-title" data-default="价格筛选">价格筛选</span>&nbsp;&nbsp;&nbsp;&nbsp;<i
+                    class="fa fa-caret-down"></i>
 
-          <div class="page">
-              <ul>
-                  <c:if test="${page != 1 && pageStatus !=0}">
-                      <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
-                  </c:if>
-                  <c:if test="${pageStatus == 2}">
-                      <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
-                  </c:if>
-                  <c:if test="${pageStatus == 0 }">
-                      <h2>没有更多了</h2>
-                  </c:if>
-              </ul>
-          </div>
+                <div class="choose-menu menu2" data-type="price">
+                    <span class="active">全部</span>
+                    <span data-min="0" data-max="10">￥0-10</span>
+                    <span data-min="10" data-max="50">￥10-50</span>
+                    <span data-min="50" data-max="100">￥50-100</span>
+                    <span data-min="100" data-max="500">￥100-500</span>
+                    <span data-min="500" data-max="1000">￥500-1000</span>
+                    <span data-min="1000" data-max="5000">￥1000-5000</span>
+                    <span data-min="5000" data-max="5000">￥5000以上</span>
+                </div>
+            </li>
+        </ul>
+        <div class="shs">
+            <span class="loading-page"></span>
+            <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" ng-cloak class="ng-cloak" style="color: #333333">
+                <div class="sh-slip fl" ng-class="">
+                    <div class="shs_pic">
+                        <img src="/static/images/users/{{sh.picturePath}}" data-pid="{{sh.picturePath}}" alt=""
+                             class="sh-item">
+                    </div>
+                    <p class="titile">{{sh.title | omit:'12'}}</p>
 
-      </div>
+                    <div class="fl">
+                        <p class="sh-cate">{{sh.category.name}}<span ng-bind="sh.depreciationRate"></span></p>
+
+                        <p class="sh-info">{{sh.tradePlace | omit:'6'}}<span ng-bind="sh.postTime | dateShow"></span>
+                        </p>
+                    </div>
+                    <span class="fr">￥{{sh.sellPrice}}</span>
+                </div>
+            </a>
+        </div>
+
+        <div style="clear:both"></div>
+
+        <div class="page">
+            <ul>
+                <c:if test="${page != 1 && pageStatus !=0}">
+                    <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
+                </c:if>
+                <c:if test="${pageStatus == 2}">
+                    <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
+                </c:if>
+                <c:if test="${pageStatus == 0 }">
+                    <h2>没有更多了</h2>
+                </c:if>
+            </ul>
+        </div>
+
+    </div>
 </div>
 
 <%--脚部--%>
