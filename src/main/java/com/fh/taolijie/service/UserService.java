@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.constant.OperationType;
+import com.fh.taolijie.controller.dto.CreditsInfo;
 
 /**
  * 规定与用户业务逻辑相关操作
@@ -49,6 +50,13 @@ public interface UserService {
      * @return
      */
     boolean isSHPostAlreadyLiked(Integer memId, Integer shId);
+
+    /**
+     * 查询积分信息
+     * @param memberId
+     * @return
+     */
+    CreditsInfo queryCreditsInfo(Integer memberId);
 
     /**
      * 加减分

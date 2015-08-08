@@ -7,10 +7,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ControllerHelper;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.TimeUtil;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -215,7 +212,8 @@ public class UJobController {
         if (job.getJobPostCategoryId() != null) {
             jobPostService.addJobPost(job);
             // 加分
-            //userService.changeCredits(mem.getId(), OperationType.POST, 0);
+            Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+            //LogUtils.getInfoLogger().info("---new credits:{}, level:{}", credits, userService.queryLevel(credits));
         } else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
@@ -358,6 +356,10 @@ public class UJobController {
         }
 
         userService.likeJobPost(userId, jobId);
+
+        // 加分
+        MemberModel mem = jobPostService.findJobPost(jobId).getMember();
+        userService.changeCredits(mem.getId(), OperationType.FAV, mem.getCredits());
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

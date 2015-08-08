@@ -27,7 +27,8 @@
         <result column="mem_reset_password_token" property="resetPasswordToken" jdbcType="VARCHAR"/>
         <result column="mem_last_token_date" property="lastTokenDate" jdbcType="DATE"/>
         <result column="mem_school_organization" property="schoolOrganization" jdbcType="VARCHAR"/>
-        <result column="mem_creadits" property="creadits" jdbcType="INTEGER"/>
+        <result column="mem_credits" property="credits" jdbcType="INTEGER"/>
+        <result column="mem_user_level" property="userLevel" jdbcType="VARCHAR"/>
 
         <result column="mem_student_id" property="studentId" jdbcType="LONGVARCHAR"/>
         <result column="mem_block_list" property="blockList" jdbcType="LONGVARCHAR"/>
@@ -45,23 +46,31 @@
 
         <collection property="roleList" resultMap="com.fh.taolijie.dao.mapper.RoleModelMapper.BaseResultMap"/>
     </resultMap>
+
+    <resultMap id="credits_info" type="com.fh.taolijie.controller.dto.CreditsInfo">
+        <result column="credits" property="credits" jdbcType="INTEGER" />
+        <result column="user_level" property="level" jdbcType="VARCHAR" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender, verified AS mem_verified, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
         qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, created_time AS mem_created_time, valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
-        last_post_time AS mem_last_post_time, reset_password_token AS mem_reset_password_token, last_token_date AS mem_last_token_date, school_organization AS mem_school_organization, creadits AS mem_creadits,
+        last_post_time AS mem_last_post_time, reset_password_token AS mem_reset_password_token, last_token_date AS mem_last_token_date, school_organization AS mem_school_organization, credits AS mem_credits,
         student_id AS mem_student_id, block_list AS mem_block_list, applied_job_ids AS mem_applied_job_ids, liked_job_ids AS mem_liked_job_ids, liked_sh_ids AS mem_liked_sh_ids, favorite_job_ids AS mem_favorite_job_ids,
         favorite_sh_ids AS mem_favorite_sh_ids, favorite_resume_ids AS mem_favorite_resume_ids,read_global_noti_ids AS mem_read_global_noti_ids,
         last_sh_date AS mem_last_sh_date,
-        last_job_date AS mem_last_job_date
+        last_job_date AS mem_last_job_date,
+        user_level AS mem_user_level
     </sql>
     <sql id="member_column">
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
-        mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.creadits AS mem_creadits,
+        mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids, mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids, mem.favorite_job_ids AS mem_favorite_job_ids,
         mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids,
         mem.last_sh_date AS mem_last_sh_date,
-        mem.last_job_date AS mem_last_job_date
+        mem.last_job_date AS mem_last_job_date,
+        mem.user_level AS mem_user_level
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
@@ -69,9 +78,10 @@
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid,
         mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id,
-        mem.last_post_time AS mem_last_post_time, mem.school_organization AS mem_school_organization, mem.creadits AS mem_creadits,
+        mem.last_post_time AS mem_last_post_time, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids,
-        mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids, mem.favorite_job_ids AS mem_favorite_job_ids
+        mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids, mem.favorite_job_ids AS mem_favorite_job_ids,
+        mem.user_level AS mem_user_level
 
     </sql>
 
@@ -529,6 +539,16 @@
             member mem
     </select>
 
+    <select id="queryCreditsInfo" resultMap="credits_info">
+        SELECT
+            credits AS credits,
+            user_level AS user_level
+        FROM
+            member
+        WHERE
+            id = #{memberId}
+    </select>
+
     <update id="validMemberById">
         UPDATE member
         SET valid = #{valid}
@@ -546,7 +566,8 @@
         UPDATE
             member
         SET
-            creadits = creadits + #{value}
+            credits = credits + #{value},
+            user_level = #{newLevel}
         WHERE
             id = #{memId}
     </update>

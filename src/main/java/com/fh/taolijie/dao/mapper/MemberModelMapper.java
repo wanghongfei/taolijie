@@ -1,5 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.controller.dto.CreditsInfo;
 import com.fh.taolijie.domain.MemberModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -69,10 +70,11 @@ public interface MemberModelMapper {
     List<MemberModel> getMemberList(Map<String, Integer> pageMap);
     long countGetMemberList();
 
+    CreditsInfo queryCreditsInfo(Integer memberId);
 
     void validMemberById(@Param("memberId") Integer memberId, @Param("valid") boolean valid);
 
     MemberModel findByEmail(String email);
 
-    void addCredits(@Param("memId") Integer memId, @Param("value") int value);
+    void addCredits(@Param("memId") Integer memId, @Param("value") int value, @Param("newLevel") String newLevel);
 }
