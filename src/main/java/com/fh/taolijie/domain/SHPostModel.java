@@ -88,6 +88,14 @@ public class SHPostModel extends Pageable {
     private MemberModel member;
     private SHPostCategoryModel category;
 
+
+    // 以下参数仅查询用
+    private Integer rangeQuery = 0; //是否根据价格范围查询. 0:否, 1:是
+    private Integer minPrice;
+    private Integer maxPrice;
+
+
+
     public SHPostCategoryModel getCategory() {
         return category;
     }
@@ -126,6 +134,30 @@ public class SHPostModel extends Pageable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRangeQuery() {
+        return rangeQuery;
+    }
+
+    public void setRangeQuery(Integer rangeQuery) {
+        this.rangeQuery = rangeQuery;
+    }
+
+    public Integer getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Integer minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public Integer getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(Integer maxPrice) {
+        this.maxPrice = maxPrice;
     }
 
     public String getContactName() {
