@@ -1556,6 +1556,10 @@ ul.bxslider li img {
     background-color: #fff;
     margin-right: 13px;
     overflow: hidden; }
+.shlist .sh-slip{
+    margin-left:13px;
+    margin-right: 0px;
+}
 .index .sh-slip img, .shlist .sh-slip img {
     width: 100%;
     height: 194px;
@@ -1616,7 +1620,11 @@ ul.bxslider li img {
 .joblist .lists, .resumelist .lists {
     position: relative;
     background-color: #fff; }
-.joblist .lists .loading-page::before,.joblist .lists .loading-page::after{
+.shlist .shs{
+    position: relative;
+}
+.joblist .lists .loading-page::before,.joblist .lists .loading-page::after,
+.shlist .shs .loading-page::before,.shlist .shs .loading-page::after{
     position: absolute;
     top:150px;
 }
@@ -1707,9 +1715,9 @@ ul.bxslider li img {
 
 
 .shlist .nav-bar {
-    background-color: #5fc4a4; }
+    background-color: #52dbaf; }
 .shlist .nav-bar > li {
-    border-left: #56b396 solid 1px;
+    border-left: #52dbaf solid 1px;
     border-right: #6ac7aa solid 1px; }
 
 /*sh相关部分css放在index.scss中*/

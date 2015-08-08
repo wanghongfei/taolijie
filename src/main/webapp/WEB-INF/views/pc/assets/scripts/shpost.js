@@ -3,8 +3,27 @@
  */
 
 $(".submit-btn").click(function(){
-    $.tlj.postForm('#ShPostForm', location.pathname, function(){
-        location.href = '/user/sh/mypost';
+    var title = document.querySelector("input[name=title]"); //少于20字
+    var description = document.querySelector("textarea[name=description]"); //15字以上
+    var msg = '';
+
+    if(title.value.length > 20) {
+        msg = '长度在20字以内';
+    }
+    title.setCustomValidity(msg);
+
+    if(description.value.length < 15) {
+        msg = '长度应在15字以上';
+    }
+    description.setCustomValidity(msg);
+
+    $.tlj.postForm('#ShPostForm', location.pathname, function(data){
+        console.log(data);
+        if(data.result){
+            location.href = '/user/sh/mypost';
+        }else{
+            alert("表单提交失败...");
+        }
     });
 });
 

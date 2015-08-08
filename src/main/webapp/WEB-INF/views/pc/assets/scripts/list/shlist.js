@@ -1,25 +1,23 @@
 /**
  *
- * Created by wyn on 15-7-24.
+ * Created by wyn on 15-8-8.
  */
 
-var $ctrlScope;
 var searchObj = {};
+var url = "/api/sh/filter";
 var maxSize = 8;
 var currPageNumber = 0;
-var url = "/api/job/filter";
+var $ctrlScope;
 
-var $loading = $(".lists .loading-page");
+var $loading = $(".shlist .shs .loading-page");
 $loading.show();
-tlj.controller('jobListCtrl', function($scope, $http) {
-
+tlj.controller('ShListCtrl', function($scope, $http) {
     $ctrlScope = $scope;
-
     var param = urlToObj(window.location.search);
     if(param.cate){
-        searchObj['jobPostCategoryId'] = param.cate;
+        searchObj['secondHandPostCategoryId'] = param.cate;
     }else{
-        delete searchObj['jobPostCategoryId'];
+        delete searchObj['secondHandPostCategoryId'];
     }
 
     //初次加载
@@ -42,26 +40,26 @@ tlj.controller('jobListCtrl', function($scope, $http) {
             currPageNumber +=1;
             searchObj['pageNumber'] = currPageNumber;
             $(document.body).animate({'scrollTop':160},200);
-           // $loading.show();
+            // $loading.show();
             search(url, searchObj,function(data){
                 if(data.ok){
                     $scope.list = data.data.list;
                     $scope.$digest();
                 }
-            //    $loading.hide();
+                //    $loading.hide();
             });
         }else{ //上一页
             if(currPageNumber > 0){
                 currPageNumber -= 1;
                 searchObj['pageNumber'] = currPageNumber;
                 $(document.body).animate({'scrollTop':160},200);
-             //   $loading.show();
+                //   $loading.show();
                 search(url, searchObj,function(data){
                     if(data.ok){
                         $scope.list = data.data.list;
                         $scope.$digest();
                     }
-              //      $loading.hide();
+                    //      $loading.hide();
                 });
             }
         }
@@ -76,10 +74,4 @@ tlj.controller('jobListCtrl', function($scope, $http) {
 
 
 });
-
-
-
-
-
-
 
