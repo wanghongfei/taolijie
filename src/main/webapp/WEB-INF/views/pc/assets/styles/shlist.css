@@ -8,30 +8,18 @@
 .shlist .shs .sh-slip:hover{
     background-color: #F1F1F1;
 }
+.shlist .shs .sh-slip .shs-pic{
+    overflow: hidden;
+}
+.shlist .shs .sh-slip:hover img{
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+}
 .main .nav-bar .choose-menu.menu2 span{
     width: 49%;
     text-align: left;
     padding-left: 20px;
 }
-.shs .sh-cate{
-    color: #4ccda4;
-}
-.shs .sh-cate span{
-    border: 1px solid;
-    padding: 2px;
-    border-radius: 3px;
-    margin-left: 5px !important;
-}
-.shs .sh-info{
-    color: #9da4a5;
-    margin: 0 0 0 10px !important;
-    width: 160px !important;
-    height: auto;
-}
-.shs .sh-info span{
-    float: right;
-    margin: 0 !important;
 
-}
 
 
