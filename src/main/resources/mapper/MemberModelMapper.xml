@@ -123,7 +123,7 @@
         created_time, valid, complaint,
         profile_photo_id, auto_login_identifier, last_post_time,
         reset_password_token, last_token_date, school_organization,
-        creadits, student_id, block_list,
+        credits, student_id, block_list,
         applied_job_ids, liked_job_ids, liked_sh_ids,
         favorite_job_ids, favorite_sh_ids,
         favorite_resume_ids, read_global_noti_ids)
@@ -134,7 +134,7 @@
         #{createdTime,jdbcType=DATE}, #{valid,jdbcType=BIT}, #{complaint,jdbcType=INTEGER},
         #{profilePhotoId,jdbcType=INTEGER}, #{autoLoginIdentifier,jdbcType=VARCHAR}, #{lastPostTime,jdbcType=DATE},
         #{resetPasswordToken,jdbcType=VARCHAR}, #{lastTokenDate,jdbcType=DATE}, #{schoolOrganization,jdbcType=VARCHAR},
-        #{creadits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
+        #{credits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
         #{appliedJobIds,jdbcType=LONGVARCHAR}, #{likedJobIds,jdbcType=LONGVARCHAR}, #{likedShIds,jdbcType=LONGVARCHAR},
         #{favoriteJobIds,jdbcType=LONGVARCHAR}, #{favoriteShIds,jdbcType=LONGVARCHAR},
         #{favoriteResumeIds,jdbcType=LONGVARCHAR}, #{readSysNotificationIds})
@@ -209,8 +209,8 @@
             <if test="schoolOrganization != null">
                 school_organization,
             </if>
-            <if test="creadits != null">
-                creadits,
+            <if test="credits != null">
+                credits,
             </if>
             <if test="studentId != null">
                 student_id,
@@ -301,8 +301,8 @@
             <if test="schoolOrganization != null">
                 #{schoolOrganization,jdbcType=VARCHAR},
             </if>
-            <if test="creadits != null">
-                #{creadits,jdbcType=INTEGER},
+            <if test="credits != null">
+                #{credits,jdbcType=INTEGER},
             </if>
             <if test="studentId != null">
                 #{studentId,jdbcType=LONGVARCHAR},
@@ -403,8 +403,8 @@
             <if test="schoolOrganization != null">
                 school_organization = #{schoolOrganization,jdbcType=VARCHAR},
             </if>
-            <if test="creadits != null">
-                creadits = #{creadits,jdbcType=INTEGER},
+            <if test="credits != null">
+                credits = #{credits,jdbcType=INTEGER},
             </if>
             <if test="studentId != null">
                 student_id = #{studentId,jdbcType=LONGVARCHAR},
@@ -465,7 +465,7 @@
         reset_password_token = #{resetPasswordToken,jdbcType=VARCHAR},
         last_token_date = #{lastTokenDate,jdbcType=DATE},
         school_organization = #{schoolOrganization,jdbcType=VARCHAR},
-        creadits = #{creadits,jdbcType=INTEGER},
+        credits = #{credits,jdbcType=INTEGER},
         student_id = #{studentId,jdbcType=LONGVARCHAR},
         block_list = #{blockList,jdbcType=LONGVARCHAR},
         applied_job_ids = #{appliedJobIds,jdbcType=LONGVARCHAR},

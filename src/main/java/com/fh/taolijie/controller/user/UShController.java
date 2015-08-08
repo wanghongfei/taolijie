@@ -527,7 +527,7 @@ public class UShController {
         userService.likeSHPost(credential.getId(), id);
         // 加分
         MemberModel mem = shPostService.findPost(id).getMember();
-        userService.changeCredits(mem.getId(), OperationType.FAV, mem.getCredits());
+        userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
 
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();

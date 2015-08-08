@@ -815,7 +815,7 @@
 
     <update id="increaseLike">
         UPDATE second_hand_post
-        SET likes = likes + 1
+            SET likes = likes + 1
         WHERE id = #{postId}
     </update>
 
