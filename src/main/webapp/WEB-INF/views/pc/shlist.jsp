@@ -16,7 +16,7 @@
 
 
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="tljApp" ng-controller="ShListCtrl">
 <head>
     <meta charset="utf-8">
     <title>二手列表</title>
@@ -32,6 +32,7 @@
     <!-- build:css({.tmp,app}) /styles/css/style.css -->
     <link rel="stylesheet" href="/styles/animate.css"/>
     <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/shlist.css "/>
     <%--图片上传美化--%>
     <link rel="stylesheet" href="/styles/webuploader.css"/>
     <!-- endbuild -->
@@ -56,6 +57,7 @@
 <jsp:include page="block/header.jsp"/>
 
 <div class="container">
+    <style>.ng-cloak{display: none}</style>
 
 
   <%--轮播--%>
@@ -66,37 +68,45 @@
   <!-- 正文 -->
 
       <div class="shlist main">
+
           <ul class="nav-bar">
-              <li>最新发布</li>
-              <li>最热二手</li>
-              <li class="choose">结算方式&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
-                  <div class="choose-menu">
-                      <ul>
-                          <li class="actived">全部</li>
-                          <li>日结</li>
-                          <li>周结</li>
-                          <li class="no-border">月结</li>
-                      </ul>
+              <li>热门推荐</li>
+              <li class="choose"><span class="choose-title" data-default="新旧程度">新旧程度</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                  <div class="choose-menu" data-type="depreciationRate" >
+                      <span class="active">全部</span>
+                      <span>全新</span>
+                      <span>九成新</span>
+                      <span>八成新</span>
+                      <span>七成新</span>
+                      <span>六成新</span>
+                  </div>
+              </li>
+              <li class="choose"><span class="choose-title" data-default="价格筛选">价格筛选</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"></i>
+                  <div class="choose-menu menu2" data-type="price" >
+                      <span class="active">全部</span>
+                      <span data-min="0" data-max="10">￥0-10</span>
+                      <span data-min="10" data-max="50">￥10-50</span>
+                      <span data-min="50" data-max="100">￥50-100</span>
+                      <span data-min="100" data-max="500">￥100-500</span>
+                      <span data-min="500" data-max="1000">￥500-1000</span>
+                      <span data-min="1000" data-max="5000">￥1000-5000</span>
+                      <span data-min="5000" data-max="5000">￥5000以上</span>
                   </div>
               </li>
           </ul>
-
           <div class="shs">
-              <c:forEach var="sh" items="${shs}" varStatus="status">
-                  <a href="/item/sh/${sh.id}" style="color: #333333">
-                      <div class="sh-slip fl ${(status.index+1)%3 == 0 ? 'no-margin-right':''}" >
-                          <img src="" data-pid="${sh.picturePath}" alt="" class="sh-item">
-                          <p class="titile">${sh.title}</p>
-                          <div class="fl">
-                              <p>${sh.category.name}</p>
-                              <span>${sh.member.username}</span>
-                              <%--换成member的role--%>
-                              <%--<span class="theme-color">1</span>--%>
-                          </div>
-                          <span class="fr">￥${sh.sellPrice.intValue()}</span>
+              <span class="loading-page"></span>
+              <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" ng-cloak class="ng-cloak" style="color: #333333">
+                  <div class="sh-slip fl" ng-class="" >
+                      <img src="/static/images/users/{{sh.picturePath}}" data-pid="{{sh.picturePath}}" alt="" class="sh-item">
+                      <p class="titile">{{sh.title | omit:'12'}}</p>
+                      <div class="fl">
+                          <p class="sh-cate">{{sh.category.name}}<span>九成新</span></p>
+                          <p class="sh-info">{{sh.member.username}}<span ng-bind="sh.postTime | dateShow"></span></p>
                       </div>
-                  </a>
-              </c:forEach>
+                      <span class="fr">￥{{sh.sellPrice}}</span>
+                  </div>
+              </a>
           </div>
 
           <div style="clear:both"></div>
@@ -116,13 +126,14 @@
           </div>
 
       </div>
-
-
 </div>
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-<script src="/scripts/sh-pic.js"></script>
+<script src="/scripts/angular/filter.js"></script>
+<%--<script src="/scripts/sh-pic.js"></script>--%>
+<script src="/scripts/list/listoperate.js"></script>
+<script src="/scripts/list/shlist.js"></script>
 </body>
 </html>
 

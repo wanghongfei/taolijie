@@ -61,35 +61,55 @@
       </ul>
       <div class="clearfix"></div>
   </div>
+      <style>
+        .form-control {
+          height: 40px;
+          font-size: 16px;
+
+        }
+        .user .submit-btn:hover{
+          background-color: #4bc39a !important;
+        }
+      </style>
   <div class="segment end-segment">
     <p class="pin-title dark-green-bg ">二手物品介绍
       <i class="pin-arrow  dark-green-arrow"></i>
     </p>
       <div class="form-group">
         <label for="">标题<span class="theme-color">*</span></label>
-        <input name="title" type="text" class="form-control" value="${sh.title}" placeholder="请填写物品名称" required>
+        <input name="title" type="text" class="form-control large-input" value="${sh.title}" placeholder="请填写物品名称，20字以内" required>
       </div>
       <div class="form-group">
         <label for="">商品分类<span class="theme-color">*</span></label>
-        <select name="secondHandPostCategoryId" required>
-          <option value="">选择分类</option>
+        <select name="secondHandPostCategoryId" class="form-control short-input" required>
+          <option value="">请选择分类</option>
           <c:forEach items="${cates}" var="cate">
             <option value="${cate.id}" ${sh.secondHandPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
           </c:forEach>
         </select>
       </div>
+    <div class="form-group">
+      <label for="">新旧程度<span class="theme-color">*</span></label>
+      <select name="depreciationRate" class="form-control short-input" required>
+        <option value="全新">全新</option>
+        <option value="九成新">九成新</option>
+        <option value="八成新">八成新</option>
+        <option value="七成新">七成新</option>
+        <option value="六成新">六成新</option>
+      </select>
+    </div>
       <div class="form-group">
         <label for="">价格<span class="theme-color">*</span></label>
-        <input name="sellPrice" type="number" class="form-control short-input" value="${sh.sellPrice}" required>
-        <span class="input-unit">元</span>
+        <input name="sellPrice" type="number" class="form-control short-input" value="${sh.sellPrice}" placeholder="输入有效数字" required>
+        <span class="input-unit">&nbsp;&nbsp;&nbsp;元</span>
       </div>
       <div class="form-group">
         <label for="">商品描述<span class="theme-color">*</span></label>
-        <textarea name="description" class="form-control" placeholder="如：2015年1月购买，九成新……" required>${sh.description}</textarea>
+        <textarea name="description" class="form-control large-input" placeholder="建议填写物品用途、新旧程度、原价等信息，15字以上" required>${sh.description}</textarea>
       </div>
       <div class="form-group">
         <label for="">交易地点<span class="theme-color">*</span></label>
-        <input name="tradePlace" type="text" class="form-control" value="${sh.tradePlace}" required>
+        <input name="tradePlace" type="text" class="form-control large-input" value="${sh.tradePlace}" placeholder="例如:宿舍、教学楼等" required>
       </div>
 
     <p class="pin-title dark-green-bg ">联系方式
@@ -98,15 +118,15 @@
 
       <div class="form-group">
         <label for="">联系人<span class="theme-color">*</span></label>
-        <input type="text" class="form-control" name="contactName" value="${sh.contactName}" required>
+        <input type="text" class="form-control medium-input" name="contactName" value="${sh.contactName}" placeholder="请输入联系人的姓名" required>
       </div>
       <div class="form-group">
         <label for="">手机号<span class="theme-color">*</span></label>
-        <input type="text" class="form-control" name="contactPhone" value="${job.contactPhone}" required pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
+        <input type="text" class="form-control medium-input" name="contactPhone" value="${job.contactPhone}" required placeholder="请输入联系人的手机号" pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>
-        <input type="number" class="form-control medium-input" name="contactQq" value="${sh.contactQq}">
+        <input type="number" class="form-control medium-input" name="contactQq" value="${sh.contactQq}" placeholder="请输入您的QQ号">
       </div>
 
     <div class="segment">

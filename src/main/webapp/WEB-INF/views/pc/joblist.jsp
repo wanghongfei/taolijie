@@ -16,7 +16,7 @@
 
 
 <!doctype html>
-<html class="no-js" ng-app="tljApp" ng-controller="jobDetailCtrl">
+<html class="no-js" ng-app="tljApp" ng-controller="jobListCtrl">
 <head>
     <meta charset="utf-8">
     <title>兼职</title>
@@ -98,7 +98,7 @@
         <div class="lists">
             <span class="loading-page"></span>
 
-            <style ng-repeat-start="job in jobList">
+            <style ng-repeat-start="job in list">
                 .list[data-color="{{job.category.themeColor}}"] .list-type{
                     background-color:{{job.category.themeColor}};
                 }
@@ -124,38 +124,6 @@
                     <span class="right-span" ng-bind="job.timeToPay"></span>
                 </div>
             </a>
-
-
-
-
-          <%--  <c:forEach var="job" items="${jobs}" varStatus="status">
-                <style>
-                    .list[data-color="${job.category.themeColor}"] .list-type{
-                        background-color: ${job.category.themeColor};
-                    }
-                    .list[data-color="${job.category.themeColor}"]:hover .list-type{
-                        background-color: #fff;
-                        border: 2px solid  ${job.category.themeColor};
-                    }
-                    .list[data-color="${job.category.themeColor}"]:hover .list-type span{
-                        color: ${job.category.themeColor};
-                    }
-                </style>
-                <a href="/item/job/${job.id}" style="color: #353f4f">
-                    <div class="list " data-color="${job.category.themeColor}">
-                        <div class="list-type">
-                            <span>${job.category.name}</span>
-                        </div>
-                        <div class="list-title">${job.title}
-                            <span class="right-span">￥${job.wage}元/${job.salaryUnit}</span>
-                        </div>
-                        <span class="workplace"><i class="fa fa-map-marker"></i> ${job.region}</span>&nbsp;&nbsp;
-                        <span><i class="fa fa-clock-o"></i> <fmt:formatDate value="${job.postTime}"
-                                                                            pattern="yyyy-MM-dd HH:mm:ss"/></span>
-                        <span class="right-span">${job.timeToPay}</span>
-                    </div>
-                </a>
-            </c:forEach>--%>
         </div>
         <div style="clear:both"></div>
         <div class="page">
@@ -164,17 +132,6 @@
                 <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(true)" ng-if="nextPage()" href="javascript:;">下一页</a></li>
             </ul>
             </li>
-            <%--<ul>--%>
-            <%--<c:if test="${page != 1 && pageStatus !=0}">--%>
-            <%--<li><a class="next" href="/list/job?page=${page-1}">上一页</a></li>--%>
-            <%--</c:if>--%>
-            <%--<c:if test="${pageStatus == 2}">--%>
-            <%--<li><a class="next" href="/list/job?page=${page+1}">下一页</a></li>--%>
-            <%--</c:if>--%>
-            <%--<c:if test="${pageStatus == 0 }">--%>
-            <%--<h2>没有更多了</h2>--%>
-            <%--</c:if>--%>
-            <%--</ul>--%>
         </div>
     </div>
 
@@ -184,6 +141,8 @@
 <%--脚部--%>
 
 <jsp:include page="block/footer.jsp"/>
+<script src="/scripts/list/listoperate.js"></script>
 <script src="/scripts/joblist.js"></script>
+
 </body>
 </html>
