@@ -511,7 +511,7 @@ public class UShController {
      */
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String like(@PathVariable Integer id,HttpSession session){
+    public String like(@PathVariable Integer id, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
@@ -525,6 +525,11 @@ public class UShController {
 
         // like +1
         userService.likeSHPost(credential.getId(), id);
+        // 加分
+        MemberModel mem = shPostService.findPost(id).getMember();
+        userService.changeCredits(mem.getId(), OperationType.FAV, mem.getCredits());
+
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
