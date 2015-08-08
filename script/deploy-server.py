@@ -5,17 +5,28 @@ import sys
 import os
 import thread
 import time
+import logging
 
 import BaseHTTPServer
 import subprocess
-import logging
 import json
+import redis
 
 # 配置logger
 FORMAT = "%(asctime)-15s %(message)s"
 CUR_TIME = time.strftime('%Y-%m-%d', time.localtime(time.time()))
 logging.basicConfig(filename="/data/taolijie/scripts-log/deploy-server.log", format=FORMAT, level=logging.DEBUG)
 #logging.basicConfig(filename="deploy-server_%s.log" % CUR_TIME, format=FORMAT, level=logging.DEBUG)
+
+
+# 刷新Redis cache
+def flush_redis():
+    REDIS_HOST = '127.0.0.1'
+    REDIS_PASSWORD = '111111'
+    REDIS_PORT = 6379
+
+    conn = redis.Redis(REDIS_HOST, REDIS_PORT, password=REDIS_PASSWORD)
+    conn.flushall()
 
 
 # 该函数用于执行外部命令来部署工程
@@ -36,6 +47,11 @@ def deploy():
             # 两次都失败，拉倒
             logging.error('deploy failed again, abort!')
             return
+
+    # flush redis
+    logging.info('flushing redis')
+    flush_redis()
+    logging.info('done flushing')
 
     logging.info('deployment finished without error')
 
