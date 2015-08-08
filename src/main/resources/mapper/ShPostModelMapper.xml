@@ -679,7 +679,7 @@
             </if>
 
             <!-- 开启了价格范围查询 -->
-            <if test="rangeQuery == true">
+            <if test="rangeQuery == 1">
                 <![CDATA[
                 AND (post.sell_price >= #{minPrice} AND post.sell_price <= #{maxPrice})
                 ]]>
