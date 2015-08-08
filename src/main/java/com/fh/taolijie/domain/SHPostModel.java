@@ -567,6 +567,9 @@ public class SHPostModel extends Pageable {
         sb.append(", contactPhone='").append(contactPhone).append('\'');
         sb.append(", member=").append(member);
         sb.append(", category=").append(category);
+        sb.append(", queryRange=").append(rangeQuery);
+        sb.append(", minPrice=").append(minPrice);
+        sb.append(", maxPrice=").append(maxPrice);
         sb.append('}');
         sb.append(pageNumber);
         sb.append(pageSize);
