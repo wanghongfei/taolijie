@@ -633,6 +633,35 @@
         </where>
     </select>
 
+    <select id="filterByIntendAndGender" resultMap="BaseResultMap">
+        SELECT
+            <include refid="resume_column" />,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.less_member_column"></include>
+        FROM
+            resume re
+                INNER JOIN member mem ON mem.id = re.member_id
+        WHERE
+            re.id IN (
+                SELECT resume_id FROM resume_job_post_category WHERE job_post_category_id = #{intendId}
+            )
+            AND re.gender = #{gender}
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFilterByIntendAndGender" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            resume re
+        WHERE
+            re.id IN (
+                SELECT resume_id FROM resume_job_post_category WHERE job_post_category_id = #{intendId}
+            )
+        AND
+            re.gender = #{gender}
+    </select>
+
     <select id="findByAuth" resultMap="BaseResultMap">
         SELECT
             <include refid="less_resume_column"/>,

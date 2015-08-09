@@ -63,6 +63,9 @@ public interface ResumeModelMapper {
     List<ResumeModel> findBy(ResumeModel model);
     long countFindBy(ResumeModel model);
 
+    List<ResumeModel> filterByIntendAndGender(@Param("intendId") Integer intendId, @Param("gender") String gender, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countFilterByIntendAndGender(@Param("intendId") Integer intendId, @Param("gender") String gender);
+
     List<ResumeModel> findByAuth(@Param("authList") List<String> authList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     long countFindByAuth(@Param("authList") List<String> authList);
 
