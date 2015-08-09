@@ -121,8 +121,7 @@
                                         <c:out value="${sh.tradePlace}"/>
                                     </c:otherwise>
                                 </c:choose>
-                                <span class="theTime">
-                                    <fmt:formatDate value="${sh.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <span class="theTime" data-time="<fmt:formatDate value="${sh.postTime}" pattern="yyyy-MM-dd HH:mm:ss"/>">
                                 </span>
                             </p>
                         </div>
@@ -180,9 +179,7 @@
 
         function formatTime($this){
             var nowTime = new Date().getTime();
-            console.log($this.text());
-            var post = new Date($this.text());
-            console.log(post);
+            var post = new Date($this.attr("data-time"));
             var nowDay = new Date().getDay();
             var time = nowTime - post.getTime();
             if (nowDay === post.getDay()) {

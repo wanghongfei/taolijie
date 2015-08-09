@@ -969,8 +969,11 @@ ul.bxslider li img {
     height: 60px;
     width: 100%;
     line-height: 60px;
-    color: #fff;
     position: relative; }
+.side .news p a{
+    color: #fff;
+}
+
 .side .news ul li {
     display: block;
     width: 163px;
@@ -1743,8 +1746,12 @@ ul.bxslider li img {
 
 /*sh相关部分css放在index.scss中*/
 .shlist .sh-slip {
-    margin-top: 20px !important;
-    margin-bottom: 0px; }
+    margin-top: 15px;
+    margin-bottom: 8px; }
+.index .sh-slip:hover, .shlist .sh-slip:hover{
+    -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
 .segment.user-top {
     margin-top: 20px;
