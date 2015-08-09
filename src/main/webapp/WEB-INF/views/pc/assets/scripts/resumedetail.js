@@ -1,10 +1,20 @@
-tlj.controller('resumeCtrl', function($scope) {
+tlj.controller('resumeCtrl', function($scope, $http) {
     $scope.resume = resume;
     $scope.postUser = postUser;
     $scope.isShow = isShow;
     $scope.intendJobs = intendJobs;
+
     $scope.fav = function() {
         fav();
+    }
+
+    $scope.del = function() {
+        $http.post('/user/resume/del')
+        .success(function(data) {
+            if(data.result){
+                location.reload();
+            }
+        })
     }
 });
 
