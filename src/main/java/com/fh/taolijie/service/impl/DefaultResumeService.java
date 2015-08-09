@@ -85,7 +85,7 @@ public class DefaultResumeService implements ResumeService {
         // 如果为空，直接返回空List
         // 继续执行会导致错误的SQL
         if (intendList.isEmpty()) {
-            return new ListResult<>();
+            return new ListResult<>(new ArrayList<>(), 0);
         }
 
         List<Integer> idList = intendList.stream().map(ApplicationIntendModel::getResumeId).collect(Collectors.toList());
