@@ -88,6 +88,8 @@ $(function () {
                 searchObj["minPrice"] = minPrice || "";
                 searchObj["maxPrice"] = maxPrice || "";
             }
+            delete searchObj['pageNumber'];
+            currPageNumber = 0;
         }
         else if(key!=null&&value!=null){
             //判断value为空的话从对象中移除改属性

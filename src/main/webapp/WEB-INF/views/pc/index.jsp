@@ -178,14 +178,13 @@
         });
 
         function formatTime($this){
-            var nowTime = new Date().getTime();
             var post = new Date($this.attr("data-time"));
-            var nowDay = new Date().getDay();
-            var time = nowTime - post.getTime();
+            var date = new Date();
+            var time = date.getTime() - post.getTime();
             if(time < 0){
                 return "1分钟前";
             }
-            if (nowDay === post.getDay()) {
+            if (date.getDate() === post.getDate() && time < 86400000) {
                 if (time < 60 * 60 * 1000) {
                     $this.text(Math.ceil(time / (60 * 1000)) + "分钟前");
                 } else {
@@ -193,7 +192,7 @@
                 }
 
             } else {
-                $this.text((post.getMonth() + 1) + "月" + post.getDay() + "日");
+                $this.text((post.getMonth() + 1) + "月" + post.getDate() + "日");
             }
         }
     })();
