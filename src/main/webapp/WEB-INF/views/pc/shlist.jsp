@@ -96,7 +96,7 @@
                     <span data-min="100" data-max="500">￥100-500</span>
                     <span data-min="500" data-max="1000">￥500-1000</span>
                     <span data-min="1000" data-max="5000">￥1000-5000</span>
-                    <span data-min="5000" data-max="5000">￥5000以上</span>
+                    <span data-min="5000">￥5000以上</span>
                 </div>
             </li>
         </ul>

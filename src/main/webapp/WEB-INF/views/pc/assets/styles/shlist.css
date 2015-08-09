@@ -5,9 +5,11 @@
     margin: 0 -20px 0 -13px;
 }
 
-.shlist .shs .sh-slip:hover{
-    background-color: #F1F1F1;
-}
+/*.shlist .shs .sh-slip:hover{*/
+    /*/!*background-color: #F1F1F1;*!/*/
+    /*-webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
+/*}*/
 .shlist .shs .sh-slip .shs-pic{
     overflow: hidden;
 }

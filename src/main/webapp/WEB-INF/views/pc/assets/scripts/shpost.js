@@ -5,6 +5,7 @@
 $(".submit-btn").click(function(){
     var title = document.querySelector("input[name=title]"); //少于20字
     var description = document.querySelector("textarea[name=description]"); //15字以上
+    var contactName = document.querySelector("input[name=contactName]");
     var msg = '';
 
     if(title.value.length > 20) {
@@ -16,6 +17,10 @@ $(".submit-btn").click(function(){
         msg = '长度应在15字以上';
     }
     description.setCustomValidity(msg);
+    if(contactName.value.length > 10){
+        msg = '联系人姓名不得超过10字';
+    }
+    contactName.setCustomValidity(msg);
 
     $.tlj.postForm('#ShPostForm', location.pathname, function(data){
         console.log(data);

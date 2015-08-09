@@ -85,8 +85,8 @@ $(function () {
                 var minPrice = $this.attr("data-min"),
                     maxPrice = $this.attr("data-max");
                 searchObj["rangeQuery"] = 1;
-                searchObj["minPrice"] = minPrice;
-                searchObj["maxPrice"] = maxPrice;
+                searchObj["minPrice"] = minPrice || "";
+                searchObj["maxPrice"] = maxPrice || "";
             }
         }
         else if(key!=null&&value!=null){
