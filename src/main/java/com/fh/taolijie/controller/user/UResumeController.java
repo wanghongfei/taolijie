@@ -3,12 +3,10 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
-import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.ApplicationIntendService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -45,6 +43,8 @@ public class UResumeController {
     JobPostCateService jobPostCateService;
     @Autowired
     ApplicationIntendService intendService;
+    @Autowired
+    UserService userService;
 
     /**
      * 创建简历 get
@@ -114,6 +114,8 @@ public class UResumeController {
         resume.setMemberId(mem.getId());
         resume.setCreatedTime(new Date());
         resumeService.addResume(resume);
+        // 加分
+        userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
 
 
         // 设置求职意向

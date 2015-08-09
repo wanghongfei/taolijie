@@ -2,12 +2,15 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.constant.RedisKey;
+import com.fh.taolijie.controller.dto.CreditsInfo;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.UserService;
+import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.StringUtils;
+import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -122,33 +125,27 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    public CreditsInfo queryCreditsInfo(Integer memberId) {
+        return memMapper.queryCreditsInfo(memberId);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public int changeCredits(Integer memberId, OperationType type, int oldCredits) {
         String valueString = (String) rt.opsForHash().get(RedisKey.CREDITS_OPERATION.toString(), type.toString());
-        int value = Integer.valueOf(valueString);
+        int valueToAdd = Integer.valueOf(valueString);
+        int newCredits = oldCredits + valueToAdd;
 
-        memMapper.addCredits(memberId, value);
+        String newLevel = queryLevel(newCredits);
+        memMapper.addCredits(memberId, valueToAdd, newLevel);
 
-        return oldCredits + value;
+        return newCredits;
     }
 
     @Override
     public String queryLevel(int credits) {
-        Map<Object, Object> map = rt.opsForHash().entries(RedisKey.CREDITS_LEVEL.toString());
+        Set<String> levelSet = rt.opsForZSet().rangeByScore(RedisKey.CREDITS_LEVEL.toString(), 0, credits);
 
-        Set<Map.Entry<Object, Object>> entrySet = map.entrySet();
-        for (Map.Entry<Object, Object> entry : entrySet) {
-            String key = (String) entry.getKey();
-            String[] valueStr = key.split("-");
-
-            int min = Integer.parseInt(valueStr[0]);
-            int max = Integer.parseInt(valueStr[1]);
-
-            if (credits >= min && credits <= max) {
-                return (String) entry.getValue();
-            }
-        }
-
-        return "LV0";
+        return CollectionUtils.findMax(levelSet);
     }
 }

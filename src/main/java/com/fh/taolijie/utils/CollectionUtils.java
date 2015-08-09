@@ -350,4 +350,24 @@ public class CollectionUtils {
         return null;
     }
 
+    /**
+     * 查找最大元素
+     * @param collection
+     * @param <T>
+     * @return
+     */
+    public static <T extends Comparable<T>> T findMax(Iterable<T> collection) {
+        T max = null;
+
+        Iterator<T> it = collection.iterator();
+        while (it.hasNext()) {
+            T obj = it.next();
+            if (null == max || max.compareTo(obj) < 0) {
+                max = obj;
+            }
+        }
+
+        return max;
+    }
+
 }

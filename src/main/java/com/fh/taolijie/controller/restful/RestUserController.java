@@ -1,8 +1,10 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.controller.dto.CreditsInfo;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class RestUserController {
     @Autowired
     AccountService accService;
+    @Autowired
+    UserService userService;
 
     /**
      * 根据用户名查询用户
@@ -42,6 +46,18 @@ public class RestUserController {
         mem.setPassword(null);
 
         return new ResponseText(mem);
+    }
+
+    /**
+     * 查询积分信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/{id}/levelInfo", produces = Constants.Produce.JSON)
+    public ResponseText queryCreditsInfo(@PathVariable Integer id) {
+        CreditsInfo info = userService.queryCreditsInfo(id);
+
+        return new ResponseText(info);
     }
 
 /*    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)

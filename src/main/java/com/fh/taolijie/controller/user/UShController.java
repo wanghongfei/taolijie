@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
@@ -204,6 +205,7 @@ public class UShController {
 
         if(shDto.getSecondHandPostCategoryId()!=null){
             shPostService.addPost(shDto);
+            userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
         }else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
@@ -509,7 +511,7 @@ public class UShController {
      */
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String like(@PathVariable Integer id,HttpSession session){
+    public String like(@PathVariable Integer id, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
@@ -523,6 +525,11 @@ public class UShController {
 
         // like +1
         userService.likeSHPost(credential.getId(), id);
+        // 加分
+        MemberModel mem = shPostService.findPost(id).getMember();
+        userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
+
+
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }
 
