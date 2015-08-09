@@ -31,7 +31,7 @@ tlj.filter('dateShow', function () {
         if(time < 0){
             return "1分钟前";
         }
-        if (date.getDay() === post.getDay() && time < 86400000) {
+        if (date.getDate() === post.getDate() && time < 86400000) {
             if (time < 60 * 60 * 1000) {
                 return Math.ceil(time / (60 * 1000)) + "分钟前";
             } else {
@@ -39,7 +39,7 @@ tlj.filter('dateShow', function () {
             }
 
         }else{
-            return (post.getMonth()+1)+"月"+post.getDay()+"日";
+            return (post.getMonth()+1)+"月"+post.getDate()+"日";
         }
 
 
