@@ -144,4 +144,10 @@
         WHERE
             name = #{name}
     </select>
+
+    <select id="isCategoryEmpty" resultType="boolean">
+        SELECT NOT EXISTS (
+            SELECT 1 FROM second_hand_post WHERE second_hand_post_category_id = #{cateId}
+        )
+    </select>
 </mapper>

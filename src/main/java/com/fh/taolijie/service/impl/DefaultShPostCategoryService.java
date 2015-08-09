@@ -53,6 +53,9 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteCategory(Integer cateId) throws CascadeDeleteException {
+        if (false == cateMapper.isCategoryEmpty(cateId)) {
+            throw new CascadeDeleteException("category is not empty!");
+        }
         cateMapper.deleteByPrimaryKey(cateId);
 
         return true;
