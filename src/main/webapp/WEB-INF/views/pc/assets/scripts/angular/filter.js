@@ -25,14 +25,13 @@ tlj.filter('omit', function () {
 tlj.filter('dateShow', function () {
     return function (date) {
         //如果是当天 显示几分钟前
-        var nowTime = new Date().getTime();
         var post = new Date(date);
-        var nowDay = new Date().getDay();
-        var time = nowTime- post.getTime() ;
+        var date= new Date();
+        var time =date.getTime() - post.getTime();
         if(time < 0){
             return "1分钟前";
         }
-        if (nowDay === post.getDay()) {
+        if (date.getDay() === post.getDay() && time < 86400000) {
             if (time < 60 * 60 * 1000) {
                 return Math.ceil(time / (60 * 1000)) + "分钟前";
             } else {

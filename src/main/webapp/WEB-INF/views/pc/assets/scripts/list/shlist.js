@@ -5,7 +5,7 @@
 
 var searchObj = {};
 var url = "/api/sh/filter";
-var maxSize = 8;
+var maxSize = 9;
 var currPageNumber = 0;
 var $ctrlScope;
 
