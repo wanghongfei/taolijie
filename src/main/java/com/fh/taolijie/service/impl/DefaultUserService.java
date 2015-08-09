@@ -10,7 +10,6 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.StringUtils;
-import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
