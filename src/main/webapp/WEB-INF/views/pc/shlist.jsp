@@ -125,18 +125,11 @@
 
         <div class="page">
             <ul>
-                <c:if test="${page != 1 && pageStatus !=0}">
-                    <li><a class="next" href="/list/sh?page=${page-1}">上一页</a></li>
-                </c:if>
-                <c:if test="${pageStatus == 2}">
-                    <li><a class="next" href="/list/sh?page=${page+1}">下一页</a></li>
-                </c:if>
-                <c:if test="${pageStatus == 0 }">
-                    <h2>没有更多了</h2>
-                </c:if>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(false)" ng-if="hasLastPage()" href="javascript:;">上一页</a></li>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(true)" ng-if="hasNextPage()" href="javascript:;">下一页</a></li>
             </ul>
+            </li>
         </div>
-
     </div>
 </div>
 

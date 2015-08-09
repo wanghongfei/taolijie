@@ -70,7 +70,6 @@ tlj.controller('jobListCtrl', function($scope, $http) {
         return $scope.list != null && currPageNumber != 0;
     };
     $scope.nextPage = function(){
-        console.log(currPageNumber);
         return $scope.list != null&&(currPageNumber+1)*maxSize <$scope.resultCount;
     }
 

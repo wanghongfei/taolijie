@@ -64,11 +64,10 @@ tlj.controller('ShListCtrl', function($scope, $http) {
             }
         }
     };
-    $scope.lastPage = function(){
+    $scope.hasLastPage = function(){
         return $scope.list != null && currPageNumber != 0;
     };
-    $scope.nextPage = function(){
-        console.log(currPageNumber);
+    $scope.hasNextPage = function(){
         return $scope.list != null&&(currPageNumber+1)*maxSize <$scope.resultCount;
     }
 
