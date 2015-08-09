@@ -191,8 +191,8 @@
 
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
 <script>
-    var resume = JSON.parse('${ju:toJson(resume)}');
-    resume.qq = parseInt(resume.qq);
+    var resume = JSON.parse('${ju:toJson(resume)}') || {};
+    resume.qq = parseInt(resume.qq) || '';
     var resumeIntendIds = JSON.parse('${ju:toJson(resumeIntendIds)}');
     var cates = JSON.parse('${ju:toJson(cates)}');
     var intendIds = $('input[name=intendIds]')[0].value.split(';');

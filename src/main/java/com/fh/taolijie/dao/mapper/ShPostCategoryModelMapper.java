@@ -104,4 +104,7 @@ public interface ShPostCategoryModelMapper {
 
     @RedisCache(SHPostCategoryModel.class)
     SHPostCategoryModel findByName(@Param("name") String name);
+
+    @RedisCache(SHPostCategoryModel.class)
+    boolean isCategoryEmpty(@Param("cateId") Integer cateId);
 }

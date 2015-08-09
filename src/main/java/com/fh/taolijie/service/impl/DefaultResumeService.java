@@ -85,7 +85,7 @@ public class DefaultResumeService implements ResumeService {
         // 如果为空，直接返回空List
         // 继续执行会导致错误的SQL
         if (intendList.isEmpty()) {
-            return new ListResult<>();
+            return new ListResult<>(new ArrayList<>(), 0);
         }
 
         List<Integer> idList = intendList.stream().map(ApplicationIntendModel::getResumeId).collect(Collectors.toList());
@@ -113,6 +113,14 @@ public class DefaultResumeService implements ResumeService {
         List<ResumeModel> list = reMapper.findBy(example);
         long tot = reMapper.countFindBy(example);
         
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    public ListResult<ResumeModel> findByGenderAndIntend(Integer intendId, String gender, int pageNumber, int pageSize) {
+        List<ResumeModel> list = reMapper.filterByIntendAndGender(intendId, gender, pageNumber, pageSize);
+        long tot = reMapper.countFilterByIntendAndGender(intendId, gender);
+
         return new ListResult<>(list, tot);
     }
 
