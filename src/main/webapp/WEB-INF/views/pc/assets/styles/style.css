@@ -1349,6 +1349,21 @@ ul.bxslider li img {
     max-width: 660px;
     color: #666; }
 
+.detail p.sh-des{
+    margin: 20px 0 0 25px;
+    font-size: 16px;
+    color: #858e8f;
+}
+.detail p.sh-des span{
+    display: inline-block;
+    color: #4ccda4;
+    margin-right: 30px;
+}
+.detail p.sh-des .oldnew{
+    border: 1px solid #4ccda4;
+    border-radius: 4px;
+}
+
 /*评论部分*/
 .comment {
     padding-top: 20px;

@@ -1,12 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
-            <%--
-  Created by IntelliJ IDEA.
-  User: wynfrith
-  Date: 15-5-18
-  Time: 上午10:54
-  To change this template use File | Settings | File Templates.
+<%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld" %>
+<%--
+Created by IntelliJ IDEA.
+User: wynfrith
+Date: 15-5-18
+Time: 上午10:54
+To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -43,7 +43,8 @@
 </head>
 <body>
 <!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
 <![endif]-->
 
 
@@ -56,14 +57,15 @@
 
 <div class="container">
     <style>
-        .sh-fav{
-           margin-right: 20px;
+        .sh-fav {
+            margin-right: 20px;
             margin-top: 5px;
             color: #4ccda4;
             cursor: pointer;
         }
-        .sh-fav :hover{
-         color: #4cae4c !important;
+
+        .sh-fav :hover {
+            color: #4cae4c !important;
         }
     </style>
 
@@ -99,6 +101,7 @@
                     </div>
                     <div class="name">
                         <img src="/images/pig.jpg" alt="">
+
                         <p ng-bind="sh.contactName"></p>
                         <%--<span ng-bind="posterRole.memo"></span>--%>
                     </div>
@@ -125,6 +128,7 @@
                     </div>
                     <div class="sh-contact">
                         <p><i class="fa fa-phone red"></i> <span ng-bind="sh.contactPhone"></span></p>
+
                         <p><i class="fa fa-qq blue"></i> <span ng-bind="sh.contactQq"></span></p>
                     </div>
                 </div>
@@ -132,9 +136,15 @@
             <div style="clean:both"></div>
             <span class="sh-title" ng-bind="sh.title"></span>
             <%--<span class="fr">浏览量 ：${sh.likes}</span>--%>
-            <span class="fr">发布时间：
+            <%--<span class="fr">发布时间：
                 <span ng-bind="sh.postTime | date:'yyyy-MM-dd'"></span>
-            </span>
+            </span>--%>
+
+            <p class="sh-des">
+                类型：<span ng-bind="sh.category.name"></span>
+                新旧程度：<span class="oldnew" ng-bind="sh.depreciationRate"></span>
+                发布时间：<span ng-bind="sh.postTime">2</span>
+            </p>
             <!-- 分享（暂时不实现） -->
             <div class="share"></div>
         </div>
@@ -143,12 +153,14 @@
             <p class="pin-title dark-green-bg">详情描述
                 <i class="pin-arrow dark-green-arrow"></i>
             </p>
+
             <p class="fr" id="fav" ng-attr-data-id="{{ sh.id }}" data-type="sh">
-                <i class="fa"  ng-class="{'fa-heart': sh.favStatus, 'fa-heart-o': !sh.favStatus}"></i>
+                <i class="fa" ng-class="{'fa-heart': sh.favStatus, 'fa-heart-o': !sh.favStatus}"></i>
                 ${favStatus? '已收藏':'收藏'}
             </p>
+
             <div>
-				<span ng-bind="sh.description"></span>
+                <span ng-bind="sh.description"></span>
             </div>
         </div>
 
@@ -156,10 +168,13 @@
             <p class="pin-title">用户评论
                 <i class="pin-arrow"></i>
             </p>
+
             <div class="operates">
                 <div class="operate">
                     <span id="like" data-id="${sh.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
+
                     <p ng-bind="sh.likes" ng-show="sh.likes"></p>
+
                     <p ng-show="!sh.likes">0</p>
                 </div>
                 <%--<div class="operate">--%>
@@ -167,27 +182,30 @@
                 <%--<p >${job.dislikes}</p>--%>
                 <%--</div>--%>
                 <div class="operate">
-                    <span id="toComment" class="fa fa-comment" style="cursor: pointer" ></span>
+                    <span id="toComment" class="fa fa-comment" style="cursor: pointer"></span>
+
                     <p ng-bind="reviewCount" ng-show="reviewCount"></p>
+
                     <p ng-show="!reviewCount">0</p>
                 </div>
-<%--                <div class="operate">
-                    <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
-                </div>--%>
+                <%--                <div class="operate">
+                                    <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
+                                </div>--%>
             </div>
             <div class="content" id="contents">
                 <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
                     <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
-                    
+
                     <p>
-                        <span ng-bind="review.member.username"></span>                    <%--判断是该用户发的显示删除按钮--%>
-                        <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}" data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
+                        <span ng-bind="review.member.username"></span> <%--判断是该用户发的显示删除按钮--%>
+                        <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}"
+                           data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
                     </p>
                     <span ng-bind="review.content"></span>
                 </div>
             </div>
             <jsp:include page="block/comment.jsp">
-              <jsp:param name="postId" value="${sh.id}"/>
+                <jsp:param name="postId" value="${sh.id}"/>
             </jsp:include>
             <%--
             <div class="review-bar">
@@ -197,7 +215,7 @@
             </div>
             --%>
         </div>
-  </div>
+    </div>
 
 </div>
 
@@ -209,7 +227,7 @@
 <script>
     var sh = JSON.parse('${ju:toJson(sh)}');
     var pids = '${pids}';
-    pids_arr = pids.substr(1, pids.length-2).replace(/ /g,'').split(',');
+    pids_arr = pids.substr(1, pids.length - 2).replace(/ /g, '').split(',');
     sh.pids = pids_arr;
     sh.poster = JSON.parse('${ju:toJson(poster)}');
     sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
