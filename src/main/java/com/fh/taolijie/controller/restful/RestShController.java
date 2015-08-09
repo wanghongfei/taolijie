@@ -45,7 +45,7 @@ public class RestShController {
     @RequestMapping(value = "/filter", produces = Constants.Produce.JSON)
     public ResponseText filter( SHPostModel example,
                                 @RequestParam(defaultValue = "0") Integer pageNumber,
-                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
+                                @RequestParam(defaultValue = "9") Integer pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         example.setPageNumber(pageNumber);
