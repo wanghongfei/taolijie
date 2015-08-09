@@ -182,6 +182,9 @@
             var post = new Date($this.attr("data-time"));
             var nowDay = new Date().getDay();
             var time = nowTime - post.getTime();
+            if(time < 0){
+                return "1分钟前";
+            }
             if (nowDay === post.getDay()) {
                 if (time < 60 * 60 * 1000) {
                     $this.text(Math.ceil(time / (60 * 1000)) + "分钟前");
