@@ -1,12 +1,15 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fh.taolijie.utils.Constants;
 
 /**
  * Created by wanghongfei on 15-5-30.
  */
 public abstract class Pageable {
+    @JsonIgnore
     protected int pageNumber = 0;
+    @JsonIgnore
     protected int pageSize = Constants.PAGE_CAPACITY;
 
     protected Pageable() {}

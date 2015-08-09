@@ -84,6 +84,9 @@
         mem.user_level AS mem_user_level
 
     </sql>
+    <sql id="less_member_column">
+        mem.id AS mem_id, mem.username AS mem_username
+    </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--

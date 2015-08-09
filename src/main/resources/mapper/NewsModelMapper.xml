@@ -160,7 +160,7 @@
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
             <include refid="news_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.less_member_column" />
         FROM news news
             INNER JOIN member mem ON mem.id = news.member_id
         ORDER BY
@@ -204,7 +204,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="news_column"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.less_member_column" />
         FROM news news
             INNER JOIN member mem ON mem.id = news.member_id
         <where>

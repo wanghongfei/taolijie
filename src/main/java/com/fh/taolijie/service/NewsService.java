@@ -40,11 +40,9 @@ public interface NewsService {
 
     /**
      * 修改新闻信息. 只修改新闻本身,无法修改所属用户和创建时间
-     * @param newsId
-     * @param newsDto
      * @return
      */
-    boolean updateNews(Integer newsId, NewsModel model);
+    boolean updateNews(NewsModel model);
 
     /**
      * 删除一条新闻
