@@ -49,9 +49,9 @@ def deploy():
             return
 
     # flush redis
-    logging.info('flushing redis')
-    flush_redis()
-    logging.info('done flushing')
+    #logging.info('flushing redis')
+    #flush_redis()
+    #logging.info('done flushing')
 
     logging.info('deployment finished without error')
 
