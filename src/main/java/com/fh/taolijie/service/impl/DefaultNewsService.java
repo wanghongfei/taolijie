@@ -47,13 +47,12 @@ public class DefaultNewsService implements NewsService {
     @Override
     @Transactional(readOnly = false)
     public void addNews(NewsModel model) {
-        newsMapper.insert(model);
+        newsMapper.insertSelective(model);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public boolean updateNews(Integer newsId, NewsModel model) {
-        model.setId(newsId);
+    public boolean updateNews(NewsModel model) {
         return newsMapper.updateByPrimaryKeySelective(model) <= 0 ? false : true;
     }
 

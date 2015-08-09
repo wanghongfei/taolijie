@@ -82,7 +82,7 @@ public class ANewsController {
      */
     @RequestMapping(value = "/edit/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateNews(@PathVariable int id,NewsModel newsDto){
-        if(!newsService.updateNews(id, newsDto)){
+        if(!newsService.updateNews(newsDto)){
             return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.EDIT_SUCCESS).getAjaxMessage();
