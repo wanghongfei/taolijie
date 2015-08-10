@@ -50,8 +50,8 @@ $(".submit-btn").click(function(){
     }
     title.setCustomValidity(msg);
 
-    if(parseInt(wage.value) <= 0) {
-        msg = '数字不符合要求,请检查';
+    if(parseInt(wage.value) <= 0 && (parseInt(wage.value)) > 9999) {
+        msg = '您输入的数字不符合要求，请重新输入';
     }
     wage.setCustomValidity(msg);
 
