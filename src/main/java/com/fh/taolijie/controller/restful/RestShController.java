@@ -43,7 +43,7 @@ public class RestShController {
      * @return
      */
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
-    public ResponseText getAll(@RequestParam Integer id) {
+    public ResponseText getAll(@PathVariable Integer id) {
         SHPostModel model = shService.findPost(id);
 
         return new ResponseText(model);
