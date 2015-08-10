@@ -39,6 +39,16 @@ public class RestShController {
     }
 
     /**
+     * 查询一条二手
+     * @return
+     */
+    @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
+    public ResponseText getAll(@RequestParam Integer id) {
+        SHPostModel model = shService.findPost(id);
+
+        return new ResponseText(model);
+    }
+    /**
      * 过虑查询
      * @return
      */
