@@ -39,6 +39,16 @@ public class RestShController {
     }
 
     /**
+     * 查询一条二手
+     * @return
+     */
+    @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
+    public ResponseText getAll(@PathVariable Integer id) {
+        SHPostModel model = shService.findPost(id);
+
+        return new ResponseText(model);
+    }
+    /**
      * 过虑查询
      * @return
      */
@@ -132,7 +142,7 @@ public class RestShController {
      */
     @RequestMapping(value = "/cate/{id}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText getCategoryById(@PathVariable Integer id) {
-        SHPostCategoryModel cate = cateService.findCategory(id);
+        SHPostCategoryModel cate = cateService.findById(id);
 
         return new ResponseText(cate);
     }

@@ -61,12 +61,13 @@ public class ACateController {
                        @PathVariable String type,
                        Model model){
         if(type.equals("job")){
-            JobPostCategoryModel cate= jobPostCateService.findCategory(id);
+            //JobPostCategoryModel cate= jobPostCateService.findCategory(id);
+            JobPostCategoryModel cate= jobPostCateService.findById(id);
             model.addAttribute("cate",cate);
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
         }else if(type.equals("sh")){
-            SHPostCategoryModel cate = shPostCategoryService.findCategory(id);
+            SHPostCategoryModel cate = shPostCategoryService.findById(id);
             model.addAttribute("cate",cate);
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
@@ -96,10 +97,13 @@ public class ACateController {
             jobCate.setLevel(cate.getLevel());
             jobCate.setThemeColor(cate.getThemeColor());
             jobCate.setMemo(cate.getMemo());
-            if(isEdit)
-                jobPostCateService.updateCategory(jobCate.getId(),jobCate);
-            else
-                jobPostCateService.addCategory(jobCate);
+
+            if(isEdit) {
+                jobPostCateService.updateByIdSelective(jobCate);
+            } else {
+                jobPostCateService.add(jobCate);
+            }
+
         }else if(type.equals("sh")){
             SHPostCategoryModel shCate = new SHPostCategoryModel();
             if(id!=0)
@@ -109,9 +113,9 @@ public class ACateController {
             shCate.setThemeColor(cate.getThemeColor());
             shCate.setMemo(cate.getMemo());
             if(isEdit)
-                shPostCategoryService.updateCategory(shCate.getId(), shCate);
+                shPostCategoryService.updateByIdSelective(shCate);
             else
-                shPostCategoryService.addCategory(shCate);
+                shPostCategoryService.add(shCate);
         }else {
             return new JsonWrapper(true, Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
@@ -128,7 +132,8 @@ public class ACateController {
     public @ResponseBody String updateJobCate(@PathVariable int id,
                                               @Valid JobPostCategoryModel dto,
                                               BindingResult result){
-        if(!jobPostCateService.updateCategory(id,dto)){
+        dto.setId(id);
+        if(!jobPostCateService.updateByIdSelective(dto)){
             return new JsonWrapper(true, Constants.ErrorType.ERROR).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
