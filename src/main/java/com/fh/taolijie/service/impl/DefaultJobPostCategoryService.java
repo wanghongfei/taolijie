@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.dao.mapper.BaseMapper;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
@@ -20,11 +21,9 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class DefaultJobPostCategoryService implements JobPostCateService {
+public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCategoryModel> implements JobPostCateService {
     @Autowired
     JobPostCategoryModelMapper cateMapper;
-    @Autowired
-    JobPostModelMapper postMapper;
 
     @Override
     public ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
@@ -52,20 +51,25 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
         return row <= 0 ? false : true;
     }
 
-    @Override
+/*    @Override
     @Transactional(readOnly = false)
     public boolean updateCategory(Integer cateId, JobPostCategoryModel model) {
         model.setId(cateId);
         return cateMapper.updateByPrimaryKey(model) <= 0 ? false : true;
-    }
+    }*/
 
-    @Override
+/*    @Override
     public JobPostCategoryModel findCategory(Integer cateId) {
         return cateMapper.selectByPrimaryKey(cateId);
-    }
+    }*/
 
     @Override
     public JobPostCategoryModel findByName(String name) {
         return cateMapper.findByName(name);
+    }
+
+    @Override
+    protected BaseMapper<JobPostCategoryModel> getMapper() {
+        return this.cateMapper;
     }
 }

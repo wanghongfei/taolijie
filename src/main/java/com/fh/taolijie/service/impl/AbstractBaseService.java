@@ -7,7 +7,7 @@ import com.fh.taolijie.service.BaseService;
  * 继承此类可以获得基本的CRUD操作
  * Created by whf on 8/11/15.
  */
-public abstract class DefaultBaseService<T> implements BaseService<T> {
+public abstract class AbstractBaseService<T> implements BaseService<T> {
     @Override
     public int add(T example) {
         return getMapper().add(example);

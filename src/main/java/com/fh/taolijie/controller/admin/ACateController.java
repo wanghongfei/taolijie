@@ -61,7 +61,8 @@ public class ACateController {
                        @PathVariable String type,
                        Model model){
         if(type.equals("job")){
-            JobPostCategoryModel cate= jobPostCateService.findCategory(id);
+            //JobPostCategoryModel cate= jobPostCateService.findCategory(id);
+            JobPostCategoryModel cate= jobPostCateService.findById(id);
             model.addAttribute("cate",cate);
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
@@ -97,7 +98,8 @@ public class ACateController {
             jobCate.setThemeColor(cate.getThemeColor());
             jobCate.setMemo(cate.getMemo());
             if(isEdit)
-                jobPostCateService.updateCategory(jobCate.getId(),jobCate);
+                //jobPostCateService.updateCategory(jobCate.getId(),jobCate);
+                jobPostCateService.updateByIdSelective(jobCate);
             else
                 jobPostCateService.addCategory(jobCate);
         }else if(type.equals("sh")){
@@ -128,7 +130,8 @@ public class ACateController {
     public @ResponseBody String updateJobCate(@PathVariable int id,
                                               @Valid JobPostCategoryModel dto,
                                               BindingResult result){
-        if(!jobPostCateService.updateCategory(id,dto)){
+        dto.setId(id);
+        if(!jobPostCateService.updateByIdSelective(dto)){
             return new JsonWrapper(true, Constants.ErrorType.ERROR).getAjaxMessage();
         }
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
