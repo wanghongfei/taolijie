@@ -22,6 +22,7 @@ public class CollectionUtils {
     }
 
     /**
+     * @deprecated
      * 将DTO对象field更新到对应entity对象中。
      */
     public static <ENTITY_T, DTO_T> void updateEntity(ENTITY_T entity, DTO_T dto, Consumer<ENTITY_T> apply) {
@@ -77,6 +78,7 @@ public class CollectionUtils {
     }
 
     /**
+     * @deprecated 重复造轮子
      * 把一个DTO对象转换成对应的Entity对象
      */
     public static <ENTITY_TYPE, DTO_TYPE> ENTITY_TYPE dto2Entity(DTO_TYPE dto, Class<ENTITY_TYPE> entityClass, Consumer<ENTITY_TYPE> apply) {
@@ -146,6 +148,7 @@ public class CollectionUtils {
     }
 
     /**
+     * @deprecated
      * 将entity转换成dto
      */
     public static <ENTITY_TYPE, DTO_TYPE> DTO_TYPE entity2Dto(ENTITY_TYPE entity, Class<DTO_TYPE> dtoClass, Consumer<DTO_TYPE> apply) {
@@ -222,11 +225,8 @@ public class CollectionUtils {
     }
 
     /**
+     * @deprecated
      * 将{@code valueField}域的值赋给{@code targetFields}中对应的Field
-     * @param sourceObj
-     * @param targetObj
-     * @param valueField
-     * @param targetFields
      */
     private static void setField(Object sourceObj, Object targetObj, Field valueField, List<Field> targetFields) {
         valueField.setAccessible(true);
