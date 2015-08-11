@@ -28,7 +28,7 @@ jQuery(function() {
         swf: '/js/Uploader.swf',
 
         // 文件接收服务端。
-        server: '/user/changePhoto',
+        server: '/static/upload',
 
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -72,12 +72,9 @@ jQuery(function() {
     });
 
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
-    uploader.on( 'uploadSuccess', function( file ) {
-        $( '#'+file.id ).addClass('upload-state-done');
-        console.log(file);
-
-        $(".tlj_modal_content").html("头像修改成功!");
-        $('.dialog').jqmShow();
+    uploader.on( 'uploadSuccess', function( file ,data) {
+        $("#headPic").val(data);
+        console.log(data);
     });
 
     // 文件上传失败，现实上传出错。

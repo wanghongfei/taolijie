@@ -100,15 +100,18 @@
 
 
             <div class="from-group" style="overflow: auto">
-              <div id="uploader" class="col-md-7 col-md-offset-2 wu-example" style="overflow: auto">
+              <div id="uploader" class="col-md-7 col-md-offset-2 wu-example" style="overflow: auto;min-height: 210px">
                 <div id="fileList" class="uploader-list" style="background-color: #eee; width: 600px;">
-                  <img src="/static/images/users/${sessionScope.user.profilePhotoId}" height="200"class="col-md-12" alt=""/>
+                  <img height="200"class="col-md-12" alt=""
+                       src="${aNews.headPicturePath == null?'':'/static/images/users/'.concat(aNews.headPicturePath)}"/>
+                  <input type="hidden" id="headPic" name="headPicturePath" value="${aNews.headPicturePath}"/>
                 </div>
                 <div id="filePicker" style="display: inline">新闻大图</div>
 
               </div>
 
             </div>
+
 
             <input type="hidden" id="newsId" value="${aNews.id}"/>
             <input type="hidden" id="isEdit" value="${isEdit}"/>

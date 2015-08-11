@@ -19,7 +19,7 @@
 <html class="no-js">
 <head>
   <meta charset="utf-8">
-  <title>兼职</title>
+  <title>校园聚焦点</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -73,10 +73,10 @@
         </p>
       </div>
       <div class="segment focus">
-        <c:forEach items="${newsList}" var="aNews">
+        <c:forEach items="${newsList.list}" var="aNews">
           <div class="focus_list">
             <div class="zixun zixun_left">
-              <a href=""><img src="./images/zixun.png" alt=""></a>
+              <a href=""><img src="/static/images/users/${aNews.headPicturePath}" alt=""></a>
             </div>
             <div class="zixun zixun_right">
               <p class="title"><a href="/detail/news/${aNews.id}">${aNews.title}</a></p>

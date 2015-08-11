@@ -7,7 +7,22 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<style>
+    .side-news-body{
+        width: 100%;
+        height: 100%;
+        background: url(/images/side.gif) no-repeat;
+        padding: 0 8px 0 8px;
+    }
+    .side-news-body span{
+        display: inline-block;
+        color:#fff;
+        text-align: left;
+        text-indent: 2em;
+        line-height: 28px;
+        margin-top: 60px;
+    }
+</style>
 <div class="side">
     <div class="services">
         <p>我们的服务</p>
@@ -54,14 +69,14 @@
 
         <ul>
             <c:forEach var="title" items="${titles}" varStatus="status">
-                    <li class="news-${status.index+1}" style="">
+                    <li class="news-${status.index+1}" style="overflow: hidden">
                         <a href="/detail/news/${title.id}">
                             <%--${title.title}--%>
-                        <img src="/images/1.gif" alt="">
+                           <div class="side-news-body" style="background-position: 0 -${status.index * 140}px;">
+                               <span>${title.title}</span>
+                           </div>
                         </a>
                     </li>
-
-
             </c:forEach>
         </ul>
     </div>

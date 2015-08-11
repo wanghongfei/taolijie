@@ -977,7 +977,7 @@ ul.bxslider li img {
 .side .news ul li {
     display: block;
     width: 163px;
-    height: 138px;
+    height: 140px;
     margin-top: 15px; }
 .side .news ul li:hover {
     -webkit-animation: hinge 1s;
@@ -1484,24 +1484,28 @@ ul.bxslider li img {
     margin-left: 23px;
     width: 372px; }
 .index .focus .zixun_right span {
+    /*margin-right: 10px;*/
     float: right; }
 .index .focus .zixun_right a {
+    font-size: 16px;
     color: #f96a39; }
-.index .focus .zixun_right a:hover {
-    color: #6cf; }
-.index .focus .zixun .title {
+.index .focus .zixun_right.zixun a:hover {
+    color: #fb7f4d; }
+.index .focus .zixun .title a{
     font-size: 26px;
     color: #f96a39; }
 .index .focus .zixun i {
     width: 30px;
     color: #f96a39; }
 .index .focus .zixun p {
+    padding-right: 10px;
     font-size: 18px;
     line-height: 45px; }
 .index .focus .zixun .jianjie {
     font-size: 18px;
     line-height: 45px; }
 .index .focus .zixun .jianjie p {
+
     text-indent: 2em;
     line-height: 35px; }
 .index .focus .zixun_top {
