@@ -29,7 +29,7 @@ public class SHPostCategoryTest extends BaseSpringDataTestClass {
     public void testAdd() {
         SHPostCategoryModel model = new SHPostCategoryModel();
         model.setName("hihi");
-        cateS.addCategory(model);
+        cateS.add(model);
     }
 
     @Test

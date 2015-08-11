@@ -33,11 +33,11 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
         return new ListResult<>(list, tot);
     }
 
-    @Override
+/*    @Override
     @Transactional(readOnly = false)
     public void addCategory(JobPostCategoryModel model) {
         cateMapper.insert(model);
-    }
+    }*/
 
     @Override
     @Transactional(readOnly = false)

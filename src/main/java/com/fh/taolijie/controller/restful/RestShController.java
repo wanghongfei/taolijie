@@ -142,7 +142,7 @@ public class RestShController {
      */
     @RequestMapping(value = "/cate/{id}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText getCategoryById(@PathVariable Integer id) {
-        SHPostCategoryModel cate = cateService.findCategory(id);
+        SHPostCategoryModel cate = cateService.findById(id);
 
         return new ResponseText(cate);
     }

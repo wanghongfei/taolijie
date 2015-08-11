@@ -67,7 +67,7 @@ public class ACateController {
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
         }else if(type.equals("sh")){
-            SHPostCategoryModel cate = shPostCategoryService.findCategory(id);
+            SHPostCategoryModel cate = shPostCategoryService.findById(id);
             model.addAttribute("cate",cate);
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
@@ -97,11 +97,13 @@ public class ACateController {
             jobCate.setLevel(cate.getLevel());
             jobCate.setThemeColor(cate.getThemeColor());
             jobCate.setMemo(cate.getMemo());
-            if(isEdit)
-                //jobPostCateService.updateCategory(jobCate.getId(),jobCate);
+
+            if(isEdit) {
                 jobPostCateService.updateByIdSelective(jobCate);
-            else
-                jobPostCateService.addCategory(jobCate);
+            } else {
+                jobPostCateService.add(jobCate);
+            }
+
         }else if(type.equals("sh")){
             SHPostCategoryModel shCate = new SHPostCategoryModel();
             if(id!=0)
@@ -111,9 +113,9 @@ public class ACateController {
             shCate.setThemeColor(cate.getThemeColor());
             shCate.setMemo(cate.getMemo());
             if(isEdit)
-                shPostCategoryService.updateCategory(shCate.getId(), shCate);
+                shPostCategoryService.updateByIdSelective(shCate);
             else
-                shPostCategoryService.addCategory(shCate);
+                shPostCategoryService.add(shCate);
         }else {
             return new JsonWrapper(true, Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }

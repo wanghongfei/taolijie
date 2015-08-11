@@ -19,20 +19,12 @@ public interface JobPostCateService extends BaseService<JobPostCategoryModel> {
     ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
 
     /**
-     * 添加一个分类
-     * @param dto
-     */
-    void addCategory(JobPostCategoryModel dto);
-
-    /**
      * 删除一个分类.
      * <p> 只有分类下没有数据时才能成功删除分类
      * @param cateId
      * @return
      */
     boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException;
-
-
 
     JobPostCategoryModel findByName(String name);
 }
