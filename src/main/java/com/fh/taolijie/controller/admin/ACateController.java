@@ -153,9 +153,9 @@ public class ACateController {
      */
     @RequestMapping(value = "/sh",method = RequestMethod.GET)
     public String shCategory(Model model){
-        int page = 1;
-        int capacity = 9999;
-        ListResult<SHPostCategoryModel> list =shPostCategoryService.getCategoryList(page-1, capacity, new ObjWrapper());
+        int page = 0;
+        int capacity = Integer.MAX_VALUE;
+        ListResult<SHPostCategoryModel> list = shPostCategoryService.getCategoryList(page, capacity, new ObjWrapper());
         model.addAttribute("shCates",list.getList());
         return "pc/admin/shcategory";
     }

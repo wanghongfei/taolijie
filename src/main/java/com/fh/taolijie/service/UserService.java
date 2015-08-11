@@ -1,7 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.constant.OperationType;
-import com.fh.taolijie.controller.dto.CreditsInfo;
+import com.fh.taolijie.dto.CreditsInfo;
 
 /**
  * 规定与用户业务逻辑相关操作

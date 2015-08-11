@@ -36,15 +36,15 @@ public class HNewsController {
     @RequestMapping(value = "list/news", method = RequestMethod.GET)
     public String newsList(Model model,
                            @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY+"") int pageSize) {
+                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
         page = PageUtils.getFirstResult(page, pageSize);
         ListResult<NewsModel> newsList = newsService.getNewsList(page, pageSize);
 
         int pageStatus = 1;
-        if(newsList.getList().size() == 0){
+        if (newsList.getList().size() == 0) {
             pageStatus = 0;
-        }else if(newsList.getList().size() == pageSize){
+        } else if (newsList.getList().size() == pageSize) {
             pageStatus = 2;
         }
         model.addAttribute("pageStatus",pageStatus);

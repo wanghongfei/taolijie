@@ -33,10 +33,10 @@ public class ANewsController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String news(Model model){
-        int page = 1;
-        int pageSize = 9999;
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
 
-        ListResult<NewsModel> news = newsService.getNewsList(page-1, pageSize);
+        ListResult<NewsModel> news = newsService.getNewsList(page, pageSize);
         model.addAttribute("news",news.getList());
 
         return "pc/admin/news";

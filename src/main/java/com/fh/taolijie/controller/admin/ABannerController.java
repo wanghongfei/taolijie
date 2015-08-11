@@ -65,10 +65,10 @@ public class ABannerController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String manage(Model model){
-        int page = 1;
-        int pageSize = 9999;
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
 
-        ListResult<BannerPicModel> banners = bannerPicService.getBannerList(page-1, pageSize);
+        ListResult<BannerPicModel> banners = bannerPicService.getBannerList(page, pageSize);
 
         model.addAttribute("bannerList",banners.getList());
         model.addAttribute("bannerCount", banners.getResultCount());

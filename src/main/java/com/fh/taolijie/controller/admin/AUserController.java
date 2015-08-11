@@ -38,9 +38,9 @@ public class AUserController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String list(Model model){
-        int page = 1;
-        int pageSize = 9999;
-        List<MemberModel> users = accountService.getMemberList(page-1, pageSize, null).getList();
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
+        List<MemberModel> users = accountService.getMemberList(page, pageSize, null).getList();
         model.addAttribute("users",users);
         return "pc/admin/users";
     }

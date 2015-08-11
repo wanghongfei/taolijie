@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.dto;
+package com.fh.taolijie.dto;
 
 /**
  * Created by whf on 8/8/15.

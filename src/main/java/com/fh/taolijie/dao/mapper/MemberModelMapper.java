@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.controller.dto.CreditsInfo;
+import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.domain.MemberModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

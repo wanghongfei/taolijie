@@ -33,11 +33,11 @@ public class AShController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String jobs(Model model){
-        int page = 1;
-        int pageSize = 9999;
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
 
         ObjWrapper objWrapper = new ObjWrapper();
-        ListResult<SHPostModel> shs =shPostService.getAllPostList(page - 1, pageSize, objWrapper);
+        ListResult<SHPostModel> shs =shPostService.getAllPostList(page, pageSize, objWrapper);
 
 //        int totalPage = (Integer) objWrapper.getObj();
 
