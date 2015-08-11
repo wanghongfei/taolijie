@@ -37,7 +37,7 @@ public class DefaultJobPostService implements JobPostService {
     ReviewModelMapper revMapper;
 
     @Override
-    public ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity) {
         List<JobPostModel> list =  postMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetAll();
 
@@ -45,7 +45,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public ListResult<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setFilterExpiredPost(false);
@@ -57,7 +57,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setJobPostCategoryId(cateId);
 
@@ -68,7 +68,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setVerified(Constants.VerifyStatus.NONE.toString());
 
@@ -83,7 +83,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity) {
         List<JobPostModel> list = postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByComplaint();
 
@@ -91,7 +91,13 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public List<JobPostModel> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<JobPostModel> getAndFilter(Integer categoryId,
+                                           Constants.WayToPay wayToPay,
+                                           boolean orderByDate,
+                                           boolean orderByPageVisit,
+                                           Integer schoolId,
+                                           int firstResult,
+                                           int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setJobPostCategoryId(categoryId);
         if (null != wayToPay) {
@@ -104,7 +110,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    public ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity) {
         model.setPageNumber(firstResult);
         model.setPageSize(CollectionUtils.determineCapacity(capacity));
 

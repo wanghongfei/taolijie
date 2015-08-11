@@ -33,7 +33,7 @@ public class DefaultShPostService implements ShPostService {
     MemberModelMapper memMapper;
 
     @Override
-    public ListResult<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> getAllPostList(int firstResult, int capacity) {
         Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
 
         List<SHPostModel> list = postMapper.getAll(page.getMap());
@@ -43,7 +43,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByCategory(cateId);
 
@@ -51,7 +51,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByMember(memId, filtered, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByMember(memId, filtered);
 
@@ -59,7 +59,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByCategory(cateId);
 
@@ -67,7 +67,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public ListResult<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper) {
+    public ListResult<SHPostModel> runSearch(SHPostModel model) {
         List<SHPostModel> list = postMapper.searchBy(model);
         long tot = postMapper.countSearchBy(model);
 
@@ -83,12 +83,12 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public List<SHPostModel> getUnverifiedPostList(SHPostModel model, ObjWrapper wrapper) {
+    public List<SHPostModel> getUnverifiedPostList(SHPostModel model) {
         return postMapper.findBy(model);
     }
 
     @Override
-    public List<SHPostModel> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper) {
+    public List<SHPostModel> getSuedPost(int firstResult, int capacity) {
         return postMapper.getSuedPost(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 

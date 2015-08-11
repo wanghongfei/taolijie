@@ -18,13 +18,13 @@ public interface ResumeService extends PageService {
      * 查找所有简历
      * @return
      */
-    List<ResumeModel> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModel> getAllResumeList(int firstResult, int capacity);
 
     /**
      * 根据权限查找所有简历
      * @return
      */
-    List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity);
 
     ListResult<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList);
 
@@ -37,7 +37,7 @@ public interface ResumeService extends PageService {
      * @see com.fh.taolijie.utils.Constants
      * @return
      */
-    List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity);
 
     /**
      *
@@ -45,7 +45,7 @@ public interface ResumeService extends PageService {
      * @param authority 设置简历权限类型
      * @return
      */
-    List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap);
+    List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity);
 
     /**
      * 根据求职意向查找简历
@@ -75,7 +75,7 @@ public interface ResumeService extends PageService {
      * 查询投递记录
      * @return
      */
-    ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap);
+    ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity);
 
 
     /**

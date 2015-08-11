@@ -17,21 +17,21 @@ public interface JobPostService extends PageService {
      * 查找所有兼职
      * @return
      */
-    ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity);
 
     /**
      * 获取某个用户发的所有兼职帖子
      * @param memId 用户id
      * @return
      */
-    ListResult<JobPostModel> getJobPostListByMember(Integer memId , int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getJobPostListByMember(Integer memId , int firstResult, int capacity);
 
     /**
      * 获取某分类下所有的兼职帖子
      * @param cateId
      * @return
      */
-    ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
 
     /**
      * 查询未审核的post
@@ -40,7 +40,7 @@ public interface JobPostService extends PageService {
      * @param wrapper
      * @return
      */
-    List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity);
 
     /**
      * 根据多个id批量查询兼职信息
@@ -53,7 +53,7 @@ public interface JobPostService extends PageService {
      * 查询被投诉的兼职信息，值最高的在前
      * @return
      */
-    ListResult<JobPostModel> getByComplaint(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> getByComplaint(int firstResult, int capacity);
 
     /**
      * 根据条件查找兼职信息.
@@ -68,7 +68,13 @@ public interface JobPostService extends PageService {
      * @param capacity
      * @return
      */
-    List<JobPostModel> getAndFilter(Integer categoryId, Constants.WayToPay wayToPay, boolean orderByDate, boolean orderByPageVisit, Integer schoolId, int firstResult, int capacity, ObjWrapper wrapper);
+    List<JobPostModel> getAndFilter(Integer categoryId,
+                                    Constants.WayToPay wayToPay,
+                                    boolean orderByDate,
+                                    boolean orderByPageVisit,
+                                    Integer schoolId,
+                                    int firstResult,
+                                    int capacity);
 
     /**
      * 根据兼职信息的某个字段执行模糊查询
@@ -76,7 +82,7 @@ public interface JobPostService extends PageService {
      * @param includeString
      * @return
      */
-    ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity);
 
     ListResult<JobPostModel> findByExample(JobPostModel example);
 

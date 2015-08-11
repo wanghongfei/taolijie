@@ -30,11 +30,9 @@ public class AResumeController {
     public String jobs(Model model){
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
-        ObjWrapper objWrapper = new ObjWrapper();
-        List<ResumeModel> resumes;
-        resumes =resumeService.getAllResumeList(page, pageSize, objWrapper);
 
-//        int totalPage = (Integer) objWrapper.getObj();
+        List<ResumeModel> resumes = resumeService.getAllResumeList(page, pageSize);
+
         model.addAttribute("resumes", resumes);
         return "pc/admin/resumes";
     }

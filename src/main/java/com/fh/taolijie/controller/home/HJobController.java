@@ -13,6 +13,7 @@ import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,16 +51,18 @@ public class HJobController {
      */
     @RequestMapping(value = {"list/job"}, method = RequestMethod.GET)
     //region 兼职二级页面 jobList(
-    public String jobList(@RequestParam(defaultValue = "1") int page,
+    public String jobList(@RequestParam(defaultValue = "0") int page,
                           @RequestParam(defaultValue = "0") int cate,
                           @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                           Model model) {
-        ObjWrapper objWrapper = new ObjWrapper();
         ListResult<JobPostModel> jobs;
+
+        page = PageUtils.getFirstResult(page, pageSize);
+
         if (cate > 0) {
-            jobs = jobPostService.getJobPostListByCategory(cate, (page - 1)*pageSize, pageSize, objWrapper);
+            jobs = jobPostService.getJobPostListByCategory(cate, page, pageSize);
         } else {
-            jobs = jobPostService.getAllJobPostList((page - 1)*pageSize, pageSize, objWrapper);
+            jobs = jobPostService.getAllJobPostList(page, pageSize);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();

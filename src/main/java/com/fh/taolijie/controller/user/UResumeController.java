@@ -58,7 +58,7 @@ public class UResumeController {
         int page = 1;
         int capacity = 9999;
         Credential credential = CredentialUtils.getCredential(session);
-        List<ResumeModel> resumeDtoList = resumeService.getResumeList(credential.getId(), 0, 0, new ObjWrapper());
+        List<ResumeModel> resumeDtoList = resumeService.getResumeList(credential.getId(), 0, 0);
         if(resumeDtoList.size()>0){
             return "redirect:/user/resume/view";
         }
@@ -99,7 +99,7 @@ public class UResumeController {
 
         // 判断是否已经有简历了
         // 如果已经有了则不允许创建新简历
-        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1, new ObjWrapper());
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1);
         if(rList.size() !=0){
             return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
         }
@@ -141,7 +141,7 @@ public class UResumeController {
     @RequestMapping(value = "/view",method = RequestMethod.GET)
     public String view(HttpSession session,Model model)  {
         Credential credential = CredentialUtils.getCredential(session);
-        List<ResumeModel> list = resumeService.getResumeList(credential.getId(), 0, 0, new ObjWrapper());
+        List<ResumeModel> list = resumeService.getResumeList(credential.getId(), 0, 0);
 
         /*因为简历只有一张,所以直接用遍历得到*/
 
@@ -181,8 +181,7 @@ public class UResumeController {
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
         /*因为简历只有一张,所以直接用遍历得到*/
         ResumeModel resume = null;
         for(ResumeModel r : list){
@@ -251,8 +250,7 @@ public class UResumeController {
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
         /*因为简历只有一张,所以直接用遍历得到*/
         ResumeModel resume = null;
         for(ResumeModel r : list){
@@ -295,7 +293,7 @@ public class UResumeController {
 
         Credential credential = CredentialUtils.getCredential(session);
 
-        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1,new ObjWrapper());
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1);
         if(rList.size()<1 ){
             return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
         }
@@ -347,8 +345,7 @@ public class UResumeController {
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
         /*因为简历只有一张,所以直接用遍历得到*/
         ResumeModel resume = null;
         for(ResumeModel r : list){
@@ -377,8 +374,7 @@ public class UResumeController {
         Credential credential = CredentialUtils.getCredential(session);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
-        ObjWrapper maxPage = new ObjWrapper();
-        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0, maxPage);
+        List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
         /*因为简历只有一张,所以直接用遍历得到*/
         ResumeModel resume = null;
         for(ResumeModel r : list){

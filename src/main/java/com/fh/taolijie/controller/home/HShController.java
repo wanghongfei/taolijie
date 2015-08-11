@@ -13,6 +13,7 @@ import com.fh.taolijie.service.ShPostCategoryService;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,17 +52,17 @@ public class HShController {
      * @return
      */
     @RequestMapping(value = "list/sh", method = RequestMethod.GET)
-    public String shList(@RequestParam(defaultValue = "1") int page,
+    public String shList(@RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "0") int cate,
                          @RequestParam(defaultValue = "12") int pageSize,
                          Model model) {
 
-        ObjWrapper objWrapper = new ObjWrapper();
+        page = PageUtils.getFirstResult(page, pageSize);
         ListResult<SHPostModel> shs;
         if (cate > 0) {
-            shs = shPostService.getAndFilter(cate, false, (page - 1)*pageSize, pageSize, objWrapper);
+            shs = shPostService.getAndFilter(cate, false, page, pageSize);
         } else {
-            shs = shPostService.getAllPostList((page - 1)*pageSize, pageSize, objWrapper);
+            shs = shPostService.getAllPostList((page - 1) * pageSize, pageSize);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();

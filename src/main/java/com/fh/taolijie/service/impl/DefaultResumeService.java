@@ -38,12 +38,12 @@ public class DefaultResumeService implements ResumeService {
     MemberModelMapper memMapper;
 
     @Override
-    public List<ResumeModel> getAllResumeList(int firstResult, int capacity, ObjWrapper wrap) {
+    public List<ResumeModel> getAllResumeList(int firstResult, int capacity) {
         return reMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
-    public List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
+    public List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setAccessAuthority(authority.toString());
 
@@ -63,7 +63,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity, ObjWrapper wrap) {
+    public List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
 
@@ -71,7 +71,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity, ObjWrapper wrap) {
+    public List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
         model.setAccessAuthority(authority.toString());
@@ -130,7 +130,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    public ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity, ObjWrapper wrap) {
+    public ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity) {
         List<ResumePostRecord> list = reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
         long tot = reMapper.countFindPostRecordByMember(memId);
 
