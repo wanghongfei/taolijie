@@ -6,10 +6,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ControllerHelper;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.TimeUtil;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,16 +48,15 @@ public class UShController {
      * @return
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
-    public String myPost(@RequestParam(defaultValue = "1") int page,
+    public String myPost(@RequestParam(defaultValue = "0") int page,
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                          HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
-        ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, (page - 1) * pageSize, pageSize, objWrapper);
+        page = PageUtils.getFirstResult(page, pageSize);
+        ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, page, pageSize);
 
-//        totalPage = (Integer)objWrapper.getObj();
 
         int pageStatus = 1;
         if(shs.getList().size() == 0){

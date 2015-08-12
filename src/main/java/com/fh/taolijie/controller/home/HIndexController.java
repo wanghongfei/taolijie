@@ -8,6 +8,7 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.impl.DefaultJobPostCategoryService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +53,10 @@ public class HIndexController {
         Credential credential = CredentialUtils.getCredential(session);
 
         // 放入兼职二手信息
-        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6, new ObjWrapper())
+        List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6)
                 .getList()
                 .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
-        List<SHPostModel> shs = shPostService.getAllPostList(0, 3, new ObjWrapper())
+        List<SHPostModel> shs = shPostService.getAllPostList(0, 3)
                 .getList()
                 .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
 
@@ -79,11 +80,13 @@ public class HIndexController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String search(@RequestParam(defaultValue = "") String content,
-                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "job") String type,
                          @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                          Model model) {
 
+
+        page = PageUtils.getFirstResult(page, pageSize);
 
         if(type.equals("job")){
             JobPostModel jobCommand = new JobPostModel();
@@ -98,7 +101,8 @@ public class HIndexController {
                 jobCommand.setJobPostCategoryId(cate.getId());
             }
 
-            List<JobPostModel> list = jobPostService.runSearch(jobCommand, (page - 1)*pageSize, pageSize,new ObjWrapper()).getList();
+            List<JobPostModel> list = jobPostService.runSearch(jobCommand, page, pageSize)
+                    .getList();
 
             int pageStatus = 1;
             if(list.size() == 0){
@@ -122,7 +126,7 @@ public class HIndexController {
                 shCommand.setSecondHandPostCategoryId(cate.getId());
             }
 
-            ListResult<SHPostModel> list =shPostService.runSearch(shCommand,new ObjWrapper());
+            ListResult<SHPostModel> list =shPostService.runSearch(shCommand);
 
             int pageStatus = 1;
             if(list.getList().size() == 0){

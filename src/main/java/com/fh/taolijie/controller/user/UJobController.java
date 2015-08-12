@@ -52,14 +52,14 @@ public class UJobController {
      * @return
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
-    public String myPost(@RequestParam(defaultValue = "1") int page,
-                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
+    public String myPost(@RequestParam(defaultValue = "0") int page,
+                         @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                          HttpSession session, Model model){
+
         Credential credential = CredentialUtils.getCredential(session);
-        ObjWrapper objWrapper = new ObjWrapper();
-        int totalPage = 0;
-        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), (page - 1) * pageSize, pageSize, objWrapper).getList();
-//        totalPage = (Integer)objWrapper.getObj();
+        page = PageUtils.getFirstResult(page, pageSize);
+        List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), page, pageSize)
+                .getList();
 
         int pageStatus = 1;
         if(jobs.size() == 0){
@@ -70,7 +70,7 @@ public class UJobController {
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs",jobs);
         model.addAttribute("page",page);
-//        model.addAttribute("totalPage",totalPage);
+        //model.addAttribute("totalPage", );
         model.addAttribute("isFav",false);
 
         return "pc/user/joblist";

@@ -2,7 +2,7 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.constant.RedisKey;
-import com.fh.taolijie.controller.dto.CreditsInfo;
+import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Set;
 
 /**

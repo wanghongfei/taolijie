@@ -116,8 +116,9 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public ListResult<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap) {
+    public ListResult<MemberModel> getMemberList(int firstResult, int capacity) {
         Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
+
         List<MemberModel> list = memMapper.getMemberList(page.getMap());
         long tot = memMapper.countGetMemberList();
 

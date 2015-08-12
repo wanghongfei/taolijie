@@ -28,13 +28,11 @@ public class AResumeController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String jobs(Model model){
-        int page = 1;
-        int pageSize = 9999;
-        ObjWrapper objWrapper = new ObjWrapper();
-        List<ResumeModel> resumes;
-        resumes =resumeService.getAllResumeList(page - 1, pageSize, objWrapper);
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
 
-//        int totalPage = (Integer) objWrapper.getObj();
+        List<ResumeModel> resumes = resumeService.getAllResumeList(page, pageSize);
+
         model.addAttribute("resumes", resumes);
         return "pc/admin/resumes";
     }

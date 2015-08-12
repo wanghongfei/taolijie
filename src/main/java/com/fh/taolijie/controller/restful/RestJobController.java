@@ -35,7 +35,7 @@ public class RestJobController {
     public ResponseText getAllPost(@RequestParam(defaultValue = "0") int pageNumber,
                                     @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        ListResult<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize, null);
+        ListResult<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize);
 
         return new ResponseText(jobList);
     }
@@ -68,7 +68,7 @@ public class RestJobController {
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize, null);
+        ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize);
 
         return new ResponseText(list);
     }
@@ -85,7 +85,7 @@ public class RestJobController {
                                     @RequestParam(defaultValue = "0") int pageNumber,
                                     @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        ListResult<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize, null);
+        ListResult<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize);
 
         return new ResponseText(list);
     }
@@ -111,7 +111,7 @@ public class RestJobController {
                                    @RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        ListResult<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize, null);
+        ListResult<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize);
         return new ResponseText(postList);
     }
 

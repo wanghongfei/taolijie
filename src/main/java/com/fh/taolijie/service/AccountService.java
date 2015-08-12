@@ -56,7 +56,7 @@ public interface AccountService {
      * @param capacity
      * @return
      */
-    public ListResult<MemberModel> getMemberList(int firstResult, int capacity, ObjWrapper wrap);
+    public ListResult<MemberModel> getMemberList(int firstResult, int capacity);
 
     MemberModel findMember(Integer memId);
 

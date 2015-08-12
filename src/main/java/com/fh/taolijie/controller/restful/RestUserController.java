@@ -1,7 +1,7 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
-import com.fh.taolijie.controller.dto.CreditsInfo;
+import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;

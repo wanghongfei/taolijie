@@ -16,7 +16,7 @@ public interface ShPostService extends PageService {
      * 查找所有二手帖子
      * @return
      */
-    ListResult<SHPostModel> getAllPostList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getAllPostList(int firstResult, int capacity);
 
     /**
      * 得到某分类下的二手帖子
@@ -25,7 +25,7 @@ public interface ShPostService extends PageService {
      * @param capacity See {@link com.fh.taolijie.service.ResumeService#getResumeList}
      * @return
      */
-    ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity);
 
     /**
      * 得到某个用户发的二手帖子信息
@@ -35,7 +35,7 @@ public interface ShPostService extends PageService {
      * @param capacity
      * @return
      */
-    ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity);
 
     /**
      * 根据分类查找二手
@@ -43,9 +43,9 @@ public interface ShPostService extends PageService {
      * @param pageView 传递true为最火的在前
      * @return
      */
-    ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity);
 
-    ListResult<SHPostModel> runSearch(SHPostModel model, ObjWrapper wrapper);
+    ListResult<SHPostModel> runSearch(SHPostModel model);
 
     /**
      * 根据条件过虑查询
@@ -58,13 +58,13 @@ public interface ShPostService extends PageService {
      * 查询还未审核的二手信息
      * @return
      */
-    List<SHPostModel> getUnverifiedPostList(SHPostModel model, ObjWrapper wrapper);
+    List<SHPostModel> getUnverifiedPostList(SHPostModel model);
 
     /**
      * 查询被投诉的二手信息
      * @return
      */
-    List<SHPostModel> getSuedPost(int firstResult, int capacity, ObjWrapper wrapper);
+    List<SHPostModel> getSuedPost(int firstResult, int capacity);
 
     /**
      * 发布新二手帖子

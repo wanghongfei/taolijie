@@ -47,7 +47,7 @@
         <collection property="roleList" resultMap="com.fh.taolijie.dao.mapper.RoleModelMapper.BaseResultMap"/>
     </resultMap>
 
-    <resultMap id="credits_info" type="com.fh.taolijie.controller.dto.CreditsInfo">
+    <resultMap id="credits_info" type="com.fh.taolijie.dto.CreditsInfo">
         <result column="credits" property="credits" jdbcType="INTEGER" />
         <result column="user_level" property="level" jdbcType="VARCHAR" />
     </resultMap>

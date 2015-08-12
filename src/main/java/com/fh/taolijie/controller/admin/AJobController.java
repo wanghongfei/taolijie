@@ -33,11 +33,11 @@ public class AJobController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String jobs(Model model){
-        int page = 1;
-        int pageSize = 9999;
-        ObjWrapper objWrapper = new ObjWrapper();
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
         List<JobPostModel> jobs;
-        jobs = jobPostService.getAllJobPostList(page - 1, pageSize,objWrapper).getList();
+        jobs = jobPostService.getAllJobPostList(page, pageSize)
+                .getList();
 
         model.addAttribute("jobs", jobs);
         return "pc/admin/jobs";

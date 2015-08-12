@@ -33,7 +33,7 @@ public class RestShController {
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize, null);
+        ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize);
 
         return new ResponseText(shList);
     }
@@ -83,9 +83,9 @@ public class RestShController {
 
         ListResult<SHPostModel> shList = null;
         if (false == pageView) {
-            shList = shService.getPostList(categoryId, pageNumber, pageSize, null);
+            shList = shService.getPostList(categoryId, pageNumber, pageSize);
         } else {
-            shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize, null);
+            shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize);
         }
 
         return new ResponseText(shList);
@@ -107,7 +107,7 @@ public class RestShController {
                                       @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
-        ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize, null);
+        ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize);
         return new ResponseText(shList);
     }
 
@@ -119,7 +119,7 @@ public class RestShController {
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText search(SHPostModel model) {
 
-        ListResult<SHPostModel> shList = shService.runSearch(model, null);
+        ListResult<SHPostModel> shList = shService.runSearch(model);
         return new ResponseText(shList);
     }
 
