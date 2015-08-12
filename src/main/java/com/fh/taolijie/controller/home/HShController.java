@@ -62,7 +62,7 @@ public class HShController {
         if (cate > 0) {
             shs = shPostService.getAndFilter(cate, false, page, pageSize);
         } else {
-            shs = shPostService.getAllPostList((page - 1) * pageSize, pageSize);
+            shs = shPostService.getAllPostList(page, pageSize);
         }
 
 //        int totalPage = (Integer) objWrapper.getObj();
