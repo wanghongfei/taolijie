@@ -12,7 +12,7 @@ public class OnlineListener implements HttpSessionListener {
     /**
      * 使用原子整数避免线程安全问题
      */
-    private static AtomicInteger onlineAmount;
+    private static AtomicInteger onlineAmount = new AtomicInteger(0);
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
