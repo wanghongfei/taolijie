@@ -1509,12 +1509,14 @@ ul.bxslider li img {
     text-indent: 2em;
     line-height: 35px; }
 .index .focus .zixun_top {
-    width: 790px;
-    height: 300px;
+    margin-bottom: 20px;
+    width: 770px;
+    height: 432px;
     overflow: hidden; }
 .index .focus .zixun_top img {
     width: 100%;
-    height: auto; }
+    height: 100%;
+ }
 .index .focus .focus_detail {
     width: 790px;
     height: auto; }

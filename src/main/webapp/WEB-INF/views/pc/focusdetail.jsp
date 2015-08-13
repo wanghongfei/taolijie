@@ -73,7 +73,7 @@
       <div class="segment focus">
         <div class="focus_detail">
           <div class="zixun zixun_top">
-            <a href=""><img src="/static/images/users/${news.headPicturePath})" alt=""></a>
+            <a href=""><img src="/static/images/users/${news.headPicturePath}" alt=""></a>
           </div>
 
           <div class="zixun zixun_bottom">

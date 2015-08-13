@@ -21,6 +21,7 @@
         text-indent: 2em;
         line-height: 28px;
         margin-top: 60px;
+        word-break:break-all;
     }
 </style>
 <div class="side">
@@ -72,7 +73,8 @@
                     <li class="news-${status.index+1}" style="overflow: hidden">
                         <a href="/detail/news/${title.id}">
                             <%--${title.title}--%>
-                           <div class="side-news-body" style="background-position: 0 -${status.index * 140}px;">
+                           <%--<div class="side-news-body" style="background-position: 0 -${status.index * 140}px;">--%>
+                          <div class="side-news-body" style="background-image: url(/images/1.gif);;">
                                <span>${title.title}</span>
                            </div>
                         </a>

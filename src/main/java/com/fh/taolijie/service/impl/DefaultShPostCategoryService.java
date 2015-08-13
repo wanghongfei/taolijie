@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.dao.mapper.BaseMapper;
 import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
@@ -18,7 +19,8 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class DefaultShPostCategoryService implements ShPostCategoryService {
+public class DefaultShPostCategoryService extends AbstractBaseService<SHPostCategoryModel>
+        implements ShPostCategoryService {
     @Autowired
     ShPostCategoryModelMapper cateMapper;
 
@@ -30,25 +32,6 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
         return new ListResult<>(list, tot);
     }
 
-    @Override
-    public SHPostCategoryModel findCategory(Integer cateId) {
-        return cateMapper.selectByPrimaryKey(cateId);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void addCategory(SHPostCategoryModel dto) {
-        cateMapper.insert(dto);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public boolean updateCategory(Integer cateId, SHPostCategoryModel model) {
-        model.setId(cateId);
-        cateMapper.updateByPrimaryKeySelective(model);
-
-        return true;
-    }
 
     @Override
     @Transactional(readOnly = false)
@@ -64,5 +47,10 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
     @Override
     public SHPostCategoryModel findByName(String name) {
         return cateMapper.findByName(name);
+    }
+
+    @Override
+    protected BaseMapper<SHPostCategoryModel> getMapper() {
+        return this.cateMapper;
     }
 }
