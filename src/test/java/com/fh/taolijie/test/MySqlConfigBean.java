@@ -19,8 +19,8 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ComponentScan(value = {
-        "com.fh.taolijie.controller",
-        "com.fh.taolijie.service",
+/*        "com.fh.taolijie.controller",
+        "com.fh.taolijie.service",*/
         "com.fh.taolijie.dao.mapper",
 })
 //@EnableCaching

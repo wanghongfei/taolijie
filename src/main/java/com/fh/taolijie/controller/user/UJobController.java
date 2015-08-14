@@ -212,7 +212,7 @@ public class UJobController {
         if (job.getJobPostCategoryId() != null) {
             jobPostService.addJobPost(job);
             // 加分
-            Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+            //Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
             //LogUtils.getInfoLogger().info("---new credits:{}, level:{}", credits, userService.queryLevel(credits));
         } else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
@@ -358,8 +358,8 @@ public class UJobController {
         userService.likeJobPost(userId, jobId);
 
         // 加分
-        MemberModel mem = jobPostService.findJobPost(jobId).getMember();
-        userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
+        //MemberModel mem = jobPostService.findJobPost(jobId).getMember();
+        //userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
     }

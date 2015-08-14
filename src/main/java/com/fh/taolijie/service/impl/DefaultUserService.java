@@ -34,9 +34,9 @@ public class DefaultUserService implements UserService {
     ShPostModelMapper shMapper;
 
 
-    @Qualifier("redisTemplateForString")
-    @Autowired
-    StringRedisTemplate rt;
+/*    @Qualifier("redisTemplateForString")
+    @Autowired(required = false)
+    StringRedisTemplate rt;*/
 
 
     @Override
@@ -130,20 +130,22 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = false)
     public int changeCredits(Integer memberId, OperationType type, int oldCredits) {
-        String valueString = (String) rt.opsForHash().get(RedisKey.CREDITS_OPERATION.toString(), type.toString());
+/*        String valueString = (String) rt.opsForHash().get(RedisKey.CREDITS_OPERATION.toString(), type.toString());
         int valueToAdd = Integer.valueOf(valueString);
         int newCredits = oldCredits + valueToAdd;
 
         String newLevel = queryLevel(newCredits);
         memMapper.addCredits(memberId, valueToAdd, newLevel);
 
-        return newCredits;
+        return newCredits;*/
+        return 0;
     }
 
     @Override
     public String queryLevel(int credits) {
-        Set<String> levelSet = rt.opsForZSet().rangeByScore(RedisKey.CREDITS_LEVEL.toString(), 0, credits);
+/*        Set<String> levelSet = rt.opsForZSet().rangeByScore(RedisKey.CREDITS_LEVEL.toString(), 0, credits);
 
-        return CollectionUtils.findMax(levelSet);
+        return CollectionUtils.findMax(levelSet);*/
+        return "";
     }
 }

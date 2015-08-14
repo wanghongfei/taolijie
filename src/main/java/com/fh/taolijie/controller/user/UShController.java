@@ -201,7 +201,7 @@ public class UShController {
 
         if(shDto.getSecondHandPostCategoryId()!=null){
             shPostService.addPost(shDto);
-            userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+            //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
         }else {
             return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
         }
@@ -522,8 +522,8 @@ public class UShController {
         // like +1
         userService.likeSHPost(credential.getId(), id);
         // 加分
-        MemberModel mem = shPostService.findPost(id).getMember();
-        userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
+        //MemberModel mem = shPostService.findPost(id).getMember();
+        //userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
 
 
         return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();

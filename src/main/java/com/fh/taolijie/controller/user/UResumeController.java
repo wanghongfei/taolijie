@@ -115,7 +115,7 @@ public class UResumeController {
         resume.setCreatedTime(new Date());
         resumeService.addResume(resume);
         // 加分
-        userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+        //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
 
 
         // 设置求职意向
