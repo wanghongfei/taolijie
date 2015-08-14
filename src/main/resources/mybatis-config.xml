@@ -42,6 +42,8 @@
         <mapper resource="mapper/RecommendedPostModelMapper.xml" />
         <mapper resource="mapper/FeedbackModelMapper.xml" />
 
+        <mapper resource="mapper/TestMapper.xml" />
+
         <mapper resource="mapper/v2/IvyActImgModelMapper.xml" />
         <mapper resource="mapper/v2/MemberVerifyRelModelMapper.xml" />
         <mapper resource="mapper/v2/ParticipantModelMapper.xml" />
