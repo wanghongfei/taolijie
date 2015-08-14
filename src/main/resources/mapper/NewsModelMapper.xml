@@ -11,6 +11,7 @@
         <result column="news_time" property="time" jdbcType="DATE"/>
         <result column="news_member_id" property="memberId" jdbcType="INTEGER"/>
         <result column="news_head_picture_path" property="headPicturePath" jdbcType="VARCHAR"/>
+        <result column="news_place" property="place" jdbcType="VARCHAR" />
 
         <result column="news_content" property="content" jdbcType="LONGVARCHAR"/>
         <result column="news_picture_path" property="picturePath" jdbcType="LONGVARCHAR"/>
@@ -24,12 +25,14 @@
         -->
         id AS news_id, title AS news_title, time AS news_time, member_id AS news_member_id,
         head_picture_path AS news_head_picture_path, content AS news_content,
-        picture_path AS news_picture_path
+        picture_path AS news_picture_path,
+        place AS news_place
     </sql>
     <sql id="news_column">
         news.id AS news_id, news.title AS news_title, news.time AS news_time, news.member_id AS news_member_id,
         news.head_picture_path AS news_head_picture_path, news.content AS news_content,
-        news.picture_path AS news_picture_path
+        news.picture_path AS news_picture_path,
+        news.place AS news_place
 
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -62,10 +65,11 @@
         -->
         INSERT INTO news (title, time,
         member_id, head_picture_path, content,
-        picture_path)
+        picture_path, place)
         VALUES (#{title,jdbcType=VARCHAR}, #{time,jdbcType=DATE},
         #{memberId,jdbcType=INTEGER}, #{headPicturePath,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR},
-        #{picturePath,jdbcType=LONGVARCHAR})
+        #{picturePath,jdbcType=LONGVARCHAR},
+        #{place})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -92,6 +96,9 @@
             <if test="picturePath != null">
                 picture_path,
             </if>
+            <if test="place != null">
+                place,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -111,6 +118,9 @@
             </if>
             <if test="picturePath != null">
                 #{picturePath,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="place != null">
+                #{place},
             </if>
         </trim>
     </insert>
@@ -139,6 +149,9 @@
             <if test="picturePath != null">
                 picture_path = #{picturePath,jdbcType=LONGVARCHAR},
             </if>
+            <if test="place != null">
+                place = #{place},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -153,7 +166,8 @@
         member_id = #{memberId,jdbcType=INTEGER},
         head_picture_path = #{headPicturePath,jdbcType=VARCHAR},
         content = #{content,jdbcType=LONGVARCHAR},
-        picture_path = #{picturePath,jdbcType=LONGVARCHAR}
+        picture_path = #{picturePath,jdbcType=LONGVARCHAR},
+        place = #{place}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -225,6 +239,9 @@
             </if>
             <if test="picturePath != null">
                 AND news.picture_path = #{picturePath,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="place != null">
+                AND news.place = #{place}
             </if>
         </where>
         ORDER BY

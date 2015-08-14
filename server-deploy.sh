@@ -9,7 +9,7 @@ check_success() {
 }
 
 echo "building project..."
-git pull origin master
+git pull coding master
 check_success
 
 mvn clean install -Dmaven.test.skip=true
