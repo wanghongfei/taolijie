@@ -1,5 +1,6 @@
 package com.fh.taolijie.utils.json;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,17 @@ public class JsonWrapper extends Wrapper {
 		
 		this.ajaxMessage = obj.toString();
 	}
+
+    public JsonWrapper(boolean result, ErrorCode code) {
+        this.result = result;
+
+        JsonObject obj = Json.createObjectBuilder()
+                .add("result", result)
+                .add("message", code.value())
+                .build();
+
+        this.ajaxMessage = obj.toString();
+    }
 
 	/**
 	 * 构造 {result: 'true', parm: {'p1': 'p1', 'p2': 'p2', ...} }

@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.service.BannerPicService;
 import com.fh.taolijie.utils.Constants;
@@ -42,7 +43,7 @@ public class ABannerController {
         pic.setCreatedTime(new Date());
         bannerPicService.addBanner(pic);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -55,9 +56,9 @@ public class ABannerController {
     @ResponseBody
     public String del(@RequestParam int id){
         if(!bannerPicService.deleteBanner(id)){ //如果删除失败可能原因是id未找到
-            return new JsonWrapper(false,Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**

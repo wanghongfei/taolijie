@@ -9,12 +9,12 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class ProfileDto {
 
-    @NotEmpty(message = Constants.ErrorType.PARAM_ILLEGAL)
-    @Length(min=3,max=15, message = Constants.ErrorType.PARAM_ILLEGAL)
+    @NotEmpty()
+    @Length(min=3,max=15)
     String name;
 
-    @NotEmpty(message = Constants.ErrorType.PARAM_ILLEGAL)
-    @Length(min=3,max=15, message = Constants.ErrorType.PARAM_ILLEGAL)
+    @NotEmpty()
+    @Length(min=3,max=15)
     String gender;
 
     public String getName() {

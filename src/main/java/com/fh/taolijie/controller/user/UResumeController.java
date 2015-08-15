@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
@@ -85,7 +86,7 @@ public class UResumeController {
                   @RequestParam(required = false) String intendIds,
                   HttpSession session){
         if (null == intendIds || intendIds.isEmpty()) {
-            return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
 
         // 判断角色权限
@@ -94,14 +95,14 @@ public class UResumeController {
 
         String roleName = credential.getRoleList().iterator().next();
         if(roleName.equals(Constants.RoleType.EMPLOYER.toString())){
-            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
 
         // 判断是否已经有简历了
         // 如果已经有了则不允许创建新简历
         List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1);
         if(rList.size() !=0){
-            return new JsonWrapper(false, Constants.ErrorType.ALREADY_EXISTS).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.EXISTS).getAjaxMessage();
         }
 
         if (result.hasErrors()) {
@@ -124,10 +125,10 @@ public class UResumeController {
             setNewIntend(idList, resume.getId());
 
         } catch (InvalidNumberStringException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.BAD_NUMBER).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -199,9 +200,9 @@ public class UResumeController {
         });
 
         if(!resumeService.deleteResume(resume.getId())){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return  new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return  new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 
     }
 
@@ -214,9 +215,9 @@ public class UResumeController {
     public @ResponseBody String fav (@PathVariable int id,HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         if(resumeService.findResume(id) == null)
-            return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
 
         //遍历用户的收藏列表
         //如果没有这条兼职则添加,反之删除
@@ -288,14 +289,14 @@ public class UResumeController {
                                        @RequestParam(required = false) String intendIds,
                                        HttpSession session){
         if (null == intendIds || intendIds.isEmpty()) {
-            return new JsonWrapper(false, "intendIds cannot be null").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
 
         Credential credential = CredentialUtils.getCredential(session);
 
         List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1);
         if(rList.size()<1 ){
-            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
         ResumeModel oldResume = rList.get(0);
 
@@ -306,7 +307,7 @@ public class UResumeController {
 
 
         if(resume == null|| !ControllerHelper.isCurrentUser(credential,resume)){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
 
         if(result.hasErrors()){
@@ -314,7 +315,7 @@ public class UResumeController {
         }
 
         if(!resumeService.updateResume(oldResume.getId(), resume)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
         // 删除老意向
@@ -329,7 +330,7 @@ public class UResumeController {
             return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -353,15 +354,15 @@ public class UResumeController {
         }
 
         if(resume == null || !ControllerHelper.isCurrentUser(credential,resume)){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
 
         resume.setCreatedTime(new Date());
         if(!resumeService.updateResume(resume.getId(), resume)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -382,7 +383,7 @@ public class UResumeController {
         }
 
         if(resume == null || !ControllerHelper.isCurrentUser(credential,resume)){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
         //切换公开状态
         int status = 0;

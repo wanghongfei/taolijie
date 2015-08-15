@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
@@ -83,11 +84,11 @@ public class HAuthController {
         try {
             accountService.login(loginDto.getUsername(), loginDto.getPassword());
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_NOT_EXIST).getAjaxMessage();
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
         } catch (UserInvalidException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         /*获取用户信息和用户权限*/
@@ -143,7 +144,7 @@ public class HAuthController {
             return new JsonWrapper(true, "id", mem.getId().toString()).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -209,7 +210,7 @@ public class HAuthController {
             res.addCookie(passwordCookie);
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -271,7 +272,7 @@ public class HAuthController {
         }
         //两次密码不一致
         if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
-            return new JsonWrapper(false, Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
         }
 
         //注册不同权限的账户
@@ -310,7 +311,7 @@ public class HAuthController {
             return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 

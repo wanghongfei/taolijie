@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
@@ -191,7 +192,7 @@ public class UJobController {
         // 检查发送时间间隔
         Date nowTime = new Date();
         if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
-            return new JsonWrapper(false, "too frequent!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.TOO_FREQUENT).getAjaxMessage();
         }
 
         /*创建兼职信息*/
@@ -207,10 +208,10 @@ public class UJobController {
             //Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
             //LogUtils.getInfoLogger().info("---new credits:{}, level:{}", credits, userService.queryLevel(credits));
         } else {
-            return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -241,17 +242,17 @@ public class UJobController {
             //查找兼这条兼职是不是用户发布的
             JobPostModel job =jobPostService.findJobPost(Integer.parseInt(currId));
             if(job == null){
-                return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
             }
             if(job.getMember().getId()!=uid){
-                return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
             }
             //删除兼职
             jobPostService.deleteJobPost(Integer.parseInt(currId));
         }
 
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -267,7 +268,7 @@ public class UJobController {
                                      HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 //        MemberModel mem = accountService.findMember(credential.getId());
 
 
@@ -281,7 +282,7 @@ public class UJobController {
         String status ="1";
         for(String currId:delIds){
             if(jobPostService.findJobPost(Integer.parseInt(currId)) == null)
-                return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+                return  new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
 
             //遍历用户的收藏列表
             //如果没有这条兼职则添加,反之删除
@@ -321,9 +322,9 @@ public class UJobController {
             }
         }catch (Exception e){
             System.out.println("mutideleteError");
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -339,12 +340,12 @@ public class UJobController {
         // 判断是否重复赞
         Credential cre = CredentialUtils.getCredential(session);
         if (null == cre) {
-            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
         Integer userId = cre.getId();
         boolean liked = userService.isJobPostAlreadyLiked(userId, jobId);
         if (liked) {
-            return new JsonWrapper(false, "already liked").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.ALREADY_DONE).getAjaxMessage();
         }
 
         userService.likeJobPost(userId, jobId);
@@ -353,7 +354,7 @@ public class UJobController {
         //MemberModel mem = jobPostService.findJobPost(jobId).getMember();
         //userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -367,17 +368,17 @@ public class UJobController {
         // 登陆判断
         Credential cre = CredentialUtils.getCredential(session);
         if (null == cre) {
-            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
         // 执行操作
         boolean opsResult = userService.unLikeJobPost(cre.getId(), jobId);
         // 返回false说明用户本来就没有点过赞
         if (false == opsResult) {
-            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 
     }
 
@@ -392,7 +393,7 @@ public class UJobController {
         // 登陆判断
         Credential cre = CredentialUtils.getCredential(session);
         if (null == cre) {
-            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
         boolean liked = userService.isJobPostAlreadyLiked(cre.getId(), jobId);
@@ -409,16 +410,16 @@ public class UJobController {
         //TODO:限定举报数目
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null){
-            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
         try{
             jobPostService.complaint(id);
         }
         catch(Exception e){
             System.out.println(e);
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -434,23 +435,23 @@ public class UJobController {
 
         if (null == jobPostModel) {
             resp.setStatus(HttpStatus.BAD_REQUEST.value());
-            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         // 检查是不是本用户发布的信息
         jobPostModel.setId(jobId);
         JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
         if (null == job) {
-            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         // 更新信息
         boolean operationResult = jobPostService.updateJobPost(jobPostModel.getId(), jobPostModel);
         if (false == operationResult) {
-            return new JsonWrapper(false, "update failed").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -470,19 +471,19 @@ public class UJobController {
         Credential credential = CredentialUtils.getCredential(session);
         JobPostModel job = jobPostService.findJobPost(id);
         if(job == null) {
-            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
 
         if(!ControllerHelper.isCurrentUser(credential,job)){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
 
         job.setPostTime(new Date());
         if(!jobPostService.updateJobPost(job.getId(),job)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -499,7 +500,7 @@ public class UJobController {
                              HttpSession session) {
         Credential credential = CredentialUtils.getCredential(session);
         if (null == credential) {
-            return new JsonWrapper(false, "未登陆").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
         model.setMemberId(credential.getId());
@@ -547,7 +548,7 @@ public class UJobController {
         // 删除评论回复
         reviewService.deleteReplyByReview(reviewId);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 

@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.FeedbackModel;
 import com.fh.taolijie.service.FeedbackService;
 import com.fh.taolijie.service.impl.Mail;
@@ -46,7 +47,7 @@ public class RestFeedbackController {
                                      HttpSession session) {
 
         if (false == StringUtils.checkNotEmpty(content)) {
-            return new ResponseText("content cannot be null");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         // send mail
@@ -118,12 +119,12 @@ public class RestFeedbackController {
     public ResponseText deleteFeedback(@RequestParam("ids") String idsStr) {
         // 验证
         if (false == StringUtils.checkNotEmpty(idsStr)) {
-            return new ResponseText("ids cannot be null");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         String[] idsStrs = idsStr.split(Constants.DELIMITER);
         if (null == idsStrs || 0 == idsStrs.length) {
-            return new ResponseText("invalid ids");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         // 转换成整数表
@@ -134,7 +135,7 @@ public class RestFeedbackController {
                     .collect(Collectors.toList());
         } catch (NumberFormatException ex) {
             // 转换失败说明有非数字字符
-            return new ResponseText("invalid ids");
+            return new ResponseText(ErrorCode.BAD_NUMBER);
         }
 
         fdService.deleteInBatch(idList);

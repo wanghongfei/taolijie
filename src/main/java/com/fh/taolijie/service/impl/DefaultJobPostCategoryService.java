@@ -43,7 +43,7 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
     @Transactional(readOnly = false)
     public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException {
         if (false == cateMapper.isCategoryEmpty(cateId)) {
-            throw new CategoryNotEmptyException(Constants.ErrorType.CATE_NOT_EMPTY);
+            throw new CategoryNotEmptyException();
         }
 
         int row = cateMapper.deleteByPrimaryKey(cateId);

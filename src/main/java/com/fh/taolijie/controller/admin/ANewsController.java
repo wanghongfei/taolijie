@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.admin;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.Constants;
@@ -74,7 +75,7 @@ public class ANewsController {
         newsDto.setTime(new Date());
         newsService.addNews(newsDto);
 
-        return new JsonWrapper(true, Constants.ErrorType.ADD_SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -83,9 +84,9 @@ public class ANewsController {
     @RequestMapping(value = "/edit/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String updateNews(@PathVariable int id,NewsModel newsDto){
         if(!newsService.updateNews(newsDto)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.EDIT_SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -95,9 +96,9 @@ public class ANewsController {
     public @ResponseBody String deleteNews(@PathVariable int id){
 
         if(! newsService.deleteNews(id)){
-            return new JsonWrapper(false, Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.DEL_SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 

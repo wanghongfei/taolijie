@@ -1,5 +1,6 @@
 package com.fh.taolijie.dto;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.utils.Constants;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -8,9 +9,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class LoginDto {
 
-    @NotEmpty(message = Constants.ErrorType.USERNAME_ILLEGAL)
+    @NotEmpty()
     private String username;
-    @NotEmpty(message = Constants.ErrorType.PASSWORD_ILLEGAL)
+    @NotEmpty()
     private String password;
     private String rememberMe = "false";
 

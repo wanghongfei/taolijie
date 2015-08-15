@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.user;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.ImageModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.dto.ChangePasswordDto;
@@ -89,7 +90,7 @@ public class UIndexController {
         user.setGender(profileDto.getGender());
 
         accountService.updateMember(user);
-        return  new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return  new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -128,9 +129,9 @@ public class UIndexController {
         if(!mem.getPassword().equals(CredentialUtils.sha(dto.getOldPassword()))){
             System.out.println("用户的密码:"+mem.getPassword());
             System.out.println("输入的原密码:"+CredentialUtils.sha(dto.getOldPassword()));
-            return new JsonWrapper(false, Constants.ErrorType.PASSWORD_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
         }else if(!dto.getNewPassword().equals(dto.getRePassword())){
-            return  new JsonWrapper(false, Constants.ErrorType.REPASSWORD_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
         }
 
         //加密
@@ -141,7 +142,7 @@ public class UIndexController {
         accountService.updateMember(mem);
 
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -168,7 +169,7 @@ public class UIndexController {
 //                +"用户邮箱:"+email+"/n"
 //                +"时间:  "+new Date(), Constants.MailType.FEEDBACK,"wfc5582563@126.com");
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -191,7 +192,7 @@ public class UIndexController {
                                        HttpSession session) {
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
         MemberModel user = accountService.findMember(credential.getId());
 

@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.service.RecommendService;
 import com.fh.taolijie.utils.Constants;
@@ -53,7 +54,7 @@ public class RestCommendUpdateController {
     @RequestMapping(method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText update(RecommendedPostModel model) {
         if (null == model.getIsJob()) {
-            return new ResponseText("id cannot be null");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         recoService.updateByIdSelective(model);

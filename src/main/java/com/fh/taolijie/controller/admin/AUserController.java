@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.admin;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
@@ -85,7 +86,7 @@ public class AUserController {
     String  addUser(MemberModel dto,@RequestParam String roleName){
 
         if(null != accountService.findMember(dto.getUsername(), false)){
-            return new JsonWrapper(false, Constants.ErrorType.USERNAME_EXISTS).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_EXIST).getAjaxMessage();
         }
         System.out.println("添加用户的role:" + roleName);
 
@@ -107,9 +108,9 @@ public class AUserController {
         try {
             accountService.register(dto);
         } catch (DuplicatedUsernameException e) {
-            return new JsonWrapper(false,Constants.ErrorType.FAILED).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -125,7 +126,7 @@ public class AUserController {
 
         accountService.updateMember(member);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -138,7 +139,7 @@ public class AUserController {
 
         accountService.updateMember(member);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -151,7 +152,7 @@ public class AUserController {
 
         accountService.updateMember(member);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -161,7 +162,7 @@ public class AUserController {
     public @ResponseBody String deleterUser(@PathVariable int id, HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(id == credential.getId()){
-            return new JsonWrapper(false,Constants.ErrorType.CANT_DELETE_CURRENT_USER).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.CAN_NOT_DEL_CURRENT_USER).getAjaxMessage();
         }
 
         MemberModel user = accountService.findMember(id);
@@ -172,7 +173,7 @@ public class AUserController {
         }
 
         accountService.updateMember(user);
-        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -184,7 +185,7 @@ public class AUserController {
     public @ResponseBody String getOneUser(@PathVariable int id){
         MemberModel member = accountService.findMember(id);
         if(member == null){
-            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
 
         return JSON.toJSONString(member);

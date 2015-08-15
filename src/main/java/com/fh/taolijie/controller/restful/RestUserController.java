@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
@@ -29,7 +30,7 @@ public class RestUserController {
     public ResponseText getByUsername(@RequestParam String username) {
         MemberModel mem = accService.findMember(username, true);
         if (null == mem) {
-            return new ResponseText("not found");
+            return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
         return new ResponseText(mem);

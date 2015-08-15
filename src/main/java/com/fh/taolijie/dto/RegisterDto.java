@@ -9,9 +9,9 @@ import org.hibernate.validator.constraints.Length;
  */
 public class RegisterDto {
 
-    @Length(min = 6, max = 20, message = Constants.ErrorType.USERNAME_ILLEGAL)
+    @Length(min = 6, max = 20)
     private String username;
-    @Length(min = 6, max = 25, message = Constants.ErrorType.PASSWORD_ILLEGAL)
+    @Length(min = 6, max = 25)
     private String password;
     @Email
     private String email;

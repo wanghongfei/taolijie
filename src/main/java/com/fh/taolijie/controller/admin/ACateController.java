@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.dto.CategoryDto;
@@ -117,9 +118,9 @@ public class ACateController {
             else
                 shPostCategoryService.add(shCate);
         }else {
-            return new JsonWrapper(true, Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+            return new JsonWrapper(true, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -134,9 +135,9 @@ public class ACateController {
                                               BindingResult result){
         dto.setId(id);
         if(!jobPostCateService.updateByIdSelective(dto)){
-            return new JsonWrapper(true, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(true, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -191,9 +192,9 @@ public class ACateController {
                 return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
             }
         }else{
-            return new JsonWrapper(true, Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+            return new JsonWrapper(true, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 

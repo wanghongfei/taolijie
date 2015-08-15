@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.admin;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.JobPostService;
@@ -52,10 +53,10 @@ public class AJobController {
             JobPostModel job = jobPostService.findJobPost(id);
 
             if(!jobPostService.deleteJobPost(id)){
-                return new JsonWrapper(false,Constants.ErrorType.ERROR).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
             }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 
     }
 }

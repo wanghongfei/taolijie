@@ -224,46 +224,42 @@ public class Constants {
 
     public static class ErrorType{
 
-        public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
-        public static final String USER_INVALID_ERROR = "该用户已被封号";
+        //public static final String USERNAME_OR_PASSWORD_ERROR = "用户名密码错误";
+        //public static final String USER_INVALID_ERROR = "该用户已被封号";
 
-        public static final String USERNAME_ILLEGAL = "用户名不合法";
-        public static final String USERNAME_ERROR = "用户名错误";
-        public static final String USERNAME_EXISTS = "用户名已存在";
-        public static final String USERNAME_NOT_EXISTS = "用户名不存在";
-        public static final String NOT_LOGGED_IN = "用户未登录";
+        //public static final String USERNAME_ILLEGAL = "用户名不合法";
+        //public static final String USERNAME_ERROR = "用户名错误";
+        //public static final String USERNAME_EXISTS = "用户名已存在";
+        //public static final String USERNAME_NOT_EXISTS = "用户名不存在";
+        //public static final String NOT_LOGGED_IN = "用户未登录";
 
-        public static final String PASSWORD_ILLEGAL = "密码不合法";
-        public static final String PASSWORD_ERROR = "密码错误";
+        //public static final String PASSWORD_ILLEGAL = "密码不合法";
+        //public static final String PASSWORD_ERROR = "密码错误";
 
-        public static final String REPASSWORD_ERROR = "密码不一致";
+        //public static final String REPASSWORD_ERROR = "密码不一致";
 
-        public static final String CATE_NOT_EMPTY = "该分类不是空的";
+        //public static final String CATE_NOT_EMPTY = "该分类不是空的";
 
-        public static final String EMAIL_ILLEGAL = "邮箱不合法";
-        public static final String EMAIL_ERROR = "邮箱错误";
+        //public static final String EMAIL_ILLEGAL = "邮箱不合法";
+        //public static final String EMAIL_ERROR = "邮箱错误";
 
-        public static final String NOT_EMPTY = "字段不为空";
+        //public static final String NOT_EMPTY = "字段不为空";
 
-        public static final String SUCCESS = "操作成功";
-        public static final String FAILED = "操作失败";
-        public static final String DELETE_FAILED = "删除失败";
-        public static final String PARAM_ILLEGAL = "参数不合法";
+        //public static final String SUCCESS = "操作成功";
+        //public static final String FAILED = "操作失败";
+        //public static final String DELETE_FAILED = "删除失败";
+        //public static final String PARAM_ILLEGAL = "参数不合法";
 
-        public static final String CANT_DELETE_CURRENT_USER = "不能删除当前用户";
+        //public static final String CANT_DELETE_CURRENT_USER = "不能删除当前用户";
 
-        public static final String VERFIEDSUCCESS = "审核通过";
-        public static final String VERFIEDFAILED = "审核未通过";
+        //public static final String VERFIEDSUCCESS = "审核通过";
+        //public static final String VERFIEDFAILED = "审核未通过";
 
-        public static final String ERROR = "出现错误";
-        public static final String NOT_FOUND = "没有找到";
-        public static final String PERMISSION_ERROR = "权限不足";
+        //public static final String ERROR = "出现错误";
+        //public static final String NOT_FOUND = "没有找到";
+        //public static final String PERMISSION_ERROR = "权限不足";
 
-        public static final String ADD_SUCCESS = "添加成功";
-        public static final String EDIT_SUCCESS = "修改成功";
-        public static final String DEL_SUCCESS = "删除成功";
 
-        public static final String ALREADY_EXISTS = "已存在";
 
 
     }

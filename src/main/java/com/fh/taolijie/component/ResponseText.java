@@ -1,5 +1,6 @@
 package com.fh.taolijie.component;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.utils.Constants;
 
 import java.util.List;
@@ -8,8 +9,9 @@ import java.util.List;
  * Created by wanghongfei on 15-6-19.
  */
 public class ResponseText {
-    private String message;
-    private boolean isOk;
+    private String message = ErrorCode.SUCCESS.toString();
+    private int code = ErrorCode.SUCCESS.value();
+    private boolean isOk = true;
 
     private Object data;
 
@@ -45,9 +47,10 @@ public class ResponseText {
      * 该构造函数默认处理结果为失败
      * @param message
      */
-    public ResponseText(String message) {
+    public ResponseText(ErrorCode errorCode) {
         this.isOk = false;
-        this.message = message;
+        this.message = errorCode.toString();
+        this.code = errorCode.value();
     }
 
     public Object getData() {
@@ -75,4 +78,11 @@ public class ResponseText {
         this.isOk = isOk;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 }

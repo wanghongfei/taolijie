@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.SHPostModel;
 import com.fh.taolijie.service.ShPostCategoryService;
@@ -52,10 +53,10 @@ public class AShController {
         SHPostModel sh = shPostService.findPost(id);
 
         if(!shPostService.deletePost(id)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 
     }
 }

@@ -51,7 +51,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     public Integer register(MemberModel model) throws DuplicatedUsernameException {
         // 检查用户是否存在
         if (true == isUserExisted(model.getUsername())) {
-            throw new DuplicatedUsernameException(Constants.ErrorType.USERNAME_EXISTS);
+            throw new DuplicatedUsernameException();
         }
 
         memMapper.insert(model);
@@ -78,17 +78,17 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     public boolean login(String username, String password) throws UserNotExistsException, PasswordIncorrectException, UserInvalidException {
         MemberModel mem = memMapper.selectByUsername(username);
         if (null == mem) {
-            throw new UserNotExistsException(Constants.ErrorType.USERNAME_NOT_EXISTS);
+            throw new UserNotExistsException();
         }
 
         // check validity
         if (null != mem.getValid() && false == mem.getValid()) {
-            throw new UserInvalidException(Constants.ErrorType.USER_INVALID_ERROR);
+            throw new UserInvalidException();
         }
 
         // check password
         if (false == mem.getPassword().equals(CredentialUtils.sha(password))) {
-            throw new PasswordIncorrectException(Constants.ErrorType.PASSWORD_ERROR);
+            throw new PasswordIncorrectException();
         }
 
         return true;

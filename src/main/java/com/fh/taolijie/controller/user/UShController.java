@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
@@ -11,6 +12,7 @@ import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -178,7 +180,7 @@ public class UShController {
 
         // 查检发布时间间隔
         if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
-            return new JsonWrapper(false, "too frequent!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.TOO_FREQUENT).getAjaxMessage();
         }
 
         /*创建二手信息*/
@@ -192,9 +194,9 @@ public class UShController {
             shPostService.addPost(shDto);
             //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
         }else {
-            return new JsonWrapper(false,Constants.ErrorType.PARAM_ILLEGAL).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -213,7 +215,7 @@ public class UShController {
 
         if (null == shPostModel) {
             resp.setStatus(HttpStatus.BAD_REQUEST.value());
-            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         // 检查是不是本用户发布的信息
@@ -221,16 +223,16 @@ public class UShController {
         shPostModel.setPicturePath(picIds);
         SHPostModel sh = shPostService.findPost(shPostModel.getId());
         if (null == sh) {
-            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         // 更新信息
         boolean operationResult = shPostService.updatePost(shPostModel.getId(), shPostModel);
         if (false == operationResult) {
-            return new JsonWrapper(false, "update failed").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -244,7 +246,7 @@ public class UShController {
         // 检查是不否是本用户发的信息
         SHPostModel sh = shPostService.findPost(shId);
         if (null == sh) {
-            return new JsonWrapper(false, Constants.ErrorType.USER_INVALID_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         SHPostModel cmd = new SHPostModel();
@@ -252,10 +254,10 @@ public class UShController {
         cmd.setExpired(true);
 
         if (false == shPostService.updatePost(shId, cmd) ) {
-            return new JsonWrapper(false, "failed").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -284,17 +286,17 @@ public class UShController {
             //查找兼这条兼职是不是用户发布的
             SHPostModel sh =shPostService.findPost(Integer.parseInt(currId));
             if(sh == null){
-                return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
             }
             if(sh.getMember().getId()!=uid){
-                return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
             }
             //删除兼职
             shPostService.deletePost(Integer.parseInt(currId));
         }
 
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -310,7 +312,7 @@ public class UShController {
                                      HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 
         String [] delIds = {id+""};
         //id=0视为多条删除
@@ -323,7 +325,7 @@ public class UShController {
             //遍历用户的收藏列表
             //如果没有这条简历则添加,反之删除
             if(shPostService.findPost(Integer.parseInt(currId)) == null)
-                return  new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+                return  new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
 
             boolean isFav = shPostService.isPostFavorite(credential.getId(),Integer.parseInt(currId));
             if(isFav){ //找到,删除收藏
@@ -351,16 +353,16 @@ public class UShController {
         //TODO:限定举报数目
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null){
-            return new JsonWrapper(false, Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
         try{
             shPostService.complaint(id);
         }
         catch(Exception e){
             System.out.println(e);
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
-        return new JsonWrapper(true,Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -381,19 +383,19 @@ public class UShController {
         Credential credential = CredentialUtils.getCredential(session);
         SHPostModel sh = shPostService.findPost(id);
         if(sh == null) {
-            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
 
         if(!ControllerHelper.isCurrentUser(credential,sh)){
-            return  new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
 
         sh.setPostTime(new Date());
         if(!shPostService.updatePost(sh.getId(), sh)){
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
 
@@ -412,16 +414,16 @@ public class UShController {
         int capacity = 9999;
         //获取评论内容,已经用户的的信息
         if(content.trim().equals("")){
-            return new JsonWrapper(false,Constants.ErrorType.NOT_EMPTY).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
-            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         int memId = credential.getId();
 
         //先查一下有没有这个帖子
         if(shPostService.findPost(id) == null){
-            return new JsonWrapper(false,Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
 
         //为该id的帖子创建一条评论
@@ -470,23 +472,23 @@ public class UShController {
         Credential credential = CredentialUtils.getCredential(session);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
-            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
 
         //验证评论是否自己发布
         ReviewModel reviewDto = reviewService.getById(reviewId);
         if(reviewDto == null)
-            return new JsonWrapper(false, Constants.ErrorType.NOT_FOUND).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         if(reviewDto.getMemberId() != credential.getId())
-            return new JsonWrapper(false, Constants.ErrorType.PERMISSION_ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 
         //删除评论
         if(!reviewService.deleteReview(reviewId))
-            return new JsonWrapper(false, Constants.ErrorType.ERROR).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
 
         // 删除评论回复
         reviewService.deleteReplyByReview(reviewId);
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
     //endregion
 
@@ -500,12 +502,12 @@ public class UShController {
         Credential credential = CredentialUtils.getCredential(session);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
-            return new JsonWrapper(false,Constants.ErrorType.NOT_LOGGED_IN).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
 
         // 判断是否重复喜欢
         boolean liked = userService.isSHPostAlreadyLiked(credential.getId(), id);
         if (liked) {
-            return new JsonWrapper(false, "already liked").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.ALREADY_DONE).getAjaxMessage();
         }
 
         // like +1
@@ -515,7 +517,7 @@ public class UShController {
         //userService.changeCredits(mem.getId(), OperationType.LIKE, mem.getCredits());
 
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
     /**
@@ -529,17 +531,17 @@ public class UShController {
         // 登陆判断
         Credential cre = CredentialUtils.getCredential(session);
         if (null == cre) {
-            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
         // 执行操作
         boolean opsResult = userService.unlikeShPost(cre.getId(), shId);
         // 返回false说明用户本来就没有点过赞
         if (false == opsResult) {
-            return new JsonWrapper(false, "invalid operation!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
-        return new JsonWrapper(true, Constants.ErrorType.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 
     }
 
@@ -554,7 +556,7 @@ public class UShController {
         // 登陆判断
         Credential cre = CredentialUtils.getCredential(session);
         if (null == cre) {
-            return new JsonWrapper(false, "not logged in now!").getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
 
         boolean liked = userService.isSHPostAlreadyLiked(cre.getId(), shId);

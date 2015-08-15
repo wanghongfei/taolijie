@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
@@ -30,11 +31,11 @@ public class RestReviewUpdateController {
     public ResponseText reply(ReviewModel model,
                               HttpSession session) {
         if (null == model.getRepliedReviewId()) {
-            return new ResponseText("repliedReviewId cannot be null");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         if (false == StringUtils.checkNotEmpty(model.getContent())) {
-            return new ResponseText("content cannot be null");
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         Credential credential = CredentialUtils.getCredential(session);
@@ -59,7 +60,7 @@ public class RestReviewUpdateController {
         Credential credential = CredentialUtils.getCredential(session);
         ReviewModel re = reService.getById(reviewId);
         if (false == re.getMemberId().equals(credential.getId())) {
-            return new ResponseText("invalid operation");
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
 
