@@ -141,11 +141,11 @@
         SELECT
             *
         FROM
-            system_notification sys
+            system_notification
         WHERE
-            sys.access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
+            access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
         ORDER BY
-            sys.time DESC
+            time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
@@ -155,16 +155,16 @@
         FROM
             system_notification sys
         WHERE
-        sys.access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
+            sys.access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
     </select>
 
     <select id="findAll" resultMap="BaseResultMap">
         SELECT
             *
         FROM
-            system_notification sys
+            system_notification
         ORDER BY
-            sys.time DESC
+            time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
 
