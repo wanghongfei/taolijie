@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.service.NotificationService;
@@ -40,7 +41,7 @@ public class RestNotificationUpdateController {
     public ResponseText addPriNotification(@Valid PrivateNotificationModel model,
                                            BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseText("invalid request");
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
         model.setTime(new Date());
@@ -70,7 +71,7 @@ public class RestNotificationUpdateController {
     public ResponseText addSysNotification(@Valid SysNotificationModel model,
                                            BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseText("invalid request");
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
         model.setTime(new Date());

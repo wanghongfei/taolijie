@@ -89,6 +89,11 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    public SysNotificationModel findSysById(Integer notiId) {
+        return sysMapper.selectByPrimaryKey(notiId);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void addNotification(PrivateNotificationModel model) {
         priMapper.insertSelective(model);
@@ -108,6 +113,18 @@ public class DefaultNotificationService implements NotificationService {
         model.setIsRead(true);
 
         priMapper.updateByPrimaryKeySelective(model);
+    }
+
+    @Override
+    public void markSysAsRead(Integer memId, Integer notiId) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String ids = mem.getReadSysNotificationIds();
+        String newIds = StringUtils.addToString(ids, notiId.toString());
+
+        MemberModel example = new MemberModel();
+        example.setId(mem.getId());
+        mem.setReadSysNotificationIds(newIds);
+        memMapper.updateByPrimaryKeySelective(example);
     }
 
     @Override

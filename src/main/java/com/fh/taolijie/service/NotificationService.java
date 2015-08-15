@@ -20,7 +20,7 @@ public interface NotificationService {
     ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize);
 
     /**
-     * 查询当前用户未读的个人通知
+     * 查询当前用户的所有个人通知
      * @param memberId 当前登陆用户的id
      */
     ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize);
@@ -43,6 +43,11 @@ public interface NotificationService {
     PrivateNotificationModel findPriById(Integer priNotiId);
 
     /**
+     * 查询系统通知
+     */
+    SysNotificationModel findSysById(Integer notiId);
+
+    /**
      * 添加一条私人通知
      * @param model
      */
@@ -61,5 +66,11 @@ public interface NotificationService {
      * 将个人通知标记为已读
      * @param sysId
      */
-    void markPriAsRead(Integer sysId);
+    void markPriAsRead(Integer notiId);
+
+    /**
+     * 将系统通知标记为已读
+     * @param notiId
+     */
+    void markSysAsRead(Integer memId, Integer notiId);
 }

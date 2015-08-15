@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
@@ -42,7 +43,7 @@ public class RestNotificationController {
                                            HttpSession session) {
         // 检查memberId是否是当前用户
         if (false == memberId.equals(CredentialUtils.getCredential(session).getId())) {
-            return new ResponseText("invalid operation!");
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
@@ -82,11 +83,31 @@ public class RestNotificationController {
         Credential credential = CredentialUtils.getCredential(session);
         PrivateNotificationModel noti = notiService.findPriById(notiId);
         if (null == noti || false == noti.getToMemberId().equals(credential.getId())) {
-            return new ResponseText("invalid operation!");
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
         // mark notification as read
         notiService.markPriAsRead(notiId);
+
+        return new ResponseText();
+    }
+
+    /**
+     * 标记系统通知为已读
+     * @return
+     */
+    @RequestMapping(value = "/sys/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText markSysAsRead(@RequestParam("notiId") Integer notiId,
+                                      HttpSession session) {
+        Credential credential = CredentialUtils.getCredential(session);
+
+        // 检查通知是否存在
+        if (null == notiService.findSysById(notiId)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // mark notification as read
+        notiService.markSysAsRead(credential.getId(), notiId);
 
         return new ResponseText();
     }
