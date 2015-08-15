@@ -15,18 +15,13 @@ public interface NotificationService {
      * 查询当前用户的系统通知
      * @param memberId 当前登陆用户的id
      * @param rangeList {@link com.fh.taolijie.utils.Constants.NotificationRange}常量的字面值
-     * @param pageNumber
-     * @param pageSize
      * @return
      */
     ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize);
 
     /**
-     * 查询当前用户的个人通知
+     * 查询当前用户未读的个人通知
      * @param memberId 当前登陆用户的id
-     * @param pageNumber
-     * @param pageSize
-     * @return
      */
     ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize);
 

@@ -78,8 +78,9 @@ public class DefaultNotificationService implements NotificationService {
     public ListResult<PrivateNotificationModel> getAllPriNotification(int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
         List<PrivateNotificationModel> list = priMapper.findBy(model);
+        long tot = priMapper.countFindBy(model);
 
-        return new ListResult<>(list);
+        return new ListResult<>(list, tot);
     }
 
     @Override
