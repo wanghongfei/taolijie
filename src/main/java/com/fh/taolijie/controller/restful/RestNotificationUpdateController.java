@@ -71,7 +71,7 @@ public class RestNotificationUpdateController {
     public ResponseText addSysNotification(@Valid SysNotificationModel model,
                                            BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            return new ResponseText(ErrorCode.EMPTY_FIELD);
         }
 
         model.setTime(new Date());

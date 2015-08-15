@@ -26,6 +26,12 @@ public interface NotificationService {
     ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize);
 
     /**
+     * 查询当前用户所有未读的个人通知
+     * @return
+     */
+    ListResult<PrivateNotificationModel> getUnreadPriNotification(Integer memberId, int pageNumber, int pageSize);
+
+    /**
      * 查询所有系统通知
      * @return
      */

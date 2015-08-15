@@ -67,6 +67,18 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    public ListResult<PrivateNotificationModel> getUnreadPriNotification(Integer memberId, int pageNumber, int pageSize) {
+        PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
+        model.setToMemberId(memberId);
+        model.setIsRead(false);
+
+        List<PrivateNotificationModel> list = priMapper.findBy(model);
+        long tot = priMapper.countFindBy(model);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
     public ListResult<SysNotificationModel> getAllSysNotification(int pageNumber, int pageSize) {
         List<SysNotificationModel> list = sysMapper.findAll(pageNumber, pageSize);
         int tot = sysMapper.countFindAll();

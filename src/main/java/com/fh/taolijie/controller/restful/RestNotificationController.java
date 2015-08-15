@@ -33,7 +33,7 @@ public class RestNotificationController {
 
 
     /**
-     * 查询个人通知
+     * 查询全部个人通知
      * @return
      */
     @RequestMapping(value = "/pri", produces = Constants.Produce.JSON)
@@ -47,8 +47,26 @@ public class RestNotificationController {
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        List<PrivateNotificationModel> list = notiService.getPriNotification(memberId, pageNumber, pageSize)
-                .getList();
+        ListResult<PrivateNotificationModel> list = notiService.getPriNotification(memberId, pageNumber, pageSize);
+
+        return new ResponseText(list);
+    }
+
+    /**
+     * 查询当前用户未读通知
+     */
+    @RequestMapping(value = "/pri/unread", produces = Constants.Produce.JSON)
+    public ResponseText getUnReadPrivateNotification(@RequestParam("memberId") Integer memberId,
+                                               @RequestParam(defaultValue = "0") int pageNumber,
+                                               @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                                               HttpSession session) {
+        // 检查memberId是否是当前用户
+        if (false == memberId.equals(CredentialUtils.getCredential(session).getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        ListResult<PrivateNotificationModel> list = notiService.getUnreadPriNotification(memberId, pageNumber, pageSize);
 
         return new ResponseText(list);
     }
