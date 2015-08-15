@@ -12,5 +12,5 @@ import java.util.List;
 
 @Repository
 public interface TestMapper {
-    void execute(SqlWrapper sql);
+    int execute(SqlWrapper sql);
 }

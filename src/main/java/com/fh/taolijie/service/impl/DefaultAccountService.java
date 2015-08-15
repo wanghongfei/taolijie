@@ -43,7 +43,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 /*    @Autowired
     RedisTemplate redisTemplate;*/
 
-    @Autowired
+    @Autowired(required = false)
     Mail mail;
 
     @Override

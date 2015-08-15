@@ -7,6 +7,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,10 @@ public class UJobController {
 
     @Autowired
     NotificationService notiService;
+
+
+    @Autowired
+    IntervalCheckService icService;
 
     /**
      * 我的发布 GET
@@ -182,25 +187,12 @@ public class UJobController {
         String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
-/*        // 检查上次发布的时间间隔
-        Date lastJobTime = mem.getLastJobDate();
+
+        // 检查发送时间间隔
         Date nowTime = new Date();
-        // 如果时间为空，说明这是用户第一次发帖
-        if (null != lastJobTime) {
-            boolean enoughInterval = TimeUtil.intervalGreaterThan(nowTime, lastJobTime, 1, TimeUnit.MINUTES);
-
-            // 时间间隔少于1min
-            // 返回错误信息
-            if (false == enoughInterval) {
-                return new JsonWrapper(false, "too frequent!").getAjaxMessage();
-            }
+        if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
+            return new JsonWrapper(false, "too frequent!").getAjaxMessage();
         }
-
-        // 写入最新的发布时间
-        MemberModel memExample = new MemberModel();
-        memExample.setId(mem.getId());
-        memExample.setLastJobDate(nowTime);
-        accountService.updateMember(memExample);*/
 
         /*创建兼职信息*/
         job.setMemberId(credential.getId());

@@ -7,6 +7,7 @@ import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -200,7 +202,14 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public void addJobPost(JobPostModel model) {
-        postMapper.insert(model);
+        // 更新作者的上次发布时间
+        MemberModel example = new MemberModel();
+        example.setId(model.getMemberId());
+        example.setLastJobDate(model.getPostTime());
+        memMapper.updateByPrimaryKeySelective(example);
+
+        // 插入兼职表
+        postMapper.insertSelective(model);
     }
 
     @Override

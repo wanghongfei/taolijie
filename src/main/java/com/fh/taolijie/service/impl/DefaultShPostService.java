@@ -95,6 +95,13 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean addPost(SHPostModel model) {
+        // 更新作者的上次发布时间
+        MemberModel example = new MemberModel();
+        example.setId(model.getMemberId());
+        example.setLastShDate(model.getPostTime());
+        memMapper.updateByPrimaryKeySelective(example);
+
+        // 插入二手表
         postMapper.insertSelective(model);
 
         return true;

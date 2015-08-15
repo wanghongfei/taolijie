@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class UShController {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    IntervalCheckService icService;
 
     /**
      * 我的发布
@@ -172,25 +176,10 @@ public class UShController {
         mem = accountService.findMember(username, false);
 
 
-/*        // 检查距离上次发布的时间间隔
-        Date lastJobTime = mem.getLastShDate();
-        Date nowTime = new Date();
-        // 如果时间为空，说明这是用户第一次发帖
-        if (null != lastJobTime) {
-            boolean enoughInterval = TimeUtil.intervalGreaterThan(nowTime, lastJobTime, 1, TimeUnit.MINUTES);
-
-            // 时间间隔少于1min
-            // 返回错误信息
-            if (false == enoughInterval) {
-                return new JsonWrapper(false, "too frequent!").getAjaxMessage();
-            }
+        // 查检发布时间间隔
+        if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
+            return new JsonWrapper(false, "too frequent!").getAjaxMessage();
         }
-
-        // 写入最新的发布时间
-        MemberModel memExample = new MemberModel();
-        memExample.setId(mem.getId());
-        memExample.setLastShDate(nowTime);
-        accountService.updateMember(memExample);*/
 
         /*创建二手信息*/
         shDto.setMemberId(mem.getId());
