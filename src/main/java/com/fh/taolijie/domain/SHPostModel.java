@@ -304,37 +304,37 @@ public class SHPostModel extends Pageable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SHPostModel{");
-        sb.append("id=").append(id);
-        sb.append(", picturePath='").append(picturePath).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append(", title='").append(title).append('\'');
-        sb.append(", deleted=").append(deleted);
-        sb.append(", expiredTime=").append(expiredTime);
-        sb.append(", postTime=").append(postTime);
-        sb.append(", depreciationRate='").append(depreciationRate).append('\'');
-        sb.append(", originalPrice=").append(originalPrice);
-        sb.append(", sellPrice=").append(sellPrice);
-        sb.append(", likes=").append(likes);
-        sb.append(", dislikes=").append(dislikes);
-        sb.append(", memberId=").append(memberId);
-        sb.append(", secondHandPostCategoryId=").append(secondHandPostCategoryId);
-        sb.append(", complaint=").append(complaint);
-        sb.append(", pageView=").append(pageView);
-        sb.append(", expired=").append(expired);
-        sb.append(", verified='").append(verified).append('\'');
-        sb.append(", tradePlace='").append(tradePlace).append('\'');
-        sb.append(", contactName='").append(contactName).append('\'');
-        sb.append(", contactQq='").append(contactQq).append('\'');
-        sb.append(", contactPhone='").append(contactPhone).append('\'');
-        sb.append(", member=").append(member);
-        sb.append(", category=").append(category);
-        sb.append(", queryRange=").append(rangeQuery);
-        sb.append(", minPrice=").append(minPrice);
-        sb.append(", maxPrice=").append(maxPrice);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder(300);
+        sb.append(id);
+        sb.append(picturePath);
+        sb.append(description);
+        sb.append(title);
+        sb.append(deleted);
+        sb.append(expiredTime);
+        sb.append(postTime);
+        sb.append(depreciationRate);
+        sb.append(originalPrice);
+        sb.append(sellPrice);
+        sb.append(likes);
+        sb.append(dislikes);
+        sb.append(memberId);
+        sb.append(secondHandPostCategoryId);
+        sb.append(complaint);
+        sb.append(pageView);
+        sb.append(expired);
+        sb.append(verified);
+        sb.append(tradePlace);
+        sb.append(contactName);
+        sb.append(contactQq);
+        sb.append(contactPhone);
+        sb.append(member);
+        sb.append(category);
+        sb.append(rangeQuery);
+        sb.append(minPrice);
+        sb.append(maxPrice);
         sb.append(pageNumber);
         sb.append(pageSize);
+
         return sb.toString();
     }
 
