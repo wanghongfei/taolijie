@@ -129,15 +129,6 @@ public class HAuthController {
         }
 
 
-/*        if (loginDto.getRememberMe().equals("true")) {
-            Cookie usernameCookie = new Cookie("username", mem.getUsername());
-            usernameCookie.setMaxAge(cookieExpireTime);
-            Cookie passwordCookie = new Cookie("password", mem.getPassword());
-            passwordCookie.setMaxAge(cookieExpireTime);
-            res.addCookie(usernameCookie);
-            res.addCookie(passwordCookie);
-        }*/
-
         // 根据参数m判断是否是移动端
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
             // this is mobile client
@@ -146,7 +137,6 @@ public class HAuthController {
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
     /**
@@ -186,11 +176,11 @@ public class HAuthController {
         try {
             accountService.login(login.getUsername(), login.getPassword());
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_NOT_EXIST).getAjaxMessage();
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
         } catch (UserInvalidException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
         /*获取用户信息和用户权限*/
@@ -200,6 +190,7 @@ public class HAuthController {
         credential.addRole(role.getRolename());
 
         CredentialUtils.createCredential(session, credential);
+
          /*如果选择自动登陆,加入cookie*/
         if (login.getRememberMe().equals("true")) {
             Cookie usernameCookie = new Cookie("username", login.getUsername());

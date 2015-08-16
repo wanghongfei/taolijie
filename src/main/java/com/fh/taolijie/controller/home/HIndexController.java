@@ -54,11 +54,10 @@ public class HIndexController {
 
         // 放入兼职二手信息
         List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6)
-                .getList()
-                .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
+                .getList();
+
         List<SHPostModel> shs = shPostService.getAllPostList(0, 3)
-                .getList()
-                .stream().filter(s->!s.isDeleted()).collect(Collectors.toList());
+                .getList();
 
         // 放入banner
         ListResult<BannerPicModel> banResult = banService.getBannerList(0, Integer.MAX_VALUE);
