@@ -234,9 +234,10 @@ public class UJobController {
 
         int uid= CredentialUtils.getCredential(session).getId();
 
-        String [] delIds = {id+""};
+        String[] delIds = { String.valueOf(id) };
+
         //id=0视为多条删除
-        if(id==0){
+        if( id == 0 ){
             delIds = ids.split(";");
         }
 
@@ -275,7 +276,7 @@ public class UJobController {
 //        MemberModel mem = accountService.findMember(credential.getId());
 
 
-        String [] delIds = {id+""};
+        String[] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
             delIds = ids.split(";");

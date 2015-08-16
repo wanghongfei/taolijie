@@ -12,6 +12,7 @@ import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.UploadUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,8 +128,6 @@ public class UIndexController {
 
 
         if(!mem.getPassword().equals(CredentialUtils.sha(dto.getOldPassword()))){
-            System.out.println("用户的密码:"+mem.getPassword());
-            System.out.println("输入的原密码:"+CredentialUtils.sha(dto.getOldPassword()));
             return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
         }else if(!dto.getNewPassword().equals(dto.getRePassword())){
             return  new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
@@ -230,8 +229,12 @@ public class UIndexController {
             // 返回成功信息
 
         } catch (IOException ex) {
+            // 记录错误到日志
+            LogUtils.getErrorLogger()
+                    .error(ex.getMessage());
+
             // 返回上传失败错误信息
-            System.out.println("error!!!!!!!!!!!!!!!!!!!!!!!!");
+            return ex.getMessage();
         }
 
         return imageId+"";

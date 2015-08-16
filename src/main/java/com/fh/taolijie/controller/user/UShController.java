@@ -89,7 +89,6 @@ public class UShController {
                       @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                       HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
-        ObjWrapper objWrapper = new ObjWrapper();
 
         List<SHPostModel> shs = shPostService.getFavoritePost(credential.getId())
                 .getList();
@@ -278,7 +277,7 @@ public class UShController {
 
         int uid= CredentialUtils.getCredential(session).getId();
 
-        String [] delIds = {id+""};
+        String [] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
             delIds = ids.split(";");
@@ -317,7 +316,7 @@ public class UShController {
         if(credential == null)
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 
-        String [] delIds = {id+""};
+        String [] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
             delIds = ids.split(";");
@@ -411,10 +410,8 @@ public class UShController {
      */
     @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
-    //region 评论 String review
     public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
-        int page = 1;
-        int capacity = 9999;
+
         //获取评论内容,已经用户的的信息
         if(content.trim().equals("")){
             return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
