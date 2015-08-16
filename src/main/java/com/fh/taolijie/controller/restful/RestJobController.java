@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.service.JobPostCateService;
@@ -95,7 +96,7 @@ public class RestJobController {
     public ResponseText getPostInBatch(@RequestParam(value = "ids") String idString) {
         List<Integer> idList = StringUtils.toIdList(idString);
         if (null == idList) {
-            return new ResponseText("invalid id string");
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         ListResult<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));

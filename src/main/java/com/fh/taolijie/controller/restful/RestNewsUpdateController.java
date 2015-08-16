@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.Constants;
@@ -42,7 +43,7 @@ public class RestNewsUpdateController {
     @RequestMapping(method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText addNews(@Valid NewsModel model, BindingResult br) {
         if (br.hasErrors()) {
-            return new ResponseText("invalid request");
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         model.setTime(new Date());
@@ -58,7 +59,7 @@ public class RestNewsUpdateController {
     @RequestMapping(method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText updateNews(NewsModel model) {
         if (null == model.getId()) {
-            return new ResponseText("id cannot be null");
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         newsService.updateNews(model);

@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.service.RecommendService;
 import com.fh.taolijie.utils.Constants;
@@ -33,7 +34,7 @@ public class RestCommendController {
                                          @RequestParam(defaultValue = "0") int pageNumber,
                                          @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         if (null == type) {
-            return new ResponseText("invalid request");
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
@@ -45,7 +46,7 @@ public class RestCommendController {
         } else if ("resume".equals(type)) {
             result = recoService.getResumeList(pageNumber, pageSize);
         } else {
-            return new ResponseText("invalid request");
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         return new ResponseText(result);
