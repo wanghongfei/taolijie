@@ -153,20 +153,12 @@ public class HAuthController {
      * 管理员后台登陆
      */
     @RequestMapping(value = "login/admin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    //region 管理员后台登陆 AdminLogin
-
-    public
-    @ResponseBody
-    String AdminLogin(@Valid LoginDto login,
+    public @ResponseBody String AdminLogin(@Valid LoginDto login,
                       BindingResult result,
                       HttpSession session,
                       HttpServletResponse res) {
 
-        System.out.println("后台管理员登陆:::");
-        System.out.println(login.getUsername());
-        System.out.println(login.getRememberMe());
-
-        int cookieExpireTime = 1 * 24 * 60 * 60;//1天
+        int cookieExpireTime = (int) TimeUnit.DAYS.toSeconds(1); // 一天
 
         if (result.hasErrors()) {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
@@ -186,6 +178,7 @@ public class HAuthController {
         /*获取用户信息和用户权限*/
         MemberModel mem = accountService.findMember(login.getUsername(), true);
         RoleModel role = mem.getRoleList().iterator().next();
+
         Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
 
@@ -193,17 +186,13 @@ public class HAuthController {
 
          /*如果选择自动登陆,加入cookie*/
         if (login.getRememberMe().equals("true")) {
-            Cookie usernameCookie = new Cookie("username", login.getUsername());
+            Cookie usernameCookie = new Cookie("un", login.getUsername());
             usernameCookie.setMaxAge(cookieExpireTime);
-            Cookie passwordCookie = new Cookie("password", login.getPassword());
-            passwordCookie.setMaxAge(cookieExpireTime);
             res.addCookie(usernameCookie);
-            res.addCookie(passwordCookie);
         }
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
     /**
      * 用户注销 post
@@ -239,18 +228,11 @@ public class HAuthController {
     /**
      * 注册用户
      * Method : POST AJAX
-     *
-     * @param result
-     * @param session
-     * @param res
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST,
-            produces = "application/json;charset=utf-8")
-    //region 注册用户 public @ResponseBody String register
-    public
-    @ResponseBody
-    String register(@Valid RegisterDto registerDto,
+            produces = Constants.Produce.JSON)
+    public @ResponseBody String register(@Valid RegisterDto registerDto,
                     BindingResult result,
                     HttpSession session,
                     HttpServletResponse res) {
@@ -299,10 +281,12 @@ public class HAuthController {
         try {
             accountService.register(mem);
         } catch (DuplicatedUsernameException e) {
-            return new JsonWrapper(false, e.getMessage()).getAjaxMessage();
+            return new JsonWrapper(false, ErrorCode.USER_EXIST)
+                    .getAjaxMessage();
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
+        return new JsonWrapper(true, ErrorCode.SUCCESS)
+                .getAjaxMessage();
     }
     //endregion
 

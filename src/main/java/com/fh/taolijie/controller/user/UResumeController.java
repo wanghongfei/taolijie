@@ -76,7 +76,6 @@ public class UResumeController {
      * 创建简历 ajax
      * @param resume 简历提交的表单
      * @param result 表单的错误信息
-     * @param session
      * @return
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -132,7 +131,6 @@ public class UResumeController {
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
     /**

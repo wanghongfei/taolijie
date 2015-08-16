@@ -121,7 +121,6 @@ public class UJobController {
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    //region 发布兼职 String post
     public String post(HttpSession session,Model model) {
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
@@ -144,7 +143,6 @@ public class UJobController {
      * 与发布兼职用同一个页面，只不过修改该兼职会填充好之前的字段
      *
      * @param id 传入要修改的job的id
-     * @param session    用户的信息
      * @return
      */
     @RequestMapping(value = "change/{id}", method = RequestMethod.GET)
@@ -166,7 +164,6 @@ public class UJobController {
 
         return "pc/user/jobpost";
     }
-    //endregion
 
     /**
      * 发布兼职信息 post ajax
@@ -175,10 +172,8 @@ public class UJobController {
      * @param session
      * @return
      */
-    //region 发布兼职 ajax String post
     @RequestMapping(value = "/post", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String post(@Valid JobPostModel job,
+    public @ResponseBody String post(@Valid JobPostModel job,
                 BindingResult result,
                 HttpSession session) {
 
@@ -201,22 +196,17 @@ public class UJobController {
         /*创建兼职信息*/
         job.setMemberId(credential.getId());
         job.setPostTime(new Date());
-        job.setLikes(0);
+/*        job.setLikes(0);
         job.setDislikes(0);
-        job.setComplaint(0);
+        job.setComplaint(0);*/
 
-        if (job.getJobPostCategoryId() != null) {
-            jobPostService.addJobPost(job);
-            // 加分
-            //Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
-            //LogUtils.getInfoLogger().info("---new credits:{}, level:{}", credits, userService.queryLevel(credits));
-        } else {
-            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
-        }
+        jobPostService.addJobPost(job);
+        // 加分
+        //Integer credits = userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+        //LogUtils.getInfoLogger().info("---new credits:{}, level:{}", credits, userService.queryLevel(credits));
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
     /**
@@ -238,19 +228,22 @@ public class UJobController {
 
         //id=0视为多条删除
         if( id == 0 ){
-            delIds = ids.split(";");
+            delIds = ids.split(Constants.DELIMITER);
         }
 
 
         for(String currId:delIds){
-            //查找兼这条兼职是不是用户发布的
+            // 根据id查找兼职
             JobPostModel job =jobPostService.findJobPost(Integer.parseInt(currId));
             if(job == null){
                 return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
             }
+
+            // 判断是不是当前用户发布的
             if(job.getMember().getId()!=uid){
                 return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
             }
+
             //删除兼职
             jobPostService.deleteJobPost(Integer.parseInt(currId));
         }
@@ -258,7 +251,6 @@ public class UJobController {
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
 
@@ -266,48 +258,44 @@ public class UJobController {
      * 收藏一条兼职
      */
     @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    //region 收藏一条兼职 fav
     public @ResponseBody String fav (@PathVariable int id,
                                      @RequestParam(required = false) String ids,
                                      HttpSession session){
         Credential credential = CredentialUtils.getCredential(session);
         if(credential == null)
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
-//        MemberModel mem = accountService.findMember(credential.getId());
 
 
         String[] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
-            delIds = ids.split(";");
+            delIds = ids.split(Constants.DELIMITER);
         }
 
 
         String status ="1";
-        for(String currId:delIds){
-            if(jobPostService.findJobPost(Integer.parseInt(currId)) == null)
-                return  new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
+        for (String currId:delIds) {
+            Integer jobId = Integer.valueOf(currId);
+
+            if(jobPostService.findJobPost(jobId) == null) {
+                return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
+            }
 
             //遍历用户的收藏列表
             //如果没有这条兼职则添加,反之删除
+            boolean isFav = jobPostService.isPostFavorite(credential.getId(), jobId);
 
-            boolean isFav = jobPostService.isPostFavorite(credential.getId(),Integer.parseInt(currId));
-
-            if(isFav){ //找到,删除收藏
+            if(isFav) { //找到,删除收藏
                 jobPostService.unfavoritePost(credential.getId(),Integer.parseInt(currId));
                 status = "1";
-            }else{ //没有找到,则添加收藏
+            } else { //没有找到,则添加收藏
                 jobPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
                 status = "0";
             }
         }
 
-
-
-
         return new JsonWrapper(true, "status",status).getAjaxMessage();
     }
-    //endregion
 
 
     /**
@@ -325,7 +313,6 @@ public class UJobController {
                 jobPostService.unfavoritePost(credential.getId(), currId);
             }
         }catch (Exception e){
-            System.out.println("mutideleteError");
             return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
@@ -346,6 +333,7 @@ public class UJobController {
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
+
         Integer userId = cre.getId();
         boolean liked = userService.isJobPostAlreadyLiked(userId, jobId);
         if (liked) {
@@ -406,6 +394,7 @@ public class UJobController {
     }
 
     /**
+     * @deprecated
      * 举报一条兼职
      */
     @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST,
@@ -492,9 +481,6 @@ public class UJobController {
 
     /**
      * 发表评论
-     * @param jobId
-     * @param model
-     * @param session
      * @return
      */
     @RequestMapping(value = "{jobId}/review/post", method = RequestMethod.POST, produces = Constants.Produce.JSON)

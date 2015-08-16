@@ -58,7 +58,6 @@ public class UShController {
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                          HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
-        int totalPage = 0;
 
         page = PageUtils.getFirstResult(page, pageSize);
         ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, page, pageSize);
@@ -127,7 +126,6 @@ public class UShController {
 
         return "pc/user/shpost";
     }
-    //endregion
 
 
     /**
@@ -153,8 +151,8 @@ public class UShController {
         // 查询分类
         ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, Integer.MAX_VALUE);
 
-        model.addAttribute("sh",sh);
-        model.addAttribute("cates",cateList.getList());
+        model.addAttribute("sh", sh);
+        model.addAttribute("cates", cateList.getList());
         return "pc/user/shpost";
     }
     //endregion
@@ -192,15 +190,11 @@ public class UShController {
         shDto.setPicturePath(picIds);
         //shDto.setExpiredTime(TimeUtil.getMaxDate());
 
-        if(shDto.getSecondHandPostCategoryId()!=null){
-            shPostService.addPost(shDto);
-            //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
-        }else {
-            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
-        }
+        shPostService.addPost(shDto);
+        //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
     /**
@@ -280,13 +274,15 @@ public class UShController {
         String [] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
-            delIds = ids.split(";");
+            delIds = ids.split(Constants.DELIMITER);
         }
 
 
         for(String currId:delIds){
+            Integer shId = Integer.valueOf(currId);
+
             //查找兼这条兼职是不是用户发布的
-            SHPostModel sh =shPostService.findPost(Integer.parseInt(currId));
+            SHPostModel sh =shPostService.findPost(shId);
             if(sh == null){
                 return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
             }
@@ -294,13 +290,12 @@ public class UShController {
                 return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
             }
             //删除兼职
-            shPostService.deletePost(Integer.parseInt(currId));
+            shPostService.deletePost(shId);
         }
 
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
 
 
@@ -319,22 +314,24 @@ public class UShController {
         String [] delIds = { String.valueOf(id) };
         //id=0视为多条删除
         if(id==0){
-            delIds = ids.split(";");
+            delIds = ids.split(Constants.DELIMITER);
         }
 
         String status ="1";
         for(String currId:delIds) {
+            Integer shId = Integer.valueOf(currId);
+
             //遍历用户的收藏列表
             //如果没有这条简历则添加,反之删除
             if(shPostService.findPost(Integer.parseInt(currId)) == null)
                 return  new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
 
-            boolean isFav = shPostService.isPostFavorite(credential.getId(),Integer.parseInt(currId));
+            boolean isFav = shPostService.isPostFavorite(credential.getId(), shId);
             if(isFav){ //找到,删除收藏
-                shPostService.unfavoritePost(credential.getId(),Integer.parseInt(currId));
+                shPostService.unfavoritePost(credential.getId(), shId);
                 status = "1";
             }else{ //没有找到,则添加收藏
-                shPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
+                shPostService.favoritePost(credential.getId(), shId);
                 status = "0";
             }
         }
@@ -376,9 +373,7 @@ public class UShController {
      * @param session 用户的信息
      */
     @RequestMapping(value = "refresh/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public
-    @ResponseBody
-    String refresh(@PathVariable int id, HttpSession session) {
+    public @ResponseBody String refresh(@PathVariable int id, HttpSession session) {
         /**
          * 如果该sh不是用户发送的,则错误json
          */
@@ -453,7 +448,6 @@ public class UShController {
         //返回帖子id
         return new JsonWrapper(true,"reviewId", newId.toString()).getAjaxMessage();
     }
-    //endregion
 
 
     /**
@@ -465,7 +459,6 @@ public class UShController {
 
     @RequestMapping(value = "/{id}/review/delete/{reviewId}",method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
-    //region 删除一条兼职评论 @ResponseBody String reviewDelete
     public @ResponseBody String reviewDelete(@PathVariable int id,
                                              @PathVariable int reviewId,
                                              HttpSession session){
@@ -490,7 +483,6 @@ public class UShController {
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-    //endregion
 
     /**
      * 点赞

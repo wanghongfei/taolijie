@@ -49,6 +49,7 @@ public class SHPostModel extends Pageable {
 
     private Integer memberId;
 
+    @NotNull
     private Integer secondHandPostCategoryId;
 
     private Integer complaint;
