@@ -76,10 +76,6 @@ public class ACateController {
         return "pc/admin/addcategory";
     }
 
-
-
-
-
     /**
      * 添加二手\兼职分类
      * @param type  0为兼职分类,1为二手分类
@@ -90,36 +86,43 @@ public class ACateController {
                        @RequestParam boolean isEdit,
                        @RequestParam(required = false) int id,
                        CategoryDto cate){
-        if(type.equals("job")){
+        if (type.equals("job")) {
             JobPostCategoryModel jobCate = new JobPostCategoryModel();
-            if(id!=0)
+            if (id != 0) {
                 jobCate.setId(id);
+            }
+
             jobCate.setName(cate.getName());
             jobCate.setLevel(cate.getLevel());
             jobCate.setThemeColor(cate.getThemeColor());
             jobCate.setMemo(cate.getMemo());
 
-            if(isEdit) {
+            if (isEdit) {
                 jobPostCateService.updateByIdSelective(jobCate);
             } else {
                 jobPostCateService.add(jobCate);
             }
 
-        }else if(type.equals("sh")){
+        } else if (type.equals("sh")) {
             SHPostCategoryModel shCate = new SHPostCategoryModel();
-            if(id!=0)
+            if (id!=0) {
                 shCate.setId(id) ;
+            }
             shCate.setName(cate.getName());
             shCate.setLevel(cate.getLevel());
             shCate.setThemeColor(cate.getThemeColor());
             shCate.setMemo(cate.getMemo());
-            if(isEdit)
+
+            if(isEdit) {
                 shPostCategoryService.updateByIdSelective(shCate);
-            else
+            } else {
                 shPostCategoryService.add(shCate);
-        }else {
+            }
+
+        } else {
             return new JsonWrapper(true, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
+
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 
@@ -146,10 +149,12 @@ public class ACateController {
      */
     @RequestMapping(value = "/job",method = RequestMethod.GET)
     public String jobCategory(Model model){
-        int page = 1;
-        int capacity = 9999;
-        ListResult<JobPostCategoryModel> list = jobPostCateService.getCategoryList(page-1, capacity, new ObjWrapper());
+        int page = 0;
+        int capacity = Integer.MAX_VALUE;
+
+        ListResult<JobPostCategoryModel> list = jobPostCateService.getCategoryList(page, capacity);
         model.addAttribute("jobCates",list.getList());
+
         return "pc/admin/jobcategory";
     }
 
@@ -161,7 +166,8 @@ public class ACateController {
     public String shCategory(Model model){
         int page = 0;
         int capacity = Integer.MAX_VALUE;
-        ListResult<SHPostCategoryModel> list = shPostCategoryService.getCategoryList(page, capacity, new ObjWrapper());
+
+        ListResult<SHPostCategoryModel> list = shPostCategoryService.getCategoryList(page, capacity);
         model.addAttribute("shCates",list.getList());
         return "pc/admin/shcategory";
     }
@@ -183,26 +189,22 @@ public class ACateController {
             try {
                 jobPostCateService.deleteCategory(id);
             } catch (CategoryNotEmptyException e) {
-                return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.CATE_NOT_EMPTY)
+                        .getAjaxMessage();
             }
-        }else if(type.equals("sh")){
+
+        } else if(type.equals("sh")){
             try {
                 shPostCategoryService.deleteCategory(id);
             } catch (CascadeDeleteException e) {
-                return new JsonWrapper(false,e.getMessage()).getAjaxMessage();
+                return new JsonWrapper(false, ErrorCode.CATE_NOT_EMPTY).getAjaxMessage();
             }
-        }else{
+
+        } else {
             return new JsonWrapper(true, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
+
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
-
-
-
-
-
-
-
-
 
 }

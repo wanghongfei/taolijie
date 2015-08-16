@@ -115,14 +115,17 @@ public class UShController {
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public String post(HttpSession session,Model model) {
-        int page = 1;
-        int pageSize = 9999;
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
+
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
             return "redirect:/login";
         }
-        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(page - 1, pageSize, new ObjWrapper());
+
+        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(page, pageSize);
         model.addAttribute("cates", cateList.getList());
+
         return "pc/user/shpost";
     }
     //endregion
@@ -149,7 +152,7 @@ public class UShController {
         }
 
         // 查询分类
-        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, 100, null);
+        ListResult<SHPostCategoryModel> cateList = shPostCategoryService.getCategoryList(0, Integer.MAX_VALUE);
 
         model.addAttribute("sh",sh);
         model.addAttribute("cates",cateList.getList());

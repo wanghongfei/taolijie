@@ -190,8 +190,4 @@ public class AUserController {
 
         return JSON.toJSONString(member);
     }
-
-
-
-
 }

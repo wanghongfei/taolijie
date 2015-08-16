@@ -26,7 +26,7 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
     JobPostCategoryModelMapper cateMapper;
 
     @Override
-    public ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity) {
         List<JobPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = cateMapper.countGetAll();
 

@@ -36,6 +36,7 @@ public class AJobController {
     public String jobs(Model model){
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
+
         List<JobPostModel> jobs;
         jobs = jobPostService.getAllJobPostList(page, pageSize)
                 .getList();
@@ -48,13 +49,13 @@ public class AJobController {
      * 删除用户的兼职
      */
     @RequestMapping(value = "/del/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String deleteInfo(@PathVariable int id){
-            JobPostModel job = jobPostService.findJobPost(id);
+    @ResponseBody
+    public String deleteInfo(@PathVariable int id){
+        JobPostModel job = jobPostService.findJobPost(id);
 
-            if(!jobPostService.deleteJobPost(id)){
-                return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
-            }
+        if(!jobPostService.deleteJobPost(id)){
+            return new JsonWrapper(false, ErrorCode.FAILED).getAjaxMessage();
+        }
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
 

@@ -16,7 +16,7 @@ public interface JobPostCateService extends BaseService<JobPostCategoryModel> {
      * 获取所有分类
      * @return
      */
-    ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity);
 
     /**
      * 删除一个分类.

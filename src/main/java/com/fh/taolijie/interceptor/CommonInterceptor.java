@@ -37,8 +37,8 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         //首页新闻
         ListResult<NewsModel> list = newsService.getNewsList(0,3);
         //首页兼职二手分类(简历和兼职分类相同)
-        ListResult<JobPostCategoryModel> jobs = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
-        ListResult<SHPostCategoryModel> shs = shPostCategoryService.getCategoryList(0,9999,new ObjWrapper());
+        ListResult<JobPostCategoryModel> jobs = jobPostCateService.getCategoryList(0, Integer.MAX_VALUE);
+        ListResult<SHPostCategoryModel> shs = shPostCategoryService.getCategoryList(0, Integer.MAX_VALUE);
 
         request.setAttribute("titles",list.getList());
         request.setAttribute("sideJobCate",jobs.getList());

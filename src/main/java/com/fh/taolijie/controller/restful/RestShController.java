@@ -130,7 +130,7 @@ public class RestShController {
      */
     @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryList() {
-        ListResult<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+        ListResult<SHPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE);
 
         return new ResponseText(list);
     }

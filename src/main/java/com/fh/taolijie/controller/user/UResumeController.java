@@ -56,17 +56,19 @@ public class UResumeController {
      */
     @RequestMapping(value = "/create" ,method = RequestMethod.GET)
     public String create(HttpSession session,Model model){
-        int page = 1;
-        int capacity = 9999;
+        int page = 0;
+        int capacity = Integer.MAX_VALUE;
+
         Credential credential = CredentialUtils.getCredential(session);
         List<ResumeModel> resumeDtoList = resumeService.getResumeList(credential.getId(), 0, 0);
         if(resumeDtoList.size()>0){
             return "redirect:/user/resume/view";
         }
 
-        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page-1,capacity,new ObjWrapper());
+        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(page,capacity);
         model.addAttribute("cates",jobCateList.getList());
         model.addAttribute("isChange",false);
+
         return "pc/user/myresume";
     }
 
@@ -269,7 +271,7 @@ public class UResumeController {
         String intendIdString = queryIntend(resume.getId());
         model.addAttribute("resumeIntendJobs",intendIdString);
 
-        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0,9999,new ObjWrapper());
+        ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0, Integer.MAX_VALUE);
         model.addAttribute("cates",jobCateList.getList());
         model.addAttribute("resume",resume);
         model.addAttribute("isChange", true);

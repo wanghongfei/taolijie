@@ -146,7 +146,7 @@ public class RestJobController {
      */
     @RequestMapping(value = "/cate/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryList() {
-        ListResult<JobPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE, null);
+        ListResult<JobPostCategoryModel> list = cateService.getCategoryList(0, Integer.MAX_VALUE);
 
         return new ResponseText(list);
     }

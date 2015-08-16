@@ -123,14 +123,17 @@ public class UJobController {
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     //region 发布兼职 String post
     public String post(HttpSession session,Model model) {
-        int page = 1;
-        int pageSize = 9999;
+        int page = 0;
+        int pageSize = Integer.MAX_VALUE;
+
         Credential credential = CredentialUtils.getCredential(session);
         if (credential == null) {
             return "redirect:/login";
         }
-        ListResult<JobPostCategoryModel> cateList= jobPostCateService.getCategoryList(page-1, pageSize, new ObjWrapper());
+
+        ListResult<JobPostCategoryModel> cateList= jobPostCateService.getCategoryList(page, pageSize);
         model.addAttribute("cates",cateList.getList());
+
         return "pc/user/jobpost";
     }
     //endregion
@@ -157,7 +160,7 @@ public class UJobController {
         }
 
         // 查询兼职分类
-        ListResult<JobPostCategoryModel> cateList = jobPostCateService.getCategoryList(0, 100, null);
+        ListResult<JobPostCategoryModel> cateList = jobPostCateService.getCategoryList(0, Integer.MAX_VALUE);
         model.addAttribute("job", job);
         model.addAttribute("cates", cateList.getList());
 

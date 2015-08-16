@@ -20,7 +20,7 @@ public interface ShPostCategoryService extends BaseService<SHPostCategoryModel> 
      * @param capacity
      * @return
      */
-    ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper);
+    ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity);
 
 
     /**

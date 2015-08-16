@@ -58,6 +58,7 @@ public class ABannerController {
         if(!bannerPicService.deleteBanner(id)){ //如果删除失败可能原因是id未找到
             return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
+
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
     }
 

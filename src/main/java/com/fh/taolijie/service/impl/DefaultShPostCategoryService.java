@@ -25,7 +25,7 @@ public class DefaultShPostCategoryService extends AbstractBaseService<SHPostCate
     ShPostCategoryModelMapper cateMapper;
 
     @Override
-    public ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity, ObjWrapper wrapper) {
+    public ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity) {
         List<SHPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = cateMapper.countGetAll();
 
