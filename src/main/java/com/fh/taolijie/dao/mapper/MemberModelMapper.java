@@ -63,7 +63,7 @@ public interface MemberModelMapper {
 
 
     MemberModel selectByAppToken(String token);
-    void updateAppToken(Integer memId, String token);
+    void updateAppToken(@Param("memId") Integer memId, @Param("token") String token);
 
 
     Long getMemberAmount();
