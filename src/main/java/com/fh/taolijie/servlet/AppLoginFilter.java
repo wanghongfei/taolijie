@@ -35,7 +35,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        applicationContext = applicationContext;
+        AppLoginFilter.applicationContext = applicationContext;
     }
 
     @Override
