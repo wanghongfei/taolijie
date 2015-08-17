@@ -41,6 +41,8 @@
 
         <result column="mem_read_global_noti_ids" property="readSysNotificationIds"/>
 
+        <result column="mem_app_token" property="appToken" jdbcType="VARCHAR"/>
+
         <result column="mem_last_job_date" property="lastJobDate" jdbcType="TIMESTAMP" />
         <result column="mem_last_sh_date" property="lastShDate" jdbcType="TIMESTAMP" />
 
@@ -60,7 +62,8 @@
         favorite_sh_ids AS mem_favorite_sh_ids, favorite_resume_ids AS mem_favorite_resume_ids,read_global_noti_ids AS mem_read_global_noti_ids,
         last_sh_date AS mem_last_sh_date,
         last_job_date AS mem_last_job_date,
-        user_level AS mem_user_level
+        user_level AS mem_user_level,
+        app_token AS mem_app_token
     </sql>
     <sql id="member_column">
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
@@ -70,7 +73,8 @@
         mem.favorite_sh_ids AS mem_favorite_sh_ids, mem.favorite_resume_ids AS mem_favorite_resume_ids,mem.read_global_noti_ids AS mem_read_global_noti_ids,
         mem.last_sh_date AS mem_last_sh_date,
         mem.last_job_date AS mem_last_job_date,
-        mem.user_level AS mem_user_level
+        mem.user_level AS mem_user_level,
+        mem.app_token AS mem_app_token
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
@@ -129,7 +133,8 @@
         credits, student_id, block_list,
         applied_job_ids, liked_job_ids, liked_sh_ids,
         favorite_job_ids, favorite_sh_ids,
-        favorite_resume_ids, read_global_noti_ids)
+        favorite_resume_ids, read_global_noti_ids,
+        app_token)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -140,7 +145,8 @@
         #{credits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
         #{appliedJobIds,jdbcType=LONGVARCHAR}, #{likedJobIds,jdbcType=LONGVARCHAR}, #{likedShIds,jdbcType=LONGVARCHAR},
         #{favoriteJobIds,jdbcType=LONGVARCHAR}, #{favoriteShIds,jdbcType=LONGVARCHAR},
-        #{favoriteResumeIds,jdbcType=LONGVARCHAR}, #{readSysNotificationIds})
+        #{favoriteResumeIds,jdbcType=LONGVARCHAR}, #{readSysNotificationIds},
+        #{appToken})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -240,6 +246,10 @@
                 favorite_resume_ids,
             </if>
 
+            <if test="appToken != null">
+                app_token,
+            </if>
+
             <if test="lastJobDate != null" >last_job_date,</if>
             <if test="lastShDate != null" >last_sh_date,</if>
         </trim>
@@ -333,6 +343,10 @@
             </if>
             <if test="readSysNotificationIds != null" >
                 #{readSysNotificationIds},
+            </if>
+
+            <if test="appToken != null" >
+                #{appToken},
             </if>
 
             <if test="lastJobDate != null" >#{lastJobDate},</if>
@@ -437,6 +451,10 @@
                 read_global_noti_ids = #{readSysNotificationIds},
             </if>
 
+            <if test="appToken != null" >
+                app_token = #{appToken},
+            </if>
+
             <if test="lastJobDate != null" >last_job_date = #{lastJobDate},</if>
             <if test="lastShDate != null" >last_sh_date = #{lastShDate},</if>
         </set>
@@ -480,7 +498,8 @@
         read_global_noti_ids = #{readSysNotificationIds},
 
         last_sh_date = #{lastShDate},
-        last_job_date = #{lastJobDate}
+        last_job_date = #{lastJobDate},
+        app_token = #{appToken}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -571,6 +590,24 @@
         SET
             credits = credits + #{value},
             user_level = #{newLevel}
+        WHERE
+            id = #{memId}
+    </update>
+
+    <select id="selectByAppToken" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            member
+        WHERE
+            app_token = #{token}
+    </select>
+
+    <update id="updateAppToken">
+        UPDATE
+            member
+        SET
+            app_token = #{token}
         WHERE
             id = #{memId}
     </update>

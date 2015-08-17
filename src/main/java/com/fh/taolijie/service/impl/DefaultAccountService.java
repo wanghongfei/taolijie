@@ -145,6 +145,17 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = false)
+    public void updateAppToken(Integer memId, String token) {
+        memMapper.updateAppToken(memId, token);
+    }
+
+    @Override
+    public MemberModel selectByAppToken(String token) {
+        return memMapper.selectByAppToken(token);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public boolean deleteMember(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         mem.setValid(false);

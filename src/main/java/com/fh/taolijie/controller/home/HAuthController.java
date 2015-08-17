@@ -16,6 +16,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -131,8 +132,16 @@ public class HAuthController {
 
         // 根据参数m判断是否是移动端
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
-            // this is mobile client
-            return new JsonWrapper(true, "id", mem.getId().toString()).getAjaxMessage();
+            // 是移动端
+            // 生成app token
+            String appToken = RandomStringUtils.randomAlphabetic(20);
+            // 写入数据库
+            accountService.updateAppToken(mem.getId(), appToken);
+
+            // 返回token给客户端
+            return new JsonWrapper(true, "id", mem.getId().toString(),
+                    "appToken", appToken)
+                    .getAjaxMessage();
         }
 
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
@@ -199,7 +208,10 @@ public class HAuthController {
      */
 
     @RequestMapping(value = "logout",method = RequestMethod.GET)
-    public String logout(HttpServletResponse resp, HttpSession session){
+    public String logout(@RequestParam(required = false, value = "m") String m,
+                         @RequestParam(required = false, value = "appToken") String appToken,
+                         HttpServletResponse resp,
+                         HttpSession session){
         session.invalidate();
 
         // 删除cookie
@@ -210,6 +222,17 @@ public class HAuthController {
         co = new Cookie("un", "");
         co.setMaxAge(0);
         resp.addCookie(co);
+
+        // 判断是否是app
+        if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
+            Credential credential = CredentialUtils.getCredential(session);
+
+            // 删除appToken
+            accountService.updateAppToken(credential.getId(), null);
+
+            return new JsonWrapper(true, ErrorCode.SUCCESS)
+                    .getAjaxMessage();
+        }
 
         return "redirect:/";
     }

@@ -71,6 +71,10 @@ public interface AccountService {
      */
     void updateMember(MemberModel model);
 
+    void updateAppToken(Integer memId, String token);
+
+    MemberModel selectByAppToken(String token);
+
 
     /**
      * @deprecated 方法未实现

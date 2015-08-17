@@ -61,6 +61,11 @@ public interface MemberModelMapper {
 
     MemberModel selectByUsername(String username);
 
+
+    MemberModel selectByAppToken(String token);
+    void updateAppToken(Integer memId, String token);
+
+
     Long getMemberAmount();
 
     boolean checkUserExist(String username);
