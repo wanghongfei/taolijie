@@ -596,11 +596,22 @@
 
     <select id="selectByAppToken" resultMap="BaseResultMap">
         SELECT
-            <include refid="Base_Column_List" />
+            <include refid="member_column"/>,
+            r.*
         FROM
-            member
-        WHERE
-            app_token = #{token}
+            (
+              SELECT id
+              FROM member
+              WHERE app_token = #{token}
+            ) info, member mem
+        LEFT JOIN
+            role r
+        ON
+            r.rid IN
+              (SELECT role_rid
+              FROM member_role
+              WHERE member_id = info.id)
+        WHERE mem.id = info.id
     </select>
 
     <update id="updateAppToken">
