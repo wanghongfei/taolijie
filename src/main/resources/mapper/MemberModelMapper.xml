@@ -556,7 +556,7 @@
     </select>
     <select id="countGetMemberList" resultType="long">
         SELECT
-            COUNT (*)
+            COUNT(*)
         FROM
             member mem
     </select>
