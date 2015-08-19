@@ -60,13 +60,13 @@ $(".submit-btn").click(function(){
     }
     expiredTime.setCustomValidity(msg);
 
-    if(workTime.value.length > 20) {
-        msg = '长度在20字以内';
+    if(workTime.value.length > 100) {
+        msg = '长度在100字以内';
     }
     workTime.setCustomValidity(msg);
 
-    if(workPlace.value.length > 20) {
-        msg = '长度在20字以内';
+    if(workPlace.value.length > 100) {
+        msg = '长度在100字以内';
     }
     workPlace.setCustomValidity(msg);
 
