@@ -81,6 +81,9 @@
             <p><i class="fa fa-history fa-lg"></i>时间:
                 <fmt:formatDate value="${news.time}" pattern="yyyy-MM-dd"/>
             </p>
+            <p>
+              <i class="fa fa-map-marker"></i>活动地点: ${news.place}
+            </p>
             <%--<p><i class="fa fa-map-marker fa-lg"></i>地点:理工大西侧三体西侧</p>--%>
             <div class="jianjie">
               <i class="fa fa-file-text-o fa-lg"></i>

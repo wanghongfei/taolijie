@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -21,6 +23,7 @@
         text-indent: 2em;
         line-height: 28px;
         margin-top: 60px;
+        width: 160px;
         word-break:break-all;
     }
 </style>
@@ -75,7 +78,16 @@
                             <%--${title.title}--%>
                            <%--<div class="side-news-body" style="background-position: 0 -${status.index * 140}px;">--%>
                           <div class="side-news-body" style="background-image: url(/images/1.gif);;">
-                               <span>${title.title}</span>
+                            <span>
+                            <c:choose>
+                                <c:when test="${fn:length(title.title) > 12}">
+                                    <c:out value="${fn:substring(title.title, 0, 12)}..."/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:out value="${title.title}"/>
+                                </c:otherwise>
+                            </c:choose>
+                          </span>
                            </div>
                         </a>
                     </li>
@@ -83,5 +95,3 @@
         </ul>
     </div>
 </div>
-
-

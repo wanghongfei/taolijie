@@ -83,6 +83,7 @@
               <p><i class="fa fa-history fa-lg"></i>时间:
                 <fmt:formatDate value="${aNews.time}"  pattern="yyyy-MM-dd" />
               </p>
+              <p><i class="fa fa-map-marker"></i>活动地点: ${aNews.place}</p>
               <p>
                 <i class="fa fa-file-text-o fa-lg"></i>
                 简介:
@@ -103,7 +104,6 @@
 
       </div>
     </div>
-
 
 
 </div>

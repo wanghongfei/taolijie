@@ -91,6 +91,12 @@
                 <input class="form-control" id="title" name="title" placeholder="输入新闻标题(30字以内)" type="text" value="${aNews.title}">
               </div>
             </div>
+            <div class="form-group">
+              <label class="control-label col-md-2" for="title">活动地点</label>
+              <div class="col-md-6 col-xs-11">
+                <input class="form-control" id="title" name="place" placeholder="请输入活动地点" type="text" value="${aNews.title}">
+              </div>
+            </div>
 
             <div class="form-group">
               <div class="col-md-offset-2 col-md-7">
@@ -171,6 +177,3 @@
 
 </body>
 </html>
-
-
-
