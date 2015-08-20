@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +68,8 @@ public class RestUserController {
     @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
     public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         ListResult<MemberModel> list = accService.getMemberList(pageNumber, pageSize);
         return new ResponseText(list);
