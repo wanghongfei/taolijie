@@ -44,7 +44,7 @@ public class RestUserController {
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
     public ResponseText getById(@PathVariable Integer id) {
         MemberModel mem = accService.findMember(id);
-        mem.setPassword(null);
+        //mem.setPassword(null);
 
         return new ResponseText(mem);
     }
