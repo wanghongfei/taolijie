@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dto.CreditsInfo;
@@ -9,6 +10,8 @@ import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-21.
@@ -61,13 +64,13 @@ public class RestUserController {
         return new ResponseText(info);
     }
 
-/*    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
     public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
-        List<MemberModel> list = accService.getMemberList(pageNumber, pageSize, null);
+        ListResult<MemberModel> list = accService.getMemberList(pageNumber, pageSize);
         return new ResponseText(list);
-    }*/
+    }
 
 
 }
