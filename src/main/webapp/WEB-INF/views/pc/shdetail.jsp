@@ -193,16 +193,18 @@ To change this template use File | Settings | File Templates.
                                 </div>--%>
             </div>
             <div class="content" id="contents">
-                <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
-                    <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+                <c:if test="${not empty sessionScope.user}">
+                    <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
+                        <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
 
-                    <p>
-                        <span ng-bind="review.member.username"></span> <%--判断是该用户发的显示删除按钮--%>
-                        <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}"
-                           data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
-                    </p>
-                    <span ng-bind="review.content"></span>
-                </div>
+                        <p>
+                            <span ng-bind="review.member.username"></span> <%--判断是该用户发的显示删除按钮--%>
+                            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}"
+                                data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
+                        </p>
+                        <span ng-bind="review.content"></span>
+                    </div>
+                </c:if>
             </div>
             <jsp:include page="block/comment.jsp">
                 <jsp:param name="postId" value="${sh.id}"/>
