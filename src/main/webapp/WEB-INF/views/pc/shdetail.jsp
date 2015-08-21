@@ -193,7 +193,6 @@ To change this template use File | Settings | File Templates.
                                 </div>--%>
             </div>
             <div class="content" id="contents">
-                <c:if test="${not empty sessionScope.user}">
                     <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
                         <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
 
@@ -204,11 +203,12 @@ To change this template use File | Settings | File Templates.
                         </p>
                         <span ng-bind="review.content"></span>
                     </div>
-                </c:if>
             </div>
-            <jsp:include page="block/comment.jsp">
-                <jsp:param name="postId" value="${sh.id}"/>
-            </jsp:include>
+            <c:if test="${not empty sessionScope.user}">
+                 <jsp:include page="block/comment.jsp">
+                     <jsp:param name="postId" value="${sh.id}"/>
+                </jsp:include>
+            </c:if>
             <%--
             <div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
