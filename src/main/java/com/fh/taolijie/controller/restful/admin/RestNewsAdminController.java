@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.admin;
 
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
@@ -16,18 +16,20 @@ import javax.validation.Valid;
 import java.util.Date;
 
 /**
- * Created by whf on 8/9/15.
+ * 与新闻相关的管理操作
+ * <p>{@code /api/manage/news}
  */
 @RestController
 @RequestMapping("/api/manage/news")
-public class RestNewsUpdateController {
+public class RestNewsAdminController {
     @Autowired
     NewsService newsService;
 
     /**
      * 删除一条新闻
-     * @param newsId
-     * @return
+     * <p>{@code DELETE /{id}}
+     *
+     * @param id 要删除的新闻id
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
     public ResponseText getList(@PathVariable("id") Integer newsId) {
@@ -38,7 +40,8 @@ public class RestNewsUpdateController {
 
     /**
      * 添加一条新闻
-     * @return
+     * <p>{@code POST /}
+     *
      */
     @RequestMapping(method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText addNews(@Valid NewsModel model, BindingResult br) {
@@ -53,8 +56,10 @@ public class RestNewsUpdateController {
     }
 
     /**
-     * 修改新闻
-     * @return
+     * 修改新闻.
+     * <p>{@code PUT /}
+     * <p>根据{@link NewsModel#id}字段定位被修改的新闻.
+     *
      */
     @RequestMapping(method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText updateNews(NewsModel model) {

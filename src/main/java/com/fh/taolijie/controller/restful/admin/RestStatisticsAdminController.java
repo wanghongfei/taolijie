@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.admin;
 
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.service.StatisticsService;
@@ -14,12 +14,16 @@ import java.util.Map;
  * Created by whf on 7/7/15.
  */
 @RestController
-@RequestMapping("/api/statistics")
-public class RestStatisticsController {
+@RequestMapping("/api/manage/statistics")
+public class RestStatisticsAdminController {
     @Autowired
     StatisticsService staService;
 
 
+    /**
+     * 页面访问量
+     * @return
+     */
     @RequestMapping(value = "/pageView", produces = Constants.Produce.JSON)
     public ResponseText pageViewStatistics() {
         Map<String, Integer> map = staService.getPageViewStatistics();
@@ -27,6 +31,10 @@ public class RestStatisticsController {
         return new ResponseText(map);
     }
 
+    /**
+     * 在线人数
+     * @return
+     */
     @RequestMapping(value = "/online", produces = Constants.Produce.JSON)
     public ResponseText onlineStatistics() {
         Integer tot = OnlineListener.getAOnlineAmount();

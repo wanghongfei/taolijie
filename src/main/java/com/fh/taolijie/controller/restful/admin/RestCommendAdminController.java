@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.admin;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
@@ -11,19 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Created by whf on 7/11/15.
+ * 与帖子推荐相关的管理员操作。
+ * <p>{@code /api/manage/recommend}
  */
-
 @RestController
-@RequestMapping("/api/recommend/u")
-public class RestCommendUpdateController {
+@RequestMapping("/api/manage/recommend")
+public class RestCommendAdminController {
     @Autowired
     RecommendService recoService;
 
     /**
      * 创建推荐信息
+     * <p>{@code POST /}
+     *
      * @param model
-     * @return
      */
     @RequestMapping(method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText add(RecommendedPostModel model) {
@@ -36,8 +37,9 @@ public class RestCommendUpdateController {
 
     /**
      * 删除一条推荐信息
-     * @param id
-     * @return
+     * <p>{@code DELETE /{id}}
+     *
+     * @param id 要删除的帖子的id
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
     public ResponseText delete(@PathVariable("id") Integer id) {
@@ -48,8 +50,9 @@ public class RestCommendUpdateController {
 
     /**
      * 更新一条推荐信息
+     * <p>{@code PUT /}
+     *
      * @param model
-     * @return
      */
     @RequestMapping(method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText update(RecommendedPostModel model) {
@@ -65,9 +68,10 @@ public class RestCommendUpdateController {
 
     /**
      * 查询推荐申请
-     * @param pageNumber
-     * @param pageSize
-     * @return
+     * <p>{@code GET /request}
+     *
+     * @param pageNumber 页数，从0开始
+     * @param pageSize 每页的结果数
      */
     @RequestMapping(value = "/request", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText findRequest(@RequestParam(value = "validation", defaultValue = "false") boolean validation,

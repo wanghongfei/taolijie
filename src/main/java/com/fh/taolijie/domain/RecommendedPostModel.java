@@ -3,17 +3,29 @@ package com.fh.taolijie.domain;
 import java.util.Date;
 
 public class RecommendedPostModel extends Pageable {
+    /**
+     * 帖子推荐的id
+     */
     private Integer id;
 
-    // 兼职
+    /**
+     * 兼职的id
+     * <p>如果这是一条兼职推荐，该字段必填</p>
+     */
     private Integer jobId;
     private JobPostModel jobPost;
 
-    // 二手
+    /**
+     * 二手的id
+     * <p>如果这是二手推荐，该字段必填</p>
+     */
     private Integer shId;
     private SHPostModel shPost;
 
-    // 简历
+    /**
+     * 简历的id
+     * <p>如果这是简历推荐，该字段必填</p>
+     */
     private Integer resumeId;
     private ResumeModel resume;
 
@@ -21,9 +33,15 @@ public class RecommendedPostModel extends Pageable {
 
     private Boolean validation = false;
 
+    /**
+     * 推荐申请人的用户id
+     */
     private Integer memberId;
     private MemberModel member;
 
+    /**
+     * 备注信息
+     */
     private String memo;
 
     private Integer orderIndex;

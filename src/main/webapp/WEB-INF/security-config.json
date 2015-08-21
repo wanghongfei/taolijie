@@ -33,11 +33,6 @@
             "toUrl": "/404",
             "url": "/api/noti**"
         },
-        {
-            "roleList": ["ADMIN"],
-            "toUrl": "/404",
-            "url": "/api/manage**"
-        },
 
         {
             "roleList": ["ADMIN"],
