@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.constant.OperationType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
@@ -441,6 +442,7 @@ public class UShController {
         PrivateNotificationModel priNoti = new PrivateNotificationModel();
         priNoti.setToMemberId(toMemberId);
         priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
+        priNoti.setNotiType(NotiType.SYSTEM_AUTO.getCode());
         priNoti.setTime(new Date());
         // 保存到db
         notificationService.addNotification(priNoti);

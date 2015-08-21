@@ -75,6 +75,7 @@ public class RestNotificationController {
      * 查询当前用户的系统通知
      * @return
      */
+    @RequestMapping(value = "/sys", produces = Constants.Produce.JSON)
     public ResponseText getSysNotification(@RequestParam("memberId") Integer memberId,
                                            @RequestParam(defaultValue = "0") int pageNumber,
                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,

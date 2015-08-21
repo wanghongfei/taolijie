@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.service.NotificationService;
@@ -32,7 +33,7 @@ public class RestNotificationUpdateController {
 
 
     /**
-     * 创建一条个人通知
+     * 管理员向用户发送个人通知
      * @param model
      * @param result
      * @return
@@ -45,6 +46,7 @@ public class RestNotificationUpdateController {
         }
 
         model.setTime(new Date());
+        model.setNotiType(NotiType.ADMIN.getCode());
         noService.addNotification(model);
         return new ResponseText();
     }

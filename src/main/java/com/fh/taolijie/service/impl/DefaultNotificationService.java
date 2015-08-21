@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.PrivateNotificationModelMapper;
 import com.fh.taolijie.dao.mapper.SysNotificationModelMapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,7 +37,14 @@ public class DefaultNotificationService implements NotificationService {
 
         // 进行已读标记
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
+        if (null == mem) {
+            return new ListResult<>(list);
+        }
         String ids = mem.getReadSysNotificationIds();
+        if (null == ids) {
+            return new ListResult<>(list);
+        }
+
         String[] idArray = StringUtils.splitIds(ids);
 
         // 全部未读
@@ -58,7 +67,13 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     public ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
+
         model.setToMemberId(memberId);
+        model.setNotiTypeList(Arrays.asList(
+                NotiType.ADMIN.getCode(),
+                NotiType.SYSTEM_AUTO.getCode(),
+                NotiType.USER.getCode()
+        ));
 
         List<PrivateNotificationModel> list = priMapper.findBy(model);
         long tot = priMapper.countFindBy(model);
@@ -69,7 +84,13 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     public ListResult<PrivateNotificationModel> getUnreadPriNotification(Integer memberId, int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
+
         model.setToMemberId(memberId);
+        model.setNotiTypeList(Arrays.asList(
+                NotiType.ADMIN.getCode(),
+                NotiType.SYSTEM_AUTO.getCode(),
+                NotiType.USER.getCode()
+        ));
         model.setIsRead(false);
 
         List<PrivateNotificationModel> list = priMapper.findBy(model);
@@ -89,6 +110,8 @@ public class DefaultNotificationService implements NotificationService {
     @Override
     public ListResult<PrivateNotificationModel> getAllPriNotification(int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
+        model.setNotiType(NotiType.ADMIN.getCode());
+
         List<PrivateNotificationModel> list = priMapper.findBy(model);
         long tot = priMapper.countFindBy(model);
 

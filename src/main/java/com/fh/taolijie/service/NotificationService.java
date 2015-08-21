@@ -49,7 +49,7 @@ public interface NotificationService {
     PrivateNotificationModel findPriById(Integer priNotiId);
 
     /**
-     * 查询系统通知
+     * 根据id查询系统通知
      */
     SysNotificationModel findSysById(Integer notiId);
 

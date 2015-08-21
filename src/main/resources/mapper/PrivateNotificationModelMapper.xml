@@ -14,6 +14,8 @@
         <result column="pri_no_time" property="time" jdbcType="TIMESTAMP"/>
         <result column="pri_no_access_range" property="accessRange" jdbcType="VARCHAR"/>
 
+        <result column="pri_no_noti_type" property="notiType" jdbcType="VARCHAR"/>
+
         <result column="pri_no_content" property="content" jdbcType="LONGVARCHAR"/>
 
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
@@ -27,7 +29,8 @@
         pri_no.time AS pri_no_time,
         pri_no.access_range AS pri_no_access_range,
         pri_no.content AS pri_no_content,
-        pri_no.to_member_id AS pri_no_to_member_id
+        pri_no.to_member_id AS pri_no_to_member_id,
+        pri_no.noti_type AS pri_no_noti_type
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -58,10 +61,11 @@
         -->
         INSERT INTO private_notification (member_id, title,
         is_read, time, access_range,
-        content, to_member_id)
+        content, to_member_id, noti_type)
         VALUES (#{memberId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
         #{isRead,jdbcType=INTEGER}, #{time}, #{accessRange,jdbcType=VARCHAR},
-        #{content,jdbcType=LONGVARCHAR}, #{toMemberId})
+        #{content,jdbcType=LONGVARCHAR}, #{toMemberId},
+        #{notiType})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.PrivateNotificationModel">
         <!--
@@ -91,6 +95,9 @@
             <if test="content != null">
                 content,
             </if>
+            <if test="notiType != null">
+                noti_type ,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="memberId != null">
@@ -113,6 +120,9 @@
             </if>
             <if test="content != null">
                 #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="notiType != null">
+                #{notiType},
             </if>
         </trim>
     </insert>
@@ -144,6 +154,9 @@
             <if test="content != null">
                 content = #{content,jdbcType=LONGVARCHAR},
             </if>
+            <if test="notiType != null">
+                noti_type = #{notiType},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -156,6 +169,7 @@
         SET member_id = #{memberId,jdbcType=INTEGER},
         title = #{title,jdbcType=VARCHAR},
         is_read = #{isRead,jdbcType=INTEGER},
+        noti_type = #{notiType},
         time = #{time},
         access_range = #{accessRange,jdbcType=VARCHAR},
         content = #{content,jdbcType=LONGVARCHAR},
@@ -193,6 +207,14 @@
             <if test="content != null">
                 AND pri_no.content = #{content,jdbcType=LONGVARCHAR}
             </if>
+            <if test="notiType != null">
+                AND pri_no.noti_type = #{notiType}
+            </if>
+
+            <if test="notiTypeList != null">
+                AND pri_no.noti_type IN
+                <foreach collection="notiTypeList" item="_t" open="(" close=")" separator=",">#{_t}</foreach>
+            </if>
 
         </where>
         ORDER BY
@@ -227,7 +249,14 @@
             <if test="content != null">
                 AND pri_no.content = #{content,jdbcType=LONGVARCHAR}
             </if>
+            <if test="notiType != null">
+                AND pri_no.noti_type = #{notiType}
+            </if>
 
+            <if test="notiTypeList != null">
+                AND pri_no.noti_type IN
+                <foreach collection="notiTypeList" item="_t" open="(" close=")" separator=",">#{_t}</foreach>
+            </if>
         </where>
     </select>
 

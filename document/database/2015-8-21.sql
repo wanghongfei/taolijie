@@ -1,0 +1,1 @@
+alter table taolijie.private_notification add column noti_type varchar(2);
