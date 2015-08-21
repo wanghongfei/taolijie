@@ -135,7 +135,6 @@
         </div>--%>
       </div>
       <div class="content" id="contents">
-        <c:if test="${not empty sessionScope.user}">
         <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
             <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
             <p>{{ review.member.username }}
@@ -143,7 +142,6 @@
            </p>
             <div class="span"><span>{{ review.content }}</span></div>
         </div>
-            </c:if>
           <%--
         <c:forEach var="review" items="${reviews}" varStatus="status">
         <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
