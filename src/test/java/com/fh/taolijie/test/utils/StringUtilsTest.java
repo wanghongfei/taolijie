@@ -80,4 +80,21 @@ public class StringUtilsTest {
             set.add(str);
         }
     }
+
+    @Test
+    public void testCheckIdExists() {
+        String ids = "1;2;3;4;5;";
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "1"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "2"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "3"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "4"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "5"));
+
+        ids = "123;234;435;1;2;34;";
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "123"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "2"));
+        Assert.assertTrue(StringUtils.checkIdExists(ids, "34"));
+        Assert.assertFalse(StringUtils.checkIdExists(ids, "4"));
+        Assert.assertFalse(StringUtils.checkIdExists(ids, "5"));
+    }
 }

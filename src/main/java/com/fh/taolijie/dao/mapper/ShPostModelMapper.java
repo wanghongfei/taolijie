@@ -118,4 +118,7 @@ public interface ShPostModelMapper {
     void increaseLike(Integer postId);
     @RedisEvict(SHPostModel.class)
     void decreaseLike(Integer postId);
+
+    @RedisEvict(SHPostModel.class)
+    int setDeleted(Integer postId, boolean delete);
 }

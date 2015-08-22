@@ -856,4 +856,13 @@
         SET likes = likes - 1
         WHERE id = #{postId}
     </update>
+
+    <update id="setDeleted">
+        UPDATE
+            second_hand_post
+        SET
+            deleted = TRUE
+        WHERE
+            id = #{postId}
+    </update>
 </mapper>
