@@ -15,11 +15,25 @@ public class ResponseText {
 
     private Object data;
 
+
+    /**
+     * 操作成功的消息对象，单例
+     */
+    public static ResponseText successResponseText;
+
     public ResponseText(boolean ok, String message, Object data) {
         this.isOk = ok;
         this.message = message;
 
         this.data = data;
+    }
+
+    public static ResponseText getSuccessResponseText() {
+        if (null == successResponseText) {
+            successResponseText = new ResponseText();
+        }
+
+        return successResponseText;
     }
 
 
