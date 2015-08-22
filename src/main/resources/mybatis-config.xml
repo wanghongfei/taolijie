@@ -41,6 +41,7 @@
         <mapper resource="mapper/ShPostModelMapper.xml" />
         <mapper resource="mapper/RecommendedPostModelMapper.xml" />
         <mapper resource="mapper/FeedbackModelMapper.xml" />
+        <mapper resource="mapper/CollectionModelMapper.xml" />
 
         <mapper resource="mapper/TestMapper.xml" />
 
