@@ -20,20 +20,6 @@ public class RestCommendAdminController {
     @Autowired
     RecommendService recoService;
 
-    /**
-     * 创建推荐信息
-     * <p>{@code POST /}
-     *
-     * @param model
-     */
-    @RequestMapping(method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText add(RecommendedPostModel model) {
-        model.setValidation(false);
-        Integer id = recoService.add(model);
-
-        return new ResponseText(id);
-    }
-
 
     /**
      * 删除一条推荐信息
@@ -54,11 +40,10 @@ public class RestCommendAdminController {
      *
      * @param model
      */
-    @RequestMapping(method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText update(RecommendedPostModel model) {
-        if (null == model.getIsJob()) {
-            return new ResponseText(ErrorCode.EMPTY_FIELD);
-        }
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText update(@PathVariable Integer id,
+                               RecommendedPostModel model) {
+        model.setId(id);
 
         recoService.updateByIdSelective(model);
 
