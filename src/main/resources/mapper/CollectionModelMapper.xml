@@ -116,6 +116,8 @@
         <if test="orderByClause != null">
             order by ${orderByClause}
         </if>
+        LIMIT
+            #{pn}, #{ps}
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -289,4 +291,43 @@
         resume_id = #{resumeId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="isMemberAndJobExists" resultType="boolean">
+        SELECT
+            EXISTS (
+                SELECT 1 FROM my_collection WHERE member_id = #{memberId} AND job_post_id = #{jobId}
+            )
+    </select>
+    <select id="isMemberAndShExists" resultType="boolean">
+        SELECT
+          EXISTS (
+            SELECT 1 FROM my_collection WHERE member_id = #{memberId} AND sh_post_id = #{shId}
+        )
+    </select>
+    <select id="isMemberAndResumeExists" resultType="boolean">
+        SELECT
+          EXISTS (
+            SELECT 1 FROM my_collection WHERE member_id = #{memberId} AND resume_id = #{resumeId}
+        )
+    </select>
+
+    <delete id="deleteByMemberAndJob">
+        DELETE FROM
+            my_collection
+        WHERE
+            member_id = #{memberId} AND job_post_id = #{jobId}
+    </delete>
+    <delete id="deleteByMemberAndSh">
+        DELETE FROM
+            my_collection
+        WHERE
+            member_id = #{memberId} AND sh_post_id = #{shId}
+    </delete>
+    <delete id="deleteByMemberAndResume">
+        DELETE FROM
+            my_collection
+        WHERE
+            member_id = #{memberId} AND resume_id = #{resumeId}
+    </delete>
+
 </mapper>
