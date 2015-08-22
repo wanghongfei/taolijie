@@ -1,11 +1,11 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.Pagination;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.*;
+import com.fh.taolijie.service.CollectionService;
 import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -32,6 +32,9 @@ public class DefaultShPostService implements ShPostService {
 
     @Autowired
     MemberModelMapper memMapper;
+
+    @Autowired
+    CollectionService coService;
 
     @Override
     public ListResult<SHPostModel> getAllPostList(int firstResult, int capacity) {
@@ -111,61 +114,46 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public void favoritePost(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String oldIds = mem.getFavoriteShIds();
-
-        String newIds = StringUtils.addToString(oldIds, postId.toString());
-
-        mem.setFavoriteShIds(newIds);
-        memMapper.updateByPrimaryKeySelective(mem);
+        coService.collect(memId, postId, PostType.SH);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String oldIds = mem.getFavoriteShIds();
-
-        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
-
-        mem.setFavoriteShIds(newIds);
-        memMapper.updateByPrimaryKeySelective(mem);
-
+        coService.cancelCollect(memId, postId, PostType.SH);
     }
 
     @Override
     public boolean isPostFavorite(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String ids = mem.getFavoriteShIds();
-
-        return StringUtils.checkIdExists(ids, postId.toString());
+        return coService.alreadyCollected(memId, postId, PostType.SH);
     }
 
     @Override
     public ListResult<SHPostModel> getFavoritePost(Integer memberId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
-        String allIds = mem.getFavoriteShIds();
-        if (null == allIds || allIds.isEmpty()) {
+
+        CollectionModelExample example = new CollectionModelExample(0, Integer.MAX_VALUE);
+        example.createCriteria()
+                .andMemberIdEqualTo(memberId)
+                .andShPostIdIsNotNull();
+        // TODO 没分页
+        ListResult<CollectionModel> coList = coService.findBy(example);
+        if (0 == coList.getResultCount()) {
             return new ListResult<>(new ArrayList<>(0), 0);
         }
 
-        String[] ids = allIds.split(Constants.DELIMITER);
-
-        // id字符串数据转换成id整数数组
-        List<Integer> idList = Arrays.stream(ids).map(id -> {
-                return Integer.parseInt(id);
-        }).collect(Collectors.toList());
+        // 转换成idList
+        List<Integer> idList = coList.getList().stream()
+                .map(CollectionModel::getShPostId)
+                .collect(Collectors.toList());
 
         List<SHPostModel> list = postMapper.getInBatch(idList);
+
         return new ListResult<>(list, list.size());
     }
 
     @Override
     public boolean isPostAlreadyFavorite(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String oldIds = mem.getFavoriteShIds();
-
-        return StringUtils.checkIdExists(oldIds, postId.toString());
+        return coService.alreadyCollected(memId, postId, PostType.SH);
     }
 
     @Override

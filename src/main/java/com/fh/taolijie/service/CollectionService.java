@@ -15,7 +15,7 @@ public interface CollectionService {
      * @param example
      * @return
      */
-    ListResult<CollectionModel> findBy(CollectionModelExample example, int pn, int ps);
+    ListResult<CollectionModel> findBy(CollectionModelExample example);
 
     /**
      * 判断是否已经收藏了

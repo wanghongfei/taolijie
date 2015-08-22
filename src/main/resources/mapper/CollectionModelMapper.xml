@@ -117,7 +117,7 @@
             order by ${orderByClause}
         </if>
         LIMIT
-            #{pn}, #{ps}
+            #{pageNumber}, #{pageSize}
     </select>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--

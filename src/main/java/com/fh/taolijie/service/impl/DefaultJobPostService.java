@@ -2,12 +2,16 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
+import com.fh.taolijie.domain.CollectionModel;
+import com.fh.taolijie.domain.CollectionModelExample;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.CollectionService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -37,6 +41,9 @@ public class DefaultJobPostService implements JobPostService {
 
     @Autowired
     ReviewModelMapper revMapper;
+
+    @Autowired
+    CollectionService coService;
 
     @Override
     public ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity) {
@@ -144,49 +151,38 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public void favoritePost(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String oldIds = mem.getFavoriteJobIds();
-        String newIds = StringUtils.addToString(oldIds, postId.toString());
-        mem.setFavoriteJobIds(newIds);
-
-        memMapper.updateByPrimaryKeySelective(mem);
+        coService.collect(memId, postId, PostType.JOB);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void unfavoritePost(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String oldIds = mem.getFavoriteJobIds();
-        String newIds = StringUtils.removeFromString(oldIds, postId.toString());
-        mem.setFavoriteJobIds(newIds);
-
-        memMapper.updateByPrimaryKeySelective(mem);
-
+        coService.cancelCollect(memId, postId, PostType.JOB);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean isPostFavorite(Integer memId, Integer postId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-        String ids = mem.getFavoriteJobIds();
-
-        return StringUtils.checkIdExists(ids, postId.toString());
+        return coService.alreadyCollected(memId, postId, PostType.JOB);
     }
 
     @Override
     @Transactional(readOnly = false)
     public ListResult<JobPostModel> getFavoritePost(Integer memberId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memberId);
-        String allIds = mem.getFavoriteJobIds();
-        if (null == allIds || allIds.isEmpty()) {
+        CollectionModelExample example = new CollectionModelExample(0, Integer.MAX_VALUE);
+        example.createCriteria()
+                .andMemberIdEqualTo(memberId)
+                .andJobPostIdIsNotNull();
+        // TODO 没分页
+        ListResult<CollectionModel> coList = coService.findBy(example);
+        if (0 == coList.getResultCount()) {
             return new ListResult<>(new ArrayList<>(0), 0);
         }
 
-        String[] ids = allIds.split(Constants.DELIMITER);
-
-        List<Integer> idList = Arrays.stream(ids).map(id -> {
-            return Integer.parseInt(id);
-        }).collect(Collectors.toList());
+        // 转换成idList
+        List<Integer> idList = coList.getList().stream()
+                .map(CollectionModel::getJobPostId)
+                .collect(Collectors.toList());
 
         List<JobPostModel> list = postMapper.getInBatch(idList);
         return new ListResult<>(list, list.size());

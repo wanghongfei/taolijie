@@ -23,8 +23,8 @@ public class DefaultCollectionService implements CollectionService {
     private CollectionModelMapper coMapper;
 
     @Override
-    public ListResult<CollectionModel> findBy(CollectionModelExample example, int pn, int ps) {
-        List<CollectionModel> list = coMapper.selectByExample(example, pn, ps);
+    public ListResult<CollectionModel> findBy(CollectionModelExample example) {
+        List<CollectionModel> list = coMapper.selectByExample(example);
         long tot = coMapper.countByExample(example);
 
         return new ListResult<>(list, tot);

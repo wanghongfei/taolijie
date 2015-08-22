@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.dao.mapper.ApplicationIntendModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ResumeModelMapper;
@@ -8,6 +9,7 @@ import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
+import com.fh.taolijie.service.CollectionService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
@@ -36,6 +38,9 @@ public class DefaultResumeService implements ResumeService {
 
     @Autowired
     MemberModelMapper memMapper;
+
+    @Autowired
+    CollectionService coService;
 
     @Override
     public List<ResumeModel> getAllResumeList(int firstResult, int capacity) {
@@ -163,35 +168,18 @@ public class DefaultResumeService implements ResumeService {
     @Override
     @Transactional(readOnly = false)
     public void favoriteResume(Integer memId, Integer resumeId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-
-        String oldIds = mem.getFavoriteResumeIds();
-        String newIds = StringUtils.addToString(oldIds, resumeId.toString());
-        mem.setFavoriteResumeIds(newIds);
-
-        memMapper.updateByPrimaryKeySelective(mem);
-
+        coService.collect(memId, resumeId, PostType.RESUME);
     }
 
     @Override
     @Transactional(readOnly = false)
     public void unFavorite(Integer memId, Integer resumeId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-
-        String oldIds = mem.getFavoriteResumeIds();
-        String newIds = StringUtils.removeFromString(oldIds, resumeId.toString());
-        mem.setFavoriteResumeIds(newIds);
-
-        memMapper.updateByPrimaryKeySelective(mem);
-
+        coService.cancelCollect(memId, resumeId, PostType.RESUME);
     }
 
     @Override
     public boolean isAlreadyFavorite(Integer memId, Integer resumeId) {
-        MemberModel mem = memMapper.selectByPrimaryKey(memId);
-
-        String oldIds = mem.getFavoriteResumeIds();
-        return StringUtils.checkIdExists(oldIds, resumeId.toString());
+        return coService.alreadyCollected(memId, resumeId, PostType.RESUME);
     }
 
     @Override
