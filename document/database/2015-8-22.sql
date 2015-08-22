@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `taolijie`.`my_collection` (
   INDEX `idx_collection_mem_sh` (`member_id` ASC, `sh_post_id` ASC)  COMMENT '',
   INDEX `idx_collection_mem_resume` (`resume_id` ASC, `member_id` ASC)  COMMENT '')
   ENGINE = InnoDB
-  COMMENT = '我的收藏关联表'
+  COMMENT = '我的收藏关联表';
 
 alter table taolijie.member drop column favorite_job_ids;
 alter table taolijie.member drop column favorite_sh_ids;
