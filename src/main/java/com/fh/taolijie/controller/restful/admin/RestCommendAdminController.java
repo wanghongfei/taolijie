@@ -31,7 +31,7 @@ public class RestCommendAdminController {
     public ResponseText delete(@PathVariable("id") Integer id) {
         recoService.deleteById(id);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -47,7 +47,7 @@ public class RestCommendAdminController {
 
         recoService.updateByIdSelective(model);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
 

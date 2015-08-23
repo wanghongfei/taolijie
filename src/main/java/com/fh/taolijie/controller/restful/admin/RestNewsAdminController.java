@@ -35,7 +35,7 @@ public class RestNewsAdminController {
     public ResponseText getList(@PathVariable("id") Integer newsId) {
         newsService.deleteNews(newsId);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -52,7 +52,7 @@ public class RestNewsAdminController {
         model.setTime(new Date());
         newsService.addNews(model);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -69,6 +69,6 @@ public class RestNewsAdminController {
 
         newsService.updateNews(model);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 }

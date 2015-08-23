@@ -49,7 +49,8 @@ public class RestNotificationAdminController {
         model.setTime(new Date());
         model.setNotiType(NotiType.ADMIN.getCode());
         noService.addNotification(model);
-        return new ResponseText();
+
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -83,7 +84,9 @@ public class RestNotificationAdminController {
 
         model.setTime(new Date());
         noService.addNotification(model);
-        return new ResponseText();
+
+
+        return ResponseText.getSuccessResponseText();
     }
 
     /**

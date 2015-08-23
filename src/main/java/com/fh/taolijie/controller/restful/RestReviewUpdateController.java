@@ -45,7 +45,7 @@ public class RestReviewUpdateController {
         model.setTime(new Date());
         reService.addComment(model);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -65,7 +65,7 @@ public class RestReviewUpdateController {
 
 
         reService.deleteReview(reviewId);
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
 }

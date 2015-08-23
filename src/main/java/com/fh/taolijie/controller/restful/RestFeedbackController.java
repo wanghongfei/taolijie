@@ -69,7 +69,7 @@ public class RestFeedbackController {
 
         fdService.addFeedback(fd);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -106,7 +106,7 @@ public class RestFeedbackController {
     public ResponseText deleteFeedback(@PathVariable("fdId") Integer fdId) {
         fdService.deleteById(fdId);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
 
@@ -140,7 +140,7 @@ public class RestFeedbackController {
 
         fdService.deleteInBatch(idList);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
 }

@@ -108,7 +108,7 @@ public class RestNotificationController {
         // mark notification as read
         notiService.markPriAsRead(notiId);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
@@ -128,6 +128,6 @@ public class RestNotificationController {
         // mark notification as read
         notiService.markSysAsRead(credential.getId(), notiId);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 }

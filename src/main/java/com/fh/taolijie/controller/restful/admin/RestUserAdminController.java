@@ -75,6 +75,6 @@ public class RestUserAdminController {
     public ResponseText getList(@PathVariable("id") Integer memId) {
         accService.invalidAccount(memId);
 
-        return new ResponseText();
+        return ResponseText.getSuccessResponseText();
     }
 }
