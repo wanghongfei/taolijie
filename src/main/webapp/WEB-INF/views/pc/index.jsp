@@ -73,7 +73,7 @@
         <div class="segment jobs">
             <%--兼职--%>
             <c:forEach var="job" items="${jobs}">
-                <a href="/item/job/${job.id}" style="color:#333333;">
+                <a href="/item/job/${job.id}" target="_blank" style="color:#333333;">
                     <div class="job-slip">
                         <span class="cate"
                               style="background-color: ${job.category.themeColor};">${job.category.name}</span>
@@ -94,7 +94,7 @@
 
             <%--二手--%>
             <c:forEach var="sh" items="${shs}" varStatus="status">
-                <a href="/item/sh/${sh.id}" style="color:#333333;">
+                <a href="/item/sh/${sh.id}" target="_black" style="color:#333333;">
 
                     <div class="sh-slip fl ${status.index == 2 ? 'no-margin':null}">
                         <div class="shs_pic"><img src="" data-pid="${sh.picturePath}" alt="" class="sh-item"></div>

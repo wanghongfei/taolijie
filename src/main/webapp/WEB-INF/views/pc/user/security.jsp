@@ -57,15 +57,15 @@
     <form action="" id="ChangPasswordForm">
       <div class="form-group">
         <label for="">原密码</label>
-        <input type="password" class="form-control" name="oldPassword">
+        <input type="password" class="form-control" name="oldPassword" required>
       </div>
       <div class="form-group">
         <label for="">新密码</label>
-        <input type="password" class="form-control" name="newPassword">
+        <input type="password" class="form-control" name="newPassword" required>
       </div>
       <div class="form-group">
         <label for="">再确认</label>
-        <input type="password" class="form-control" name="rePassword">
+        <input type="password" class="form-control" name="rePassword" required>
       </div>
 
       <div class="segment">

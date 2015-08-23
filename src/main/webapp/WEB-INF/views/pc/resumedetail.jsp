@@ -15,7 +15,7 @@
 <html class="no-js" ng-app="tljApp" ng-controller="resumeCtrl">
 <head>
   <meta charset="utf-8">
-  <title>${postUser.username}的简历</title>
+  <title>{{postUser.username}}的简历</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -63,7 +63,7 @@
   <!-- 正文 -->
   <div class="detail main white-bg">
     <div class="detail-bar">
-      <span>${postUser.name}的简历</span>
+      <span>${postUser.username}的简历</span>
         <a href="/list/resume" style="color: #fa6a38"><p class="fl"><i class="fa fa-angle-left">&nbsp;&nbsp;</i>返回</p></a>
 
       <p class="fr" id="del" ng-attr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow" ng-click="del()">删除</p>

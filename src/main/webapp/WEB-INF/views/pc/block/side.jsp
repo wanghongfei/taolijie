@@ -76,8 +76,8 @@
                     <li class="news-${status.index+1}" style="overflow: hidden">
                         <a href="/detail/news/${title.id}">
                             <%--${title.title}--%>
-                           <%--<div class="side-news-body" style="background-position: 0 -${status.index * 140}px;">--%>
-                          <div class="side-news-body" style="background-image: url(/images/1.gif);;">
+                           <div class="side-news-body" style="background-position: 0 -${status.index * 140 + (status.index+1) * 10}px;">
+                          <%-- <div class="side-news-body" style="background-image: url(/images/1.gif);;"> --%>
                             <span>
                             <c:choose>
                                 <c:when test="${fn:length(title.title) > 12}">

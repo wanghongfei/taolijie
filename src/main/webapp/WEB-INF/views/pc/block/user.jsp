@@ -23,9 +23,7 @@
   <div class="content">
     <p>${sessionScope.user.username}<span></span></p>
     <div class="user-description">
-      <p>去完善自己的个人资料把</p>
-      <p>去完善自己的个人资料把</p>
-      <p>去完善自己的个人资料把</p>
+      <p>去完善自己的个人资料吧</p>
     </div>
   </div>
 

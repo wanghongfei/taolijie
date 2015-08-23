@@ -82,16 +82,16 @@
         <input name="height" class="short-input form-control" type="number" placeholder="填写有效数字" ng-model="resume.height" min="50" max="250">
         <span for="" class="input-unit">cm</span>
       </div>
-      <%--
+
       <div class="form-group">
         <label for="">年龄<i class="theme-color">*</i></label>
         <input name="age" class="short-input form-control" type="number" placeholder="" value="${resume.age}" min="14" max="80">
       </div>
-      --%>
-      <div class="form-group">
+
+      <%-- <div class="form-group">
         <label for="">出生日期<i class="theme-color">*</i></label>
         <input name="birthday" class="short-input form-control datepicker" type="text" placeholder="" ng-model="resume.birthday">
-      </div>
+      </div> --%>
       <div class="form-group">
         <label for="">学校<i class="theme-color">*</i></label>
         <input type="text" class="form-control" placeholder="填写您的学校" name="school" required maxlength="20" ng-model="resume.school">
@@ -150,7 +150,7 @@
       <div class="form-group">
         <label for="">公开程度</label>
         <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="ALL" required> 公开
-        <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="EMPLOYER" required> 对商家用户公开 
+        <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="EMPLOYER" required> 对商家用户公开
         <input type="radio" name="accessAuthority" ng-model="resume.accessAuthority" value="ME_ONLY" required> 不公开
       </div>
       <p class="pin-title">

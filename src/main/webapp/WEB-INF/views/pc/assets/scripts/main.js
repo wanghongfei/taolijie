@@ -1,6 +1,12 @@
 var tlj = angular.module('tljApp',[]);
 
 var num = 40;
+
+var errorCode = {
+  '3': '密码错误,请重新输入',
+  '4': '用户名不存在',
+  '8': '两次密码不一致'
+}
 $(window).bind('scroll', function () {
     if ($(window).scrollTop() > num) {
         $('.header').addClass('fixed');
@@ -13,7 +19,7 @@ $('#login-form').submit(function(e) {
     e.preventDefault();
     $.tlj.postForm('#login-form', '/login', function(data) {
         if(data.result == false) {
-            $.tlj.notify(data.message);
+            $.tlj.notify(errorCode[data.message]);
         }else {
 			location.href = '/';
         }
@@ -24,7 +30,7 @@ $('#reg-form').submit(function(e) {
     e.preventDefault();
     $.tlj.postForm('#reg-form', '/register', function(data) {
         if(data.result == false) {
-            $.tlj.notify(data.message);
+            $.tlj.notify(errorCode[data.message]);
         }else {
 			window.location.href = "/login";
         }
