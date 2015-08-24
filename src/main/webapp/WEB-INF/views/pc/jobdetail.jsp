@@ -157,11 +157,9 @@
         </c:forEach>
           --%>
       </div>
-    <c:if test="${not empty sessionScope.user}">
       <jsp:include page="block/comment.jsp">
         <jsp:param name="postId" value="${job.id}"/>
       </jsp:include>
-    </c:if>
     </div>
   </div>
 </div>

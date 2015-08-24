@@ -205,11 +205,9 @@ To change this template use File | Settings | File Templates.
                         <span ng-bind="review.content"></span>
                     </div>
             </div>
-            <c:if test="${not empty sessionScope.user}">
                  <jsp:include page="block/comment.jsp">
                      <jsp:param name="postId" value="${sh.id}"/>
                 </jsp:include>
-            </c:if>
             <%--
             <div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
