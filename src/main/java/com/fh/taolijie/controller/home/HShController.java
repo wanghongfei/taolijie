@@ -14,6 +14,7 @@ import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +88,7 @@ public class HShController {
      */
     @RequestMapping(value = "item/sh/{id}", method = RequestMethod.GET)
     public String shItem(@PathVariable int id,
-                         HttpSession session,
+                         HttpServletRequest req,
                          @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
                          @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize,
                          Model model) {
@@ -118,7 +120,8 @@ public class HShController {
 
         //收藏的显示状态
         boolean status = false; //不显示
-        Credential credential = CredentialUtils.getCredential(session);
+        //Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if (credential == null)
             status = false;
         else { //查找有没有收藏

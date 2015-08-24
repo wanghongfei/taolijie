@@ -11,6 +11,7 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,7 @@ public class HResumeController {
                              @RequestParam(defaultValue = "0") int cate,
                              @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                              Model model,
-                             HttpSession session) {
+                             HttpServletRequest req) {
         ObjWrapper objWrapper = new ObjWrapper();
         ListResult<ResumeModel> resumes;
         if (cate > 0) {
@@ -66,7 +68,8 @@ public class HResumeController {
             resumes = resumeService.getResumeListByIntend(cate, page * pageSize, pageSize);
         } else {
             // 查找所有简历
-            Credential credential = CredentialUtils.getCredential(session);
+            //Credential credential = CredentialUtils.getCredential(session);
+            Credential credential = SessionUtils.getCredential(req);
             // 如果是商家
             if (null != credential && Constants.RoleType.EMPLOYER.toString().equals(credential.getRoleList().get(0))) {
                 resumes = resumeService.findByAuthes(page, pageSize, Constants.AccessAuthority.ALL, Constants.AccessAuthority.EMPLOYER);
