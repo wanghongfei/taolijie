@@ -49,8 +49,8 @@ public class HIndexController {
      * @return
      */
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String index(HttpSession session, Model model){
-        Credential credential = CredentialUtils.getCredential(session);
+    public String index(Model model){
+        //Credential credential = CredentialUtils.getCredential(session);
 
         // 放入兼职二手信息
         List<JobPostModel> jobs = jobPostService.getAllJobPostList(0, 6)
@@ -64,7 +64,7 @@ public class HIndexController {
 
         model.addAttribute("jobs", jobs);
         model.addAttribute("shs", shs);
-        model.addAttribute("mem", credential);
+        //model.addAttribute("mem", credential);
 
         model.addAttribute("bannerList", banResult.getList());
         model.addAttribute("bannerCount", banResult.getResultCount());
