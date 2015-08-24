@@ -9,14 +9,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page session="false" %>
 
 <span class="loading-page"></span>
 <div class="top-bar">
   <div class="top-bar-content">
     <p>山东理工大学</p>
     <ul>
-      <c:if test="${not empty sessionScope.user}">
-        <li><a href="/user/profile" id="user-name-label">${sessionScope.user.username}</a>&nbsp;|&nbsp;</li>
+      <c:if test="${isLoggedIn}">
+        <li><a href="/user/profile" id="user-name-label">${username}</a>&nbsp;|&nbsp;</li>
         <li><a href="/logout">注销 
             <%--
             <i class="fa fa-caret-down"> </i>
@@ -24,7 +25,7 @@
         </a></li>
       </c:if>
 
-      <c:if test="${empty sessionScope.user}">
+      <c:if test="${not isLoggedIn}">
         <li> <a href="/login">登录</a>&nbsp;|&nbsp;</li>
         <li> <a href="/register">注册</a></li>
       </c:if>

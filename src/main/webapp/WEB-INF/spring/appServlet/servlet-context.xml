@@ -83,6 +83,11 @@
             <bean class="com.fh.taolijie.interceptor.CommonInterceptor"></bean>
         </mvc:interceptor>
 
+        <mvc:interceptor>
+            <mvc:mapping path="/" />
+            <bean class="com.fh.taolijie.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+
         <!-- 访问统计拦截器， 依赖于redis -->
         <mvc:interceptor>
             <mvc:mapping path="/**" />
