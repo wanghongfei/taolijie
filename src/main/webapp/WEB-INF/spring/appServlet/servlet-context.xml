@@ -73,7 +73,7 @@
     <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/" />
+            <mvc:mapping path="/**" />
             <bean class="com.fh.taolijie.interceptor.LoginInterceptor"></bean>
         </mvc:interceptor>
 
