@@ -14,8 +14,7 @@
   <div class="top-bar-content">
     <p  ><a href="/" style="color: #fff;">桃李街首页</a></p>
     <ul>
-
-      <c:if test="${not empty sessionScope.user}">
+        <c:if test="${isLoggedIn}">
         <li><a href="/user/profile">${sessionScope.user.username} &nbsp;|&nbsp;</a></li>
         <li><a href="/logout">注销 
             <%--
@@ -24,7 +23,7 @@
         </a></li>
       </c:if>
 
-      <c:if test="${empty sessionScope.user}">
+        <c:if test="${ not isLoggedIn}">
         <li> <a href="/login">登录</a>&nbsp;|&nbsp;</li>
         <li> <a href="/register">注册</a></li>
       </c:if>
