@@ -18,7 +18,7 @@ import java.util.Date;
  * Created by whf on 8/22/15.
  */
 @Controller
-@RestController("/api/manage/ban")
+@RequestMapping("/api/manage/ban")
 public class RestBannerAdminController {
 
     @Autowired
