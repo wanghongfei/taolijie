@@ -15,7 +15,7 @@
     <p  ><a href="/" style="color: #fff;">桃李街首页</a></p>
     <ul>
         <c:if test="${isLoggedIn}">
-        <li><a href="/user/profile">${sessionScope.user.username} &nbsp;|&nbsp;</a></li>
+        <li><a href="/user/profile">${username} &nbsp;|&nbsp;</a></li>
         <li><a href="/logout">注销 
             <%--
             <i class="fa fa-caret-down"> </i>
