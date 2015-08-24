@@ -12,6 +12,7 @@
 <%@ taglib prefix="ju" uri="/WEB-INF/tld/JsonUtils.tld"%>
 
 <%request.setCharacterEncoding("UTF-8");%>
+<%@ page session="false" %>
 <%--html头部--%>
 
 

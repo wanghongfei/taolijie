@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page session="false" %>
 <form class="review-bar">
     <img src="/images/default-img.jpg" alt="user photo" ng-if="!currentUser.profilePhotoId" class="comment-avatar">
     <img src="/static/images/users/{{ currentUser.profilePhotoId }}" alt="user photo" ng-if="currentUser.profilePhotoId" class="comment-avatar">
