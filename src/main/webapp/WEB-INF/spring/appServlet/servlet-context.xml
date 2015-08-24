@@ -73,6 +73,11 @@
     <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
     <mvc:interceptors>
         <mvc:interceptor>
+            <mvc:mapping path="/" />
+            <bean class="com.fh.taolijie.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
             <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
             <mvc:mapping path="/" />
             <mvc:mapping path="/search" />
@@ -83,10 +88,6 @@
             <bean class="com.fh.taolijie.interceptor.CommonInterceptor"></bean>
         </mvc:interceptor>
 
-        <mvc:interceptor>
-            <mvc:mapping path="/" />
-            <bean class="com.fh.taolijie.interceptor.LoginInterceptor"></bean>
-        </mvc:interceptor>
 
         <!-- 访问统计拦截器， 依赖于redis -->
         <mvc:interceptor>
