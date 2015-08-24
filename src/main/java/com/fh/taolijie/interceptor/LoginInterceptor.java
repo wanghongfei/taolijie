@@ -40,7 +40,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
             request.setAttribute("isLoggedIn", false);
         }
 
-        return  true;
+        return super.preHandle(request, response, handler);
     }
 
 }

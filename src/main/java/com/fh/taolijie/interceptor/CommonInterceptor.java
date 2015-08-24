@@ -44,7 +44,9 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         request.setAttribute("sideJobCate",jobs.getList());
         request.setAttribute("sideSHCate",shs.getList());
         request.setAttribute("sideResumeCate",jobs.getList());
-        return  true;
+
+
+        return super.preHandle(request, response, handler);
     }
 
 }
