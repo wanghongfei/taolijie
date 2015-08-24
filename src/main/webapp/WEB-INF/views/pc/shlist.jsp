@@ -102,7 +102,7 @@
         </ul>
         <div class="shs">
             <span class="loading-page"></span>
-            <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" ng-cloak class="ng-cloak" style="color: #333333">
+            <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" target="_blank" ng-cloak class="ng-cloak" style="color: #333333">
                 <div class="sh-slip fl" ng-class="">
                     <div class="shs_pic">
                         <img src="/static/images/users/{{sh.picturePath}}" data-pid="{{sh.picturePath}}" alt=""
@@ -141,4 +141,3 @@
 <script src="/scripts/list/shlist.js"></script>
 </body>
 </html>
-

@@ -79,7 +79,16 @@
               <a href=""><img src="/static/images/users/${aNews.headPicturePath}" alt=""></a>
             </div>
             <div class="zixun zixun_right">
-              <p class="title"><a href="/detail/news/${aNews.id}">${aNews.title}</a></p>
+              <p class="title"><a href="/detail/news/${aNews.id}">
+                <c:choose>
+                  <c:when test="${aNews.title.length()>12}">
+                    <c:out value="${fn:substring(aNews.title, 0, 12)}..." />
+                  </c:when>
+                  <c:otherwise>
+                    <c:out value="${aNews.title}" />
+                  </c:otherwise>
+                </c:choose>
+              </a></p>
               <p><i class="fa fa-history fa-lg"></i>时间:
                 <fmt:formatDate value="${aNews.time}"  pattern="yyyy-MM-dd" />
               </p>

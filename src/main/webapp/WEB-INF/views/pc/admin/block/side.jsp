@@ -66,6 +66,12 @@
 
         </ul>
       </li>
+      <li class="menu-list"><a href=""><i class="fa fa-tasks"></i> <span>通知管理</span></a>
+        <ul class="sub-menu-list">
+          <li ><a href="/manage/news/add"> 发送通知</a></li>
+          <li><a href="/manage/"> 查看已发送通知</a></li>
+        </ul>
+      </li>
 
       <%--<li class="menu-list"><a href=""><i class="fa fa-bullhorn"></i> <span>公告管理</span></a>--%>
         <%--<ul class="sub-menu-list">--%>

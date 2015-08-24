@@ -85,7 +85,7 @@
               </li>
           </ul>
           <div class="lists">
-              <a href="/item/resume/{{resume.id}}" ng-repeat="resume in resumes">
+              <a href="/item/resume/{{resume.id}}" target="_blank" ng-repeat="resume in resumes">
                   <div class="list">
                       <img src="/static/images/users/{{resume.photoPath}}" alt="">
                       <div>
