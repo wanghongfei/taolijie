@@ -43,7 +43,7 @@ public class ResponseText {
      */
     public ResponseText(Object data) {
         this.isOk = true;
-        this.message = Constants.StatusMessage.SUCCESS;
+        //this.message = Constants.StatusMessage.SUCCESS;
 
         this.data = data;
     }

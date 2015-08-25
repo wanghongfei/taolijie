@@ -31,8 +31,7 @@ public class RestReviewController {
     @RequestMapping(value = "/job/{id}", produces = Constants.Produce.JSON)
     public ResponseText getReviewsByJobPost(@PathVariable("id") Integer jobId,
                                             @RequestParam(defaultValue = "0") int pageNumber,
-                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                                            HttpSession session) {
+                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ReviewModel reviewCommand = new ReviewModel(pageNumber, pageSize);
@@ -49,8 +48,7 @@ public class RestReviewController {
     @RequestMapping(value = "/sh/{id}", produces = Constants.Produce.JSON)
     public ResponseText getReviewsByShPost(@PathVariable("id") Integer shId,
                                             @RequestParam(defaultValue = "0") int pageNumber,
-                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                                            HttpSession session) {
+                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 

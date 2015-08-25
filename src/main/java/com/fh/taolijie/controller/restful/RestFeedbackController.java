@@ -10,10 +10,12 @@ import com.fh.taolijie.service.FeedbackService;
 import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
@@ -44,7 +46,7 @@ public class RestFeedbackController {
                                      @RequestParam(required = false) String title,
                                      @RequestParam(defaultValue = "0") int send, // 是否发邮件. 0为不发, 1为发
                                      @RequestParam String email,
-                                     HttpSession session) {
+                                     HttpServletRequest req) {
 
         if (false == StringUtils.checkNotEmpty(content)) {
             return new ResponseText(ErrorCode.EMPTY_FIELD);
@@ -61,7 +63,8 @@ public class RestFeedbackController {
         fd.setTitle(title);
         fd.setCreatedTime(new Date());
         // 如果用户已经登陆，则自动关联当前用户
-        Credential credential = CredentialUtils.getCredential(session);
+        //Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if (null != credential) {
             fd.setMemberId(credential.getId());
             fd.setUsername(credential.getUsername());

@@ -12,12 +12,14 @@ import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
@@ -40,11 +42,13 @@ public class RestNotificationController {
     public ResponseText getPrivateNotification(@RequestParam("memberId") Integer memberId,
                                            @RequestParam(defaultValue = "0") int pageNumber,
                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                                           HttpSession session) {
+                                           HttpServletRequest req) {
         // 检查memberId是否是当前用户
-        if (false == memberId.equals(CredentialUtils.getCredential(session).getId())) {
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential || memberId.equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
+
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<PrivateNotificationModel> list = notiService.getPriNotification(memberId, pageNumber, pageSize);
@@ -59,9 +63,10 @@ public class RestNotificationController {
     public ResponseText getUnReadPrivateNotification(@RequestParam("memberId") Integer memberId,
                                                @RequestParam(defaultValue = "0") int pageNumber,
                                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                                               HttpSession session) {
+                                               HttpServletRequest req) {
         // 检查memberId是否是当前用户
-        if (false == memberId.equals(CredentialUtils.getCredential(session).getId())) {
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential || memberId.equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
@@ -79,11 +84,16 @@ public class RestNotificationController {
     public ResponseText getSysNotification(@RequestParam("memberId") Integer memberId,
                                            @RequestParam(defaultValue = "0") int pageNumber,
                                            @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                                           HttpSession session
+                                           HttpServletRequest req
                                            ) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+
         // 得到当前用户的role
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
         String roleName = credential.getRoleList().get(0);
 
         ListResult<SysNotificationModel> list = notiService.getSysNotification(memberId, Arrays.asList(roleName), pageNumber, pageSize);
@@ -97,9 +107,14 @@ public class RestNotificationController {
      */
     @RequestMapping(value = "/pri/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText markPriAsRead(@RequestParam("notiId") Integer notiId,
-                                      HttpSession session) {
+                                      HttpServletRequest req) {
+        // 登陆检查
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
         // 检查通知是不是发给自己的
-        Credential credential = CredentialUtils.getCredential(session);
         PrivateNotificationModel noti = notiService.findPriById(notiId);
         if (null == noti || false == noti.getToMemberId().equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
@@ -117,15 +132,24 @@ public class RestNotificationController {
      */
     @RequestMapping(value = "/sys/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText markSysAsRead(@RequestParam("notiId") Integer notiId,
-                                      HttpSession session) {
-        Credential credential = CredentialUtils.getCredential(session);
+                                      HttpServletRequest req) {
+        // 登陆检查
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
 
         // 检查通知是否存在
-        if (null == notiService.findSysById(notiId)) {
+        SysNotificationModel noti = notiService.findSysById(notiId);
+        if (null == noti) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+        // 检查是不是发给自己的
+        if (false == noti.getAccessRange().equals(credential.getRoleList().get(0))) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-        // mark notification as read
+        // 标记已读
         notiService.markSysAsRead(credential.getId(), notiId);
 
         return ResponseText.getSuccessResponseText();
