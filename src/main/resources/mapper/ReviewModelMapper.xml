@@ -199,6 +199,8 @@
                 AND rev.content = #{content,jdbcType=LONGVARCHAR}
             </if>
         </where>
+        ORDER BY
+            rev.time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
