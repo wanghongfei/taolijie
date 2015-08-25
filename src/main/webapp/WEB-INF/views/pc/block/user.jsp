@@ -11,11 +11,11 @@
 
 <div class="segment user-top">
   <div class="user-img" id="userImg">
-    <c:if  test="${sessionScope.user.profilePhotoId == 0}">
+    <c:if  test="${currUser.profilePhotoId == null}">
       <img src="/images/default-img.jpg" alt="">
     </c:if>
-    <c:if  test="${sessionScope.user.profilePhotoId != 0}">
-      <img src="/static/images/users/${sessionScope.user.profilePhotoId}" alt="">
+    <c:if  test="${currUser.profilePhotoId != null}">
+      <img src="/static/images/users/${currUser.profilePhotoId}" alt="">
     </c:if>
   </div>
   <div class="fr big-btn">

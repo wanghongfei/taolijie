@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
@@ -72,16 +73,24 @@
           <div class="col_choice" style="line-height:112px; width:45px;">
             <input name="collection" type="checkbox" value="" data-id="${sh.id}" class="col_del_check">
           </div>
-          <div class="col_style" style="background-color: ${sh.category.themeColor};">${sh.category.name}
+          <div class="col_style" style="">${sh.category.name}
 
           </div></a>
           <div class="col_main" style="margin-left:40px; width:630px;">
             <div class="col_main_top">
               <div class="title" style="width:450px;"><a href="/item/sh/${sh.id}" style="color: #333">${sh.title}</a></div>
-              <div class="style" style="width: 150px;">${sh.member.username}</div>
             </div>
             <div class="col_main_bottom">
-              <div class="location" style="width:140px;"><i class="fa fa-map-marker fa-lg"></i> ${sh.tradePlace}</div>
+              <div class="location" style="width:180px;"><i class="fa fa-map-marker fa-lg"></i>
+              <c:choose>
+                  <c:when test="${fn:length(sh.tradePlace) > 10}">
+                      <c:out value="${fn:substring(sh.tradePlace, 0, 10)}..."/>
+                  </c:when>
+                  <c:otherwise>
+                      <c:out value="${sh.tradePlace}"/>
+                  </c:otherwise>
+              </c:choose>
+             </div>
               <div class="salary" style="color:#a47e3c;width: 120px;" ><i class="fa fa-jpy fa-lg"></i> ${sh.sellPrice.intValue()}元</div>
               <%--<div class="salarystyle" >&nbsp;&nbsp;${job.timeToPay}</div>--%>
               <div class="time"><i class="fa fa-clock-o fa-lg"></i>
@@ -92,7 +101,9 @@
             </div>
           </div>
           <div class="col_delete">
+              <c:if test="${!isFav}">
             <a href="/user/sh/change/${sh.id}">修改</a>
+          </c:if>
             <a href="javascript:void(0);" class="UserDel" data-id="${sh.id}" data-type="sh"  data-option = "${isFav?'fav':''}" >
                 <%--
                 <i class="fa fa-trash fa-2x"></i>
@@ -132,4 +143,3 @@
   <script src="/scripts/security.js"></script>
   </body>
   </html>
-

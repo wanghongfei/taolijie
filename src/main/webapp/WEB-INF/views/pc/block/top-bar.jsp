@@ -18,7 +18,7 @@
     <ul>
       <c:if test="${isLoggedIn}">
         <li><a href="/user/profile" id="user-name-label">${username}</a>&nbsp;|&nbsp;</li>
-        <li><a href="/logout">注销 
+        <li><a href="/logout">注销
             <%--
             <i class="fa fa-caret-down"> </i>
             --%>

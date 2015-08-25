@@ -178,7 +178,7 @@
         });
 
         function formatTime($this){
-            var post = new Date($this.attr("data-time"));
+            var post = new Date($this.attr("data-time").replace(/-/g,'/'));
             var date = new Date();
             var time = date.getTime() - post.getTime();
             if(time < 0){

@@ -176,7 +176,7 @@
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
-    var currentUser = JSON.parse('${ju:toJson(sessionScope.user)}');
+    var currentUser = JSON.parse('${ju:toJson(currUser)}');
 </script>
 </body>
 </html>
