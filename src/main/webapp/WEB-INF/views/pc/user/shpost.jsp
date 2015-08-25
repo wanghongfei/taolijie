@@ -122,7 +122,7 @@
       </div>
       <div class="form-group">
         <label for="">手机号<span class="theme-color">*</span></label>
-        <input type="text" class="form-control medium-input" name="contactPhone" value="${job.contactPhone}" required placeholder="请输入联系人的手机号" pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
+        <input type="text" class="form-control medium-input" name="contactPhone" value="${sh.contactPhone}" required placeholder="请输入联系人的手机号" pattern="^1\d{10}$|^(0\d{2,3}-?|\(0\d{2,3}\))?[1-9]\d{4,7}(-\d{1,8})?$">
       </div>
       <div class="form-group">
         <label for="">QQ号</label>

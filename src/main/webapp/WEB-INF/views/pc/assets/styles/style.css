@@ -879,55 +879,55 @@ ul.bxslider li img {
 .side .services .menu_left > li:nth-child(n+1):hover {
     color: #FFF; }
 .side .services .menu_left > li:nth-child(n+1):hover ul.submenu {
-    display: block; 
+    display: block;
 }
 .side .services .menu_left > li:nth-child(1),
 .side .services .menu_left > li:nth-child(1) a{
-    color: #84cc5c; 
+    color: #84cc5c;
 }
 .side .services .menu_left > li:nth-child(2),
 .side .services .menu_left > li:nth-child(2) a{
-    color: #4ccda4; 
+    color: #4ccda4;
 }
 .side .services .menu_left > li:nth-child(3),
 .side .services .menu_left > li:nth-child(3) a{
-    color: #3299de; 
+    color: #3299de;
 }
 .side .services .menu_left > li:nth-child(4),
 .side .services .menu_left > li:nth-child(4) a{
-    color: #f36362; 
+    color: #f36362;
 }
 .side .services .menu_left > li:nth-child(1):hover a{
-    background-color: #84cc5c; 
+    background-color: #84cc5c;
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(1) ul.submenu {
-    background-color: #84cc5c; 
+    background-color: #84cc5c;
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(2):hover a{
-    background-color: #4ccda4; 
+    background-color: #4ccda4;
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(2) ul.submenu {
-    background-color: #4ccda4; 
+    background-color: #4ccda4;
 }
 .side .services .menu_left > li:nth-child(3):hover a{
-    background-color: #3299de; 
+    background-color: #3299de;
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(3) ul.submenu {
-    background-color: #3299de; 
+    background-color: #3299de;
 }
 .side .services .menu_left > li:nth-child(4):hover a{
-    background-color: #f36362; 
+    background-color: #f36362;
     color: #fff;
 }
 .side .services .menu_left > li a:hover{
     color: #fff;
 }
 .side .services .menu_left > li:nth-child(4) ul.submenu {
-    background-color: #f36362; 
+    background-color: #f36362;
 }
 .side .services .menu_left .submenu {
     width: 100px;
@@ -939,7 +939,7 @@ ul.bxslider li img {
     color: #fff;
     width: 100px;
     margin: 7px 0;
-    line-height: 26px; 
+    line-height: 26px;
 }
 .side .services .menu_left .submenu > li a:hover {
     background-color: #EEBC5B;
@@ -1799,7 +1799,21 @@ ul.bxslider li img {
     color: #fff; }
 .big-btn a {
     color: #fff; }
-
+.feedback input[type=text]{
+  height: 38px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.feedback span.submit-btn{
+  margin-top: 6px;
+  height: 38px;
+  line-height: 38px;
+  padding-top: 0px;
+}
+#ChangPasswordForm .form-control{
+  height: 38px;
+}
 .user {
     font-size: 18px; }
 .user .submit-btn {
@@ -1943,7 +1957,7 @@ padding-bottom: 7px; }
     float: left;
     color: #c1c1c1;
     font-size: 14px;
-    width: 100px; 
+    width: 100px;
 }
 .user .col_content .col_list > div .col_main_bottom .time {
     width: 200px; }

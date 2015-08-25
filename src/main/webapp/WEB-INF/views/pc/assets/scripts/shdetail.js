@@ -58,7 +58,7 @@ $("#like").click(function(){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             } else {
-                $.tlj.notify(data.message);
+                $.tlj.notify(errorCode[data.message]);
                 //if(data.message == 'already liked')
                 //    $.tlj.notify('您已经喜欢过了!');
                 //if (data.message == 'not logged in now!') {

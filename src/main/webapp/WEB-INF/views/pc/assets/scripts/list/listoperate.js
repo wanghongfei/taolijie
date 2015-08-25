@@ -74,7 +74,7 @@ $(function () {
         var $this = $(this);
         //console.log(this);
         var key = $this.parent().attr("data-type");
-        var value = $this.text();
+        var value = $this.attr("data-val") || $this.text();
         var isAll = false;
 
         //额外判断一下价格筛选
@@ -116,7 +116,7 @@ $(function () {
         if(isAll){
             $chooseTitle.text($chooseTitle.attr("data-default"));
         }else{
-            $chooseTitle.text(value);
+            $chooseTitle.text($this.text());
         }
         $loading.show();
         search(url, searchObj,function(data){
@@ -129,4 +129,3 @@ $(function () {
         });
     });
 });
-
