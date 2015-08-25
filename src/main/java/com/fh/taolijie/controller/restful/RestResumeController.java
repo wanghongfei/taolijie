@@ -4,7 +4,9 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
@@ -129,6 +131,18 @@ public class RestResumeController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         model.setPageNumber(pageNumber);
         model.setPageSize(pageSize);
+
+        // 是否根据意向查询
+        String ids = model.getIntendIds();
+        if (null != ids) {
+            try {
+                List<Integer> idList = StringUtils.splitIntendIds(ids);
+                model.setIntendIdList(idList);
+
+            } catch (InvalidNumberStringException e) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+        }
 
         ListResult<ResumeModel> lr = resumeService.findBy(model);
 

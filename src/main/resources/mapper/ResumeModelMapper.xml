@@ -539,17 +539,26 @@
                 AND re.major = #{major},
             </if>
             <if test="preferredProvince != null">
-                AND re.preferredProvince = #{preferredProvince},
+                AND re.preferred_province = #{preferredProvince},
             </if>
             <if test="preferredCity != null">
-                AND re.preferredCity = #{preferredCity},
+                AND re.preferred_city = #{preferredCity},
             </if>
             <if test="preferredRegion != null">
-                AND re.preferredRegion = #{preferredRegion},
+                AND re.preferred_region = #{preferredRegion},
             </if>
             <if test="birthday != null">
                 AND re.birthday = #{birthday},
             </if>
+
+            <!-- 根据意向查询 -->
+            <if test="intendIdList != null">
+                AND re.id IN (
+                    SELECT resume_id FROM resume_job_post_category WHERE job_post_category_id IN
+                    <foreach collection="intendIdList" item="cate_id" open="(" close=")" separator=",">#{cate_id}</foreach>
+                )
+            </if>
+
         </where>
         LIMIT
             #{pageNumber}, #{pageSize}
@@ -629,6 +638,14 @@
             </if>
             <if test="birthday != null">
                 AND re.birthday = #{birthday},
+            </if>
+
+            <!-- 根据意向查询 -->
+            <if test="intendIdList != null">
+                AND re.id IN (
+                    SELECT resume_id FROM resume_job_post_category WHERE job_post_category_id IN
+                    <foreach collection="intendIdList" item="cate_id" open="(" close=")" separator=",">#{cate_id}</foreach>
+                )
             </if>
         </where>
     </select>

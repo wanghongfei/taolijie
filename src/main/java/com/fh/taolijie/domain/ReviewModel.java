@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
@@ -33,6 +34,7 @@ public class ReviewModel extends Pageable {
      * 评论对应的兼职信息
      */
     private Integer jobPostId;
+    @JsonIgnore
     private JobPostModel jobPost; // we don't need this field
 
     public ReviewModel() {}
