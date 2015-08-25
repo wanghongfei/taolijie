@@ -127,6 +127,9 @@ public class RestResumeController {
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        model.setPageNumber(pageNumber);
+        model.setPageSize(pageSize);
+
         ListResult<ResumeModel> lr = resumeService.findBy(model);
 
         return new ResponseText(lr);
