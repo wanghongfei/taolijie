@@ -11,6 +11,7 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
 import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -122,7 +123,7 @@ public class UResumeController {
 
         // 设置求职意向
         try {
-            List<Integer> idList = splitIntendIds(intendIds);
+            List<Integer> idList = StringUtils.splitIntendIds(intendIds);
             setNewIntend(idList, resume.getId());
 
         } catch (InvalidNumberStringException e) {
@@ -271,7 +272,7 @@ public class UResumeController {
 
         ListResult<JobPostCategoryModel> jobCateList = jobPostCateService.getCategoryList(0, Integer.MAX_VALUE);
         model.addAttribute("cates",jobCateList.getList());
-        model.addAttribute("resume",resume);
+        model.addAttribute("resume", resume);
         model.addAttribute("isChange", true);
         return "pc/user/myresume";
     }
@@ -294,7 +295,7 @@ public class UResumeController {
 
         Credential credential = CredentialUtils.getCredential(session);
 
-        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(),0,1);
+        List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1);
         if(rList.size()<1 ){
             return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
         }
@@ -323,7 +324,7 @@ public class UResumeController {
 
         // 设置求职意向
         try {
-            List<Integer> idList = splitIntendIds(intendIds);
+            List<Integer> idList = StringUtils.splitIntendIds(intendIds);
             setNewIntend(idList, resume.getId());
         } catch (InvalidNumberStringException e) {
             // 此异常说明字符串非数字
@@ -417,30 +418,6 @@ public class UResumeController {
 
     }
 
-    /**
-     * 将以分号分隔的id字符串转换成id List
-     * @param intendIds
-     * @return
-     * @throws InvalidNumberStringException
-     */
-    private List<Integer> splitIntendIds(String intendIds) throws InvalidNumberStringException {
-        String[] ids = intendIds.split(Constants.DELIMITER);
-        if (null == ids || 0 == ids.length) {
-            throw new InvalidNumberStringException("intendIds格式错误");
-        }
-
-        List<Integer> idList = new ArrayList<>(10);
-        for (String idStr : ids) {
-            try {
-                Integer id = Integer.valueOf(idStr);
-                idList.add(id);
-            } catch (NumberFormatException ex) {
-                throw new InvalidNumberStringException("intendIds参数非数字");
-            }
-        }
-
-        return idList;
-    }
 
     /**
      * 转换为id;id;id格式的字符串

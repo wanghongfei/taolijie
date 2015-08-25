@@ -1,11 +1,9 @@
 package com.fh.taolijie.utils;
 
+import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +24,32 @@ public class StringUtils {
         return RandomStringUtils.randomAlphabetic(length);
     }
 
+
+    /**
+     * 将以分号分隔的id字符串转换成id List
+     * @param intendIds
+     * @return
+     * @throws InvalidNumberStringException
+     */
+    public static List<Integer> splitIntendIds(String intendIds) throws InvalidNumberStringException {
+        String[] ids = intendIds.split(Constants.DELIMITER);
+        if (null == ids || 0 == ids.length) {
+            throw new InvalidNumberStringException("intendIds格式错误");
+        }
+
+        List<Integer> idList = new ArrayList<>(10);
+        try {
+            for (String idStr : ids) {
+                Integer id = Integer.valueOf(idStr);
+                idList.add(id);
+            }
+
+        } catch (NumberFormatException ex) {
+            throw new InvalidNumberStringException("intendIds参数非数字");
+        }
+
+        return idList;
+    }
 
     /**
      * 构造 {@code SELECT XXX FROM XXX WHERE XXX LIKE '%XXX%' AND XXX ORDER By XXX}语句
