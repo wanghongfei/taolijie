@@ -89,7 +89,8 @@
 
     </sql>
     <sql id="less_member_column">
-        mem.id AS mem_id, mem.username AS mem_username
+        mem.id AS mem_id, mem.username AS mem_username,
+        mem.profile_photo_path AS mem_profile_photo_path
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

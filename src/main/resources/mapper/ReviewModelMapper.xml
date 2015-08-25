@@ -12,7 +12,7 @@
         <result column="review_sh_post_id" property="shPostId" jdbcType="INTEGER"/>
 
         <result column="review_member_id" property="memberId" jdbcType="INTEGER"/>
-        <result column="review_time" property="time" jdbcType="DATE"/>
+        <result column="review_time" property="time" jdbcType="TIMESTAMP"/>
         <result column="review_replied_review_id" property="repliedReviewId" jdbcType="INTEGER"/>
 
         <result column="review_content" property="content" jdbcType="LONGVARCHAR"/>
@@ -63,7 +63,7 @@
         time, replied_review_id, content
         )
         VALUES (#{jobPostId}, #{shPostId}, #{memberId,jdbcType=INTEGER},
-        #{time,jdbcType=DATE}, #{repliedReviewId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+        #{time,jdbcType=TIMESTAMP}, #{repliedReviewId,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.ReviewModel">
@@ -103,7 +103,7 @@
                 #{memberId,jdbcType=INTEGER},
             </if>
             <if test="time != null">
-                #{time,jdbcType=DATE},
+                #{time,jdbcType=TIMESTAMP},
             </if>
             <if test="repliedReviewId != null">
                 #{repliedReviewId,jdbcType=INTEGER},
@@ -131,7 +131,7 @@
                 member_id = #{memberId,jdbcType=INTEGER},
             </if>
             <if test="time != null">
-                time = #{time,jdbcType=DATE},
+                time = #{time,jdbcType=TIMESTAMP},
             </if>
             <if test="repliedReviewId != null">
                 replied_review_id = #{repliedReviewId,jdbcType=INTEGER},
@@ -151,7 +151,7 @@
         SET sh_post_id = #{shPostId,jdbcType=INTEGER},
         job_post_id = #{jobPostId},
         member_id = #{memberId,jdbcType=INTEGER},
-        time = #{time,jdbcType=DATE},
+        time = #{time,jdbcType=TIMESTAMP},
         replied_review_id = #{repliedReviewId,jdbcType=INTEGER},
         content = #{content,jdbcType=LONGVARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
@@ -174,7 +174,7 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password"/>
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.less_member_column"/>
         FROM
             review rev
         LEFT JOIN
@@ -190,7 +190,7 @@
                 AND rev.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="time != null">
-                AND rev.time = #{time,jdbcType=DATE}
+                AND rev.time = #{time,jdbcType=TIMESTAMP}
             </if>
             <if test="repliedReviewId != null">
                 AND rev.replied_review_id = #{repliedReviewId,jdbcType=INTEGER}
@@ -199,6 +199,8 @@
                 AND rev.content = #{content,jdbcType=LONGVARCHAR}
             </if>
         </where>
+        ORDER BY
+            rev.time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
@@ -219,7 +221,7 @@
                 AND rev.member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="time != null">
-                AND rev.time = #{time,jdbcType=DATE}
+                AND rev.time = #{time,jdbcType=TIMESTAMP}
             </if>
             <if test="repliedReviewId != null">
                 AND rev.replied_review_id = #{repliedReviewId,jdbcType=INTEGER}
