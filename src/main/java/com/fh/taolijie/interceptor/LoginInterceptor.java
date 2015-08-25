@@ -4,12 +4,10 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.NewsService;
-import com.fh.taolijie.service.ResumeService;
-import com.fh.taolijie.service.ShPostCategoryService;
+import com.fh.taolijie.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -20,6 +18,9 @@ import javax.servlet.http.HttpSession;
 
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter{
+
+    @Autowired
+    AccountService accountService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -32,6 +33,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
                 //已经登陆，将用户名放到model中
                 request.setAttribute("isLoggedIn", true);
                 request.setAttribute("username", credential.getUsername());
+                MemberModel currUser = accountService.findMember(credential.getId());
+                currUser.setPassword("secret field");
+                request.setAttribute("currUser", currUser);
             } else {
                 // 没登陆
                 request.setAttribute("isLoggedIn", false);
