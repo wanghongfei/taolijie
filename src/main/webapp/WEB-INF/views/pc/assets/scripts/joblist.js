@@ -17,9 +17,9 @@ tlj.controller('jobListCtrl', function($scope, $http) {
 
     var param = urlToObj(window.location.search);
     if(param.cate){
-        searchObj['jobPostCategoryId'] = param.cate;
+    //    searchObj['jobPostCategoryId'] = param.cate;
     }else{
-        delete searchObj['jobPostCategoryId'];
+    //    delete searchObj['jobPostCategoryId'];
     }
 
     //初次加载
@@ -75,10 +75,3 @@ tlj.controller('jobListCtrl', function($scope, $http) {
 
 
 });
-
-
-
-
-
-
-

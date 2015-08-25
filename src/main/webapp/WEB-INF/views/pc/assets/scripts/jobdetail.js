@@ -15,18 +15,18 @@ $("#like").click(function(){
     $.ajax({
         type:"post",
         url:"/user/job/"+id+"/like",
-        success:function(data){
-            console.log(data);
+        success:function(data, text, res){
+          if(res.status === 302){
+            $.tlj.notify('您还未登录!');
+          }else{
             if(data.result){
                 //更新计数
                 p.text(parseInt(p.text())+1) ;
             }else{
-                if(data.message == 'already liked')
-                    $.tlj.notify('您已经喜欢过了!');
-                if (data.message == 'not logged in now!') {
-                    $.tlj.notify('登陆后才能执行该操作!');
-                }
+                $.tlj.notify(errorCode[data.message]);
             }
+          }
+
         }
     });
 });

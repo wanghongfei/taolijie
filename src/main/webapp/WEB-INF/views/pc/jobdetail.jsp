@@ -139,7 +139,9 @@
         <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
             <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
             <p>{{ review.member.username }}
-            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}" ng-show="currentUser.id == review.member.id"> 删除</a>
+            <a class="red delete-review" href="javascript:void(0);"
+               ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}"
+               ng-show="currentUser.id == review.member.id"> 删除</a>
            </p>
             <div class="span"><span>{{ review.content }}</span></div>
         </div>
@@ -174,7 +176,7 @@
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
-    var currentUser = JSON.parse('${ju:toJson(sessionScope.user)}');
+    var currentUser = JSON.parse('${ju:toJson(currUser)}');
 </script>
 </body>
 </html>

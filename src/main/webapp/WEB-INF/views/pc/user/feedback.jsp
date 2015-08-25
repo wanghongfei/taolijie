@@ -58,9 +58,9 @@
     </div>
     <form action="" class="" id="FeedBackForm">
       <div class="form-group">
-        <textarea name="content" class="form-control" placeholder="把您最棒的意见，最有创意的想法，告诉小桃吧"></textarea >
+        <textarea name="content" class="form-control" placeholder="把您最棒的意见，最有创意的想法，告诉小桃吧" required></textarea >
         <div>
-          <input type="text" name="email" placeholder="输入您的邮箱,方便与您沟通哦">
+          <input type="text" name="email" placeholder="输入您的邮箱,方便与您沟通哦" required>
           <span class="fr big-btn theme-color-bg submit-btn">提交</span>
         </div>
       </div>

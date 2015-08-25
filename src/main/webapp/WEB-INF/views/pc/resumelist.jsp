@@ -59,7 +59,7 @@
 <jsp:include page="block/header.jsp"/>
 
 <div class="container">
-
+    <style>.ng-cloak{display: none}</style>
 
   <%--轮播--%>
   <jsp:include page="block/silder.jsp"/>
@@ -71,21 +71,22 @@
           <ul class="nav-bar">
               <li ng-click="getRecommend()">热门推荐
               </li>
-              <li class="choose">求职意向
-                <div class="choose-menu" data-type="region" >
-                    <span class="active" ng-click="listFilter('list')">全部</span>
-                    <span ng-repeat="c in cates" ng-bind="c.name" ng-click="listFilter('intend', c.id)"></span>
+              <li class="choose"><span class="choose-title" data-default="求职意向">求职意向</span>
+                <div class="choose-menu" data-type="intend" >
+                    <span class="active" >全部</span>
+                    <span ng-repeat="c in cates" ng-bind="c.name"> </span>
                 </div>
               </li>
-              <li class="choose">性别选择<i class="fa fa-caret-down"></i>
-                  <div class="choose-menu">
-                      <span class="active" ng-click="listFilter('list')">全部</span>
-                      <span ng-click="listFilter('gender', 'm')">男</span>
-                      <span ng-click="listFilter('gender', 'f')">女</span>
+              <li class="choose"><span class="choose-title" data-default="性别选择">性别选择</span> <i class="fa fa-caret-down"></i>
+                  <div class="choose-menu" data-type="gender">
+                      <span class="active">全部</span>
+                      <span data-val="m">男</span>
+                      <span data-val="f">女</span>
                   </div>
               </li>
           </ul>
           <div class="lists">
+            <span class="loading-page"></span>
               <a href="/item/resume/{{resume.id}}" target="_blank" ng-repeat="resume in resumes">
                   <div class="list">
                       <img src="/static/images/users/{{resume.photoPath}}" alt="">
@@ -99,9 +100,7 @@
                               </p>
                               <p class="intent">
                               <span class="intent-title theme-color-bg">求职意向</span>
-                              <%--
-                              <span ng-repeat="i in resume.intend" ng-bind="i" class="intend-item"></span>
-                              --%>
+                              <%-- <span ng-repeat="i in resume.intend" ng-bind="i" class="intend-item"></span> --%>
                               <span ng-bind="resume.intend.join('、')" class="intend-item"></span>
                               </p>
                           </div>
@@ -119,17 +118,11 @@
           </div>
           <div style="clear:both"></div>
           <div class="page">
-              <ul>
-                  <c:if test="${page != 1 && pageStatus !=0}">
-                      <li><a class="next" href="/list/resume?page=${page-1}">上一页</a></li>
-                  </c:if>
-                  <c:if test="${pageStatus == 2}">
-                      <li><a class="next" href="/list/resume?page=${page+1}">下一页</a></li>
-                  </c:if>
-                  <c:if test="${pageStatus == 0 }">
-                      <h2>没有更多了</h2>
-                  </c:if>
-              </ul>
+            <ul>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(false)" ng-if="lastPage()" href="javascript:;">上一页</a></li>
+                <li ng-cloak class="ng-cloak"><a class="next" ng-click="pageChange(true)" ng-if="nextPage()" href="javascript:;">下一页</a></li>
+            </ul>
+            </li>
           </div>
       </div>
 </div>
@@ -137,6 +130,7 @@
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
 <script src="/scripts/list/resumelist.js"></script>
+<script src="/scripts/list/listoperate.js"></script>
 <script>
     var resumes = JSON.parse('${ju:toJson(resumes.list)}');
     var pages = {};

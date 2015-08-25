@@ -3,6 +3,7 @@
 *.bak
 target/
 *.bak
+.imdone/
 
 .settings/
 deploy.sh

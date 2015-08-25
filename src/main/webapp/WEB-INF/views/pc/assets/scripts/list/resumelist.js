@@ -1,3 +1,11 @@
+var $ctrlScope;
+var searchObj = {};
+var maxSize = 8;
+var currPageNumber = 0;
+var url = "/api/resume/filter"
+
+var $loading = $(".lists .loading-page");
+$loading.show();
 tlj.controller('resumeListCtrl', function($scope, $http) {
     $scope.resumes = resumes;
     $scope.pages = pages;
@@ -10,6 +18,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
             }
         })
     }
+    //推荐 .. 暂未实现
     $scope.getRecommend = function() {
         $http.get('/api/recommend/list?type=resume')
         .success(function(data) {
@@ -19,6 +28,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
             }
         })
     }
+    //过滤.. 未使用
     $scope.listFilter = function(type, spec) {
         if(spec) {
             spec = '/' + spec;
@@ -32,6 +42,72 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
             }
         })
     }
+
+    //筛选
+    $ctrlScope = $scope;
+
+    var param = urlToObj(window.location.search);
+    if(param.cate){
+        searchObj['jobPostCategoryId'] = param.cate;
+    }else{
+        delete searchObj['jobPostCategoryId'];
+    }
+
+    //初次加载
+    search(url, searchObj,function(data){
+        if(data.ok){
+            $scope.resumes= data.data.list;
+            $scope.resultCount = data.data.resultCount;
+            $scope.$digest();
+        }
+        $loading.hide();
+    })
+
+    /**
+     * 分页切换
+     * @param isNext
+     */
+    $scope.pageChange = function(isNext){
+
+        if(isNext){//下一页
+            currPageNumber +=1;
+            searchObj['pageNumber'] = currPageNumber;
+            $(document.body).animate({'scrollTop':160},200);
+           // $loading.show();
+            search(url, searchObj,function(data){
+                if(data.ok){
+                    $scope.resumes= data.data.list;
+                    $scope.$digest();
+                }
+            //    $loading.hide();
+            });
+        }else{ //上一页
+            if(currPageNumber > 0){
+                currPageNumber -= 1;
+                searchObj['pageNumber'] = currPageNumber;
+                $(document.body).animate({'scrollTop':160},200);
+             //   $loading.show();
+                search(url, searchObj,function(data){
+                    if(data.ok){
+                        $scope.resumes = data.data.list;
+                        $scope.$digest();
+                    }
+              //      $loading.hide();
+                });
+            }
+        }
+    };
+
+    $scope.lastPage = function(){
+        return $scope.resumes != null && currPageNumber != 0;
+    };
+    $scope.nextPage = function(){
+        return $scope.resumes != null&&(currPageNumber+1)*maxSize <$scope.resultCount;
+    }
+
+
+
+
 
     $scope.getCates()
 });
