@@ -71,7 +71,7 @@
           <ul class="nav-bar">
               <li ng-click="getRecommend()">热门推荐
               </li>
-              <li class="choose"><span class="choose-title" data-default="求职意向">求职意向</span>
+              <li class="choose"><span class="choose-title" data-default="求职意向">求职意向</span> <i class="fa fa-caret-down"></i>
                 <div class="choose-menu" data-type="intendIds" >
                     <span class="active" >全部</span>
                     <span ng-repeat="c in cates" ng-bind="c.name" ng-attr-data-val="{{c.id}}"> </span>
