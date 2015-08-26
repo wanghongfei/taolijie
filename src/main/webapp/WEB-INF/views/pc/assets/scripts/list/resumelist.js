@@ -7,9 +7,9 @@ var url = "/api/resume/filter"
 var $loading = $(".lists .loading-page");
 $loading.show();
 tlj.controller('resumeListCtrl', function($scope, $http) {
-    $scope.resumes = resumes;
-    $scope.pages = pages;
     $scope.cates = [];
+
+
     $scope.getCates = function() {
         $http.get('/api/job/cate/list')
         .success(function(data) {
@@ -24,7 +24,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
         .success(function(data) {
             console.log(data);
             if(data.ok) {
-                $scope.resumes = data.list;
+                $scope.list = data.list;
             }
         })
     }
@@ -38,7 +38,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
         $http.get('/api/resume/' + type + spec)
         .success(function(data) {
             if(data.ok) {
-                $scope.resumes = data.data.list || [];
+                $scope.list = data.data.list || [];
             }
         })
     }
@@ -48,15 +48,16 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
 
     var param = urlToObj(window.location.search);
     if(param.cate){
-        searchObj['jobPostCategoryId'] = param.cate;
+        searchObj['intendIds'] = param.cate;
     }else{
-        delete searchObj['jobPostCategoryId'];
+        delete searchObj['intendIds'];
     }
 
     //初次加载
     search(url, searchObj,function(data){
+      console.log('初次加载');
         if(data.ok){
-            $scope.resumes= data.data.list;
+            $scope.list= data.data.list;
             $scope.resultCount = data.data.resultCount;
             $scope.$digest();
         }

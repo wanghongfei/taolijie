@@ -177,6 +177,7 @@
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
     var currentUser = JSON.parse('${ju:toJson(currUser)}');
+    console.log(job.reviews);
 </script>
 </body>
 </html>
