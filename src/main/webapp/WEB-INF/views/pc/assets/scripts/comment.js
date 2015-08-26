@@ -20,9 +20,11 @@ $('.review-bar').submit(function(e) {
     }else {
         url = "/user/sh/"+id+"/review/post";
     }
-    $.tlj.post(url, data, function(data) {
+    $.tlj.post(url, data, function(data, err) {
+      if(err){
+          $.tlj.notify('你还未登录');
+      }else{
         if(data.result){
-            console.log(data);
             var reviewId =data.parm.reviewId;
             //var reviewId = data.message;
             var photo_url = $('.comment-avatar').attr('src');
@@ -34,13 +36,29 @@ $('.review-bar').submit(function(e) {
             //更新评论条数
             $commetCount.text(parseInt($commetCount.text())+1);
         }else{
-            $.tlj.notify(data.message);
+          if(data.result){
+              var reviewId =data.parm.reviewId;
+              //var reviewId = data.message;
+              var photo_url = $('.comment-avatar').attr('src');
+              $parent.append('<img src="' + photo_url + '" alt="">');
+              $parent.append('<p>'+username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+reviewId+'"> 删除</a></p>');
+              $parent.append('<span>'+content+'</span>');
+              $contents.append($parent);
+              $("#comment-input").val('');
+              //更新评论条数
+              $commetCount.text(parseInt($commetCount.text())+1);
+          }else{
+              $.tlj.notify(errorCode[data.message]);
+          };
         }
+      }
+
     });
 });
 
 //删除一条评论
 $(document).on("click",'.delete-review',function(){
+  if(confirm('确定要删除吗?')){
     var id = this.dataset.id;
     var $commetCount = $("#toComment").next();
     var reviewId = this.getAttribute("data-reviewId");
@@ -48,16 +66,19 @@ $(document).on("click",'.delete-review',function(){
     $.ajax({
         type:"POST",
         url:"/user/job/"+id+"/review/delete/"+reviewId,
-        success:function(data){
+        success:function(data, text, res){
             if(data.result){
                 $parent.remove();
                 $commetCount.text(parseInt($commetCount.text())-1);
             }else{
                 alert(data.message);
             }
+        },
+        error: function(data){
+          console.log(data);
         }
     });
-
+  }
 });
 
 $("#toComment").click(function(){

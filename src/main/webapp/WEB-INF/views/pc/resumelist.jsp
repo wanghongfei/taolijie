@@ -71,10 +71,10 @@
           <ul class="nav-bar">
               <li ng-click="getRecommend()">热门推荐
               </li>
-              <li class="choose"><span class="choose-title" data-default="求职意向">求职意向</span>
-                <div class="choose-menu" data-type="intend" >
+              <li class="choose"><span class="choose-title" data-default="求职意向">求职意向</span> <i class="fa fa-caret-down"></i>
+                <div class="choose-menu" data-type="intendIds" >
                     <span class="active" >全部</span>
-                    <span ng-repeat="c in cates" ng-bind="c.name"> </span>
+                    <span ng-repeat="c in cates" ng-bind="c.name" ng-attr-data-val="{{c.id}}"> </span>
                 </div>
               </li>
               <li class="choose"><span class="choose-title" data-default="性别选择">性别选择</span> <i class="fa fa-caret-down"></i>
@@ -87,7 +87,7 @@
           </ul>
           <div class="lists">
             <span class="loading-page"></span>
-              <a href="/item/resume/{{resume.id}}" target="_blank" ng-repeat="resume in resumes">
+              <a href="/item/resume/{{resume.id}}" target="_blank" ng-repeat="resume in list" ng-cloak class="ng-cloak">
                   <div class="list">
                       <img src="/static/images/users/{{resume.photoPath}}" alt="">
                       <div>
@@ -109,7 +109,7 @@
                               <span ng-bind="resume.major"></span>
                               </p>
                               <p>
-                              <span class="time" ng-bind="resume.createdTime"></span>
+                              <span class="time" ng-bind="resume.createdTime | date:'yyyy-MM-dd HH:mm:ss'"></span>
                               </p>
                           </div>
                       </div>
@@ -129,14 +129,14 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-<script src="/scripts/list/resumelist.js"></script>
 <script src="/scripts/list/listoperate.js"></script>
+<script src="/scripts/list/resumelist.js"></script>
 <script>
-    var resumes = JSON.parse('${ju:toJson(resumes.list)}');
-    var pages = {};
-    pages.page = JSON.parse('${ju:toJson(page)}');;
-    pages.pageStatus = JSON.parse('${ju:toJson(pageStatus)}');
-    pages.pageSize = JSON.parse('${ju:toJson(pageSize)}');
+    // var resumes = JSON.parse('${ju:toJson(resumes.list)}');
+    // var pages = {};
+    // pages.page = JSON.parse('${ju:toJson(page)}');;
+    // pages.pageStatus = JSON.parse('${ju:toJson(pageStatus)}');
+    // pages.pageSize = JSON.parse('${ju:toJson(pageSize)}');
 </script>
 
 </body>

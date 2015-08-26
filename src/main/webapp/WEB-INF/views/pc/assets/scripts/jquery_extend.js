@@ -9,6 +9,10 @@ $.tlj = {
                   success:function(data){
                       callback(data);
                       $loading.hide();
+                  },
+                  error:function(err){
+                    callback(data, err);
+                    $loading.hide();
                   }
               });
           },

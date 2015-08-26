@@ -64,6 +64,7 @@ public class UJobController {
                          HttpSession session, Model model){
 
         Credential credential = CredentialUtils.getCredential(session);
+        if(page < 0) page = 0;
         page = PageUtils.getFirstResult(page, pageSize);
         List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), page, pageSize)
                 .getList();

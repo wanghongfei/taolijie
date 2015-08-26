@@ -27,7 +27,7 @@ $(".submit-btn").click(function(){
         if(data.result){
             location.href = '/user/sh/mypost';
         }else{
-            alert("表单提交失败...");
+          alert(errorCode[data.message]);
         }
     });
 });
@@ -66,10 +66,10 @@ $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
     $img.remove()
     var picIds = $('input[name=picIds]').val().split(';');
     for( var i = 0;i < picIds.length; i++){
-        if( $img.data('pid') == picIds[i] ) { 
+        if( $img.data('pid') == picIds[i] ) {
             picIds.splice(i,1);
             break;
-        }   
+        }
     }
     $('input[name=picIds]').val(picIds.join(';'));
 });

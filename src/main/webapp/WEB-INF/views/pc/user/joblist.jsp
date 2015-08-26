@@ -116,7 +116,7 @@
             </c:forEach>
             <div class="page">
                 <ul>
-                    <c:if test="${page != 1 && pageStatus !=0}">
+                    <c:if test="${page != 0 && pageStatus !=0}">
                         <li><a class="next" href="${isFav?'/user/job/myfav':'/user/job/mypost'}?page=${page-1}">上一页</a></li>
                     </c:if>
                     <c:if test="${pageStatus == 2}">

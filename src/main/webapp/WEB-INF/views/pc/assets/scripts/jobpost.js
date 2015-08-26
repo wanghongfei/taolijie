@@ -94,7 +94,7 @@ $(".submit-btn").click(function(){
         if(data.result){
             location.href = '/user/job/mypost';
         }else{
-            alert("表单提交失败...");
+          alert(errorCode[data.message]);
         }
         //
     });

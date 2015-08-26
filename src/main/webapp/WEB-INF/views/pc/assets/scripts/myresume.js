@@ -41,7 +41,11 @@ $(".submit-btn").click(function(){
     }
     introduce.setCustomValidity(msg);
     $.tlj.postForm('#CreateResumeForm', location.pathname, function(data){
+      if(data.result){
         location.href = '/user/resume/view';
+      }else{
+        alert(errorCode[data.message]);
+      }
     });
 });
 

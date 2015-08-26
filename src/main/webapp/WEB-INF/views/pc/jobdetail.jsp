@@ -168,8 +168,6 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-<script src="/scripts/comment.js"></script>
-<script src="/scripts/jobdetail.js"></script>
 <script>
     var job = JSON.parse('${ju:toJson(job)}');
     job.expiredTime = new Date(job.expiredTime);
@@ -178,5 +176,7 @@
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
     var currentUser = JSON.parse('${ju:toJson(currUser)}');
 </script>
+<script src="/scripts/comment.js"></script>
+<script src="/scripts/jobdetail.js"></script>
 </body>
 </html>

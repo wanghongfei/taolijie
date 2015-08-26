@@ -59,7 +59,7 @@ public class UShController {
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                          HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
-
+        if(page < 0) page = 0;
         page = PageUtils.getFirstResult(page, pageSize);
         ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, page, pageSize);
 
