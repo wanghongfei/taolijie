@@ -77,7 +77,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
            // $loading.show();
             search(url, searchObj,function(data){
                 if(data.ok){
-                    $scope.resumes= data.data.list;
+                    $scope.list= data.data.list;
                     $scope.$digest();
                 }
             //    $loading.hide();
@@ -90,7 +90,7 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
              //   $loading.show();
                 search(url, searchObj,function(data){
                     if(data.ok){
-                        $scope.resumes = data.data.list;
+                        $scope.list= data.data.list;
                         $scope.$digest();
                     }
               //      $loading.hide();
@@ -100,10 +100,10 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
     };
 
     $scope.lastPage = function(){
-        return $scope.resumes != null && currPageNumber != 0;
+        return $scope.list!= null && currPageNumber != 0;
     };
     $scope.nextPage = function(){
-        return $scope.resumes != null&&(currPageNumber+1)*maxSize <$scope.resultCount;
+        return $scope.list!= null&&(currPageNumber+1)*maxSize <$scope.resultCount;
     }
 
 
