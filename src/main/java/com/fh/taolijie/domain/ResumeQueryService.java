@@ -5,6 +5,7 @@ import com.fh.taolijie.utils.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 与简历相关的非数据库操作逻辑, 不需要事务支持
@@ -21,12 +22,16 @@ public class ResumeQueryService {
      * @return 赋好值的简历List
      */
     public List<ResumeModel> assignIntend(List<ResumeWithIntend> withList, List<ResumeModel> reList) {
-        for (ResumeWithIntend with : withList) {
-            ResumeModel resume = CollectionUtils.findFromCollection(reList, r -> r.getId().equals(with.getResumeId()));
-            if (null != resume) {
-                resume.getIntend().add(with.getCateName());
+        withList.forEach( with -> {
+
+            Optional<ResumeModel> resume = reList.stream()
+                    .filter(r -> r.getId().equals(with.getResumeId()))
+                    .findAny();
+
+            if (resume.isPresent()) {
+                resume.get().getIntend().add(with.getCateName());
             }
-        }
+        });
 
         return reList;
     }
