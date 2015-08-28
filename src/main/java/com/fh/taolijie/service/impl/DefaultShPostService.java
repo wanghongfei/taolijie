@@ -129,9 +129,9 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    public ListResult<SHPostModel> getFavoritePost(Integer memberId) {
+    public ListResult<SHPostModel> getFavoritePost(Integer memberId, int pn, int ps) {
 
-        CollectionModelExample example = new CollectionModelExample(0, Integer.MAX_VALUE);
+        CollectionModelExample example = new CollectionModelExample(pn, ps);
         example.createCriteria()
                 .andMemberIdEqualTo(memberId)
                 .andShPostIdIsNotNull();
@@ -148,7 +148,7 @@ public class DefaultShPostService implements ShPostService {
 
         List<SHPostModel> list = postMapper.getInBatch(idList);
 
-        return new ListResult<>(list, list.size());
+        return new ListResult<>(list, coList.getResultCount());
     }
 
     @Override

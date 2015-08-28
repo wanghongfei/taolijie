@@ -120,7 +120,12 @@ public interface JobPostService extends PageService {
      */
     boolean isPostFavorite(Integer memId, Integer postId);
 
-    ListResult<JobPostModel> getFavoritePost(Integer memberId);
+    /**
+     * 查询收藏的兼职
+     * @param memberId
+     * @return
+     */
+    ListResult<JobPostModel> getFavoritePost(Integer memberId, int pn, int ps);
 
     /**
      * @deprecated

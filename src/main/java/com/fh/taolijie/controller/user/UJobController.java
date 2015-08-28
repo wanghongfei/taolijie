@@ -93,14 +93,15 @@ public class UJobController {
      * @return
      */
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
-    public String fav(@RequestParam (defaultValue = "1") int page,
+    public String fav(@RequestParam (defaultValue = "0") int page,
                       @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
                       HttpSession session, Model model){
         Credential credential = CredentialUtils.getCredential(session);
-        ObjWrapper objWrapper = new ObjWrapper();
+        //ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
-        List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId())
+        page = PageUtils.getFirstResult(page, pageSize);
+        List<JobPostModel> jobs = jobPostService.getFavoritePost(credential.getId(), page, pageSize)
                 .getList();
 
         int pageStatus = 1;

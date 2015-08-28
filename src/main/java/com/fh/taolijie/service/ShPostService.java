@@ -90,7 +90,7 @@ public interface ShPostService extends PageService {
      * @param pageNumber 从0开始
      * @return
      */
-    ListResult<SHPostModel> getFavoritePost(Integer memberId);
+    ListResult<SHPostModel> getFavoritePost(Integer memberId, int pn, int ps);
 
     boolean isPostAlreadyFavorite(Integer memId, Integer postId);
 

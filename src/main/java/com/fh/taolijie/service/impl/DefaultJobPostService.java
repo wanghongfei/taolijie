@@ -168,11 +168,12 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = false)
-    public ListResult<JobPostModel> getFavoritePost(Integer memberId) {
-        CollectionModelExample example = new CollectionModelExample(0, Integer.MAX_VALUE);
+    public ListResult<JobPostModel> getFavoritePost(Integer memberId, int pn, int ps) {
+        CollectionModelExample example = new CollectionModelExample(pn, ps);
         example.createCriteria()
                 .andMemberIdEqualTo(memberId)
                 .andJobPostIdIsNotNull();
+
         // TODO 没分页
         ListResult<CollectionModel> coList = coService.findBy(example);
         if (0 == coList.getResultCount()) {
@@ -185,7 +186,7 @@ public class DefaultJobPostService implements JobPostService {
                 .collect(Collectors.toList());
 
         List<JobPostModel> list = postMapper.getInBatch(idList);
-        return new ListResult<>(list, list.size());
+        return new ListResult<>(list, coList.getResultCount());
     }
 
     @Deprecated

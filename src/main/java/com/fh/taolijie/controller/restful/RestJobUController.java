@@ -46,4 +46,26 @@ public class RestJobUController {
         return new ResponseText(result);
     }
 
+    /**
+     * 查询用户收藏的所有兼职
+     * @param jobId
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/favlist", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText favJobList(HttpServletRequest req,
+                                   @RequestParam(defaultValue = "0") int pageNumber,
+                                   @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+        ListResult<JobPostModel> lr = jobService.getFavoritePost(credential.getId(), pageNumber, pageSize);
+
+        return new ResponseText(lr);
+    }
+
 }
