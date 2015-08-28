@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
+import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.service.CollectionService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
@@ -127,6 +128,11 @@ public class DefaultResumeService implements ResumeService {
         long tot = reMapper.countFilterByIntendAndGender(intendId, gender);
 
         return new ListResult<>(list, tot);
+    }
+
+    @Override
+    public List<ResumeWithIntend> findIntendForResume(List<Integer> resumeIdList) {
+        return reMapper.findIntendInBatch(resumeIdList);
     }
 
     @Override

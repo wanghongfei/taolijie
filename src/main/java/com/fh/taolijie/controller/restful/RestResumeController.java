@@ -6,6 +6,8 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.ResumeQueryService;
+import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by whf on 7/29/15.
@@ -30,6 +33,9 @@ import java.util.List;
 public class RestResumeController {
     @Autowired
     ResumeService resumeService;
+
+    @Autowired
+    ResumeQueryService reQueryService;
 
     /**
      * 简历库
@@ -144,7 +150,21 @@ public class RestResumeController {
             }
         }
 
+        // 简历
         ListResult<ResumeModel> lr = resumeService.findBy(model);
+
+        // 把简历id取出转换成List
+        List<Integer> idList = lr.getList().stream()
+                .map(ResumeModel::getId)
+                .collect(Collectors.toList());
+
+        // 查询简历对应的意向
+        List<ResumeWithIntend> withList = resumeService.findIntendForResume(idList);
+
+        // 将意向设置到对应简历中
+        List<ResumeModel> list = reQueryService.assignIntend(withList, lr.getList());
+
+        lr.setList(list);
 
         return new ResponseText(lr);
 

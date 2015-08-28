@@ -2,6 +2,7 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
+import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -77,4 +78,7 @@ public interface ResumeModelMapper {
     void updateTime(Integer resumeId);
 
     void increasePageView(Integer resumeId);
+
+
+    List<ResumeWithIntend> findIntendInBatch(List<Integer> resumeIdList);
 }

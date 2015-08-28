@@ -40,6 +40,14 @@
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
     </resultMap>
 
+    <resultMap id="resume_with_intend" type="com.fh.taolijie.domain.middle.ResumeWithIntend">
+        <result property="resumeId" column="resume_id" />
+        <result property="cateId" column="cate_id" />
+        <result property="cateName" column="cate_name" />
+        <result property="cateLevel" column="cate_level" />
+        <result property="cateThemeColor" column="cate_theme_color" />
+    </resultMap>
+
     <resultMap id="PostRecord" type="com.fh.taolijie.domain.middle.ResumePostRecord">
         <association property="jobPost" resultMap="com.fh.taolijie.dao.mapper.JobPostModelMapper.BaseResultMap"/>
         <association property="member" resultMap="com.fh.taolijie.dao.mapper.MemberModelMapper.BaseResultMap"/>
@@ -728,5 +736,17 @@
             resume_post_rel rp
         WHERE
             re.member_id = #{memberId}
+    </select>
+
+    <select id="findIntendInBatch" resultMap="resume_with_intend">
+        select
+            intend.resume_id, cate.id AS cate_id, cate.name AS cate_name, cate.memo AS cate_memo,
+	        cate.level AS cate_level, cate.theme_color AS cate_theme_color
+        from
+            resume_job_post_category intend
+	    inner join
+		    job_post_category cate ON intend.job_post_category_id = cate.id
+        where
+		    intend.resume_id in <foreach collection="list" item="id" open="(" close=")" separator=",">#{id}</foreach>
     </select>
 </mapper>

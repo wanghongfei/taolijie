@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.ApplicationIntendModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
+import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ObjWrapper;
 
@@ -62,6 +63,13 @@ public interface ResumeService extends PageService {
     ListResult<ResumeModel> findBy(ResumeModel example);
 
     ListResult<ResumeModel> findByGenderAndIntend(Integer intendId, String gender, int pageNumber, int pageSize);
+
+    /**
+     * 为每个简历查询对应的意向
+     * @param resumeIdList
+     * @return
+     */
+    List<ResumeWithIntend> findIntendForResume(List<Integer> resumeIdList);
 
     /**
      * 根据简历查找意向
