@@ -135,33 +135,24 @@
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
         </div>--%>
       </div>
-      <div class="content" id="contents">
-        <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
-            <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
-            <p>{{ review.member.username }}
-            <a class="red delete-review" href="javascript:void(0);"
-               ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}"
-               ng-show="currentUser.id == review.member.id"> 删除</a>
-           </p>
-            <div class="span"><span>{{ review.content }}</span></div>
-        </div>
-          <%--
-        <c:forEach var="review" items="${reviews}" varStatus="status">
-        <div class="${status.index == status.count-1 ? 'no-border-bottom':null}" >
-           <img src="/static/images/users/${review.member.profilePhotoId}" alt="user photo">
-           <p>${review.member.username}
-             <c:if test="${sessionScope.user.id == review.member.id}">
-               <a class="red delete-review" href="javascript:void(0);" data-id="${job.id}" data-reviewId="${review.id}"> 删除</a>
-             </c:if>
-           </p>
-           <span>${review.content}</span>
-        </div>
-        </c:forEach>
-          --%>
-      </div>
       <jsp:include page="block/comment.jsp">
         <jsp:param name="postId" value="${job.id}"/>
       </jsp:include>
+      <div class="content" id="contents">
+        <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in job.reviews">
+            <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+            <p >{{review.member.username}}
+            <a class="red delete-review" href="javascript:void(0);"
+               ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}"
+               ng-show="{{ currentUser.id == review.member.id }}"> 删除 </a>
+           </p>
+            <div class="span"><span ng-bind="review.content"></span></div>
+        </div>
+      </div>
+
+      <div class="load-more" style="text-align: center;display: none">
+        <button id="loadMore">加载更多评论</button>
+      </div>
     </div>
   </div>
 </div>
@@ -175,8 +166,11 @@
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
     var currentUser = JSON.parse('${ju:toJson(currUser)}');
+    console.log(currentUser);
+    console.log(job.reviews);
 </script>
 <script src="/scripts/comment.js"></script>
 <script src="/scripts/jobdetail.js"></script>
+
 </body>
 </html>
