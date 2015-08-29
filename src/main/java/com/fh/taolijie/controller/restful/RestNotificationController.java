@@ -45,7 +45,7 @@ public class RestNotificationController {
                                            HttpServletRequest req) {
         // 检查memberId是否是当前用户
         Credential credential = SessionUtils.getCredential(req);
-        if (null == credential || memberId.equals(credential.getId())) {
+        if (null == credential || false == memberId.equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
@@ -66,7 +66,7 @@ public class RestNotificationController {
                                                HttpServletRequest req) {
         // 检查memberId是否是当前用户
         Credential credential = SessionUtils.getCredential(req);
-        if (null == credential || memberId.equals(credential.getId())) {
+        if (null == credential || false == memberId.equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
