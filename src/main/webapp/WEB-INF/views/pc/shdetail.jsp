@@ -101,7 +101,7 @@ To change this template use File | Settings | File Templates.
                         <div class="bubble-arrow-inner"></div>
                     </div>
                     <div class="name">
-                        <img src="/images/pig.jpg" alt="">
+                        <img src="/static/images/users/{{sh.member.profilePhotoId}}" alt="">
 
                         <p ng-bind="sh.contactName"></p>
                         <%--<span ng-bind="posterRole.memo"></span>--%>
@@ -173,10 +173,8 @@ To change this template use File | Settings | File Templates.
             <div class="operates">
                 <div class="operate">
                     <span id="like" data-id="${sh.id}" class="fa fa-thumbs-up" style="cursor: pointer"></span>
+                    <p ng-bind="sh.likes" ></p>
 
-                    <p ng-bind="sh.likes" ng-show="sh.likes"></p>
-
-                    <p ng-show="!sh.likes">0</p>
                 </div>
                 <%--<div class="operate">--%>
                 <%--<span  id="dislike" data-id="${job.id}" class="fa fa-thumbs-down"></span>--%>
@@ -193,21 +191,26 @@ To change this template use File | Settings | File Templates.
                                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
                                 </div>--%>
             </div>
-            <div class="content" id="contents">
-                    <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
-                        <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+            <jsp:include page="block/comment.jsp">
+                <jsp:param name="postId" value="${sh.id}"/>
+           </jsp:include>
 
-                        <p>
-                            <span ng-bind="review.member.username"></span> <%--判断是该用户发的显示删除按钮--%>
-                            <a class="red delete-review" href="javascript:void(0);" ng-attr-data-id="{{ sh.id }}"
-                                data-reviewId="{{ review.id }}" ng-show="{{ sh.userId == review.member.id }}"> 删除</a>
-                        </p>
-                        <span ng-bind="review.content"></span>
-                    </div>
+            <div class="content" id="contents">
+              <div ng-class="{'no-border-bottom' : $last}" ng-repeat="review in sh.reviews">
+                  <img src="/static/images/users/{{ review.member.profilePhotoId }}" alt="user photo">
+                  <p >{{review.member.username}}
+                  <a class="red delete-review" href="javascript:void(0);"
+                     ng-attr-data-id="{{ job.id }}" data-reviewId="{{ review.id }}"
+                     ng-show="{{ currentUser.id == review.member.id }}"> 删除 </a>
+                 </p>
+                  <div class="span"><span ng-bind="review.content"></span></div>
+              </div>
             </div>
-                 <jsp:include page="block/comment.jsp">
-                     <jsp:param name="postId" value="${sh.id}"/>
-                </jsp:include>
+
+            <div class="load-more" style="text-align: center;display: none">
+              <button id="loadMore">加载更多评论</button>
+            </div>
+
             <%--
             <div class="review-bar">
                 <img src="/images/pig.jpg" alt="">
@@ -234,8 +237,12 @@ To change this template use File | Settings | File Templates.
     sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
     sh.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     sh.reviews = JSON.parse('${ju:toJson(reviews)}');
-    sh.userId = '${sessionScope.user.id}';
-    var currentUser = JSON.parse('${ju:toJson(sessionScope.user)}');
+    var currentUser = JSON.parse('${ju:toJson(currUser)}');
+    sh.userId = currentUser.id;
+    var shownReviewNums = sh.reviews.length || 0;
+    var reviewCount = sh.reviewCount;
+    var reviewType = 'sh';
+    console.log(reviewType);
 </script>
 </body>
 </html>

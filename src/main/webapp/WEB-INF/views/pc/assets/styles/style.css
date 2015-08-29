@@ -1163,6 +1163,57 @@ ul.bxslider li img {
 .detail .contact .phone span {
     color: #fa6a38; }
 
+    .detail .title .label {
+        font-size: 16px;
+        color: #858e8f;
+    }
+    .detail > .info .money{
+        padding: 23px 0 23px 0;
+    }
+    .detail .info .money .wage{
+        display: inline-block;
+        color: #fa6a38;
+        font-size: 42px;
+        padding-right: 5px;
+    }
+    .detail .info .money .time-to-pay{
+        color: #333;
+        margin-left: 20px;
+        font-size: 1em;
+        display: inline-block;
+    }
+    .detail .context-title{
+        color: #858e8f;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    .detail .content a{
+        font-size: 17px;
+        display: inline-block;
+        float: right;
+        margin-right: 20px;
+    }
+    .detail .content div.span{
+        border: none;
+        padding-top: 0px;
+    }
+    .detail > .description{
+        border: 0px;
+    }
+    .detail > .description .pin-title{
+        margin-bottom: 20px;
+    }
+    .detail .review-bar input[type=submit]{
+        padding: 0px;
+    }
+    .detail .review-bar input[type=submit]:hover{
+        background-color: #7ecdb4;
+    }
+    .detail .review-bar input[type=submit]:active{
+        background-color: #76c3aa;
+    }
+
 /*下面是简历的三级页面css，从之前手机端复制过来的，所以代码看起来有些魔幻*/
 /*======resume-info======*/
 .resume-info {
@@ -1431,7 +1482,7 @@ ul.bxslider li img {
 .comment .content div {
     overflow: auto;
     border-top: 1px dashed #bdbdbd;
-    border-bottom: 1px dashed #bdbdbd;
+    /*border-bottom: 1px dashed #bdbdbd;*/
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 30px; }

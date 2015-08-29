@@ -166,8 +166,10 @@
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     job.reviews = JSON.parse('${ju:toJson(reviews)}');
     var currentUser = JSON.parse('${ju:toJson(currUser)}');
-    console.log(currentUser);
-    console.log(job.reviews);
+
+    var shownReviewNums = job.reviews.length || 0;
+    var reviewCount = job.reviewCount;
+    var reviewType = 'job';
 </script>
 <script src="/scripts/comment.js"></script>
 <script src="/scripts/jobdetail.js"></script>

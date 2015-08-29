@@ -1,6 +1,5 @@
 var id = $('#review-btn').data('id');
 var $contents = $("#contents");
-var shownReviewNums = job.reviews.length || 0;
 var reviewPage = 0;
 
 $(function(){
@@ -21,13 +20,8 @@ $('.review-bar').submit(function(e) {
         content:content
     };
 
-    var url = '';
-    var path = location.pathname;
-    if(path.indexOf('job') > -1) {
-        url = "/user/job/"+id+"/review/post";
-    }else {
-        url = "/user/sh/"+id+"/review/post";
-    }
+    var path = location.pathname,
+        url = "/user/"+reviewType+"/"+id+"/review/post";
     $.tlj.post(url, data, function(data, err) {
       if(err){
           $.tlj.notify('你还未登录');
@@ -73,7 +67,7 @@ $(document).on("click",'.delete-review',function(){
     var $parent = $(this).parent().parent();
     $.ajax({
         type:"POST",
-        url:"/user/job/"+id+"/review/delete/"+reviewId,
+        url:"/user/"+reviewType+"/"+id+"/review/delete/"+reviewId,
         success:function(data, text, res){
             if(data.result){
                 $parent.remove();
@@ -96,7 +90,7 @@ $("#toComment").click(function(){
 
 //动态加载评论
 $("#loadMore").click(function(){
-  $.get('/api/review/job/'+id+'?pageNumber='+(++reviewPage))
+  $.get('/api/review/'+reviewType+'/'+id+'?pageNumber='+(++reviewPage))
     .success(function(data){
       var i = 0,
           list = data.data.list;
@@ -106,7 +100,7 @@ $("#loadMore").click(function(){
             $parent = $('<div class="no-border-bottom"></div>'),
             photo_url = '/static/images/users/'+user.profilePhotoId;
         $parent.append('<img src="' + photo_url + '" alt="">');
-        if(currentUser.id === user.id){
+        if(currentUser && currentUser.id === user.id){
           $parent.append('<p>'+user.username+'<a class="red delete-review" href="javascript:void(0);"  data-id="'+id+'" data-reviewId="'+review.id+'"> 删除</a></p>');
         }
         $parent.append('<span>'+review.content+'</span>');
@@ -121,8 +115,9 @@ $("#loadMore").click(function(){
 
 //检测是否有评论存在
 function haveReviews(){
-  if(job.reviewCount < 8 || shownReviewNums >= job.reviewCount){
-    console.log('false');
+  console.log(reviewCount);
+  console.log(shownReviewNums);
+  if(reviewCount < 8 || shownReviewNums >= reviewCount){
     return false;
   }else{
     return true;
