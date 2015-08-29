@@ -34,6 +34,16 @@ jQuery(function() {
             title: 'Images',
             extensions: 'gif,jpg,jpeg,bmp,png',
             mimeTypes: 'image/*'
+        },
+        //压缩
+        compress: {
+          width: 210,
+          height: 210,
+          compressSize: 0,
+          allowMagnify: false,
+          crop: true,
+          preserveHeaders: true,
+          noCompressIfLarger: false,
         }
     });
 
