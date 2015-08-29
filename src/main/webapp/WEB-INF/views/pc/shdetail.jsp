@@ -182,10 +182,8 @@ To change this template use File | Settings | File Templates.
                 <%--</div>--%>
                 <div class="operate">
                     <span id="toComment" class="fa fa-comment" style="cursor: pointer"></span>
+                    <p ng-bind="sh.reviewCount"></p>
 
-                    <p ng-bind="reviewCount" ng-show="reviewCount"></p>
-
-                    <p ng-show="!reviewCount">0</p>
                 </div>
                 <%--                <div class="operate">
                                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
@@ -238,7 +236,6 @@ To change this template use File | Settings | File Templates.
     sh.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
     sh.reviews = JSON.parse('${ju:toJson(reviews)}');
     var currentUser = JSON.parse('${ju:toJson(currUser)}');
-    sh.userId = currentUser.id;
     var shownReviewNums = sh.reviews.length || 0;
     var reviewCount = sh.reviewCount;
     var reviewType = 'sh';
