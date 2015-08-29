@@ -11,8 +11,8 @@
 <!-- 图片轮播 -->
 <div class="slider">
   <ul class="bxslider">
-    <li><img src="https://placeimg.com/1000/196/tech" /></li>
-    <li><img src="https://placeimg.com/1000/196/tech/grey" /></li>
-    <li><img src="https://placeimg.com/1000/196/tech/sepia" /></li>
+    <li><img src="http://7xlgan.com1.z0.glb.clouddn.com/banner-1" /></li>
+    <li><img src="http://7xlgan.com1.z0.glb.clouddn.com/banner-2" /></li>
+    <li><img src="http://7xlgan.com1.z0.glb.clouddn.com/banner-3" /></li>
   </ul>
 </div>
