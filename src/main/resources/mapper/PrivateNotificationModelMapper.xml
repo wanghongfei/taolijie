@@ -41,8 +41,6 @@
             <include refid="Base_Column_List"/>
         from
             private_notification pri_no
-        INNER JOIN
-            member mem ON mem.id = noti.member_id
         where
             pri_no.id = #{id,jdbcType=INTEGER}
     </select>

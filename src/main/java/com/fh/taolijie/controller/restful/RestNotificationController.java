@@ -14,10 +14,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -54,6 +51,55 @@ public class RestNotificationController {
         ListResult<PrivateNotificationModel> list = notiService.getPriNotification(memberId, pageNumber, pageSize);
 
         return new ResponseText(list);
+    }
+
+    /**
+     * 查询单条个人通知
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/pri/{notiId}", produces = Constants.Produce.JSON)
+    public ResponseText queryPriNotiById(@PathVariable("notiId") Integer notiId,
+                                               HttpServletRequest req) {
+        PrivateNotificationModel pri = notiService.findPriById(notiId);
+        if (null == pri) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        Integer toMemberId = pri.getToMemberId();
+
+        // 检查toMember是否当前用户
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential || false == toMemberId.equals(credential.getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        return new ResponseText(pri);
+    }
+
+    /**
+     * 查询单条系统通知
+     * @param notiId
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/sys/{notiId}", produces = Constants.Produce.JSON)
+    public ResponseText querySysNotiById(@PathVariable("notiId") Integer notiId,
+                                         HttpServletRequest req) {
+        SysNotificationModel sys = notiService.findSysById(notiId);
+        if (null == sys) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        String role = sys.getAccessRange();
+
+        // 检查当前用户的role能否接收这个通知
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential || false == role.equals(credential.getRoleList().get(0))) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        return new ResponseText(sys);
     }
 
     /**
