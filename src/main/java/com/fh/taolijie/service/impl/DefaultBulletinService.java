@@ -15,7 +15,6 @@ import java.util.List;
  * Created by wanghongfei on 15-6-7.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultBulletinService implements BulletinService {
     @Autowired
     BulletinModelMapper buMapper;
@@ -33,11 +32,13 @@ public class DefaultBulletinService implements BulletinService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BulletinModel> getAll(int firstResult, int capacity, ObjWrapper wrap) {
         return buMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BulletinModel findOne(Integer id) {
         return buMapper.selectByPrimaryKey(id);
     }

@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultShPostService implements ShPostService {
     @Autowired
     ShPostModelMapper postMapper;
@@ -37,6 +36,7 @@ public class DefaultShPostService implements ShPostService {
     CollectionService coService;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> getAllPostList(int firstResult, int capacity) {
         Pagination page = new Pagination(firstResult, CollectionUtils.determineCapacity(capacity));
 
@@ -47,6 +47,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> getPostList(Integer cateId, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByCategory(cateId);
@@ -55,6 +56,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> getPostList(Integer memId, boolean filtered, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByMember(memId, filtered, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByMember(memId, filtered);
@@ -63,6 +65,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> getAndFilter(Integer cateId, boolean pageView, int firstResult, int capacity) {
         List<SHPostModel> list = postMapper.getByCategory(cateId, false, firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByCategory(cateId);
@@ -71,6 +74,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> runSearch(SHPostModel model) {
         List<SHPostModel> list = postMapper.searchBy(model);
         long tot = postMapper.countSearchBy(model);
@@ -79,6 +83,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> filterQuery(SHPostModel model) {
         List<SHPostModel> list = postMapper.findBy(model);
         long tot = postMapper.countFindBy(model);
@@ -87,11 +92,13 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SHPostModel> getUnverifiedPostList(SHPostModel model) {
         return postMapper.findBy(model);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<SHPostModel> getSuedPost(int firstResult, int capacity) {
         return postMapper.getSuedPost(firstResult, CollectionUtils.determineCapacity(capacity));
     }
@@ -124,11 +131,13 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isPostFavorite(Integer memId, Integer postId) {
         return coService.alreadyCollected(memId, postId, PostType.SH);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostModel> getFavoritePost(Integer memberId, int pn, int ps) {
 
         CollectionModelExample example = new CollectionModelExample(pn, ps);
@@ -152,6 +161,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isPostAlreadyFavorite(Integer memId, Integer postId) {
         return coService.alreadyCollected(memId, postId, PostType.SH);
     }
@@ -163,6 +173,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SHPostModel findPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }

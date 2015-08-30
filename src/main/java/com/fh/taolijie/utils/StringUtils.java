@@ -218,7 +218,7 @@ public class StringUtils {
         }
 
         return Arrays.stream(ids)
-                .anyMatch( (id) -> id.equals(targetId) );
+                .anyMatch((id) -> id.equals(targetId));
     }
 
     public static boolean checkIdExists(String idsString, String idString) {
@@ -255,5 +255,19 @@ public class StringUtils {
         }
 
         return true;
+    }
+
+
+    /**
+     * 将所有参数做为字符串拼接在一起
+     * @param objs
+     * @return
+     */
+    public static String concat(Object... objs) {
+        StringBuilder sb = new StringBuilder();
+
+        Arrays.stream(objs).forEach( o -> sb.append(o) );
+
+        return sb.toString();
     }
 }

@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.PrivateNotificationModelMapper;
 import com.fh.taolijie.dao.mapper.SysNotificationModelMapper;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
@@ -16,13 +17,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-12.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultNotificationService implements NotificationService {
     @Autowired
     SysNotificationModelMapper sysMapper;
@@ -32,6 +33,7 @@ public class DefaultNotificationService implements NotificationService {
     MemberModelMapper memMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize) {
         List<SysNotificationModel> list = sysMapper.findSysByAccessRange(rangeList, pageNumber, CollectionUtils.determineCapacity(pageSize));
 
@@ -65,6 +67,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<PrivateNotificationModel> getPriNotification(Integer memberId, int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
 
@@ -82,6 +85,8 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+
     public ListResult<PrivateNotificationModel> getUnreadPriNotification(Integer memberId, int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
 
@@ -100,6 +105,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SysNotificationModel> getAllSysNotification(int pageNumber, int pageSize) {
         List<SysNotificationModel> list = sysMapper.findAll(pageNumber, pageSize);
         int tot = sysMapper.countFindAll();
@@ -108,6 +114,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<PrivateNotificationModel> getAllPriNotification(int pageNumber, int pageSize) {
         PrivateNotificationModel model = new PrivateNotificationModel(pageNumber, pageSize);
         model.setNotiType(NotiType.ADMIN.getCode());
@@ -119,11 +126,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PrivateNotificationModel findPriById(Integer priNotiId) {
         return priMapper.selectByPrimaryKey(priNotiId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SysNotificationModel findSysById(Integer notiId) {
         return sysMapper.selectByPrimaryKey(notiId);
     }
@@ -142,6 +151,22 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = false)
+    public void addCommentNotification(Integer memberId, String title, String content) {
+        // 创建通知实体
+        PrivateNotificationModel priNoti = new PrivateNotificationModel();
+        priNoti.setToMemberId(memberId);
+        priNoti.setNotiType(NotiType.SYSTEM_AUTO.getCode());
+        priNoti.setTitle(title);
+        priNoti.setContent(content);
+        priNoti.setTime(new Date());
+
+        // 保存到db
+        priMapper.insertSelective(priNoti);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void markPriAsRead(Integer sysId) {
         PrivateNotificationModel model = new PrivateNotificationModel();
         model.setId(sysId);
@@ -151,6 +176,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void markSysAsRead(Integer memId, Integer notiId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String ids = mem.getReadSysNotificationIds();

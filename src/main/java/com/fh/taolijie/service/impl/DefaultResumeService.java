@@ -23,13 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultResumeService implements ResumeService {
     @Autowired
     ResumeModelMapper reMapper;
@@ -44,11 +44,13 @@ public class DefaultResumeService implements ResumeService {
     CollectionService coService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeModel> getAllResumeList(int firstResult, int capacity) {
         return reMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeModel> getAllResumeList(Constants.AccessAuthority authority, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setAccessAuthority(authority.toString());
@@ -57,6 +59,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumeModel> findByAuthes(int pageNumber, int pageSize, Constants.AccessAuthority... authList) {
         List<String> authStrings = Arrays.stream(authList)
                 .map(auth -> auth.toString())
@@ -69,6 +72,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeModel> getResumeList(Integer memId, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
@@ -77,6 +81,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeModel> getResumeList(Integer memId, Constants.AccessAuthority authority, int firstResult, int capacity) {
         ResumeModel model = new ResumeModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
@@ -86,6 +91,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumeModel> getResumeListByIntend(Integer categoryId, int firstResult, int capacity) {
         List<ApplicationIntendModel> intendList = intendMapper.getByIntend(categoryId, firstResult, CollectionUtils.determineCapacity(capacity));
         // 如果为空，直接返回空List
@@ -104,6 +110,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumeModel> getResumeByGender(String gender, int pageNumber, int pageSize) {
         ResumeModel example = new ResumeModel(pageNumber, pageSize);
         example.setGender(gender);
@@ -115,6 +122,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumeModel> findBy(ResumeModel example) {
         List<ResumeModel> list = reMapper.findBy(example);
         long tot = reMapper.countFindBy(example);
@@ -123,6 +131,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumeModel> findByGenderAndIntend(Integer intendId, String gender, int pageNumber, int pageSize) {
         List<ResumeModel> list = reMapper.filterByIntendAndGender(intendId, gender, pageNumber, pageSize);
         long tot = reMapper.countFilterByIntendAndGender(intendId, gender);
@@ -131,16 +140,19 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeWithIntend> findIntendForResume(List<Integer> resumeIdList) {
         return reMapper.findIntendInBatch(resumeIdList);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ApplicationIntendModel> getIntendByResume(Integer resumeId) {
         return intendMapper.getByResume(resumeId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ResumePostRecord> getPostRecord(Integer memId, int page, int capacity) {
         List<ResumePostRecord> list = reMapper.findPostRecordByMember(memId, page, CollectionUtils.determineCapacity(capacity));
         long tot = reMapper.countFindPostRecordByMember(memId);
@@ -149,6 +161,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResumeModel> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
         return reMapper.getInBatch(Arrays.asList(ids));
     }
@@ -184,6 +197,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isAlreadyFavorite(Integer memId, Integer resumeId) {
         return coService.alreadyCollected(memId, resumeId, PostType.RESUME);
     }
@@ -207,6 +221,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResumeModel findResume(Integer resumeId) {
         return reMapper.selectByPrimaryKey(resumeId);
     }
@@ -223,5 +238,21 @@ public class DefaultResumeService implements ResumeService {
     @Transactional(readOnly = false)
     public void increasePageView(Integer id) {
         reMapper.increasePageView(id);
+    }
+
+    @Override
+    public List<ResumeModel> assignIntend(List<ResumeWithIntend> withList, List<ResumeModel> reList) {
+        withList.forEach( with -> {
+
+            Optional<ResumeModel> resume = reList.stream()
+                    .filter(r -> r.getId().equals(with.getResumeId()))
+                    .findAny();
+
+            if (resume.isPresent()) {
+                resume.get().getIntend().add(with.getCateName());
+            }
+        });
+
+        return reList;
     }
 }

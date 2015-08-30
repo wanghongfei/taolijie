@@ -18,13 +18,13 @@ import java.util.List;
  * Created by wanghongfei on 15-6-5.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultShPostCategoryService extends AbstractBaseService<SHPostCategoryModel>
         implements ShPostCategoryService {
     @Autowired
     ShPostCategoryModelMapper cateMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<SHPostCategoryModel> getCategoryList(int firstResult, int capacity) {
         List<SHPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = cateMapper.countGetAll();
@@ -45,11 +45,13 @@ public class DefaultShPostCategoryService extends AbstractBaseService<SHPostCate
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SHPostCategoryModel findByName(String name) {
         return cateMapper.findByName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     protected BaseMapper<SHPostCategoryModel> getMapper() {
         return this.cateMapper;
     }

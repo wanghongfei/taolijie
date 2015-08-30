@@ -17,12 +17,12 @@ import java.util.List;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultNewsService implements NewsService {
     @Autowired
     NewsModelMapper newsMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<NewsModel> getNewsList(int firstResult, int capacity) {
         List<NewsModel> list = newsMapper.getAll(firstResult, capacity);
         long tot = newsMapper.countGetAll();
@@ -31,6 +31,7 @@ public class DefaultNewsService implements NewsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<NewsModel> getNewsList(Date uptime, int firstResult, int capacity) {
         Date now = new Date();
         List<NewsModel> list = newsMapper.getByInterval(uptime, now, firstResult, CollectionUtils.determineCapacity(capacity));
@@ -40,6 +41,7 @@ public class DefaultNewsService implements NewsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public NewsModel findNews(Integer newsId) {
         return newsMapper.selectByPrimaryKey(newsId);
     }

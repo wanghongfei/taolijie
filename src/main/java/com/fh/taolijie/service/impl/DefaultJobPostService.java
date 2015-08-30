@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultJobPostService implements JobPostService {
     @Autowired
     JobPostModelMapper postMapper;
@@ -46,6 +45,7 @@ public class DefaultJobPostService implements JobPostService {
     CollectionService coService;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> getAllJobPostList(int firstResult, int capacity) {
         List<JobPostModel> list =  postMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetAll();
@@ -54,6 +54,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> getJobPostListByMember(Integer memId, int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setMemberId(memId);
@@ -66,6 +67,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setJobPostCategoryId(cateId);
@@ -77,6 +79,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity) {
         JobPostModel model = new JobPostModel(firstResult, CollectionUtils.determineCapacity(capacity));
         model.setVerified(Constants.VerifyStatus.NONE.toString());
@@ -84,6 +87,7 @@ public class DefaultJobPostService implements JobPostService {
         return postMapper.findBy(model);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ListResult<JobPostModel> getPostListByIds(Integer... ids) {
         List<JobPostModel> list = postMapper.getInBatch(Arrays.asList(ids));
@@ -92,6 +96,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity) {
         List<JobPostModel> list = postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByComplaint();
@@ -100,6 +105,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<JobPostModel> getAndFilter(Integer categoryId,
                                            Constants.WayToPay wayToPay,
                                            boolean orderByDate,
@@ -119,6 +125,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity) {
         model.setPageNumber(firstResult);
         model.setPageSize(CollectionUtils.determineCapacity(capacity));
@@ -130,6 +137,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> findByExample(JobPostModel example) {
         List<JobPostModel> list = postMapper.findBy(example);
         long tot = postMapper.countFindBy(example);
@@ -138,6 +146,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public JobPostModel findJobPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
     }
