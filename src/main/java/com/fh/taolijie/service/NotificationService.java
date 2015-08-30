@@ -65,6 +65,14 @@ public interface NotificationService {
      */
     void addNotification(SysNotificationModel model);
 
+    /**
+     * 发送一条帖子被评论产生的通知
+     * @param memberId 通知接收者
+     * @param title
+     * @param content
+     */
+    void addCommentNotification(Integer memberId, String title, String content);
+
     void deleteSysNotification(Integer sysId);
     void deletePriNotification(Integer priId);
 

@@ -507,6 +507,8 @@ public class UJobController {
         // 得到兼职的发送者
         JobPostModel job = jobPostService.findJobPost(jobId);
         Integer toMemberId = job.getMemberId();
+
+        /*
         // 创建通知实体
         PrivateNotificationModel priNoti = new PrivateNotificationModel();
         priNoti.setToMemberId(toMemberId);
@@ -514,7 +516,10 @@ public class UJobController {
         priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
         priNoti.setTime(new Date());
         // 保存到db
-        notiService.addNotification(priNoti);
+        notiService.addNotification(priNoti);*/
+        String commentTitle = "评论通知";
+        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧;", Constants.DELIMITER, jobId);
+        notiService.addCommentNotification(toMemberId, commentTitle, commentContent);
 
 
         return new JsonWrapper(true, "reviewId", newReviewId.toString()).getAjaxMessage();

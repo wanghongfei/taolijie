@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.PrivateNotificationModelMapper;
 import com.fh.taolijie.dao.mapper.SysNotificationModelMapper;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -138,6 +140,22 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = false)
     public void addNotification(SysNotificationModel model) {
         sysMapper.insertSelective(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addCommentNotification(Integer memberId, String title, String content) {
+        // 创建通知实体
+        PrivateNotificationModel priNoti = new PrivateNotificationModel();
+        priNoti.setToMemberId(memberId);
+        priNoti.setNotiType(NotiType.SYSTEM_AUTO.getCode());
+        priNoti.setTitle(title);
+        priNoti.setContent(content);
+        priNoti.setTime(new Date());
+
+        // 保存到db
+        priMapper.insertSelective(priNoti);
+
     }
 
     @Override
