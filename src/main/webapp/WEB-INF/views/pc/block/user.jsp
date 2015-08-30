@@ -44,7 +44,7 @@
     <li class="${param.navShow == 'resume'?'active':''}" ><a href="/user/resume/create">我的简历</a></li>
     <li class="${param.navShow == 'favlist'?'active':''}" ><a href="/user/job/myfav">我的收藏</a></li>
     <li class="${param.navShow == 'postlist'?'active':''}" ><a href="/user/job/mypost">我的发布</a></li>
-    <li class="${param.navShow == 'message'?'active':''}" ><a style="cursor: not-allowed" href="javascript:;">消息通知</a></li>
+    <li class="${param.navShow == 'notify'?'active':''}" ><a href="/user/notify/unread">消息通知</a></li>
     <li class="${param.navShow == 'security'?'active':''}" ><a href="/user/setting/security">修改密码</a></li>
     <li class="${param.navShow == 'feedback'?'active':''}" ><a href="/user/feedback">意见反馈</a></li>
   </ul>
