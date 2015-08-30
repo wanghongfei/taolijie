@@ -74,7 +74,7 @@ $("#dislike").click(function(){
     var p = $(this).next();
     $.ajax({
         type:"post",
-        url:"/user/job/"+id+"/dislike",
+        url:"/user/sh/"+id+"/dislike",
         success:function(data){
             console.log(data);
             if(data.result){
