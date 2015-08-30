@@ -150,4 +150,14 @@ public interface ResumeService extends PageService {
      * @return
      */
     boolean deleteResume(Integer resumeId);
+
+    /**
+     * 给ResumeModel对象的intend赋值.
+     * 即将意向设置到对应的简历中
+     *
+     * @param withList 带意向信息和简历id的中间对象
+     * @param reList 简历List
+     * @return 赋好值的简历List
+     */
+    List<ResumeModel> assignIntend(List<ResumeWithIntend> withList, List<ResumeModel> reList);
 }

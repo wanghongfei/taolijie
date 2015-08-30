@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -237,5 +238,21 @@ public class DefaultResumeService implements ResumeService {
     @Transactional(readOnly = false)
     public void increasePageView(Integer id) {
         reMapper.increasePageView(id);
+    }
+
+    @Override
+    public List<ResumeModel> assignIntend(List<ResumeWithIntend> withList, List<ResumeModel> reList) {
+        withList.forEach( with -> {
+
+            Optional<ResumeModel> resume = reList.stream()
+                    .filter(r -> r.getId().equals(with.getResumeId()))
+                    .findAny();
+
+            if (resume.isPresent()) {
+                resume.get().getIntend().add(with.getCateName());
+            }
+        });
+
+        return reList;
     }
 }

@@ -6,7 +6,6 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.ResumeModel;
-import com.fh.taolijie.domain.ResumeQueryService;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.ResumeService;
@@ -33,9 +32,6 @@ import java.util.stream.Collectors;
 public class RestResumeController {
     @Autowired
     ResumeService resumeService;
-
-    @Autowired
-    ResumeQueryService reQueryService;
 
     /**
      * 简历库
@@ -162,7 +158,8 @@ public class RestResumeController {
         List<ResumeWithIntend> withList = resumeService.findIntendForResume(idList);
 
         // 将意向设置到对应简历中
-        List<ResumeModel> list = reQueryService.assignIntend(withList, lr.getList());
+        //List<ResumeModel> list = reQueryService.assignIntend(withList, lr.getList());
+        List<ResumeModel> list = resumeService.assignIntend(withList, lr.getList());
 
         lr.setList(list);
 
