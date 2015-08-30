@@ -13,22 +13,24 @@ import java.util.List;
  * Created by wanghongfei on 15-6-19.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultAppIntendService implements ApplicationIntendService {
     @Autowired
     ApplicationIntendModelMapper aiMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ApplicationIntendModel> getByIntend(Integer categoryId, int pageNumber, int pageSize) {
         return aiMapper.getByIntend(categoryId, pageNumber, pageSize);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ApplicationIntendModel> getByResume(Integer resumeId) {
         return aiMapper.getByResume(resumeId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ApplicationIntendModel> getByResumeInBatch(List<Integer> resumeIdList) {
         return aiMapper.getByResumeInBatch(resumeIdList);
     }

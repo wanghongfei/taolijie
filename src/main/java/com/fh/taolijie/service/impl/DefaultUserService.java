@@ -22,7 +22,6 @@ import java.util.Set;
  * Created by wanghongfei on 15-6-7.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultUserService implements UserService {
     @Autowired
     MemberModelMapper memMapper;
@@ -107,6 +106,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isJobPostAlreadyLiked(Integer memId, Integer posId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
@@ -115,6 +115,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isSHPostAlreadyLiked(Integer memId, Integer shId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
@@ -123,12 +124,12 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CreditsInfo queryCreditsInfo(Integer memberId) {
         return memMapper.queryCreditsInfo(memberId);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public int changeCredits(Integer memberId, OperationType type, int oldCredits) {
 /*        String valueString = (String) rt.opsForHash().get(RedisKey.CREDITS_OPERATION.toString(), type.toString());
         int valueToAdd = Integer.valueOf(valueString);

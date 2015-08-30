@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
  * Created by whf on 8/15/15.
  */
 @Service
-@Transactional(readOnly = false)
 public class IntervalCheckService {
     @Autowired
     private AccountService accountService;

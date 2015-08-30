@@ -21,6 +21,7 @@ public class DefaultRecommendService implements RecommendService {
     RecommendedPostModelMapper recoMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public RecommendedPostModel findById(Integer recommendId) {
         return recoMapper.selectByPrimaryKey(recommendId);
     }
@@ -47,6 +48,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<RecommendedPostModel> getJobList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsJob(true);
@@ -59,6 +61,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<RecommendedPostModel> getShList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsSh(true);
@@ -71,6 +74,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<RecommendedPostModel> getResumeList(int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setIsResume(true);
@@ -83,6 +87,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validatoin, int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setValidation(validatoin);

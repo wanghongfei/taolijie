@@ -17,12 +17,12 @@ import java.util.List;
  * Created by whf on 8/22/15.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultCollectionService implements CollectionService {
     @Autowired
     private CollectionModelMapper coMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<CollectionModel> findBy(CollectionModelExample example) {
         List<CollectionModel> list = coMapper.selectByExample(example);
         long tot = coMapper.countByExample(example);
@@ -31,6 +31,7 @@ public class DefaultCollectionService implements CollectionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean alreadyCollected(Integer memberId, Integer postId, PostType type) {
         switch (type) {
             case JOB:

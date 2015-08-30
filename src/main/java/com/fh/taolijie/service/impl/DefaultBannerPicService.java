@@ -16,12 +16,12 @@ import java.util.List;
  * Created by wanghongfei on 15-6-16.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultBannerPicService implements BannerPicService {
     @Autowired
     BannerPicModelMapper banMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<BannerPicModel> getBannerList(int firstResult, int capacity) {
         List<BannerPicModel> banList =  banMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         int tot = banMapper.countGetAll();
@@ -50,6 +50,7 @@ public class DefaultBannerPicService implements BannerPicService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BannerPicModel findBanner(Integer id) {
         return banMapper.selectByPrimaryKey(id);
     }

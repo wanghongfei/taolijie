@@ -20,12 +20,12 @@ import java.util.List;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCategoryModel> implements JobPostCateService {
     @Autowired
     JobPostCategoryModelMapper cateMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity) {
         List<JobPostCategoryModel> list =  cateMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = cateMapper.countGetAll();
@@ -64,11 +64,13 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
     }*/
 
     @Override
+    @Transactional(readOnly = true)
     public JobPostCategoryModel findByName(String name) {
         return cateMapper.findByName(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     protected BaseMapper<JobPostCategoryModel> getMapper() {
         return this.cateMapper;
     }

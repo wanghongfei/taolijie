@@ -15,12 +15,12 @@ import java.util.List;
  * Created by whf on 8/2/15.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultFeedbackService implements FeedbackService {
     @Autowired
     private FeedbackModelMapper fdMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<FeedbackModel> getAll(int pageNumber, int pageSize) {
         FeedbackModelExample example = new FeedbackModelExample(pageNumber, pageSize);
         example.setOrderByClause("created_time DESC");
@@ -33,6 +33,7 @@ public class DefaultFeedbackService implements FeedbackService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public FeedbackModel findById(Integer fbId) {
         return fdMapper.selectByPrimaryKey(fbId);
     }

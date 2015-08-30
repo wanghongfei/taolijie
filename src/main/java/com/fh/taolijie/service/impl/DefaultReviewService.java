@@ -15,12 +15,12 @@ import java.util.List;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultReviewService implements ReviewService {
     @Autowired
     ReviewModelMapper reMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ReviewModel> getReviewList(ReviewModel model) {
         List<ReviewModel> list = reMapper.findBy(model);
         int count = reMapper.countFindBy(model);
@@ -28,6 +28,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<ReviewModel> getReply(Integer reviewId, int pageNumber, int pageSize) {
         ReviewModel cmd = new ReviewModel(pageNumber, pageSize);
         cmd.setRepliedReviewId(reviewId);
@@ -45,6 +46,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReviewModel getById(Integer reviewId) {
         return reMapper.selectByPrimaryKey(reviewId);
     }
