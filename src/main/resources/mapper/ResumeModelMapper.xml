@@ -568,6 +568,8 @@
             </if>
 
         </where>
+        ORDER BY
+            re.created_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
