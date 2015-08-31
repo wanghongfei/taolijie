@@ -13,11 +13,13 @@ import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -173,11 +175,11 @@ public class RestNotificationController {
     }
 
     /**
-     * 标记系统通知为已读
+     * 标记系统通知为已读, 支持批量
      * @return
      */
     @RequestMapping(value = "/sys/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText markSysAsRead(@RequestParam("notiId") Integer notiId,
+    public ResponseText markSysAsRead(@RequestParam("notiId") String notiIdString,
                                       HttpServletRequest req) {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -185,18 +187,38 @@ public class RestNotificationController {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
 
-        // 检查通知是否存在
-        SysNotificationModel noti = notiService.findSysById(notiId);
-        if (null == noti) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-        }
-        // 检查是不是发给自己的
-        if (false == noti.getAccessRange().equals(credential.getRoleList().get(0))) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        // 分隔id
+        String[] idStrs = StringUtils.splitIds(notiIdString);
+        // 合法性检查
+        if (null == idStrs || 0 == idStrs.length) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        // 标记已读
-        notiService.markSysAsRead(credential.getId(), notiId);
+        try {
+            List<Integer> idList = new ArrayList<>(10);
+
+            for (String idStr : idStrs) {
+                Integer id = Integer.valueOf(idStr);
+
+                // 检查通知是否存在
+                SysNotificationModel noti = notiService.findSysById(id);
+                if (null == noti) {
+                    return new ResponseText(ErrorCode.NOT_FOUND);
+                }
+                // 检查是不是发给自己的
+                if (false == noti.getAccessRange().equals(credential.getRoleList().get(0))) {
+                    return new ResponseText(ErrorCode.PERMISSION_ERROR);
+                }
+
+                idList.add(id);
+            }
+
+            // 批量标记为已读
+            notiService.markSysAsReadInBatch(credential.getId(), idList);
+
+        } catch (NumberFormatException ex) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
 
         return ResponseText.getSuccessResponseText();
     }
