@@ -83,8 +83,20 @@ public interface NotificationService {
     void markPriAsRead(Integer notiId);
 
     /**
+     * 批量标记个人通知为已读
+     * @param priNotiList List必须至少有一个元素
+     */
+    void markPriAsReadInBatch(List<Integer> priNotiList);
+
+    /**
      * 将系统通知标记为已读
      * @param notiId
      */
     void markSysAsRead(Integer memId, Integer notiId);
+
+    /**
+     * 批量标记系统通知为已读
+     * @param memId
+     */
+    void markSysAsReadInBatch(Integer memId, List<Integer> idList);
 }

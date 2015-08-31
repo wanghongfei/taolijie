@@ -258,5 +258,15 @@
         </where>
     </select>
 
+    <!-- 根据id批量标记为已读 -->
+    <update id="markAsReadInBatch">
+        UPDATE
+            private_notification pri_no
+        SET
+            pri_no.is_read = TRUE
+        WHERE
+            pri_no.id IN <foreach collection="list" item="_id" open="(" close=")" separator=",">#{_id}</foreach>
+
+    </update>
 
 </mapper>

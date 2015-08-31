@@ -176,7 +176,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
+    public void markPriAsReadInBatch(List<Integer> priNotiList) {
+        priMapper.markAsReadInBatch(priNotiList);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void markSysAsRead(Integer memId, Integer notiId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String ids = mem.getReadSysNotificationIds();
@@ -186,6 +192,20 @@ public class DefaultNotificationService implements NotificationService {
         example.setId(mem.getId());
         mem.setReadSysNotificationIds(newIds);
         memMapper.updateByPrimaryKeySelective(example);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void markSysAsReadInBatch(Integer memId, List<Integer> idList) {
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        String ids = mem.getReadSysNotificationIds();
+        String newIds = StringUtils.addToString(ids, StringUtils.listToString(idList));
+
+        MemberModel example = new MemberModel();
+        example.setId(mem.getId());
+        mem.setReadSysNotificationIds(newIds);
+        memMapper.updateByPrimaryKeySelective(example);
+
     }
 
     @Override

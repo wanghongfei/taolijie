@@ -270,4 +270,19 @@ public class StringUtils {
 
         return sb.toString();
     }
+
+    /**
+     * 将整数List转换成以分号分隔的字符串
+     * @param idList
+     * @return
+     */
+    public static String listToString(List<Integer> idList) {
+        StringBuilder sb = new StringBuilder(20);
+        idList.forEach( id -> {
+            sb.append(id);
+            sb.append(Constants.DELIMITER);
+        });
+
+        return sb.toString();
+    }
 }
