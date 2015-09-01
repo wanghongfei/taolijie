@@ -7,6 +7,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.constant.OperationType;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.impl.IntervalCheckService;
@@ -518,7 +519,7 @@ public class UJobController {
         // 保存到db
         notiService.addNotification(priNoti);*/
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧", Constants.DELIMITER, jobId);
+        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧", Constants.DELIMITER, jobId, Constants.DELIMITER, PostType.JOB.toString());
         notiService.addCommentNotification(toMemberId, commentTitle, commentContent);
 
 

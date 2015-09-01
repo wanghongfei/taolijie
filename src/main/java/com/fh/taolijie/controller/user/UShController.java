@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.NotiType;
 import com.fh.taolijie.constant.OperationType;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.impl.IntervalCheckService;
@@ -449,7 +450,7 @@ public class UShController {
         notificationService.addNotification(priNoti);*/
 
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧", Constants.DELIMITER, id);
+        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧", Constants.DELIMITER, id, Constants.DELIMITER, PostType.SH.toString());
         notificationService.addCommentNotification(toMemberId, commentTitle, commentContent);
 
         //返回帖子id
