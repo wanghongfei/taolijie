@@ -34,8 +34,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
                 request.setAttribute("isLoggedIn", true);
                 request.setAttribute("username", credential.getUsername());
                 MemberModel currUser = accountService.findMember(credential.getId());
+                String roleName = currUser.getRoleList().get(0).getRolename();
                 currUser.setPassword("secret field");
                 request.setAttribute("currUser", currUser);
+                request.setAttribute("roleName", roleName);;
             } else {
                 // 没登陆
                 request.setAttribute("isLoggedIn", false);
