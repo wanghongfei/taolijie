@@ -450,7 +450,14 @@ public class UShController {
         notificationService.addNotification(priNoti);*/
 
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(), "]被评论了，快去看看吧", Constants.DELIMITER, id, Constants.DELIMITER, PostType.SH.toString());
+        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(),
+                "]被评论了，快去看看吧",
+                Constants.DELIMITER,
+                id,
+                Constants.DELIMITER,
+                PostType.SH.toString(),
+                Constants.DELIMITER,
+                content);
         notificationService.addCommentNotification(toMemberId, commentTitle, commentContent);
 
         //返回帖子id
