@@ -51,13 +51,26 @@
     color: #fff;
     margin-left: -5px;
 }
+.note-table .note-poster-a{
+    background-color: #e84936;
+}
 
 .note-table .note-content{
      font-size: 18px;
      color: #4bcea4;
 }
 .note-table .note-content:hover{
-    color: #4ee1b6;
+    /*color: #4ee1b6;*/
+}
+
+.note-table tr.read .note-content,
+.note-table tr.read .note-time,
+.note-table tr.read .bell-btn i{
+    color:#f2dede;
+    cursor:default;
+}
+.note-table tr.read .note-poster{
+    background-color: #f2dede;
 }
 
 .operate{
@@ -69,11 +82,19 @@
     margin: 0 5px 0 8px;
 }
 
-.note-del-btn, .operate button{
+.note-del-btn,.bell-btn, .operate button{
     outline:none;
     cursor: pointer;
     border: 0;
     background-color: #fff;
+}
+
+.bell-btn i{
+    font-size: 20px;
+    color: #4bcea4;
+}
+.bell-btn i:hover{
+    color: #43b990;
 }
 
 .note-del-btn i{
@@ -95,5 +116,11 @@
 }
 .operate button:hover{
     background-color: #f94a37;
+}
+.page a{
+    color:#4bcea4;
+}
+.page a:hover{
+    color: #43b990;
 }
 
