@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by whf on 7/5/15.
@@ -195,12 +196,12 @@ public class RestNotificationController {
         }
 
         try {
-            List<Integer> idList = new ArrayList<>(10);
+            List<Integer> idList = Arrays.stream(idStrs)
+                    .map( id -> Integer.valueOf(id) )
+                    .collect(Collectors.toList());
 
-            for (String idStr : idStrs) {
-                Integer id = Integer.valueOf(idStr);
 
-                // 检查通知是否存在
+/*                // 检查通知是否存在
                 SysNotificationModel noti = notiService.findSysById(id);
                 if (null == noti) {
                     return new ResponseText(ErrorCode.NOT_FOUND);
@@ -209,9 +210,7 @@ public class RestNotificationController {
                 if (false == noti.getAccessRange().equals(credential.getRoleList().get(0))) {
                     return new ResponseText(ErrorCode.PERMISSION_ERROR);
                 }
-
-                idList.add(id);
-            }
+            } */
 
             // 批量标记为已读
             notiService.markSysAsReadInBatch(credential.getId(), idList);
