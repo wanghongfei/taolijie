@@ -147,4 +147,21 @@ public class PrivateNotificationModel extends Pageable {
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
     }
+
+    @Override
+    public String toString() {
+        return "PrivateNotificationModel{" +
+                "id=" + id +
+                ", memberId=" + memberId +
+                ", member=" + member +
+                ", toMemberId=" + toMemberId +
+                ", title='" + title + '\'' +
+                ", isRead=" + isRead +
+                ", notiType='" + notiType + '\'' +
+                ", time=" + time +
+                ", accessRange='" + accessRange + '\'' +
+                ", content='" + content + '\'' +
+                ", notiTypeList=" + notiTypeList +
+                '}';
+    }
 }
