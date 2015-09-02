@@ -49,6 +49,13 @@ public interface NotificationService {
     PrivateNotificationModel findPriById(Integer priNotiId);
 
     /**
+     * 根据id批量查询个人通知
+     * @param idList
+     * @return
+     */
+    List<PrivateNotificationModel> findPriByIdInBatch(List<Integer> idList);
+
+    /**
      * 根据id查询系统通知
      */
     SysNotificationModel findSysById(Integer notiId);

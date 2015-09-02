@@ -133,6 +133,12 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<PrivateNotificationModel> findPriByIdInBatch(List<Integer> idList) {
+        return priMapper.findInBatch(idList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public SysNotificationModel findSysById(Integer notiId) {
         return sysMapper.selectByPrimaryKey(notiId);
     }

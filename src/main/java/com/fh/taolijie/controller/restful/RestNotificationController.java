@@ -22,7 +22,10 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by whf on 7/5/15.
@@ -155,7 +158,7 @@ public class RestNotificationController {
      * @return
      */
     @RequestMapping(value = "/pri/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText markPriAsRead(@RequestParam("notiId") Integer notiId,
+    public ResponseText markPriAsRead(@RequestParam("notiId") String notiIds,
                                       HttpServletRequest req) {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -163,14 +166,40 @@ public class RestNotificationController {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
 
-        // 检查通知是不是发给自己的
-        PrivateNotificationModel noti = notiService.findPriById(notiId);
-        if (null == noti || false == noti.getToMemberId().equals(credential.getId())) {
+        // 分离id
+        String[] ids = StringUtils.splitIds(notiIds);
+        // 参数合法性检查
+        if (null == ids || 0 == ids.length) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        // String数组转换成Integer List
+        List<Integer> idList = null;
+        try {
+            idList = Stream.of(ids)
+                    .map( id -> Integer.valueOf(id))
+                    .collect(Collectors.toList());
+        } catch (NumberFormatException ex) {
+            // 转换成整数失败
+            // 说明参数非法
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        // 查出这些id代表的通知
+        List<PrivateNotificationModel> notiList = notiService.findPriByIdInBatch(idList);
+
+        // 检查这些通知是不是都是发给自己的
+        Integer memId = credential.getId();
+        Optional<PrivateNotificationModel> opt = notiList.stream()
+                .filter(noti -> !noti.getToMemberId().equals(memId))
+                .findAny();
+        // 如果存在，则返回错误
+        if (opt.isPresent()) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-        // mark notification as read
-        notiService.markPriAsRead(notiId);
+        // 批量标记已读
+        notiService.markPriAsReadInBatch(idList);
 
         return ResponseText.getSuccessResponseText();
     }

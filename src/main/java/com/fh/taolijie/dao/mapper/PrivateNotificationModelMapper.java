@@ -63,4 +63,6 @@ public interface PrivateNotificationModelMapper {
     long countFindBy(PrivateNotificationModel model);
 
     int markAsReadInBatch(List<Integer> idList);
+
+    List<PrivateNotificationModel> findInBatch(List<Integer> idList);
 }
