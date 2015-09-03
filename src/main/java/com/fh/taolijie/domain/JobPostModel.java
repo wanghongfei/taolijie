@@ -869,6 +869,8 @@ public class JobPostModel extends Pageable implements Serializable {
         sb.append(orderByVisit);
         sb.append(filterExpiredPost);
         sb.append(cateId);
+        sb.append(pageNumber);
+        sb.append(pageSize);
 
         return sb.toString();
     }
