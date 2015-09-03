@@ -74,7 +74,6 @@
                         </c:if>
                     </td>
                     <td>
-                        <c:set value="${note.content}"></c:set>
                   <span class="note-content read" href="">${note.content}</span>
                     </td>
                     <td ><span class="note-time read"><fmt:formatDate value="${note.time}" pattern="yyyy-MM-dd HH:mm:ss"/></span></td>

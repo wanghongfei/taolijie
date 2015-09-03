@@ -30,6 +30,24 @@
     color: #fff;
     background-color: darksalmon;
 }
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #777;
+    border-radius: 10px;
+}
+.message .badge{
+    position: absolute;
+    left:110px;
+    top: 5px;
+}
 
 /* stage end* /
 /*global start*/
