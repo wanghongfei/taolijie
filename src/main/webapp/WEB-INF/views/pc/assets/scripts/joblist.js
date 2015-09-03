@@ -33,6 +33,21 @@ tlj.controller('jobListCtrl', function($scope, $http) {
     });
 
     /**
+     * 热门推荐
+     */
+    $scope.getHot = function(){
+        //api/recommend/list?type=job
+        $http.get('/api/recommend/list?type=job')
+            .success(function(data){
+                console.log(data);
+            })
+            .error(function(xhr, error, thrown){
+                console.log('error');
+                console.log(xhr);
+            });
+    };
+
+    /**
      * 分页切换
      * @param isNext
      */

@@ -70,7 +70,7 @@
     <div class="joblist main">
 
         <ul class="nav-bar">
-            <li class="">热门推荐</li>
+            <li class="" ng-click="getHot()">热门推荐</li>
             <li class="choose"><span class="choose-title" data-default="区域选择">区域选择</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down"> </i>
                 <div class="choose-menu" data-type="region" >
                 <span class="active">全部</span>
