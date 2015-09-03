@@ -28,7 +28,7 @@ public class DefaultRecommendService implements RecommendService {
     @Override
     @Transactional(readOnly = true)
     public boolean checkRecommendExist(RecommendedPostModel model) {
-        return checkRecommendExist(model);
+        return recoMapper.checkRecommendExist(model);
     }
 
     @Override
