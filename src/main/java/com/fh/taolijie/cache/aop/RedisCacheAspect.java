@@ -185,6 +185,12 @@ public class RedisCacheAspect {
 
         // 得到被代理的方法
         Method me = ((MethodSignature) jp.getSignature()).getMethod();
+
+        NoCache noAn = me.getAnnotation(NoCache.class);
+        if (null != noAn) {
+            return jp.proceed(jp.getArgs());
+        }
+
         // 得到被代理的方法上的注解
         Class[] modelType = me.getAnnotation(RedisEvict.class).value();
 

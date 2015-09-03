@@ -30,7 +30,7 @@ public class DefaultRecommendService implements RecommendService {
     @Transactional(readOnly = false)
     public int add(RecommendedPostModel model) {
         model.setApplyTime(new Date());
-        recoMapper.insert(model);
+        recoMapper.insertSelective(model);
 
         return model.getId();
     }
