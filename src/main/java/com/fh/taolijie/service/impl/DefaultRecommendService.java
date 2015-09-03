@@ -15,7 +15,6 @@ import java.util.List;
  * Created by whf on 7/11/15.
  */
 @Service
-@Transactional(readOnly = true)
 public class DefaultRecommendService implements RecommendService {
     @Autowired
     RecommendedPostModelMapper recoMapper;
@@ -24,6 +23,12 @@ public class DefaultRecommendService implements RecommendService {
     @Transactional(readOnly = true)
     public RecommendedPostModel findById(Integer recommendId) {
         return recoMapper.selectByPrimaryKey(recommendId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkRecommendExist(RecommendedPostModel model) {
+        return checkRecommendExist(model);
     }
 
     @Override

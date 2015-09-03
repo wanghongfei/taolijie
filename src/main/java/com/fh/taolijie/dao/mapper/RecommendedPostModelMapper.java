@@ -76,4 +76,6 @@ public interface RecommendedPostModelMapper {
     List<RecommendedPostModel> findRecommendList(RecommendedPostModel model);
     @NoCache
     int countFindRecommendList(RecommendedPostModel model);
+
+    boolean checkRecommendExist(RecommendedPostModel model);
 }

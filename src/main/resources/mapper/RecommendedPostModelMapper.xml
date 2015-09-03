@@ -382,4 +382,17 @@
         </if>
 
     </select>
+
+    <select id="checkRecommendExist" resultType="boolean">
+        SELECT EXISTS (
+            SELECT
+                1
+            FROM
+                recommended_post reco
+            WHERE
+            <if test="shId != null">reco.sh_id = #{shId}</if>
+            <if test="jobId != null">reco.job_id = #{jobId}</if>
+            <if test="resumeId != null">reco.resume_id = #{resumeId}</if>
+        )
+    </select>
 </mapper>

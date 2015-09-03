@@ -16,6 +16,13 @@ public interface RecommendService {
     RecommendedPostModel findById(Integer recommendId);
 
     /**
+     * 检查推荐是否已经存在
+     * @param model
+     * @return
+     */
+    boolean checkRecommendExist(RecommendedPostModel model);
+
+    /**
      * 添加推荐信息
      * @param model
      * @return 刚刚添加的记录的主键id
