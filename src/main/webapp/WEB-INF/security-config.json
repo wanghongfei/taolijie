@@ -44,6 +44,11 @@
             "toUrl": "/404",
             "url": "/api/noti**"
         },
+        {
+            "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
+            "toUrl": "/404",
+            "url": "/api/review/u**"
+        },
 
         {
             "roleList": ["ADMIN"],
