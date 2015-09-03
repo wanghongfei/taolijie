@@ -186,13 +186,21 @@ public class RedisCacheAspect {
         // 得到被代理的方法
         Method me = ((MethodSignature) jp.getSignature()).getMethod();
 
-        NoCache noAn = me.getAnnotation(NoCache.class);
-        if (null != noAn) {
+
+        // 如果标记了@NoCache注解，则不执行缓存操作
+        if (me.isAnnotationPresent(NoCache.class)) {
             return jp.proceed(jp.getArgs());
         }
 
         // 得到被代理的方法上的注解
-        Class[] modelType = me.getAnnotation(RedisEvict.class).value();
+        RedisEvict reAn = me.getAnnotation(RedisEvict.class);
+        // 如果没有任何注解
+        // 则不执行任何操作
+        if (null == reAn) {
+            return jp.proceed(jp.getArgs());
+        }
+
+        Class[] modelType = reAn.value();
 
         for (Class clazz : modelType) {
             if (infoLog.isDebugEnabled()) {
