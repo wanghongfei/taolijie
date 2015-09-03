@@ -273,7 +273,7 @@
         SELECT
             <include refid="Base_Column_List" />
         FROM
-            private_notification pro_no
+            private_notification pri_no
         WHERE
             pri_no.id IN <foreach collection="list" item="_id" open="(" close=")" separator=",">#{_id}</foreach>
     </select>
