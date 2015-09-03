@@ -214,16 +214,16 @@
     <select id="findBy" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List"/>,
-            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />,
+            <include refid="com.fh.taolijie.dao.mapper.MemberModelMapper.member_column_without_password" />
 
             <if test="isJob == true">
-                <include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />
+                ,<include refid="com.fh.taolijie.dao.mapper.JobPostModelMapper.Base_Column_List" />
             </if>
             <if test="isSh == true">
-                <include refid="com.fh.taolijie.dao.mapper.ShPostModelMapper.Base_Column_List" />
+                ,<include refid="com.fh.taolijie.dao.mapper.ShPostModelMapper.Base_Column_List" />
             </if>
             <if test="isResume == true">
-                <include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.resume_column" />
+                ,<include refid="com.fh.taolijie.dao.mapper.ResumeModelMapper.resume_column" />
             </if>
         FROM
             recommended_post reco
