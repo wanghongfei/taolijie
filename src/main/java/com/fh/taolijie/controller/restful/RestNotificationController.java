@@ -187,6 +187,9 @@ public class RestNotificationController {
 
         // 查出这些id代表的通知
         List<PrivateNotificationModel> notiList = notiService.findPriByIdInBatch(idList);
+        if (notiList.isEmpty()) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
 
         // 检查这些通知是不是都是发给自己的
         Integer memId = credential.getId();
