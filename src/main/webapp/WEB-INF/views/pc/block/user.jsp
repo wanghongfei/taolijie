@@ -46,7 +46,7 @@
     </c:if>
     <li class="${param.navShow == 'favlist'?'active':''}" ><a href="/user/job/myfav">我的收藏</a></li>
     <li class="${param.navShow == 'postlist'?'active':''}" ><a href="/user/job/mypost">我的发布</a></li>
-    <li style="position: relative" class="message ${param.navShow == 'notify'?'active':''}" ><a href="/user/notify/pri">消息通知<span class="badge">8</span></a></li>
+    <li style="position: relative" class="message ${param.navShow == 'notify'?'active':''}" ><a href="/user/notify/pri">消息通知<%--<span class="badge">8</span>--%></a></li>
     <li class="${param.navShow == 'security'?'active':''}" ><a href="/user/setting/security">修改密码</a></li>
     <li class="${param.navShow == 'feedback'?'active':''}" ><a href="/user/feedback">意见反馈</a></li>
   </ul>

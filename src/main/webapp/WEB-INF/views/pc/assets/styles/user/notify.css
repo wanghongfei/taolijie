@@ -123,4 +123,8 @@
 .page a:hover{
     color: #43b990;
 }
+.no-notify-tip{
+    color:#b6b6b6;
+    margin: 20px 0 0 10px;
+}
 

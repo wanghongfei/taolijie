@@ -55,6 +55,9 @@ form input[type=submit] {
     border: none;
     font-size: 1em;
 }
+.hidden{
+    display: none;
+}
 .notify {
     display: none;
     position: fixed;

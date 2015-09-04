@@ -48,7 +48,10 @@
             </ul>
         </div>
 
-        <table class="note-table">
+        <c:if test="${notes.size() == 0}">
+            <p class="no-notify-tip">您还没有未读的通知消息哦~</p>
+        </c:if>
+        <table class="note-table ${notes.size() ==0 ? 'hidden':''}">
           <thead>
             <tr>
               <%--<th ></th>--%>
@@ -88,9 +91,9 @@
           </tbody>
         </table>
 
-        <div class="operate">
+        <div class="operate ${notes.size() ==0 ? 'hidden':''}">
           <%--<input type="checkbox" name="name" value=""> 全选--%>
-              <button type="button" name="" >全部标记为已读</button>
+              <button type="button" name="" id="markAll">全部标记为已读</button>
               <div class="page">
                   <fmt:formatNumber value="${(resultCount/pageSize) + ((resultCount/pageSize) % 1 == 0 ? 0 : 0.5)}"
                                     type="number" pattern="#"  var="pNum"/>
@@ -132,8 +135,35 @@
                       }
                   });
 
+              });
+
+              $("#markAll").on('click', function(){
+                  var $trs = $(".note-table tbody").find("tr");
+                  var $bells = $('.note-table tbody').find('.bell-btn i');
+                  var ids = [];
+                  $trs.each(function(i){
+                      console.log($($trs[i]).data('id'));
+                      ids.push($($trs[i]).data('id'));
+                  });
+                  if(ids == []){
+                      return false;
+                  }
+                  $.ajax({
+                      type: 'PUT',
+                      url: '/api/noti/pri/mark?notiId='+ids.join(';'),
+                  }).success(function(data){
+                      console.log(data);
+                      if(data.ok){
+                          $bells.removeClass('fa-bell-o');
+                          $bells.addClass('fa-bell');
+                          $trs.addClass('read');
+                      }else{
+                          console.log(data.message);
+                      }
+                  });
               })
           });
+
       </script>
 </body>
 </html>
