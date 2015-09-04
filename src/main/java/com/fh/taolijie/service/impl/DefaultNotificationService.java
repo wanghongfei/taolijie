@@ -209,7 +209,7 @@ public class DefaultNotificationService implements NotificationService {
 
         MemberModel example = new MemberModel();
         example.setId(mem.getId());
-        mem.setReadSysNotificationIds(newIds);
+        example.setReadSysNotificationIds(newIds);
         memMapper.updateByPrimaryKeySelective(example);
 
     }
