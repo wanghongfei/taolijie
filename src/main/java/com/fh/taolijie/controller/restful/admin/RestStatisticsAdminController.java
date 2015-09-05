@@ -37,7 +37,7 @@ public class RestStatisticsAdminController {
      */
     @RequestMapping(value = "/online", produces = Constants.Produce.JSON)
     public ResponseText onlineStatistics() {
-        Integer tot = OnlineListener.getAOnlineAmount();
+        Integer tot = OnlineListener.getOnlineAmount();
         return new ResponseText(tot);
     }
 

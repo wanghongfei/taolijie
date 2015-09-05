@@ -36,6 +36,7 @@ public class DefaultNotificationService implements NotificationService {
     @Transactional(readOnly = true)
     public ListResult<SysNotificationModel> getSysNotification(Integer memberId, List<String> rangeList, int pageNumber, int pageSize) {
         List<SysNotificationModel> list = sysMapper.findSysByAccessRange(rangeList, pageNumber, CollectionUtils.determineCapacity(pageSize));
+        long tot = sysMapper.countFindSysByAccessRange(rangeList);
 
         // 进行已读标记
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
@@ -63,7 +64,7 @@ public class DefaultNotificationService implements NotificationService {
         });
 
 
-        return new ListResult<>(list);
+        return new ListResult<>(list, tot);
     }
 
     @Override
