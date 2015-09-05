@@ -24,7 +24,7 @@ public class OnlineListener implements HttpSessionListener {
         onlineAmount.decrementAndGet();
     }
 
-    public static int getAOnlineAmount() {
+    public static int getOnlineAmount() {
         return onlineAmount.get();
     }
 }
