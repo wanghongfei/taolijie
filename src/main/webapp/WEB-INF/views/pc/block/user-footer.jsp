@@ -14,7 +14,9 @@
 
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
-<script src="/scripts/angular/angular.js"></script>
+
+<%--<script src="/scripts/angular/angular.js"></script>--%>
+<script src="//cdn.bootcss.com/angular.js/1.2.0rc3/angular.min.js"></script>
 <script src="/scripts/jquery11.js"></script>
 <script src="/scripts/jquery_extend.js"></script>
 <!-- endbower -->
