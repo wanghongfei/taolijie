@@ -45,11 +45,11 @@
               <label class="control-label col-md-3" for="username">发送给谁</label>
               <div class="col-md-2 col-xs-11">
                 <select name="" id="userType" class="form-control">
-                  <option value="1" data-val="ALL">全部用户</option>
+                  <%--<option value="1" data-val="ALL">全部用户</option>--%>
                   <option value="2" data-val="STUDENT">学生</option>
                   <option value="3" data-val="EMPLOYER">商家</option>
-                  <option value="4" data-val="ORGANIZATION">校内组织</option>
-                  <option value="0" data-val="USER">指定用户</option>
+                  <%--<option value="4" data-val="ORGANIZATION">校内组织</option>--%>
+                  <option value="0" data-val="USER">指定用户id</option>
                 </select>
                 <%--<input class="form-control" id="username" name="username" placeholder="输入用户名" type="text" value="" >--%>
               </div>
@@ -60,7 +60,7 @@
             <div class="form-group">
               <label class="control-label col-md-3" for="password">通知标题</label>
               <div class="col-md-4 col-xs-11" >
-                <input class="form-control" id="title" name="title" placeholder="输入通知标题" type="text">
+                <input class="form-control" id="title" disabled value="通知暂无标题" name="title" placeholder="输入通知标题" type="text">
               </div>
             </div>
 
@@ -126,12 +126,17 @@
             data = {
               toMemberId: $user.val(),
               memberId: ${currUser.id},
-              title: $title.val(),
+              title: '暂无',
               content: $content.val()
             };
             $.post('/api/manage/noti/pri', data)
                 .success(function(data){
-                   console.log(data);
+                      if(data.code === 0){
+                        alert("通知发送成功!");
+                        window.location.href = "/manage/note/send";
+                      }else{
+                        alert(data.message);
+                      }
                 })
 
           }
@@ -153,7 +158,12 @@
 
           $.post('/api/manage/noti/sys',data)
                   .success(function(data){
-                    console.log(data);
+                    if(data.code === 0){
+                      alert("通知发送成功!");
+                      window.location.href = "/manage/note/send";
+                    }else{
+                      alert(data.message);
+                    }
                   });
         }
       }

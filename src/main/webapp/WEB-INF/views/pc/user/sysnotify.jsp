@@ -43,8 +43,8 @@
     <div class="segment infos link-segment">
         <div class="nav">
             <ul>
-                <li class=""><a href="/user/notify/pri">个人消息</a></li>
-                <li class="active"><a href="/user/notify/sys">系统通知</a></li>
+                <li class=""><a href="/user/notify/pri">个人消息 ${priUnreadCount>0?priUnreadCount:''}</a></li>
+                <li class="active"><a href="/user/notify/sys">系统通知 ${sysUnreadCount>0?sysUnreadCount:''}</a></li>
             </ul>
         </div>
 
@@ -83,6 +83,28 @@
             </tbody>
         </table>
 
+        <div class="operate ${notes.size() ==0 ? 'hidden':''}">
+            <%--<input type="checkbox" name="name" value=""> 全选--%>
+            <button type="button" name="" id="markAll">全部标记为已读</button>
+            <div class="page">
+                <fmt:formatNumber value="${(resultCount/pageSize) + ((resultCount/pageSize) % 1 == 0 ? 0 : 0.5)}"
+                                  type="number" pattern="#"  var="pNum"/>
+
+                <c:if test="${currentPage > 0}">
+                    <c:set value="${currentPage-1}" var="prev"/>
+                    <a href="/user/notify/sys?page=${currentPage>pNum-1 ? pNum-1:currentPage-1}">上一页</a>
+                </c:if>
+                <a > 第${currentPage+1}页 </a>
+                <c:if test="${currentPage*pageSize + noteCounts < resultCount}">
+                    <c:set value="${currentPage+1}" var="next"/>
+                    <a href="/user/notify/sys?page=${currentPage+1}">下一页</a>
+                </c:if>
+            </div>
+
+
+            <%--<button type="button"">删除选中项</button>--%>
+        </div>
+
     </div>
     <jsp:include page="../block/user-footer.jsp"></jsp:include>
 
@@ -102,11 +124,40 @@
                         $bell.removeClass('fa-bell-o');
                         $bell.addClass('fa-bell');
                         $tr.addClass('read');
+                        window.location.reload();
                     }else{
                         console.log(data.message);
                     }
                 });
 
+            });
+
+            $("#markAll").on('click', function(){
+                var $trs = $(".note-table tbody").find("tr");
+                var $bells = $('.note-table tbody').find('.bell-btn i');
+                var ids = [];
+                $trs.each(function(i){
+                    if($trs[i].className !== 'read'){
+                        ids.push($($trs[i]).data('id'));
+                    }
+                });
+                console.log(ids);
+                if(ids.length === 0){
+                    return false;
+                }
+                $.ajax({
+                    type: 'PUT',
+                    url: '/api/noti/sys/mark?notiId='+ids.join(';'),
+                }).success(function(data){
+                    if(data.ok){
+                        $bells.removeClass('fa-bell-o');
+                        $bells.addClass('fa-bell');
+                        $trs.addClass('read');
+//                        window.location.reload();
+                    }else{
+                        alert(data.message);
+                    }
+                });
             })
         });
     </script>

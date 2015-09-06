@@ -71,6 +71,11 @@ $(function () {
     });
 
     $('.choose-menu').on('click','span',function(){
+        if(url == 'api/job/search'){
+            alert(url);
+            window.location.href= "list/job";
+
+        }
         var $this = $(this);
         //console.log(this);
         var key = $this.parent().attr("data-type");
@@ -119,6 +124,8 @@ $(function () {
             $chooseTitle.text($this.text());
         }
         $loading.show();
+
+
         search(url, searchObj,function(data){
             if(data.ok){
                 $ctrlScope.list= data.data.list;
