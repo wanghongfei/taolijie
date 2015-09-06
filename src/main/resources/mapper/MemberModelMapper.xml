@@ -30,6 +30,12 @@
         <result column="mem_credits" property="credits" jdbcType="INTEGER"/>
         <result column="mem_user_level" property="userLevel" jdbcType="VARCHAR"/>
 
+        <result column="mem_province" property="province" jdbcType="VARCHAR"/>
+        <result column="mem_city" property="city" jdbcType="VARCHAR"/>
+        <result column="mem_region" property="region" jdbcType="VARCHAR"/>
+        <result column="mem_college_name" property="collegeName" jdbcType="VARCHAR"/>
+        <result column="mem_major" property="major" jdbcType="VARCHAR"/>
+
         <result column="mem_student_id" property="studentId" jdbcType="LONGVARCHAR"/>
         <result column="mem_block_list" property="blockList" jdbcType="LONGVARCHAR"/>
         <result column="mem_applied_job_ids" property="appliedJobIds" jdbcType="LONGVARCHAR"/>
@@ -63,7 +69,13 @@
         last_sh_date AS mem_last_sh_date,
         last_job_date AS mem_last_job_date,
         user_level AS mem_user_level,
-        app_token AS mem_app_token
+        app_token AS mem_app_token,
+
+        province AS mem_province,
+        city AS mem_city,
+        region AS mem_region,
+        college_name AS mem_college_name,
+        major AS mem_major
     </sql>
     <sql id="member_column">
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
@@ -74,7 +86,13 @@
         mem.last_sh_date AS mem_last_sh_date,
         mem.last_job_date AS mem_last_job_date,
         mem.user_level AS mem_user_level,
-        mem.app_token AS mem_app_token
+        mem.app_token AS mem_app_token,
+
+        mem.province AS mem_province,
+        mem.city AS mem_city,
+        mem.region AS mem_region,
+        mem.college_name AS mem_college_name,
+        mem.major AS mem_major
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
@@ -85,7 +103,13 @@
         mem.last_post_time AS mem_last_post_time, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids,
         mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids,
-        mem.user_level AS mem_user_level
+        mem.user_level AS mem_user_level,
+
+        mem.province AS mem_province,
+        mem.city AS mem_city,
+        mem.region AS mem_region,
+        mem.college_name AS mem_college_name,
+        mem.major AS mem_major
 
     </sql>
     <sql id="less_member_column">
