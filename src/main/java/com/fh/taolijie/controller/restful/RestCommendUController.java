@@ -63,17 +63,31 @@ public class RestCommendUController {
         Integer memId = credential.getId();
         if (null != model.getShId()) {
             SHPostModel sh = shService.findPost(model.getShId());
-            if (null == sh || false == sh.getMemberId().equals(memId)) {
+            if (null == sh) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (false == sh.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
         } else if (null != model.getJobId()) {
             JobPostModel job = jobService.findJobPost(model.getJobId());
-            if (null == job || false == job.getMemberId().equals(memId)) {
+
+            if (null == job) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (false == job.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
         } else if (null != model.getResumeId()) {
             ResumeModel resume = resumeService.findResume(model.getResumeId());
-            if (null == resume || false == resume.getMemberId().equals(memId)) {
+
+            if (null == resume) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (false == resume.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
 
