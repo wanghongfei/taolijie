@@ -3,8 +3,14 @@ package com.fh.taolijie.controller.restful;
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.RecommendedPostModel;
+import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.RecommendService;
+import com.fh.taolijie.service.ResumeService;
+import com.fh.taolijie.service.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,15 @@ import javax.servlet.http.HttpServletRequest;
 public class RestCommendUController {
     @Autowired
     RecommendService recoService;
+
+    @Autowired
+    ShPostService shService;
+
+    @Autowired
+    JobPostService jobService;
+
+    @Autowired
+    ResumeService resumeService;
 
 
     /**
@@ -44,7 +59,30 @@ public class RestCommendUController {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
 
-        model.setMemberId(credential.getId());
+        // 验证申请的帖子是不是自己发的
+        Integer memId = credential.getId();
+        if (null != model.getShId()) {
+            SHPostModel sh = shService.findPost(model.getShId());
+            if (null == sh || false == sh.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        } else if (null != model.getJobId()) {
+            JobPostModel job = jobService.findJobPost(model.getJobId());
+            if (null == job || false == job.getMemberId().equals(model.getJobId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        } else if (null != model.getResumeId()) {
+            ResumeModel resume = resumeService.findResume(model.getResumeId());
+            if (null == resume || false == resume.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+        } else {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+
+        model.setMemberId(memId);
         model.setValidation(false);
 
         // 检查申请是否已经存在
