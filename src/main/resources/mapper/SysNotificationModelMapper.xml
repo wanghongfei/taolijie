@@ -149,7 +149,7 @@
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>
-    <select id="countFindSysByAccessRange" resultMap="BaseResultMap">
+    <select id="countFindSysByAccessRange" resultType="long">
         SELECT
             COUNT(*)
         FROM
