@@ -68,7 +68,7 @@ public class RestCommendUController {
             }
         } else if (null != model.getJobId()) {
             JobPostModel job = jobService.findJobPost(model.getJobId());
-            if (null == job || false == job.getMemberId().equals(model.getJobId())) {
+            if (null == job || false == job.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
         } else if (null != model.getResumeId()) {
