@@ -158,7 +158,8 @@ public class RestNotificationController {
             if (null != readStringList && 0 != readStringList.length()) {
                 try {
                     readList = Stream.of(readStrings)
-                            .map( id -> Integer.valueOf(id) )
+                            .filter(i-> !"".equals(i))
+                            .map(id -> Integer.valueOf(id) )
                             .collect(Collectors.toList());
 
                 } catch (NumberFormatException ex) {
