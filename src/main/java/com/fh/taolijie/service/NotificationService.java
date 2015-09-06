@@ -78,7 +78,7 @@ public interface NotificationService {
      * @param title
      * @param content
      */
-    void addCommentNotification(Integer memberId, String title, String content);
+    void addCommentNotification(Integer memberId, String title, String content, Integer postId, String postType);
 
     void deleteSysNotification(Integer sysId);
     void deletePriNotification(Integer priId);

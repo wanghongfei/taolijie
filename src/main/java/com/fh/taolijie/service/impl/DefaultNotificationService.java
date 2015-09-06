@@ -158,14 +158,17 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = false)
-    public void addCommentNotification(Integer memberId, String title, String content) {
+    public void addCommentNotification(Integer memberId, String title, String content, Integer postId, String postType) {
         // 创建通知实体
         PrivateNotificationModel priNoti = new PrivateNotificationModel();
+
         priNoti.setToMemberId(memberId);
         priNoti.setNotiType(NotiType.SYSTEM_AUTO.getCode());
         priNoti.setTitle(title);
         priNoti.setContent(content);
         priNoti.setTime(new Date());
+        priNoti.setPostId(postId);
+        priNoti.setPostType(postType);
 
         // 保存到db
         priMapper.insertSelective(priNoti);

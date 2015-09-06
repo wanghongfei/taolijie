@@ -41,6 +41,10 @@ public class PrivateNotificationModel extends Pageable {
 
     private Date time;
 
+    private Integer postId;
+
+    private String postType;
+
     /**
      *
      * @deprecated
@@ -148,20 +152,39 @@ public class PrivateNotificationModel extends Pageable {
         this.content = content == null ? null : content.trim();
     }
 
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public String getPostType() {
+        return postType;
+    }
+
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
+
     @Override
     public String toString() {
-        return "PrivateNotificationModel{" +
-                "id=" + id +
-                ", memberId=" + memberId +
-                ", member=" + member +
-                ", toMemberId=" + toMemberId +
-                ", title='" + title + '\'' +
-                ", isRead=" + isRead +
-                ", notiType='" + notiType + '\'' +
-                ", time=" + time +
-                ", accessRange='" + accessRange + '\'' +
-                ", content='" + content + '\'' +
-                ", notiTypeList=" + notiTypeList +
-                '}';
+        final StringBuilder sb = new StringBuilder("PrivateNotificationModel{");
+        sb.append("id=").append(id);
+        sb.append(", memberId=").append(memberId);
+        sb.append(", member=").append(member);
+        sb.append(", toMemberId=").append(toMemberId);
+        sb.append(", title='").append(title).append('\'');
+        sb.append(", isRead=").append(isRead);
+        sb.append(", notiType='").append(notiType).append('\'');
+        sb.append(", time=").append(time);
+        sb.append(", postId=").append(postId);
+        sb.append(", postType='").append(postType).append('\'');
+        sb.append(", accessRange='").append(accessRange).append('\'');
+        sb.append(", content='").append(content).append('\'');
+        sb.append(", notiTypeList=").append(notiTypeList);
+        sb.append('}');
+        return sb.toString();
     }
 }

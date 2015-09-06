@@ -440,25 +440,14 @@ public class UShController {
         // 得到兼职的发送者
         SHPostModel job = shPostService.findPost(id);
         Integer toMemberId = job.getMemberId();
-/*        // 创建通知实体
-        PrivateNotificationModel priNoti = new PrivateNotificationModel();
-        priNoti.setToMemberId(toMemberId);
-        priNoti.setContent("有人评论了你的[" + job.getTitle() + "]");
-        priNoti.setNotiType(NotiType.SYSTEM_AUTO.getCode());
-        priNoti.setTime(new Date());
-        // 保存到db
-        notificationService.addNotification(priNoti);*/
 
+        // 创建通知
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[", job.getTitle(),
-                "]被评论了，快去看看吧",
-                Constants.DELIMITER,
-                id,
-                Constants.DELIMITER,
-                PostType.SH.toString(),
-                Constants.DELIMITER,
+        String commentContent = StringUtils.concat("你的帖子[",
+                job.getTitle(),
+                "]被评论了:",
                 content);
-        notificationService.addCommentNotification(toMemberId, commentTitle, commentContent);
+        notificationService.addCommentNotification(toMemberId, commentTitle, commentContent, id, PostType.SH.toString());
 
         //返回帖子id
         return new JsonWrapper(true,"reviewId", newId.toString()).getAjaxMessage();
