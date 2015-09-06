@@ -107,6 +107,15 @@ public class DefaultNotificationService implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<SysNotificationModel> getUnreadSysNotification(List<Integer> readList, List<String> rangeList, int pn, int ps) {
+        List<SysNotificationModel> list = sysMapper.findSysByRangeAndFilter(readList, rangeList, pn, ps);
+        long tot = sysMapper.countFindSysByRangeAndFilter(readList, rangeList);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<SysNotificationModel> getAllSysNotification(int pageNumber, int pageSize) {
         List<SysNotificationModel> list = sysMapper.findAll(pageNumber, pageSize);
         int tot = sysMapper.countFindAll();

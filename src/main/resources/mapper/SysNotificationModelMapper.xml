@@ -158,6 +158,31 @@
             sys.access_range IN <foreach collection="list" open="(" separator="," close=")" item="role">#{role}</foreach>
     </select>
 
+    <select id="findSysByRangeAndFilter" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            system_notification
+        WHERE
+            access_range IN <foreach collection="rangeList" open="(" separator="," close=")" item="role">#{role}</foreach>
+            AND id NOT IN <foreach collection="readList" open="(" separator="," close=")" item="_id">#{_id}</foreach>
+        ORDER BY
+            time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+
+    </select>
+
+    <select id="countFindSysByRangeAndFilter" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            system_notification
+        WHERE
+            access_range IN <foreach collection="rangeList" open="(" separator="," close=")" item="role">#{role}</foreach>
+            AND id NOT IN <foreach collection="readList" open="(" separator="," close=")" item="_id">#{_id}</foreach>
+    </select>
+
     <select id="findAll" resultMap="BaseResultMap">
         SELECT
             *

@@ -23,6 +23,9 @@ public interface SysNotificationModelMapper {
     List<SysNotificationModel> findSysByAccessRange(@Param("list") List<String> roleList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     long countFindSysByAccessRange(List<String> roleList);
 
+    List<SysNotificationModel> findSysByRangeAndFilter(@Param("readList") List<Integer> readList, @Param("rangeList") List<String> rangeList, @Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
+    long countFindSysByRangeAndFilter(@Param("readList") List<Integer> readList, @Param("rangeList") List<String> rangeList);
+
 
     List<SysNotificationModel> findAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     int countFindAll();

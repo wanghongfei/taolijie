@@ -6,8 +6,10 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
+import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
@@ -35,6 +37,9 @@ import java.util.stream.Stream;
 public class RestNotificationController {
     @Autowired
     NotificationService notiService;
+
+    @Autowired
+    AccountService accService;
 
 
     /**
@@ -109,7 +114,7 @@ public class RestNotificationController {
     }
 
     /**
-     * 查询当前用户未读通知
+     * 查询当前用户未读个人通知
      */
     @RequestMapping(value = "/pri/unread", produces = Constants.Produce.JSON)
     public ResponseText getUnReadPrivateNotification(@RequestParam("memberId") Integer memberId,
@@ -124,6 +129,64 @@ public class RestNotificationController {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<PrivateNotificationModel> list = notiService.getUnreadPriNotification(memberId, pageNumber, pageSize);
+
+        return new ResponseText(list);
+    }
+
+    /**
+     * 查询当前未读系统通知
+     * @return
+     */
+    @RequestMapping(value = "/sys/unread", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText getUnReadSysNotification(@RequestParam(defaultValue = "0") int pageNumber,
+                                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                                                 HttpServletRequest req) {
+        // login check
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 先查出当前用户已读的系统通知id
+        MemberModel mem = accService.findMember(credential.getId());
+        String readStringList = mem.getReadSysNotificationIds();
+
+        List<Integer> readList = new ArrayList<>(1);
+        if (true == StringUtils.checkNotEmpty(readStringList)) {
+            // 分隔id, 并转换成List对象
+            String[] readStrings = readStringList.split(Constants.DELIMITER);
+            if (null != readStringList && 0 != readStringList.length()) {
+                try {
+                    readList = Stream.of(readStrings)
+                            .map( id -> Integer.valueOf(id) )
+                            .collect(Collectors.toList());
+
+                } catch (NumberFormatException ex) {
+                    return new ResponseText(ErrorCode.BAD_NUMBER);
+                }
+            }
+
+        }
+
+
+        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
+
+        ListResult<SysNotificationModel> list = null;
+        if (readList.isEmpty()) {
+            list = notiService.getSysNotification(
+                    credential.getId(),
+                    Arrays.asList(credential.getRoleList().get(0),
+                            Constants.NotificationRange.GLOBAL.toString()),
+                    pageNumber,
+                    pageSize);
+        } else {
+            list = notiService.getUnreadSysNotification(
+                    readList,
+                    Arrays.asList(
+                            Constants.NotificationRange.GLOBAL.toString(),
+                            credential.getRoleList().get(0)),
+                    pageNumber, pageSize);
+        }
 
         return new ResponseText(list);
     }
@@ -148,7 +211,12 @@ public class RestNotificationController {
 
         String roleName = credential.getRoleList().get(0);
 
-        ListResult<SysNotificationModel> list = notiService.getSysNotification(memberId, Arrays.asList(roleName), pageNumber, pageSize);
+        ListResult<SysNotificationModel> list = notiService.getSysNotification(
+                memberId,
+                Arrays.asList(roleName,
+                        Constants.NotificationRange.GLOBAL.toString()),
+                pageNumber,
+                pageSize);
         return new ResponseText(list);
     }
 
