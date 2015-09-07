@@ -41,8 +41,7 @@
 </head>
 <body>
 <!--[if lt IE 10]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-    your browser</a> to improve your experience.</p>
+<p class="browsehappy">您的浏览器太老了, 升级下您的浏览器吧</p>
 <![endif]-->
 
 
@@ -57,6 +56,7 @@
         .form-control {
             height: 40px;
             font-size: 16px;
+            position:relative;
         }
 
         .form-group.division select {
@@ -67,6 +67,11 @@
             width: 90px !important;
             margin-left: 15px !important;
         }
+        .form-group span.err-span{
+            position: absolute;top:50px;left:120px; font-size:14px; color: #EF6F66;
+        }
+       .ng-cloak{display: none}
+
     </style>
 
     <div class="segment end-segment" ng-controller="jobPostCtrl">
@@ -74,12 +79,14 @@
             <i class="pin-arrow  dark-red-arrow"></i>
         </p>
 
-        <form name="JobPostForm" id="JobPostForm" class="form-horizontal">
-            <div class="form-group">
+        <form name="JobPostForm" id="JobPostForm" class="form-horizontal" novalidate ng-submit="submit(JobPostForm.$valid)">
+            <div class="form-group" style="position: relative">
                 <label for="">兼职标题<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control large-input" name="title" placeholder="20字以内"
-                       value="${job.title}"
-                       required>
+                       value="${job.title}" ng-model="job.title" ng-maxlength="20"
+                       required ng-focus>
+                <span class="err-span ng-cloak" ng-cloak ng-show="(checkAll && JobPostForm.title.$error.required) || (!JobPostForm.title.$focused && JobPostForm.title.$dirty && JobPostForm.title.$error.required)">请输入兼职标题</span>
+                <span class="err-span ng-cloak" ng-cloak ng-show="(checkAll && JobPostForm.title.$error.maxlength) || (!JobPostForm.title.$focused && JobPostForm.title.$dirty && JobPostForm.title.$error.maxlength)">长度要在20字以内</span>
             </div>
             <div class="form-group">
                 <label for="">选择分类<span class="asterisk-red">*</span></label>
@@ -194,9 +201,7 @@
                 <div class="submit-btn big-btn red-bg">
                     <span>提交</span>
                 </div>
-                <%--
                 <input type="submit" value="发布兼职" />
-                --%>
             </div>
         </form>
 
