@@ -51,6 +51,9 @@
 
 /* stage end* /
 /*global start*/
+img{
+    border-style: none;
+}
 form input[type=submit] {
     border: none;
     font-size: 1em;
@@ -151,6 +154,7 @@ form input[type=submit] {
 
 .header-content .logo-img {
     vertical-align: middle;
+    border-style: none;
 }
 
 .header-content .search-bar {
