@@ -146,19 +146,11 @@ public class UNotifyController {
                 getUnreadPriNotification(credential.getId(), PageUtils.getFirstResult(page, pageSize), pageSize).getResultCount();
 
 
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
         String readStringList = mem.getReadSysNotificationIds();
         List<Integer> readList = new ArrayList<>(1);
         if (true == StringUtils.checkNotEmpty(readStringList)) {
             // 分隔id, 并转换成List对象
             String[] readStrings = readStringList.split(Constants.DELIMITER);
-            System.out.println(readStringList);
-            for(String s : readStrings){
-                System.out.println(s);
-            }
             if (null != readStringList && 0 != readStringList.length()) {
                 try {
                     readList = Stream.of(readStrings)
@@ -171,16 +163,15 @@ public class UNotifyController {
                 }
             }
         }
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-        System.out.println("------------------------------");
-
         ListResult<SysNotificationModel> notes = noteService.getSysNotification(credential.getId(), range, PageUtils.getFirstResult(page, pageSize), pageSize);
-        System.out.println(notes.getResultCount());
 
-        long sysCounts= noteService
+        long sysCounts = 0;
+        if(readList.isEmpty()){
+            sysCounts = notes.getResultCount();
+        }else{
+             sysCounts= noteService
                 .getUnreadSysNotification(readList,range, page, pageSize).getResultCount();
+        }
 
         model.addAttribute("notes",notes.getList());
         model.addAttribute("currentPage", page);
