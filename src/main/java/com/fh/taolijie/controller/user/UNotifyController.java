@@ -95,8 +95,12 @@ public class UNotifyController {
 
         }
 
-       long sysUnreadCount =
-               noteService.getUnreadSysNotification(readList, range, page, pageSize).getResultCount();
+       long sysUnreadCount = 0;
+        if(readList.isEmpty()){
+            sysUnreadCount = noteService.getSysNotification(credential.getId(), range,page, pageSize ).getResultCount();
+        }else{
+            sysUnreadCount = noteService.getUnreadSysNotification(readList, range, page, pageSize).getResultCount();
+        }
 
         model.addAttribute("notes",notes.getList());
         model.addAttribute("currentPage", page);
