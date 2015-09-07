@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -89,7 +91,9 @@ public class UNotifyController {
                             .collect(Collectors.toList());
 
                 } catch (NumberFormatException ex) {
-                    return "redirect:/404";
+                    LogUtils.getErrorLogger().error("系统消息列表获取错误");
+                    LogUtils.getErrorLogger().error("readStringList: "+ readStringList);
+                    LogUtils.getErrorLogger().error(ex.toString());
                 }
             }
 
@@ -159,7 +163,6 @@ public class UNotifyController {
                             .collect(Collectors.toList());
 
                 } catch (NumberFormatException ex) {
-                    return "redirect:/404";
                 }
             }
         }
