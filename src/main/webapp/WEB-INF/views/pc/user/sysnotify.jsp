@@ -153,7 +153,7 @@
                         $bells.removeClass('fa-bell-o');
                         $bells.addClass('fa-bell');
                         $trs.addClass('read');
-//                        window.location.reload();
+                       window.location.reload();
                     }else{
                         alert(data.message);
                     }
