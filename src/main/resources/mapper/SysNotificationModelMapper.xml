@@ -9,7 +9,7 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="is_read" property="isRead" jdbcType="BIT"/>
-        <result column="time" property="time" jdbcType="DATE"/>
+        <result column="time" property="time" jdbcType="TIMESTAMP"/>
         <result column="access_range" property="accessRange" jdbcType="VARCHAR"/>
 
         <result column="content" property="content" jdbcType="LONGVARCHAR"/>
@@ -48,7 +48,7 @@
         time, access_range, content
         )
         VALUES (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{isRead,jdbcType=BIT},
-        #{time,jdbcType=DATE}, #{accessRange,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+        #{time}, #{accessRange,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.SysNotificationModel">
@@ -88,7 +88,7 @@
                 #{isRead,jdbcType=BIT},
             </if>
             <if test="time != null">
-                #{time,jdbcType=DATE},
+                #{time},
             </if>
             <if test="accessRange != null">
                 #{accessRange,jdbcType=VARCHAR},
@@ -112,7 +112,7 @@
                 is_read = #{isRead,jdbcType=BIT},
             </if>
             <if test="time != null">
-                time = #{time,jdbcType=DATE},
+                time = #{time},
             </if>
             <if test="accessRange != null">
                 access_range = #{accessRange,jdbcType=VARCHAR},
@@ -131,7 +131,7 @@
         UPDATE system_notification
         SET title = #{title,jdbcType=VARCHAR},
         is_read = #{isRead,jdbcType=BIT},
-        time = #{time,jdbcType=DATE},
+        time = #{time},
         access_range = #{accessRange,jdbcType=VARCHAR},
         content = #{content,jdbcType=LONGVARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
