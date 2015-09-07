@@ -43,8 +43,8 @@
     <div class="segment infos link-segment">
         <div class="nav">
             <ul>
-                <li class="active"><a href="/user/notify/pri">个人消息</a></li>
-                <li><a href="/user/notify/sys">系统通知</a></li>
+                <li class="active"><a href="/user/notify/pri">个人消息 ${priUnreadCount>0?priUnreadCount:''}</a></li>
+                <li><a href="/user/notify/sys">系统通知 ${sysUnreadCount>0?sysUnreadCount:''}</a></li>
             </ul>
         </div>
 
@@ -77,7 +77,7 @@
                         </c:if>
                     </td>
                     <td>
-                  <span class="note-content read" href="">${note.content}</span>
+                  <span class="note-content read" >${note.content}</span>
                     </td>
                     <td ><span class="note-time read"><fmt:formatDate value="${note.time}" pattern="yyyy-MM-dd HH:mm:ss"/></span></td>
                     <td style="text-align:center">
@@ -102,6 +102,7 @@
                       <c:set value="${currentPage-1}" var="prev"/>
                       <a href="/user/notify/pri?page=${currentPage>pNum-1 ? pNum-1:currentPage-1}">上一页</a>
                   </c:if>
+                  <a > 第${currentPage+1}页 </a>
                   <c:if test="${currentPage*pageSize + noteCounts < resultCount}">
                       <c:set value="${currentPage+1}" var="next"/>
                       <a href="/user/notify/pri?page=${currentPage+1}">下一页</a>
@@ -130,6 +131,7 @@
                           $bell.removeClass('fa-bell-o');
                           $bell.addClass('fa-bell');
                           $tr.addClass('read');
+                          window.location.reload();
                       }else{
                           console.log(data.message);
                       }
@@ -142,10 +144,11 @@
                   var $bells = $('.note-table tbody').find('.bell-btn i');
                   var ids = [];
                   $trs.each(function(i){
-                      console.log($($trs[i]).data('id'));
-                      ids.push($($trs[i]).data('id'));
+                      if($trs[i].className !== 'read'){
+                          ids.push($($trs[i]).data('id'));
+                      }
                   });
-                  if(ids == []){
+                  if(ids.length === 0){
                       return false;
                   }
                   $.ajax({
@@ -157,6 +160,7 @@
                           $bells.removeClass('fa-bell-o');
                           $bells.addClass('fa-bell');
                           $trs.addClass('read');
+                          window.location.reload();
                       }else{
                           console.log(data.message);
                       }

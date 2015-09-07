@@ -40,10 +40,10 @@ jQuery(function() {
           width: 210,
           height: 210,
           compressSize: 0,
-          allowMagnify: false,
+          allowMagnify:true,
           crop: true,
           preserveHeaders: true,
-          noCompressIfLarger: false,
+          noCompressIfLarger: false
         }
     });
 

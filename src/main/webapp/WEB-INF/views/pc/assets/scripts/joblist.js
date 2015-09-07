@@ -8,6 +8,7 @@ var searchObj = {};
 var maxSize = 8;
 var currPageNumber = 0;
 var url = "/api/job/filter";
+var searchContent = ";"
 
 var $loading = $(".lists .loading-page");
 $loading.show();
@@ -15,11 +16,24 @@ tlj.controller('jobListCtrl', function($scope, $http) {
 
     $ctrlScope = $scope;
 
+    var location = window.location.pathname;
+    if(location == '/search'){
+        var param = urlToObj(window.location.search);
+
+        if(param.type == 'job'){
+            url = "api/job/search";
+        }else if(param.type == 'sh'){
+            url ="api/sh/search";
+        }
+
+        searchContent = param.content;
+        searchObj['title'] =decodeURI(searchContent);
+    }
     var param = urlToObj(window.location.search);
     if(param.cate){
-    //    searchObj['jobPostCategoryId'] = param.cate;
+        searchObj['jobPostCategoryId'] = param.cate;
     }else{
-    //    delete searchObj['jobPostCategoryId'];
+        delete searchObj['jobPostCategoryId'];
     }
 
     //初次加载

@@ -69,6 +69,12 @@
     color:#f2dede;
     cursor:default;
 }
+.note-table tr a{
+    color: #c0bcea;
+}
+.note-table tr.read a{
+    color: #f2dede;
+}
 .note-table tr.read .note-poster{
     background-color: #f2dede;
 }
