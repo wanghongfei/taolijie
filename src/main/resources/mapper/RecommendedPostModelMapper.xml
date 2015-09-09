@@ -380,6 +380,7 @@
         <if test="isResume == true">
             reco.resume_id IS NOT NULL
         </if>
+            AND reco.validation = true
 
     </select>
 
