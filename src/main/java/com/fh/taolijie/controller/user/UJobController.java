@@ -511,9 +511,9 @@ public class UJobController {
 
         // 创建通知
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[",
+        String commentContent = StringUtils.concat("你的帖子<a href=\"/item/job/",job.getId(),"\">[",
                 job.getTitle(),
-                "]被评论了:",
+                "]</a>被评论了:",
                 model.getContent());
         notiService.addCommentNotification(toMemberId, commentTitle, commentContent, jobId, PostType.JOB.toString());
 

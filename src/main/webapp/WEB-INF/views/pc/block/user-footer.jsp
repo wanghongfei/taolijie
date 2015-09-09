@@ -15,9 +15,9 @@
 <!-- build:js scripts/vendor.js -->
 <!-- bower:js -->
 
-<%--<script src="/scripts/angular/angular.js"></script>--%>
-<script src="//cdn.bootcss.com/angular.js/1.2.0rc3/angular.min.js"></script>
+<%--<script src="//cdn.bootcss.com/angular.js/1.2.0rc3/angular.min.js"></script>--%>
 <script src="/scripts/jquery11.js"></script>
+<script src="/scripts/angular/angular.js"></script>
 <script src="/scripts/jquery_extend.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
@@ -32,9 +32,3 @@
 <script src="/scripts/webuploader.min.js"></script>
 <script src="/scripts/upload.js"></script>
 <script src="/scripts/user.js"></script>
-<script src="/admin/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script>
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd'
-    })
-</script>

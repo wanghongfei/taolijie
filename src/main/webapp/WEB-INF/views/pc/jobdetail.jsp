@@ -22,14 +22,11 @@
   <title ng-bind="'兼职-'+job.title"></title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-  <!-- build:css /styles/vendor.css -->
-  <!-- bower:css -->
-  <!-- endbower -->
-  <!-- endbuild -->
+    <!--[if IE 8]>
+    <script src="/scripts/es5-shim.min.js"></script>
+    <![endif]-->
 
-  <!-- build:css({.tmp,app}) /styles/css/style.css -->
   <link rel="stylesheet" href="/styles/animate.css"/>
   <link rel="stylesheet" href="/styles/style.css">
   <link rel="stylesheet" href="/styles/jobdetail.css">

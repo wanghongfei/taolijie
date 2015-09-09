@@ -4,6 +4,7 @@
  */
 
 //提交表单
+tlj = angular.module('tljApp',['pickadate']);
 
 tlj.directive('ngFocus', [function() {
     var FOCUS_CLASS = "ng-focused";
@@ -24,7 +25,17 @@ tlj.directive('ngFocus', [function() {
 }]);
 
 tlj.controller('jobPostCtrl', function($scope, $http){
+    var today = new Date();
     $scope.checkAll = false;
+    $scope.date = {
+        start: today,
+        initDate: new Date(today.getTime() + 7*24*60*60*1000),
+        options: {
+            format: 'yyyy-mm-dd'
+        }
+    };
+    $scope.startDate = new Date();
+    $scope.validationDate = undefined;
     //省市区不完整
     $scope.division = {
         "山东省":{
@@ -40,10 +51,22 @@ tlj.controller('jobPostCtrl', function($scope, $http){
 
     $scope.submit = function(isValid){
         $scope.checkAll = true;
-        alert(isValid);
+        //alert(isValid);
+        if(isValid){
+            var url =location.pathname;
+            console.log($scope.job);
+            $.tlj.post(url, $scope.job, function(data){
+                console.log(data);
+            })
+
+        }
     };
 
-
+    //检查是否required
+    $scope.check= function(e, type){
+      return ($scope.checkAll && e.$error[type]) ||
+            (!e.$focused && e.$dirty && e.$error[type]);
+    }
 
 });
 
@@ -130,4 +153,3 @@ tlj.controller('jobPostCtrl', function($scope, $http){
 //        //
 //    });
 //});
-
