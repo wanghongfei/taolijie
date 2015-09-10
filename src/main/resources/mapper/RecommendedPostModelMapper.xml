@@ -227,7 +227,7 @@
             </if>
         FROM
             recommended_post reco
-        INNER JOIN
+        LEFT JOIN
             member mem ON mem.id = reco.member_id
         <if test="isJob == true">
         INNER JOIN
@@ -336,18 +336,18 @@
             recommended_post reco
         <if test="isJob == true">
         INNER JOIN
-            job_post post
+            job_post post ON post.id = reco.job_id
         </if>
         <if test="isSh == true">
         INNER JOIN
-            second_hand_post post
+            second_hand_post post ON post.id = reco.sh_id
         </if>
         <if test="isResume == true">
         INNER JOIN
-            resume re
+            resume re ON re.id = reco.resume_id
         </if>
         INNER JOIN
-            member mem
+            member mem ON mem.id = reco.member_id
         WHERE
         <if test="isJob == true">
             reco.job_id IS NOT NULL
