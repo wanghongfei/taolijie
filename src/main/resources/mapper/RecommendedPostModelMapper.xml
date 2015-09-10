@@ -229,15 +229,15 @@
             recommended_post reco
         INNER JOIN
             member mem
-        <if test="isJob == null">
+        <if test="isJob == true">
         INNER JOIN
             job_post post ON post.id = reco.job_id
         </if>
-        <if test="isSh == null">
+        <if test="isSh == true">
         INNER JOIN
             second_hand_post post ON post.id = reco.sh_id
         </if>
-        <if test="isResume == null">
+        <if test="isResume == true">
         INNER JOIN
             resume re ON re.id = reco.resume_id
         </if>
