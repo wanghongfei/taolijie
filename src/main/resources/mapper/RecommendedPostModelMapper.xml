@@ -228,7 +228,7 @@
         FROM
             recommended_post reco
         INNER JOIN
-            member mem
+            member mem ON mem.id = reco.member_id
         <if test="isJob == true">
         INNER JOIN
             job_post post ON post.id = reco.job_id
