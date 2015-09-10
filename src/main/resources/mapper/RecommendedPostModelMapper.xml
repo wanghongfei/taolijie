@@ -231,15 +231,15 @@
             member mem
         <if test="isJob == null">
         INNER JOIN
-            job_post post
+            job_post post ON post.id = reco.job_id
         </if>
         <if test="isSh == null">
         INNER JOIN
-            second_hand_post post
+            second_hand_post post ON post.id = reco.sh_id
         </if>
         <if test="isResume == null">
         INNER JOIN
-            resume re
+            resume re ON re.id = reco.resume_id
         </if>
 
         <where>
