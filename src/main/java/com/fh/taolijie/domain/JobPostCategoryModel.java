@@ -1,6 +1,6 @@
 package com.fh.taolijie.domain;
 
-import com.fh.taolijie.domain.middle.JobCategoryWithJob;
+import com.fh.taolijie.domain.middle.CategoryWithPost;
 
 import java.io.Serializable;
 
@@ -17,7 +17,7 @@ public class JobPostCategoryModel implements Serializable {
 
     public JobPostCategoryModel() {}
 
-    public JobPostCategoryModel(JobCategoryWithJob withJob) {
+    public JobPostCategoryModel(CategoryWithPost withJob) {
         this.id = withJob.getCateId();
         this.name = withJob.getName();
         this.level = withJob.getLevel();

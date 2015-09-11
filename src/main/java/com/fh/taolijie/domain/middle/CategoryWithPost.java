@@ -3,7 +3,7 @@ package com.fh.taolijie.domain.middle;
 /**
  * Created by whf on 9/11/15.
  */
-public class JobCategoryWithJob {
+public class CategoryWithPost {
     /**
      * 帖子id
      */

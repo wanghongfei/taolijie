@@ -14,7 +14,7 @@
         <result column="job_cate_memo" property="memo" jdbcType="LONGVARCHAR"/>
     </resultMap>
 
-    <resultMap id="CategoryWithJob" type="com.fh.taolijie.domain.middle.JobCategoryWithJob">
+    <resultMap id="CategoryWithJob" type="com.fh.taolijie.domain.middle.CategoryWithPost">
         <result column="post_id" property="postId" />
 
         <result column="job_cate_id" property="cateId" />

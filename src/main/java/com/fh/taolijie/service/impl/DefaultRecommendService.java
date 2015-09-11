@@ -3,14 +3,17 @@ package com.fh.taolijie.service.impl;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
 import com.fh.taolijie.dao.mapper.RecommendedPostModelMapper;
+import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.RecommendedPostModel;
-import com.fh.taolijie.domain.middle.JobCategoryWithJob;
+import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.middle.CategoryWithPost;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.awt.image.IntegerInterleavedRaster;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 public class DefaultRecommendService implements RecommendService {
     @Autowired
     RecommendedPostModelMapper recoMapper;
+
+    @Autowired
+    ShPostCategoryModelMapper shCateMapper;
 
     @Autowired
     JobPostCateService jobCateService;
@@ -79,7 +85,7 @@ public class DefaultRecommendService implements RecommendService {
             List<Integer> idList = list.stream()
                     .map(RecommendedPostModel::getId)
                     .collect(Collectors.toList());
-            List<JobCategoryWithJob> jobAndCateList = jobCateMapper.getByJobInBatch(idList);
+            List<CategoryWithPost> jobAndCateList = jobCateMapper.getByJobInBatch(idList);
 
             doMatch(list, jobAndCateList);
         }
@@ -92,12 +98,12 @@ public class DefaultRecommendService implements RecommendService {
      * @param recoList
      * @param jobAndCateList
      */
-    private void doMatch(List<RecommendedPostModel> recoList, List<JobCategoryWithJob> jobAndCateList) {
+    private void doMatch(List<RecommendedPostModel> recoList, List<CategoryWithPost> jobAndCateList) {
         Map<Integer, JobPostCategoryModel> map = jobAndCateList.stream()
-                .collect(Collectors.toMap(JobCategoryWithJob::getCateId, with -> new JobPostCategoryModel(with)));
+                .collect(Collectors.toMap(CategoryWithPost::getCateId, with -> new JobPostCategoryModel(with)));
 
-        recoList.forEach( reco -> {
-            reco.getJobPost().setCategory( map.get(reco.getJobId()) );
+        recoList.forEach(reco -> {
+            reco.getJobPost().setCategory(map.get(reco.getJobId()));
         });
     }
 
@@ -112,7 +118,27 @@ public class DefaultRecommendService implements RecommendService {
         List<RecommendedPostModel> list = recoMapper.findRecommendList(cmd);
         int tot = recoMapper.countFindRecommendList(cmd);
 
+        // 查询对应的分类
+        if (0 != tot) {
+            List<Integer> idList = list.stream()
+                    .map(RecommendedPostModel::getShId)
+                    .collect(Collectors.toList());
+            List<CategoryWithPost> withPostList = shCateMapper.findByShInBatch(idList);
+
+            doMatchForSh(list, withPostList);
+        }
+
         return new ListResult<>(list, tot);
+    }
+
+    private void doMatchForSh(List<RecommendedPostModel> recoList, List<CategoryWithPost> withList) {
+        Map<Integer, SHPostCategoryModel> map = withList.stream()
+                .collect(Collectors.toMap(CategoryWithPost::getCateId, with -> new SHPostCategoryModel(with)));
+
+        recoList.forEach(reco -> {
+            reco.getShPost().setCategory(map.get(reco.getShId()));
+        });
+
     }
 
     @Override

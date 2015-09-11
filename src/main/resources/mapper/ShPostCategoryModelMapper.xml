@@ -12,6 +12,17 @@
         <result column="sh_post_cate_theme_color" property="themeColor" jdbcType="VARCHAR"/>
         <result column="sh_post_cate_memo" property="memo" jdbcType="LONGVARCHAR"/>
     </resultMap>
+
+    <resultMap id="CategoryWithSh" type="com.fh.taolijie.domain.middle.CategoryWithPost">
+        <result column="post_id" property="postId" />
+
+        <result column="job_cate_id" property="cateId" />
+        <result column="job_cate_name" property="name" />
+        <result column="job_cate_level" property="level" />
+        <result column="job_cate_theme_color" property="themeColor" />
+        <result column="job_cate_memo" property="memo" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
@@ -144,6 +155,19 @@
         WHERE
             name = #{name}
     </select>
+
+    <select id="findByShInBatch" resultMap="CategoryWithSh">
+        SELECT
+            post.id AS post_id,
+            <include refid="Base_Column_List" />
+        FROM
+            second_hand_post post
+        INNER JOIN
+            second_hand_post_category cate ON post.second_hand_post_category_id = cate.id
+        WHERE
+            post.id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </select>
+
 
     <select id="isCategoryEmpty" resultType="boolean">
         SELECT NOT EXISTS (

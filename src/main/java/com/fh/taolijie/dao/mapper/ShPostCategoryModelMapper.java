@@ -1,9 +1,11 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.middle.CategoryWithPost;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -104,6 +106,9 @@ public interface ShPostCategoryModelMapper extends BaseMapper<SHPostCategoryMode
 
     @RedisCache(SHPostCategoryModel.class)
     SHPostCategoryModel findByName(@Param("name") String name);
+
+    @NoCache
+    List<CategoryWithPost> findByShInBatch(List<Integer> shIdList);
 
     @RedisCache(SHPostCategoryModel.class)
     boolean isCategoryEmpty(@Param("cateId") Integer cateId);

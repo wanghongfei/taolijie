@@ -5,11 +5,8 @@ import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.middle.JobCategoryWithJob;
+import com.fh.taolijie.domain.middle.CategoryWithPost;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -102,7 +99,7 @@ public interface JobPostCategoryModelMapper extends BaseMapper<JobPostCategoryMo
      * @return
      */
     @NoCache
-    List<JobCategoryWithJob> getByJobInBatch(List<Integer> jobIdList);
+    List<CategoryWithPost> getByJobInBatch(List<Integer> jobIdList);
 
     @RedisCache(JobPostCategoryModel.class)
     JobPostCategoryModel findByName(@Param("name") String name);
