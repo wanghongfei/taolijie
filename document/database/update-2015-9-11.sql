@@ -1,0 +1,1 @@
+alter table taolijie.recommended_post add column post_title varchar(45);

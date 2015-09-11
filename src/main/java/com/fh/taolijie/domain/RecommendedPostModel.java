@@ -37,6 +37,11 @@ public class RecommendedPostModel extends Pageable {
     private Boolean validation = false;
 
     /**
+     * 冗余字段，与sh_post, job_post表的title相同
+     */
+    private String postTitle;
+
+    /**
      * 推荐申请人的用户id
      */
     private Integer memberId;
@@ -168,6 +173,14 @@ public class RecommendedPostModel extends Pageable {
      */
     public void setJobId(Integer jobId) {
         this.jobId = jobId;
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
     }
 
     public JobPostModel getJobPost() {
