@@ -10,6 +10,8 @@ import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * 与帖子推荐相关的管理员操作。
  * <p>{@code /api/manage/recommend}
@@ -44,6 +46,7 @@ public class RestCommendAdminController {
     public ResponseText update(@PathVariable Integer id,
                                RecommendedPostModel model) {
         model.setId(id);
+        model.setPassTime(new Date());
 
         recoService.updateByIdSelective(model);
 
