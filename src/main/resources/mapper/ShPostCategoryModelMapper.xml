@@ -16,11 +16,11 @@
     <resultMap id="CategoryWithSh" type="com.fh.taolijie.domain.middle.CategoryWithPost">
         <result column="post_id" property="postId" />
 
-        <result column="job_cate_id" property="cateId" />
-        <result column="job_cate_name" property="name" />
-        <result column="job_cate_level" property="level" />
-        <result column="job_cate_theme_color" property="themeColor" />
-        <result column="job_cate_memo" property="memo" />
+        <result column="sh_post_cate_id" property="cateId" />
+        <result column="sh_post_cate_name" property="name" />
+        <result column="sh_post_cate_level" property="level" />
+        <result column="sh_post_cate_theme_color" property="themeColor" />
+        <result column="sh_post_cate_memo" property="memo" />
     </resultMap>
 
     <sql id="Base_Column_List">

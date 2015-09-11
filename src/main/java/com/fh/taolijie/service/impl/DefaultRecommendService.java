@@ -7,6 +7,7 @@ import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.domain.middle.CategoryWithPost;
 import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.RecommendService;
@@ -100,7 +101,7 @@ public class DefaultRecommendService implements RecommendService {
      */
     private void doMatch(List<RecommendedPostModel> recoList, List<CategoryWithPost> jobAndCateList) {
         Map<Integer, JobPostCategoryModel> map = jobAndCateList.stream()
-                .collect(Collectors.toMap(CategoryWithPost::getCateId, with -> new JobPostCategoryModel(with)));
+                .collect(Collectors.toMap(CategoryWithPost::getPostId, with -> new JobPostCategoryModel(with)));
 
         recoList.forEach(reco -> {
             reco.getJobPost().setCategory(map.get(reco.getJobId()));
@@ -133,9 +134,12 @@ public class DefaultRecommendService implements RecommendService {
 
     private void doMatchForSh(List<RecommendedPostModel> recoList, List<CategoryWithPost> withList) {
         Map<Integer, SHPostCategoryModel> map = withList.stream()
-                .collect(Collectors.toMap(CategoryWithPost::getCateId, with -> new SHPostCategoryModel(with)));
+                .collect(Collectors.toMap(CategoryWithPost::getPostId, with -> new SHPostCategoryModel(with)));
+
+        System.out.println("############# " + map);
 
         recoList.forEach(reco -> {
+            System.out.println("8=************ doing match");
             reco.getShPost().setCategory(map.get(reco.getShId()));
         });
 
