@@ -14,6 +14,16 @@
         <result column="job_cate_memo" property="memo" jdbcType="LONGVARCHAR"/>
     </resultMap>
 
+    <resultMap id="CategoryWithJob" type="com.fh.taolijie.domain.middle.JobCategoryWithJob">
+        <result column="post_id" property="postId" />
+
+        <result column="job_cate_id" property="cateId" />
+        <result column="job_cate_name" property="name" />
+        <result column="job_cate_level" property="level" />
+        <result column="job_cate_theme_color" property="themeColor" />
+        <result column="job_cate_memo" property="memo" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbggenerated
@@ -139,6 +149,27 @@
             COUNT(*)
         FROM
             job_post_category
+    </select>
+
+    <select id="getInBatch" resultMap="BaseResultMap">
+        SELECT
+            *
+        FROM
+            job_post_category
+        WHERE
+            id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </select>
+
+    <select id="getByJobInBatch" resultMap="CategoryWithJob">
+        SELECT
+            post.id AS post_id,
+            <include refid="category_column" />
+        FROM
+            job_post post
+        INNER JOIN
+            job_post_category cate ON post.job_post_category_id = cate.id
+        WHERE
+            post.id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
     </select>
 
     <select id="findByName" resultMap="BaseResultMap">

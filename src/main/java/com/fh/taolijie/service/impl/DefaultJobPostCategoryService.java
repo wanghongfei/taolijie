@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,18 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
         return new ListResult<>(list, tot);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<JobPostCategoryModel> getInBatch(List<Integer> idList) {
+        List<JobPostCategoryModel> list = null;
+        if (!idList.isEmpty()) {
+            list = cateMapper.getInBatch(idList);
+        } else {
+            list = new ArrayList<>(0);
+        }
+
+        return new ListResult<>(list, list.size());
+    }
 /*    @Override
     @Transactional(readOnly = false)
     public void addCategory(JobPostCategoryModel model) {

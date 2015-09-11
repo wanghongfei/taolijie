@@ -1,8 +1,12 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
 import com.fh.taolijie.dao.mapper.RecommendedPostModelMapper;
+import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.RecommendedPostModel;
+import com.fh.taolijie.domain.middle.JobCategoryWithJob;
+import com.fh.taolijie.service.JobPostCateService;
 import com.fh.taolijie.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by whf on 7/11/15.
@@ -18,6 +24,12 @@ import java.util.List;
 public class DefaultRecommendService implements RecommendService {
     @Autowired
     RecommendedPostModelMapper recoMapper;
+
+    @Autowired
+    JobPostCateService jobCateService;
+
+    @Autowired
+    JobPostCategoryModelMapper jobCateMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -62,8 +74,33 @@ public class DefaultRecommendService implements RecommendService {
         List<RecommendedPostModel> list = recoMapper.findRecommendList(cmd);
         int tot = recoMapper.countFindRecommendList(cmd);
 
+        if (0 != tot) {
+            // 查询对应的分类
+            List<Integer> idList = list.stream()
+                    .map(RecommendedPostModel::getId)
+                    .collect(Collectors.toList());
+            List<JobCategoryWithJob> jobAndCateList = jobCateMapper.getByJobInBatch(idList);
+
+            doMatch(list, jobAndCateList);
+        }
+
         return new ListResult<>(list, tot);
     }
+
+    /**
+     * 设置推荐信息对应的分类
+     * @param recoList
+     * @param jobAndCateList
+     */
+    private void doMatch(List<RecommendedPostModel> recoList, List<JobCategoryWithJob> jobAndCateList) {
+        Map<Integer, JobPostCategoryModel> map = jobAndCateList.stream()
+                .collect(Collectors.toMap(JobCategoryWithJob::getCateId, with -> new JobPostCategoryModel(with)));
+
+        recoList.forEach( reco -> {
+            reco.getJobPost().setCategory( map.get(reco.getJobId()) );
+        });
+    }
+
 
     @Override
     @Transactional(readOnly = true)
