@@ -70,6 +70,8 @@ public class RestCommendUController {
             if (false == sh.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
+
+            model.setPostTitle(sh.getTitle());
         } else if (null != model.getJobId()) {
             JobPostModel job = jobService.findJobPost(model.getJobId());
 
@@ -80,6 +82,8 @@ public class RestCommendUController {
             if (false == job.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
+
+            model.setPostTitle(job.getTitle());
         } else if (null != model.getResumeId()) {
             ResumeModel resume = resumeService.findResume(model.getResumeId());
 
@@ -91,6 +95,7 @@ public class RestCommendUController {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
 
+            //model.setPostTitle(resume.getTitle());
         } else {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
