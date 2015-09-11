@@ -101,6 +101,7 @@
             </div>
           </div>
           <div class="col_delete">
+            <a href="javascript:void(0);" class="Recommend" data-id="${sh.id}" data-title="${sh.title}" data-type="sh"> 申请推荐</a>
               <c:if test="${!isFav}">
             <a href="/user/sh/change/${sh.id}">修改</a>
           </c:if>

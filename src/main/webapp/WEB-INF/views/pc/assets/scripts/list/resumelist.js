@@ -2,7 +2,7 @@ var $ctrlScope;
 var searchObj = {};
 var maxSize = 8;
 var currPageNumber = 0;
-var url = "/api/resume/filter"
+var url = "/api/resume/filter";
 
 var $loading = $(".lists .loading-page");
 $loading.show();
@@ -17,17 +17,22 @@ tlj.controller('resumeListCtrl', function($scope, $http) {
                 $scope.cates = data.data.list;
             }
         })
-    }
+    };
     //推荐 .. 暂未实现
     $scope.getRecommend = function() {
+        var list = [];
         $http.get('/api/recommend/list?type=resume')
         .success(function(data) {
-            console.log(data);
-            if(data.ok) {
-                $scope.list = data.list;
-            }
+                var datalist = data.data.list;
+                for(var i=0; i<datalist.length;i++){
+                    console.log(datalist);
+                    list.push(datalist[i].resume);
+                }
+                $scope.list= list;
+                $scope.resultCount = data.data.resultCount;
+                //$scope.resultCount =data.data.resultCount;
         })
-    }
+    };
     //过滤.. 未使用
     $scope.listFilter = function(type, spec) {
         if(spec) {

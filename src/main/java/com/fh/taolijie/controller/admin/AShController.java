@@ -37,10 +37,10 @@ public class AShController {
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
 
-        ListResult<SHPostModel> shs =shPostService.getAllPostList(page, pageSize);
+        List<SHPostModel> secondHands=shPostService.getAllPostList(0,9999).getList();
 
 
-        model.addAttribute("shs", shs);
+        model.addAttribute("secondHands", secondHands);
         return "pc/admin/shs";
     }
 

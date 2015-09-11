@@ -71,6 +71,10 @@
       <p class="fr" id="edit" ng-attr-data-id="{{ resume.id }}" data-type="resume" style="cursor: pointer" ng-if="!isShow">
         <a href="/user/resume/change" style="color: #fa6a38">编辑</a>
       </p>
+      <p class="fr" id="recommend" ng-attr-data-id="{{ resume.id }}" data-type="resume" ng-click="toRecommend()"
+         ng-attr-data-title="{{postUser.username}}的简历" style="cursor: pointer" ng-if="!isShow">
+        推荐申请
+      </p>
 
       <p class="fr" id="fav" ng-attr-data-id="{{ resume.id }}" data-type="resume" ng-if="isShow" ng-click="fav()">
           <i class="fa ${favStatus? 'fa-heart':'fa-heart-o'}">&nbsp;&nbsp;</i>
@@ -81,7 +85,7 @@
     <div style="clean:both"></div>
     <div class="resume-info">
         <img src="/static/images/users/{{ resume.photoPath }}" alt="photo" ng-show="{{ resume.photoPath != ''}}"/>
-        <img src="/images/miao.jpg" alt="" ng-show="{{ resume.photoPath == ''}}">
+        <img src="/images/no-avatar.jpeg" alt="" ng-show="{{ resume.photoPath == ''}}">
       <div class="infos">
           <p>姓名 : <span ng-bind="resume.name"></span></p>
           <p ng-if="resume.gender == 'm'">性别 : <span>男</span></p>

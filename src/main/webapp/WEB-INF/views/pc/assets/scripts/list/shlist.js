@@ -30,6 +30,23 @@ tlj.controller('ShListCtrl', function($scope, $http) {
         $loading.hide();
     });
 
+    $scope.getHot = function(){
+        //api/recommend/list?type=sh
+        var list = [];
+        $http.get('/api/recommend/list?type=sh')
+            .success(function(data){
+                var datalist = data.data.list;
+                for(var i=0; i<datalist.length;i++){
+                    list.push(datalist[i].shPost);
+                }
+                $scope.list = list;
+                $scope.resultCount =data.data.resultCount;
+            })
+            .error(function(xhr, error, thrown){
+                console.log('error');
+                console.log(xhr);
+            });
+    };
     /**
      * 分页切换
      * @param isNext

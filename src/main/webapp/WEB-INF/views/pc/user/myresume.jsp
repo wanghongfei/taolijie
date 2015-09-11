@@ -60,7 +60,7 @@
       <div class="form-group">
           <label for="">照片<i class="theme-color">*</i> </label>
           <c:if test="${resume.photoPath == null}">
-            <img src="/images/miao.jpg" alt="resume photo" class="resume-photo">
+            <img src="/images/no-avatar.jpeg" alt="resume photo" class="resume-photo">
           </c:if>
           <c:if test="${resume.photoPath != null}">
           <img src="/static/images/users/{{ resume.photoPath }}" alt="" class="resume-photo">

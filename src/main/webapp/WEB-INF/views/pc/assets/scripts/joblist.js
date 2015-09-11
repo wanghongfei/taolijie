@@ -51,9 +51,16 @@ tlj.controller('jobListCtrl', function($scope, $http) {
      */
     $scope.getHot = function(){
         //api/recommend/list?type=job
+        var list = [];
         $http.get('/api/recommend/list?type=job')
             .success(function(data){
-                console.log(data);
+                var datalist = data.data.list;
+                for(var i=0; i<datalist.length;i++){
+                    console.log(datalist);
+                    list.push(datalist[i].jobPost);
+                }
+                $scope.list = list;
+                $scope.resultCount =data.data.resultCount;
             })
             .error(function(xhr, error, thrown){
                 console.log('error');

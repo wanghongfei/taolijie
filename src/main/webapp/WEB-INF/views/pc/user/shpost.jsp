@@ -19,11 +19,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-  <!-- build:css /styles/vendor.css -->
-  <!-- bower:css -->
-  <!-- endbower -->
-  <!-- endbuild -->
-
   <!-- build:css({.tmp,app}) /styles/css/style.css -->
   <link rel="stylesheet" href="/styles/animate.css"/>
   <link rel="stylesheet" href="/styles/style.css">
@@ -131,7 +126,7 @@
 
     <div class="segment">
       <div class="submit-btn big-btn dark-green-bg">
-        <span href="javascript:void(0);">发布二手</span>
+        <span href="javascript:void(0);" id="subBtn">发布二手</span>
       </div>
     </div>
 
