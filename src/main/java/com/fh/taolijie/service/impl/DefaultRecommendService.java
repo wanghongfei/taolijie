@@ -96,9 +96,6 @@ public class DefaultRecommendService implements RecommendService {
     public ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validation, int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
         cmd.setValidation(validation);
-        cmd.setIsJob(true);
-        cmd.setIsSh(true);
-        cmd.setIsResume(true);
 
         List<RecommendedPostModel> list = recoMapper.findBy(cmd);
         int tot = recoMapper.countFindBy(cmd);
