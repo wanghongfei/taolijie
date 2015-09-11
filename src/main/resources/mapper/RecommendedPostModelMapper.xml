@@ -381,7 +381,7 @@
         </if>
             AND reco.validation = true
         ORDER BY
-            reco.order_index ASC, reco.apply_time DESC
+            reco.order_index ASC, reco.pass_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
 
