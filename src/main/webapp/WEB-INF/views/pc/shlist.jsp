@@ -73,7 +73,7 @@
     <div class="shlist main">
 
         <ul class="nav-bar">
-            <li>热门推荐</li>
+            <li ng-click="getHot()">热门推荐</li>
             <li class="choose"><span class="choose-title" data-default="新旧程度">新旧程度</span>&nbsp;&nbsp;&nbsp;&nbsp;<i
                     class="fa fa-caret-down"></i>
 

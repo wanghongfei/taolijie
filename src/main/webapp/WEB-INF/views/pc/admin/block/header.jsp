@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -19,8 +20,13 @@
     <ul class="notification-menu">
       <li>
         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <img src="/admin/images/photos/user-avatar.png" alt="" />
-          wynfrith
+          <c:if  test="${currUser.profilePhotoId == null}">
+            <img src="/images/default-img.jpg" alt="">
+          </c:if>
+          <c:if  test="${currUser.profilePhotoId != null}">
+            <img src="/static/images/users/${currUser.profilePhotoId}" alt="">
+          </c:if>
+          ${username}
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -63,7 +64,7 @@
                     <th>二手物品标题</th>
                     <th class="hidden-phone">发布人</th>
                     <th class="hidden-phone">发布时间</th>
-                    <th class="hidden-phone">过期时间</th>
+                    <%--<th class="hidden-phone">过期时间</th>--%>
                     <th class="hidden-phone">分类</th>
                     <th class="hidden-phone">顶</th>
                     <th class="hidden-phone">踩</th>
@@ -71,13 +72,13 @@
                   </tr>
                   </thead>
                   <tbody id="table-body">
-                  <c:forEach items="${shs}" var="sh">
+                  <c:forEach items="${secondHands}" var="sh">
                       <tr class="">
                           <td>${sh.id}</td>
                           <td>${sh.title}</td> <!-- 不超15字 -->
                           <td class="hidden-phone">${sh.member.username}</td>
-                          <td class="center hidden-phone">${sh.postTime}</td>
-                          <td class="center hidden-phone">${sh.expiredTime}</td>
+                          <td class="center hidden-phone" style="width:150px;"><fmt:formatDate value="${sh.postTime}" pattern="YYYY-MM-dd hh:mm:ss"/></td>
+                          <%--<td class="center hidden-phone"><fmt:formatDate value="${sh.expiredTime}" pattern="YYYY-MM-dd hh:mm:ss"/></td>--%>
                           <td class="center hidden-phone">${sh.category.name}</td>
                           <td class="center hidden-phone">${sh.likes}</td>
                           <td class="center hidden-phone">${sh.dislikes}</td>
@@ -85,7 +86,7 @@
                               <button href="javascript:;"
                                       data-id="${sh.id}"
                                       data-type="sh"
-                                      class="delete-btn btn btn-danger
+                                      class="delete-btn btn btn-xs btn-danger
                                       class="btn btn-danger btn-xs">删除</button>
                           </td>
                       </tr>

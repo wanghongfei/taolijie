@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -71,9 +72,11 @@
                                   <c:forEach items="${jobs}" var="job">
                                       <tr class="">
                                           <td>${job.id}</td>
-                                          <td>${job.title}</td> <!-- 不超15字 -->
+                                          <td><a href="/item/job/${job.id}">${job.title}</a></td> <!-- 不超15字 -->
                                           <td class="hidden-phone">${job.member.username}</td>
-                                          <td class="center hidden-phone">${job.postTime}</td>
+                                          <td class="center hidden-phone" style="width:150px">
+                                              <fmt:formatDate value="${job.postTime}" pattern="YYYY-MM-dd hh:mm:ss"/>
+                                          </td>
                                           <td class="center hidden-phone">${job.complaint}</td>
                                           <td class="center hidden-phone">${job.likes}</td>
                                           <td class="center hidden-phone">${job.dislikes}</td>

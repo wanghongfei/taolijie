@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -71,8 +72,10 @@
                     <tr class="">
                       <td>${resume.id}</td>
                       <td>${resume.name}</td> <!-- 不超15字 -->
-                      <td class="hidden-phone">${resume.createdTime}</td>
-                      <td class="center hidden-phone">${resume.gender}</td>
+                      <td class="hidden-phone" style="width: 150px">
+                        <fmt:formatDate value="${resume.createdTime}" pattern="YYYY-MM-dd hh:mm:ss"/>
+                      </td>
+                      <td class="center hidden-phone">${resume.gender == 'm'?'男':'女'}</td>
                       <td class="center hidden-phone">${resume.member.username}</td>
                       <td class="center hidden-phone">
                         <button href="javascript:;"
