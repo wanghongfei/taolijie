@@ -2055,7 +2055,7 @@ padding-bottom: 7px; }
 .user .col_content .col_list > div .col_main_bottom .time {
     width: 200px; }
 .user .col_list .col_delete {
-    width: 150px;
+    /*width: 150px;*/
     text-align: center;
     margin-top: 25px;
     border-left: 1px solid #EEBC5B;

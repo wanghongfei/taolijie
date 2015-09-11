@@ -71,7 +71,7 @@
           <li ><a href="/manage/note/send">发送消息给用户</a></li>
           <li><a href="/manage/">查看已发送通知</a></li>
           <li><a href="/manage/">收到的反馈消息</a></li>
-          <li><a href="/manage/">收到的请求消息</a></li>
+          <li><a href="/manage/recommend/">收到的请求消息</a></li>
         </ul>
 
       </li>

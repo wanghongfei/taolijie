@@ -3,6 +3,15 @@
  */
 
 $(".submit-btn").click(function(){
+
+    if ( !HTMLFormElement.prototype.reportValidity ) {
+        HTMLFormElement.prototype.reportValidity = function() {
+            var subBtn = this.querySelector("span[id=subBtn]");
+                    subBtn.click();
+                    return;
+        }
+    };
+
     var title = document.querySelector("input[name=title]"); //少于20字
     var description = document.querySelector("textarea[name=description]"); //15字以上
     var contactName = document.querySelector("input[name=contactName]");

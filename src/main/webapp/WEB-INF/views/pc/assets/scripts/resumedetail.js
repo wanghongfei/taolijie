@@ -6,7 +6,7 @@ tlj.controller('resumeCtrl', function($scope, $http) {
 
     $scope.fav = function() {
         fav();
-    }
+    };
 
     $scope.del = function() {
         $http.post('/user/resume/del')
@@ -15,6 +15,31 @@ tlj.controller('resumeCtrl', function($scope, $http) {
                 location.reload();
             }
         })
+    };
+
+    $scope.toRecommend = function(){
+        var $recommend = $('#recommend'),
+            id = $recommend.data('id'),
+            type = $recommend.data('type'),
+            title = $recommend.data('title');
+        console.log(title);
+
+        var data = {
+            resumeId: id,
+            order_index: 10,
+            postTitle: title
+        };
+
+        $.post('/api/u/recommend', data)
+            .success(function(data) {
+                if(data.code === 0){
+                    alert('申请成功!')
+                }else if(data.code === 15){
+                    alert('您已经申请过了');
+                }else {
+                    alert(errorCode[data.code]);
+                }
+         })
     }
 });
 

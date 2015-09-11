@@ -22,7 +22,7 @@ var errorCode = {
   '15':'已经存在',
   '16':'您已经喜欢过了',
   '17':'非法数字'
-}
+};
 $(window).bind('scroll', function () {
     if ($(window).scrollTop() > num) {
         $('.header').addClass('fixed');
@@ -33,18 +33,25 @@ $(window).bind('scroll', function () {
 
 $('#login-form').submit(function(e) {
     e.preventDefault();
-    $.tlj.postForm('#login-form', '/login', function(data) {
+    var $form = $('#login-form');
+    var form = $form[0];
+    var formdata = $form.serialize();
+    $.tlj.post('/login', formdata, function(data) {
         if(data.result == false) {
             $.tlj.notify(errorCode[data.message]);
         }else {
-			location.href = '/';
+            //location.go(-1);
+            window.location.href ="/";
         }
     })
 });
 
 $('#reg-form').submit(function(e) {
     e.preventDefault();
-    $.tlj.postForm('#reg-form', '/register', function(data) {
+    var $form = $('#reg-form');
+    var form = $form[0];
+    var formdata = $form.serialize();
+    $.tlj.post('/register', formdata, function(data) {
         if(data.result == false) {
             $.tlj.notify(errorCode[data.message]);
         }else {

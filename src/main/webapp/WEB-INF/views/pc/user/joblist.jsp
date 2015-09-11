@@ -99,6 +99,7 @@
                         </div>
                     </div>
                     <div class="col_delete">
+                        <a href="javascript:void(0);" class="Recommend" data-id="${job.id}" data-title="${job.title}" data-type="job"> 申请推荐</a>
                         <c:if test="${!isFav}">
                             <a href="/user/job/change/${job.id}">修改</a>
                         </c:if>

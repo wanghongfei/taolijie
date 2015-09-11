@@ -22,11 +22,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css /styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-
     <!-- build:css({.tmp,app}) /styles/css/style.css -->
     <link rel="stylesheet" href="/styles/animate.css"/>
     <link rel="stylesheet" href="/styles/style.css">
@@ -242,9 +237,7 @@
             </div>
 
             <div class="segment">
-                <div class="submit-btn big-btn red-bg">
-                    <input type="submit" value="发布兼职" />
-                </div>
+                    <input type="submit" class="submit-btn big-btn red-bg" value="发布兼职" style="display: block"/>
             </div>
         </form>
 

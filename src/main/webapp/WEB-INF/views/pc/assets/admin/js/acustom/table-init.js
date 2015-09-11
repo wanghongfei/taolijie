@@ -44,7 +44,7 @@ $(document).ready(function() {
         "aoColumnDefs": [
             { "bSortable": false, "aTargets": [ 0 ] }
         ],
-        "aaSorting": [[1, 'asc']]
+        "aaSorting": [[1, 'desc']]
     });
 
     /* Add event listener for opening and closing details
