@@ -93,9 +93,12 @@ public class DefaultRecommendService implements RecommendService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validatoin, int pageNumber, int pageSize) {
+    public ListResult<RecommendedPostModel> findNewAppliedRequest(boolean validation, int pageNumber, int pageSize) {
         RecommendedPostModel cmd = new RecommendedPostModel(pageNumber, pageSize);
-        cmd.setValidation(validatoin);
+        cmd.setValidation(validation);
+        cmd.setIsJob(true);
+        cmd.setIsSh(true);
+        cmd.setIsResume(true);
 
         List<RecommendedPostModel> list = recoMapper.findBy(cmd);
         int tot = recoMapper.countFindBy(cmd);
