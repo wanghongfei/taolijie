@@ -56,7 +56,11 @@ tlj.controller('jobPostCtrl', function($scope, $http){
             var url =location.pathname;
             console.log($scope.job);
             $.tlj.post(url, $scope.job, function(data){
-                console.log(data);
+                if(data.result){
+                    location.href = '/user/job/mypost';
+                }else{
+                    alert(errorCode[data.message]);
+                }
             })
 
         }
