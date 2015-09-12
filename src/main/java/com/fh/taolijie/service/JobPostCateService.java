@@ -19,6 +19,13 @@ public interface JobPostCateService extends BaseService<JobPostCategoryModel> {
     ListResult<JobPostCategoryModel> getCategoryList(int firstResult, int capacity);
 
     /**
+     * 根据id批量查询
+     * @param idList
+     * @return
+     */
+    ListResult<JobPostCategoryModel> getInBatch(List<Integer> idList);
+
+    /**
      * 删除一个分类.
      * <p> 只有分类下没有数据时才能成功删除分类
      * @param cateId

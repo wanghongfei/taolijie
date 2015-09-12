@@ -1,13 +1,12 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.middle.CategoryWithPost;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -91,6 +90,16 @@ public interface JobPostCategoryModelMapper extends BaseMapper<JobPostCategoryMo
     List<JobPostCategoryModel> getAll(@Param("pageNumber") int pageNumber, @Param("pageSize") int pageSize);
     @RedisCache(JobPostCategoryModel.class)
     long countGetAll();
+
+    @NoCache
+    List<JobPostCategoryModel> getInBatch(List<Integer> idList);
+
+    /**
+     * 查出兼职对应的分类
+     * @return
+     */
+    @NoCache
+    List<CategoryWithPost> getByJobInBatch(List<Integer> jobIdList);
 
     @RedisCache(JobPostCategoryModel.class)
     JobPostCategoryModel findByName(@Param("name") String name);
