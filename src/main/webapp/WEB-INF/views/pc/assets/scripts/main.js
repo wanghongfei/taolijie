@@ -23,6 +23,17 @@ var errorCode = {
   '16':'您已经喜欢过了',
   '17':'非法数字'
 };
+
+function escapeSpecialChars(jsonString) {
+
+    return jsonString.replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/\t/g, "\\t")
+        .replace(/\f/g, "\\f");
+
+}
+
+
 $(window).bind('scroll', function () {
     if ($(window).scrollTop() > num) {
         $('.header').addClass('fixed');

@@ -161,7 +161,7 @@ To change this template use File | Settings | File Templates.
             </p>
 
             <div>
-                <span ng-bind="sh.description"></span>
+                <pre style="white-space: pre; word-wrap: break-word; word-break: break-all" ng-bind="sh.description"></pre>
             </div>
         </div>
 
@@ -227,7 +227,7 @@ To change this template use File | Settings | File Templates.
 <script src="/scripts/shdetail.js"></script>
 <script src="/scripts/responsiveslides.min.js"></script>
 <script>
-    var sh = JSON.parse('${ju:toJson(sh)}');
+    var sh = JSON.parse(escapeSpecialChars('${ju:toJson(sh)}'));
     var pids = '${pids}';
     pids_arr = pids.substr(1, pids.length - 2).replace(/ /g, '').split(',');
     sh.pids = pids_arr;

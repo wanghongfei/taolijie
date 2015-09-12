@@ -1,5 +1,16 @@
 /*$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";*/
 
+.detail-pre{
+    display: inline-block;
+    padding: 10px 0 0 0;
+    word-break: break-all;
+    margin-left: 40px;
+    white-space: pre-wrap;
+    white-space:-moz-pre-wrap;
+    white-space:-o-pre-wrap;
+    word-wrap:break-word;
+
+}
 /* stage start */
 #fav {
     width: 120px;

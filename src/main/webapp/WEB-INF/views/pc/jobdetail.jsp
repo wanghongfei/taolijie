@@ -96,8 +96,8 @@
       <p class="pin-title">工作详情
         <i class="pin-arrow"></i>
       </p>
-      <p><span class="context-title">工作内容 : </span><span ng-bind="job.jobDetail"></span></p>
-      <p><span class="context-title">工作要求 : </span><span ng-bind="job.jobDescription"></span></p>
+      <p><span class="context-title">工作内容 : </span><pre class="detail-pre" ng-bind="job.jobDetail"></pre></p>
+      <p><span class="context-title">工作要求 : </span><pre class="detail-pre" ng-bind="job.jobDescription"></pre></p>
     </div>
       <div class="description">
           <p class="pin-title">联系方式
@@ -157,7 +157,7 @@
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
 <script>
-    var job = JSON.parse('${ju:toJson(job)}');
+    var job = JSON.parse(escapeSpecialChars('${ju:toJson(job)}'));
     job.expiredTime = new Date(job.expiredTime);
     job.favStatus = JSON.parse('${ju:toJson(favStatus)}');
     job.reviewCount = JSON.parse('${ju:toJson(reviewCount)}');
