@@ -46,4 +46,13 @@ public class LogUtils {
 
         return sw.toString();
     }
+
+    /**
+     * 直接将栈异常信息写入到错误日志中
+     * @param ex
+     */
+    public static void logException(Exception ex) {
+        String stack = getStackTrace(ex);
+        getErrorLogger().error(stack);
+    }
 }

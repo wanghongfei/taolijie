@@ -9,6 +9,7 @@ import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.URLUtils;
 import org.apache.commons.codec.EncoderException;
+import org.json.JSONException;
 
 import java.io.File;
 
@@ -28,6 +29,9 @@ public class QiniuUtils {
         mac = new Mac(ACCESS_KEY, SECRET_KEY);
     }
 
+    /**
+     * @deprecated
+     */
     public static void upload(String key) throws Exception {
         PutPolicy putPolicy = new PutPolicy(SPACE_NAME);
         String uptoken = putPolicy.token(mac);
@@ -51,8 +55,19 @@ public class QiniuUtils {
     public static String genUrl(String domain, String key) throws EncoderException, AuthException {
         String baseUrl = URLUtils.makeBaseUrl(domain, key);
         GetPolicy getPolicy = new GetPolicy();
-        String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
+        return getPolicy.makeRequest(baseUrl, mac);
+    }
 
-        return downloadUrl;
+    /**
+     * 生成上传token
+     * @param key
+     * @return
+     * @throws AuthException
+     * @throws JSONException
+     */
+    public static String genToken(String key) throws AuthException, JSONException {
+        PutPolicy putPolicy = new PutPolicy(SPACE_NAME);
+        putPolicy.scope = StringUtils.concat(SPACE_NAME, ":", key);
+        return putPolicy.token(mac);
     }
 }
