@@ -1,7 +1,6 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.dao.mapper.BaseMapper;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
@@ -21,7 +20,7 @@ import java.util.List;
  * Created by wanghongfei on 15-6-6.
  */
 @Service
-public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCategoryModel> implements JobPostCateService {
+public class DefaultJobPostCategoryService implements JobPostCateService {
     @Autowired
     JobPostCategoryModelMapper cateMapper;
 
@@ -46,11 +45,11 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
 
         return new ListResult<>(list, list.size());
     }
-/*    @Override
+    @Override
     @Transactional(readOnly = false)
     public void addCategory(JobPostCategoryModel model) {
-        cateMapper.insert(model);
-    }*/
+        cateMapper.insertSelective(model);
+    }
 
     @Override
     @Transactional(readOnly = false)
@@ -64,17 +63,17 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
         return row <= 0 ? false : true;
     }
 
-/*    @Override
+    @Override
     @Transactional(readOnly = false)
     public boolean updateCategory(Integer cateId, JobPostCategoryModel model) {
         model.setId(cateId);
         return cateMapper.updateByPrimaryKey(model) <= 0 ? false : true;
-    }*/
+    }
 
-/*    @Override
+    @Override
     public JobPostCategoryModel findCategory(Integer cateId) {
         return cateMapper.selectByPrimaryKey(cateId);
-    }*/
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -82,9 +81,4 @@ public class DefaultJobPostCategoryService extends AbstractBaseService<JobPostCa
         return cateMapper.findByName(name);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    protected BaseMapper<JobPostCategoryModel> getMapper() {
-        return this.cateMapper;
-    }
 }

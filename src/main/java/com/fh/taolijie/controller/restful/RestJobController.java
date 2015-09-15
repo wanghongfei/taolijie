@@ -136,7 +136,7 @@ public class RestJobController {
     @RequestMapping(value = "/cate/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getCategoryById(@PathVariable(value = "id") Integer cateId) {
         //JobPostCategoryModel cate = cateService.findCategory(cateId);
-        JobPostCategoryModel cate = cateService.findById(cateId);
+        JobPostCategoryModel cate = cateService.findCategory(cateId);
 
         return new ResponseText(cate);
     }

@@ -1,10 +1,8 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.dao.mapper.BaseMapper;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
-import com.fh.taolijie.service.impl.AbstractBaseService;
 import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
  * 规定与二手帖子分类相关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface ShPostCategoryService extends BaseService<SHPostCategoryModel> {
+public interface ShPostCategoryService {
     /**
      * 获取(所有)分类
      * @param firstResult
@@ -31,4 +29,10 @@ public interface ShPostCategoryService extends BaseService<SHPostCategoryModel> 
     boolean deleteCategory(Integer cateId) throws CascadeDeleteException;
 
     SHPostCategoryModel findByName(String name);
+
+    SHPostCategoryModel findById(Integer cateId);
+
+    void updateCategory(SHPostCategoryModel model);
+
+    void addCategory(SHPostCategoryModel model);
 }

@@ -63,7 +63,7 @@ public class ACateController {
                        Model model){
         if(type.equals("job")){
             //JobPostCategoryModel cate= jobPostCateService.findCategory(id);
-            JobPostCategoryModel cate= jobPostCateService.findById(id);
+            JobPostCategoryModel cate= jobPostCateService.findCategory(id);
             model.addAttribute("cate",cate);
             model.addAttribute("type", type);
             model.addAttribute("isEdit",true);
@@ -98,9 +98,9 @@ public class ACateController {
             jobCate.setMemo(cate.getMemo());
 
             if (isEdit) {
-                jobPostCateService.updateByIdSelective(jobCate);
+                jobPostCateService.updateCategory(jobCate.getId(), jobCate);
             } else {
-                jobPostCateService.add(jobCate);
+                jobPostCateService.addCategory(jobCate);
             }
 
         } else if (type.equals("sh")) {
@@ -114,9 +114,9 @@ public class ACateController {
             shCate.setMemo(cate.getMemo());
 
             if(isEdit) {
-                shPostCategoryService.updateByIdSelective(shCate);
+                shPostCategoryService.updateCategory(shCate);
             } else {
-                shPostCategoryService.add(shCate);
+                shPostCategoryService.addCategory(shCate);
             }
 
         } else {
@@ -137,7 +137,7 @@ public class ACateController {
                                               @Valid JobPostCategoryModel dto,
                                               BindingResult result){
         dto.setId(id);
-        if(!jobPostCateService.updateByIdSelective(dto)){
+        if(!jobPostCateService.updateCategory(id, dto)){
             return new JsonWrapper(true, ErrorCode.FAILED).getAjaxMessage();
         }
         return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();

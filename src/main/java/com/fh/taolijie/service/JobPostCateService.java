@@ -11,7 +11,7 @@ import java.util.List;
  * 规定与兼职信息分类相关的操作
  * Created by wanghongfei on 15-3-5.
  */
-public interface JobPostCateService extends BaseService<JobPostCategoryModel> {
+public interface JobPostCateService {
     /**
      * 获取所有分类
      * @return
@@ -34,4 +34,8 @@ public interface JobPostCateService extends BaseService<JobPostCategoryModel> {
     boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException;
 
     JobPostCategoryModel findByName(String name);
+
+    void addCategory(JobPostCategoryModel model);
+    boolean updateCategory(Integer cateId, JobPostCategoryModel model);
+    JobPostCategoryModel findCategory(Integer cateId);
 }
