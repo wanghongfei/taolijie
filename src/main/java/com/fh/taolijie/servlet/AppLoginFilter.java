@@ -85,7 +85,11 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
     }
 
     private AccountService retrieveService(String beanName) {
-        return (AccountService) applicationContext.getBean(beanName);
+        if (null == accountService) {
+            accountService = (AccountService) applicationContext.getBean(beanName);
+        }
+
+        return accountService;
     }
 
     @Override
