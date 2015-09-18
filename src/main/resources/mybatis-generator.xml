@@ -43,10 +43,24 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-<!--        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />-->
-        <table tableName="my_collection" domainObjectName="CollectionModel" enableCountByExample="true" enableDeleteByExample="false" enableSelectByExample="true"
+        <table tableName="quest_cate" domainObjectName="QuestCategoryModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                enableUpdateByExample="true" />
+        <table tableName="quest" domainObjectName="QuestModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="quest_assign" domainObjectName="QuestAssignModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="finish_request" domainObjectName="FinishRequestModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="pay_order" domainObjectName="PayOrderModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="cash_acc" domainObjectName="CashAccModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="withdraw_apply" domainObjectName="WithdrawApplyModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+        <table tableName="acc_flow" domainObjectName="AccFlowModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               enableUpdateByExample="true" />
+
+
 <!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
 

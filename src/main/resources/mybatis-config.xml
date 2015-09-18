@@ -45,5 +45,15 @@
 
         <mapper resource="mapper/TestMapper.xml" />
 
+        <!-- 轻兼职相关 -->
+        <mapper resource="mapper/AccFlowModelMapper.xml" />
+        <mapper resource="mapper/CashAccModelMapper.xml" />
+        <mapper resource="mapper/FinishRequestModelMapper.xml" />
+        <mapper resource="mapper/PayOrderModelMapper.xml" />
+        <mapper resource="mapper/QuestAssignModelMapper.xml" />
+        <mapper resource="mapper/QuestCategoryModelMapper.xml" />
+        <mapper resource="mapper/QuestModelMapper.xml" />
+        <mapper resource="mapper/WithdrawApplyModelMapper.xml" />
+
     </mappers>
 </configuration>
