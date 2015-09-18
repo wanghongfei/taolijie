@@ -40,7 +40,7 @@ public class MySqlConfigBean {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setUsername("root");
         ds.setPassword("111111");
-        ds.setUrl("jdbc:mysql://localhost:3306/taolijie?allowMultiQueries=true");
+        ds.setUrl("jdbc:mysql://localhost:3306/taolijie_test?allowMultiQueries=true");
         ds.setDriverClassName("com.mysql.jdbc.Driver");
 
         return ds;

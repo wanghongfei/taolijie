@@ -95,4 +95,7 @@ public interface QuestCategoryModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(QuestCategoryModel record);
+
+    List<QuestCategoryModel> findBy(QuestCategoryModel model);
+    long countFindBy(QuestCategoryModel model);
 }
