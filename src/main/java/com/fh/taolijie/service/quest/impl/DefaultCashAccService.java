@@ -47,6 +47,8 @@ public class DefaultCashAccService implements CashAccService {
             throw new UserNotExistsException("");
         }
         model.setUsername(m.getUsername());
+        // 设置member role冗余字段
+        model.setMemberRole(m.getRoleList().get(0).getRolename());
 
         model.setUpdateTime(new Date());
         model.setCreatedTime(new Date());
