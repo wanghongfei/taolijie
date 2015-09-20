@@ -48,7 +48,8 @@ public interface CashAccService {
      * @param accId
      * @param amt
      */
-    void addMoney(Integer accId, BigDecimal amt);
+    boolean addAvailableMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException;
 
     /**
      * 减少可用余额

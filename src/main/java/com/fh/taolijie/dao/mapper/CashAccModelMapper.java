@@ -2,6 +2,8 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.CashAccModelExample;
+
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -24,4 +26,12 @@ public interface CashAccModelMapper {
     boolean checkAccExists(Integer memId);
 
     boolean checkAccIdExists(Integer id);
+
+    /**
+     * 添加可用余额
+     * @param accId
+     * @param amt
+     * @return
+     */
+    int addAvailableAmt(@Param("accId") Integer accId, @Param("amt") BigDecimal amt);
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -86,5 +87,14 @@ public class CashAccServiceTest extends BaseSpringDataTestClass {
         }
 
         Assert.assertTrue(false);
+    }
+
+    @Test
+    public void addAvailableAmt() throws Exception {
+        service.addAvailableMoney(3, new BigDecimal("100.45"));
+
+        CashAccModel acc = service.findByAcc(3);
+        Assert.assertEquals(new BigDecimal("100.45"), acc.getAvailableBalance());
+        Assert.assertEquals(new BigDecimal("100.45"), acc.getTotalBalance());
     }
 }

@@ -77,8 +77,13 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    public void addMoney(Integer accId, BigDecimal amt) {
+    @Transactional(readOnly = false)
+    public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
+        if (!checkAccIdExists(accId)) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
 
+        return accMapper.addAvailableAmt(accId, amt) > 0 ? true : false;
     }
 
     @Override

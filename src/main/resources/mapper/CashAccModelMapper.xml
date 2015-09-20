@@ -253,4 +253,15 @@
         SELECT
             EXISTS (SELECT 1 FROM cash_acc WHERE id = #{id})
     </select>
+
+    <!-- 添加可用余额 -->
+    <update id="addAvailableAmt">
+        UPDATE
+            cash_acc
+        SET
+            available_balance = available_balance + #{amt},
+            total_balance = available_balance + frozen_balance
+        WHERE
+            id = #{accId}
+    </update>
 </mapper>
