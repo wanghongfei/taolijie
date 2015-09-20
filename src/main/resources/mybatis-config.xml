@@ -19,4 +19,49 @@
 
     <!-- Continue going here -->
 
+    <mappers>
+        <mapper resource="mapper/AcademyModelMapper.xml" />
+        <mapper resource="mapper/ApplicationIntendModelMapper.xml" />
+        <mapper resource="mapper/BannerPicModelMapper.xml" />
+        <mapper resource="mapper/BulletinModelMapper.xml" />
+        <mapper resource="mapper/EEModelMapper.xml" />
+        <mapper resource="mapper/ImageModelMapper.xml" />
+        <mapper resource="mapper/JobPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/JobPostModelMapper.xml" />
+        <mapper resource="mapper/MemberModelMapper.xml" />
+        <mapper resource="mapper/MemberRoleModelMapper.xml" />
+        <mapper resource="mapper/NewsModelMapper.xml" />
+        <mapper resource="mapper/PrivateNotificationModelMapper.xml" />
+        <mapper resource="mapper/SysNotificationModelMapper.xml" />
+        <mapper resource="mapper/ResumeModelMapper.xml" />
+        <mapper resource="mapper/ReviewModelMapper.xml" />
+        <mapper resource="mapper/RoleModelMapper.xml" />
+        <mapper resource="mapper/SchoolModelMapper.xml" />
+        <mapper resource="mapper/ShPostCategoryModelMapper.xml" />
+        <mapper resource="mapper/ShPostModelMapper.xml" />
+        <mapper resource="mapper/RecommendedPostModelMapper.xml" />
+        <mapper resource="mapper/FeedbackModelMapper.xml" />
+        <mapper resource="mapper/CollectionModelMapper.xml" />
+
+        <mapper resource="mapper/TestMapper.xml" />
+
+        <!-- 轻兼职相关 -->
+        <mapper resource="mapper/AccFlowModelMapper.xml" />
+        <mapper resource="mapper/CashAccModelMapper.xml" />
+        <mapper resource="mapper/FinishRequestModelMapper.xml" />
+        <mapper resource="mapper/PayOrderModelMapper.xml" />
+        <mapper resource="mapper/QuestAssignModelMapper.xml" />
+        <mapper resource="mapper/QuestCategoryModelMapper.xml" />
+        <mapper resource="mapper/QuestModelMapper.xml" />
+        <mapper resource="mapper/WithdrawApplyModelMapper.xml" />
+
+        <mapper resource="mapper/DictCityModelMapper.xml" />
+        <mapper resource="mapper/DictProvinceModelMapper.xml" />
+        <mapper resource="mapper/DictRegionModelMapper.xml" />
+        <mapper resource="mapper/DictCollegeModelMapper.xml" />
+        <mapper resource="mapper/DictSchoolModelMapper.xml" />
+        <mapper resource="mapper/StuCertiModelMapper.xml" />
+        <mapper resource="mapper/EmpCertiModelMapper.xml" />
+
+    </mappers>
 </configuration>
