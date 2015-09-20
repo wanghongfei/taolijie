@@ -115,4 +115,24 @@ public class CashAccServiceTest extends BaseSpringDataTestClass {
 
         Assert.assertTrue(false);
     }
+
+    @Test
+    public void testFrozenAmt() throws Exception {
+        service.frozenMoney(3, new BigDecimal(40));
+
+        CashAccModel acc = service.findByAcc(3);
+        Assert.assertEquals(new BigDecimal("60.00"), acc.getAvailableBalance());
+        Assert.assertEquals(new BigDecimal("100.00"), acc.getTotalBalance());
+
+        Assert.assertEquals(new BigDecimal("40.00"), acc.getFrozenBalance());
+
+
+        try {
+            service.frozenMoney(3, new BigDecimal(2000));
+        } catch (BalanceNotEnoughException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
+    }
 }

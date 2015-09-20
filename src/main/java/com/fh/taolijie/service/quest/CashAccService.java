@@ -65,7 +65,8 @@ public interface CashAccService {
      * @param accId
      * @param amt
      */
-    void frozenMoney(Integer accId, BigDecimal amt);
+    void frozenMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException, BalanceNotEnoughException ;
 
     /**
      * 根据用户id查找现金账户

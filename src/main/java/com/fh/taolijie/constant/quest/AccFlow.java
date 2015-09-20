@@ -5,7 +5,8 @@ package com.fh.taolijie.constant.quest;
  */
 public enum AccFlow {
     WITHDRAW("00"),
-    CHARGE("01");
+    CHARGE("01"),
+    FROZEN("02");
 
     private String code;
 

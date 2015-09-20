@@ -179,8 +179,59 @@ public class DefaultCashAccService implements CashAccService {
 
 
     @Override
-    public void frozenMoney(Integer accId, BigDecimal amt) {
+    @Transactional(readOnly = false)
+    public void frozenMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException, BalanceNotEnoughException {
 
+        CashAccModel acc = accMapper.selectByPrimaryKey(accId);
+        if (null == acc) {
+            throw new CashAccNotExistsException("");
+        }
+
+        // 检查可用余额是否充足
+        if (acc.getAvailableBalance().compareTo(amt) < 0) {
+            throw new BalanceNotEnoughException("");
+        }
+
+        // 减少可用余额
+        BigDecimal newAva = acc.getAvailableBalance().subtract(amt);
+        acc.setAvailableBalance(newAva);
+
+        // 增加冻结余额
+        BigDecimal newFrozen = acc.getFrozenBalance().add(amt);
+        acc.setFrozenBalance(newFrozen);
+
+        // 更新
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setUpdateTime(new Date());
+        example.setAvailableBalance(newAva);
+        example.setFrozenBalance(newFrozen);
+        accMapper.updateByPrimaryKeySelective(example);
+
+
+        // 记录流水
+        BigDecimal zero = new BigDecimal("0.00");
+
+        // 创建流水
+        AccFlowModel flowModel = new AccFlowModel();
+        flowModel.setAccId(accId);
+        flowModel.setActionType(AccFlow.FROZEN.code());
+        flowModel.setCreatedTime(new Date());
+
+        // 记录可用余额变化
+        flowModel.setAvaBalanceCh(amt.negate());
+        flowModel.setAvaBalanceNew(newAva);
+
+        // 记录冻结余额变化
+        flowModel.setFroBalanceCh(amt);
+        flowModel.setFroBalanceNew(newFrozen);
+
+        // 记录总余额变化
+        flowModel.setTotBalanceCh(zero);
+        flowModel.setTotBalanceNew(acc.getTotalBalance());
+
+        flowMapper.insertSelective(flowModel);
     }
 
     @Override
