@@ -24,7 +24,10 @@ import javax.sql.DataSource;
         "com.fh.taolijie.dao.mapper",
 })
 //@EnableCaching
-@MapperScan( annotationClass = Repository.class, basePackages = "com.fh.taolijie.dao.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(
+        annotationClass = Repository.class,
+        basePackages = "com.fh.taolijie.dao.mapper",
+        sqlSessionFactoryRef = "sqlSessionFactory")
 public class MySqlConfigBean {
     @Autowired
     private DataSource dataSource;
@@ -58,6 +61,7 @@ public class MySqlConfigBean {
         SqlSessionFactoryBean session = new SqlSessionFactoryBean();
         session.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
         session.setDataSource(this.dataSource);
+        session.setMapperLocations(new ClassPathResource[] { new ClassPathResource("classpath:mapper/*.xml") });
 
         return session;
     }
