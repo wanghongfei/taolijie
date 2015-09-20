@@ -236,7 +236,7 @@ public class DefaultCashAccService implements CashAccService {
 
     @Override
     public CashAccModel findByMember(Integer memId) {
-        return null;
+        return accMapper.findByMemberId(memId);
     }
 
     @Override

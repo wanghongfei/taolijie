@@ -34,4 +34,6 @@ public interface CashAccModelMapper {
      * @return
      */
     int addAvailableAmt(@Param("accId") Integer accId, @Param("amt") BigDecimal amt);
+
+    CashAccModel findByMemberId(Integer memId);
 }

@@ -264,4 +264,13 @@
         WHERE
             id = #{accId}
     </update>
+
+    <select id="findByMemberId" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            cash_acc casha
+        WHERE
+            casha.member_id = #{memId}
+    </select>
 </mapper>

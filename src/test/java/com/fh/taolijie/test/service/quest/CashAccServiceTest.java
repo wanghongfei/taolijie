@@ -135,4 +135,11 @@ public class CashAccServiceTest extends BaseSpringDataTestClass {
 
         Assert.assertTrue(false);
     }
+
+    @Test
+    public void testFindByMember() {
+        CashAccModel acc = service.findByMember(1);
+        Assert.assertNotNull(acc);
+        Assert.assertEquals(acc.getUsername(), "taolijie");
+    }
 }
