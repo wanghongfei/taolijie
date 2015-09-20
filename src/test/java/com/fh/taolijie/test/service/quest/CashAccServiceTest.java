@@ -1,8 +1,10 @@
 package com.fh.taolijie.test.service.quest;
 
+import com.fh.taolijie.constant.quest.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
+import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 import com.fh.taolijie.service.quest.CashAccService;
 import com.fh.taolijie.service.quest.impl.DefaultCashAccService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
@@ -63,5 +65,26 @@ public class CashAccServiceTest extends BaseSpringDataTestClass {
 
         result = service.checkCashAccExists(2);
         Assert.assertFalse(result);
+
+
+        result = service.checkAccIdExists(3);
+        Assert.assertTrue(result);
+
+        result = service.checkAccIdExists(100);
+        Assert.assertFalse(result);
+    }
+
+    @Test
+    public void updateStatus() throws Exception {
+        service.updateStatus(3, CashAccStatus.FROZEN);
+        Assert.assertTrue(CashAccStatus.FROZEN.code().equals(service.findByAcc(3).getStatus()) );
+
+        try {
+            service.updateStatus(100, CashAccStatus.FROZEN);
+        } catch (CashAccNotExistsException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
     }
 }

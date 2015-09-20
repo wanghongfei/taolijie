@@ -22,4 +22,6 @@ public interface CashAccModelMapper {
 
 
     boolean checkAccExists(Integer memId);
+
+    boolean checkAccIdExists(Integer id);
 }

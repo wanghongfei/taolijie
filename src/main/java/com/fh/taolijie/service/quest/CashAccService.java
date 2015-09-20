@@ -4,6 +4,7 @@ import com.fh.taolijie.constant.quest.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
+import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 
 import java.math.BigDecimal;
 
@@ -32,7 +33,15 @@ public interface CashAccService {
      * @param accId
      * @param status
      */
-    void updateStatus(Integer accId, CashAccStatus status);
+    void updateStatus(Integer accId, CashAccStatus status)
+            throws CashAccNotExistsException;
+
+    /**
+     * 根据id检查现金账户是否存在
+     * @param accId
+     * @return
+     */
+    boolean checkAccIdExists(Integer accId);
 
     /**
      * 添加可用余额
