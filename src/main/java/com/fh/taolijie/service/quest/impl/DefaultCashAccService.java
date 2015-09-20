@@ -1,11 +1,15 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.fh.taolijie.constant.quest.AccFlow;
 import com.fh.taolijie.constant.quest.CashAccStatus;
+import com.fh.taolijie.dao.mapper.AccFlowModelMapper;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.domain.AccFlowModel;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 import com.fh.taolijie.service.quest.CashAccService;
@@ -23,6 +27,9 @@ import java.util.Date;
 public class DefaultCashAccService implements CashAccService {
     @Autowired
     private CashAccModelMapper accMapper;
+
+    @Autowired
+    private AccFlowModelMapper flowMapper;
 
     @Autowired
     private MemberModelMapper memMapper;
@@ -79,17 +86,97 @@ public class DefaultCashAccService implements CashAccService {
     @Override
     @Transactional(readOnly = false)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
-        if (!checkAccIdExists(accId)) {
+        CashAccModel acc = accMapper.selectByPrimaryKey(accId);
+        if (null == acc) {
             throw new CashAccNotExistsException("现金账户" + accId + "不存在");
         }
+
+        BigDecimal zero = new BigDecimal("0.00");
+
+        // 创建流水
+        AccFlowModel flowModel = new AccFlowModel();
+        flowModel.setAccId(accId);
+        flowModel.setActionType(AccFlow.CHARGE.code());
+        flowModel.setCreatedTime(new Date());
+
+        // 记录可用余额变化
+        flowModel.setAvaBalanceCh(amt);
+        flowModel.setAvaBalanceNew(amt.add(acc.getAvailableBalance()));
+
+        // 记录冻结余额变化
+        flowModel.setFroBalanceCh(zero);
+        flowModel.setFroBalanceNew(acc.getFrozenBalance());
+
+        // 记录总余额变化
+        flowModel.setTotBalanceCh(zero);
+        flowModel.setTotBalanceNew(acc.getTotalBalance().add(amt));
+
+        flowMapper.insertSelective(flowModel);
 
         return accMapper.addAvailableAmt(accId, amt) > 0 ? true : false;
     }
 
     @Override
-    public void reduceMoney(Integer accId, BigDecimal amt) {
+    @Transactional(readOnly = false)
+    public void reduceAvailableMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException, BalanceNotEnoughException {
 
+        CashAccModel acc = accMapper.selectByPrimaryKey(accId);
+        if (null == acc) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
+
+        // 判断余额是否充足
+        BigDecimal avaBalance = acc.getAvailableBalance();
+        if (avaBalance.compareTo(amt) < 0) {
+            throw new BalanceNotEnoughException("");
+        }
+
+        // 减少可用余额
+        BigDecimal newBalance = avaBalance.subtract(amt);
+        acc.setAvailableBalance(newBalance);
+        calculateTotalBalance(acc);
+
+        BigDecimal zero = new BigDecimal("0.00");
+
+        // 创建流水
+        AccFlowModel flowModel = new AccFlowModel();
+        flowModel.setAccId(accId);
+        flowModel.setActionType(AccFlow.WITHDRAW.code());
+        flowModel.setCreatedTime(new Date());
+
+        // 记录可用余额变化
+        flowModel.setAvaBalanceCh(amt.negate());
+        flowModel.setAvaBalanceNew(newBalance);
+
+        // 记录冻结余额变化
+        flowModel.setFroBalanceCh(zero);
+        flowModel.setFroBalanceNew(acc.getFrozenBalance());
+
+        // 记录总余额变化
+        flowModel.setTotBalanceCh(amt.negate());
+        flowModel.setTotBalanceNew(acc.getTotalBalance());
+
+        flowMapper.insertSelective(flowModel);
+
+        // 执行更新操作
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setAvailableBalance(newBalance);
+        example.setTotalBalance(acc.getTotalBalance());
+        example.setUpdateTime(new Date());
+        accMapper.updateByPrimaryKeySelective(example);
     }
+
+    /**
+     * 计算总余额
+     * @param acc
+     */
+    private void calculateTotalBalance(CashAccModel acc) {
+        BigDecimal tot = acc.getAvailableBalance().add(acc.getFrozenBalance());
+        acc.setTotalBalance(tot);
+    }
+
 
     @Override
     public void frozenMoney(Integer accId, BigDecimal amt) {

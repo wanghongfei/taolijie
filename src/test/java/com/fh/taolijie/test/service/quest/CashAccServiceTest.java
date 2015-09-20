@@ -3,6 +3,7 @@ package com.fh.taolijie.test.service.quest;
 import com.fh.taolijie.constant.quest.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 import com.fh.taolijie.service.quest.CashAccService;
@@ -94,7 +95,24 @@ public class CashAccServiceTest extends BaseSpringDataTestClass {
         service.addAvailableMoney(3, new BigDecimal("100.45"));
 
         CashAccModel acc = service.findByAcc(3);
-        Assert.assertEquals(new BigDecimal("100.45"), acc.getAvailableBalance());
-        Assert.assertEquals(new BigDecimal("100.45"), acc.getTotalBalance());
+        Assert.assertEquals(new BigDecimal("200.45"), acc.getAvailableBalance());
+        Assert.assertEquals(new BigDecimal("200.45"), acc.getTotalBalance());
+    }
+
+    @Test
+    public void testReduceAvailableAmt() throws Exception {
+        service.reduceAvailableMoney(3, new BigDecimal(20));
+
+        CashAccModel acc = service.findByAcc(3);
+        Assert.assertEquals(new BigDecimal("80.00"), acc.getAvailableBalance());
+        Assert.assertEquals(new BigDecimal("80.00"), acc.getTotalBalance());
+
+        try {
+            service.reduceAvailableMoney(3, new BigDecimal(120));
+        } catch (BalanceNotEnoughException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
     }
 }

@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.constant.quest.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 
@@ -56,7 +57,8 @@ public interface CashAccService {
      * @param accId
      * @param amt
      */
-    void reduceMoney(Integer accId, BigDecimal amt);
+    void reduceAvailableMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException, BalanceNotEnoughException;
 
     /**
      * 冻结余额
