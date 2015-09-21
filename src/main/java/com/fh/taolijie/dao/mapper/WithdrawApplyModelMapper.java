@@ -58,4 +58,7 @@ public interface WithdrawApplyModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(WithdrawApplyModel record);
+
+    List<WithdrawApplyModel> findBy(WithdrawApplyModel example);
+    long countFindBy(WithdrawApplyModel example);
 }

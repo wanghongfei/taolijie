@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.service.quest;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
@@ -29,7 +30,7 @@ public class WithdrawServiceTest extends BaseSpringDataTestClass {
     //@Rollback(false)
     public void testWithdraw() throws Exception {
         WithdrawApplyModel model = new WithdrawApplyModel();
-        model.setMemberId(1);
+        model.setMemberId(2);
         model.setAccId(3);
         model.setAmount(new BigDecimal(20));
 
@@ -47,8 +48,29 @@ public class WithdrawServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    @Rollback(false)
+    //@Rollback(false)
     public void testUpdateStatus() throws Exception {
         service.updateStatus(2, WithdrawStatus.DONE, "OK");
+    }
+
+    @Test
+    public void testFindAll() {
+        ListResult<WithdrawApplyModel> lr = service.findAll(0, 100);
+        Assert.assertNotNull(lr);
+        Assert.assertEquals(1, lr.getResultCount());
+        Assert.assertTrue(lr.getList().stream().anyMatch(with -> with.getId().equals(2)));
+    }
+
+    @Test
+    public void testFind() {
+        ListResult<WithdrawApplyModel> lr = service.findAllByStatus(WithdrawStatus.WAIT_AUDIT, 0, 100);
+        Assert.assertEquals(1, lr.getResultCount());
+
+        lr = service.findByMember(1, 0, 100);
+        Assert.assertEquals(1, lr.getResultCount());
+
+        lr = service.findByMember(1, WithdrawStatus.DONE, 0, 100);
+        Assert.assertEquals(1, lr.getResultCount());
+
     }
 }

@@ -12,12 +12,14 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
 import com.fh.taolijie.service.quest.WithdrawService;
+import com.sun.xml.internal.bind.v2.model.core.WildcardMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 提现申请业务实现
@@ -92,22 +94,50 @@ public class DefaultWithdrawService implements WithdrawService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<WithdrawApplyModel> findAll(int pn, int ps) {
-        return null;
+        WithdrawApplyModel example = new WithdrawApplyModel(pn, ps);
+
+        List<WithdrawApplyModel> list = drawMapper.findBy(example);
+        long tot = drawMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<WithdrawApplyModel> findAllByStatus(WithdrawStatus status, int pn, int ps) {
-        return null;
+        WithdrawApplyModel example = new WithdrawApplyModel(pn, ps);
+        example.setStatus(status.code());
+
+        List<WithdrawApplyModel> list = drawMapper.findBy(example);
+        long tot = drawMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<WithdrawApplyModel> findByMember(Integer memId, int pn, int ps) {
-        return null;
+        WithdrawApplyModel example = new WithdrawApplyModel(pn, ps);
+        example.setMemberId(memId);
+
+        List<WithdrawApplyModel> list = drawMapper.findBy(example);
+        long tot = drawMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<WithdrawApplyModel> findByMember(Integer memId, WithdrawStatus status, int pn, int ps) {
-        return null;
+        WithdrawApplyModel example = new WithdrawApplyModel(pn, ps);
+        example.setMemberId(memId);
+        example.setStatus(status.code());
+
+        List<WithdrawApplyModel> list = drawMapper.findBy(example);
+        long tot = drawMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 }

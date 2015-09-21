@@ -209,4 +209,92 @@
         acc_id = #{accId}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findBy" resultMap="BaseResultMap" >
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            withdraw_apply withd
+        <where>
+            <if test="id != null">
+                withd.id = #{id}
+            </if>
+            <if test="memberId != null">
+                AND withd.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND withd.username = #{username}
+            </if>
+            <if test="applyTime != null">
+                AND withd.apply_time = #{applyTime}
+            </if>
+            <if test="amount != null">
+                AND withd.amount = #{amount}
+            </if>
+            <if test="status != null">
+                AND withd.status = #{status}
+            </if>
+            <if test="updateTime != null">
+                AND withd.update_time = #{updateTime}
+            </if>
+            <if test="alipayAcc != null">
+                AND withd.alipay_acc = #{applyTime}
+            </if>
+            <if test="bankAcc != null">
+                AND withd.bank_acc = #{bankAcc}
+            </if>
+            <if test="memo != null">
+                AND withd.memo = #{memo}
+            </if>
+
+            <if test="accId != null">
+                AND withd.acc_id = #{accId}
+            </if>
+        </where>
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFindBy" resultType="long" >
+        SELECT
+            COUNT(*)
+        FROM
+            withdraw_apply withd
+        <where>
+            <if test="id != null">
+                withd.id = #{id}
+            </if>
+            <if test="memberId != null">
+                AND withd.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND withd.username = #{username}
+            </if>
+            <if test="applyTime != null">
+                AND withd.apply_time = #{applyTime}
+            </if>
+            <if test="amount != null">
+                AND withd.amount = #{amount}
+            </if>
+            <if test="status != null">
+                AND withd.status = #{status}
+            </if>
+            <if test="updateTime != null">
+                AND withd.update_time = #{updateTime}
+            </if>
+            <if test="alipayAcc != null">
+                AND withd.alipay_acc = #{applyTime}
+            </if>
+            <if test="bankAcc != null">
+                AND withd.bank_acc = #{bankAcc}
+            </if>
+            <if test="memo != null">
+                AND withd.memo = #{memo}
+            </if>
+
+            <if test="accId != null">
+                AND withd.acc_id = #{accId}
+            </if>
+        </where>
+    </select>
 </mapper>
