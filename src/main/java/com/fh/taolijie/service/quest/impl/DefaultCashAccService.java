@@ -237,6 +237,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CashAccModel findByMember(Integer memId) {
         return accMapper.findByMemberId(memId);
     }
