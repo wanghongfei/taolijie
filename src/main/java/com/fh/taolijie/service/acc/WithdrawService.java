@@ -3,10 +3,8 @@ package com.fh.taolijie.service.acc;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
-import com.sun.xml.internal.bind.v2.model.core.WildcardMode;
 
 /**
  * 提现申请相关业务接口

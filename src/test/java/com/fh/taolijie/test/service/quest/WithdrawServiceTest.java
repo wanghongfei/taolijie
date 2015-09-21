@@ -56,7 +56,7 @@ public class WithdrawServiceTest extends BaseSpringDataTestClass {
     public void testFindAll() {
         ListResult<WithdrawApplyModel> lr = service.findAll(0, 100);
         Assert.assertNotNull(lr);
-        Assert.assertEquals(1, lr.getResultCount());
+        Assert.assertEquals(2, lr.getResultCount());
         Assert.assertTrue(lr.getList().stream().anyMatch(with -> with.getId().equals(2)));
     }
 
