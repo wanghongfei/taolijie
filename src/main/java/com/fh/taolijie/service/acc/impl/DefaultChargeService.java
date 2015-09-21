@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 充值业务实现
@@ -53,12 +54,27 @@ public class DefaultChargeService implements ChargeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<PayOrderModel> findByAcc(Integer accId, int pn, int ps) {
-        return null;
+        PayOrderModel example = new PayOrderModel(pn, ps);
+        example.setCashAccId(accId);
+
+        List<PayOrderModel> list = orderMapper.findBy(example);
+        long tot = orderMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<PayOrderModel> findByAcc(Integer accId, OrderStatus status, int pn, int ps) {
-        return null;
+        PayOrderModel example = new PayOrderModel(pn, ps);
+        example.setCashAccId(accId);
+        example.setStatus(status.code());
+
+        List<PayOrderModel> list = orderMapper.findBy(example);
+        long tot = orderMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 }

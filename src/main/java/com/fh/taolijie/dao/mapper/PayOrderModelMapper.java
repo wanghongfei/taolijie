@@ -58,4 +58,7 @@ public interface PayOrderModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(PayOrderModel record);
+
+    List<PayOrderModel> findBy(PayOrderModel example);
+    long countFindBy(PayOrderModel example);
 }
