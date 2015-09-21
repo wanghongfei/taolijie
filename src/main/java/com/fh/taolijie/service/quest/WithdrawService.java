@@ -25,8 +25,9 @@ public interface WithdrawService {
      * @param withId
      * @param status 新状态
      * @param memo 审核备注
+     * @return 成功返回true
      */
-    void updateStatus(Integer withId, WithdrawStatus status, String memo);
+    boolean updateStatus(Integer withId, WithdrawStatus status, String memo);
 
     /**
      * 查询所有申请

@@ -71,9 +71,24 @@ public class DefaultWithdrawService implements WithdrawService {
         drawMapper.insertSelective(model);
     }
 
+    /**
+     * 更新审核状态.
+     *
+     * @param withId
+     * @param status 新状态
+     * @param memo 审核备注
+     */
     @Override
-    public void updateStatus(Integer withId, WithdrawStatus status, String memo) {
+    @Transactional(readOnly = false)
+    public boolean updateStatus(Integer withId, WithdrawStatus status, String memo) {
+        WithdrawApplyModel example = new WithdrawApplyModel();
+        example.setId(withId);
 
+        example.setMemo(memo);
+        example.setStatus(status.code());
+        example.setUpdateTime(new Date());
+
+        return drawMapper.updateByPrimaryKeySelective(example) > 0 ? true : false;
     }
 
     @Override

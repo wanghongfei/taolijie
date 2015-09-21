@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.service.quest;
 
+import com.fh.taolijie.constant.quest.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.service.quest.WithdrawService;
@@ -43,5 +44,11 @@ public class WithdrawServiceTest extends BaseSpringDataTestClass {
         }
 
         Assert.assertFalse(true);
+    }
+
+    @Test
+    @Rollback(false)
+    public void testUpdateStatus() throws Exception {
+        service.updateStatus(2, WithdrawStatus.DONE, "OK");
     }
 }
