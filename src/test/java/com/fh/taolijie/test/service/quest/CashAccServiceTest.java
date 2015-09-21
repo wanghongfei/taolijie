@@ -12,6 +12,7 @@ import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
