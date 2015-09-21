@@ -1,4 +1,4 @@
-package com.fh.taolijie.service.quest.impl;
+package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.constant.quest.AccFlow;
 import com.fh.taolijie.constant.quest.CashAccStatus;
@@ -12,7 +12,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
 import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
-import com.fh.taolijie.service.quest.CashAccService;
+import com.fh.taolijie.service.acc.CashAccService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

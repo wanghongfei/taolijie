@@ -4,13 +4,12 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
-import com.fh.taolijie.service.quest.WithdrawService;
-import com.fh.taolijie.service.quest.impl.DefaultWithdrawService;
+import com.fh.taolijie.service.acc.WithdrawService;
+import com.fh.taolijie.service.acc.impl.DefaultWithdrawService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;

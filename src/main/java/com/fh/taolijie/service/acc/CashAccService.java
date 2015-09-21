@@ -1,4 +1,4 @@
-package com.fh.taolijie.service.quest;
+package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.constant.quest.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
