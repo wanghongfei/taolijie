@@ -43,13 +43,14 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="dict_province" domainObjectName="DictProvinceModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
+        <table tableName="sys_config" domainObjectName="SysConfigModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
+<!--        <table tableName="dict_province" domainObjectName="DictProvinceModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_city" domainObjectName="DictCityModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_region" domainObjectName="DictRegionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_college" domainObjectName="DictCollegeModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_school" domainObjectName="DictSchoolModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="stu_certi" domainObjectName="StuCertiModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
-        <table tableName="emp_certi" domainObjectName="EmpCertiModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
+        <table tableName="emp_certi" domainObjectName="EmpCertiModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />-->
 
 <!--        <table tableName="quest_cate" domainObjectName="QuestCategoryModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                enableUpdateByExample="true" />

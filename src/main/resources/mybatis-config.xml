@@ -62,6 +62,7 @@
         <mapper resource="mapper/DictSchoolModelMapper.xml" />
         <mapper resource="mapper/StuCertiModelMapper.xml" />
         <mapper resource="mapper/EmpCertiModelMapper.xml" />
+        <mapper resource="mapper/SysConfigModelMapper.xml" />
 
     </mappers>
 </configuration>
