@@ -5,6 +5,8 @@ alter table taolijie.quest add column college_id int;
 alter table taolijie.quest add column school_id int;
 
 alter table taolijie.withdraw_apply add column acc_id int not null;
+alter table taolijie.quest add column final_award decimal(9,2);
+alter table taolijie.quest add column member_id int not null;
 
 
 CREATE TABLE IF NOT EXISTS `taolijie`.`dict_province` (

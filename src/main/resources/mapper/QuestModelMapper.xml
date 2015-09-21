@@ -16,7 +16,13 @@
         <result column="qu_limit_time" property="limitTime" jdbcType="INTEGER"/>
         <result column="qu_total_amt" property="totalAmt" jdbcType="INTEGER"/>
         <result column="qu_left_amt" property="leftAmt" jdbcType="INTEGER"/>
+
         <result column="qu_award" property="award" jdbcType="DECIMAL"/>
+        <result column="qu_final_award" property="finalAward" jdbcType="DECIMAL"/>
+
+        <result column="qu_member_id" property="memberId" jdbcType="INTEGER"/>
+
+
         <result column="qu_contact_name" property="contactName" jdbcType="VARCHAR"/>
         <result column="qu_contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
         <result column="qu_description" property="description" jdbcType="VARCHAR"/>
@@ -47,6 +53,7 @@
         qu.total_amt,
         qu.left_amt,
         qu.award,
+        qu.final_award,
         qu.contact_name,
         qu.contact_phone,
         qu.description,
@@ -59,7 +66,8 @@
         qu.city_id,
         qu.region_id,
         qu.college_id,
-        qu.school_id
+        qu.school_id,
+        qu.member_id
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -94,7 +102,9 @@
         city_id,
         region_id,
         college_id,
-        school_id
+        school_id,
+        final_award,
+        member_id
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -102,7 +112,9 @@
         #{award,jdbcType=DECIMAL}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR},
         #{description,jdbcType=VARCHAR}, #{questDetail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
         #{memo,jdbcType=VARCHAR}, #{offline,jdbcType=BIT},
-        #{provinceId}, #{cityId}, #{regionId}, #{collegeId}, #{schoolId})
+        #{provinceId}, #{cityId}, #{regionId}, #{collegeId}, #{schoolId},
+        #{finalAward},
+        #{memberId})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.QuestModel">
         <!--
@@ -179,6 +191,14 @@
             <if test="schoolId != null">
                 school_id,
             </if>
+
+            <if test="finalAward != null">
+                final_award,
+            </if>
+
+            <if test="memberId != null">
+                member_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -248,6 +268,14 @@
             </if>
             <if test="schoolId != null">
                 #{schoolId},
+            </if>
+
+            <if test="finalAward != null">
+                #{finalAward},
+            </if>
+
+            <if test="memberId != null">
+                #{memberId},
             </if>
         </trim>
     </insert>
@@ -323,6 +351,14 @@
             <if test="schoolId != null">
                 school_id = #{schoolId},
             </if>
+
+            <if test="finalAward != null">
+                final_award = #{finalAward},
+            </if>
+
+            <if test="memberId != null">
+                member_id = #{memberId},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -354,7 +390,9 @@
         region_id = #{regionId},
 
         college_id = #{collegeId},
-        school_id = #{schoolId}
+        school_id = #{schoolId},
+        final_award = #{finalAward},
+        member_id = #{memberId}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
