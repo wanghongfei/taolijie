@@ -14,6 +14,7 @@ alter table taolijie.quest add column id int primary key auto_increment;
 alter table taolijie.emp_certi add column member_id int not null;
 alter table taolijie.emp_certi add column username varchar(45);
 alter table taolijie.stu_certi add column username varchar(45);
+alter table taolijie.emp_certi add column memo varchar(100);
 
 
 

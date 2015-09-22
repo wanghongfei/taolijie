@@ -56,4 +56,7 @@ public interface EmpCertiModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(EmpCertiModel record);
+
+    List<EmpCertiModel> findBy(EmpCertiModel example);
+    long countFindBy(EmpCertiModel example);
 }
