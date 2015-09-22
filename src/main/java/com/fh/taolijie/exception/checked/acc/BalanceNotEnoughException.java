@@ -1,4 +1,4 @@
-package com.fh.taolijie.exception.checked.quest;
+package com.fh.taolijie.exception.checked.acc;
 
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 

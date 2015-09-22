@@ -395,4 +395,23 @@
         member_id = #{memberId}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectQuestLeftAmountWithLock" resultType="int">
+        SELECT
+            left_amt
+        FROM
+            quest
+        WHERE
+            id = #{questId}
+        FOR UPDATE
+    </select>
+
+    <update id="decreaseLeftAmount">
+        UPDATE
+            quest
+        SET
+            left_amt = left_amt - 1
+        WHERE
+            id = #{questId}
+    </update>
 </mapper>

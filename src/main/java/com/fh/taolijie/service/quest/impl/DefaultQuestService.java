@@ -1,9 +1,16 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.QuestAssignModelMapper;
 import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
+import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.quest.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +34,12 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private FeeCalculator feeCal;
 
+    @Autowired
+    private QuestAssignModelMapper assignMapper;
+
+    @Autowired
+    private MemberModelMapper memMapper;
+
 
     @Override
     @Transactional(readOnly = false)
@@ -45,6 +58,55 @@ public class DefaultQuestService implements QuestService {
         questMapper.insertSelective(model);
     }
 
+    /**
+     * 领取任务。
+     * 需要行锁。
+     *
+     * @param memId 领取任务的用户id.
+     * @param questId 任务id
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void assignQuest(Integer memId, Integer questId)
+            throws QuestAssignedException, QuestZeroException {
+
+        // 检查任务是否已经领取
+        boolean repeat = assignMapper.checkMemberIdAndQuestIdExists(memId, questId);
+        if (repeat) {
+            throw new QuestAssignedException("");
+        }
+
+        // 判断剩余任务数量
+        // 这句查询会加行锁
+        int leftAmt = questMapper.selectQuestLeftAmountWithLock(questId);
+        if (leftAmt <= 0) {
+            // 任务已经没了
+            throw new QuestZeroException("");
+        }
+
+
+        // 领取任务
+        // 向分配表中插入记录
+        QuestAssignModel assignModel = new QuestAssignModel();
+        assignModel.setMemberId(memId);
+        assignModel.setQuestId(questId);
+        assignModel.setAssignTime(new Date());
+        // 设置冗余字段username
+        MemberModel m = memMapper.selectByPrimaryKey(memId);
+        assignModel.setUsername(m.getUsername());
+        // 设置冗余字段quest_title
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        assignModel.setQuestTitle(quest.getTitle());
+        assignModel.setStatus(AssignStatus.ASSIGNED.code());
+        assignMapper.insertSelective(assignModel);
+
+
+        // 任务剩余数量减少1
+        questMapper.decreaseLeftAmount(questId);
+
+
+        // 方法结束 == 事务结束，行锁释放
+    }
 
     @Override
     public ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps) {

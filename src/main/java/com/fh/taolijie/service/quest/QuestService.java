@@ -2,6 +2,8 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.QuestModel;
+import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 
 import java.math.BigDecimal;
 
@@ -15,6 +17,14 @@ public interface QuestService {
      * @param model
      */
     void publishQuest(QuestModel model);
+
+    /**
+     * 用户领取任务
+     * @param memId 领取任务的用户id.
+     * @param questId 任务id
+     */
+    void assignQuest(Integer memId, Integer questId)
+            throws QuestAssignedException, QuestZeroException;
 
     /**
      * 根据分类查找任务

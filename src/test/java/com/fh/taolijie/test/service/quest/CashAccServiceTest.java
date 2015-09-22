@@ -1,18 +1,17 @@
 package com.fh.taolijie.test.service.quest;
 
-import com.fh.taolijie.constant.quest.CashAccStatus;
+import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.exception.checked.quest.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.quest.CashAccExistsException;
-import com.fh.taolijie.exception.checked.quest.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;

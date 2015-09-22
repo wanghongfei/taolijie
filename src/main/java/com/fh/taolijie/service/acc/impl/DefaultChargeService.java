@@ -1,8 +1,8 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.constant.quest.OrderStatus;
-import com.fh.taolijie.constant.quest.OrderType;
+import com.fh.taolijie.constant.acc.OrderStatus;
+import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
 import com.fh.taolijie.domain.PayOrderModel;

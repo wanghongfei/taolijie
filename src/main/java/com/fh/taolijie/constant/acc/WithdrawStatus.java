@@ -1,4 +1,4 @@
-package com.fh.taolijie.constant.quest;
+package com.fh.taolijie.constant.acc;
 
 /**
  * Created by whf on 9/21/15.

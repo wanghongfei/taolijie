@@ -1,15 +1,16 @@
-package com.fh.taolijie.constant.quest;
+package com.fh.taolijie.constant.acc;
 
 /**
  * Created by whf on 9/20/15.
  */
-public enum CashAccStatus {
-    NORMAL("00"),
-    FROZEN("01");
+public enum AccFlow {
+    WITHDRAW("00"),
+    CHARGE("01"),
+    FROZEN("02");
 
     private String code;
 
-    private CashAccStatus(String code) {
+    private AccFlow(String code) {
         this.code = code;
     }
 

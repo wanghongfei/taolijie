@@ -56,4 +56,14 @@ public interface QuestModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(QuestModel record);
+
+
+    /**
+     * 查询剩余任务数量，加行锁
+     * @param questId
+     * @return
+     */
+    int selectQuestLeftAmountWithLock(Integer questId);
+
+    void decreaseLeftAmount(Integer questId);
 }
