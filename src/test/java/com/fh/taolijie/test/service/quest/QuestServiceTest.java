@@ -1,6 +1,11 @@
 package com.fh.taolijie.test.service.quest;
 
+import com.fh.taolijie.dao.mapper.CashAccModelMapper;
+import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.QuestModel;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
+import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.impl.DefaultQuestService;
 import com.fh.taolijie.service.quest.impl.FeeCalculator;
@@ -19,11 +24,16 @@ import java.util.Date;
  */
 @ContextConfiguration(classes = {
         DefaultQuestService.class,
+        DefaultAccFlowService.class,
+        DefaultCashAccService.class,
         FeeCalculator.class
 })
 public class QuestServiceTest extends BaseSpringDataTestClass {
     @Autowired
     private QuestService service;
+
+    @Autowired
+    private CashAccModelMapper accMapper;
 
     @Test
     //@Rollback(false)
@@ -39,5 +49,11 @@ public class QuestServiceTest extends BaseSpringDataTestClass {
         model.setTotalAmt(10);
 
         service.publishQuest(3, model);
+
+
+        // 检查钱扣了没有
+        // 当前费率是20%
+        CashAccModel acc = accMapper.selectByPrimaryKey(3);
+        Assert.assertEquals(new BigDecimal("40.00"), acc.getAvailableBalance());
     }
 }
