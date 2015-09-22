@@ -39,4 +39,12 @@ public class FinishRequestServiceTest extends BaseSpringDataTestClass {
     public void updateStatus() throws Exception {
         service.updateStatus(7, RequestStatus.FAILED, "");
     }
+
+    @Test
+    public void testFind() {
+        service.findAll(0, 100);
+        service.findByStatus(RequestStatus.WAIT_AUDIT, 0, 100);
+        service.findByMember(1, 0, 100);
+        service.findByMember(1, RequestStatus.DONE, 0, 100);
+    }
 }

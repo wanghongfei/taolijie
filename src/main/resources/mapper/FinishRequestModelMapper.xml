@@ -210,4 +210,89 @@
                 SELECT 1 FROM finish_request WHERE member_id = #{memId} AND quest_id = #{questId}
             )
     </select>
+
+    <select id="findBy" resultMap="BaseResultMap" >
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            finish_request finishr
+        <where>
+            <if test="questId != null">
+                finishr.quest_id = #{questId}
+            </if>
+            <if test="memberId != null">
+                AND finishr.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND finishr.username = #{username}
+            </if>
+            <if test="createdTime != null">
+                AND finishr.created_time = #{createdTime}
+            </if>
+            <if test="auditTime != null">
+                AND finishr.audit_time = #{auditTime}
+            </if>
+            <if test="description != null">
+                AND finishr.description = #{description}
+            </if>
+            <if test="imageIds != null">
+                AND finishr.image_ids = #{imageIds}
+            </if>
+            <if test="status != null">
+                AND finishr.status = #{status}
+            </if>
+            <if test="memo != null">
+                AND finishr.memo = #{memo}
+            </if>
+            <if test="name != null">
+                AND finishr.name = #{name}
+            </if>
+
+        </where>
+        ORDER BY
+            finishr.created_time DESC
+
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFindBy" resultType="long" >
+        SELECT
+            COUNT(*)
+        FROM
+            finish_request finishr
+        <where>
+            <if test="questId != null">
+                finishr.quest_id = #{questId}
+            </if>
+            <if test="memberId != null">
+                AND finishr.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND finishr.username = #{username}
+            </if>
+            <if test="createdTime != null">
+                AND finishr.created_time = #{createdTime}
+            </if>
+            <if test="auditTime != null">
+                AND finishr.audit_time = #{auditTime}
+            </if>
+            <if test="description != null">
+                AND finishr.description = #{description}
+            </if>
+            <if test="imageIds != null">
+                AND finishr.image_ids = #{imageIds}
+            </if>
+            <if test="status != null">
+                AND finishr.status = #{status}
+            </if>
+            <if test="memo != null">
+                AND finishr.memo = #{memo}
+            </if>
+            <if test="name != null">
+                AND finishr.name = #{name}
+            </if>
+
+        </where>
+    </select>
 </mapper>

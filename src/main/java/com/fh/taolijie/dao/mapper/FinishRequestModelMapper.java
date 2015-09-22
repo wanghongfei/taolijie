@@ -67,4 +67,8 @@ public interface FinishRequestModelMapper {
     int updateByPrimaryKey(FinishRequestModel record);
 
     boolean checkMemberIdAndQuestIdExists(@Param("memId") Integer memId, @Param("questId") Integer questId);
+
+
+    List<FinishRequestModel> findBy(FinishRequestModel model);
+    long countFindBy(FinishRequestModel model);
 }

@@ -1,10 +1,12 @@
 package com.fh.taolijie.service.quest;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.FinishRequestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestNotAssignedException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
+import jdk.jfr.events.FileReadEvent;
 
 /**
  * 任务提交审核业务接口
@@ -26,4 +28,37 @@ public interface QuestFinishService {
      */
     void updateStatus(Integer requestId, RequestStatus status, String memo)
             throws CashAccNotExistsException;
+
+    /**
+     * 查询所有请求
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<FinishRequestModel> findAll(int pn, int ps);
+
+    /**
+     * 根据状态查询请求
+     * @param status
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<FinishRequestModel> findByStatus(RequestStatus status, int pn, int ps);
+
+    /**
+     * 查询指定用户的申请
+     * @return
+     */
+    ListResult<FinishRequestModel> findByMember(Integer memId, int pn, int ps);
+
+    /**
+     * 查询指定用户指定状态的申请
+     * @param memId
+     * @param status
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<FinishRequestModel> findByMember(Integer memId, RequestStatus status, int pn, int ps);
 }

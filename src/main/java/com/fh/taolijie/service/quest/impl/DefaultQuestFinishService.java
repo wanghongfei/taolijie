@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.CashAccModel;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 任务提交申请业务实现
@@ -105,5 +107,53 @@ public class DefaultQuestFinishService implements QuestFinishService {
         example.setMemo(memo);
         example.setAuditTime(new Date());
         fiMapper.updateByPrimaryKeySelective(example);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findAll(int pn, int ps) {
+        FinishRequestModel example = new FinishRequestModel(pn, ps);
+
+        List<FinishRequestModel> list = fiMapper.findBy(example);
+        long tot = fiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findByStatus(RequestStatus status, int pn, int ps) {
+        FinishRequestModel example = new FinishRequestModel(pn, ps);
+        example.setStatus(status.code());
+
+        List<FinishRequestModel> list = fiMapper.findBy(example);
+        long tot = fiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findByMember(Integer memId, int pn, int ps) {
+        FinishRequestModel example = new FinishRequestModel(pn, ps);
+        example.setMemberId(memId);
+
+        List<FinishRequestModel> list = fiMapper.findBy(example);
+        long tot = fiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findByMember(Integer memId, RequestStatus status, int pn, int ps) {
+        FinishRequestModel example = new FinishRequestModel(pn, ps);
+        example.setMemberId(memId);
+        example.setStatus(status.code());
+
+        List<FinishRequestModel> list = fiMapper.findBy(example);
+        long tot = fiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 }
