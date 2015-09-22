@@ -32,7 +32,6 @@ public class DefaultAccFlowService implements AccFlowService {
     @Transactional(readOnly = false)
     public void recordAvaBalanceChange(Integer accId, AccFlow type, BigDecimal amt)
             throws CashAccNotExistsException {
-        BigDecimal zero = new BigDecimal("0.00");
 
         CashAccModel acc = accMapper.selectByPrimaryKey(accId);
         if (null == acc) {

@@ -161,4 +161,11 @@
             )
     </select>
 
+    <update id="deleteAssign">
+        DELETE FROM
+            quest_assign
+        WHERE
+            member_id = #{memId} AND quest_id = #{questId}
+    </update>
+
 </mapper>
