@@ -1,8 +1,11 @@
 package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.domain.AccFlowModel;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -10,6 +13,14 @@ import java.util.Date;
  * Created by whf on 9/21/15.
  */
 public interface AccFlowService {
+    /**
+     * 记录可用余额变化流水
+     * @param accId 账户id
+     * @param type 操作类型
+     */
+    void recordAvaBalanceChange(Integer accId, AccFlow type, BigDecimal amt)
+            throws CashAccNotExistsException;
+
     /**
      * 查询指定账户的流水记录
      * @param accId

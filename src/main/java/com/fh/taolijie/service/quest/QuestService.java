@@ -2,6 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.QuestModel;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 
@@ -14,9 +15,11 @@ import java.math.BigDecimal;
 public interface QuestService {
     /**
      * 商家发布任务
+     * @param accId 商家账户
      * @param model
      */
-    void publishQuest(QuestModel model);
+    void publishQuest(Integer accId, QuestModel model)
+            throws BalanceNotEnoughException;
 
     /**
      * 用户领取任务

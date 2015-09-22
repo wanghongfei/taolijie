@@ -2,13 +2,12 @@ package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
-import com.fh.taolijie.dao.mapper.MemberModelMapper;
-import com.fh.taolijie.dao.mapper.QuestAssignModelMapper;
-import com.fh.taolijie.dao.mapper.QuestModelMapper;
-import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
+import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.quest.QuestService;
@@ -40,10 +39,23 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private MemberModelMapper memMapper;
 
+    @Autowired
+    private CashAccModelMapper accMapper;
 
+
+    /**
+     * 商家发布任务.
+     *
+     * 要先检查商家账户余额是否充足
+     * @param accId 商家账户id
+     * @param model
+     */
     @Override
     @Transactional(readOnly = false)
-    public void publishQuest(QuestModel model) {
+    public void publishQuest(Integer accId, QuestModel model)
+            throws BalanceNotEnoughException {
+
+        // 计算单个任务的最终价格
         // 获取费率
         int rate = configMapper.selectByPrimaryKey(1).getQuestFeeRate();
         // 单个任务的原始价格
@@ -52,9 +64,26 @@ public class DefaultQuestService implements QuestService {
         single = feeCal.calculateFee(rate, single);
         // 将最终价格设置到model中
         model.setFinalAward(single);
+        // 计算总钱数
+        BigDecimal tot = single.multiply(new BigDecimal(model.getTotalAmt()));
 
+
+
+        // 判断账户余额
+        BigDecimal left = accMapper.selectByPrimaryKey(accId).getAvailableBalance();
+        if (left.compareTo(tot) < 0) {
+            // 余额不足
+            throw new BalanceNotEnoughException("");
+        }
+
+        // 扣钱
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setAvailableBalance(left.subtract(tot));
+        accMapper.updateByPrimaryKeySelective(example);
+
+        // 发布任务
         model.setCreatedTime(new Date());
-
         questMapper.insertSelective(model);
     }
 

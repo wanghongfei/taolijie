@@ -61,6 +61,7 @@ public interface CashAccService {
             throws CashAccNotExistsException, BalanceNotEnoughException;
 
     /**
+     * @deprecated
      * 冻结余额
      * @param accId
      * @param amt

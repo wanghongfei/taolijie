@@ -27,17 +27,17 @@ public class QuestServiceTest extends BaseSpringDataTestClass {
 
     @Test
     //@Rollback(false)
-    public void testPublish() {
+    public void testPublish() throws Exception {
         QuestModel model = new QuestModel();
         model.setTitle("quest1");
-        model.setAward(new BigDecimal(10));
+        model.setAward(new BigDecimal(5));
         model.setMemberId(1);
         model.setQuestCateId(1);
         model.setStartTime(new Date());
         model.setEndTime(new Date());
-        model.setLeftAmt(100);
-        model.setTotalAmt(100);
+        model.setLeftAmt(10);
+        model.setTotalAmt(10);
 
-        service.publishQuest(model);
+        service.publishQuest(3, model);
     }
 }

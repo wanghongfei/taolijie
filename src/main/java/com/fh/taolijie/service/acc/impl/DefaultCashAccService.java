@@ -12,6 +12,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,10 @@ public class DefaultCashAccService implements CashAccService {
 
     @Autowired
     private MemberModelMapper memMapper;
+
+
+    @Autowired
+    private AccFlowService flowService;
 
     @Override
     @Transactional(readOnly = false)
@@ -88,32 +93,8 @@ public class DefaultCashAccService implements CashAccService {
     @Override
     @Transactional(readOnly = false)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
-        CashAccModel acc = accMapper.selectByPrimaryKey(accId);
-        if (null == acc) {
-            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
-        }
-
-        BigDecimal zero = new BigDecimal("0.00");
-
-        // 创建流水
-        AccFlowModel flowModel = new AccFlowModel();
-        flowModel.setAccId(accId);
-        flowModel.setActionType(AccFlow.CHARGE.code());
-        flowModel.setCreatedTime(new Date());
-
-        // 记录可用余额变化
-        flowModel.setAvaBalanceCh(amt);
-        flowModel.setAvaBalanceNew(amt.add(acc.getAvailableBalance()));
-
-        // 记录冻结余额变化
-        flowModel.setFroBalanceCh(zero);
-        flowModel.setFroBalanceNew(acc.getFrozenBalance());
-
-        // 记录总余额变化
-        flowModel.setTotBalanceCh(zero);
-        flowModel.setTotBalanceNew(acc.getTotalBalance().add(amt));
-
-        flowMapper.insertSelective(flowModel);
+        // 记录流水
+        flowService.recordAvaBalanceChange(accId, AccFlow.CHARGE, amt);
 
         return accMapper.addAvailableAmt(accId, amt) > 0 ? true : false;
     }
@@ -136,41 +117,24 @@ public class DefaultCashAccService implements CashAccService {
 
         // 减少可用余额
         BigDecimal newBalance = avaBalance.subtract(amt);
-        acc.setAvailableBalance(newBalance);
-        calculateTotalBalance(acc);
+        //acc.setAvailableBalance(newBalance);
+        //calculateTotalBalance(acc);
 
-        BigDecimal zero = new BigDecimal("0.00");
+        // 记录流水
+        flowService.recordAvaBalanceChange(accId, AccFlow.WITHDRAW, amt.negate());
 
-        // 创建流水
-        AccFlowModel flowModel = new AccFlowModel();
-        flowModel.setAccId(accId);
-        flowModel.setActionType(AccFlow.WITHDRAW.code());
-        flowModel.setCreatedTime(new Date());
-
-        // 记录可用余额变化
-        flowModel.setAvaBalanceCh(amt.negate());
-        flowModel.setAvaBalanceNew(newBalance);
-
-        // 记录冻结余额变化
-        flowModel.setFroBalanceCh(zero);
-        flowModel.setFroBalanceNew(acc.getFrozenBalance());
-
-        // 记录总余额变化
-        flowModel.setTotBalanceCh(amt.negate());
-        flowModel.setTotBalanceNew(acc.getTotalBalance());
-
-        flowMapper.insertSelective(flowModel);
 
         // 执行更新操作
         CashAccModel example = new CashAccModel();
         example.setId(accId);
         example.setAvailableBalance(newBalance);
-        example.setTotalBalance(acc.getTotalBalance());
+        //example.setTotalBalance(acc.getTotalBalance());
         example.setUpdateTime(new Date());
         accMapper.updateByPrimaryKeySelective(example);
     }
 
     /**
+     * @deprecated
      * 计算总余额
      * @param acc
      */
@@ -180,6 +144,9 @@ public class DefaultCashAccService implements CashAccService {
     }
 
 
+    /**
+     * @deprecated
+     */
     @Override
     @Transactional(readOnly = false)
     public void frozenMoney(Integer accId, BigDecimal amt)

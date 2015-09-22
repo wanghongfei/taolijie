@@ -1,13 +1,18 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.dao.mapper.AccFlowModelMapper;
+import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.domain.AccFlowModel;
+import com.fh.taolijie.domain.CashAccModel;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.AccFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +24,35 @@ import java.util.List;
 public class DefaultAccFlowService implements AccFlowService {
     @Autowired
     private AccFlowModelMapper flowMapper;
+
+    @Autowired
+    private CashAccModelMapper accMapper;
+
+    @Override
+    @Transactional(readOnly = false)
+    public void recordAvaBalanceChange(Integer accId, AccFlow type, BigDecimal amt)
+            throws CashAccNotExistsException {
+        BigDecimal zero = new BigDecimal("0.00");
+
+        CashAccModel acc = accMapper.selectByPrimaryKey(accId);
+        if (null == acc) {
+            throw new CashAccNotExistsException("");
+        }
+
+        // 创建流水
+        AccFlowModel flowModel = new AccFlowModel();
+        flowModel.setAccId(accId);
+        flowModel.setActionType(type.code());
+        flowModel.setCreatedTime(new Date());
+
+        // 记录可用余额变化
+        flowModel.setAvaBalanceCh(amt);
+        flowModel.setAvaBalanceNew(amt.add(acc.getAvailableBalance()));
+
+
+        flowMapper.insertSelective(flowModel);
+
+    }
 
     @Override
     @Transactional(readOnly = true)
