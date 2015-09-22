@@ -66,4 +66,7 @@ public interface QuestModelMapper {
     int selectQuestLeftAmountWithLock(Integer questId);
 
     void decreaseLeftAmount(Integer questId);
+
+    List<QuestModel> findBy(QuestModel model);
+    long countFindBy(QuestModel model);
 }

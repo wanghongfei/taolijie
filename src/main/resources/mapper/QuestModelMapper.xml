@@ -414,4 +414,186 @@
         WHERE
             id = #{questId}
     </update>
+
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            quest qu
+        <where>
+            <if test="title != null">
+                qu.title = #{title}
+            </if>
+            <if test="createdTime != null">
+                AND qu.created_time = #{createdTime}
+            </if>
+            <if test="questCateId != null">
+                AND qu.quest_cate_id = #{questCateId}
+            </if>
+            <if test="startTime != null">
+                AND qu.start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND qu.end_time = #{endTime}
+            </if>
+            <if test="limitTime != null">
+                AND qu.limit_time = #{limitTime}
+            </if>
+            <if test="totalAmt != null">
+                AND qu.total_amt = #{totalAmt}
+            </if>
+            <if test="leftAmt != null">
+                AND qu.left_amt = #{leftAmt}
+            </if>
+            <if test="awardRangeQuery == false and award != null">
+                AND qu.award = #{award}
+            </if>
+
+            <!-- 按赏金范围过滤 -->
+            <if test="awardRangeQuery == true">
+                <![CDATA[
+                AND qu.award >= #{minAward} AND qu.award <= #{maxAward}
+                ]]>
+            </if>
+
+            <if test="contactName != null">
+                AND qu.contact_name = #{contactName}
+            </if>
+            <if test="contactPhone != null">
+                AND qu.contact_phone = #{contactPhone}
+            </if>
+            <if test="description != null">
+                AND qu.description = #{description}
+            </if>
+            <if test="questDetail != null">
+                AND qu.quest_detail = #{questDetail}
+            </if>
+            <if test="url != null">
+                AND qu.url = #{url}
+            </if>
+            <if test="memo != null">
+                AND qu.memo = #{memo}
+            </if>
+            <if test="offline != null">
+                ANd qu.offline = #{offline}
+            </if>
+
+
+            <if test="provinceId != null">
+                AND qu.province_id = #{provinceId}
+            </if>
+            <if test="cityId != null">
+                AND qu.city_id = #{cityId}
+            </if>
+            <if test="regionId != null">
+                AND qu.region_id = #{regionId}
+            </if>
+            <if test="collegeId != null">
+                AND qu.college_id = #{collegeId}
+            </if>
+            <if test="schoolId != null">
+                AND qu.school_id = #{schoolId}
+            </if>
+
+            <if test="finalAward != null">
+                AND qu.final_award = #{finalAward}
+            </if>
+
+            <if test="memberId != null">
+                AND qu.member_id = #{memberId}
+            </if>
+
+        </where>
+
+        ORDER BY
+            qu.created_time DESC
+
+        LIMIT
+          #{pageNumber}, #{pageSize}
+
+    </select>
+
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            quest qu
+        <where>
+            <if test="title != null">
+                qu.title = #{title}
+            </if>
+            <if test="createdTime != null">
+                AND qu.created_time = #{createdTime}
+            </if>
+            <if test="questCateId != null">
+                AND qu.quest_cate_id = #{questCateId}
+            </if>
+            <if test="startTime != null">
+                AND qu.start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND qu.end_time = #{endTime}
+            </if>
+            <if test="limitTime != null">
+                AND qu.limit_time = #{limitTime}
+            </if>
+            <if test="totalAmt != null">
+                AND qu.total_amt = #{totalAmt}
+            </if>
+            <if test="leftAmt != null">
+                AND qu.left_amt = #{leftAmt}
+            </if>
+            <if test="award != null">
+                AND qu.award = #{award}
+            </if>
+            <if test="contactName != null">
+                AND qu.contact_name = #{contactName}
+            </if>
+            <if test="contactPhone != null">
+                AND qu.contact_phone = #{contactPhone}
+            </if>
+            <if test="description != null">
+                AND qu.description = #{description}
+            </if>
+            <if test="questDetail != null">
+                AND qu.quest_detail = #{questDetail}
+            </if>
+            <if test="url != null">
+                AND qu.url = #{url}
+            </if>
+            <if test="memo != null">
+                AND qu.memo = #{memo}
+            </if>
+            <if test="offline != null">
+                ANd qu.offline = #{offline}
+            </if>
+
+
+            <if test="provinceId != null">
+                AND qu.province_id = #{provinceId}
+            </if>
+            <if test="cityId != null">
+                AND qu.city_id = #{cityId}
+            </if>
+            <if test="regionId != null">
+                AND qu.region_id = #{regionId}
+            </if>
+            <if test="collegeId != null">
+                AND qu.college_id = #{collegeId}
+            </if>
+            <if test="schoolId != null">
+                AND qu.school_id = #{schoolId}
+            </if>
+
+            <if test="finalAward != null">
+                AND qu.final_award = #{finalAward}
+            </if>
+
+            <if test="memberId != null">
+                AND qu.member_id = #{memberId}
+            </if>
+
+        </where>
+
+    </select>
 </mapper>

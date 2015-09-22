@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 轻兼职业务实现
@@ -133,12 +134,29 @@ public class DefaultQuestService implements QuestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps) {
-        return null;
+        QuestModel example = new QuestModel(pn, ps);
+        example.setQuestCateId(cateId);
+
+        List<QuestModel> list = questMapper.findBy(example);
+        long tot = questMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps) {
-        return null;
+        QuestModel example = new QuestModel(pn, ps);
+        example.setQuestCateId(cateId);
+        example.setAwardRangeQuery(true);
+        example.setMinAward(min);
+        example.setMaxAward(max);
+
+        List<QuestModel> list = questMapper.findBy(example);
+        long tot = questMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 }

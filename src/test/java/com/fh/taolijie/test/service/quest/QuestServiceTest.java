@@ -84,4 +84,10 @@ public class QuestServiceTest extends BaseSpringDataTestClass {
 
         Assert.assertTrue(false);
     }
+
+    @Test
+    public void testByCate() {
+        service.findByCate(1, new BigDecimal(10), new BigDecimal(100), 0, 100);
+        service.findByCate(1, 0, 100);
+    }
 }
