@@ -4,14 +4,12 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.service.ShPostCategoryService;
-import com.fh.taolijie.service.ShPostService;
+import com.fh.taolijie.service.sh.ShPostCategoryService;
+import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-20.

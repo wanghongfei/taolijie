@@ -1,18 +1,16 @@
 package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
-import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.domain.RoleModel;
 import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.job.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**

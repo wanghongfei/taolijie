@@ -7,14 +7,11 @@ import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.dto.CategoryDto;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ShPostCategoryService;
-import com.fh.taolijie.service.ShPostService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.service.job.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostService;
+import com.fh.taolijie.service.sh.ShPostCategoryService;
+import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.json.JsonWrapper;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Created by wynfrith on 15-6-11.

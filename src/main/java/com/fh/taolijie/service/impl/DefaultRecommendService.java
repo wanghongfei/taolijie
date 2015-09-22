@@ -7,14 +7,12 @@ import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.RecommendedPostModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
-import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.domain.middle.CategoryWithPost;
-import com.fh.taolijie.service.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.RecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.awt.image.IntegerInterleavedRaster;
 
 import java.util.Date;
 import java.util.List;

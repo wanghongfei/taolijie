@@ -1,16 +1,13 @@
 package com.fh.taolijie.controller.restful;
 
 import cn.fh.security.credential.Credential;
-import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.PrivateNotificationModel;
 import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.JobPostService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
@@ -20,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -1,27 +1,22 @@
 package com.fh.taolijie.controller.home;
 
-import cn.fh.security.credential.Credential;
-import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.service.*;
-import com.fh.taolijie.service.impl.DefaultJobPostCategoryService;
+import com.fh.taolijie.service.job.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostService;
+import com.fh.taolijie.service.sh.ShPostCategoryService;
+import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.PageUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by wynfrith on 15-6-11.

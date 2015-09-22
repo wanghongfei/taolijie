@@ -1,6 +1,5 @@
-package com.fh.taolijie.service.impl;
+package com.fh.taolijie.service.job.impl;
 
-import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
@@ -10,20 +9,16 @@ import com.fh.taolijie.domain.CollectionModel;
 import com.fh.taolijie.domain.CollectionModelExample;
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.CollectionService;
-import com.fh.taolijie.service.JobPostService;
+import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
-import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

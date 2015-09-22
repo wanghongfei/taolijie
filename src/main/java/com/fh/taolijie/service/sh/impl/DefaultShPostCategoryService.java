@@ -1,12 +1,11 @@
-package com.fh.taolijie.service.impl;
+package com.fh.taolijie.service.sh.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
 import com.fh.taolijie.domain.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
-import com.fh.taolijie.service.ShPostCategoryService;
+import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

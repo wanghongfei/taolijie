@@ -1,4 +1,4 @@
-package com.fh.taolijie.service;
+package com.fh.taolijie.service.sh;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.SHPostCategoryModel;

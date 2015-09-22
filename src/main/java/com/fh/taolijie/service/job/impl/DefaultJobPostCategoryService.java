@@ -1,14 +1,11 @@
-package com.fh.taolijie.service.impl;
+package com.fh.taolijie.service.job.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
-import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
-import com.fh.taolijie.service.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

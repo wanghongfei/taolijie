@@ -2,8 +2,8 @@ package com.fh.taolijie.servlet;
 
 import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.service.ShPostService;
+import com.fh.taolijie.service.job.JobPostService;
+import com.fh.taolijie.service.sh.ShPostService;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Random;
 
 /**

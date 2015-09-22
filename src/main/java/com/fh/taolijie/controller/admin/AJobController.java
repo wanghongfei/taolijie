@@ -2,10 +2,8 @@ package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.service.JobPostCateService;
-import com.fh.taolijie.service.JobPostService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.service.job.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

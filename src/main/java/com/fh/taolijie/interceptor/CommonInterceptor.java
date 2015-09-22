@@ -4,18 +4,16 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.JobPostCategoryModel;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.domain.SHPostCategoryModel;
-import com.fh.taolijie.service.JobPostCateService;
+import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.ResumeService;
-import com.fh.taolijie.service.ShPostCategoryService;
-import com.fh.taolijie.utils.ObjWrapper;
+import com.fh.taolijie.service.sh.ShPostCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by wynfrith on 15-5-18.
