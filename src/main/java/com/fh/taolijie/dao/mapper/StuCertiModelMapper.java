@@ -51,4 +51,7 @@ public interface StuCertiModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(StuCertiModel record);
+
+    List<StuCertiModel> findBy(StuCertiModel example);
+    long countFindBy(StuCertiModel example);
 }

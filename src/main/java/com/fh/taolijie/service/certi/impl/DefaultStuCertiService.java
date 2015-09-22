@@ -1,0 +1,77 @@
+package com.fh.taolijie.service.certi.impl;
+
+import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.UserVerifyStatus;
+import com.fh.taolijie.constant.certi.CertiStatus;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.StuCertiModelMapper;
+import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.StuCertiModel;
+import com.fh.taolijie.service.certi.StuCertiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 学生认证业务实现
+ * Created by whf on 9/22/15.
+ */
+@Service
+public class DefaultStuCertiService implements StuCertiService {
+    @Autowired
+    private StuCertiModelMapper certiMapper;
+
+    @Autowired
+    private MemberModelMapper memMapper;
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addApplication(StuCertiModel model) {
+        Date now = new Date();
+
+        model.setStatus(CertiStatus.WAIT_AUDIT.code());
+        model.setCreatedTime(now);
+        model.setUpdateTime(now);
+
+        // 填写username冗余字段
+        MemberModel m = memMapper.selectByPrimaryKey(model.getMemberId());
+        model.setUsername(m.getUsername());
+
+        certiMapper.insertSelective(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo) {
+        if (status == CertiStatus.DONE) {
+            // 认证通过
+            // 将用户设置为已经认证
+            MemberModel example = new MemberModel();
+            example.setId(memId);
+            example.setVerified(UserVerifyStatus.DONE.code());
+            memMapper.updateByPrimaryKeySelective(example);
+        }
+
+        StuCertiModel example = new StuCertiModel();
+        example.setId(certiId);
+        example.setMemo(memo);
+        example.setStatus(status.code());
+        certiMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<StuCertiModel> findByMember(Integer memId) {
+        StuCertiModel example = new StuCertiModel();
+        example.setMemberId(memId);
+
+        List<StuCertiModel> list = certiMapper.findBy(example);
+        long tot = certiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+}

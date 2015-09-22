@@ -63,7 +63,7 @@ CREATE TABLE `acc_flow` (
   KEY `idx_acc_id` (`acc_id`),
   KEY `idx_acc_id_and_created_time` (`acc_id`,`created_time`),
   KEY `idx_acc_id_and_action_type` (`acc_id`,`action_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='现金账户流水';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='现金账户流水';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -361,8 +361,11 @@ CREATE TABLE `emp_certi` (
   `status` varchar(3) DEFAULT NULL COMMENT '00: 等待审核 01: 审核通过 02; 审核失败',
   `created_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
+  `member_id` int(11) NOT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `memo` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,6 +374,7 @@ CREATE TABLE `emp_certi` (
 
 LOCK TABLES `emp_certi` WRITE;
 /*!40000 ALTER TABLE `emp_certi` DISABLE KEYS */;
+INSERT INTO `emp_certi` VALUES (5,'Microsoft','Earth',NULL,'00','2015-09-22 18:47:17','2015-09-22 18:47:17',1,'taolijie',NULL);
 /*!40000 ALTER TABLE `emp_certi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,7 +433,7 @@ CREATE TABLE `finish_request` (
   KEY `idx_created_time` (`created_time`),
   KEY `idx_audit_time` (`audit_time`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='任务完成审核表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='任务完成审核表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -824,7 +828,7 @@ CREATE TABLE `pay_order` (
   KEY `idx_acc_id_and_type` (`cash_acc_id`,`type`),
   KEY `idx_acc_id_and_type_and_status` (`cash_acc_id`,`type`,`status`),
   KEY `idx_acc_id_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='支付订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='支付订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -910,7 +914,7 @@ CREATE TABLE `quest` (
   KEY `idx_offline` (`offline`),
   KEY `idx_start_time` (`start_time`),
   KEY `idx_end_time` (`end_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='轻兼职表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='轻兼职表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -973,7 +977,7 @@ CREATE TABLE `quest_cate` (
   `level` int(11) DEFAULT NULL COMMENT '层级',
   PRIMARY KEY (`id`),
   KEY `idx_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='轻兼职分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='轻兼职分类表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1415,6 +1419,7 @@ CREATE TABLE `stu_certi` (
   `pic_ids` varchar(100) DEFAULT NULL COMMENT '图片id',
   `status` varchar(3) DEFAULT NULL COMMENT '00: 等待审核 01: 审核通过 02; 审核失败',
   `memo` varchar(200) DEFAULT NULL COMMENT '审核原因说明',
+  `username` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学生认证信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1559,7 +1564,7 @@ CREATE TABLE `withdraw_apply` (
   KEY `idx_username` (`username`),
   KEY `idx_member_id_and_status` (`member_id`,`status`),
   KEY `idx_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='提现申请';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='提现申请';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1581,4 +1586,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-22 14:39:14
+-- Dump completed on 2015-09-22 19:06:46
