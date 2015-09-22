@@ -4,6 +4,8 @@ import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
 import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.service.quest.QuestService;
@@ -55,5 +57,31 @@ public class QuestServiceTest extends BaseSpringDataTestClass {
         // 当前费率是20%
         CashAccModel acc = accMapper.selectByPrimaryKey(3);
         Assert.assertEquals(new BigDecimal("40.00"), acc.getAvailableBalance());
+    }
+
+    @Test
+    //@Rollback(false)
+    public void testAssign() throws Exception {
+        try {
+            service.assignQuest(1, 10);
+        } catch (QuestAssignedException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
+    }
+
+    @Test
+    //@Rollback(false)
+    public void testAssignToZero() throws Exception {
+        testAssign();
+
+        try {
+            service.assignQuest(2, 10);
+        } catch (QuestZeroException e) {
+            return;
+        }
+
+        Assert.assertTrue(false);
     }
 }

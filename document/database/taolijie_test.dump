@@ -1,0 +1,1583 @@
+-- MySQL dump 10.13  Distrib 5.5.44, for osx10.8 (i386)
+--
+-- Host: localhost    Database: taolijie_test
+-- ------------------------------------------------------
+-- Server version	5.5.44
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `academy`
+--
+
+DROP TABLE IF EXISTS `academy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `academy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `short_name` varchar(20) DEFAULT NULL,
+  `full_name` varchar(128) DEFAULT NULL,
+  `college_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学院';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `academy`
+--
+
+LOCK TABLES `academy` WRITE;
+/*!40000 ALTER TABLE `academy` DISABLE KEYS */;
+/*!40000 ALTER TABLE `academy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `acc_flow`
+--
+
+DROP TABLE IF EXISTS `acc_flow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `acc_flow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_time` datetime DEFAULT NULL,
+  `acc_id` int(11) DEFAULT NULL,
+  `action_type` varchar(3) DEFAULT NULL COMMENT '00: 申请提现 01: 提现成功',
+  `ava_balance_ch` decimal(9,2) DEFAULT '0.00' COMMENT '可用余额变化值 ',
+  `fro_balance_ch` decimal(9,2) DEFAULT '0.00' COMMENT '冻结余额变化值 ',
+  `tot_balance_ch` decimal(9,2) DEFAULT '0.00' COMMENT '总余额变化值',
+  `ava_balance_new` decimal(9,2) DEFAULT '0.00' COMMENT '最新可用余额',
+  `fro_balance_new` decimal(9,2) DEFAULT '0.00' COMMENT '最新冻结余额',
+  `tot_balance_new` decimal(9,2) DEFAULT '0.00' COMMENT '最新总余额',
+  `memo` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_acc_id` (`acc_id`),
+  KEY `idx_acc_id_and_created_time` (`acc_id`,`created_time`),
+  KEY `idx_acc_id_and_action_type` (`acc_id`,`action_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COMMENT='现金账户流水';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acc_flow`
+--
+
+LOCK TABLES `acc_flow` WRITE;
+/*!40000 ALTER TABLE `acc_flow` DISABLE KEYS */;
+INSERT INTO `acc_flow` VALUES (15,'2015-09-22 13:04:54',3,'00',0.00,0.00,0.00,100.00,0.00,0.00,NULL);
+/*!40000 ALTER TABLE `acc_flow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `banner_pic`
+--
+
+DROP TABLE IF EXISTS `banner_pic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `banner_pic` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_time` datetime DEFAULT NULL,
+  `picture_id` int(11) DEFAULT NULL COMMENT 'image_resource表的主键',
+  `url` varchar(256) DEFAULT NULL,
+  `memo` varchar(256) DEFAULT NULL,
+  `order_index` int(11) DEFAULT NULL COMMENT '排序,值越小越靠前',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `banner_pic`
+--
+
+LOCK TABLES `banner_pic` WRITE;
+/*!40000 ALTER TABLE `banner_pic` DISABLE KEYS */;
+/*!40000 ALTER TABLE `banner_pic` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `bulletin`
+--
+
+DROP TABLE IF EXISTS `bulletin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bulletin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text,
+  `created_time` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统公告';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bulletin`
+--
+
+LOCK TABLES `bulletin` WRITE;
+/*!40000 ALTER TABLE `bulletin` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bulletin` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cash_acc`
+--
+
+DROP TABLE IF EXISTS `cash_acc`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cash_acc` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `available_balance` decimal(9,2) DEFAULT '0.00' COMMENT '可用余额',
+  `frozen_balance` decimal(9,2) DEFAULT '0.00' COMMENT '被冻结的金额',
+  `total_balance` decimal(9,2) DEFAULT '0.00' COMMENT '总余额',
+  `status` varchar(3) DEFAULT '00' COMMENT '00: 正常 01: 冻结',
+  `update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `member_id` int(11) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL COMMENT '冗余字段，用户名',
+  `member_role` varchar(20) DEFAULT NULL COMMENT '冗余字段，用户的角色名',
+  `deal_password` varchar(20) DEFAULT NULL COMMENT '交易密码',
+  `phone_number` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(45) DEFAULT NULL,
+  `name` varchar(10) DEFAULT NULL COMMENT '用户真实姓名',
+  `created_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_member_id` (`member_id`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='现金账户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cash_acc`
+--
+
+LOCK TABLES `cash_acc` WRITE;
+/*!40000 ALTER TABLE `cash_acc` DISABLE KEYS */;
+INSERT INTO `cash_acc` VALUES (3,100.00,0.00,100.00,'00','2015-09-22 13:04:54',1,'taolijie',NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `cash_acc` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `credits_level`
+--
+
+DROP TABLE IF EXISTS `credits_level`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `credits_level` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `min_credits` int(11) DEFAULT NULL,
+  `max_credits` int(11) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分阶梯';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `credits_level`
+--
+
+LOCK TABLES `credits_level` WRITE;
+/*!40000 ALTER TABLE `credits_level` DISABLE KEYS */;
+/*!40000 ALTER TABLE `credits_level` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict_city`
+--
+
+DROP TABLE IF EXISTS `dict_city`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dict_city` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL COMMENT '所属于的省，没有则是直辖市',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict_city`
+--
+
+LOCK TABLES `dict_city` WRITE;
+/*!40000 ALTER TABLE `dict_city` DISABLE KEYS */;
+INSERT INTO `dict_city` VALUES (1,'淄博市',NULL);
+/*!40000 ALTER TABLE `dict_city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict_college`
+--
+
+DROP TABLE IF EXISTS `dict_college`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dict_college` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(45) DEFAULT NULL,
+  `short_name` varchar(10) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `region_id` int(11) DEFAULT NULL,
+  `address` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict_college`
+--
+
+LOCK TABLES `dict_college` WRITE;
+/*!40000 ALTER TABLE `dict_college` DISABLE KEYS */;
+INSERT INTO `dict_college` VALUES (1,'山东理工大学','理工大',1,1,1,NULL);
+/*!40000 ALTER TABLE `dict_college` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict_province`
+--
+
+DROP TABLE IF EXISTS `dict_province`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dict_province` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='省表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict_province`
+--
+
+LOCK TABLES `dict_province` WRITE;
+/*!40000 ALTER TABLE `dict_province` DISABLE KEYS */;
+INSERT INTO `dict_province` VALUES (1,'山东省');
+/*!40000 ALTER TABLE `dict_province` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict_region`
+--
+
+DROP TABLE IF EXISTS `dict_region`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dict_region` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL COMMENT '所属的省',
+  `city_id` int(11) DEFAULT NULL COMMENT '所属的市',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict_region`
+--
+
+LOCK TABLES `dict_region` WRITE;
+/*!40000 ALTER TABLE `dict_region` DISABLE KEYS */;
+INSERT INTO `dict_region` VALUES (1,'张店区',1,1);
+/*!40000 ALTER TABLE `dict_region` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dict_school`
+--
+
+DROP TABLE IF EXISTS `dict_school`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dict_school` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(45) DEFAULT NULL,
+  `short_name` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dict_school`
+--
+
+LOCK TABLES `dict_school` WRITE;
+/*!40000 ALTER TABLE `dict_school` DISABLE KEYS */;
+/*!40000 ALTER TABLE `dict_school` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `education_experience`
+--
+
+DROP TABLE IF EXISTS `education_experience`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `education_experience` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `admission_time` date DEFAULT NULL COMMENT '入学时间',
+  `length_of_schooling` int(11) DEFAULT NULL COMMENT '学制(年)',
+  `major` varchar(45) DEFAULT NULL COMMENT '专业',
+  `academy_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='教育经历';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `education_experience`
+--
+
+LOCK TABLES `education_experience` WRITE;
+/*!40000 ALTER TABLE `education_experience` DISABLE KEYS */;
+/*!40000 ALTER TABLE `education_experience` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `emp_certi`
+--
+
+DROP TABLE IF EXISTS `emp_certi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `emp_certi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(45) DEFAULT NULL,
+  `address` varchar(45) DEFAULT NULL,
+  `pic_ids` varchar(100) DEFAULT NULL,
+  `status` varchar(3) DEFAULT NULL COMMENT '00: 等待审核 01: 审核通过 02; 审核失败',
+  `created_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `emp_certi`
+--
+
+LOCK TABLES `emp_certi` WRITE;
+/*!40000 ALTER TABLE `emp_certi` DISABLE KEYS */;
+/*!40000 ALTER TABLE `emp_certi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feedback` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '反馈表',
+  `phone` varchar(20) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `created_time` timestamp NULL DEFAULT NULL,
+  `title` varchar(30) DEFAULT NULL,
+  `content` varchar(500) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL COMMENT '反馈者的用户id. 如果没有则留空',
+  `username` varchar(45) DEFAULT NULL COMMENT '冗余字段，保存member表的用户名',
+  PRIMARY KEY (`id`),
+  KEY `idx_member_id` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feedback`
+--
+
+LOCK TABLES `feedback` WRITE;
+/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
+/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `finish_request`
+--
+
+DROP TABLE IF EXISTS `finish_request`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `finish_request` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quest_id` int(11) DEFAULT NULL COMMENT '任务id',
+  `member_id` int(11) DEFAULT NULL COMMENT '申请者用户id',
+  `username` varchar(45) DEFAULT NULL COMMENT '冗余字段,申请者的用户名',
+  `created_time` datetime DEFAULT NULL COMMENT '申请时间',
+  `audit_time` datetime DEFAULT NULL COMMENT '审核完成时间',
+  `description` varchar(500) DEFAULT NULL COMMENT '任务完成情况文字描述',
+  `image_ids` varchar(500) DEFAULT NULL COMMENT '上传图片id',
+  `status` varchar(3) DEFAULT '01' COMMENT '00: 已通过 01: 等待审核 02: 审核未通过',
+  `memo` varchar(500) DEFAULT NULL COMMENT '审核说明',
+  `name` varchar(10) DEFAULT NULL COMMENT '用户姓名',
+  PRIMARY KEY (`id`),
+  KEY `idx_member_id` (`member_id`),
+  KEY `idx_quest_id` (`quest_id`),
+  KEY `idx_created_time` (`created_time`),
+  KEY `idx_audit_time` (`audit_time`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务完成审核表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `finish_request`
+--
+
+LOCK TABLES `finish_request` WRITE;
+/*!40000 ALTER TABLE `finish_request` DISABLE KEYS */;
+/*!40000 ALTER TABLE `finish_request` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `image_resource`
+--
+
+DROP TABLE IF EXISTS `image_resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `image_resource` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(256) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL COMMENT '.jpeg, .gif',
+  `bin_data` mediumblob,
+  `type` varchar(45) DEFAULT NULL COMMENT '图片的作用. 如:身份证图片, 证件图片等',
+  `member_id` int(11) DEFAULT NULL COMMENT '如果是用户上传的证件照, 则这里为用户表的id',
+  `job_post_id` int(11) DEFAULT NULL,
+  `sh_post_id` int(11) DEFAULT NULL,
+  `news_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `image_resource`
+--
+
+LOCK TABLES `image_resource` WRITE;
+/*!40000 ALTER TABLE `image_resource` DISABLE KEYS */;
+/*!40000 ALTER TABLE `image_resource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ivy_activity_image_resource`
+--
+
+DROP TABLE IF EXISTS `ivy_activity_image_resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ivy_activity_image_resource` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(256) DEFAULT NULL,
+  `extension` varchar(10) DEFAULT NULL,
+  `bin_data` mediumblob,
+  `ivy_id` int(11) DEFAULT NULL,
+  `activity_id` int(11) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL COMMENT 'MAIN: 主要图片',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='桃李青藤, 校园活动中使用到的图片信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ivy_activity_image_resource`
+--
+
+LOCK TABLES `ivy_activity_image_resource` WRITE;
+/*!40000 ALTER TABLE `ivy_activity_image_resource` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ivy_activity_image_resource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_post`
+--
+
+DROP TABLE IF EXISTS `job_post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `expired_time` datetime DEFAULT NULL,
+  `post_time` datetime DEFAULT NULL,
+  `work_place` varchar(256) DEFAULT NULL,
+  `wage` decimal(6,1) DEFAULT NULL,
+  `time_to_pay` varchar(45) DEFAULT NULL COMMENT '结算方式',
+  `job_description` varchar(1000) DEFAULT NULL COMMENT '工作简介',
+  `contact` varchar(45) DEFAULT NULL COMMENT '联系人名',
+  `contact_phone` varchar(45) DEFAULT NULL COMMENT '联系人手机号',
+  `contact_email` varchar(45) DEFAULT NULL COMMENT '联系人mail\n',
+  `contact_qq` varchar(45) DEFAULT NULL,
+  `job_detail` varchar(1000) DEFAULT NULL COMMENT '工作详细描述',
+  `introduce` text COMMENT '商家介绍',
+  `likes` int(11) DEFAULT '0',
+  `dislikes` int(11) DEFAULT '0',
+  `job_post_category_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `education_level` varchar(45) DEFAULT NULL COMMENT '学历要求信息',
+  `complaint` int(11) DEFAULT '0',
+  `work_time` varchar(128) DEFAULT NULL COMMENT '工作时间',
+  `salary_unit` varchar(45) DEFAULT NULL COMMENT '工资单位：天、周、月',
+  `page_view` int(11) DEFAULT '0',
+  `verified` varchar(45) DEFAULT NULL,
+  `job_postcol` varchar(45) DEFAULT NULL,
+  `application_resume_ids` text COMMENT '收到的简历id',
+  `applicant_amount` int(11) DEFAULT '0' COMMENT '申请者数量',
+  `deleted` tinyint(1) DEFAULT '0',
+  `work_region` varchar(45) DEFAULT NULL COMMENT '工作的地域，如博山、张店等等',
+  `expired` tinyint(1) DEFAULT '0' COMMENT '是否过期',
+  `province` varchar(15) DEFAULT NULL COMMENT '工作所在省',
+  `city` varchar(15) DEFAULT NULL COMMENT '工作所在市',
+  `region` varchar(15) DEFAULT NULL COMMENT '工作所在区',
+  `is_indexed` tinyint(1) DEFAULT '0' COMMENT '是否已经完成了inverted index的创建',
+  PRIMARY KEY (`id`),
+  KEY `idx_is_indexed` (`is_indexed`),
+  KEY `idx_job_title` (`title`),
+  KEY `idx_deleted` (`deleted`),
+  KEY `idx_post_time` (`post_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='兼职表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_post`
+--
+
+LOCK TABLES `job_post` WRITE;
+/*!40000 ALTER TABLE `job_post` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_post` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `job_post_category`
+--
+
+DROP TABLE IF EXISTS `job_post_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `job_post_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  `level` int(11) DEFAULT NULL COMMENT '分类层次：一级分类(1)、二级分类(2)',
+  `theme_color` varchar(45) DEFAULT NULL COMMENT '#FFFFFF值',
+  PRIMARY KEY (`id`),
+  KEY `idx_job_category_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='兼职信息分类';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `job_post_category`
+--
+
+LOCK TABLES `job_post_category` WRITE;
+/*!40000 ALTER TABLE `job_post_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `job_post_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member`
+--
+
+DROP TABLE IF EXISTS `member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL COMMENT '登陆名',
+  `password` varchar(90) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL COMMENT '真人人名',
+  `student_id` text COMMENT '学号',
+  `qq` varchar(20) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `credits` int(11) DEFAULT '0' COMMENT '积分',
+  `auto_login_identifier` varchar(60) DEFAULT NULL,
+  `app_token` varchar(25) DEFAULT NULL COMMENT '移动端的登陆标识',
+  `last_post_time` datetime DEFAULT NULL COMMENT '最近一次发布信息的时间',
+  `reset_password_token` varchar(45) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `verified` varchar(50) DEFAULT NULL COMMENT '审核状态：NONE, INPROCESS, VERIFIED',
+  `profile_photo_path` varchar(256) DEFAULT NULL COMMENT '头像路径',
+  `phone` varchar(20) DEFAULT NULL,
+  `company_name` varchar(128) DEFAULT NULL,
+  `block_list` text COMMENT '要屏蔽的商家。保存id号，以;分隔。如1;2;3;4;5',
+  `valid` tinyint(1) DEFAULT '1' COMMENT '是否封号',
+  `complaint` int(11) DEFAULT '0' COMMENT '被投诉数',
+  `applied_job_ids` text COMMENT '已申请的工作id',
+  `profile_photo_id` int(11) DEFAULT NULL,
+  `last_token_date` datetime DEFAULT NULL,
+  `school_organization` varchar(15) DEFAULT NULL COMMENT '校园组织验证状态. NONE, IN_PROCESS, REJECTED, PASSED',
+  `liked_job_ids` text,
+  `liked_sh_ids` text,
+  `read_global_noti_ids` text COMMENT '已经读过的全局通知',
+  `last_job_date` datetime DEFAULT NULL COMMENT '最近一次发布兼职信息的时间',
+  `last_sh_date` datetime DEFAULT NULL COMMENT '最近一次发布二手信息的时间',
+  `user_level` varchar(10) DEFAULT NULL,
+  `province` varchar(30) DEFAULT NULL,
+  `city` varchar(30) DEFAULT NULL,
+  `region` varchar(30) DEFAULT NULL,
+  `college_name` varchar(45) DEFAULT NULL,
+  `major` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_member_app_token` (`app_token`),
+  KEY `idx_member_username` (`username`),
+  KEY `idx_member_auto_login_identifer` (`auto_login_identifier`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member`
+--
+
+LOCK TABLES `member` WRITE;
+/*!40000 ALTER TABLE `member` DISABLE KEYS */;
+INSERT INTO `member` VALUES (1,'taolijie','3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d',NULL,'wanghongfei',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'taolijie2','3d4f2bf07dc1be38b20cd6e46949a1071f9d0e3d',NULL,'hello',NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `member` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member_role`
+--
+
+DROP TABLE IF EXISTS `member_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_role` (
+  `member_id` int(11) DEFAULT NULL,
+  `role_rid` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `idx_role_rid` (`role_rid`),
+  KEY `idx_member_id` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member_role`
+--
+
+LOCK TABLES `member_role` WRITE;
+/*!40000 ALTER TABLE `member_role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `member_verification_rel`
+--
+
+DROP TABLE IF EXISTS `member_verification_rel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_verification_rel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `image_id` int(11) DEFAULT NULL,
+  `image_type` varchar(45) DEFAULT NULL COMMENT 'ID_FRONT, ID_BACK, ORG_FRONT, ORG_BACK, STU_ID_FRONT, STU_ID_BACK',
+  `created_time` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='与image_resource表关联, 保存用户上传的证件照片';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `member_verification_rel`
+--
+
+LOCK TABLES `member_verification_rel` WRITE;
+/*!40000 ALTER TABLE `member_verification_rel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `member_verification_rel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `my_collection`
+--
+
+DROP TABLE IF EXISTS `my_collection`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `my_collection` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_time` datetime DEFAULT NULL COMMENT '收藏时间',
+  `member_id` int(11) DEFAULT NULL COMMENT '收藏者用户id',
+  `job_post_id` int(11) DEFAULT NULL,
+  `sh_post_id` int(11) DEFAULT NULL,
+  `resume_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_collection_job_post` (`job_post_id`),
+  KEY `idx_collection_sh_post` (`sh_post_id`),
+  KEY `idx_collection_resume` (`resume_id`),
+  KEY `idx_collection_mem_job` (`member_id`,`job_post_id`),
+  KEY `idx_collection_mem_sh` (`member_id`,`sh_post_id`),
+  KEY `idx_collection_mem_resume` (`resume_id`,`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='我的收藏关联表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `my_collection`
+--
+
+LOCK TABLES `my_collection` WRITE;
+/*!40000 ALTER TABLE `my_collection` DISABLE KEYS */;
+/*!40000 ALTER TABLE `my_collection` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `news`
+--
+
+DROP TABLE IF EXISTS `news`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `content` text,
+  `place` varchar(45) DEFAULT NULL COMMENT '活动地点',
+  `picture_path` text COMMENT '文章引用的图片路径，以;分隔',
+  `time` datetime DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `head_picture_path` varchar(256) DEFAULT NULL COMMENT '文章标题旁边显示的图片',
+  PRIMARY KEY (`id`),
+  KEY `idx_time` (`time`),
+  KEY `idx_member_id` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='首页显示的新闻信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `news`
+--
+
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `participant`
+--
+
+DROP TABLE IF EXISTS `participant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `participant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `ivy_id` int(11) DEFAULT NULL,
+  `activity_id` int(11) DEFAULT NULL,
+  `name` varchar(45) DEFAULT NULL,
+  `academy` varchar(45) DEFAULT NULL COMMENT '学院',
+  `className` varchar(45) DEFAULT NULL COMMENT '班级',
+  `qq` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `weichat` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `created_time` date DEFAULT NULL COMMENT '报名时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='"想去"功能对应的数据表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `participant`
+--
+
+LOCK TABLES `participant` WRITE;
+/*!40000 ALTER TABLE `participant` DISABLE KEYS */;
+/*!40000 ALTER TABLE `participant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pay_order`
+--
+
+DROP TABLE IF EXISTS `pay_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pay_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cash_acc_id` int(11) DEFAULT NULL COMMENT '订单对应的现金账户',
+  `member_id` int(11) DEFAULT NULL COMMENT '订单生成者id',
+  `title` varchar(45) DEFAULT NULL COMMENT '订单标题',
+  `created_time` datetime DEFAULT NULL COMMENT '订单创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '状态更新时间 ',
+  `amount` decimal(9,2) DEFAULT NULL COMMENT '订单金额',
+  `type` varchar(3) DEFAULT NULL COMMENT '订单类型. 00: 充值订单',
+  `status` varchar(3) DEFAULT NULL COMMENT '订单状态. 00:等待审核 01: 交易成功 02: 审核未通过',
+  `alipay_trade_num` varchar(35) DEFAULT NULL COMMENT '支付宝交易号',
+  `memo` varchar(200) DEFAULT NULL COMMENT '审核备注',
+  PRIMARY KEY (`id`),
+  KEY `idx_cash_acc_id` (`cash_acc_id`),
+  KEY `idx_created_time` (`created_time`),
+  KEY `idx_amount` (`amount`),
+  KEY `idx_acc_id_and_type` (`cash_acc_id`,`type`),
+  KEY `idx_acc_id_and_type_and_status` (`cash_acc_id`,`type`,`status`),
+  KEY `idx_acc_id_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='支付订单表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pay_order`
+--
+
+LOCK TABLES `pay_order` WRITE;
+/*!40000 ALTER TABLE `pay_order` DISABLE KEYS */;
+INSERT INTO `pay_order` VALUES (2,3,1,'??','2015-09-21 11:48:27','2015-09-21 11:53:57',200.00,'00','01','2012394759037459023','OK');
+/*!40000 ALTER TABLE `pay_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `private_notification`
+--
+
+DROP TABLE IF EXISTS `private_notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `private_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `content` text,
+  `is_read` tinyint(1) DEFAULT '0',
+  `time` datetime DEFAULT NULL,
+  `access_range` varchar(45) DEFAULT NULL COMMENT 'GLOBAL, (与role_type相同)',
+  `to_member_id` int(11) DEFAULT NULL,
+  `noti_type` varchar(2) DEFAULT NULL COMMENT '	⁃	通知的类型。0为管理员发送的通知, 1为程序自动生成的通知(如被评论), 2为普通用户发送的通知\n',
+  `post_id` int(11) DEFAULT NULL,
+  `post_type` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_noti_member_is_read_type` (`member_id`,`is_read`,`noti_type`),
+  KEY `idx_member_id_type` (`member_id`,`noti_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `private_notification`
+--
+
+LOCK TABLES `private_notification` WRITE;
+/*!40000 ALTER TABLE `private_notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `private_notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `quest`
+--
+
+DROP TABLE IF EXISTS `quest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quest` (
+  `title` varchar(20) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `quest_cate_id` int(11) DEFAULT NULL COMMENT '任务分类',
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `limit_time` int(11) DEFAULT '2' COMMENT '做任务的时间限制，单位为小时',
+  `total_amt` int(11) DEFAULT NULL COMMENT '任务总数量',
+  `left_amt` int(11) DEFAULT NULL COMMENT '任务剩余数量',
+  `award` decimal(9,2) DEFAULT '0.00' COMMENT '每个任务的奖励',
+  `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系人手机号',
+  `description` varchar(100) DEFAULT NULL COMMENT '任务简单描述',
+  `quest_detail` varchar(1000) DEFAULT NULL COMMENT '详细描述',
+  `url` varchar(255) DEFAULT NULL COMMENT '任务链接URL',
+  `memo` varchar(100) DEFAULT NULL COMMENT '其它说明',
+  `offline` tinyint(1) DEFAULT '0' COMMENT '是否已经下线',
+  `province_id` int(11) DEFAULT NULL,
+  `city_id` int(11) DEFAULT NULL,
+  `region_id` int(11) DEFAULT NULL,
+  `college_id` int(11) DEFAULT NULL,
+  `school_id` int(11) DEFAULT NULL,
+  `final_award` decimal(9,2) DEFAULT NULL,
+  `member_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `idx_created_time` (`created_time`),
+  KEY `idx_quest_cate_id` (`quest_cate_id`),
+  KEY `idx_award` (`award`),
+  KEY `idx_offline` (`offline`),
+  KEY `idx_start_time` (`start_time`),
+  KEY `idx_end_time` (`end_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='轻兼职表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quest`
+--
+
+LOCK TABLES `quest` WRITE;
+/*!40000 ALTER TABLE `quest` DISABLE KEYS */;
+INSERT INTO `quest` VALUES ('quest1','2015-09-21 21:22:40',1,'2015-09-21 21:22:40','2015-09-21 21:22:40',2,100,100,10.00,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,12.00,1,2),('quest1','2015-09-22 13:04:54',1,'2015-09-22 13:04:54','2015-09-22 13:04:54',2,10,0,0.00,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,0.00,1,10);
+/*!40000 ALTER TABLE `quest` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `quest_assign`
+--
+
+DROP TABLE IF EXISTS `quest_assign`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quest_assign` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL COMMENT '领取者用户id',
+  `username` varchar(45) DEFAULT NULL COMMENT '领取者用户名',
+  `quest_id` int(11) DEFAULT NULL COMMENT '任务id',
+  `quest_title` varchar(45) DEFAULT NULL COMMENT '任取的任务的标题',
+  `assign_time` datetime DEFAULT NULL COMMENT '领取时间',
+  `status` varchar(3) DEFAULT '00' COMMENT '00: 已领取. 01: 已完成 02: 已结束',
+  PRIMARY KEY (`id`),
+  KEY `idx_assign_time` (`assign_time`),
+  KEY `idx_member_id` (`member_id`),
+  KEY `idx_member_id_and_assign_time` (`member_id`,`assign_time`),
+  KEY `idx_member_id_and_status` (`member_id`,`status`),
+  KEY `idx_quest_id` (`quest_id`),
+  KEY `idx_member_id_and_quest_id` (`member_id`,`quest_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='任务领取表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quest_assign`
+--
+
+LOCK TABLES `quest_assign` WRITE;
+/*!40000 ALTER TABLE `quest_assign` DISABLE KEYS */;
+INSERT INTO `quest_assign` VALUES (1,1,'taolijie',10,'quest1','2015-09-22 13:06:49','00');
+/*!40000 ALTER TABLE `quest_assign` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `quest_cate`
+--
+
+DROP TABLE IF EXISTS `quest_cate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quest_cate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL COMMENT '分类名',
+  `memo` varchar(200) DEFAULT NULL,
+  `theme_color` varchar(10) DEFAULT NULL,
+  `level` int(11) DEFAULT NULL COMMENT '层级',
+  PRIMARY KEY (`id`),
+  KEY `idx_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='轻兼职分类表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `quest_cate`
+--
+
+LOCK TABLES `quest_cate` WRITE;
+/*!40000 ALTER TABLE `quest_cate` DISABLE KEYS */;
+INSERT INTO `quest_cate` VALUES (1,'cate1',NULL,NULL,1),(2,'cate2',NULL,NULL,NULL);
+/*!40000 ALTER TABLE `quest_cate` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recommended_post`
+--
+
+DROP TABLE IF EXISTS `recommended_post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recommended_post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) DEFAULT NULL,
+  `sh_id` int(11) DEFAULT NULL,
+  `resume_id` int(11) DEFAULT NULL,
+  `apply_time` datetime DEFAULT NULL COMMENT '申请时间',
+  `validation` tinyint(1) DEFAULT '0' COMMENT '是否显示在首页',
+  `member_id` int(11) DEFAULT NULL COMMENT '申请人',
+  `memo` varchar(300) DEFAULT NULL,
+  `order_index` int(11) DEFAULT NULL COMMENT '排序指数，值越小越靠前，从0开始',
+  `pass_time` datetime DEFAULT NULL COMMENT '通过审核的时间',
+  `remove_time` datetime DEFAULT NULL COMMENT '下架时间',
+  `post_title` varchar(45) DEFAULT NULL COMMENT '冗余字段，与帖子表的title值相同',
+  PRIMARY KEY (`id`),
+  KEY `idx_reco_job` (`job_id`),
+  KEY `idx_reco_sh` (`sh_id`),
+  KEY `idx_reco_resume` (`resume_id`),
+  KEY `idx_reco_validation` (`validation`),
+  KEY `idx_reco_member` (`member_id`),
+  KEY `idx_reco_order` (`order_index`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recommended_post`
+--
+
+LOCK TABLES `recommended_post` WRITE;
+/*!40000 ALTER TABLE `recommended_post` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recommended_post` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `resume`
+--
+
+DROP TABLE IF EXISTS `resume`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resume` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `height` int(11) DEFAULT NULL,
+  `photo_path` varchar(256) DEFAULT NULL COMMENT '用户头像图片路径',
+  `email` varchar(45) DEFAULT NULL,
+  `qq` varchar(45) DEFAULT NULL,
+  `experience` text,
+  `introduce` text COMMENT '自我介绍',
+  `member_id` int(11) DEFAULT NULL,
+  `access_authority` varchar(45) DEFAULT NULL COMMENT '访问权限: ME_ONLY, ALL',
+  `page_view` int(11) DEFAULT '0' COMMENT '访问量',
+  `verified` varchar(45) DEFAULT NULL COMMENT '审核状态',
+  `photo_id` int(11) DEFAULT NULL,
+  `phone_number` varchar(45) DEFAULT NULL,
+  `wechat_account` varchar(45) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `spare_time` varchar(45) DEFAULT NULL COMMENT '空闲时间描述',
+  `major` varchar(30) DEFAULT NULL COMMENT '专业',
+  `school` varchar(30) DEFAULT NULL COMMENT '学校名',
+  `preferred_province` varchar(30) DEFAULT NULL,
+  `preferred_city` varchar(30) DEFAULT NULL,
+  `preferred_region` varchar(30) DEFAULT NULL,
+  `birthday` datetime DEFAULT NULL COMMENT 'ß',
+  PRIMARY KEY (`id`),
+  KEY `idx_member_id` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `resume`
+--
+
+LOCK TABLES `resume` WRITE;
+/*!40000 ALTER TABLE `resume` DISABLE KEYS */;
+/*!40000 ALTER TABLE `resume` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `resume_job_post_category`
+--
+
+DROP TABLE IF EXISTS `resume_job_post_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resume_job_post_category` (
+  `resume_id` int(11) DEFAULT NULL,
+  `job_post_category_id` int(11) DEFAULT NULL,
+  KEY `idx_resume_id` (`resume_id`),
+  KEY `idx_job_post_category` (`job_post_category_id`),
+  KEY `idx_resume_id_and_job_post_category` (`resume_id`,`job_post_category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='求职意向关联表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `resume_job_post_category`
+--
+
+LOCK TABLES `resume_job_post_category` WRITE;
+/*!40000 ALTER TABLE `resume_job_post_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `resume_job_post_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `resume_post_rel`
+--
+
+DROP TABLE IF EXISTS `resume_post_rel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resume_post_rel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resume_id` int(11) DEFAULT NULL,
+  `job_post_id` int(11) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL COMMENT '投递时间',
+  `member_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='简历投递表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `resume_post_rel`
+--
+
+LOCK TABLES `resume_post_rel` WRITE;
+/*!40000 ALTER TABLE `resume_post_rel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `resume_post_rel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `review`
+--
+
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `review` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text,
+  `job_post_id` int(11) DEFAULT NULL COMMENT '如果被评论者是兼职，该字段为兼职id',
+  `member_id` int(11) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  `replied_review_id` int(11) DEFAULT NULL COMMENT '此field有值表示这是一条评论回复',
+  `sh_post_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_sh_post_id` (`sh_post_id`),
+  KEY `idx_replied_review_id` (`replied_review_id`),
+  KEY `idx_job_post_id` (`job_post_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `review`
+--
+
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role` (
+  `rid` int(11) NOT NULL AUTO_INCREMENT,
+  `rolename` varchar(45) DEFAULT NULL,
+  `memo` text,
+  PRIMARY KEY (`rid`),
+  KEY `idx_rid` (`rid`),
+  KEY `idx_rolename` (`rolename`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `school`
+--
+
+DROP TABLE IF EXISTS `school`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `school` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `short_name` varchar(20) DEFAULT NULL,
+  `full_name` varchar(128) DEFAULT NULL,
+  `province` varchar(45) DEFAULT NULL COMMENT '大学所在省份',
+  `type` varchar(45) DEFAULT NULL COMMENT 'e.g., HIGH_SCHOOL, UNDERGRADUATE, INSTITUTE(专科)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `school`
+--
+
+LOCK TABLES `school` WRITE;
+/*!40000 ALTER TABLE `school` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `school_activity`
+--
+
+DROP TABLE IF EXISTS `school_activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `school_activity` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL COMMENT '如果是个人发布的, 该字段存放用户id',
+  `school_organization_id` int(11) DEFAULT NULL,
+  `title` varchar(45) DEFAULT NULL,
+  `content` text,
+  `created_time` date DEFAULT NULL,
+  `expired_time` date DEFAULT NULL,
+  `likes` int(11) DEFAULT NULL,
+  `school_activity_category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='校园活动';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `school_activity`
+--
+
+LOCK TABLES `school_activity` WRITE;
+/*!40000 ALTER TABLE `school_activity` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_activity` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `school_activity_category`
+--
+
+DROP TABLE IF EXISTS `school_activity_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `school_activity_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  `level` int(11) DEFAULT NULL,
+  `theme_color` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `school_activity_category`
+--
+
+LOCK TABLES `school_activity_category` WRITE;
+/*!40000 ALTER TABLE `school_activity_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_activity_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `school_organization`
+--
+
+DROP TABLE IF EXISTS `school_organization`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `school_organization` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL COMMENT '简介',
+  `member_names` text COMMENT '成员列表',
+  `slogan` varchar(100) DEFAULT NULL COMMENT '口号',
+  `bulletin` text COMMENT '公告',
+  `location` varchar(45) DEFAULT NULL COMMENT '地点',
+  `qq` varchar(45) DEFAULT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `wechat` varchar(45) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  `school_organization_category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='校内组织';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `school_organization`
+--
+
+LOCK TABLES `school_organization` WRITE;
+/*!40000 ALTER TABLE `school_organization` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_organization` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `school_organization_category`
+--
+
+DROP TABLE IF EXISTS `school_organization_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `school_organization_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  `level` int(11) DEFAULT NULL,
+  `theme_color` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='校园组织分类表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `school_organization_category`
+--
+
+LOCK TABLES `school_organization_category` WRITE;
+/*!40000 ALTER TABLE `school_organization_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `school_organization_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `second_hand_post`
+--
+
+DROP TABLE IF EXISTS `second_hand_post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `second_hand_post` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `expired_time` datetime DEFAULT NULL COMMENT '过期时间',
+  `post_time` datetime DEFAULT NULL,
+  `depreciation_rate` varchar(10) DEFAULT NULL COMMENT '9成，95成\n',
+  `original_price` decimal(6,1) DEFAULT NULL COMMENT '原价格',
+  `sell_price` decimal(6,1) DEFAULT NULL COMMENT '现价',
+  `picture_path` text COMMENT '物品图片路径，以;分号分隔。如: /home/a.jpg;/home/b.jpg',
+  `description` text COMMENT '物品描述',
+  `likes` int(11) DEFAULT '0',
+  `dislikes` int(11) DEFAULT '0',
+  `member_id` int(11) DEFAULT NULL,
+  `second_hand_post_category_id` int(11) DEFAULT NULL,
+  `complaint` int(11) DEFAULT '0',
+  `page_view` int(11) DEFAULT '0',
+  `verified` varchar(45) DEFAULT NULL,
+  `trade_place` varchar(45) DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT '0',
+  `contact_name` varchar(20) DEFAULT NULL,
+  `contact_qq` varchar(20) DEFAULT NULL,
+  `contact_phone` varchar(20) DEFAULT NULL,
+  `expired` tinyint(1) DEFAULT '0' COMMENT '是否下架',
+  `is_indexed` tinyint(1) DEFAULT '0' COMMENT '是否已经完成了inverted index的创建',
+  PRIMARY KEY (`id`),
+  KEY `idx_is_indexed` (`is_indexed`),
+  KEY `dix_sh_title` (`title`),
+  KEY `idx_member_id` (`member_id`),
+  KEY `idx_deleted` (`is_indexed`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `second_hand_post`
+--
+
+LOCK TABLES `second_hand_post` WRITE;
+/*!40000 ALTER TABLE `second_hand_post` DISABLE KEYS */;
+/*!40000 ALTER TABLE `second_hand_post` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `second_hand_post_category`
+--
+
+DROP TABLE IF EXISTS `second_hand_post_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `second_hand_post_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  `level` int(11) DEFAULT NULL,
+  `theme_color` varchar(45) DEFAULT NULL COMMENT '#FFAABB值',
+  PRIMARY KEY (`id`),
+  KEY `idx_sh_category_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='二手信息帖子分类';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `second_hand_post_category`
+--
+
+LOCK TABLES `second_hand_post_category` WRITE;
+/*!40000 ALTER TABLE `second_hand_post_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `second_hand_post_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stu_certi`
+--
+
+DROP TABLE IF EXISTS `stu_certi`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stu_certi` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `created_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `member_id` int(11) NOT NULL,
+  `name` varchar(10) DEFAULT NULL COMMENT '认证姓名',
+  `college_id` int(11) DEFAULT NULL COMMENT '认证大学',
+  `school_id` int(11) DEFAULT NULL COMMENT '认证学院',
+  `clazz` varchar(20) DEFAULT NULL COMMENT '班级',
+  `pic_ids` varchar(100) DEFAULT NULL COMMENT '图片id',
+  `status` varchar(3) DEFAULT NULL COMMENT '00: 等待审核 01: 审核通过 02; 审核失败',
+  `memo` varchar(200) DEFAULT NULL COMMENT '审核原因说明',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='学生认证信息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stu_certi`
+--
+
+LOCK TABLES `stu_certi` WRITE;
+/*!40000 ALTER TABLE `stu_certi` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stu_certi` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sys_config`
+--
+
+DROP TABLE IF EXISTS `sys_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sys_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quest_fee_rate` int(11) DEFAULT NULL COMMENT '整数表示百分比, 5表示5%, 200表示200%',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统配置表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sys_config`
+--
+
+LOCK TABLES `sys_config` WRITE;
+/*!40000 ALTER TABLE `sys_config` DISABLE KEYS */;
+INSERT INTO `sys_config` VALUES (1,20);
+/*!40000 ALTER TABLE `sys_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `system_notification`
+--
+
+DROP TABLE IF EXISTS `system_notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `system_notification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `content` text,
+  `is_read` tinyint(1) DEFAULT '0',
+  `time` datetime DEFAULT NULL,
+  `access_range` varchar(45) DEFAULT NULL COMMENT 'GLOBAL, (与role_type相同)',
+  PRIMARY KEY (`id`),
+  KEY `idx_noti_acc_range` (`access_range`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `system_notification`
+--
+
+LOCK TABLES `system_notification` WRITE;
+/*!40000 ALTER TABLE `system_notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `system_notification` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taoli_ivy`
+--
+
+DROP TABLE IF EXISTS `taoli_ivy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `taoli_ivy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) DEFAULT NULL,
+  `content` text,
+  `created_time` date DEFAULT NULL,
+  `likes` int(11) DEFAULT NULL,
+  `expired_time` date DEFAULT NULL COMMENT '过期时间',
+  `taoli_ivy_category_id` int(11) DEFAULT NULL,
+  `member_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='桃李青藤';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taoli_ivy`
+--
+
+LOCK TABLES `taoli_ivy` WRITE;
+/*!40000 ALTER TABLE `taoli_ivy` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taoli_ivy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `taoli_ivy_category`
+--
+
+DROP TABLE IF EXISTS `taoli_ivy_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `taoli_ivy_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `memo` text,
+  `level` int(11) DEFAULT NULL,
+  `theme_color` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='桃李青藤分类表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `taoli_ivy_category`
+--
+
+LOCK TABLES `taoli_ivy_category` WRITE;
+/*!40000 ALTER TABLE `taoli_ivy_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `taoli_ivy_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `withdraw_apply`
+--
+
+DROP TABLE IF EXISTS `withdraw_apply`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `withdraw_apply` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL COMMENT '申请者id',
+  `username` varchar(45) DEFAULT NULL COMMENT '申请者用户名',
+  `apply_time` datetime DEFAULT NULL COMMENT '申请时间',
+  `amount` decimal(5,2) DEFAULT NULL COMMENT '提现金额',
+  `status` varchar(3) DEFAULT '00' COMMENT '00: 等待审核 01: 等待派现 02: 已完成 03: 审核不通过',
+  `update_time` datetime DEFAULT NULL COMMENT '状态更新时间',
+  `alipay_acc` varchar(45) DEFAULT NULL COMMENT '支付宝账号',
+  `bank_acc` varchar(45) DEFAULT NULL COMMENT '银行卡号',
+  `memo` varchar(200) DEFAULT NULL,
+  `acc_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_member_id` (`member_id`),
+  KEY `idx_username` (`username`),
+  KEY `idx_member_id_and_status` (`member_id`,`status`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='提现申请';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `withdraw_apply`
+--
+
+LOCK TABLES `withdraw_apply` WRITE;
+/*!40000 ALTER TABLE `withdraw_apply` DISABLE KEYS */;
+INSERT INTO `withdraw_apply` VALUES (2,1,'taolijie','2015-09-21 10:45:45',20.00,'02','2015-09-21 10:55:13',NULL,NULL,'OK',3),(4,2,'taolijie','2015-09-21 11:08:26',20.00,'00','2015-09-21 11:08:26',NULL,NULL,NULL,3);
+/*!40000 ALTER TABLE `withdraw_apply` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-09-22 13:15:44
