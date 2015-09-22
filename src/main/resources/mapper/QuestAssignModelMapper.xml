@@ -168,4 +168,65 @@
             member_id = #{memId} AND quest_id = #{questId}
     </update>
 
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            quest_assign questa
+        <where>
+            <if test="memberId != null">
+                questa.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND questa.username = #{username}
+            </if>
+            <if test="questId != null">
+                AND questa.quest_id = #{questId}
+            </if>
+            <if test="questTitle != null">
+                AND questa.quest_title = #{questTitle}
+            </if>
+            <if test="assignTime != null">
+                AND questa.assign_time = #{assignTime}
+            </if>
+            <if test="status != null">
+                AND questa.status = #{status}
+            </if>
+
+        </where>
+        ORDER BY
+            questa.assign_time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            quest_assign questa
+        <where>
+            <if test="memberId != null">
+                questa.member_id = #{memberId}
+            </if>
+            <if test="username != null">
+                AND questa.username = #{username}
+            </if>
+            <if test="questId != null">
+                AND questa.quest_id = #{questId}
+            </if>
+            <if test="questTitle != null">
+                AND questa.quest_title = #{questTitle}
+            </if>
+            <if test="assignTime != null">
+                AND questa.assign_time = #{assignTime}
+            </if>
+            <if test="status != null">
+                AND questa.status = #{status}
+            </if>
+
+        </where>
+    </select>
+
+
 </mapper>

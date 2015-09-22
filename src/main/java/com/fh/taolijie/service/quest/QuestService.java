@@ -1,6 +1,8 @@
 package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -45,4 +47,25 @@ public interface QuestService {
      * @return
      */
     ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps);
+
+
+    /**
+     * 查询指定用户的任务领取记录
+     * @param memId
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<QuestAssignModel> queryAssignRecords(Integer memId, int pn, int ps);
+
+    /**
+     * 查询指定用户指定状态的任务领取记录
+     *
+     * @param memId
+     * @param status
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<QuestAssignModel> queryAssignRecords(Integer memId, AssignStatus status, int pn, int ps);
 }

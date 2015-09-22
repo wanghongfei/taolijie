@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.service.quest;
 
+import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.QuestModel;
@@ -89,5 +90,11 @@ public class QuestServiceTest extends BaseSpringDataTestClass {
     public void testByCate() {
         service.findByCate(1, new BigDecimal(10), new BigDecimal(100), 0, 100);
         service.findByCate(1, 0, 100);
+    }
+
+    @Test
+    public void testQueryAssign() {
+        service.queryAssignRecords(1, 0, 100);
+        service.queryAssignRecords(1, AssignStatus.ASSIGNED, 0, 100);
     }
 }

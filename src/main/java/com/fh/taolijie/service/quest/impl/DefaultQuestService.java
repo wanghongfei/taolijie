@@ -159,4 +159,29 @@ public class DefaultQuestService implements QuestService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<QuestAssignModel> queryAssignRecords(Integer memId, int pn, int ps) {
+        QuestAssignModel example = new QuestAssignModel(pn, ps);
+        example.setMemberId(memId);
+
+        List<QuestAssignModel> list = assignMapper.findBy(example);
+        long tot = assignMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<QuestAssignModel> queryAssignRecords(Integer memId, AssignStatus status, int pn, int ps) {
+        QuestAssignModel example = new QuestAssignModel(pn, ps);
+        example.setMemberId(memId);
+        example.setStatus(status.code());
+
+        List<QuestAssignModel> list = assignMapper.findBy(example);
+        long tot = assignMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
 }

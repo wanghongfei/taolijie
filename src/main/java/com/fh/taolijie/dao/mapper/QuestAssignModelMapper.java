@@ -62,4 +62,7 @@ public interface QuestAssignModelMapper {
     boolean checkMemberIdAndQuestIdExists(@Param("memId") Integer memId, @Param("questId") Integer questId);
 
     int deleteAssign(@Param("memId") Integer memId, @Param("questId") Integer questId);
+
+    List<QuestAssignModel> findBy(QuestAssignModel model);
+    long countFindBy(QuestAssignModel model);
 }
