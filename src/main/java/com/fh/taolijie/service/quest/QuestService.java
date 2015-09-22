@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 
@@ -19,7 +20,7 @@ public interface QuestService {
      * @param model
      */
     void publishQuest(Integer accId, QuestModel model)
-            throws BalanceNotEnoughException;
+            throws BalanceNotEnoughException, CashAccNotExistsException;
 
     /**
      * 用户领取任务

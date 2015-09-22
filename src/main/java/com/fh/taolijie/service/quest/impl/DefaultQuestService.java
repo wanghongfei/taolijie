@@ -8,8 +8,10 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
+import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,10 @@ public class DefaultQuestService implements QuestService {
     private CashAccModelMapper accMapper;
 
 
+    @Autowired
+    private CashAccService accService;
+
+
     /**
      * 商家发布任务.
      *
@@ -53,7 +59,7 @@ public class DefaultQuestService implements QuestService {
     @Override
     @Transactional(readOnly = false)
     public void publishQuest(Integer accId, QuestModel model)
-            throws BalanceNotEnoughException {
+            throws BalanceNotEnoughException, CashAccNotExistsException {
 
         // 计算单个任务的最终价格
         // 获取费率
@@ -68,19 +74,8 @@ public class DefaultQuestService implements QuestService {
         BigDecimal tot = single.multiply(new BigDecimal(model.getTotalAmt()));
 
 
-
-        // 判断账户余额
-        BigDecimal left = accMapper.selectByPrimaryKey(accId).getAvailableBalance();
-        if (left.compareTo(tot) < 0) {
-            // 余额不足
-            throw new BalanceNotEnoughException("");
-        }
-
         // 扣钱
-        CashAccModel example = new CashAccModel();
-        example.setId(accId);
-        example.setAvailableBalance(left.subtract(tot));
-        accMapper.updateByPrimaryKeySelective(example);
+        accService.reduceAvailableMoney(accId, tot);
 
         // 发布任务
         model.setCreatedTime(new Date());
