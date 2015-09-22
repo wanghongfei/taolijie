@@ -3,6 +3,7 @@ package com.fh.taolijie.service.acc;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.domain.PayOrderModel;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 
 /**
  * 充值业务接口
@@ -21,7 +22,8 @@ public interface ChargeService {
      * @param status
      * @param memo
      */
-    boolean updateStatus(Integer orderId, OrderStatus status, String memo);
+    boolean updateStatus(Integer orderId, OrderStatus status, String memo)
+            throws CashAccNotExistsException;
 
     /**
      * 查询指定现金账户的订单

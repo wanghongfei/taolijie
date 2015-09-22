@@ -3,7 +3,10 @@ package com.fh.taolijie.test.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.domain.PayOrderModel;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.ChargeService;
+import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
+import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.service.acc.impl.DefaultChargeService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
@@ -17,7 +20,9 @@ import java.math.BigDecimal;
  * Created by whf on 9/21/15.
  */
 @ContextConfiguration(classes = {
-        DefaultChargeService.class
+        DefaultCashAccService.class,
+        DefaultChargeService.class,
+        DefaultAccFlowService.class
 })
 public class ChargeServiceTest extends BaseSpringDataTestClass {
     @Autowired
@@ -38,7 +43,7 @@ public class ChargeServiceTest extends BaseSpringDataTestClass {
 
     @Test
     //@Rollback(false)
-    public void testUpdateStatus() {
+    public void testUpdateStatus() throws CashAccNotExistsException {
 
         service.updateStatus(2, OrderStatus.DONE, "OK");
     }
