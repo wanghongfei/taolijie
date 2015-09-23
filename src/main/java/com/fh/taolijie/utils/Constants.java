@@ -27,6 +27,7 @@ public class Constants {
      * 默认一面显示8条结果
      */
     public static final int PAGE_CAPACITY = 8;
+    public static final String PAGE_CAP = "8";
 
     public static final int TOKEN_LENGTH = 15;
 
