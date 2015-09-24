@@ -154,10 +154,10 @@ public class RestQuestCtr {
         try {
             fiService.submitRequest(model);
         } catch (QuestNotAssignedException e) {
-            new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
+            return new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
 
         } catch (RequestRepeatedException e) {
-            new ResponseText(ErrorCode.REPEAT);
+            return new ResponseText(ErrorCode.REPEAT);
         }
 
         return new ResponseText();
