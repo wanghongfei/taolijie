@@ -29,7 +29,10 @@ public enum ErrorCode {
     EXISTS(15, "already exists"),
     ALREADY_DONE(16, "already done"),
 
-    BAD_NUMBER(17, "invalid number");
+    BAD_NUMBER(17, "invalid number"),
+
+    BALANCE_NOT_ENOUGH(18, "balance not enough"),
+    CASH_ACC_NOT_EXIST(19, "cash account doesn't exist");
 
     private final String msg;
     private final int code;

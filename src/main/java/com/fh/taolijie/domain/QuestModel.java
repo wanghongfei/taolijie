@@ -1,39 +1,54 @@
 package com.fh.taolijie.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class QuestModel extends Pageable {
     private Integer id;
 
+    @NotNull
     private String title;
 
     private Date createdTime;
 
+    @NotNull
     private Integer questCateId;
 
+    @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startTime;
 
+    @NotNull
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endTime;
 
     private Integer limitTime;
 
+    @NotNull
     private Integer totalAmt;
 
     private Integer leftAmt;
 
+    @NotNull
     private BigDecimal award;
 
     private Integer memberId;
 
     private BigDecimal finalAward;
 
+    @NotNull
     private String contactName;
 
+    @NotNull
     private String contactPhone;
 
+    @NotNull
     private String description;
 
+    @NotNull
     private String questDetail;
 
     private String url;
@@ -42,9 +57,13 @@ public class QuestModel extends Pageable {
 
     private Boolean offline;
 
+    @NotNull
     private Integer provinceId;
+    @NotNull
     private Integer cityId;
+    @NotNull
     private Integer regionId;
+
     private Integer collegeId;
     private Integer schoolId;
 

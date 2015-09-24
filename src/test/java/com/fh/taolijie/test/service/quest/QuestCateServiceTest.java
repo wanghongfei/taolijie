@@ -69,7 +69,7 @@ public class QuestCateServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    public void testDelete() {
+    public void testDelete() throws Exception {
         service.delete(1);
 
         Assert.assertNull(service.find(1));
