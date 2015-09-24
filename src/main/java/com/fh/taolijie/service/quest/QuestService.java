@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestExpiredException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 
@@ -31,7 +32,7 @@ public interface QuestService {
      * @param questId 任务id
      */
     void assignQuest(Integer memId, Integer questId)
-            throws QuestAssignedException, QuestZeroException, QuestNotFoundException;
+            throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException;
 
     /**
      * 根据分类查找任务

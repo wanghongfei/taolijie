@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestExpiredException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.acc.CashAccService;
@@ -106,6 +107,10 @@ public class RestQuestCtr {
 
         } catch (QuestNotFoundException e) {
             return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (QuestExpiredException e) {
+            return new ResponseText(ErrorCode.QUEST_EXPIRED);
+
         }
 
         return new ResponseText();
