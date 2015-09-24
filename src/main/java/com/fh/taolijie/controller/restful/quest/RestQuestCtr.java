@@ -4,15 +4,14 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.CashAccModel;
+import com.fh.taolijie.domain.FinishRequestModel;
 import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
-import com.fh.taolijie.exception.checked.quest.QuestExpiredException;
-import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
-import com.fh.taolijie.exception.checked.quest.QuestZeroException;
+import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -34,6 +33,9 @@ public class RestQuestCtr {
 
     @Autowired
     private CashAccService accService;
+
+    @Autowired
+    private QuestFinishService fiService;
 
     /**
      * 商家发布任务
@@ -111,6 +113,51 @@ public class RestQuestCtr {
         } catch (QuestExpiredException e) {
             return new ResponseText(ErrorCode.QUEST_EXPIRED);
 
+        }
+
+        return new ResponseText();
+    }
+
+
+    /**
+     * 提交完成申请
+     * @param questId
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/submit/{questId}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText submitQuest(@PathVariable Integer questId,
+                                    @RequestParam String description,
+                                    @RequestParam("imageIds") String imgIds,
+                                    @RequestParam(required = false) String name,
+                                    @RequestParam(required = false) String memo,
+                                    HttpServletRequest req) {
+
+        // 登陆检查
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+        // 判断当前用户是否是学生
+        if (!SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        FinishRequestModel model = new FinishRequestModel();
+        model.setQuestId(questId);
+        model.setMemberId(credential.getId());
+        model.setDescription(description);
+        model.setImageIds(imgIds);
+        model.setName(name);
+        model.setMemo(memo);
+
+        try {
+            fiService.submitRequest(model);
+        } catch (QuestNotAssignedException e) {
+            new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
+
+        } catch (RequestRepeatedException e) {
+            new ResponseText(ErrorCode.REPEAT);
         }
 
         return new ResponseText();

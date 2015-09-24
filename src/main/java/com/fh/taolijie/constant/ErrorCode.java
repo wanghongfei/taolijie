@@ -35,7 +35,10 @@ public enum ErrorCode {
     CASH_ACC_NOT_EXIST(19, "cash account doesn't exist"),
     QUEST_ASSIGNED(20, "quest has been assigned"),
     QUEST_ZERO(21, "quest has no left amount"),
-    QUEST_EXPIRED(22, "expired");
+    QUEST_EXPIRED(22, "expired"),
+
+    QUEST_NOT_ASSIGNED(23, "not assigned"),
+    REPEAT(24, "repeat submit");
 
     private final String msg;
     private final int code;
