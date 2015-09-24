@@ -65,6 +65,16 @@
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>-->
 
+    <!-- 解决springMVC不识别PUT请求参数问题 -->
+    <filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <servlet-name>appServlet</servlet-name>
+    </filter-mapping>
+
     <!-- app登陆过虑器 -->
     <filter>
         <filter-name>App Login Filter</filter-name>
