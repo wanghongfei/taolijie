@@ -38,7 +38,9 @@ public enum ErrorCode {
     QUEST_EXPIRED(22, "expired"),
 
     QUEST_NOT_ASSIGNED(23, "not assigned"),
-    REPEAT(24, "repeat submit");
+    REPEAT(24, "repeat submit"),
+
+    VALIDATION_CODE_ERROR(25, "validation code mismatch");
 
     private final String msg;
     private final int code;
