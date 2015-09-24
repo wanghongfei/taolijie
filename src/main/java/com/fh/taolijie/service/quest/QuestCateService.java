@@ -14,7 +14,12 @@ public interface QuestCateService {
 
     ListResult<QuestCategoryModel> findAll(int pn, int ps);
 
-    void add(QuestCategoryModel model);
+    /**
+     * 创建一个分类
+     * @param model
+     * @return 返回刚创建分类的id
+     */
+    int add(QuestCategoryModel model);
 
     void update(QuestCategoryModel model);
 

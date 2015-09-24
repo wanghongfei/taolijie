@@ -50,8 +50,10 @@ public class DefaultQuestCateService implements QuestCateService {
 
     @Override
     @Transactional(readOnly = false)
-    public void add(QuestCategoryModel model) {
+    public int add(QuestCategoryModel model) {
         cateMapper.insertSelective(model);
+
+        return model.getId();
     }
 
     @Override
