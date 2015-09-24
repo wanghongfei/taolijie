@@ -27,7 +27,7 @@ public class PhoneValidationService {
      * 生成短信验证码, 并调用短信发送接口
      * @return
      */
-    public String genValidationCode(Integer memId) {
+    public String genValidationCode(Integer memId, String mobile) {
         String code = RandomStringUtils.randomNumeric(6);
 
         // 调用短信接口
