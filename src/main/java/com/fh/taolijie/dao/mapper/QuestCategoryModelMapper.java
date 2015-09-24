@@ -98,4 +98,7 @@ public interface QuestCategoryModelMapper {
 
     List<QuestCategoryModel> findBy(QuestCategoryModel model);
     long countFindBy(QuestCategoryModel model);
+
+
+    boolean checkCateEmpty(Integer cateId);
 }

@@ -328,4 +328,10 @@
         </where>
 
     </select>
+
+    <select id="checkCateEmpty" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM quest WHERE quest_cate_id = #{cateId}
+        )
+    </select>
 </mapper>

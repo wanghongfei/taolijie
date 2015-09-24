@@ -2,6 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 
 /**
  * 轻兼职分类
@@ -28,5 +29,6 @@ public interface QuestCateService {
      */
     int update(QuestCategoryModel model);
 
-    void delete(Integer id);
+    void delete(Integer id)
+            throws CategoryNotEmptyException;
 }

@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful.quest;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.quest.QuestCateService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
@@ -54,6 +55,22 @@ public class RestQuestCateAdminController {
         int rows = cateService.update(model);
         if (rows <= 0) {
             return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return new ResponseText();
+    }
+
+    /**
+     * 删除分类
+     * @param cateId
+     * @return
+     */
+    @RequestMapping(value = "/{cateId}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText updateCate(@PathVariable Integer cateId) {
+        try {
+            cateService.delete(cateId);
+        } catch (CategoryNotEmptyException e) {
+            return new ResponseText(ErrorCode.CATE_NOT_EMPTY);
         }
 
         return new ResponseText();

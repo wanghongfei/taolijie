@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest.impl;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.QuestCategoryModelMapper;
 import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.quest.QuestCateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,11 @@ public class DefaultQuestCateService implements QuestCateService {
 
     @Override
     @Transactional(readOnly = false)
-    public void delete(Integer id) {
+    public void delete(Integer id) throws CategoryNotEmptyException{
+        if (!cateMapper.checkCateEmpty(id)) {
+            throw new CategoryNotEmptyException("");
+        }
+
         cateMapper.deleteByPrimaryKey(id);
     }
 }
