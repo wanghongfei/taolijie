@@ -4,9 +4,11 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.service.acc.impl.PhoneValidationService;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,7 @@ public class ValidationCodeCtr {
      * 请求短信验证码
      * @return
      */
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText smsCode(@RequestParam String mobile,
                                 HttpServletRequest req) {
         // 登陆检查
@@ -34,7 +37,7 @@ public class ValidationCodeCtr {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
 
-        String code = codeService.genValidationCode(credential.getId(), mobile);
-        return new ResponseText(code);
+        codeService.genValidationCode(credential.getId(), mobile);
+        return new ResponseText();
     }
 }
