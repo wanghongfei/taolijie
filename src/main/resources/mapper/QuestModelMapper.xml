@@ -406,6 +406,12 @@
         FOR UPDATE
     </select>
 
+    <select id="checkQuestIdExists" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM quest WHERE id = #{questId}
+        )
+    </select>
+
     <update id="decreaseLeftAmount">
         UPDATE
             quest

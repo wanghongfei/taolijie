@@ -32,7 +32,9 @@ public enum ErrorCode {
     BAD_NUMBER(17, "invalid number"),
 
     BALANCE_NOT_ENOUGH(18, "balance not enough"),
-    CASH_ACC_NOT_EXIST(19, "cash account doesn't exist");
+    CASH_ACC_NOT_EXIST(19, "cash account doesn't exist"),
+    QUEST_ASSIGNED(20, "quest has been assigned"),
+    QUEST_ZERO(21, "quest has no left amount");
 
     private final String msg;
     private final int code;

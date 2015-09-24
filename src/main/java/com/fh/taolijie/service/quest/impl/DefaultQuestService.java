@@ -10,6 +10,7 @@ import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
@@ -93,7 +94,12 @@ public class DefaultQuestService implements QuestService {
     @Override
     @Transactional(readOnly = false)
     public void assignQuest(Integer memId, Integer questId)
-            throws QuestAssignedException, QuestZeroException {
+            throws QuestAssignedException, QuestZeroException, QuestNotFoundException {
+
+        // 检查任务是否存在
+        if (!questMapper.checkQuestIdExists(questId)) {
+            throw new QuestNotFoundException("");
+        }
 
         // 检查任务是否已经领取
         boolean repeat = assignMapper.checkMemberIdAndQuestIdExists(memId, questId);
