@@ -21,7 +21,12 @@ public interface QuestCateService {
      */
     int add(QuestCategoryModel model);
 
-    void update(QuestCategoryModel model);
+    /**
+     * 返回影响的记录数
+     * @param model
+     * @return
+     */
+    int update(QuestCategoryModel model);
 
     void delete(Integer id);
 }

@@ -58,8 +58,8 @@ public class DefaultQuestCateService implements QuestCateService {
 
     @Override
     @Transactional(readOnly = false)
-    public void update(QuestCategoryModel model) {
-        cateMapper.updateByPrimaryKeySelective(model);
+    public int update(QuestCategoryModel model) {
+        return cateMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
