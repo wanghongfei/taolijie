@@ -47,7 +47,7 @@ public class RestQuestCateAdminController {
     public ResponseText updateCate(@PathVariable Integer cateId,
                                    QuestCategoryModel model) {
         if (!notAllNull(model.getName(), model.getLevel(), model.getMemo(), model.getThemeColor())) {
-            new ResponseText(ErrorCode.INVALID_PARAMETER);
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         model.setId(cateId);
