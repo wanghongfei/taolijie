@@ -17,4 +17,20 @@ public enum RequestStatus {
     public String code() {
         return this.code;
     }
+
+    public static RequestStatus fromCode(String code) {
+        switch (code) {
+            case "00":
+                return DONE;
+
+            case "01":
+                return WAIT_AUDIT;
+
+            case "02":
+                return FAILED;
+
+            default:
+                return null;
+        }
+    }
 }

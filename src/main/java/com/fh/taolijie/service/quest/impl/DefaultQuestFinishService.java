@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestNotAssignedException;
+import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
@@ -81,11 +82,15 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Override
     @Transactional(readOnly = false)
     public void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException {
+            throws CashAccNotExistsException, RequestNotExistException {
 
         FinishRequestModel req = fiMapper.selectByPrimaryKey(requestId);
+        if (null == req) {
+            throw new RequestNotExistException("");
+        }
+
         QuestModel quest = questMapper.selectByPrimaryKey(req.getQuestId());
-        CashAccModel acc = accMapper.findByMemberId(quest.getMemberId());
+        CashAccModel acc = accMapper.findByMemberId(req.getMemberId());
 
         // 如果是审核通过
         // 则向账户加钱
@@ -96,7 +101,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
         } else if (status == RequestStatus.FAILED) {
             // 如果审核失败
             // 则删除任务领取记录
-            assignMapper.deleteAssign(quest.getMemberId(), quest.getId());
+            assignMapper.deleteAssign(req.getMemberId(), quest.getId());
         }
 
 

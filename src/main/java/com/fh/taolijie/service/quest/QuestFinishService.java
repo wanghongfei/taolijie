@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.FinishRequestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestNotAssignedException;
+import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import jdk.jfr.events.FileReadEvent;
 
@@ -27,7 +28,7 @@ public interface QuestFinishService {
      * @param memo
      */
     void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException;
+            throws CashAccNotExistsException, RequestNotExistException;
 
     /**
      * 查询所有请求
