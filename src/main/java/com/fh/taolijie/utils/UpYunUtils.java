@@ -32,15 +32,25 @@ public class UpYunUtils {
         return sign(parmMap, KEY);
     }
 
+    /**
+     * 生成签名
+     * @return
+     */
+    public static String sign(String policy) {
+        // policy跟KEY组合
+        String concat = StringUtils.concat(policy, DELIMITER, KEY);
+
+        // 计算md5
+        return md5(concat);
+    }
+
+    /**
+     * 生成签名
+     * @return
+     */
     public static String sign(Map<String, Object> parmMap, String key) {
-        // 将参数序列化为JSON
-        JSONObject jsonO = new JSONObject();
-        jsonO.putAll(parmMap);
-        String json = jsonO.toJSONString();
-
-
         // 计算policy
-        String policy = genPolicy(json).replaceAll("\n", "");
+        String policy = genPolicy(parmMap);
         // policy跟KEY组合
         String concat = StringUtils.concat(policy, DELIMITER, key);
 
@@ -48,9 +58,19 @@ public class UpYunUtils {
         return md5(concat);
     }
 
-    public static String genPolicy(String json) {
+    /**
+     * 生成policy
+     * @param parmMap
+     * @return
+     */
+    public static String genPolicy(Map<String, Object> parmMap) {
+        // 将参数序列化为JSON
+        JSONObject jsonO = new JSONObject();
+        jsonO.putAll(parmMap);
+        String json = jsonO.toJSONString();
+
         BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(json.getBytes());
+        return encoder.encode(json.getBytes()).replaceAll("\n", "");
     }
 
     public static String md5(String s) {
