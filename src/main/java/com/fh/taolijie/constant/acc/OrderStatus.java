@@ -17,4 +17,20 @@ public enum OrderStatus {
     public String code() {
         return this.code;
     }
+
+    public static OrderStatus fromCode(String code) {
+        switch (code) {
+            case "00":
+                return WAIT_AUDIT;
+
+            case "01":
+                return DONE;
+
+            case "02":
+                return FAILED;
+
+            default:
+                return null;
+        }
+    }
 }
