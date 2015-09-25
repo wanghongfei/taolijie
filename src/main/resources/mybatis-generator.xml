@@ -45,8 +45,9 @@
 
 <!--        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
-        <table tableName="my_collection" domainObjectName="CollectionModel" enableCountByExample="true" enableDeleteByExample="false" enableSelectByExample="true"
-               enableUpdateByExample="true" />
+        <table tableName="seq_avatar" domainObjectName="SeqAvatarModel" />
+        <table tableName="seq_sh" domainObjectName="SeqShModel" />
+        <table tableName="seq_job" domainObjectName="SeqJobModel" />
 <!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
 
