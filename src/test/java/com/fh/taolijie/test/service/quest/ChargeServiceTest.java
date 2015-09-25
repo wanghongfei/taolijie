@@ -30,7 +30,7 @@ public class ChargeServiceTest extends BaseSpringDataTestClass {
 
     @Test
     //@Rollback(false)
-    public void testApplyCharge() {
+    public void testApplyCharge() throws Exception {
         PayOrderModel model = new PayOrderModel();
         model.setMemberId(1);
         model.setCashAccId(3);

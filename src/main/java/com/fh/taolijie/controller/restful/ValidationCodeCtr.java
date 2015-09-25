@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by whf on 9/24/15.
  */
 @RestController
-@RequestMapping("/api/code")
+@RequestMapping("/api/user/code")
 public class ValidationCodeCtr {
     @Autowired
     private PhoneValidationService codeService;

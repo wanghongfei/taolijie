@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
+import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.PayOrderModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.CashAccService;
@@ -33,13 +34,24 @@ public class DefaultChargeService implements ChargeService {
 
     @Override
     @Transactional(readOnly = false)
-    public void chargeApply(PayOrderModel model) {
+    public void chargeApply(PayOrderModel model)
+            throws CashAccNotExistsException {
+
         Date now = new Date();
 
+        model.setTitle("账户充值申请");
         model.setCreatedTime(now);
         model.setUpdateTime(now);
         model.setType(OrderType.CHARGE.code());
         model.setStatus(OrderStatus.WAIT_AUDIT.code());
+
+        // 查出账户id
+        CashAccModel acc = accMapper.findByMemberId(model.getMemberId());
+        if (null == acc) {
+            throw new CashAccNotExistsException("");
+        }
+        model.setCashAccId(acc.getId());
+
 
         orderMapper.insertSelective(model);
     }

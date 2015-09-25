@@ -14,7 +14,8 @@ public interface ChargeService {
      * 发起充值申请
      * @param model
      */
-    void chargeApply(PayOrderModel model);
+    void chargeApply(PayOrderModel model)
+            throws CashAccNotExistsException;
 
     /**
      * 更新审核状态
