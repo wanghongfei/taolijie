@@ -30,6 +30,7 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         String uri = request.getRequestURI();
         // 放过表态资源
         if (true == isStaticResource(uri)) {
@@ -37,7 +38,8 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
         }
 
         rt.opsForHash().increment(Constants.RedisKey.PAGE_STATISTICS, uri, 1);
-
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
         return super.preHandle(request, response, handler);
     }
 
