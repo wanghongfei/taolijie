@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful;
 
+import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.PicType;
@@ -8,10 +9,7 @@ import com.fh.taolijie.dao.mapper.SeqJobModelMapper;
 import com.fh.taolijie.dao.mapper.SeqShModelMapper;
 import com.fh.taolijie.domain.SeqShModel;
 import com.fh.taolijie.service.impl.SeqService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.LogUtils;
-import com.fh.taolijie.utils.QiniuUtils;
-import com.fh.taolijie.utils.UpYunUtils;
+import com.fh.taolijie.utils.*;
 import com.qiniu.api.auth.AuthException;
 import org.apache.commons.codec.EncoderException;
 import org.json.JSONException;
@@ -59,7 +57,15 @@ public class RestSignController {
                                  @RequestParam(value = "x-gmkerl-crop", required = false) String gmkerlCrop,
                                  @RequestParam(value = "x-gmkerl-exif-switch", required = false) String gmkerlExif,
                                  @RequestParam(value = "ext-param", required = false) String extParam,
-                                 @RequestParam(value = "allow-file-type", required = false) String fileType) {
+                                 @RequestParam(value = "allow-file-type", required = false) String fileType,
+                                 HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        // 检查上次请求间隔
+        // 不能少于2s
+        if (!seqService.checkInterval(credential.getId())) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
 
         Map<String, Object> parmMap = new HashMap<>(30);
         parmMap.put("bucket", "taolijie-pic");
