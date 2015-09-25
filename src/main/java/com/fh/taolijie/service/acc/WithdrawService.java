@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
 
 /**
  * 提现申请相关业务接口
@@ -25,7 +26,8 @@ public interface WithdrawService {
      * @param memo 审核备注
      * @return 成功返回true
      */
-    boolean updateStatus(Integer withId, WithdrawStatus status, String memo);
+    boolean updateStatus(Integer withId, WithdrawStatus status, String memo)
+            throws WithdrawNotExistsException, CashAccNotExistsException, BalanceNotEnoughException;
 
     /**
      * 查询所有申请

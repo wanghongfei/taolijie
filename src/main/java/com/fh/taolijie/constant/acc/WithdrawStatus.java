@@ -18,4 +18,23 @@ public enum WithdrawStatus {
     public String code() {
         return this.code;
     }
+
+    public static WithdrawStatus fromCode(String code) {
+        switch (code) {
+            case "00":
+                return WAIT_AUDIT;
+
+            case "01":
+                return WAIT_DISPATCH;
+
+            case "02":
+                return DONE;
+
+            case "03":
+                return FAILED;
+
+            default:
+                return null;
+        }
+    }
 }

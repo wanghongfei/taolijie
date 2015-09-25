@@ -9,6 +9,8 @@ import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
+import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class DefaultWithdrawService implements WithdrawService {
 
     @Autowired
     private CashAccModelMapper accMapper;
+
+    @Autowired
+    private CashAccService accService;
 
     /**
      * 创建提现申请.
@@ -80,7 +85,20 @@ public class DefaultWithdrawService implements WithdrawService {
      */
     @Override
     @Transactional(readOnly = false)
-    public boolean updateStatus(Integer withId, WithdrawStatus status, String memo) {
+    public boolean updateStatus(Integer withId, WithdrawStatus status, String memo)
+            throws WithdrawNotExistsException, CashAccNotExistsException, BalanceNotEnoughException {
+
+        WithdrawApplyModel model = drawMapper.selectByPrimaryKey(withId);
+        if (null == model) {
+            throw new WithdrawNotExistsException("");
+        }
+
+        if (status == WithdrawStatus.DONE) {
+            // 如果状态是已派现
+            // 则增加账户余额
+            accService.reduceAvailableMoney(model.getAccId(), model.getAmount());
+        }
+
         WithdrawApplyModel example = new WithdrawApplyModel();
         example.setId(withId);
 
