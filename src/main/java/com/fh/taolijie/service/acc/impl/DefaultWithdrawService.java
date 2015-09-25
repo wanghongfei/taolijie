@@ -47,7 +47,7 @@ public class DefaultWithdrawService implements WithdrawService {
     public void addWithdraw(WithdrawApplyModel model)
             throws CashAccNotExistsException, BalanceNotEnoughException {
 
-        CashAccModel acc = accMapper.selectByPrimaryKey(model.getAccId());
+        CashAccModel acc = accMapper.findByMemberId(model.getMemberId());
         if (null == acc) {
             throw new CashAccNotExistsException("");
         }
@@ -64,6 +64,7 @@ public class DefaultWithdrawService implements WithdrawService {
         model.setUsername(acc.getUsername());
         model.setApplyTime(now);
         model.setUpdateTime(now);
+        model.setAccId(acc.getId());
         model.setStatus(WithdrawStatus.WAIT_AUDIT.code());
 
         // 插入记录
