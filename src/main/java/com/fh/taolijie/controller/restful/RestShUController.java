@@ -60,4 +60,33 @@ public class RestShUController {
 
         return new ResponseText(lr);
     }
+
+    /**
+     * 更新图片URL
+     * @return
+     */
+    @RequestMapping(value = "/{shId}/pic", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText updatePic(@PathVariable("shId") Integer shId,
+                                  @RequestParam String picAddr,
+                                  HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        // 判断帖子是不是自己发的
+        SHPostModel sh = shService.findPost(shId);
+        if (!sh.getMemberId().equals(credential.getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 更新URL
+        SHPostModel example = new SHPostModel();
+        example.setId(shId);
+        example.setPicturePath(picAddr);
+        shService.updatePost(shId, example);
+
+        return new ResponseText();
+    }
 }
