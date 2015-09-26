@@ -7,6 +7,7 @@ import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.StuCertiModelMapper;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.StuCertiModel;
+import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.certi.StuCertiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,13 @@ public class DefaultStuCertiService implements StuCertiService {
     @Override
     @Transactional(readOnly = false)
     public void addApplication(StuCertiModel model) {
+
+/*        // 检查是否已经有该用户的申请，且申请状态为通过的记录
+        if (certiMapper.checkApplyExists(model.getMemberId())) {
+            // 如果有，则不能再提申请
+            throw new ApplicationDuplicatedException("");
+        }*/
+
         Date now = new Date();
 
         model.setStatus(CertiStatus.WAIT_AUDIT.code());

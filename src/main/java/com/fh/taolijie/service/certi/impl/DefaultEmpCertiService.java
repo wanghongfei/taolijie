@@ -7,6 +7,7 @@ import com.fh.taolijie.dao.mapper.EmpCertiModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.EmpCertiModel;
 import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.certi.EmpCertiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,13 @@ public class DefaultEmpCertiService implements EmpCertiService {
     @Override
     @Transactional(readOnly = false)
     public void addApplication(EmpCertiModel model) {
+
+/*        // 检查是否存在该用户申请的且状态为通过的记录
+        if (certiMapper.checkApplyExists(model.getMemberId())) {
+            // 如果有，则不允许再申请
+            throw new ApplicationDuplicatedException("");
+        }*/
+
         Date now = new Date();
 
         model.setStatus(CertiStatus.WAIT_AUDIT.code());

@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.EmpCertiModel;
 import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.StuCertiModel;
+import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.certi.EmpCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
@@ -58,7 +59,7 @@ public class RestCertiCtr {
         }
 
         // 检查是否是学生用户
-        if (!credential.getRoleList().get(0).equals(Constants.RoleType.STUDENT  .toString())) {
+        if (!credential.getRoleList().get(0).equals(Constants.RoleType.STUDENT.toString())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 

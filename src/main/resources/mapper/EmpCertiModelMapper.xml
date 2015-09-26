@@ -269,4 +269,11 @@
             </if>
         </where>
     </select>
+
+    <select id="checkApplyExists" resultType="boolean">
+        SELECT
+            EXISTS (
+                SELECT 1 FROM emp_certi WHERE member_id = #{memId} AND status = '01'
+            )
+    </select>
 </mapper>

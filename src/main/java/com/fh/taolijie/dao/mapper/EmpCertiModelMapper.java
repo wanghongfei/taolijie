@@ -59,4 +59,6 @@ public interface EmpCertiModelMapper {
 
     List<EmpCertiModel> findBy(EmpCertiModel example);
     long countFindBy(EmpCertiModel example);
+
+    boolean checkApplyExists(Integer memId);
 }
