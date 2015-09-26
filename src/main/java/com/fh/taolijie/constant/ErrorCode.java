@@ -40,7 +40,9 @@ public enum ErrorCode {
     QUEST_NOT_ASSIGNED(23, "not assigned"),
     REPEAT(24, "repeat submit"),
 
-    VALIDATION_CODE_ERROR(25, "validation code mismatch");
+    VALIDATION_CODE_ERROR(25, "validation code mismatch"),
+
+    ALREADY_VERIFIED(26, "already verified");
 
     private final String msg;
     private final int code;
