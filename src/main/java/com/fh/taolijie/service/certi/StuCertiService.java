@@ -24,6 +24,8 @@ public interface StuCertiService {
      */
     void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo);
 
+    StuCertiModel findById(Integer certiId);
+
     /**
      * 查找商家用户的认证申请记录
      * @param memId

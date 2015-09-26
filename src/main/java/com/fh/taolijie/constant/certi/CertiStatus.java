@@ -17,4 +17,20 @@ public enum CertiStatus {
     public String code() {
         return this.code;
     }
+
+    public static CertiStatus fromCode(String code) {
+        switch (code) {
+            case "00":
+                return WAIT_AUDIT;
+
+            case "01":
+                return DONE;
+
+            case "02":
+                return FAILED;
+
+            default:
+                return null;
+        }
+    }
 }

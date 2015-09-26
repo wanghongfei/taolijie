@@ -65,6 +65,12 @@ public class DefaultStuCertiService implements StuCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public StuCertiModel findById(Integer certiId) {
+        return certiMapper.selectByPrimaryKey(certiId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<StuCertiModel> findByMember(Integer memId) {
         StuCertiModel example = new StuCertiModel();
         example.setMemberId(memId);

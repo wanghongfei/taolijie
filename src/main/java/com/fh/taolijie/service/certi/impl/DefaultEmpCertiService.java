@@ -65,6 +65,12 @@ public class DefaultEmpCertiService implements EmpCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public EmpCertiModel findById(Integer certiId) {
+        return certiMapper.selectByPrimaryKey(certiId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<EmpCertiModel> findByMember(Integer memId) {
         EmpCertiModel example = new EmpCertiModel();
         example.setMemberId(memId);
