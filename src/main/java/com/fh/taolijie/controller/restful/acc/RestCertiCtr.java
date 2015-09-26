@@ -57,6 +57,10 @@ public class RestCertiCtr {
             return new ResponseText(ErrorCode.ALREADY_VERIFIED);
         }
 
+        // 检查是否是学生用户
+        if (!credential.getRoleList().get(0).equals(Constants.RoleType.STUDENT  .toString())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
 
         StuCertiModel model = new StuCertiModel();
         model.setMemberId(mem.getId());
@@ -89,6 +93,11 @@ public class RestCertiCtr {
 
         if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.toString())) {
             return new ResponseText(ErrorCode.ALREADY_VERIFIED);
+        }
+
+        // 检查是否是商家用户
+        if (!credential.getRoleList().get(0).equals(Constants.RoleType.EMPLOYER.toString())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
         EmpCertiModel model = new EmpCertiModel();
