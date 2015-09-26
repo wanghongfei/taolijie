@@ -27,7 +27,7 @@ import java.util.Map;
  * Created by whf on 9/14/15.
  */
 @RestController
-@RequestMapping("/api/sign")
+@RequestMapping("/api/user/sign")
 public class RestSignController {
     @Autowired
     private SeqService seqService;
