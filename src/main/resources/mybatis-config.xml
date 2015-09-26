@@ -64,5 +64,10 @@
         <mapper resource="mapper/EmpCertiModelMapper.xml" />
         <mapper resource="mapper/SysConfigModelMapper.xml" />
 
+
+        <mapper resource="mapper/SeqAvatarModelMapper.xml" />
+        <mapper resource="mapper/SeqShModelMapper.xml" />
+        <mapper resource="mapper/SeqJobModelMapper.xml" />
+
     </mappers>
 </configuration>
