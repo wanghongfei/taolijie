@@ -20,10 +20,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -96,6 +93,20 @@ public class RestAccAdminCtr {
 
         return new ResponseText(lr);
     }
+
+    /**
+     * 查询单个提现申请审核
+     * @return
+     */
+    @RequestMapping(value = "/withdraw/{drawId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryDrawById(@PathVariable("drawId") Integer drawId,
+                                      HttpServletRequest req) {
+
+        WithdrawApplyModel model = drawService.findById(drawId);
+
+        return new ResponseText(model);
+    }
+
     /**
      * 充值申请审核
      * @return
@@ -147,5 +158,30 @@ public class RestAccAdminCtr {
         lr = chargeService.findAllAcc(st, pn, ps);
 
         return new ResponseText(lr);
+    }
+
+    /**
+     * 查询单个充值申请审核
+     * @return
+     */
+    @RequestMapping(value = "/charge/{orderId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryChargeById(@PathVariable("orderId") Integer orderId,
+                                      HttpServletRequest req) {
+
+        PayOrderModel order = chargeService.findById(orderId);
+
+        return new ResponseText(order);
+    }
+
+    /**
+     * 查询任意用户的现金账户信息
+     * @return
+     */
+    @RequestMapping(value = "/query/{memId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText queryAccByMember(@PathVariable("memId") Integer memId,
+                                      HttpServletRequest req) {
+
+        CashAccModel acc = accService.findByMember(memId);
+        return new ResponseText(acc);
     }
 }
