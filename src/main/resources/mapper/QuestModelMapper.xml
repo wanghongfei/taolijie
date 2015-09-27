@@ -420,6 +420,15 @@
         WHERE
             id = #{questId}
     </update>
+    <update id="increaseLeftAmount">
+        UPDATE
+            quest
+        SET
+            left_amt = left_amt + 1
+        WHERE
+            id = #{questId}
+    </update>
+
 
     <select id="findBy" resultMap="BaseResultMap">
         SELECT

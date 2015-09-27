@@ -102,6 +102,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
             // 如果审核失败
             // 则删除任务领取记录
             assignMapper.deleteAssign(req.getMemberId(), quest.getId());
+
+            // 同时释放任务剩余数量
+            questMapper.increaseLeftAmount(quest.getId());
         }
 
 

@@ -68,6 +68,7 @@ public interface QuestModelMapper {
     boolean checkQuestIdExists(Integer questId);
 
     void decreaseLeftAmount(Integer questId);
+    void increaseLeftAmount(Integer questId);
 
     List<QuestModel> findBy(QuestModel model);
     long countFindBy(QuestModel model);
