@@ -91,7 +91,7 @@
                 <a href="/item/sh/${sh.id}" target="_black" style="color:#333333;">
 
                     <div class="sh-slip fl ${status.index == 2 ? 'no-margin':null}">
-                        <div class="shs_pic"><img src="" data-pid="${sh.picturePath}" alt="" class="sh-item"></div>
+                        <div class="shs_pic"><img src="http://taolijie-pic.b0.upaiyun.com/${sh.picturePath.split(';')[0]}!pc261v2" data-pid="${sh.picturePath}" alt="" class="sh-item"></div>
                         <p class="title">
                             <c:choose>
                                 <c:when test="${fn:length(sh.title) > 12}">
@@ -162,7 +162,7 @@
 
 <%--脚部--%>
 <jsp:include page="block/footer.jsp"/>
-<script src="/scripts/sh-pic.js"></script>
+<%--<script src="/scripts/sh-pic.js"></script>--%>
 <script>
     (function () {
         var $theTime= $(".theTime");

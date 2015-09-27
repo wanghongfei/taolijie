@@ -17,6 +17,16 @@ tlj.filter('omit', function () {
     }
 });
 
+/**
+ * 分割去首
+ */
+
+tlj.filter('splitFirst', function(){
+    return function(value,regex){
+        return value.split(regex)[0];
+    }
+});
+
 
 /**
  * 时间过滤器

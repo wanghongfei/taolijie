@@ -63,43 +63,4 @@ $(".submit-btn").click(function(){
 //    });
 //});
 
-/*
- * del img uploaded
- *
- */
-$('.img-list-wrapper').delegate('.btn-img-del','click', function(){
-    if( $('.img-list-item').length == 4) {
-        $('.img-list-btn').toggle();
-    }
-    var $img = $(this).parent('li');
-    $img.remove()
-    var picIds = $('input[name=picIds]').val().split(';');
-    for( var i = 0;i < picIds.length; i++){
-        if( $img.data('pid') == picIds[i] ) {
-            picIds.splice(i,1);
-            break;
-        }
-    }
-    $('input[name=picIds]').val(picIds.join(';'));
-});
 
-/* upload img list init*/
-var initImgList = function() {
-    var ids = $('input[name=picIds]').val().split(';');
-    if(ids[0] != '') {
-        ids.forEach(function(data) {
-            $('<li class="img-list-item" data-pid="'
-                + data
-                + '">'
-                + '<img src="/static/images/users/'
-                + data
-                + '" class="img-list-img"/>'
-                + '<span class="btn-img-del">x</span>'
-                + '</li>').insertBefore('.img-list-btn');
-        })
-        if(ids.length > 3) {
-            $('.img-list-btn').toggle();
-        }
-    }
-}
-initImgList();

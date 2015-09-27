@@ -83,7 +83,7 @@ To change this template use File | Settings | File Templates.
             <div class="pics fl" style="position: relative">
                 <ul class="rslides">
                     <li ng-repeat="pid in sh.pids track by $index" on-last-repeat>
-                        <img src="/static/images/users/{{ pid }}" alt="good photo">
+                        <img src="http://taolijie-pic.b0.upaiyun.com/{{ pid }}!pcfull" alt="图片加载中..">
                         <%--<p class="caption"></p>--%>
                     </li>
                 </ul>
@@ -230,6 +230,8 @@ To change this template use File | Settings | File Templates.
     var sh = JSON.parse(escapeSpecialChars('${ju:toJson(sh)}'));
     var pids = '${pids}';
     pids_arr = pids.substr(1, pids.length - 2).replace(/ /g, '').split(',');
+    console.log(pids);
+    console.log(pids_arr);
     sh.pids = pids_arr;
     sh.poster = JSON.parse('${ju:toJson(poster)}');
     sh.posterRole = JSON.parse('${ju:toJson(posterRole)}');
