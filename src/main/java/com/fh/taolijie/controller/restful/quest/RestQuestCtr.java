@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.restful.quest;
 
 import cn.fh.security.credential.Credential;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.CashAccModel;
@@ -14,6 +15,7 @@ import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -163,5 +165,22 @@ public class RestQuestCtr {
         }
 
         return new ResponseText();
+    }
+
+    /**
+     * 查询我发布的任务
+     * @return
+     */
+    @RequestMapping(value = "/publish/list", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText queryPublishQuests(@RequestParam(required = false, defaultValue = "0") int pn,
+                                           @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
+                                           HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<QuestModel> lr = questService.findByMember(credential.getId(), pn, ps);
+
+        return new ResponseText(lr);
     }
 }

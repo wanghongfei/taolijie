@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -70,8 +71,11 @@ public class QuestModel extends Pageable {
 
     // ******** 仅查询用 ********
 
+    @JsonIgnore
     private Boolean awardRangeQuery = false;
+    @JsonIgnore
     private BigDecimal minAward;
+    @JsonIgnore
     private BigDecimal maxAward;
 
     // ******** 仅查询用 ********

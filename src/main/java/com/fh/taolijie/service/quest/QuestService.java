@@ -47,6 +47,15 @@ public interface QuestService {
      */
     ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps);
 
+    /**
+     * 查询指定用户发布的任务记录
+     * @param memId
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<QuestModel> findByMember(Integer memId, int pn, int ps);
+
 
     /**
      * 查询指定用户的任务领取记录
