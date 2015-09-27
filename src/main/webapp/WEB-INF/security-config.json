@@ -33,11 +33,6 @@
             "toUrl": "/login/admin",
             "url": "/manage**"
         },
-        {
-            "roleList": ["ADMIN"],
-            "toUrl": "/login/admin",
-            "url": "/api/manage**"
-        },
 
         {
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
