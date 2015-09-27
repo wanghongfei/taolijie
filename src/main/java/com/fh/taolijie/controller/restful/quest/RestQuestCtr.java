@@ -171,7 +171,7 @@ public class RestQuestCtr {
      * 查询我发布的任务
      * @return
      */
-    @RequestMapping(value = "/publish/list", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/publish/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText queryPublishQuests(@RequestParam(required = false, defaultValue = "0") int pn,
                                            @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
                                            HttpServletRequest req) {
