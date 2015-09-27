@@ -119,4 +119,10 @@ public class DefaultChargeService implements ChargeService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PayOrderModel findById(Integer orderId) {
+        return orderMapper.selectByPrimaryKey(orderId);
+    }
 }

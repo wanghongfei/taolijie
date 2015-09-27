@@ -156,4 +156,10 @@ public class DefaultWithdrawService implements WithdrawService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public WithdrawApplyModel findById(Integer drawId) {
+        return drawMapper.selectByPrimaryKey(drawId);
+    }
 }

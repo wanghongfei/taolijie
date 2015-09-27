@@ -43,4 +43,6 @@ public interface ChargeService {
      * @return
      */
     ListResult<PayOrderModel> findAllAcc(OrderStatus status, int pn, int ps);
+
+    PayOrderModel findById(Integer orderId);
 }

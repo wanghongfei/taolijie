@@ -64,4 +64,6 @@ public interface WithdrawService {
      * @return
      */
     ListResult<WithdrawApplyModel> findByMember(Integer memId, WithdrawStatus status, int pn, int ps);
+
+    WithdrawApplyModel findById(Integer drawId);
 }
