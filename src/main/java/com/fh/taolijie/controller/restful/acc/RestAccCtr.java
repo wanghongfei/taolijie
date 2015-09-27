@@ -2,8 +2,10 @@ package com.fh.taolijie.controller.restful.acc;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.domain.AccFlowModel;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.PayOrderModel;
 import com.fh.taolijie.domain.WithdrawApplyModel;
@@ -11,14 +13,17 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.WithdrawService;
 import com.fh.taolijie.service.acc.impl.PhoneValidationService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by whf on 9/24/15.
@@ -46,6 +52,9 @@ public class RestAccCtr {
 
     @Autowired
     private ChargeService chargeService;
+
+    @Autowired
+    private AccFlowService flowService;
 
     /**
      * 开通现金账户
@@ -172,5 +181,25 @@ public class RestAccCtr {
         }
 
         return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 查询账户流水
+     * @return
+     */
+    @RequestMapping(value = "/flow", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText chargeApply(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date end,
+
+                                    @RequestParam(defaultValue = "0") int pn,
+                                    @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                    HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<AccFlowModel> lr = flowService.findByAcc(credential.getId(), start, end, pn, ps);
+
+        return new ResponseText(lr);
     }
 }

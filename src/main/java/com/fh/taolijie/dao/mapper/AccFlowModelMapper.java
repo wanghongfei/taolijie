@@ -55,8 +55,8 @@ public interface AccFlowModelMapper {
     int updateByPrimaryKey(AccFlowModel record);
 
 
-    List<AccFlowModel> selectByAccId(@Param("accId") Integer accId, @Param("pn") int pn, @Param("ps") int ps);
-    long countSelectByAccId(@Param("accId") Integer accId);
+    List<AccFlowModel> selectByAccId(@Param("accId") Integer accId, @Param("start") Date start, @Param("end") Date end, @Param("pn") int pn, @Param("ps") int ps);
+    long countSelectByAccId(@Param("accId") Integer accId, @Param("start") Date start, @Param("end") Date end);
 
 
 

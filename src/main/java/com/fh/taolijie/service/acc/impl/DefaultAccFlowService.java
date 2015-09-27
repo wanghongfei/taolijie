@@ -55,9 +55,9 @@ public class DefaultAccFlowService implements AccFlowService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListResult<AccFlowModel> findByAcc(Integer accId, int pn, int ps) {
-        List<AccFlowModel> list = flowMapper.selectByAccId(accId, pn, ps);
-        long tot = flowMapper.countSelectByAccId(accId);
+    public ListResult<AccFlowModel> findByAcc(Integer accId, Date start, Date end, int pn, int ps) {
+        List<AccFlowModel> list = flowMapper.selectByAccId(accId, start, end, pn, ps);
+        long tot = flowMapper.countSelectByAccId(accId, start, end);
 
         return new ListResult<>(list, tot);
     }

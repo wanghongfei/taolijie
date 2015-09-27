@@ -23,12 +23,9 @@ public interface AccFlowService {
 
     /**
      * 查询指定账户的流水记录
-     * @param accId
-     * @param pn
-     * @param ps
      * @return
      */
-    ListResult<AccFlowModel> findByAcc(Integer accId, int pn, int ps);
+    ListResult<AccFlowModel> findByAcc(Integer accId, Date start, Date end, int pn, int ps);
 
     /**
      * 查询指定账户指定时间段的流水记录

@@ -212,6 +212,16 @@
             acc_flow accf
         WHERE
             accf.acc_id = #{accId}
+            <if test="start != null">
+                <![CDATA[
+                AND accf.created_time >= #{start}
+                ]]>
+            </if>
+            <if test="end != null">
+                <![CDATA[
+                AND accf.created_time <= #{end}
+                ]]>
+            </if>
         ORDER BY
             accf.created_time DESC
         LIMIT
@@ -224,6 +234,16 @@
             acc_flow accf
         WHERE
             accf.acc_id = #{accId}
+            <if test="start != null">
+                <![CDATA[
+                AND accf.created_time >= #{start}
+                ]]>
+            </if>
+            <if test="end != null">
+                <![CDATA[
+                AND accf.created_time <= #{end}
+                ]]>
+            </if>
     </select>
 
 
