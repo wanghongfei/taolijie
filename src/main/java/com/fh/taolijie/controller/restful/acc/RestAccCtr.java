@@ -97,12 +97,10 @@ public class RestAccCtr {
 
     /**
      * 查询当前用户的现金账户
-     * @param dealPwd
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText createAcc(@RequestParam String dealPwd,
-                                  HttpServletRequest req) {
+    public ResponseText queryAcc(HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
 

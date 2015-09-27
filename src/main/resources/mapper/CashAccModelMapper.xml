@@ -42,6 +42,22 @@
         casha.email,
         casha.name
     </sql>
+
+    <sql id="without_pwd">
+        casha.id,
+        casha.available_balance,
+        casha.frozen_balance,
+        casha.total_balance,
+        casha.status,
+        casha.update_time,
+        casha.created_time,
+        casha.member_id,
+        casha.username,
+        casha.member_role,
+        casha.phone_number,
+        casha.email,
+        casha.name
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated
@@ -267,7 +283,7 @@
 
     <select id="findByMemberId" resultMap="BaseResultMap">
         SELECT
-            <include refid="Base_Column_List" />
+            <include refid="without_pwd" />
         FROM
             cash_acc casha
         WHERE
