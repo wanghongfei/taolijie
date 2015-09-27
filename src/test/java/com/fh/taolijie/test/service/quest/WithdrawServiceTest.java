@@ -33,12 +33,12 @@ public class WithdrawServiceTest extends BaseSpringDataTestClass {
         model.setAccId(3);
         model.setAmount(new BigDecimal(20));
 
-        service.addWithdraw(model);
+        service.addWithdraw(model, "");
 
 
         try {
             model.setAmount(new BigDecimal(200));
-            service.addWithdraw(model);
+            service.addWithdraw(model, "");
         } catch (BalanceNotEnoughException e) {
             return;
         }
