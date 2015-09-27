@@ -39,7 +39,6 @@ public class RestSignController {
     @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText genToken(@RequestParam("expiration") Long expiration,
                                  @RequestParam Integer picType,
-                                 @RequestParam String fileName,
 
                                  @RequestParam(value = "content-length-range", required = false) String fileRange,
                                  @RequestParam(value = "content-md5", required = false) String md5,
@@ -102,7 +101,7 @@ public class RestSignController {
         }
 
         // 生成key名
-        String key = seqService.genKey(pt, fileName);
+        String key = seqService.genKey(pt);
         parmMap.put("save-key", key);
 
         // 签名
