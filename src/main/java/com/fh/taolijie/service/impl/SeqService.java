@@ -45,16 +45,16 @@ public class SeqService {
      * @param type
      * @return
      */
-    public String genKey(PicType type, String fileName) {
+    public String genKey(PicType type) {
         switch (type) {
             case JOB:
-                return genJobKey(fileName);
+                return genJobKey();
 
             case SH:
-                return genShKey(fileName);
+                return genShKey();
 
             case AVATAR:
-                return genAvatarKey(fileName);
+                return genAvatarKey();
         }
 
         return null;
@@ -86,25 +86,25 @@ public class SeqService {
     }
 
 
-    private String genAvatarKey(String fileName) {
+    private String genAvatarKey() {
         SeqAvatarModel model = new SeqAvatarModel();
         avaMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "avatar-", model.getId(), "-", fileName);
+        return StringUtils.concat(genDatePath(), "avatar-", model.getId());
     }
 
-    private String genShKey(String fileName) {
+    private String genShKey() {
         SeqShModel model = new SeqShModel();
         shMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "sh-", model.getId(), "-", fileName);
+        return StringUtils.concat(genDatePath(), "sh-", model.getId());
     }
 
-    private String genJobKey(String fileName) {
+    private String genJobKey() {
         SeqJobModel model = new SeqJobModel();
         jobMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "job-", model.getId(), "-", fileName);
+        return StringUtils.concat(genDatePath(), "job-", model.getId());
     }
 
     /**
