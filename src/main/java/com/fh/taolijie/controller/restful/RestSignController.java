@@ -39,6 +39,7 @@ public class RestSignController {
     @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText genToken(@RequestParam("expiration") Long expiration,
                                  @RequestParam Integer picType,
+                                 @RequestParam String fileName,
 
                                  @RequestParam(value = "content-length-range", required = false) String fileRange,
                                  @RequestParam(value = "content-md5", required = false) String md5,
@@ -94,14 +95,17 @@ public class RestSignController {
         parmMap.put("allow-file-type", fileType);
 
 
+        // 将状态字符串转换成enum
         PicType pt = PicType.fromCode(picType);
         if (null == pt) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        String key = seqService.genKey(pt);
+        // 生成key名
+        String key = seqService.genKey(pt, fileName);
         parmMap.put("save-key", key);
 
+        // 签名
         SignAndPolicy sap = new SignAndPolicy();
         sap.policy = UpYunUtils.genPolicy(parmMap);
         sap.sign = UpYunUtils.sign(sap.policy);
