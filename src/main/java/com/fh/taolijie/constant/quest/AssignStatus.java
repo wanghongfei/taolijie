@@ -17,4 +17,20 @@ public enum AssignStatus {
     public String code() {
         return this.code;
     }
+
+    public static AssignStatus fromCode(String code) {
+        switch (code) {
+            case "00":
+                return ASSIGNED;
+
+            case "01":
+                return DONE;
+
+            case "02":
+                return ENDED;
+
+            default:
+                return null;
+        }
+    }
 }

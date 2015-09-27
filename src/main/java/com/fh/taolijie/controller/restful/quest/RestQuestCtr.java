@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.FinishRequestModel;
 import com.fh.taolijie.domain.QuestAssignModel;
@@ -180,6 +181,39 @@ public class RestQuestCtr {
 
         pn = PageUtils.getFirstResult(pn, ps);
         ListResult<QuestModel> lr = questService.findByMember(credential.getId(), pn, ps);
+
+        return new ResponseText(lr);
+    }
+
+
+    /**
+     * 查询我领取的任务
+     * @return
+     */
+    @RequestMapping(value = "/assign/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryAssignedQuest(@RequestParam(required = false) String status,
+                                           @RequestParam(required = false, defaultValue = "0") int pn,
+                                           @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
+                                           HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        AssignStatus st = null;
+        if (null != status) {
+            st = AssignStatus.fromCode(status);
+            if (null == st) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+        }
+
+        ListResult<QuestAssignModel> lr = null;
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        if (null != st) {
+            lr = questService.queryAssignRecords(credential.getId(), st, pn, ps);
+        } else {
+            lr = questService.queryAssignRecords(credential.getId(), pn, ps);
+        }
 
         return new ResponseText(lr);
     }
