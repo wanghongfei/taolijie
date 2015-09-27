@@ -1,6 +1,7 @@
 package com.fh.taolijie.controller.restful.acc;
 
 import cn.fh.security.credential.Credential;
+import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.CashAccModel;
@@ -76,7 +77,7 @@ public class RestAccCtr {
 
         // 开通
         CashAccModel acc = new CashAccModel();
-        acc.setDealPassword(dealPwd);
+        acc.setDealPassword(CredentialUtils.sha(dealPwd));
         acc.setPhoneNumber(phone);
         acc.setEmail(email);
         acc.setName(name);
@@ -94,6 +95,20 @@ public class RestAccCtr {
         return ResponseText.getSuccessResponseText();
     }
 
+    /**
+     * 查询当前用户的现金账户
+     * @param dealPwd
+     * @return
+     */
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText createAcc(@RequestParam String dealPwd,
+                                  HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        CashAccModel acc = accService.findByMember(credential.getId());
+        return new ResponseText(acc);
+    }
     /**
      * 发起提现申请
      * @return
