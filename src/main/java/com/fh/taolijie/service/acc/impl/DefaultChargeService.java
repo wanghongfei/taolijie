@@ -4,8 +4,10 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
 import com.fh.taolijie.domain.CashAccModel;
+import com.fh.taolijie.domain.MemberModel;
 import com.fh.taolijie.domain.PayOrderModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.CashAccService;
@@ -97,6 +99,20 @@ public class DefaultChargeService implements ChargeService {
         PayOrderModel example = new PayOrderModel(pn, ps);
         example.setCashAccId(accId);
         example.setStatus(status.code());
+
+        List<PayOrderModel> list = orderMapper.findBy(example);
+        long tot = orderMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<PayOrderModel> findAllAcc(OrderStatus status, int pn, int ps) {
+        PayOrderModel example = new PayOrderModel(pn, ps);
+        if (null != status) {
+            example.setStatus(status.code());
+        }
 
         List<PayOrderModel> list = orderMapper.findBy(example);
         long tot = orderMapper.countFindBy(example);

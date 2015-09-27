@@ -37,4 +37,10 @@ public interface ChargeService {
      * @return
      */
     ListResult<PayOrderModel> findByAcc(Integer accId, OrderStatus status, int pn, int ps);
+
+    /**
+     * 查询所有指定状态的订单
+     * @return
+     */
+    ListResult<PayOrderModel> findAllAcc(OrderStatus status, int pn, int ps);
 }

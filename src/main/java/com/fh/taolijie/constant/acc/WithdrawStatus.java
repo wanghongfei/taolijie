@@ -20,6 +20,10 @@ public enum WithdrawStatus {
     }
 
     public static WithdrawStatus fromCode(String code) {
+        if (null == code) {
+            return null;
+        }
+
         switch (code) {
             case "00":
                 return WAIT_AUDIT;
