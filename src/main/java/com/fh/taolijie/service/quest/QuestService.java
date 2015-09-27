@@ -31,6 +31,15 @@ public interface QuestService {
     void assignQuest(Integer memId, Integer questId)
             throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException;
 
+    QuestModel findById(Integer questId);
+
+    /**
+     * 根据用户查询指定任务的领取情况
+     * @param memId
+     * @return
+     */
+    QuestAssignModel findAssignByMember(Integer memId, Integer questId);
+
     /**
      * 根据分类查找任务
      * @param cateId 分类id

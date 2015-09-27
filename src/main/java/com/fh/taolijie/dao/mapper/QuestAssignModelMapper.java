@@ -60,6 +60,7 @@ public interface QuestAssignModelMapper {
     int updateByPrimaryKey(QuestAssignModel record);
 
     boolean checkMemberIdAndQuestIdExists(@Param("memId") Integer memId, @Param("questId") Integer questId);
+    QuestAssignModel selectAssignByMemberAndQuest(@Param("memId") Integer memId, @Param("questId") Integer questId);
 
     int deleteAssign(@Param("memId") Integer memId, @Param("questId") Integer questId);
 

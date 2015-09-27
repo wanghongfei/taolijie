@@ -84,6 +84,16 @@ public class QuestModel extends Pageable {
 
     // ******** 仅查询用 ********
 
+
+    // ******** 仅返回用 ********
+
+    /**
+     * 该任务对于当前用户的状态
+     */
+    private Integer status;
+
+    // ******** 仅返回用 ********
+
     public QuestModel() {}
 
     public QuestModel(int pn, int ps) {
@@ -556,6 +566,14 @@ public class QuestModel extends Pageable {
 
     public void setMaxAward(BigDecimal maxAward) {
         this.maxAward = maxAward;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     /**

@@ -150,6 +150,18 @@ public class DefaultQuestService implements QuestService {
 
     @Override
     @Transactional(readOnly = true)
+    public QuestModel findById(Integer questId) {
+        return questMapper.selectByPrimaryKey(questId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QuestAssignModel findAssignByMember(Integer memId, Integer questId) {
+        return assignMapper.selectAssignByMemberAndQuest(memId, questId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps) {
         QuestModel example = new QuestModel(pn, ps);
         example.setQuestCateId(cateId);

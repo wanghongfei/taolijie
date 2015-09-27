@@ -161,6 +161,15 @@
             )
     </select>
 
+    <select id="selectAssignByMemberAndQuest" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            quest_assign questa
+        WHERE
+            assign_time = (SELECT MAX(assign_time) FROM quest_assign WHERE member_id = #{memId} AND quest_id = #{questId} )
+    </select>
+
     <update id="deleteAssign">
         DELETE FROM
             quest_assign
