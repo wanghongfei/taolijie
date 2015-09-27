@@ -168,6 +168,23 @@ public class RestQuestCtr {
         return new ResponseText();
     }
 
+
+    /**
+     * 查询完成申请
+     * @return
+     */
+    @RequestMapping(value = "/submit/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText submitQuest(@RequestParam(defaultValue = "0") int pn,
+                                    @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                    HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        ListResult<FinishRequestModel> lr = fiService.findByMember(credential.getId(), pn, ps);
+
+        return new ResponseText(lr);
+    }
+
     /**
      * 查询我发布的任务
      * @return
