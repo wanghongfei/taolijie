@@ -1,6 +1,5 @@
 package com.fh.taolijie.constant;
 
-import sun.security.x509.AVA;
 
 /**
  * Created by whf on 9/25/15.
