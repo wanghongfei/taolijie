@@ -1,5 +1,8 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -14,6 +17,8 @@ public class QuestAssignModel extends Pageable {
 
     private String questTitle;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date assignTime;
 
     private String status;
