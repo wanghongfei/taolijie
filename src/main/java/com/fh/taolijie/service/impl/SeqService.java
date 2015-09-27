@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,16 +45,16 @@ public class SeqService {
      * @param type
      * @return
      */
-    public String genKey(PicType type) {
+    public String genKey(PicType type, String fileName) {
         switch (type) {
             case JOB:
-                return genJobKey();
+                return genJobKey(fileName);
 
             case SH:
-                return genShKey();
+                return genShKey(fileName);
 
             case AVATAR:
-                return genAvatarKey();
+                return genAvatarKey(fileName);
         }
 
         return null;
@@ -83,24 +86,40 @@ public class SeqService {
     }
 
 
-    private String genAvatarKey() {
+    private String genAvatarKey(String fileName) {
         SeqAvatarModel model = new SeqAvatarModel();
         avaMapper.insert(model);
 
-        return "avatar-" + model.getId();
+        return StringUtils.concat(genDatePath(), "avatar-", model.getId(), "-", fileName);
     }
 
-    private String genShKey() {
+    private String genShKey(String fileName) {
         SeqShModel model = new SeqShModel();
         shMapper.insert(model);
 
-        return "sh-" + model.getId();
+        return StringUtils.concat(genDatePath(), "sh-", model.getId(), "-", fileName);
     }
 
-    private String genJobKey() {
+    private String genJobKey(String fileName) {
         SeqJobModel model = new SeqJobModel();
         jobMapper.insert(model);
 
-        return "job-" + model.getId();
+        return StringUtils.concat(genDatePath(), "job-", model.getId(), "-", fileName);
+    }
+
+    /**
+     * 生成/2015/3/14日期路径
+     * @return
+     */
+    private String genDatePath() {
+        Calendar calendar = Calendar.getInstance();
+
+        return StringUtils.concat(File.separator,
+                calendar.get(Calendar.YEAR),
+                File.separator,
+                calendar.get(Calendar.MONTH),
+                File.separator,
+                calendar.get(Calendar.DAY_OF_MONTH),
+                File.separator);
     }
 }
