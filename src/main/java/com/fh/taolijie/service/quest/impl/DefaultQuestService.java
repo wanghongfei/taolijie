@@ -9,10 +9,7 @@ import com.fh.taolijie.domain.QuestAssignModel;
 import com.fh.taolijie.domain.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
-import com.fh.taolijie.exception.checked.quest.QuestExpiredException;
-import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
-import com.fh.taolijie.exception.checked.quest.QuestZeroException;
+import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,16 +92,22 @@ public class DefaultQuestService implements QuestService {
     @Override
     @Transactional(readOnly = false)
     public void assignQuest(Integer memId, Integer questId)
-            throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException {
+            throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException {
 
         QuestModel questModel = questMapper.selectByPrimaryKey(questId);
         // 检查任务是否存在
         if (null == questModel) {
             throw new QuestNotFoundException("");
         }
+
+        Date now = new Date();
         // 检查任务是否过期
-        if (questModel.getEndTime().compareTo(new Date()) <= 0) {
+        if (questModel.getEndTime().compareTo(now) < 0) {
             throw new QuestExpiredException("");
+        }
+        // 检查任务是否开始
+        if(questModel.getStartTime().compareTo(now) > 0) {
+            throw new QuestNotStartException("");
         }
 
         // 检查任务是否已经领取

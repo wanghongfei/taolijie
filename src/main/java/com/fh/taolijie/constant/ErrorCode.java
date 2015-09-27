@@ -42,7 +42,9 @@ public enum ErrorCode {
 
     VALIDATION_CODE_ERROR(25, "validation code mismatch"),
 
-    ALREADY_VERIFIED(26, "already verified");
+    ALREADY_VERIFIED(26, "already verified"),
+
+    NOT_STARTED(27, "not start yet");
 
     private final String msg;
     private final int code;

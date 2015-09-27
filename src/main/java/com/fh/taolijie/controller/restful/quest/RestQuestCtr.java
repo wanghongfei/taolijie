@@ -113,6 +113,8 @@ public class RestQuestCtr {
         } catch (QuestExpiredException e) {
             return new ResponseText(ErrorCode.QUEST_EXPIRED);
 
+        } catch (QuestNotStartException e) {
+            return new ResponseText(ErrorCode.NOT_STARTED);
         }
 
         return new ResponseText();
