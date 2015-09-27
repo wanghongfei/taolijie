@@ -13,6 +13,7 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.ChargeService;
@@ -122,6 +123,7 @@ public class RestAccCtr {
      */
     @RequestMapping(value = "/withdraw", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText withdraw(@RequestParam BigDecimal amt,
+                                 @RequestParam String dealPwd,
                                  @RequestParam(required = false) String alipayAcc,
                                  @RequestParam(required = false) String bankAcc,
                                  HttpServletRequest req) {
@@ -142,12 +144,15 @@ public class RestAccCtr {
         model.setBankAcc(bankAcc);
 
         try {
-            drawService.addWithdraw(model);
+            drawService.addWithdraw(model, CredentialUtils.sha(dealPwd));
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
         } catch (BalanceNotEnoughException e) {
             return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (InvalidDealPwdException e) {
+            return new ResponseText(ErrorCode.BAD_PASSWORD);
 
         }
 

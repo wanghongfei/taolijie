@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
 import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
 
 /**
@@ -16,8 +17,8 @@ public interface WithdrawService {
      * 创建提现申请
      * @param model
      */
-    void addWithdraw(WithdrawApplyModel model)
-            throws CashAccNotExistsException, BalanceNotEnoughException;
+    void addWithdraw(WithdrawApplyModel model, String dealPwd)
+            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException;
 
     /**
      * 更新状态

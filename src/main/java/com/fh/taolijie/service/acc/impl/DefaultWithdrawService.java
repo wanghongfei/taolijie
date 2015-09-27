@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.CashAccModel;
 import com.fh.taolijie.domain.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
 import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.WithdrawService;
@@ -49,12 +50,17 @@ public class DefaultWithdrawService implements WithdrawService {
      */
     @Override
     @Transactional(readOnly = false)
-    public void addWithdraw(WithdrawApplyModel model)
-            throws CashAccNotExistsException, BalanceNotEnoughException {
+    public void addWithdraw(WithdrawApplyModel model, String dealPwd)
+            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException {
 
         CashAccModel acc = accMapper.findByMemberId(model.getMemberId());
         if (null == acc) {
             throw new CashAccNotExistsException("");
+        }
+
+        // 验证交易密码
+        if (!acc.getDealPassword().equals(dealPwd)) {
+            throw new InvalidDealPwdException("");
         }
 
         // 检查账户余额
