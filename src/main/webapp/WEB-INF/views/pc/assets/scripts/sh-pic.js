@@ -8,7 +8,7 @@ for( var i = 0; i<$shList.length; i++) {
     if(picIds[0] > 0) {
         url = '/static/images/users/' + picIds[0];
     } else {
-        url = '/images/pig.jpg';
+        //url = '/images/pig.jpg';
     }
     $item.attr('src', url);
 }
