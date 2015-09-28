@@ -187,9 +187,9 @@ jQuery(function() {
                 $('<li class="img-list-item" data-pid="'
                     + data
                     + '">'
-                    + '<img src="/static/images/users/'
+                    + '<img src="http://taolijie-pic.b0.upaiyun.com/'
                     + data
-                    + '" class="img-list-img"/>'
+                    + '!pc200" class="img-list-img"/>'
                     + '<span class="btn-img-del">x</span>'
                     + '</li>').insertBefore('.img-list-btn');
             })
