@@ -1,14 +1,10 @@
 package com.fh.taolijie.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import main.java.com.UpYun;
 import sun.misc.BASE64Encoder;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by whf on 9/25/15.
