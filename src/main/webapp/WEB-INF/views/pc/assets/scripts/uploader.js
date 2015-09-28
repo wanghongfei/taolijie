@@ -23,7 +23,8 @@ jQuery(function() {
         swf: '/js/Uploader.swf',
 
         // 文件接收服务端。
-        server: '/static/upload',
+        //server: '/static/upload',
+        server: 'http://v0.api.upyun.com/taolijie-pic/',
 
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -43,6 +44,36 @@ jQuery(function() {
             crop: true,
             preserveHeaders: true,
             noCompressIfLarger: false
+        },
+        method: "POST",
+        formData:{
+        }
+    });
+    uploader.on('uploadBeforeSend',function(obj,data, header){
+        //header['Origin'] = '*';
+        //header['Access-Control-Request-Method']= "POST";
+        //console.log(data);
+        var url = '/api/user/sign?picType=1&expiration='+(new Date().getTime()+10*1000);
+            $.ajax({
+                url: url,
+                async: false
+            })
+            .success(function(d){
+                    if(d.code ==0){
+                       data['policy'] = d.data.policy;
+                       data['signature'] = d.data.sign;
+                    }else{
+                        //取消发送
+                        alert('您上传图片过于频繁');
+                    }
+            }).error(function(d){
+                });
+
+    });
+    uploader.on('error', function(err, file){
+        console.log(err);
+        if(err == 'F_DUPLICATE'){
+            alert('上传失败,图片重复');
         }
     });
 
@@ -92,18 +123,18 @@ jQuery(function() {
             $('.img-list-btn').toggle();
         }
         $('<li class="img-list-item" data-pid="'
-            + data
+            + data.url.substr(1)
             + '">'
-            + '<img src="/static/images/users/'
-            + data
-            + '" class="img-list-img"/>'
+            + '<img src="http://taolijie-pic.b0.upaiyun.com/'
+            + data.url.substr(1)
+            + '!pc200" class="img-list-img"/>'
             + '<span class="btn-img-del">x</span>'
             + '</li>').insertBefore('.img-list-btn');
         var picIds = $('input[name=picIds]').val().split(';');
         if(picIds[0] === "") {
             picIds = [];
         }
-        picIds.push(data);
+        picIds.push(data.url.substr(1));
         $('input[name=picIds]').val(picIds.join(';'));
     });
 
@@ -111,7 +142,6 @@ jQuery(function() {
     uploader.on( 'uploadError', function( file ) {
         var $li = $( '#'+file.id ),
             $error = $li.find('div.error');
-
         // 避免重复创建
         if ( !$error.length ) {
             $error = $('<div class="error"></div>').appendTo( $li );
@@ -124,4 +154,49 @@ jQuery(function() {
     uploader.on( 'uploadComplete', function( file ) {
         $( '#'+file.id ).find('.progress').remove();
     });
+
+
+
+
+    /*
+     * del img uploaded
+     *
+     */
+    $('.img-list-wrapper').delegate('.btn-img-del','click', function(){
+        if( $('.img-list-item').length == 4) {
+            $('.img-list-btn').toggle();
+        }
+        var $img = $(this).parent('li');
+        $img.remove();
+        //同时删除文件队列
+        var picIds = $('input[name=picIds]').val().split(';');
+        for( var i = 0;i < picIds.length; i++){
+            if( $img.data('pid') == picIds[i] ) {
+                picIds.splice(i,1);
+                break;
+            }
+        }
+        $('input[name=picIds]').val(picIds.join(';'));
+    });
+
+    /* upload img list init*/
+    var initImgList = function() {
+        var ids = $('input[name=picIds]').val().split(';');
+        if(ids[0] != '') {
+            ids.forEach(function(data) {
+                $('<li class="img-list-item" data-pid="'
+                    + data
+                    + '">'
+                    + '<img src="/static/images/users/'
+                    + data
+                    + '" class="img-list-img"/>'
+                    + '<span class="btn-img-del">x</span>'
+                    + '</li>').insertBefore('.img-list-btn');
+            })
+            if(ids.length > 3) {
+                $('.img-list-btn').toggle();
+            }
+        }
+    }
+    initImgList();
 });
