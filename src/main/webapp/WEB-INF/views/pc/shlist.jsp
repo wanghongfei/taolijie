@@ -106,7 +106,7 @@
             <a ng-repeat="sh in list" href="/item/sh/{{sh.id}}" target="_blank" ng-cloak class="ng-cloak" style="color: #333333">
                 <div class="sh-slip fl" ng-class="">
                     <div class="shs_pic">
-                        <img src="/static/images/users/{{sh.picturePath}}" data-pid="{{sh.picturePath}}" alt=""
+                        <img src="http://taolijie-pic.b0.upaiyun.com/{{sh.picturePath | splitFirst:';' }}!pc261v2" alt=""
                              class="sh-item">
                     </div>
                     <p class="titile">{{sh.title | omit:'12'}}</p>
