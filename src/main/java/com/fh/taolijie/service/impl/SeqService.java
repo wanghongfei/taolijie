@@ -117,7 +117,7 @@ public class SeqService {
         return StringUtils.concat(File.separator,
                 calendar.get(Calendar.YEAR),
                 File.separator,
-                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.MONTH) + 1,
                 File.separator,
                 calendar.get(Calendar.DAY_OF_MONTH),
                 File.separator);
