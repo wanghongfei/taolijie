@@ -43,7 +43,8 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="sys_config" domainObjectName="SysConfigModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
+        <table tableName="quest_college_rel" domainObjectName="QuestCollRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="quest_school_rel" domainObjectName="QuestSchRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
 <!--        <table tableName="dict_province" domainObjectName="DictProvinceModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_city" domainObjectName="DictCityModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_region" domainObjectName="DictRegionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
@@ -72,9 +73,6 @@
 
 <!--        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
-        <table tableName="seq_avatar" domainObjectName="SeqAvatarModel" />
-        <table tableName="seq_sh" domainObjectName="SeqShModel" />
-        <table tableName="seq_job" domainObjectName="SeqJobModel" />
 <!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false" />-->
 

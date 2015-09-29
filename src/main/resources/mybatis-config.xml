@@ -66,5 +66,8 @@
         <mapper resource="mapper/SeqShModelMapper.xml" />
         <mapper resource="mapper/SeqJobModelMapper.xml" />
 
+        <mapper resource="mapper/QuestCollRelModelMapper.xml" />
+        <mapper resource="mapper/QuestSchRelModelMapper.xml" />
+
     </mappers>
 </configuration>
