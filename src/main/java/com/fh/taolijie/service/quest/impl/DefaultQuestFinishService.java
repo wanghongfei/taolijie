@@ -181,4 +181,10 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FinishRequestModel findById(Integer reqId) {
+        return fiMapper.selectByPrimaryKey(reqId);
+    }
 }

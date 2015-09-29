@@ -236,6 +236,70 @@ public class RestQuestCtr {
 
         return new ResponseText(lr);
     }
+
+
+    /**
+     * 修改提交状态
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/submit/{reqId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeStatus(@PathVariable Integer reqId,
+                                     @RequestParam String status,
+                                     @RequestParam(required = false) String memo,
+                                     HttpServletRequest req) {
+
+        // 登陆检查
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        // 学生不能调用
+        if (SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        Integer memId = credential.getId();
+
+        // 判断当前是否为商家
+        if (SessionUtils.isEmployer(credential)) {
+            // 如果是
+            // 判断该任务是不是自己发布的
+            FinishRequestModel reqModel = fiService.findById(reqId);
+            if (null == reqModel) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            Integer questId = reqModel.getQuestId();
+
+            QuestModel quest = questService.findById(questId);
+            if (!quest.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+        }
+
+
+        RequestStatus st = RequestStatus.fromCode(status);
+        if (null == st) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        try {
+            fiService.updateStatus(reqId, st, memo);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (RequestNotExistException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        }
+
+        return new ResponseText();
+    }
+
     /**
      * 查询我发布的任务
      * @return

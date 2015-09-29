@@ -68,4 +68,6 @@ public interface QuestFinishService {
      * @return
      */
     ListResult<FinishRequestModel> findByQuest(Integer questId, RequestStatus status, int pn, int ps);
+
+    FinishRequestModel findById(Integer reqId);
 }
