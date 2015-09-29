@@ -84,6 +84,7 @@ public class QuestModel extends Pageable {
     @JsonIgnore
     private BigDecimal maxAward;
 
+
     @JsonIgnore
     private List<Integer> collegeIdList;
     @JsonIgnore

@@ -157,7 +157,24 @@ public class DefaultQuestFinishService implements QuestFinishService {
     public ListResult<FinishRequestModel> findByMember(Integer memId, RequestStatus status, int pn, int ps) {
         FinishRequestModel example = new FinishRequestModel(pn, ps);
         example.setMemberId(memId);
-        example.setStatus(status.code());
+        if (null != status) {
+            example.setStatus(status.code());
+        }
+
+        List<FinishRequestModel> list = fiMapper.findBy(example);
+        long tot = fiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findByQuest(Integer questId, RequestStatus status, int pn, int ps) {
+        FinishRequestModel example = new FinishRequestModel(pn, ps);
+        example.setQuestId(questId);
+        if (null != status) {
+            example.setStatus(status.code());
+        }
 
         List<FinishRequestModel> list = fiMapper.findBy(example);
         long tot = fiMapper.countFindBy(example);

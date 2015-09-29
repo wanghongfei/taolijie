@@ -61,4 +61,11 @@ public interface QuestFinishService {
      * @return
      */
     ListResult<FinishRequestModel> findByMember(Integer memId, RequestStatus status, int pn, int ps);
+
+    /**
+     * 根据任务查询申请
+     * @param questId
+     * @return
+     */
+    ListResult<FinishRequestModel> findByQuest(Integer questId, RequestStatus status, int pn, int ps);
 }
