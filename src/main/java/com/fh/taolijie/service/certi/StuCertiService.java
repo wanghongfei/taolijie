@@ -2,8 +2,7 @@ package com.fh.taolijie.service.certi;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.certi.CertiStatus;
-import com.fh.taolijie.domain.StuCertiModel;
-import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
+import com.fh.taolijie.domain.certi.StuCertiModel;
 
 /**
  * 学生认证业务接口

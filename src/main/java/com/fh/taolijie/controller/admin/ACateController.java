@@ -2,8 +2,8 @@ package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.job.JobPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.dto.CategoryDto;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;

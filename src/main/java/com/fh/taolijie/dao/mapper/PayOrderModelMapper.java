@@ -1,9 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.PayOrderModel;
-import com.fh.taolijie.domain.PayOrderModelExample;
+import com.fh.taolijie.domain.order.PayOrderModel;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.stereotype.Repository;
 
 @Repository

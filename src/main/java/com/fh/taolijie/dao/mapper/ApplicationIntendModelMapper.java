@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.ApplicationIntendModel;
+import com.fh.taolijie.domain.resume.ApplicationIntendModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

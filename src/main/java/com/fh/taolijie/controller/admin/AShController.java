@@ -1,7 +1,7 @@
 package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.json.JsonWrapper;

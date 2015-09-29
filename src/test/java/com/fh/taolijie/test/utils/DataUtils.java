@@ -2,7 +2,6 @@ package com.fh.taolijie.test.utils;
 
 import com.fh.taolijie.dao.mapper.TestMapper;
 import com.fh.taolijie.domain.SqlWrapper;
-import com.fh.taolijie.domain.SysNotificationModel;
 import com.fh.taolijie.utils.TimeUtil;
 
 import java.util.*;

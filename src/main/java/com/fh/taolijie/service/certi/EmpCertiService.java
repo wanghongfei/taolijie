@@ -2,8 +2,7 @@ package com.fh.taolijie.service.certi;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.certi.CertiStatus;
-import com.fh.taolijie.domain.EmpCertiModel;
-import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
+import com.fh.taolijie.domain.certi.EmpCertiModel;
 
 
 /**

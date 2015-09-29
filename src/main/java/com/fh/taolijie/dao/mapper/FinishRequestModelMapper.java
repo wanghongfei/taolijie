@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.FinishRequestModel;
-import com.fh.taolijie.domain.FinishRequestModelExample;
+import com.fh.taolijie.domain.quest.FinishRequestModel;
+import com.fh.taolijie.domain.quest.FinishRequestModelExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

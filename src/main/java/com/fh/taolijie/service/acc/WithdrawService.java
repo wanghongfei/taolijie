@@ -2,7 +2,7 @@ package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.WithdrawStatus;
-import com.fh.taolijie.domain.WithdrawApplyModel;
+import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;

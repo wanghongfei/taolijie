@@ -4,15 +4,13 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dto.CreditsInfo;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-6-21.

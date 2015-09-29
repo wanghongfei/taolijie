@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.DictCityModel;
-import com.fh.taolijie.domain.DictCityModelExample;
+import com.fh.taolijie.domain.dict.DictCityModel;
+import com.fh.taolijie.domain.dict.DictCityModelExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

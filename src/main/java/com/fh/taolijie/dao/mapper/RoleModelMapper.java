@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.RoleModel;
+import com.fh.taolijie.domain.acc.RoleModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

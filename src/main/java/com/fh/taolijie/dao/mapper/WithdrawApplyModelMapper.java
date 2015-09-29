@@ -1,9 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.WithdrawApplyModel;
-import com.fh.taolijie.domain.WithdrawApplyModelExample;
+import com.fh.taolijie.domain.acc.WithdrawApplyModel;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.stereotype.Repository;
 
 @Repository

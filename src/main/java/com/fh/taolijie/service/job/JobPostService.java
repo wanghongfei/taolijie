@@ -1,11 +1,9 @@
 package com.fh.taolijie.service.job;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.service.PageService;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.EmpCertiModel;
-import com.fh.taolijie.domain.EmpCertiModelExample;
+import com.fh.taolijie.domain.certi.EmpCertiModel;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.stereotype.Repository;
 
 @Repository

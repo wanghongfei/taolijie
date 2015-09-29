@@ -1,7 +1,7 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.dao.mapper.ApplicationIntendModelMapper;
-import com.fh.taolijie.domain.ApplicationIntendModel;
+import com.fh.taolijie.domain.resume.ApplicationIntendModel;
 import com.fh.taolijie.service.ApplicationIntendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

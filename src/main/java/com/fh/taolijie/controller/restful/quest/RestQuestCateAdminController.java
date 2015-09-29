@@ -2,11 +2,10 @@ package com.fh.taolijie.controller.restful.quest;
 
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.domain.quest.QuestCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.quest.QuestCateService;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

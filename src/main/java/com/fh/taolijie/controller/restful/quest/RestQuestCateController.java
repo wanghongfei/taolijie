@@ -2,7 +2,7 @@ package com.fh.taolijie.controller.restful.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
-import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.domain.quest.QuestCategoryModel;
 import com.fh.taolijie.service.quest.QuestCateService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;

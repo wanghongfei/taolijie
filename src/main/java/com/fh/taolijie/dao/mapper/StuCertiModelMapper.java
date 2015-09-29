@@ -1,9 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.StuCertiModel;
-import com.fh.taolijie.domain.StuCertiModelExample;
+import com.fh.taolijie.domain.certi.StuCertiModel;
+
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
 import org.springframework.stereotype.Repository;
 
 @Repository

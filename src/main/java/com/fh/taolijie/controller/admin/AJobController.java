@@ -1,7 +1,7 @@
 package com.fh.taolijie.controller.admin;
 
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.JobPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.json.JsonWrapper;

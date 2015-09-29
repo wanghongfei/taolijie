@@ -1,10 +1,6 @@
 package com.fh.taolijie.test.other;
 
-import com.fh.taolijie.domain.SysNotificationModel;
 import org.junit.Test;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Iterator;
 
 /**
  * Created by whf on 8/16/15.

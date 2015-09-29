@@ -1,8 +1,8 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.PrivateNotificationModel;
-import com.fh.taolijie.domain.SysNotificationModel;
+import com.fh.taolijie.domain.noti.PrivateNotificationModel;
+import com.fh.taolijie.domain.noti.SysNotificationModel;
 
 import java.util.List;
 

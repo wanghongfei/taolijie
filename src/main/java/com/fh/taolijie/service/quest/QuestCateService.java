@@ -1,7 +1,7 @@
 package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.domain.quest.QuestCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 
 /**

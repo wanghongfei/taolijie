@@ -1,7 +1,8 @@
 package com.fh.taolijie.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.job.JobPostModel;
 
 import java.util.Date;
 

@@ -2,7 +2,7 @@ package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.WithdrawStatus;
-import com.fh.taolijie.domain.WithdrawApplyModel;
+import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.service.acc.WithdrawService;
 import com.fh.taolijie.service.acc.impl.DefaultWithdrawService;

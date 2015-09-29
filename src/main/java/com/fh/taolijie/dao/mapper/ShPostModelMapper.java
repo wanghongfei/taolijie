@@ -2,9 +2,8 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

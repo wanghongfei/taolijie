@@ -1,6 +1,10 @@
 package com.fh.taolijie.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.resume.ResumeModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 
 import java.util.Date;
 

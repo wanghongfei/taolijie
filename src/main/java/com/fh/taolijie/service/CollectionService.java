@@ -2,8 +2,8 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
-import com.fh.taolijie.domain.CollectionModel;
-import com.fh.taolijie.domain.CollectionModelExample;
+import com.fh.taolijie.domain.acc.CollectionModel;
+import com.fh.taolijie.domain.acc.CollectionModelExample;
 
 /**
  * 与我的收藏相关的操作

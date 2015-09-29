@@ -1,9 +1,9 @@
 package com.fh.taolijie.utils;
 
 import cn.fh.security.credential.Credential;
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.ResumeModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.resume.ResumeModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 
 /**
  * Created by wynfrith on 15-6-11.

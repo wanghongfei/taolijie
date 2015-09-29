@@ -1,7 +1,6 @@
 package com.fh.taolijie.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fh.taolijie.domain.acc.MemberModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;

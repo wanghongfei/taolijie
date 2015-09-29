@@ -1,10 +1,8 @@
 package com.fh.taolijie.service.sh;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.SHPostModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.PageService;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.fh.taolijie.interceptor;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.job.JobPostCategoryModel;
 import com.fh.taolijie.domain.NewsModel;
-import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.service.ResumeService;

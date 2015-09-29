@@ -4,9 +4,9 @@ package com.fh.taolijie.domain.middle;
  * Created by wanghongfei on 15-6-7.
  */
 
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.resume.ResumeModel;
 
 import java.util.Date;
 

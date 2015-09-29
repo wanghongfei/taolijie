@@ -1,7 +1,7 @@
 package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.constant.acc.CashAccStatus;
-import com.fh.taolijie.domain.CashAccModel;
+import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;

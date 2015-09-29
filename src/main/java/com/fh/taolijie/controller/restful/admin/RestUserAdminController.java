@@ -1,11 +1,10 @@
 package com.fh.taolijie.controller.restful.admin;
 
-import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;

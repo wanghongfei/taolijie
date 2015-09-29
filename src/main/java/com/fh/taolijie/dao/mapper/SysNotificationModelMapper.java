@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.SysNotificationModel;
+import com.fh.taolijie.domain.noti.SysNotificationModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

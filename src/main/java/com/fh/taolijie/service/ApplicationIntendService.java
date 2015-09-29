@@ -1,6 +1,6 @@
 package com.fh.taolijie.service;
 
-import com.fh.taolijie.domain.ApplicationIntendModel;
+import com.fh.taolijie.domain.resume.ApplicationIntendModel;
 
 import java.util.List;
 

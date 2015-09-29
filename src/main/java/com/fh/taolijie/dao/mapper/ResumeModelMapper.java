@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.resume.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import org.apache.ibatis.annotations.Param;

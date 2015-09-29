@@ -2,7 +2,7 @@ package com.fh.taolijie.service.sh.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.ShPostCategoryModelMapper;
-import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.utils.CollectionUtils;

@@ -1,9 +1,8 @@
 package com.fh.taolijie.service.job;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.job.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 

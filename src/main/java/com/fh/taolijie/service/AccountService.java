@@ -1,13 +1,12 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.RoleModel;
+import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 

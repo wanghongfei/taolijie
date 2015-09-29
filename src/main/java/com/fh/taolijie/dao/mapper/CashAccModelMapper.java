@@ -1,10 +1,9 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.CashAccModel;
-import com.fh.taolijie.domain.CashAccModelExample;
+import com.fh.taolijie.domain.acc.CashAccModel;
 
 import java.math.BigDecimal;
-import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.SeqShModel;
-import com.fh.taolijie.domain.SeqShModelExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.fh.taolijie.domain.sequence.SeqShModel;
 import org.springframework.stereotype.Repository;
 
 @Repository

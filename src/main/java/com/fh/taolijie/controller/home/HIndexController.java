@@ -2,6 +2,10 @@ package com.fh.taolijie.controller.home;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.*;
+import com.fh.taolijie.domain.job.JobPostCategoryModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;

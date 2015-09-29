@@ -4,9 +4,9 @@ import com.fh.taolijie.constant.PicType;
 import com.fh.taolijie.dao.mapper.SeqAvatarModelMapper;
 import com.fh.taolijie.dao.mapper.SeqJobModelMapper;
 import com.fh.taolijie.dao.mapper.SeqShModelMapper;
-import com.fh.taolijie.domain.SeqAvatarModel;
-import com.fh.taolijie.domain.SeqJobModel;
-import com.fh.taolijie.domain.SeqShModel;
+import com.fh.taolijie.domain.sequence.SeqAvatarModel;
+import com.fh.taolijie.domain.sequence.SeqJobModel;
+import com.fh.taolijie.domain.sequence.SeqShModel;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**

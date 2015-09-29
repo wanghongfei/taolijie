@@ -1,7 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.AccFlowModel;
-import com.fh.taolijie.domain.AccFlowModelExample;
+import com.fh.taolijie.domain.acc.AccFlowModel;
 
 import java.util.Date;
 import java.util.List;

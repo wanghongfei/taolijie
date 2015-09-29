@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.PrivateNotificationModel;
+import com.fh.taolijie.domain.noti.PrivateNotificationModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -5,16 +5,14 @@ import com.fh.taolijie.constant.acc.UserVerifyStatus;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.EmpCertiModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
-import com.fh.taolijie.domain.EmpCertiModel;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.certi.EmpCertiModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.certi.EmpCertiService;
 import com.fh.taolijie.service.certi.impl.DefaultEmpCertiService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
-import com.fh.taolijie.utils.Constants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 /**

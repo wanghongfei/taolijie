@@ -1,11 +1,8 @@
 package com.fh.taolijie.service.sh;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.exception.checked.CascadeDeleteException;
-import com.fh.taolijie.utils.ObjWrapper;
-
-import java.util.List;
 
 /**
  * 规定与二手帖子分类相关的操作

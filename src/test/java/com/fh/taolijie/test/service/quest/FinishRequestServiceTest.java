@@ -1,7 +1,7 @@
 package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.constant.quest.RequestStatus;
-import com.fh.taolijie.domain.FinishRequestModel;
+import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
 import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
@@ -9,7 +9,6 @@ import com.fh.taolijie.service.quest.impl.DefaultQuestFinishService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 /**

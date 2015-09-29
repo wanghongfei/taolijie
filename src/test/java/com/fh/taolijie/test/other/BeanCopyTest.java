@@ -1,11 +1,8 @@
 package com.fh.taolijie.test.other;
 
-import com.fh.taolijie.domain.SysNotificationModel;
 import net.sf.cglib.beans.BeanCopier;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
 
 /**
  * Created by whf on 8/8/15.

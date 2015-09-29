@@ -2,7 +2,7 @@ package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.AccFlow;
-import com.fh.taolijie.domain.AccFlowModel;
+import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 
 import java.math.BigDecimal;

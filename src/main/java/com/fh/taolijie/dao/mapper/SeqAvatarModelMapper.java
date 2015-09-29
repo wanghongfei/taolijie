@@ -1,9 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.SeqAvatarModel;
-import com.fh.taolijie.domain.SeqAvatarModelExample;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.fh.taolijie.domain.sequence.SeqAvatarModel;
 import org.springframework.stereotype.Repository;
 
 @Repository

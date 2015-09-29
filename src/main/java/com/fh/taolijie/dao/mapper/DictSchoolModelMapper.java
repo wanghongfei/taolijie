@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.DictSchoolModel;
-import com.fh.taolijie.domain.DictSchoolModelExample;
+import com.fh.taolijie.domain.dict.DictSchoolModel;
+import com.fh.taolijie.domain.dict.DictSchoolModelExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

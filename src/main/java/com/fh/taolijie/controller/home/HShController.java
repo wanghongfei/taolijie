@@ -2,10 +2,10 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
-import com.fh.taolijie.domain.RoleModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.acc.RoleModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.sh.ShPostCategoryService;

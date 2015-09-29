@@ -1,7 +1,7 @@
 package com.fh.taolijie.servlet;
 
-import com.fh.taolijie.domain.JobPostModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.sh.ShPostService;
 import org.springframework.beans.BeansException;

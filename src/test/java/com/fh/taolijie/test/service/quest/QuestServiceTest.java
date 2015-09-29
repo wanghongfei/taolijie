@@ -2,9 +2,8 @@ package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
-import com.fh.taolijie.domain.CashAccModel;
-import com.fh.taolijie.domain.QuestModel;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.quest.QuestAssignedException;
 import com.fh.taolijie.exception.checked.quest.QuestZeroException;
 import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
@@ -16,7 +15,6 @@ import com.fh.taolijie.test.BaseSpringDataTestClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;

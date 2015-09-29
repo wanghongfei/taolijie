@@ -4,8 +4,8 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.NotiType;
-import com.fh.taolijie.domain.PrivateNotificationModel;
-import com.fh.taolijie.domain.SysNotificationModel;
+import com.fh.taolijie.domain.noti.PrivateNotificationModel;
+import com.fh.taolijie.domain.noti.SysNotificationModel;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 创建、修改通知控制器。

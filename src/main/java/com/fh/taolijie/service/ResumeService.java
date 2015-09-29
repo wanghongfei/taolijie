@@ -1,9 +1,8 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.ApplicationIntendModel;
-import com.fh.taolijie.domain.ResumeModel;
-import com.fh.taolijie.domain.ResumeModel;
+import com.fh.taolijie.domain.resume.ApplicationIntendModel;
+import com.fh.taolijie.domain.resume.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.utils.Constants;

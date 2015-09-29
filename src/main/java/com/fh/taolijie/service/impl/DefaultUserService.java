@@ -1,22 +1,16 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.constant.OperationType;
-import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ShPostModelMapper;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.UserService;
-import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Set;
 
 /**
  * Created by wanghongfei on 15-6-7.

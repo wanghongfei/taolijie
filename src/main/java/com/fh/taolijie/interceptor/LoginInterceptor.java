@@ -2,11 +2,7 @@ package com.fh.taolijie.interceptor;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
-import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.JobPostCategoryModel;
-import com.fh.taolijie.domain.MemberModel;
-import com.fh.taolijie.domain.NewsModel;
-import com.fh.taolijie.domain.SHPostCategoryModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

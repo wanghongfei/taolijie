@@ -2,8 +2,8 @@ package com.fh.taolijie.controller.restful;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
-import com.fh.taolijie.domain.SHPostCategoryModel;
-import com.fh.taolijie.domain.SHPostModel;
+import com.fh.taolijie.domain.sh.SHPostCategoryModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;

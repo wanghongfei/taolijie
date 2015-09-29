@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.QuestAssignModel;
-import com.fh.taolijie.domain.QuestAssignModelExample;
+import com.fh.taolijie.domain.quest.QuestAssignModel;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

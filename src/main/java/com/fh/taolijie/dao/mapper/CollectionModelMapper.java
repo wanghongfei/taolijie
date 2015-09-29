@@ -1,7 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.CollectionModel;
-import com.fh.taolijie.domain.CollectionModelExample;
+import com.fh.taolijie.domain.acc.CollectionModel;
+import com.fh.taolijie.domain.acc.CollectionModelExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

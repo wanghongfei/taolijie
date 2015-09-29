@@ -1,11 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.JobPostModel;
 import com.fh.taolijie.domain.ReviewModel;
-import com.fh.taolijie.utils.ObjWrapper;
-
-import java.util.List;
 
 /**
  * 规定与评论相关的操作

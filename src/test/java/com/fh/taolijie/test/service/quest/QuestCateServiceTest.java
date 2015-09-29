@@ -1,7 +1,7 @@
 package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.QuestCategoryModel;
+import com.fh.taolijie.domain.quest.QuestCategoryModel;
 import com.fh.taolijie.service.quest.QuestCateService;
 import com.fh.taolijie.service.quest.impl.DefaultQuestCateService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;

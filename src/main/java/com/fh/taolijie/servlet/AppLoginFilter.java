@@ -5,9 +5,8 @@ import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RequestParamName;
-import com.fh.taolijie.domain.MemberModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.LogRecord;
 
 /**
  * 用于app登陆的过虑器

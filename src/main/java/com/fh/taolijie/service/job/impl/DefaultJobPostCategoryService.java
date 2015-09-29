@@ -2,7 +2,7 @@ package com.fh.taolijie.service.job.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.JobPostCategoryModelMapper;
-import com.fh.taolijie.domain.JobPostCategoryModel;
+import com.fh.taolijie.domain.job.JobPostCategoryModel;
 import com.fh.taolijie.exception.checked.CategoryNotEmptyException;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.utils.CollectionUtils;
