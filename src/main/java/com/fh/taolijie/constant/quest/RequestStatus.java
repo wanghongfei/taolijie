@@ -19,6 +19,10 @@ public enum RequestStatus {
     }
 
     public static RequestStatus fromCode(String code) {
+        if (null == code) {
+            return null;
+        }
+
         switch (code) {
             case "00":
                 return DONE;

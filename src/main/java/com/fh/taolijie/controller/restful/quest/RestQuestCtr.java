@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
@@ -200,6 +201,41 @@ public class RestQuestCtr {
         return new ResponseText(lr);
     }
 
+    /**
+     * 查询指定任务的申请
+     * @return
+     */
+    @RequestMapping(value = "/submit/{questId}/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText querySubmitQuest(@PathVariable("questId") Integer questId,
+                                         @RequestParam(required = false) String status,
+                                         @RequestParam(defaultValue = "0") int pn,
+                                         @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                         HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 学生用户不能调用该接口
+        if (SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断是否是商家用户
+        if (SessionUtils.isEmployer(credential)) {
+            // 如果是
+            // 判断该任务是不是自己发布的
+            QuestModel quest = questService.findById(questId);
+            if (!quest.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        }
+
+        RequestStatus st = RequestStatus.fromCode(status);
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<FinishRequestModel> lr = fiService.findByQuest(questId, st, pn, ps);
+
+        return new ResponseText(lr);
+    }
     /**
      * 查询我发布的任务
      * @return
