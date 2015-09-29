@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
@@ -18,12 +19,14 @@ import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by whf on 9/24/15.
@@ -46,6 +49,8 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText publishQuest(@Valid QuestModel model,
                                      BindingResult br,
+                                     @RequestParam String collegeIds,
+                                     @RequestParam String schoolIds,
                                      HttpServletRequest req) {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -57,9 +62,19 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-
+        // 参数验证
         if (br.hasErrors()) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+        // 将id string 转换成List<Integer>
+        try {
+            List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
+            List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
+            model.setCollegeIdList(coList);
+            model.setSchoolIdList(schList);
+
+        } catch (InvalidNumberStringException e) {
+            return new ResponseText(ErrorCode.BAD_NUMBER);
         }
 
         // 查出用户对应的现金账户

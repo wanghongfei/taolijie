@@ -3,6 +3,8 @@ package com.fh.taolijie.service.quest.impl;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.QuestCollRelModel;
+import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 轻兼职业务实现
@@ -47,6 +50,10 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private CashAccService accService;
 
+    @Autowired
+    private QuestCollRelModelMapper qcMapper;
+    @Autowired
+    private QuestSchRelModelMapper qsMapper;
 
     /**
      * 商家发布任务.
@@ -79,6 +86,51 @@ public class DefaultQuestService implements QuestService {
         // 发布任务
         model.setCreatedTime(new Date());
         questMapper.insertSelective(model);
+
+        Integer questId = model.getId();
+
+        // 添加任务对象关联信息
+        List<Integer> collList = model.getCollegeIdList();
+        List<Integer> schList = model.getSchoolIdList();
+
+        // 关联学校名
+        if (!collList.isEmpty()) {
+            List<QuestCollRelModel> qcList = collList.stream()
+                    .map( id -> new QuestCollRelModel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestCollegeRel(qcList);
+        }
+
+        // 关联学院名
+        if (!schList.isEmpty()) {
+            List<QuestSchRelModel> qsList = schList.stream()
+                    .map( id -> new QuestSchRelModel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestSchoolRel(qsList);
+
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addQuestCollegeRel(List<QuestCollRelModel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        qcMapper.insertInBatch(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addQuestSchoolRel(List<QuestSchRelModel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        qsMapper.insertInBatch(list);
     }
 
     /**

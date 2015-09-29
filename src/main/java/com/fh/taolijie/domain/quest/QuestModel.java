@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class QuestModel extends Pageable {
     private Integer id;
@@ -74,7 +75,7 @@ public class QuestModel extends Pageable {
     private Integer schoolId;
 
 
-    // ******** 仅查询用 ********
+    // ******** 仅作为请求参数使用 ********
 
     @JsonIgnore
     private Boolean awardRangeQuery = false;
@@ -83,7 +84,12 @@ public class QuestModel extends Pageable {
     @JsonIgnore
     private BigDecimal maxAward;
 
-    // ******** 仅查询用 ********
+    @JsonIgnore
+    private List<Integer> collegeIdList;
+    @JsonIgnore
+    private List<Integer> schoolIdList;
+
+    // ******** 仅作为请求参数使用 ********
 
 
     // ******** 仅返回用 ********
@@ -575,6 +581,22 @@ public class QuestModel extends Pageable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<Integer> getCollegeIdList() {
+        return collegeIdList;
+    }
+
+    public void setCollegeIdList(List<Integer> collegeIdList) {
+        this.collegeIdList = collegeIdList;
+    }
+
+    public List<Integer> getSchoolIdList() {
+        return schoolIdList;
+    }
+
+    public void setSchoolIdList(List<Integer> schoolIdList) {
+        this.schoolIdList = schoolIdList;
     }
 
     /**

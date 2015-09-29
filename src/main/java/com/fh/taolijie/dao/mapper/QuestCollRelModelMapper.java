@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface QuestCollRelModelMapper {
     /**
@@ -52,4 +54,6 @@ public interface QuestCollRelModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(QuestCollRelModel record);
+
+    void insertInBatch(List<QuestCollRelModel> list);
 }

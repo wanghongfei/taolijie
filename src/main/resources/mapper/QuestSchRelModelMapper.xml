@@ -100,4 +100,16 @@
         school_id = #{schoolId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <insert id="insertInBatch" >
+        INSERT INTO
+            quest_school_rel (quest_id, school_id)
+        VALUES
+        <foreach collection="list" item="item" index="ix" separator=",">
+            (
+                #{item.questId},
+                #{item.schoolId}
+            )
+        </foreach>
+    </insert>
 </mapper>

@@ -2,6 +2,8 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.domain.QuestCollRelModel;
+import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
@@ -9,6 +11,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 轻兼职业务接口
@@ -22,6 +25,18 @@ public interface QuestService {
      */
     void publishQuest(Integer accId, QuestModel model)
             throws BalanceNotEnoughException, CashAccNotExistsException;
+
+    /**
+     * 批量插入 任务-学校 关联
+     * @param list
+     */
+    void addQuestCollegeRel(List<QuestCollRelModel> list);
+
+    /**
+     * 批量插入 任务-学院 关联
+     * @param list
+     */
+    void addQuestSchoolRel(List<QuestSchRelModel> list);
 
     /**
      * 用户领取任务
