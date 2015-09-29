@@ -20,11 +20,9 @@
     <!-- Continue going here -->
 
     <mappers>
-        <mapper resource="mapper/AcademyModelMapper.xml" />
         <mapper resource="mapper/ApplicationIntendModelMapper.xml" />
         <mapper resource="mapper/BannerPicModelMapper.xml" />
         <mapper resource="mapper/BulletinModelMapper.xml" />
-        <mapper resource="mapper/EEModelMapper.xml" />
         <mapper resource="mapper/ImageModelMapper.xml" />
         <mapper resource="mapper/JobPostCategoryModelMapper.xml" />
         <mapper resource="mapper/JobPostModelMapper.xml" />
@@ -36,7 +34,6 @@
         <mapper resource="mapper/ResumeModelMapper.xml" />
         <mapper resource="mapper/ReviewModelMapper.xml" />
         <mapper resource="mapper/RoleModelMapper.xml" />
-        <mapper resource="mapper/SchoolModelMapper.xml" />
         <mapper resource="mapper/ShPostCategoryModelMapper.xml" />
         <mapper resource="mapper/ShPostModelMapper.xml" />
         <mapper resource="mapper/RecommendedPostModelMapper.xml" />
