@@ -1,11 +1,11 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
-import com.fh.taolijie.domain.MsgProtocol;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.acc.MemberModel;

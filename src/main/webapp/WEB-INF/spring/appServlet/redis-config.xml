@@ -65,5 +65,24 @@
         </property>
     </bean>
 
+    <!-- channel监听 -->
+    <bean id="messageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+        <constructor-arg>
+            <bean class="com.fh.taolijie.cache.message.AutoAuditListener"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+        <property name="connectionFactory" ref="redisConnectionFactory"/>
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="messageListener">
+                    <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                        <constructor-arg value="auto-audit" />
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
 
 </beans>

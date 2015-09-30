@@ -1,6 +1,9 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.*;
@@ -14,11 +17,20 @@ import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
+import com.fh.taolijie.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +40,9 @@ import java.util.List;
  */
 @Service
 public class DefaultQuestFinishService implements QuestFinishService {
+    private static Logger logger = LoggerFactory.getLogger(DefaultQuestFinishService.class);
+
+
     @Autowired
     private FinishRequestModelMapper fiMapper;
 
@@ -45,6 +60,10 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
     @Autowired
     private QuestAssignModelMapper assignMapper;
+
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    StringRedisTemplate rt;
 
     @Override
     @Transactional(readOnly = false)
@@ -74,7 +93,34 @@ public class DefaultQuestFinishService implements QuestFinishService {
         MemberModel m = memMapper.selectByPrimaryKey(model.getMemberId());
         model.setUsername(m.getUsername());
 
-        fiMapper.insertSelective(model);
+        int reqId = fiMapper.insertSelective(model);
+
+
+        // todo 投递24小时后自动通过任务
+        rt.execute( (RedisConnection redisConn) -> {
+            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol();
+            msg.setBeanName("AutoAuditJob");
+            // 24小时以 后执行
+            msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24));
+            // 构造参数列表
+            List<Object> parmList = new ArrayList<>(1);
+            parmList.add(reqId);
+            msg.setParmList(parmList);
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+
+            return null;
+        });
     }
 
     /**
@@ -98,7 +144,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
         // 如果是审核通过
         // 则向账户加钱
-        if (status == RequestStatus.DONE) {
+        if (status == RequestStatus.DONE || status == RequestStatus.AUTO_PASSED) {
             BigDecimal amt = quest.getAward();
             accService.addAvailableMoney(acc.getId(), amt);
 

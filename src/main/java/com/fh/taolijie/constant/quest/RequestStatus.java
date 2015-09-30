@@ -6,7 +6,11 @@ package com.fh.taolijie.constant.quest;
 public enum RequestStatus {
     DONE("00"),
     WAIT_AUDIT("01"),
-    FAILED("02");
+    FAILED("02"),
+    /**
+     * 已经超过24小时，自动通过
+     */
+    AUTO_PASSED("03");
 
     private String code;
 
@@ -32,6 +36,9 @@ public enum RequestStatus {
 
             case "02":
                 return FAILED;
+
+            case "03":
+                return AUTO_PASSED;
 
             default:
                 return null;
