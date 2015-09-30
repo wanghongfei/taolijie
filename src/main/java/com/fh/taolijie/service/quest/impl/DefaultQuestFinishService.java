@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
@@ -50,7 +51,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
     public void submitRequest(FinishRequestModel model)
             throws QuestNotAssignedException, RequestRepeatedException {
 
-        // 先检查用户是否已经领取该任务
+        // 先检查用户是否已经领取该任务且状态不为"02:已超时"
         boolean assigned = assignMapper.checkMemberIdAndQuestIdExists(model.getMemberId(), model.getQuestId());
         if (!assigned) {
             throw new QuestNotAssignedException("");
@@ -61,6 +62,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
         if (repeated) {
             throw new RequestRepeatedException("");
         }
+
+        // 领取表状态变为"03: 已提交"
+        assignMapper.updateStatus(model.getMemberId(), model.getQuestId(), AssignStatus.SUBMITTED.code());
 
         Date now = new Date();
         model.setStatus(RequestStatus.WAIT_AUDIT.code());

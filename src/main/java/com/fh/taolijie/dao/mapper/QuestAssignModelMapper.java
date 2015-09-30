@@ -64,6 +64,8 @@ public interface QuestAssignModelMapper {
 
     int deleteAssign(@Param("memId") Integer memId, @Param("questId") Integer questId);
 
+    int updateStatus(@Param("memId") Integer memId, @Param("questId") Integer questId, @Param("status") String status);
+
     List<QuestAssignModel> findBy(QuestAssignModel model);
     long countFindBy(QuestAssignModel model);
 }

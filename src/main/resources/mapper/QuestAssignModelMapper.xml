@@ -157,7 +157,11 @@
     <select id="checkMemberIdAndQuestIdExists" resultType="boolean">
         SELECT
             EXISTS (
-                SELECT 1 FROM quest_assign WHERE member_id = #{memId} AND quest_id = #{questId}
+                SELECT 1 FROM quest_assign
+                WHERE
+                    member_id = #{memId}
+                    AND quest_id = #{questId}
+                    AND status != '02'
             )
     </select>
 
@@ -170,9 +174,18 @@
             assign_time = (SELECT MAX(assign_time) FROM quest_assign WHERE member_id = #{memId} AND quest_id = #{questId} )
     </select>
 
-    <update id="deleteAssign">
+    <delete id="deleteAssign">
         DELETE FROM
             quest_assign
+        WHERE
+            member_id = #{memId} AND quest_id = #{questId}
+    </delete>
+
+    <update id="updateStatus">
+        UPDATE
+            quest_assign
+        SET
+            status = #{status}
         WHERE
             member_id = #{memId} AND quest_id = #{questId}
     </update>
