@@ -1,23 +1,36 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.MsgProtocol;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.ObjectGenerationException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +41,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DefaultQuestService implements QuestService {
+    private static Logger logger = LoggerFactory.getLogger(DefaultQuestService.class);
+
     @Autowired
     private QuestModelMapper questMapper;
 
@@ -54,6 +69,10 @@ public class DefaultQuestService implements QuestService {
     private QuestCollRelModelMapper qcMapper;
     @Autowired
     private QuestSchRelModelMapper qsMapper;
+
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    StringRedisTemplate rt;
 
     /**
      * 商家发布任务.
@@ -189,12 +208,38 @@ public class DefaultQuestService implements QuestService {
         QuestModel quest = questMapper.selectByPrimaryKey(questId);
         assignModel.setQuestTitle(quest.getTitle());
         assignModel.setStatus(AssignStatus.ASSIGNED.code());
-        assignMapper.insertSelective(assignModel);
+        final int assignId = assignMapper.insertSelective(assignModel);
 
 
         // 任务剩余数量减少1
         questMapper.decreaseLeftAmount(questId);
 
+        // todo 投递定时任务请求
+        rt.execute( (RedisConnection redisConn) -> {
+            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol();
+            msg.setBeanName("QuestExpiredJob");
+            // 2小时以 后执行
+            msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2));
+            // 构造参数列表
+            List<Object> parmList = new ArrayList<>(2);
+            parmList.add(memId);
+            parmList.add(assignId);
+            msg.setParmList(parmList);
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+
+            return null;
+        });
 
         // 方法结束 == 事务结束，行锁释放
     }
