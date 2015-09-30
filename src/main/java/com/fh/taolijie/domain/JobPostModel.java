@@ -62,7 +62,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String contact;
 
     @NotNull
-    @Length(min = 7, max = 30)
+    @Length(max = 30)
     private String contactPhone;
 
     private String contactEmail;
