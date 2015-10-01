@@ -17,6 +17,7 @@ import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -43,6 +45,9 @@ public class RestQuestCtr {
 
     @Autowired
     private QuestFinishService fiService;
+
+    @Autowired
+    private TljAuditService auditService;
 
     /**
      * 商家发布任务
@@ -350,5 +355,18 @@ public class RestQuestCtr {
         }
 
         return new ResponseText(lr);
+    }
+
+
+    /**
+     * 计算代审核所需的费用
+     * @param amt
+     * @return
+     */
+    @RequestMapping(value = "/audit/fee", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText addCate(@RequestParam Integer amt) {
+        BigDecimal tot = auditService.calculateFee(amt);
+
+        return new ResponseText(tot);
     }
 }

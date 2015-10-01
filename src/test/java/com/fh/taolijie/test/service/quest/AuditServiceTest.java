@@ -3,6 +3,7 @@ package com.fh.taolijie.test.service.quest;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
+import com.fh.taolijie.service.acc.impl.DefaultCashAccService;
 import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.service.quest.impl.DefaultTljAuditService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
@@ -15,7 +16,8 @@ import org.springframework.test.context.ContextConfiguration;
  * Created by whf on 10/1/15.
  */
 @ContextConfiguration(classes = {
-        DefaultTljAuditService.class
+        DefaultTljAuditService.class,
+        DefaultCashAccService.class
 })
 public class AuditServiceTest extends BaseSpringDataTestClass {
     @Autowired
@@ -28,7 +30,7 @@ public class AuditServiceTest extends BaseSpringDataTestClass {
     }
 
     @Test
-    public void testInsert() {
+    public void testInsert() throws Exception {
         TljAuditModel model = new TljAuditModel();
         model.setEmpId(10);
         model.setEmpUsername("whhf");
