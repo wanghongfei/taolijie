@@ -87,7 +87,7 @@ public class PhoneValidationService {
      * @param memId
      * @return
      */
-    public boolean validateCode(Integer memId, String code) {
+    public boolean validateSMSCode(Integer memId, String code) {
         String key = genKeyForSMS(memId);
         String realCode = rt.opsForValue().get(key);
         if (null == realCode) {

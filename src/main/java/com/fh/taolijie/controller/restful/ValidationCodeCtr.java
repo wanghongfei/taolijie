@@ -30,12 +30,18 @@ public class ValidationCodeCtr {
      */
     @RequestMapping(value = "/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText sendSMS(@RequestParam String mobile,
+                                @RequestParam String code,
                                 HttpServletRequest req) {
-        // 登陆检查
+
         Credential credential = SessionUtils.getCredential(req);
-        if (null == credential) {
-            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        Integer memId = credential.getId();
+
+        // 验证验证码是否正确
+        boolean result = codeService.validateWebCode(memId, code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
+
 
         codeService.genSMSValidationCode(credential.getId(), mobile);
         return new ResponseText();
