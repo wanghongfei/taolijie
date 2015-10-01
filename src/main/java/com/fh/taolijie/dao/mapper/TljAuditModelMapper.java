@@ -31,4 +31,10 @@ public interface TljAuditModelMapper {
     long queryLeftAmt(Integer auditId);
 
     int decreaseLeftAmt(Integer auditId);
+
+    /**
+     * 检查对同一个任务是否已经申请过
+     * @return
+     */
+    boolean checkMemberAndQuestExists(Integer memId, Integer questId);
 }

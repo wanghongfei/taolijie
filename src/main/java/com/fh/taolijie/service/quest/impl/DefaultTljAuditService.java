@@ -1,14 +1,19 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
 import com.fh.taolijie.dao.mapper.TljAuditModelMapper;
 import com.fh.taolijie.domain.SysConfigModel;
 import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
+import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.TljAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +37,12 @@ public class DefaultTljAuditService implements TljAuditService {
     @Autowired
     private CashAccService accService;
 
+    @Autowired
+    private MemberModelMapper memMapper;
+
+    @Autowired
+    private QuestModelMapper questMapper;
+
     @Override
     @Transactional(readOnly = true)
     public TljAuditModel findById(Integer auditId) {
@@ -50,7 +61,20 @@ public class DefaultTljAuditService implements TljAuditService {
     @Override
     @Transactional(readOnly = false)
     public void addAudit(TljAuditModel example)
-            throws BalanceNotEnoughException, CashAccNotExistsException {
+            throws BalanceNotEnoughException, CashAccNotExistsException, RequestRepeatedException {
+
+        // 检查对同一个任务是否重复申请
+        if (auditMapper.checkMemberAndQuestExists(example.getEmpId(), example.getQuestId())) {
+            throw new RequestRepeatedException("");
+        }
+
+        // 填写冗余字段 username
+        MemberModel mem = memMapper.selectByPrimaryKey(example.getEmpId());
+        example.setEmpUsername(mem.getUsername());
+        // 填写冗余字段 questTitle
+        QuestModel quest = questMapper.selectByPrimaryKey(example.getQuestId());
+        example.setQuestTitle(quest.getTitle());
+
 
         // 计算金额
         BigDecimal amt = calculateFee(example.getTotAmt());

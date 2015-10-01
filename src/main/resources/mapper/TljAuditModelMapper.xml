@@ -223,4 +223,10 @@
         WHERE
             id = #{auditId}
     </update>
+
+    <select id="checkMemberAndQuestExists" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM tlj_audit WHERE emp_id = #{memId} AND quest_id = #{questId}
+        )
+    </select>
 </mapper>

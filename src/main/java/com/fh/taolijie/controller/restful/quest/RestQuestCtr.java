@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
@@ -364,9 +365,46 @@ public class RestQuestCtr {
      * @return
      */
     @RequestMapping(value = "/audit/fee", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText addCate(@RequestParam Integer amt) {
+    public ResponseText calculateAuditFee(@RequestParam Integer amt) {
         BigDecimal tot = auditService.calculateFee(amt);
 
         return new ResponseText(tot);
+    }
+
+    /**
+     * 审核代审核任务完成申请
+     * @param amt
+     * @return
+     */
+    @RequestMapping(value = "/audit", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText applyAudit(@RequestParam Integer questId,
+                                   @RequestParam Integer amt, // 申请数量
+                                   HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        // 判断是否是商家用户
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        TljAuditModel model = new TljAuditModel();
+        model.setQuestId(questId);
+        model.setEmpId(credential.getId());
+        model.setTotAmt(amt);
+        model.setLeftAmt(amt);
+
+        try {
+            auditService.addAudit(model);
+        } catch (BalanceNotEnoughException e) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (RequestRepeatedException e) {
+            return new ResponseText(ErrorCode.REPEAT);
+        }
+
+        return ResponseText.getSuccessResponseText();
     }
 }
