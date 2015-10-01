@@ -104,6 +104,63 @@ public class RestAccCtr {
     }
 
     /**
+     * 更换手机号
+     * @return
+     */
+    @RequestMapping(value = "/chPhone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changePhone(@RequestParam String phone,
+                                    @RequestParam String code, // 手机验证码
+                                    HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        // 判断有没有解绑手机号
+        // 必须先解绑才允许操作
+        CashAccModel acc = accService.findByMember(memId);
+        String oldPhone = acc.getPhoneNumber();
+        if (null != oldPhone && !oldPhone.isEmpty()) {
+            return new ResponseText(ErrorCode.UNBIND_FIRST);
+        }
+
+        // 判断验证码是否正确
+        boolean result = codeService.validateSMSCode(memId, code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        // 更新手机号
+        Integer accId = accService.findByMember(memId).getId();
+        accService.updatePhone(accId, phone);
+
+        return new ResponseText();
+    }
+
+    /**
+     * 解绑手机号
+     * @return
+     */
+    @RequestMapping(value = "/unPhone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText unbindPhone(@RequestParam String code, // 手机验证码
+                                    HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+
+
+        // 判断验证码是否正确
+        boolean result = codeService.validateSMSCode(memId, code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        // 更新手机号
+        Integer accId = accService.findByMember(memId).getId();
+        accService.updatePhone(accId, "");
+
+        return new ResponseText();
+    }
+
+    /**
      * 查询当前用户的现金账户
      * @return
      */

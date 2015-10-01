@@ -85,6 +85,16 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void updatePhone(Integer accId, String phone) {
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setPhoneNumber(phone);
+
+        accMapper.updateByPrimaryKeySelective(example);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean checkAccIdExists(Integer accId) {
         return accMapper.checkAccIdExists(accId);

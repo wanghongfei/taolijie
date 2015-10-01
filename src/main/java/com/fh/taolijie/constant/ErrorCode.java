@@ -45,7 +45,8 @@ public enum ErrorCode {
     ALREADY_VERIFIED(26, "already verified"),
 
     NOT_STARTED(27, "not start yet"),
-    STATUS_CANNOT_CHANGE(28, "status cannot be changed");
+    STATUS_CANNOT_CHANGE(28, "status cannot be changed"),
+    UNBIND_FIRST(29, "unbind phone first");
 
     private final String msg;
     private final int code;
