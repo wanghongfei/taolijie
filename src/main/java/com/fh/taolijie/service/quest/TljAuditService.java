@@ -6,6 +6,8 @@ import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
 
+import java.math.BigDecimal;
+
 
 /**
  * 桃李街代审核业务实现
@@ -22,6 +24,13 @@ public interface TljAuditService {
      */
     void addAudit(TljAuditModel example)
             throws BalanceNotEnoughException, CashAccNotExistsException;
+
+    /**
+     * 计算代审核总费用
+     * @param amt
+     * @return
+     */
+    BigDecimal calculateFee(Integer amt);
 
     void updateAudit(TljAuditModel example);
 

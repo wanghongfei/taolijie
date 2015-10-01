@@ -53,12 +53,7 @@ public class DefaultTljAuditService implements TljAuditService {
             throws BalanceNotEnoughException, CashAccNotExistsException {
 
         // 计算金额
-        SysConfigModel conf = confMapper.selectByPrimaryKey(1);
-        BigDecimal amt = conf.getAuditFee().multiply(
-                new BigDecimal(
-                        example.getTotAmt()
-                )
-        );
+        BigDecimal amt = calculateFee(example.getTotAmt());
 
         // 扣钱
         CashAccModel acc = accService.findByMember(example.getEmpId());
@@ -68,6 +63,16 @@ public class DefaultTljAuditService implements TljAuditService {
         accService.reduceAvailableMoney(acc.getId(), amt);
 
         auditMapper.insertSelective(example);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal calculateFee(Integer amt) {
+        // 计算金额
+        SysConfigModel conf = confMapper.selectByPrimaryKey(1);
+        BigDecimal tot = conf.getAuditFee().multiply(new BigDecimal(amt));
+
+        return tot;
     }
 
     @Override
