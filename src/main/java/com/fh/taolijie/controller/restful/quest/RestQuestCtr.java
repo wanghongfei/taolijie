@@ -295,6 +295,8 @@ public class RestQuestCtr {
         } catch (RequestNotExistException e) {
             return new ResponseText(ErrorCode.NOT_FOUND);
 
+        } catch (RequestCannotChangeException ex) {
+            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
         }
 
         return new ResponseText();

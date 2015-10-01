@@ -14,6 +14,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.QuestNotAssignedException;
+import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
 import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
@@ -137,11 +138,17 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Override
     @Transactional(readOnly = false)
     public void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException, RequestNotExistException {
+            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException {
 
         FinishRequestModel req = fiMapper.selectByPrimaryKey(requestId);
         if (null == req) {
             throw new RequestNotExistException("");
+        }
+
+        // 判断任务申请状态
+        // 如果状态为"审核通过"或"已自动通过"，则不允许再修改状态
+        if (req.getStatus().equals(RequestStatus.DONE.code()) || req.getStatus().equals(RequestStatus.AUTO_PASSED.code())) {
+            throw new RequestCannotChangeException();
         }
 
         QuestModel quest = questMapper.selectByPrimaryKey(req.getQuestId());

@@ -44,7 +44,8 @@ public enum ErrorCode {
 
     ALREADY_VERIFIED(26, "already verified"),
 
-    NOT_STARTED(27, "not start yet");
+    NOT_STARTED(27, "not start yet"),
+    STATUS_CANNOT_CHANGE(28, "status cannot be changed");
 
     private final String msg;
     private final int code;
