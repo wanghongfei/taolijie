@@ -56,6 +56,7 @@ public interface QuestService {
     QuestAssignModel findAssignByMember(Integer memId, Integer questId);
 
     /**
+     * @deprecated
      * 根据分类查找任务
      * @param cateId 分类id
      * @return
@@ -63,6 +64,7 @@ public interface QuestService {
     ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps);
 
     /**
+     * @deprecated
      * 根据分类和赏金查询任务
      * @param cateId 分类id
      * @param min 最低赏金
@@ -70,6 +72,8 @@ public interface QuestService {
      * @return
      */
     ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps);
+
+    ListResult<QuestModel> findBy(QuestModel command);
 
     /**
      * 查询指定用户发布的任务记录

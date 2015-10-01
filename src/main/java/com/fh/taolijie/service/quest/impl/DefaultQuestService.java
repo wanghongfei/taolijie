@@ -262,6 +262,9 @@ public class DefaultQuestService implements QuestService {
         return assignMapper.selectAssignByMemberAndQuest(memId, questId);
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps) {
@@ -274,6 +277,10 @@ public class DefaultQuestService implements QuestService {
         return new ListResult<>(list, tot);
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps) {
@@ -285,6 +292,15 @@ public class DefaultQuestService implements QuestService {
 
         List<QuestModel> list = questMapper.findBy(example);
         long tot = questMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<QuestModel> findBy(QuestModel command) {
+        List<QuestModel> list = questMapper.findBy(command);
+        long tot = questMapper.countFindBy(command);
 
         return new ListResult<>(list, tot);
     }
