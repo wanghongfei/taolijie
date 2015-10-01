@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Created by whf on 9/24/15.
  */
 @Service
-public class PhoneValidationService {
+public class CodeService {
     public static final String SMS_KEY_PREFIX = "code" + Constants.DELIMITER + "SMS";
 
     public static final String WEB_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB";

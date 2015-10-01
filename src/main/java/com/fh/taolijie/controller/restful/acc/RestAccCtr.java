@@ -18,7 +18,7 @@ import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.WithdrawService;
-import com.fh.taolijie.service.acc.impl.PhoneValidationService;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -44,7 +44,7 @@ public class RestAccCtr {
     private CashAccService accService;
 
     @Autowired
-    private PhoneValidationService codeService;
+    private CodeService codeService;
 
     @Autowired
     private WithdrawService drawService;

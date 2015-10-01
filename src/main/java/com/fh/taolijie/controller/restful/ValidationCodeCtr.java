@@ -3,7 +3,7 @@ package com.fh.taolijie.controller.restful;
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.service.acc.impl.PhoneValidationService;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/user/code")
 public class ValidationCodeCtr {
     @Autowired
-    private PhoneValidationService codeService;
+    private CodeService codeService;
 
     /**
      * 向用户发送短信

@@ -2,6 +2,7 @@ package com.fh.taolijie.servlet;
 
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.sh.ShPostService;
 import org.springframework.beans.BeansException;
@@ -85,12 +86,15 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
             throws ServletException, java.io.IOException {
         String job = req.getParameter("jobId");
         String sh = req.getParameter("shId");
+        String mId = req.getParameter("mId");
 
         String phoneNumber = null;
         if (null != job) {
             phoneNumber = getJobPhone(Integer.valueOf(job));
         } else if (null != sh) {
             phoneNumber = getShNumber(Integer.valueOf(sh));
+        } else if (null != mId) {
+            phoneNumber = getWebCode(Integer.valueOf(mId));
         } else {
             return;
         }
@@ -170,5 +174,15 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
         ShPostService shService = (ShPostService) applicationContext.getBean("defaultShPostService");
         SHPostModel sh = shService.findPost(shId);
         return sh.getContactPhone();
+    }
+
+    /**
+     * 生成一个web页面的验证码
+     * @param memId
+     * @return
+     */
+    private String getWebCode(Integer memId) {
+        CodeService codeService = (CodeService) applicationContext.getBean("codeService");
+        return codeService.genWebValidationCode(memId);
     }
 }
