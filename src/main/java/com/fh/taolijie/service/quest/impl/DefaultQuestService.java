@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest.impl;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
@@ -27,6 +28,7 @@ import org.springframework.data.redis.connection.StringRedisConnection;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.applet.resources.MsgAppletViewer_zh_TW;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -223,6 +225,7 @@ public class DefaultQuestService implements QuestService {
             // 构造消息体
             MsgProtocol msg = new MsgProtocol();
             msg.setBeanName("QuestExpiredJob");
+            msg.setType(MsgType.DATE_STYLE.code());
             // 2小时以 后执行
             msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2));
             //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));

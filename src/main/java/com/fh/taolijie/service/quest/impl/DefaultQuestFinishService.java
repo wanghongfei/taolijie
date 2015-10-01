@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest.impl;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
@@ -93,18 +94,22 @@ public class DefaultQuestFinishService implements QuestFinishService {
         MemberModel m = memMapper.selectByPrimaryKey(model.getMemberId());
         model.setUsername(m.getUsername());
 
-        int reqId = fiMapper.insertSelective(model);
+        fiMapper.insertSelective(model);
+        int reqId = model.getId();
 
 
-        // todo 投递24小时后自动通过任务
+
+        // 投递24小时后自动通过定时任务
         rt.execute( (RedisConnection redisConn) -> {
             StringRedisConnection strConn = (StringRedisConnection) redisConn;
 
             // 构造消息体
             MsgProtocol msg = new MsgProtocol();
             msg.setBeanName("AutoAuditJob");
+            msg.setType(MsgType.DATE_STYLE.code());
             // 24小时以 后执行
             msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24));
+            //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
             List<Object> parmList = new ArrayList<>(1);
             parmList.add(reqId);
