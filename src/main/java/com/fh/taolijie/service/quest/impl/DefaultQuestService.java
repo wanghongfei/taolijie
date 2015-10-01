@@ -208,7 +208,9 @@ public class DefaultQuestService implements QuestService {
         QuestModel quest = questMapper.selectByPrimaryKey(questId);
         assignModel.setQuestTitle(quest.getTitle());
         assignModel.setStatus(AssignStatus.ASSIGNED.code());
-        final int assignId = assignMapper.insertSelective(assignModel);
+        assignMapper.insertSelective(assignModel);
+
+        final int assignId = assignModel.getId();
 
 
         // 任务剩余数量减少1
@@ -223,10 +225,11 @@ public class DefaultQuestService implements QuestService {
             msg.setBeanName("QuestExpiredJob");
             // 2小时以 后执行
             msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2));
+            //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
             List<Object> parmList = new ArrayList<>(2);
-            parmList.add(memId);
             parmList.add(assignId);
+            parmList.add(AssignStatus.ENDED.code());
             msg.setParmList(parmList);
 
             // 序列化成JSON
