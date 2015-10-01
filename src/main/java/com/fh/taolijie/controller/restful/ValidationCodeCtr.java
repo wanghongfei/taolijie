@@ -3,6 +3,8 @@ package com.fh.taolijie.controller.restful;
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -24,8 +26,11 @@ public class ValidationCodeCtr {
     @Autowired
     private CodeService codeService;
 
+    @Autowired
+    private CashAccService accService;
+
     /**
-     * 向用户发送短信
+     * 向指定手机号发送短信
      * @return
      */
     @RequestMapping(value = "/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
@@ -44,6 +49,32 @@ public class ValidationCodeCtr {
 
 
         codeService.genSMSValidationCode(credential.getId(), mobile);
+        return new ResponseText();
+    }
+
+    /**
+     * 给当前用户手机发送短信
+     * @return
+     */
+    @RequestMapping(value = "/sms", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText sendSMS(@RequestParam String code,
+                                HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 验证验证码是否正确
+        boolean result = codeService.validateWebCode(memId, code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        CashAccModel acc = accService.findByMember(memId);
+        if (null == acc) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        codeService.genSMSValidationCode(credential.getId(), acc.getPhoneNumber());
         return new ResponseText();
     }
 
