@@ -25,11 +25,11 @@ public class ValidationCodeCtr {
     private PhoneValidationService codeService;
 
     /**
-     * 请求短信验证码
+     * 向用户发送短信
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText smsCode(@RequestParam String mobile,
+    @RequestMapping(value = "/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText sendSMS(@RequestParam String mobile,
                                 HttpServletRequest req) {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -37,7 +37,20 @@ public class ValidationCodeCtr {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
 
-        codeService.genValidationCode(credential.getId(), mobile);
+        codeService.genSMSValidationCode(credential.getId(), mobile);
         return new ResponseText();
+    }
+
+    /**
+     * 请求一个验证码
+     * @return
+     */
+    @RequestMapping(value = "/web", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText fetchValidationCode(HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        String code = codeService.genWebValidationCode(credential.getId());
+
+        return new ResponseText(code);
     }
 }

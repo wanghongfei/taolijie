@@ -4,6 +4,7 @@ import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.exception.checked.InvalidMessageException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
 import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.utils.LogUtils;
@@ -59,6 +60,8 @@ public class AutoAuditListener extends MessageListenerAdapter {
         } catch (CashAccNotExistsException e) {
             e.printStackTrace();
         } catch (RequestNotExistException e) {
+            e.printStackTrace();
+        } catch (RequestCannotChangeException e) {
             e.printStackTrace();
         }
 
