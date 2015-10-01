@@ -253,12 +253,11 @@ public class HAuthController {
      * Method : POST AJAX
      * @return
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST,
-            produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public @ResponseBody String register(@Valid RegisterDto registerDto,
-                    BindingResult result,
-                    HttpSession session,
-                    HttpServletResponse res) {
+                                         BindingResult result,
+                                         @RequestParam(defaultValue = "0") int m, // 0: PC, 1:app
+                                         HttpServletResponse res) {
         int DEFAULT_INM_ID = 11;
 
         // TODO: 需要验证邮箱的唯一性
@@ -266,6 +265,11 @@ public class HAuthController {
         if (result.hasErrors()) {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
+
+        if (m == 1 && null == registerDto.getNickname()) {
+            return new JsonWrapper(false, "nickname cannot be empty").getAjaxMessage();
+        }
+
         //两次密码不一致
         if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
             return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
@@ -293,6 +297,7 @@ public class HAuthController {
 
         MemberModel mem = new MemberModel();
         mem.setUsername(registerDto.getUsername());
+        mem.setName(registerDto.getNickname());
         mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
         mem.setValid(true);
         mem.setVerified(Constants.VerifyStatus.NONE.toString());

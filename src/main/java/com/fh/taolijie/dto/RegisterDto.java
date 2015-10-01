@@ -11,11 +11,19 @@ public class RegisterDto {
 
     @Length(min = 6, max = 20)
     private String username;
+
     @Length(min = 6, max = 25)
     private String password;
+    private String rePassword;
+
     @Email
     private String email;
-    private String rePassword;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+
     private boolean isEmployer;
 
     public String getUsername() {
@@ -52,6 +60,14 @@ public class RegisterDto {
 
     public boolean isEmployer() {
         return isEmployer;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setIsEmployer(boolean isEmployer) {
