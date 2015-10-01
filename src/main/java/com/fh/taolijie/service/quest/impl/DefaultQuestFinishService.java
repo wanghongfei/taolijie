@@ -146,8 +146,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
         }
 
         // 判断任务申请状态
-        // 如果状态为"审核通过"或"已自动通过"，则不允许再修改状态
-        if (req.getStatus().equals(RequestStatus.DONE.code()) || req.getStatus().equals(RequestStatus.AUTO_PASSED.code())) {
+        // 如果状态为最终状态，则不允许再修改状态
+        RequestStatus st = RequestStatus.fromCode(req.getStatus());
+        if (RequestStatus.isFinalStatus(st)) {
             throw new RequestCannotChangeException();
         }
 
@@ -156,11 +157,11 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
         // 如果是审核通过
         // 则向账户加钱
-        if (status == RequestStatus.DONE || status == RequestStatus.AUTO_PASSED) {
+        if (status == RequestStatus.EMP_PASSED || status == RequestStatus.TLJ_PASSED || status == RequestStatus.AUTO_PASSED) {
             BigDecimal amt = quest.getAward();
             accService.addAvailableMoney(acc.getId(), amt);
 
-        } else if (status == RequestStatus.FAILED) {
+        } else if (status == RequestStatus.TLJ_FAILED || status == RequestStatus.EMP_FAILED) {
             // 如果审核失败
             // 则删除任务领取记录
             assignMapper.deleteAssign(req.getMemberId(), quest.getId());
