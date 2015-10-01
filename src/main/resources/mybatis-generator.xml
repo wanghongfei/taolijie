@@ -43,8 +43,10 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="quest_college_rel" domainObjectName="QuestCollRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
-        <table tableName="quest_school_rel" domainObjectName="QuestSchRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="tlj_audit" domainObjectName="TljAuditModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+
+<!--        <table tableName="quest_college_rel" domainObjectName="QuestCollRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="quest_school_rel" domainObjectName="QuestSchRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="dict_province" domainObjectName="DictProvinceModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_city" domainObjectName="DictCityModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
         <table tableName="dict_region" domainObjectName="DictRegionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" />
@@ -69,73 +71,5 @@
                enableUpdateByExample="true" />
         <table tableName="acc_flow" domainObjectName="AccFlowModel" enableCountByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
                enableUpdateByExample="true" />-->
-
-
-<!--        <table tableName="recommended_post" domainObjectName="RecommendedPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />-->
-<!--        <table tableName="system_notification" domainObjectName="SysNotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />-->
-
-<!--        <table tableName="taoli_ivy_category" domainObjectName="TaoliIvyCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-        <table tableName="taoli_ivy" domainObjectName="TaoliIvyModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-
-        <table tableName="school_activity_category" domainObjectName="SchoolActCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-        <table tableName="school_activity" domainObjectName="SchoolActModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-
-        <table tableName="school_organization_category" domainObjectName="SchoolOrgCategory" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-        <table tableName="school_organization" domainObjectName="SchoolOrgModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-
-        <table tableName="participant" domainObjectName="ParticipantModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-
-        <table tableName="member_verification_rel" domainObjectName="MemberVerifyRelModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />
-
-        <table tableName="ivy_activity_image_resource" domainObjectName="IvyActImgModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false" />-->
-
-<!--        <table tableName="member" domainObjectName="MemberModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="member_role" domainObjectName="MemberRoleModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="role" domainObjectName="RoleModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-
-        <table tableName="notification" domainObjectName="NotificationModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="review" domainObjectName="ReviewModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="job_post" domainObjectName="JobPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="job_post_category" domainObjectName="JobPostCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="resume" domainObjectName="ResumeModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="resume_job_post_category" domainObjectName="ApplicationIntendModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="school" domainObjectName="SchoolModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="academy" domainObjectName="AcademyModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="education_experience" domainObjectName="EEModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="image_resource" domainObjectName="ImageModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="news" domainObjectName="NewsModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="banner_pic" domainObjectName="BannerPicModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="bulletin" domainObjectName="BulletinModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="second_hand_post" domainObjectName="SHPostModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>
-        <table tableName="second_hand_post_category" domainObjectName="SHPostCategoryModel" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               enableUpdateByExample="false"/>-->
     </context>
 </generatorConfiguration>
