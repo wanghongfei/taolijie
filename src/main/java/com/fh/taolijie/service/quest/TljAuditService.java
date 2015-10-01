@@ -2,11 +2,13 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.TljAuditModel;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
 
-import java.util.List;
 
 /**
+ * 桃李街代审核业务实现
  * Created by whf on 10/1/15.
  */
 public interface TljAuditService {
@@ -14,7 +16,12 @@ public interface TljAuditService {
 
     ListResult<TljAuditModel> findBy(TljAuditModel cmd);
 
-    void addAudit(TljAuditModel example);
+    /**
+     * 添加一条代审核申请.
+     * @param example
+     */
+    void addAudit(TljAuditModel example)
+            throws BalanceNotEnoughException, CashAccNotExistsException;
 
     void updateAudit(TljAuditModel example);
 
