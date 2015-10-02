@@ -30,7 +30,7 @@ public class CodeService {
      * @param memId
      * @return
      */
-    public String genWebValidationCode(Integer memId) {
+    public String genWebValidationCode(String memId) {
         String key = genKeyForWEB(memId);
 
         // 生成随机6位验证码
@@ -48,7 +48,7 @@ public class CodeService {
      * @param code
      * @return
      */
-    public boolean validateWebCode(Integer memId, String code) {
+    public boolean validateWebCode(String memId, String code) {
         String key = genKeyForWEB(memId);
 
         // 从redis中取出code
@@ -68,7 +68,7 @@ public class CodeService {
      * 生成短信验证码, 并调用短信发送接口
      * @return
      */
-    public String genSMSValidationCode(Integer memId, String mobile) {
+    public String genSMSValidationCode(String memId, String mobile) {
         String code = RandomStringUtils.randomNumeric(6);
 
         // 调用短信接口
@@ -87,7 +87,7 @@ public class CodeService {
      * @param memId
      * @return
      */
-    public boolean validateSMSCode(Integer memId, String code) {
+    public boolean validateSMSCode(String memId, String code) {
         String key = genKeyForSMS(memId);
         String realCode = rt.opsForValue().get(key);
         if (null == realCode) {
@@ -107,11 +107,11 @@ public class CodeService {
      * @param memId
      * @return
      */
-    private String genKeyForSMS(Integer memId) {
+    private String genKeyForSMS(String memId) {
         return StringUtils.concat(SMS_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 
-    private String genKeyForWEB(Integer memId) {
+    private String genKeyForWEB(String memId) {
         return StringUtils.concat(WEB_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 }

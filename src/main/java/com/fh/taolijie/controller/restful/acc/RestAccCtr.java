@@ -123,7 +123,7 @@ public class RestAccCtr {
         }
 
         // 判断验证码是否正确
-        boolean result = codeService.validateSMSCode(memId, code);
+        boolean result = codeService.validateSMSCode(memId.toString(), code);
         if (!result) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
@@ -148,7 +148,7 @@ public class RestAccCtr {
 
 
         // 判断验证码是否正确
-        boolean result = codeService.validateSMSCode(memId, code);
+        boolean result = codeService.validateSMSCode(memId.toString(), code);
         if (!result) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }

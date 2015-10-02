@@ -183,6 +183,6 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
      */
     private String getWebCode(Integer memId) {
         CodeService codeService = (CodeService) applicationContext.getBean("codeService");
-        return codeService.genWebValidationCode(memId);
+        return codeService.genWebValidationCode(memId.toString());
     }
 }

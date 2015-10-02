@@ -42,13 +42,13 @@ public class ValidationCodeCtr {
         Integer memId = credential.getId();
 
         // 验证验证码是否正确
-        boolean result = codeService.validateWebCode(memId, code);
+        boolean result = codeService.validateWebCode(memId.toString(), code);
         if (!result) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
 
 
-        codeService.genSMSValidationCode(credential.getId(), mobile);
+        codeService.genSMSValidationCode(credential.getId().toString(), mobile);
         return new ResponseText();
     }
 
@@ -64,7 +64,7 @@ public class ValidationCodeCtr {
         Integer memId = credential.getId();
 
         // 验证验证码是否正确
-        boolean result = codeService.validateWebCode(memId, code);
+        boolean result = codeService.validateWebCode(memId.toString(), code);
         if (!result) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
@@ -74,7 +74,7 @@ public class ValidationCodeCtr {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
         }
 
-        codeService.genSMSValidationCode(credential.getId(), acc.getPhoneNumber());
+        codeService.genSMSValidationCode(credential.getId().toString(), acc.getPhoneNumber());
         return new ResponseText();
     }
 
@@ -86,7 +86,7 @@ public class ValidationCodeCtr {
     public ResponseText fetchValidationCode(HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
-        String code = codeService.genWebValidationCode(credential.getId());
+        String code = codeService.genWebValidationCode(credential.getId().toString());
 
         return new ResponseText(code);
     }
