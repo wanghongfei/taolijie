@@ -9,7 +9,7 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.QuestCoModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,4 +58,8 @@ public interface QuestCoModelMapper {
 
     List<QuestCoModel> findBy(QuestCoModel example);
     long countFindBy(QuestCoModel example);
+
+    boolean checkMemberAndQuestExists(@Param("memId") Integer memId, @Param("questId") Integer questId);
+
+    int deleteByMemberAndQuest(@Param("memId") Integer memId, @Param("questId") Integer questId);
 }

@@ -1,11 +1,11 @@
-package com.fh.taolijie.service.impl;
+package com.fh.taolijie.service.collect.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.dao.mapper.CollectionModelMapper;
 import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.service.collect.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

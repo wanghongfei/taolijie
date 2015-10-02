@@ -9,7 +9,7 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.acc.MemberModel;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;

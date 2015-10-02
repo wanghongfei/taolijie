@@ -9,7 +9,7 @@ import com.fh.taolijie.domain.resume.ApplicationIntendModel;
 import com.fh.taolijie.domain.resume.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;

@@ -168,4 +168,17 @@
             </if>
         </where>
     </select>
+
+    <select id="checkMemberAndQuestExists" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM collection_quest WHERE member_id = #{memId} AND quest_id = #{questId}
+        )
+    </select>
+
+    <delete id="deleteByMemberAndQuest">
+        DELETE FROM
+            collection_quest
+        WHERE
+            member_id = #{memId} AND quest_id = #{questId}
+    </delete>
 </mapper>
