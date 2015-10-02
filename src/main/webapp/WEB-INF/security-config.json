@@ -35,6 +35,12 @@
         },
 
         {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login/admin",
+            "url": "/api/manage**"
+        },
+
+        {
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],
             "toUrl": "/404",
             "url": "/api/noti**"
