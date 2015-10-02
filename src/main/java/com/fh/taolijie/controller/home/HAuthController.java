@@ -277,6 +277,20 @@ public class HAuthController {
             return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
         }
 
+        //两次密码不一致
+        if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
+            return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
+        }
+
+        // 创建model对象
+        MemberModel mem = new MemberModel();
+        mem.setUsername(registerDto.getUsername());
+        mem.setName(registerDto.getNickname());
+        mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
+        mem.setValid(true);
+        mem.setVerified(Constants.VerifyStatus.NONE.toString());
+        mem.setCreatedTime(new Date());
+
         // 手机号注册
         if (type == RegType.MOBILE) {
             // 昵称必填
@@ -293,12 +307,10 @@ public class HAuthController {
             if (!codeService.validateSMSCode(identifier, code)) {
                 return new JsonWrapper(false, ErrorCode.VALIDATION_CODE_ERROR).getAjaxMessage();
             }
+
+            mem.setPhone(registerDto.getUsername());
         }
 
-        //两次密码不一致
-        if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
-            return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
-        }
 
         //注册不同权限的账户
         //1.根据权限的名称找到对应的权限id,如果没有找到,返回false
@@ -320,15 +332,7 @@ public class HAuthController {
 
 
 
-        MemberModel mem = new MemberModel();
-        mem.setUsername(registerDto.getUsername());
-        mem.setName(registerDto.getNickname());
-        mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
-        mem.setValid(true);
-        mem.setVerified(Constants.VerifyStatus.NONE.toString());
-        mem.setCreatedTime(new Date());
         mem.setRoleList(Arrays.asList(role));
-//        mem.setProfilePhotoId(DEFAULT_INM_ID); // 默认用户头像,更改直接换图片id
 
         //注册并且检查用户名是否存在
         try {
@@ -341,7 +345,6 @@ public class HAuthController {
         return new JsonWrapper(true, ErrorCode.SUCCESS)
                 .getAjaxMessage();
     }
-    //endregion
 
 
     /**
