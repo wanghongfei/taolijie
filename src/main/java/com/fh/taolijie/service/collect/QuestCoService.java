@@ -2,6 +2,7 @@ package com.fh.taolijie.service.collect;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.QuestCoModel;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 
 /**
  * Created by whf on 10/3/15.
@@ -10,7 +11,8 @@ public interface QuestCoService {
     /**
      * 添加收藏
      */
-    void collect(Integer memId, Integer questId);
+    void collect(Integer memId, Integer questId)
+            throws QuestNotFoundException ;
 
     /**
      * 条件查询

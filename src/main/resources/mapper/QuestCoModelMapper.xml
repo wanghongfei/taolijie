@@ -130,16 +130,16 @@
             collection_quest
         <where>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+                created_time = #{createdTime,jdbcType=TIMESTAMP}
             </if>
             <if test="memberId != null">
-                member_id = #{memberId,jdbcType=INTEGER},
+                AND member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="questId != null">
-                quest_id = #{questId,jdbcType=INTEGER},
+                AND quest_id = #{questId,jdbcType=INTEGER}
             </if>
             <if test="questTitle != null">
-                quest_title = #{questTitle,jdbcType=VARCHAR},
+                AND quest_title = #{questTitle,jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY
@@ -148,23 +148,23 @@
             #{pageNumber}, #{pageSize}
     </select>
 
-    <select id="countFindBy" resultMap="BaseResultMap">
+    <select id="countFindBy" resultType="long">
         SELECT
             COUNT(*)
         FROM
             collection_quest
         <where>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=TIMESTAMP},
+                created_time = #{createdTime,jdbcType=TIMESTAMP}
             </if>
             <if test="memberId != null">
-                member_id = #{memberId,jdbcType=INTEGER},
+                AND member_id = #{memberId,jdbcType=INTEGER}
             </if>
             <if test="questId != null">
-                quest_id = #{questId,jdbcType=INTEGER},
+                AND quest_id = #{questId,jdbcType=INTEGER}
             </if>
             <if test="questTitle != null">
-                quest_title = #{questTitle,jdbcType=VARCHAR},
+                AND quest_title = #{questTitle,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

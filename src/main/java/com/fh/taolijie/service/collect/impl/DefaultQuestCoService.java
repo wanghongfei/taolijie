@@ -4,6 +4,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.QuestCoModelMapper;
 import com.fh.taolijie.domain.QuestCoModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.collect.QuestCoService;
 import com.fh.taolijie.service.quest.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,18 @@ public class DefaultQuestCoService implements QuestCoService {
 
     @Override
     @Transactional(readOnly = false)
-    public void collect(Integer memId, Integer questId) {
+    public void collect(Integer memId, Integer questId) throws QuestNotFoundException {
+        QuestModel quest = questService.findById(questId);
+        if(null == quest) {
+            throw new QuestNotFoundException("");
+        }
+
+
         QuestCoModel model = new QuestCoModel();
         model.setQuestId(questId);
         model.setMemberId(memId);
 
         // 设置冗余字段
-        QuestModel quest = questService.findById(questId);
         model.setQuestTitle(quest.getTitle());
 
         model.setCreatedTime(new Date());
