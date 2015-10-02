@@ -5,8 +5,10 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -14,6 +16,7 @@ import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
+import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.ChargeService;
@@ -55,13 +58,16 @@ public class RestAccCtr {
     @Autowired
     private AccFlowService flowService;
 
+    @Autowired
+    private AccountService memService;
+
     /**
      * 开通现金账户
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText createAcc(@RequestParam String dealPwd,
-                                  @RequestParam String phone,
+                                  @RequestParam(required = false) String phone,
                                   @RequestParam(defaultValue = "") String code, // 手机验证码
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String name,
@@ -83,13 +89,27 @@ public class RestAccCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        // 开通
+        // 创建model对象
         CashAccModel acc = new CashAccModel();
         acc.setDealPassword(CredentialUtils.sha(dealPwd));
-        acc.setPhoneNumber(phone);
         acc.setEmail(email);
         acc.setName(name);
         acc.setMemberId(memId);
+
+        // 判断用户的注册类型是不是手机号注册
+        MemberModel mem = memService.findMember(memId);
+        if (mem.getRegType().intValue() == RegType.MOBILE.code()) {
+            // 如果是
+            // 则直接将用户名设置为手机号
+            acc.setPhoneNumber(mem.getUsername());
+        } else {
+            // 如果不是，则设置手机号参数中的号码
+            if (!StringUtils.checkNotEmpty(phone)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+            acc.setPhoneNumber(phone);
+        }
 
         try {
             accService.addAcc(acc);
