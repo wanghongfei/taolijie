@@ -53,20 +53,6 @@ public class ValidationCodeCtr {
         return new ResponseText();
     }
 
-    /**
-     * (手机注册时使用)向指定手机号发送短信
-     * @return
-     */
-    @RequestMapping(value = "/sms/register", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
-                                              HttpServletRequest req) {
-
-        String randCode = RandomStringUtils.randomAlphabetic(15);
-
-        codeService.genSMSValidationCode(randCode, mobile);
-
-        return new ResponseText(randCode);
-    }
 
     /**
      * 给当前用户手机发送短信

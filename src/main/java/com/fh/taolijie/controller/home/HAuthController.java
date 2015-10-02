@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
@@ -338,4 +339,19 @@ public class HAuthController {
     //endregion
 
 
+    /**
+     * (手机注册时使用)向指定手机号发送短信
+     * @return
+     */
+    @RequestMapping(value = "/register/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
+                                              HttpServletRequest req) {
+
+        String randCode = RandomStringUtils.randomAlphabetic(15);
+
+        codeService.genSMSValidationCode(randCode, mobile);
+
+        return new ResponseText(randCode);
+    }
 }
