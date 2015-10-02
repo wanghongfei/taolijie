@@ -1,5 +1,9 @@
 package com.fh.taolijie.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class TljAuditModel extends Pageable {
 
     private Integer id;
@@ -15,6 +19,9 @@ public class TljAuditModel extends Pageable {
     private Integer empId;
 
     private String empUsername;
+
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date createdTime;
 
 
     public TljAuditModel() {}
@@ -180,5 +187,13 @@ public class TljAuditModel extends Pageable {
      */
     public void setEmpUsername(String empUsername) {
         this.empUsername = empUsername == null ? null : empUsername.trim();
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 }

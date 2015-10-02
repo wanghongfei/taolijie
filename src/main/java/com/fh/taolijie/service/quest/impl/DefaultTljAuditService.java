@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +75,7 @@ public class DefaultTljAuditService implements TljAuditService {
         // 填写冗余字段 questTitle
         QuestModel quest = questMapper.selectByPrimaryKey(example.getQuestId());
         example.setQuestTitle(quest.getTitle());
+        example.setCreatedTime(new Date());
 
 
         // 计算金额
