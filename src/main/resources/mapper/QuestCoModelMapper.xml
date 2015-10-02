@@ -122,4 +122,50 @@
         quest_title = #{questTitle,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            collection_quest
+        <where>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="memberId != null">
+                member_id = #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="questId != null">
+                quest_id = #{questId,jdbcType=INTEGER},
+            </if>
+            <if test="questTitle != null">
+                quest_title = #{questTitle,jdbcType=VARCHAR},
+            </if>
+        </where>
+        ORDER BY
+            created_time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFindBy" resultMap="BaseResultMap">
+        SELECT
+            COUNT(*)
+        FROM
+            collection_quest
+        <where>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="memberId != null">
+                member_id = #{memberId,jdbcType=INTEGER},
+            </if>
+            <if test="questId != null">
+                quest_id = #{questId,jdbcType=INTEGER},
+            </if>
+            <if test="questTitle != null">
+                quest_title = #{questTitle,jdbcType=VARCHAR},
+            </if>
+        </where>
+    </select>
 </mapper>

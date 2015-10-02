@@ -3,6 +3,8 @@ package com.fh.taolijie.dao.mapper;
 import com.fh.taolijie.domain.QuestCoModel;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface QuestCoModelMapper {
     /**
@@ -52,4 +54,7 @@ public interface QuestCoModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(QuestCoModel record);
+
+    List<QuestCoModel> findBy(QuestCoModel example);
+    long countFindBy(QuestCoModel example);
 }
