@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
@@ -260,11 +261,10 @@ public class HAuthController {
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public @ResponseBody String register(@Valid RegisterDto registerDto,
                                          BindingResult result,
-                                         @RequestParam(defaultValue = "0") int m, // 0: PC, 1:app
+                                         @RequestParam Integer regType,
                                          @RequestParam(required = false) String code,
                                          @RequestParam(required = false) String identifier,
                                          HttpServletResponse res) {
-        int DEFAULT_INM_ID = 11;
 
         // TODO: 需要验证邮箱的唯一性
         //验证表单错误
@@ -272,8 +272,13 @@ public class HAuthController {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
 
-        // m == 1表示是通过app注册的用户
-        if (m == 1) {
+        RegType type = RegType.fromCode(regType);
+        if (null == type) {
+            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
+        }
+
+        // 手机号注册
+        if (type == RegType.MOBILE) {
             // 昵称必填
             if (null == registerDto.getNickname()) {
                 return new JsonWrapper(false, ErrorCode.BAD_USERNAME).getAjaxMessage();
