@@ -70,6 +70,7 @@
         <mapper resource="mapper/QuestSchRelModelMapper.xml" />
 
         <mapper resource="mapper/TljAuditModelMapper.xml" />
+        <mapper resource="mapper/QuestCoModelMapper.xml" />
 
     </mappers>
 </configuration>
