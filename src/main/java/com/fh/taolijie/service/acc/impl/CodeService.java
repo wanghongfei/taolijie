@@ -21,6 +21,12 @@ public class CodeService {
 
     public static final String WEB_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB";
 
+
+    /**
+     * 用于验证用户两次发送短信的间隔
+     */
+    public static final String SMS_CONSTRAIN_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB" + Constants.DELIMITER + "CONSTRAIN";
+
     @Qualifier("redisTemplateForString")
     @Autowired
     StringRedisTemplate rt;
@@ -66,15 +72,20 @@ public class CodeService {
 
     /**
      * 生成短信验证码, 并调用短信发送接口
-     * @return
+     *
+     * @return 返回null表示两次短信发送间隔太短
      */
     public String genSMSValidationCode(String memId, String mobile) {
+        if (!checkSMSInterval(memId)) {
+            return null;
+        }
+
         String code = RandomStringUtils.randomNumeric(6);
 
         // 调用短信接口
         // ... ...
 
-        // 存入Redis
+        // 验证码存入Redis
         // 过期时间5min
         rt.opsForValue().set(genKeyForSMS(memId), code, 5, TimeUnit.MINUTES);
 
@@ -103,12 +114,39 @@ public class CodeService {
     }
 
     /**
+     * 检查距离上次发送的间隔是否合法
+     * @param memId
+     * @return
+     */
+    private boolean checkSMSInterval(String memId) {
+        String key = genKeyForSMSConstrain(memId);
+
+        String val = rt.opsForValue().get(key);
+
+        // 如果没取到
+        // 说明距离上次发送已经超过1min了
+        if (null == val) {
+            // 将本次发送验证码的状态保存到redis中
+            // 过期时间为1min
+            rt.opsForValue().set(key, "T", 1, TimeUnit.MINUTES);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 生成key名
      * @param memId
      * @return
      */
     private String genKeyForSMS(String memId) {
         return StringUtils.concat(SMS_KEY_PREFIX, Constants.DELIMITER, memId);
+    }
+
+    private String genKeyForSMSConstrain(String memId) {
+        return StringUtils.concat(SMS_CONSTRAIN_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 
     private String genKeyForWEB(String memId) {

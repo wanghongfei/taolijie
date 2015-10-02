@@ -49,7 +49,11 @@ public class ValidationCodeCtr {
         }
 
 
-        codeService.genSMSValidationCode(credential.getId().toString(), mobile);
+        String res = codeService.genSMSValidationCode(credential.getId().toString(), mobile);
+        if (null == res) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
+
         return new ResponseText();
     }
 
@@ -76,7 +80,11 @@ public class ValidationCodeCtr {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
         }
 
-        codeService.genSMSValidationCode(credential.getId().toString(), acc.getPhoneNumber());
+        String res = codeService.genSMSValidationCode(credential.getId().toString(), acc.getPhoneNumber());
+        if (null == res) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
+
         return new ResponseText();
     }
 

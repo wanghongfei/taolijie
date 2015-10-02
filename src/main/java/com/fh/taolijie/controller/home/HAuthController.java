@@ -350,7 +350,10 @@ public class HAuthController {
 
         String randCode = RandomStringUtils.randomAlphabetic(15);
 
-        codeService.genSMSValidationCode(randCode, mobile);
+        String res = codeService.genSMSValidationCode(randCode, mobile);
+        if (null == res) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
 
         return new ResponseText(randCode);
     }
