@@ -8,6 +8,7 @@ import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +51,21 @@ public class ValidationCodeCtr {
 
         codeService.genSMSValidationCode(credential.getId().toString(), mobile);
         return new ResponseText();
+    }
+
+    /**
+     * (手机注册时使用)向指定手机号发送短信
+     * @return
+     */
+    @RequestMapping(value = "/sms/register", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
+                                              HttpServletRequest req) {
+
+        String randCode = RandomStringUtils.randomAlphabetic(15);
+
+        codeService.genSMSValidationCode(randCode, mobile);
+
+        return new ResponseText(randCode);
     }
 
     /**

@@ -12,6 +12,7 @@ import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
@@ -43,6 +44,8 @@ public class HAuthController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    private CodeService codeService;
 
     /**
      * 登陆页面
@@ -257,6 +260,8 @@ public class HAuthController {
     public @ResponseBody String register(@Valid RegisterDto registerDto,
                                          BindingResult result,
                                          @RequestParam(defaultValue = "0") int m, // 0: PC, 1:app
+                                         @RequestParam(required = false) String code,
+                                         @RequestParam(required = false) String identifier,
                                          HttpServletResponse res) {
         int DEFAULT_INM_ID = 11;
 
@@ -266,8 +271,22 @@ public class HAuthController {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
 
-        if (m == 1 && null == registerDto.getNickname()) {
-            return new JsonWrapper(false, "nickname cannot be empty").getAjaxMessage();
+        // m == 1表示是通过app注册的用户
+        if (m == 1) {
+            // 昵称必填
+            if (null == registerDto.getNickname()) {
+                return new JsonWrapper(false, ErrorCode.BAD_USERNAME).getAjaxMessage();
+            }
+
+            // 参数code和identifier不能为空字符串
+            if (!StringUtils.checkNotEmpty(code) || !StringUtils.checkNotEmpty(identifier)) {
+                return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
+            }
+
+            // 验证验证码
+            if (!codeService.validateSMSCode(identifier, code)) {
+                return new JsonWrapper(false, ErrorCode.VALIDATION_CODE_ERROR).getAjaxMessage();
+            }
         }
 
         //两次密码不一致
