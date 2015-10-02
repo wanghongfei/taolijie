@@ -407,4 +407,42 @@ public class RestQuestCtr {
 
         return ResponseText.getSuccessResponseText();
     }
+
+
+    /**
+     * 查询商家的代审核申请
+     * @return
+     */
+    @RequestMapping(value = "/audit/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText auditList(@RequestParam(required = false) Integer questId,
+                                  @RequestParam(defaultValue = "0") int pn,
+                                  @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                  HttpServletRequest req) {
+
+        // 只有商家才能调用该接口
+        Credential credential = SessionUtils.getCredential(req);
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断任务是不是本人发的
+        if (null != questId) {
+            QuestModel quest = questService.findById(questId);
+            if (null == quest) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (!quest.getMemberId().equals(credential.getId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        }
+
+        TljAuditModel cmd = new TljAuditModel(pn, ps);
+        cmd.setQuestId(questId);
+        cmd.setEmpId(credential.getId());
+
+        ListResult<TljAuditModel> lr = auditService.findBy(cmd);
+
+        return new ResponseText(lr);
+    }
 }
