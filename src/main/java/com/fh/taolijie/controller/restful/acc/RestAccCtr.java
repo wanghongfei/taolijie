@@ -73,10 +73,10 @@ public class RestAccCtr {
 
 
 
-        // TODO 验证验证码
-/*        if (!codeService.validateCode(memId, code)) {
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-        }*/
+        }
 
         // 验证交易密码
         if (!StringUtils.checkNotEmpty(dealPwd)) {
