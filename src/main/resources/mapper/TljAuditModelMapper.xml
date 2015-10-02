@@ -190,6 +190,17 @@
                 AND created_time = #{createdTime}
             </if>
 
+            <if test="minAmt != null">
+                <![CDATA[
+                AND left_amt >= #{minAmt}
+                ]]>
+            </if>
+            <if test="maxAmt != null">
+                <![CDATA[
+                AND left_amt <= #{maxAmt}
+                ]]>
+            </if>
+
         </where>
 
         ORDER BY
@@ -222,6 +233,17 @@
             </if>
             <if test="empUsername != null">
                 AND emp_username = #{empUsername,jdbcType=VARCHAR}
+            </if>
+
+            <if test="minAmt != null">
+                <![CDATA[
+                AND left_amt >= #{minAmt}
+                ]]>
+            </if>
+            <if test="maxAmt != null">
+                <![CDATA[
+                AND left_amt <= #{maxAmt}
+                ]]>
             </if>
         </where>
     </select>

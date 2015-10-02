@@ -24,12 +24,16 @@ public class RestAuditAdminCtr {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText auditList(@RequestParam(required = false) Integer questId,
+                                  @RequestParam(required = false) Integer minLeft,
+                                  @RequestParam(required = false) Integer maxLeft,
                                   @RequestParam(defaultValue = "0") int pn,
                                   @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
                                   HttpServletRequest req) {
 
         TljAuditModel cmd = new TljAuditModel(pn, ps);
         cmd.setQuestId(questId);
+        cmd.setMinAmt(minLeft);
+        cmd.setMaxAmt(maxLeft);
 
         ListResult<TljAuditModel> lr = auditService.findBy(cmd);
         return new ResponseText(lr);

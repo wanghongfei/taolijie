@@ -23,6 +23,10 @@ public class TljAuditModel extends Pageable {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    //******** 仅做为请求参数使用 ***********
+    private Integer minAmt;
+    private Integer maxAmt;
+    //******** 仅做为请求参数使用 ***********
 
     public TljAuditModel() {}
     public TljAuditModel(int pn, int ps) {
@@ -191,6 +195,22 @@ public class TljAuditModel extends Pageable {
 
     public Date getCreatedTime() {
         return createdTime;
+    }
+
+    public Integer getMinAmt() {
+        return minAmt;
+    }
+
+    public void setMinAmt(Integer minAmt) {
+        this.minAmt = minAmt;
+    }
+
+    public Integer getMaxAmt() {
+        return maxAmt;
+    }
+
+    public void setMaxAmt(Integer maxAmt) {
+        this.maxAmt = maxAmt;
     }
 
     public void setCreatedTime(Date createdTime) {
