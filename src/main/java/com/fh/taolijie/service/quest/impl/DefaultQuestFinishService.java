@@ -13,12 +13,10 @@ import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.quest.QuestNotAssignedException;
-import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
-import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
-import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
+import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
+import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +60,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
     @Autowired
     private QuestAssignModelMapper assignMapper;
+
+    @Autowired
+    private TljAuditService auditService;
 
     @Qualifier("redisTemplateForString")
     @Autowired
@@ -138,7 +139,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Override
     @Transactional(readOnly = false)
     public void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException {
+            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException {
 
         FinishRequestModel req = fiMapper.selectByPrimaryKey(requestId);
         if (null == req) {
@@ -160,6 +161,11 @@ public class DefaultQuestFinishService implements QuestFinishService {
         if (status == RequestStatus.EMP_PASSED || status == RequestStatus.TLJ_PASSED || status == RequestStatus.AUTO_PASSED) {
             BigDecimal amt = quest.getAward();
             accService.addAvailableMoney(acc.getId(), amt);
+
+            // todo 如果是tlj审核, 则代审核申请 -1
+            if (status == RequestStatus.TLJ_PASSED) {
+                auditService.decreaseLeftAmtByQuest(quest.getId());
+            }
 
         } else if (status == RequestStatus.TLJ_FAILED || status == RequestStatus.EMP_FAILED) {
             // 如果审核失败

@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
 import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.service.quest.QuestFinishService;
@@ -61,6 +62,9 @@ public class RestQuestFinishAdminCtr {
 
         } catch (RequestCannotChangeException e) {
             return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
+
+        } catch (AuditNotEnoughException e) {
+            return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
         }
 
         return new ResponseText();

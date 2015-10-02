@@ -303,6 +303,9 @@ public class RestQuestCtr {
 
         } catch (RequestCannotChangeException ex) {
             return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
+
+        } catch (AuditNotEnoughException ex) {
+            return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
         }
 
         return new ResponseText();

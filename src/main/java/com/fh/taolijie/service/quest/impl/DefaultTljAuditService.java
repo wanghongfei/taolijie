@@ -120,4 +120,19 @@ public class DefaultTljAuditService implements TljAuditService {
         // 数量-1
         auditMapper.decreaseLeftAmt(auditId);
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void decreaseLeftAmtByQuest(Integer questId) throws AuditNotEnoughException {
+        // 查询剩余数量
+        // 该查询会加行锁
+        long left = auditMapper.queryLeftAmtByQuest(questId);
+        if (left <= 0) {
+            throw new AuditNotEnoughException();
+        }
+
+        // 数量-1
+        auditMapper.decreaseLeftAmtByQuest(questId);
+
+    }
 }

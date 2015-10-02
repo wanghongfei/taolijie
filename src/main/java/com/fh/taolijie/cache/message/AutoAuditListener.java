@@ -57,12 +57,8 @@ public class AutoAuditListener extends MessageListenerAdapter {
     private void doAutoAudit(Integer requestId) {
         try {
             fiService.updateStatus(requestId, RequestStatus.AUTO_PASSED, "");
-        } catch (CashAccNotExistsException e) {
-            e.printStackTrace();
-        } catch (RequestNotExistException e) {
-            e.printStackTrace();
-        } catch (RequestCannotChangeException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();;
         }
 
     }

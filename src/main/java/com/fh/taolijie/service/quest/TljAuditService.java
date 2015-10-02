@@ -41,4 +41,10 @@ public interface TljAuditService {
      */
     void decreaseLeftAmt(Integer auditId)
             throws AuditNotEnoughException;
+
+    /**
+     * 剩余数量-1
+     */
+    void decreaseLeftAmtByQuest(Integer questId)
+            throws AuditNotEnoughException;
 }

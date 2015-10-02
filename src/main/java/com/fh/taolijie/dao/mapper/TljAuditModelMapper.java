@@ -29,8 +29,10 @@ public interface TljAuditModelMapper {
      * @return
      */
     long queryLeftAmt(Integer auditId);
+    long queryLeftAmtByQuest(Integer questId);
 
     int decreaseLeftAmt(Integer auditId);
+    int decreaseLeftAmtByQuest(Integer questId);
 
     /**
      * 检查对同一个任务是否已经申请过

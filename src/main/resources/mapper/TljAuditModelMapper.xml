@@ -257,6 +257,15 @@
             id = #{auditId}
         FOR UPDATE
     </select>
+    <select id="queryLeftAmtByQuest" resultType="long">
+        SELECT
+            left_amt
+        FROM
+            tlj_audit
+        WHERE
+            quest_id = #{questId}
+        FOR UPDATE
+    </select>
 
     <update id="decreaseLeftAmt">
         UPDATE
@@ -265,6 +274,14 @@
             left_amt = left_amt - 1
         WHERE
             id = #{auditId}
+    </update>
+    <update id="decreaseLeftAmtByQuest">
+        UPDATE
+            tlj_audit
+        SET
+            left_amt = left_amt - 1
+        WHERE
+            quest_id = #{questId}
     </update>
 
     <select id="checkMemberAndQuestExists" resultType="boolean">
