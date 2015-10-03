@@ -36,6 +36,7 @@ public class RestQuestQueryCtr {
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText query(@RequestParam(required = false) Integer cateId,
                               @RequestParam(required = false) Integer regionId,
+                              @RequestParam(required = false) Integer collegeId,
                               @RequestParam(required = false) Integer schoolId,
                               @RequestParam(required = false) BigDecimal min,
                               @RequestParam(required = false) BigDecimal max,
@@ -56,6 +57,7 @@ public class RestQuestQueryCtr {
 
         command.setQuestCateId(cateId);
         command.setRegionId(regionId);
+        command.setCollegeId(collegeId);
         command.setSchoolId(schoolId);
 
         ListResult<QuestModel> lr = questService.findBy(command);
