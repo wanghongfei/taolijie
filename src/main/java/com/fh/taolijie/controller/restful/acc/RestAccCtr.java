@@ -127,7 +127,7 @@ public class RestAccCtr {
      * 修改支付宝账号
      * @return
      */
-    @RequestMapping(value = "/chAlipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/alipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeAlipay(@RequestParam String alipay,
                                      @RequestParam String code, // 手机验证码
                                      HttpServletRequest req) {
@@ -154,7 +154,7 @@ public class RestAccCtr {
      * 修改银行卡号
      * @return
      */
-    @RequestMapping(value = "/chBank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/bank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeBank(@RequestParam String bankAcc,
                                    @RequestParam String code, // 手机验证码
                                    HttpServletRequest req) {
@@ -181,7 +181,7 @@ public class RestAccCtr {
      * 更换手机号
      * @return
      */
-    @RequestMapping(value = "/chPhone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/phone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changePhone(@RequestParam String phone,
                                     @RequestParam String code, // 手机验证码
                                     HttpServletRequest req) {
@@ -213,7 +213,7 @@ public class RestAccCtr {
      * 解绑手机号
      * @return
      */
-    @RequestMapping(value = "/unPhone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/phone", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
     public ResponseText unbindPhone(@RequestParam String code, // 手机验证码
                                     HttpServletRequest req) {
 
