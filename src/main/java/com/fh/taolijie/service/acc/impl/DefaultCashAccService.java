@@ -86,6 +86,34 @@ public class DefaultCashAccService implements CashAccService {
 
     @Override
     @Transactional(readOnly = false)
+    public void updateAlipay(Integer accId, String alipay) throws CashAccNotExistsException {
+        if (!checkAccIdExists(accId)) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
+
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setAlipayAcc(alipay);
+        accMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateBankAcc(Integer accId, String bank) throws CashAccNotExistsException {
+        if (!checkAccIdExists(accId)) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
+
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setBankAcc(bank);
+        accMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void updatePhone(Integer accId, String phone) {
         CashAccModel example = new CashAccModel();
         example.setId(accId);

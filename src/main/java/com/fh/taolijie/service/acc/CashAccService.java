@@ -38,6 +38,24 @@ public interface CashAccService {
             throws CashAccNotExistsException;
 
     /**
+     * 更新支付宝
+     * @param accId
+     * @param alipay
+     * @throws CashAccNotExistsException
+     */
+    void updateAlipay(Integer accId, String alipay)
+            throws CashAccNotExistsException;
+
+    /**
+     * 更新银行卡号
+     * @param accId
+     * @param bank
+     * @throws CashAccNotExistsException
+     */
+    void updateBankAcc(Integer accId, String bank)
+            throws CashAccNotExistsException;
+
+    /**
      * 修改手机号
      * @param accId
      * @param phone

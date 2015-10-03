@@ -124,6 +124,60 @@ public class RestAccCtr {
     }
 
     /**
+     * 修改支付宝账号
+     * @return
+     */
+    @RequestMapping(value = "/chAlipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeAlipay(@RequestParam String alipay,
+                                     @RequestParam String code, // 手机验证码
+                                     HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        CashAccModel acc = accService.findByMember(memId);
+        try {
+            accService.updateAlipay(acc.getId(), alipay);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 修改银行卡号
+     * @return
+     */
+    @RequestMapping(value = "/chBank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeBank(@RequestParam String bankAcc,
+                                   @RequestParam String code, // 手机验证码
+                                   HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        CashAccModel acc = accService.findByMember(memId);
+        try {
+            accService.updateBankAcc(acc.getId(), bankAcc);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
      * 更换手机号
      * @return
      */
