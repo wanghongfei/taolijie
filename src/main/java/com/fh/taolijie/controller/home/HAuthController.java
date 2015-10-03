@@ -8,6 +8,7 @@ import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
+import com.fh.taolijie.dto.LoginRespDto;
 import com.fh.taolijie.dto.RegisterDto;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
@@ -63,38 +64,34 @@ public class HAuthController {
 
     /**
      * ajax登陆请求
-     *
-     * @param result
-     * @param session
-     * @param res
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    //region 登陆请求 login
-    public
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
-    String login(@Valid LoginDto loginDto,
-                 BindingResult result,
-                 @RequestParam(value = "m", required = false) String m,
-                 HttpSession session,
-                 HttpServletResponse res) throws Exception {
+    public ResponseText login(@Valid LoginDto loginDto,
+                              BindingResult result,
+                              @RequestParam(value = "m", required = false) String m,
+                              HttpSession session,
+                              HttpServletResponse res) {
 
-        int cookieExpireTime = 1 * 24 * 60 * 60;//1天
 
-        /*验证用户信息*/
+        // 参数验证
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         /*验证用户是否存在*/
         try {
             accountService.login(loginDto.getUsername(), loginDto.getPassword());
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false, ErrorCode.USER_NOT_EXIST).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_NOT_EXIST);
+
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
+            return new ResponseText(ErrorCode.BAD_PASSWORD);
+
         } catch (UserInvalidException e) {
-            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_INVALID);
+
         }
 
         /*获取用户信息和用户权限*/
@@ -144,12 +141,10 @@ public class HAuthController {
             accountService.updateAppToken(mem.getId(), appToken);
 
             // 返回token给客户端
-            return new JsonWrapper(true, "id", mem.getId().toString(),
-                    "appToken", appToken)
-                    .getAjaxMessage();
+            return new ResponseText(new LoginRespDto(mem.getId(), appToken));
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
+        return ResponseText.getSuccessResponseText();
     }
 
 
