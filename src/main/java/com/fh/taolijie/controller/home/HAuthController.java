@@ -360,4 +360,37 @@ public class HAuthController {
 
         return new ResponseText(randCode);
     }
+
+    /**
+     * 通过手机找回密码
+     * @return
+     */
+    @RequestMapping(value = "/findPwd", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public ResponseText findPwd(@RequestParam String mobile,
+                                @RequestParam String newPwd,
+                                @RequestParam String code,
+                                @RequestParam String identifier,
+                                HttpServletRequest req) {
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(identifier, code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        MemberModel mem = accountService.findMember(mobile, true);
+        if (null == mem) {
+            return new ResponseText(ErrorCode.INVALID_PHONE_NUMBER);
+        }
+
+
+        // 修改密码
+        MemberModel example = new MemberModel();
+        example.setId(mem.getId());
+        example.setPassword(CredentialUtils.sha(newPwd));
+        accountService.updateMember(example);
+
+        return ResponseText.getSuccessResponseText();
+
+    }
 }

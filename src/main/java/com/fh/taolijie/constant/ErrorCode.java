@@ -47,7 +47,9 @@ public enum ErrorCode {
     NOT_STARTED(27, "not start yet"),
     STATUS_CANNOT_CHANGE(28, "status cannot be changed"),
     UNBIND_FIRST(29, "unbind phone first"),
-    AUDIT_NOT_ENOUGH(30, "audit not enough");
+    AUDIT_NOT_ENOUGH(30, "audit not enough"),
+
+    INVALID_PHONE_NUMBER(31, "phone not found");
 
     private final String msg;
     private final int code;
