@@ -1,5 +1,7 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -21,10 +23,13 @@ public class TljAuditModel extends Pageable {
     private String empUsername;
 
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
     //******** 仅做为请求参数使用 ***********
+    @JsonIgnore
     private Integer minAmt;
+    @JsonIgnore
     private Integer maxAmt;
     //******** 仅做为请求参数使用 ***********
 
