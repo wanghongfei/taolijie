@@ -61,7 +61,7 @@
         casha.member_role,
         casha.phone_number,
         casha.email,
-        casha.name
+        casha.name,
         casha.bank_acc,
         casha.alipay_acc
     </sql>
