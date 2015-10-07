@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <!-- 普通日志 -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n" />
+        </Console>
+
+        <!-- 错误日志写入到文件中 -->
+        <RollingFile name="ERROR-APPENDER" fileName="/data/taolijie/tlj-error.log"
+                     filePattern="logs/%d{MM-dd-yyyy}log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- 错误信息的logger -->
+        <Logger name="error" level="error">
+            <AppenderRef ref="ERROR-APPENDER" />
+        </Logger>
+
+        <Logger name="info" level="debug">
+        </Logger>
+
+        <!-- Application Loggers -->
+        <Logger name="com.fh.taolijie" level="debug">
+        </Logger>
+
+        <Logger name="cn.fh.security" level="debug">
+        </Logger>
+
+        <!-- 3rdparty Loggers -->
+        <Logger name="org.springframework.core" level="info">
+        </Logger>
+
+        <Logger name="org.springframework.beans" level="info">
+        </Logger>
+
+        <Logger name="org.springframework.context" level="info">
+        </Logger>
+
+        <Logger name="org.springframework.web" level="info">
+        </Logger>
+
+        <!-- Root Logger -->
+        <Root level="info">
+            <AppenderRef ref="console" />
+        </Root>
+
+    </Loggers>
+
+
+
+</Configuration>

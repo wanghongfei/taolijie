@@ -4,6 +4,7 @@
 target/
 *.bak
 .imdone/
+logs/
 
 .settings/
 deploy.sh
