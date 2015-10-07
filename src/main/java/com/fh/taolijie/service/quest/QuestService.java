@@ -46,6 +46,12 @@ public interface QuestService {
     void assignQuest(Integer memId, Integer questId)
             throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException;
 
+    /**
+     * 让任务过期
+     * @param assignId
+     */
+    void assignExpired(Integer assignId);
+
     QuestModel findById(Integer questId);
 
     /**

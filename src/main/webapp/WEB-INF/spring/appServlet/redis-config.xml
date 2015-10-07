@@ -54,19 +54,9 @@
         <property name="hashValueSerializer" ref="stringSerializer" />
     </bean>
 
-    <!-- cache manager -->
-    <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
-        <constructor-arg name="template" ref="redisTemplate" />
-        <property name="expires">
-            <map>
-                <entry key="webCache" value="600" /> <!-- 10 minutes -->
-                <entry key="memberCache" value="3600" /> <!-- 1 hour -->
-            </map>
-        </property>
-    </bean>
 
     <!-- channel监听 -->
-    <bean id="messageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+<!--    <bean id="messageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
         <constructor-arg>
             <bean class="com.fh.taolijie.cache.message.AutoAuditListener"/>
         </constructor-arg>
@@ -83,6 +73,6 @@
                 </entry>
             </map>
         </property>
-    </bean>
+    </bean>-->
 
 </beans>

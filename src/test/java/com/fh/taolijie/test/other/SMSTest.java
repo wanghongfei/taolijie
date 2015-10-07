@@ -7,6 +7,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
@@ -22,7 +23,8 @@ import java.util.List;
 public class SMSTest {
     @Test
     public void sendSMS() throws IOException {
-        HttpClient client = new DefaultHttpClient();
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        HttpClient client = builder.build();
         HttpPost post = new HttpPost("http://api.weimi.cc/2/sms/send.html");
 
         List<NameValuePair> parmList = new ArrayList<>();

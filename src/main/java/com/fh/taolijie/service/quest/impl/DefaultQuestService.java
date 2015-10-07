@@ -31,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sun.applet.resources.MsgAppletViewer_zh_TW;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -224,16 +221,19 @@ public class DefaultQuestService implements QuestService {
 
             // 构造消息体
             MsgProtocol msg = new MsgProtocol();
-            msg.setBeanName("QuestExpiredJob");
             msg.setType(MsgType.DATE_STYLE.code());
+            msg.setCallbackHost("localhost");
+            msg.setCallbackPort(8080);
+            msg.setCallbackPath("/api/schedule/autoExpire");
+            msg.setCallbackMethod("GET");
             // 2小时以 后执行
             msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2));
             //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
-            List<Object> parmList = new ArrayList<>(2);
-            parmList.add(assignId);
-            parmList.add(AssignStatus.ENDED.code());
-            msg.setParmList(parmList);
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", String.valueOf(assignId));
+            map.put("assignId", String.valueOf(assignId));
+            msg.setParmMap(map);
 
             // 序列化成JSON
             String json = JSON.toJSONString(msg);
@@ -248,6 +248,27 @@ public class DefaultQuestService implements QuestService {
         });
 
         // 方法结束 == 事务结束，行锁释放
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void assignExpired(Integer assignId) {
+        // 检查任务领取表的状态是不是"03:已经提交"
+        // 如果是，则不进行任何操作，方法直接返回
+        QuestAssignModel model = assignMapper.selectByPrimaryKey(assignId);
+        if (model.getStatus().equals(AssignStatus.SUBMITTED.code())) {
+            return;
+        }
+
+        // 修改状态为"已超时"
+        QuestAssignModel example = new QuestAssignModel();
+        example.setId(assignId);
+        example.setStatus(AssignStatus.ENDED.code());
+        assignMapper.updateByPrimaryKeySelective(example);
+
+        // 释放任务数量
+        questMapper.increaseLeftAmount(model.getQuestId());
+
     }
 
     @Override

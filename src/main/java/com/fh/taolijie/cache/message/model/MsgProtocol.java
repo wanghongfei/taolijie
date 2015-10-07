@@ -1,7 +1,7 @@
 package com.fh.taolijie.cache.message.model;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * 通讯协议
@@ -14,9 +14,22 @@ public class MsgProtocol {
     private int type;
 
     /**
-     * job的spring bean名
+     * 接口调用地址
      */
-    private String beanName;
+    private String callbackPath;
+    /**
+     * 接口调用主机名
+     */
+    private String callbackHost;
+    /**
+     * 接口调用端口
+     */
+    private Integer callbackPort;
+
+    /**
+     * 调用方法
+     */
+    private String callbackMethod;
 
     /**
      * crontab表达式
@@ -28,7 +41,7 @@ public class MsgProtocol {
     /**
      * 参数
      */
-    private List<Object> parmList;
+    private Map<String, String> parmMap;
 
     public int getType() {
         return type;
@@ -38,12 +51,28 @@ public class MsgProtocol {
         this.type = type;
     }
 
-    public String getBeanName() {
-        return beanName;
+    public String getCallbackPath() {
+        return callbackPath;
     }
 
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
+    public void setCallbackPath(String callbackPath) {
+        this.callbackPath = callbackPath;
+    }
+
+    public String getCallbackHost() {
+        return callbackHost;
+    }
+
+    public void setCallbackHost(String callbackHost) {
+        this.callbackHost = callbackHost;
+    }
+
+    public Integer getCallbackPort() {
+        return callbackPort;
+    }
+
+    public void setCallbackPort(Integer callbackPort) {
+        this.callbackPort = callbackPort;
     }
 
     public String getCronExp() {
@@ -58,24 +87,20 @@ public class MsgProtocol {
         return exeAt;
     }
 
-    public List<Object> getParmList() {
-        return parmList;
+    public String getCallbackMethod() {
+        return callbackMethod;
     }
 
-    public void setParmList(List<Object> parmList) {
-        this.parmList = parmList;
+    public void setCallbackMethod(String callbackMethod) {
+        this.callbackMethod = callbackMethod;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("MsgProtocol{");
-        sb.append("type=").append(type);
-        sb.append(", beanName='").append(beanName).append('\'');
-        sb.append(", cronExp='").append(cronExp).append('\'');
-        sb.append(", exeAt=").append(exeAt);
-        sb.append(", parmList=").append(parmList);
-        sb.append('}');
-        return sb.toString();
+    public Map<String, String> getParmMap() {
+        return parmMap;
+    }
+
+    public void setParmMap(Map<String, String> parmMap) {
+        this.parmMap = parmMap;
     }
 
     public void setExeAt(Date exeAt) {

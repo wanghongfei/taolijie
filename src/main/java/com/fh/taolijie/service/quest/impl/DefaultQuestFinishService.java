@@ -29,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 任务提交申请业务实现
@@ -97,7 +94,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
         model.setUsername(m.getUsername());
 
         fiMapper.insertSelective(model);
-        int reqId = model.getId();
+        Integer reqId = model.getId();
 
 
 
@@ -107,15 +104,20 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
             // 构造消息体
             MsgProtocol msg = new MsgProtocol();
-            msg.setBeanName("AutoAuditJob");
             msg.setType(MsgType.DATE_STYLE.code());
+            msg.setCallbackHost("localhost");
+            msg.setCallbackPort(8080);
+            msg.setCallbackPath("/api/schedule/autoAudit");
+            msg.setCallbackMethod("GET");
             // 24小时以 后执行
             msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24));
             //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
-            List<Object> parmList = new ArrayList<>(1);
-            parmList.add(reqId);
-            msg.setParmList(parmList);
+            Map<String, String> parmMap = new HashMap<>();
+            parmMap.put("taskId", reqId.toString());
+            parmMap.put("reqId", reqId.toString());
+            msg.setParmMap(parmMap);
+
 
             // 序列化成JSON
             String json = JSON.toJSONString(msg);
