@@ -1,5 +1,7 @@
 package com.fh.taolijie.cache.message.model;
 
+import com.fh.taolijie.constant.MsgType;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -42,6 +44,51 @@ public class MsgProtocol {
      * 参数
      */
     private Map<String, String> parmMap;
+
+    /**
+     * Builder模式
+     */
+    public static class Builder {
+        // 必填参数
+        private int type;
+        private String callbackPath;
+        private String callbackHost;
+        private Integer callbackPort;
+        private String callbackMethod;
+        private Date exeAt;
+
+        // 选填
+        private Map<String, String> parmMap;
+
+        public Builder(MsgType type, String callbackHost, Integer callbackPort, String callbackPath, String callbackMethod, Date exeAt) {
+            this.type = type.code();
+            this.callbackPath = callbackPath;
+            this.callbackHost = callbackHost;
+            this.callbackPort = callbackPort;
+            this.callbackMethod = callbackMethod;
+            this.exeAt = exeAt;
+        }
+
+        public Builder setParmMap(Map<String, String> parmMap) {
+            this.parmMap = parmMap;
+            return this;
+        }
+
+        public MsgProtocol build() {
+            return new MsgProtocol(this);
+        }
+    }
+
+    private MsgProtocol(Builder b) {
+        this.type = b.type;
+        this.callbackPath = b.callbackPath;
+        this.callbackHost = b.callbackHost;
+        this.callbackPort = b.callbackPort;
+        this.callbackMethod = b.callbackMethod;
+        this.exeAt = b.exeAt;
+
+        this.parmMap = b.parmMap;
+    }
 
     public int getType() {
         return type;

@@ -102,21 +102,21 @@ public class DefaultQuestFinishService implements QuestFinishService {
         rt.execute( (RedisConnection redisConn) -> {
             StringRedisConnection strConn = (StringRedisConnection) redisConn;
 
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol();
-            msg.setType(MsgType.DATE_STYLE.code());
-            msg.setCallbackHost("localhost");
-            msg.setCallbackPort(8080);
-            msg.setCallbackPath("/api/schedule/autoAudit");
-            msg.setCallbackMethod("GET");
-            // 24小时以 后执行
-            msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24));
-            //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
             Map<String, String> parmMap = new HashMap<>();
             parmMap.put("taskId", reqId.toString());
             parmMap.put("reqId", reqId.toString());
-            msg.setParmMap(parmMap);
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                        MsgType.DATE_STYLE,
+                        "localhost",
+                        8080,
+                        "/api/schedule/autoAudit",
+                        "GET",
+                        TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24)
+                    ).setParmMap(parmMap)
+                    .build();
 
 
             // 序列化成JSON

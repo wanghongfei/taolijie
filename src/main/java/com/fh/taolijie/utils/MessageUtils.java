@@ -17,7 +17,7 @@ public class MessageUtils {
      * @return
      * @throws InvalidMessageException
      */
-    public static MsgProtocol deserailize(byte[] buf) throws InvalidMessageException {
+    public static MsgProtocol deserialize(byte[] buf) throws InvalidMessageException {
         try {
             return JSON.parseObject(buf, MsgProtocol.class);
 

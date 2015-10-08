@@ -219,21 +219,22 @@ public class DefaultQuestService implements QuestService {
         rt.execute( (RedisConnection redisConn) -> {
             StringRedisConnection strConn = (StringRedisConnection) redisConn;
 
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol();
-            msg.setType(MsgType.DATE_STYLE.code());
-            msg.setCallbackHost("localhost");
-            msg.setCallbackPort(8080);
-            msg.setCallbackPath("/api/schedule/autoExpire");
-            msg.setCallbackMethod("GET");
-            // 2小时以 后执行
-            msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2));
-            //msg.setExeAt(TimeUtil.calculateDate(new Date(), Calendar.SECOND, 10));
             // 构造参数列表
             Map<String, String> map = new HashMap<>();
             map.put("taskId", String.valueOf(assignId));
             map.put("assignId", String.valueOf(assignId));
-            msg.setParmMap(map);
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                        MsgType.DATE_STYLE,
+                        "localhost",
+                        8080,
+                        "/api/schedule/autoExpire",
+                        "GET",
+                        TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
+                    .setParmMap(map)
+                    .build();
+
 
             // 序列化成JSON
             String json = JSON.toJSONString(msg);
