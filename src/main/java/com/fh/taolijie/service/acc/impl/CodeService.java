@@ -118,8 +118,11 @@ public class CodeService {
         }
 
         boolean result = realCode.equals(code);
+        // 只有当验证码正确时才
         // 从Redis中清除
-        rt.delete(key);
+        if (result) {
+            rt.delete(key);
+        }
 
         return result;
     }
