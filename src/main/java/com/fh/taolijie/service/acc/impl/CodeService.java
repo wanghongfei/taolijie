@@ -64,7 +64,7 @@ public class CodeService {
 
         // 从redis中取出code
         String redisCode = rt.opsForValue().get(key);
-        if (null == code) {
+        if (null == redisCode) {
             // 已经过期了
             return false;
         }
