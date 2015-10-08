@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import sun.misc.BASE64Encoder;
 
 import java.security.MessageDigest;
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by whf on 9/25/15.

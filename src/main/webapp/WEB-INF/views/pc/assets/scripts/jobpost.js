@@ -25,6 +25,7 @@ tlj.directive('ngFocus', [function() {
 }]);
 
 tlj.controller('jobPostCtrl', function($scope, $http){
+    $scope.job = job;
     var today = new Date();
     $scope.checkAll = false;
     $scope.date = {
@@ -42,12 +43,15 @@ tlj.controller('jobPostCtrl', function($scope, $http){
             "淄博市":["张店区","淄川区","博山区","临淄区","周村区","桓台县","沂源县","高青县"]
         }
     };
-    $scope.job= {
-        province: "山东省",
-        city: "淄博市",
-        region: "张店区",
-        salaryUnit:"时"
-    };
+    if(!$scope.job){
+        $scope.job= {
+            province: "山东省",
+            city: "淄博市",
+            region: "张店区",
+            salaryUnit:"时"
+        };
+    }
+
 
     $scope.submit = function(isValid){
         $scope.checkAll = true;
