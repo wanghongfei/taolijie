@@ -30,8 +30,8 @@ public class SMSTest {
         List<NameValuePair> parmList = new ArrayList<>();
         parmList.add(new BasicNameValuePair("uid", "Ctpc2fjQKMq3"));
         parmList.add(new BasicNameValuePair("pas", "7yaz2zeb"));
-        parmList.add(new BasicNameValuePair("mob", "18518369058"));
-        parmList.add(new BasicNameValuePair("cid", "d9Z7uIKCYqhQ"));
+        parmList.add(new BasicNameValuePair("mob", "18369905318,13287096323,15653325871,18369905893,15689093197"));
+        parmList.add(new BasicNameValuePair("cid", "vJWD1eXBm0AM"));
         parmList.add(new BasicNameValuePair("p1", "wanghongfei"));
         parmList.add(new BasicNameValuePair("type", "json"));
 

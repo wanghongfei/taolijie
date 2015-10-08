@@ -11,7 +11,6 @@ import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,7 +60,6 @@ public class HResumeController {
                              @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
                              Model model,
                              HttpServletRequest req) {
-        ObjWrapper objWrapper = new ObjWrapper();
         ListResult<ResumeModel> resumes;
         if (cate > 0) {
             // 按求职意向查找

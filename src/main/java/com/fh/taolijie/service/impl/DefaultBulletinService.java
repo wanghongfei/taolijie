@@ -4,7 +4,6 @@ import com.fh.taolijie.dao.mapper.BulletinModelMapper;
 import com.fh.taolijie.domain.BulletinModel;
 import com.fh.taolijie.service.BulletinService;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +32,7 @@ public class DefaultBulletinService implements BulletinService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BulletinModel> getAll(int firstResult, int capacity, ObjWrapper wrap) {
+    public List<BulletinModel> getAll(int firstResult, int capacity) {
         return buMapper.getAll(firstResult, CollectionUtils.determineCapacity(capacity));
     }
 

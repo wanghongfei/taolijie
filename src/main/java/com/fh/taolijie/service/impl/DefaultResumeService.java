@@ -13,7 +13,6 @@ import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,7 +159,7 @@ public class DefaultResumeService implements ResumeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumeModel> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids) {
+    public List<ResumeModel> getResumesByIds(Integer... ids) {
         return reMapper.getInBatch(Arrays.asList(ids));
     }
 
