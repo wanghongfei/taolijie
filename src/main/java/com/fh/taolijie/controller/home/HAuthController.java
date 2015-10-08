@@ -17,10 +17,12 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TaolijieCredential;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,6 +45,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Controller
 public class HAuthController {
+    private static Logger infoLog = LogUtils.getInfoLogger();
 
     @Autowired
     AccountService accountService;
@@ -352,10 +355,13 @@ public class HAuthController {
                                               HttpServletRequest req) {
 
         String randCode = RandomStringUtils.randomAlphabetic(15);
+        if (infoLog.isDebugEnabled()) {
+            infoLog.debug("identifier generated:{}", randCode);
+        }
 
         String res = codeService.genSMSValidationCode(randCode, mobile);
         if (null == res) {
-            return new ResponseText(ErrorCode.TOO_FREQUENT);
+            return new ResponseText(ErrorCode.FAILED);
         }
 
         return new ResponseText(randCode);

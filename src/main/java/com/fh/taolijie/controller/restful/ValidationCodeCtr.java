@@ -51,7 +51,7 @@ public class ValidationCodeCtr {
 
         String res = codeService.genSMSValidationCode(credential.getId().toString(), mobile);
         if (null == res) {
-            return new ResponseText(ErrorCode.TOO_FREQUENT);
+            return new ResponseText(ErrorCode.FAILED);
         }
 
         return new ResponseText();
@@ -82,7 +82,7 @@ public class ValidationCodeCtr {
 
         String res = codeService.genSMSValidationCode(credential.getId().toString(), acc.getPhoneNumber());
         if (null == res) {
-            return new ResponseText(ErrorCode.TOO_FREQUENT);
+            return new ResponseText(ErrorCode.FAILED);
         }
 
         return new ResponseText();

@@ -1,9 +1,12 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.SMSUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,6 +20,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class CodeService {
+    private static final Logger infoLog = LogUtils.getInfoLogger();
+
     public static final String SMS_KEY_PREFIX = "code" + Constants.DELIMITER + "SMS";
 
     public static final String WEB_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB";
@@ -81,9 +86,15 @@ public class CodeService {
         }
 
         String code = RandomStringUtils.randomNumeric(6);
+        if (infoLog.isDebugEnabled()) {
+            infoLog.debug("SMS code generated: {}", code);
+        }
 
         // 调用短信接口
-        // ... ...
+        boolean result = SMSUtils.sendCode(code, mobile);
+        if (false == result) {
+            return null;
+        }
 
         // 验证码存入Redis
         // 过期时间5min
