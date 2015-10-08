@@ -288,6 +288,7 @@ public class HAuthController {
         mem.setValid(true);
         mem.setVerified(Constants.VerifyStatus.NONE.toString());
         mem.setCreatedTime(new Date());
+        mem.setRegType(RegType.USERNAME.code());
 
         // 手机号注册
         if (type == RegType.MOBILE) {
@@ -307,6 +308,7 @@ public class HAuthController {
             }
 
             mem.setPhone(registerDto.getUsername());
+            mem.setRegType(RegType.MOBILE.code());
         }
 
 
