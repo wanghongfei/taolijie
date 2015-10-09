@@ -138,7 +138,7 @@
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.timeToPay, 'required')">请选择结算方式</span>
             </div>
             <div class="form-group">
-                <label for="">截止时间<span class="asterisk-red">*</span></label>
+                <label for="">截止报名<span class="asterisk-red">*</span></label>
                 <%--<input type="text" class="form-control datepicker medium-input" name="expiredTime" id="expiredTime"--%>
                         <%--required ng-model="job.expiredTime"--%>
                        <%--placeholder="保留该信息的截止日期"--%>
@@ -169,7 +169,7 @@
                 <select name="city" id="city" class="form-control fl" required>
                     <option value="淄博市">淄博市</option>
                 </select>
-                <select name="region" id="region" class="form-control fl" required>
+                 <select name="region" id="region" class="form-control fl" required ng-model="job.region">
                     <option value="张店区">张店区</option>
                     <option value="周村区">周村区</option>
                     <option value="淄川区">淄川区</option>
