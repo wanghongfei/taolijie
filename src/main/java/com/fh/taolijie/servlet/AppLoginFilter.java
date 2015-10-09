@@ -3,11 +3,15 @@ package com.fh.taolijie.servlet;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.credential.DefaultCredential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -24,6 +28,8 @@ import java.util.concurrent.TimeUnit;
  * Created by whf on 8/17/15.
  */
 public class AppLoginFilter implements Filter, ApplicationContextAware {
+    private static final Logger infoLogger = LogUtils.getInfoLogger();
+
     /**
      * 持有容器
      */
@@ -48,6 +54,10 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         // 判断是否是app请求
         String appToken = req.getParameter(RequestParamName.APP_TOKEN.toString());
         if (null != appToken) {
+            if (infoLogger.isDebugEnabled()) {
+                infoLogger.debug("appToken found:{}", appToken);
+            }
+
             if (null == accountService) {
                 accountService = retrieveService("defaultAccountService");
             }
@@ -55,10 +65,13 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
             // 根据appToken查询用户
             MemberModel mem = accountService.selectByAppToken(appToken);
             if (null == mem) {
+                if (infoLogger.isDebugEnabled()) {
+                    infoLogger.debug("invalid appToken:{}", appToken);
+                }
+
                 // 没查到说明用户已经退出了登陆
                 HttpServletResponse resp = (HttpServletResponse) servletResponse;
-                String respStr = new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN)
-                        .getAjaxMessage();
+                String respStr = JSON.toJSONString(new ResponseText(ErrorCode.NOT_LOGGED_IN));
                 // 返回错误JSON
                 resp.getOutputStream().write(respStr.getBytes());
                 resp.getOutputStream().flush();
@@ -76,6 +89,10 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
             credential.addRole(mem.getRoleList().get(0).getRolename());
 
             CredentialUtils.createCredential(session, credential);
+
+            if (infoLogger.isDebugEnabled()) {
+                infoLogger.debug("appToken[{}] login succeeded for user:{}", appToken, mem.getUsername());
+            }
         }
 
 
