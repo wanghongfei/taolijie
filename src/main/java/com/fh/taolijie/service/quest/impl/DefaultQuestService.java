@@ -18,6 +18,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -243,7 +244,10 @@ public class DefaultQuestService implements QuestService {
             }
 
             // 发布消息
-            strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
 
             return null;
         });
