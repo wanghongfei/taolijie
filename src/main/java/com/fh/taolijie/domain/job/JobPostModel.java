@@ -53,18 +53,18 @@ public class JobPostModel extends Pageable implements Serializable {
     private boolean deleted = false;
 
     @NotNull
-    @Length(min = 10, max = 500)
+    @Length(min = 0, max = 500)
     private String jobDescription;
 
     /**
      * 联系人名
      */
     @NotNull
-    @Length(min = 1, max = 10)
+    @Length(min = 0, max = 10)
     private String contact;
 
     @NotNull
-    @Length(min = 7, max = 30)
+    @Length(min = 0, max = 30)
     private String contactPhone;
 
     private String contactEmail;
@@ -74,7 +74,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String contactQq;
 
     @NotNull
-    @Length(min = 10, max = 500)
+    @Length(min = 0, max = 500)
     private String jobDetail;
 
     private Integer likes;
@@ -94,7 +94,7 @@ public class JobPostModel extends Pageable implements Serializable {
      * 工作时间
      */
     @NotNull
-    @Length(min = 1, max = 100)
+    @Length(min = 0, max = 100)
     private String workTime;
 
     private String salaryUnit;

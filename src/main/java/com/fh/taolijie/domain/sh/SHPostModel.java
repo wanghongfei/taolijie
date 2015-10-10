@@ -18,12 +18,12 @@ public class SHPostModel extends Pageable {
     private String picturePath;
 
     @NotNull
-    @Length(min = 15, max = 500)
+    @Length(min = 0, max = 500)
     private String description;
 
 
     @NotNull
-    @Length(min = 1, max = 20)
+    @Length(min = 0, max = 20)
     private String title;
 
     private boolean deleted = false;
@@ -70,7 +70,7 @@ public class SHPostModel extends Pageable {
     private String tradePlace;
 
     @NotNull
-    @Length(max = 10)
+    @Length(max = 15)
     private String contactName;
 
     //@NotNull
