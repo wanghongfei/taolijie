@@ -69,7 +69,7 @@ $("#like").click(function(){
                 //}
             }
         },error: function(err){
-          $tlj.notify('请先登录再进行点赞');
+          $.tlj.notify('请先登录再进行点赞');
         }
     });
 });
