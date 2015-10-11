@@ -26,7 +26,9 @@ $("#like").click(function(){
                 $.tlj.notify(errorCode[data.message]);
             }
           }
-
+        },
+        error: function(err) {
+          $.tlj.notify('请先登录后再点赞!');
         }
     });
 });
@@ -83,6 +85,9 @@ $("#fav").on("click",function(){
             }else{
                 $.tlj.notify(data.message);
             }
+        },
+        error: function(err) {
+          $.tlj.notify('您还未登录!');
         }
     });
 });
@@ -99,6 +104,9 @@ $("#del").on("click",function(){
                 $.tlj.notify("简历已删除");
                 window.location = '/';
             }
+        },
+        error: function(err) {
+          $.tlj.notify('您还未登录!');
         }
     });
 });

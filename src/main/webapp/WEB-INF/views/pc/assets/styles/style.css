@@ -186,6 +186,9 @@ form input[type=submit] {
     outline: none;
     line-height: 50px;
     font-size: 17px; }
+.header-content .search-bar input:-webkit-autofill{
+  background-color:#fff;
+}
 .header-content .search-bar .search-left {
     float: left;
     width: 30px;

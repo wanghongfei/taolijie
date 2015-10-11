@@ -40,6 +40,9 @@ $("#fav").on("click",function(){
             }else{
                 $.tlj.notify(data.message);
             }
+        },
+        error: function(err) {
+          $.tlj.notify('您还未登录!');
         }
     });
 });
@@ -65,6 +68,8 @@ $("#like").click(function(){
                 //    $.tlj.notify('登陆后才能执行该操作!');
                 //}
             }
+        },error: function(err){
+          $.tlj.notify('请先登录再进行点赞');
         }
     });
 });
