@@ -53,17 +53,25 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // 判断是否是app请求
         String appToken = req.getParameter(RequestParamName.APP_TOKEN.toString());
-        if (null != appToken) {
+        // 是否是wechat端登陆
+        String wechat = req.getParameter(RequestParamName.WECHAT_TOKEN.toString());
+        if (null != appToken || null != wechat) {
             if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("appToken found:{}", appToken);
+                infoLogger.debug("token found:{}", appToken == null ? wechat : appToken);
             }
 
             if (null == accountService) {
                 accountService = retrieveService("defaultAccountService");
             }
 
-            // 根据appToken查询用户
-            MemberModel mem = accountService.selectByAppToken(appToken);
+            // 根据token查询用户
+            MemberModel mem = null;
+            if (null != appToken) {
+                mem = accountService.selectByAppToken(appToken);
+            } else if (null != wechat) {
+                mem = accountService.selectByWechatToken(wechat);
+            }
+
             if (null == mem) {
                 if (infoLogger.isDebugEnabled()) {
                     infoLogger.debug("invalid appToken:{}", appToken);

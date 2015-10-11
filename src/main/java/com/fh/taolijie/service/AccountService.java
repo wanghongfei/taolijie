@@ -68,11 +68,18 @@ public interface AccountService {
     /**
      * 更新用户信息.
      */
-    void updateMember(MemberModel model);
+    int updateMember(MemberModel model);
 
     void updateAppToken(Integer memId, String token);
 
     MemberModel selectByAppToken(String token);
+
+    /**
+     * 根据wechat token登陆
+     * @param wechat
+     * @return
+     */
+    MemberModel selectByWechatToken(String wechat);
 
 
     /**

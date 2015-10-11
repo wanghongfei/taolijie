@@ -28,6 +28,7 @@
         <result column="mem_auto_login_identifier" property="autoLoginIdentifier" jdbcType="VARCHAR"/>
         <result column="mem_last_post_time" property="lastPostTime" jdbcType="DATE"/>
         <result column="mem_reset_password_token" property="resetPasswordToken" jdbcType="VARCHAR"/>
+        <result column="mem_wechat_token" property="wechatToken" jdbcType="VARCHAR"/>
         <result column="mem_last_token_date" property="lastTokenDate" jdbcType="DATE"/>
         <result column="mem_school_organization" property="schoolOrganization" jdbcType="VARCHAR"/>
         <result column="mem_credits" property="credits" jdbcType="INTEGER"/>
@@ -63,6 +64,7 @@
         <result column="user_level" property="level" jdbcType="VARCHAR" />
     </resultMap>
 
+    <!-- wechat_token -->
     <sql id="Base_Column_List">
         id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender, verified AS mem_verified, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
         qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, created_time AS mem_created_time, valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
@@ -555,6 +557,19 @@
             role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
         WHERE
             mem.auto_login_identifier = #{identifier}
+    </select>
+
+    <select id="selectByWechatToken" resultMap="BaseResultMap">
+        SELECT
+            <include refid="member_column_without_password" />,
+            r.*
+        FROM
+            member mem
+        INNER JOIN
+            role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
+        WHERE
+            mem.wechat_token = #{token}
+
     </select>
 
     <select id="getMemberList" resultMap="BaseResultMap">

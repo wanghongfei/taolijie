@@ -72,6 +72,8 @@ public interface MemberModelMapper {
 
     MemberModel selectByIdentifier(String identifier);
 
+    MemberModel selectByWechatToken(String token);
+
     List<MemberModel> getMemberList(Map<String, Integer> pageMap);
     long countGetMemberList();
 

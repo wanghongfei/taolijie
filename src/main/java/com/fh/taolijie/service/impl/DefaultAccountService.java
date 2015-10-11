@@ -139,8 +139,8 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateMember(MemberModel model) {
-        memMapper.updateByPrimaryKeySelective(model);
+    public int updateMember(MemberModel model) {
+        return memMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
@@ -152,6 +152,11 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Override
     public MemberModel selectByAppToken(String token) {
         return memMapper.selectByAppToken(token);
+    }
+
+    @Override
+    public MemberModel selectByWechatToken(String wechat) {
+        return memMapper.selectByWechatToken(wechat);
     }
 
     @Override
