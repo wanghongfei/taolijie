@@ -139,7 +139,7 @@
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.timeToPay, 'required')">请选择结算方式</span>
             </div>
             <div class="form-group">
-                <label for="">截止时间<span class="asterisk-red">*</span></label>
+                <label for="">报名截至<span class="asterisk-red">*</span></label>
                 <%--<input type="text" class="form-control datepicker medium-input" name="expiredTime" id="expiredTime"--%>
                         <%--required ng-model="job.expiredTime"--%>
                        <%--placeholder="保留该信息的截止日期"--%>
@@ -170,7 +170,7 @@
                 <select name="city" id="city" class="form-control fl" required>
                     <option value="淄博市">淄博市</option>
                 </select>
-                <select name="region" id="region" class="form-control fl" required>
+                 <select name="region" id="region" class="form-control fl" required ng-model="job.region">
                     <option value="张店区">张店区</option>
                     <option value="周村区">周村区</option>
                     <option value="淄川区">淄川区</option>
@@ -193,17 +193,17 @@
             <div class="form-group form-textarea">
                 <label for="">工作内容<span class="asterisk-red">*</span></label>
                 <textarea name="jobDetail" id="" cols="30" class="form-control large-input"
-                          placeholder="填写工作具体内容(10字以上)" ng-minlength="10" ng-maxlength="500" ng-model="job.jobDetail"
+                          placeholder="填写工作具体内容(10字以上)" ng-minlength="5" ng-maxlength="500" ng-model="job.jobDetail"
                            required ng-focus >${job.jobDetail}
                 </textarea>
                  <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDetail, 'required')">请输入工作内容</span>
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDetail, 'maxlength')">长度在500字以内</span>
-                <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDetail, 'minlength')">长度在10字以上</span>
+                <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDetail, 'minlength')">长度在5字以上</span>
             </div>
             <div class="form-group form-textarea">
                 <label for="">工作要求<span class="asterisk-red">*</span></label>
-                <textarea name="jobDescription" class="form-control large-input" required ng-model="job.jobDescription" ng-minlength="10" ng-maxlength="500" placeholder="请填写工作具体要求(10字以上)" ng-focus>${job.jobDescription}</textarea>
-                <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDescription, 'minlength')">长度在10字以上</span>
+                <textarea name="jobDescription" class="form-control large-input" required ng-model="job.jobDescription" ng-minlength="5" ng-maxlength="500" placeholder="请填写工作具体要求(10字以上)" ng-focus>${job.jobDescription}</textarea>
+                <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDescription, 'minlength')">长度在5字以上</span>
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDescription, 'maxlength')">长度在500字以内</span>
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.jobDescription, 'required')">请输入工作详情</span>
 
@@ -233,8 +233,7 @@
             <div class="form-group">
                 <label for="">QQ号</label>
                 <input type="text" class="form-control medium-input" name="contactQq" value="${job.contactQq}"
-                       placeholder="请输入您的qq号" ng-focus ng-model="job.contactQq" required>
-                <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.contactQq, 'required')">请输入QQ号</span>
+                       placeholder="请输入您的qq号" ng-model="job.contactQq">
             </div>
 
             <div class="segment">

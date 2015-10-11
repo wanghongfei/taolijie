@@ -75,6 +75,17 @@
         <servlet-name>appServlet</servlet-name>
     </filter-mapping>
 
+    <!-- XSS attach filter -->
+    <filter>
+        <filter-name>XSS Filter</filter-name>
+        <filter-class>com.fh.taolijie.servlet.XSSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>XSS Filter</filter-name>
+        <servlet-name>appServlet</servlet-name>
+    </filter-mapping>
+
+
     <!-- app登陆过虑器 -->
     <filter>
         <filter-name>App Login Filter</filter-name>

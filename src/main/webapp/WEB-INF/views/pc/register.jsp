@@ -70,20 +70,20 @@
           <div class="form-group">
             <label for="" class="col-4 label-control">用户名</label>
             <div class="col-8">
-                <input type="text" class="form-control" name="username" placeholder="推荐使用常用邮箱" pattern=".{6,}" title="至少6位" required>
+                <input type="text" class="form-control" name="username" placeholder="推荐您使用常用邮箱注册" pattern=".{6,}" title="至少6位" required>
             </div>
 
           </div>
           <div class="form-group">
             <label for="" class="col-4 label-control" name="password">密码</label>
             <div class="col-8">
-              <input type="password" class="form-control" name="password" pattern=".{6,}" title="至少6位" required>
+              <input type="password" class="form-control" name="password" pattern=".{6,}" title="密码长度最低6位" required>
             </div>
           </div>
           <div class="form-group">
             <label for="" class="col-4 label-control" name="rePassword">确认密码</label>
             <div class="col-8">
-              <input type="password" class="form-control" name="rePassword" pattern=".{6,}" title="至少6位" required>
+              <input type="password" class="form-control" name="rePassword" pattern=".{6,}" title="请再一次输入您的密码" required>
             </div>
           </div>
             <div class="col-12" >
@@ -104,4 +104,3 @@
 
 </body>
 </html>
-
