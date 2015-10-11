@@ -44,6 +44,7 @@
         </javaClientGenerator>
 
         <table tableName="collection_quest" domainObjectName="QuestCoModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="quest" />
 
 <!--        <table tableName="quest_college_rel" domainObjectName="QuestCollRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
         <table tableName="quest_school_rel" domainObjectName="QuestSchRelModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->

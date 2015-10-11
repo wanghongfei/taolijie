@@ -64,7 +64,13 @@ public class RestQuestCtr {
         if (null == credential) {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
-        // 判断当前用户是否是商家
+
+
+
+
+
+
+        
         if (!SessionUtils.isEmployer(credential)) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
