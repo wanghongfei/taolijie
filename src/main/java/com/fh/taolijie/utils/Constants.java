@@ -179,7 +179,7 @@ public class Constants {
                 case WEEK:
                     return "周结";
                 case DAY:
-                    return "周结";
+                    return "日结";
                 case MONTH:
                     return "月结";
                 case OTHER:
