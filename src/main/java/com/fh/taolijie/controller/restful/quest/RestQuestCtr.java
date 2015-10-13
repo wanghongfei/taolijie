@@ -4,10 +4,13 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.acc.UserVerifyStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -43,6 +46,9 @@ public class RestQuestCtr {
 
     @Autowired
     private CashAccService accService;
+
+    @Autowired
+    private MemberModelMapper memMapper;
 
     @Autowired
     private QuestFinishService fiService;
@@ -127,6 +133,13 @@ public class RestQuestCtr {
         }
         // 判断当前用户是否是学生
         if (!SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断是否已经认证
+        MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
+        String status = mem.getVerified();
+        if (null == status || false == status.equals(UserVerifyStatus.DONE.code())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 

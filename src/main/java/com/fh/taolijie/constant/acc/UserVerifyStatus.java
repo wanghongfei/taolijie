@@ -5,7 +5,8 @@ package com.fh.taolijie.constant.acc;
  */
 public enum UserVerifyStatus {
     NOT_YET("00"),
-    DONE("01");
+    ONGOING("01"),
+    DONE("02");
 
 
     private String code;
