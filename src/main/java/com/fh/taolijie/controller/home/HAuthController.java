@@ -5,6 +5,7 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
@@ -286,7 +287,7 @@ public class HAuthController {
         mem.setName(registerDto.getNickname());
         mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
         mem.setValid(true);
-        mem.setVerified(Constants.VerifyStatus.NONE.toString());
+        mem.setVerified(CertiStatus.NOT_YET.code());
         mem.setCreatedTime(new Date());
         mem.setRegType(RegType.USERNAME.code());
 

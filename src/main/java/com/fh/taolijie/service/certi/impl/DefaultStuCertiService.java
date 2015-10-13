@@ -1,7 +1,6 @@
 package com.fh.taolijie.service.certi.impl;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.constant.acc.UserVerifyStatus;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.StuCertiModelMapper;
@@ -58,7 +57,7 @@ public class DefaultStuCertiService implements StuCertiService {
             // 将用户设置为已经认证
             MemberModel example = new MemberModel();
             example.setId(memId);
-            example.setVerified(UserVerifyStatus.DONE.code());
+            example.setVerified(CertiStatus.DONE.code());
             memMapper.updateByPrimaryKeySelective(example);
         }
 

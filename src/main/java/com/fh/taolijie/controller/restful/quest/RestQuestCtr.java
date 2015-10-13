@@ -4,7 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.constant.acc.UserVerifyStatus;
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -139,7 +139,7 @@ public class RestQuestCtr {
         // 判断是否已经认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
         String status = mem.getVerified();
-        if (null == status || false == status.equals(UserVerifyStatus.DONE.code())) {
+        if (null == status || false == status.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 

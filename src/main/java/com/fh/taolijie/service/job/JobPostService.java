@@ -33,6 +33,7 @@ public interface JobPostService extends PageService {
     ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
 
     /**
+     * @deprecated
      * 查询未审核的post
      * @param firstResult
      * @param capacity

@@ -34,6 +34,7 @@ public class Constants {
     public static final long MAIL_VALID_MINUTES = 10;
 
     /**
+     * @deprecated
      * 数据库member表中verified字段的取值
      */
     public static enum VerifyStatus {

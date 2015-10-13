@@ -73,6 +73,9 @@ public class DefaultJobPostService implements JobPostService {
         return new ListResult<>(list, tot);
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     @Transactional(readOnly = true)
     public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity) {

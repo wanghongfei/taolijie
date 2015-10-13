@@ -53,7 +53,7 @@ public class RestCertiCtr {
 
         String certiStatus = mem.getVerified();
 
-        if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.toString())) {
+        if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.ALREADY_VERIFIED);
         }
 
