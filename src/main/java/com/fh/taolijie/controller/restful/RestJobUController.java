@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -224,6 +225,35 @@ public class RestJobUController {
         }
 
         userService.likeJobPost(userId, jobId);
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 更新兼职信息
+     * @return
+     */
+    @RequestMapping(value = "/{jobId}",method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText change(@PathVariable("jobId") Integer jobId,
+                               JobPostModel jobPostModel,
+                               HttpServletRequest req,
+                               HttpServletResponse resp){
+
+        Credential credential = SessionUtils.getCredential(req);
+
+
+        // 检查是不是本用户发布的信息
+        jobPostModel.setId(jobId);
+        JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
+        if (null == job || false == job.getMemberId().equals(credential.getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 更新信息
+        boolean operationResult = jobPostService.updateJobPost(jobPostModel.getId(), jobPostModel);
+        if (false == operationResult) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
 
         return ResponseText.getSuccessResponseText();
     }
