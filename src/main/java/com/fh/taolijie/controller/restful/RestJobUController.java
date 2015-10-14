@@ -119,4 +119,42 @@ public class RestJobUController {
         return ResponseText.getSuccessResponseText();
     }
 
+    /**
+     * 删除兼职
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText delPost(@PathVariable int id,
+                                @RequestParam(required = false) String ids,
+                                HttpServletRequest req) {
+
+        int uid = SessionUtils.getCredential(req).getId();
+
+        String[] delIds = { String.valueOf(id) };
+
+        //id=0视为多条删除
+        if( id == 0 ){
+            delIds = ids.split(Constants.DELIMITER);
+        }
+
+
+        for(String currId:delIds){
+            // 根据id查找兼职
+            JobPostModel job =jobPostService.findJobPost(Integer.parseInt(currId));
+            if(job == null){
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            // 判断是不是当前用户发布的
+            if(job.getMember().getId()!=uid){
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+            //删除兼职
+            jobPostService.deleteJobPost(Integer.parseInt(currId));
+        }
+
+
+        return ResponseText.getSuccessResponseText();
+    }
 }
