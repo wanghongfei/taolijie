@@ -52,7 +52,13 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
 
         // 判断是否是app请求
-        String appToken = req.getParameter(RequestParamName.APP_TOKEN.toString());
+        // 先从header中取token
+        String appToken = req.getHeader(RequestParamName.HEADER_APP_TOKEN.toString());
+        // 取不到再从请求参数中取
+        if (null == appToken) {
+            appToken = req.getParameter(RequestParamName.APP_TOKEN.toString());
+        }
+
         // 是否是wechat端登陆
         String wechat = req.getParameter(RequestParamName.WECHAT_TOKEN.toString());
         if (null != appToken || null != wechat) {

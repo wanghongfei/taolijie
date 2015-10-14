@@ -5,6 +5,7 @@ package com.fh.taolijie.constant;
  */
 public enum RequestParamName {
     APP_TOKEN,
+    HEADER_APP_TOKEN,
     WECHAT_TOKEN;
 
     @Override
@@ -15,6 +16,9 @@ public enum RequestParamName {
 
             case WECHAT_TOKEN:
                 return "wechat";
+
+            case HEADER_APP_TOKEN:
+                return "App-Token";
 
             default:
                 throw new IllegalStateException();
