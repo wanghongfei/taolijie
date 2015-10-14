@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
@@ -39,11 +40,14 @@ public class RestShUController {
     @Autowired
     private ShPostService shPostService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 是否赞美
      * @return
      */
-    @RequestMapping(value = "/fav/{shId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/like/{shId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText isFav(@PathVariable("shId") Integer shId,
                               HttpServletRequest req) {
         Credential credential = SessionUtils.getCredential(req);
@@ -212,6 +216,75 @@ public class RestShUController {
             //删除兼职
             shPostService.deletePost(shId);
         }
+
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 收藏
+     */
+    @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = Constants.Produce.JSON)
+    public ResponseText fav(@PathVariable int id,
+                            @RequestParam(required = false) String ids,
+                            HttpServletRequest req){
+
+        Credential credential = SessionUtils.getCredential(req);
+        if (credential == null) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        String [] delIds = { String.valueOf(id) };
+        //id=0视为多条删除
+        if(id == 0) {
+            delIds = ids.split(Constants.DELIMITER);
+        }
+
+        for(String currId:delIds) {
+            Integer shId = Integer.valueOf(currId);
+
+            //遍历用户的收藏列表
+            //如果没有这条简历则添加,反之删除
+            if (shPostService.findPost(Integer.parseInt(currId)) == null) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            boolean isFav = shPostService.isPostFavorite(credential.getId(), shId);
+            if (isFav) { //找到,删除收藏
+                shPostService.unfavoritePost(credential.getId(), shId);
+            } else { //没有找到,则添加收藏
+                shPostService.favoritePost(credential.getId(), shId);
+            }
+        }
+
+
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 点赞
+     * @return
+     */
+    @RequestMapping(value = "/like/{id}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText like(@PathVariable Integer id,
+                             HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        // 登陆检查
+        if (credential == null) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        // 判断是否重复喜欢
+        boolean liked = userService.isSHPostAlreadyLiked(credential.getId(), id);
+        if (liked) {
+            return new ResponseText(ErrorCode.ALREADY_DONE);
+        }
+
+        // like +1
+        userService.likeSHPost(credential.getId(), id);
 
 
         return ResponseText.getSuccessResponseText();
