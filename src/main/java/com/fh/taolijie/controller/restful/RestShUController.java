@@ -145,4 +145,34 @@ public class RestShUController {
 
         return ResponseText.getSuccessResponseText();
     }
+
+    /**
+     * 更新二手
+     * @return
+     */
+    @RequestMapping(value = "/{shId}",method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText update(SHPostModel shPostModel,
+                               @RequestParam("picIds") String picIds,
+                               @PathVariable("shId") Integer shId,
+                               HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+
+        // 检查是不是本用户发布的信息
+        shPostModel.setId(shId);
+        shPostModel.setPicturePath(picIds);
+        SHPostModel sh = shPostService.findPost(shPostModel.getId());
+        if (null == sh || false == sh.getMemberId().equals(credential.getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 更新信息
+        boolean operationResult = shPostService.updatePost(shPostModel.getId(), shPostModel);
+        if (false == operationResult) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
 }
