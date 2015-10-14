@@ -47,7 +47,7 @@ public class RestJobUController {
      * 是否已赞
      * @return
      */
-    @RequestMapping(value = "/fav/{jobId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/like/{jobId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText isFav(@PathVariable("jobId") Integer jobId,
                               HttpServletRequest req) {
         Credential credential = SessionUtils.getCredential(req);
@@ -154,6 +154,48 @@ public class RestJobUController {
             jobPostService.deleteJobPost(Integer.parseInt(currId));
         }
 
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+
+    /**
+     * 收藏
+     */
+    @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText fav(@PathVariable int id,
+                            @RequestParam(required = false) String ids,
+                            HttpServletRequest req) {
+        Credential credential = SessionUtils.getCredential(req);
+        if (credential == null) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+
+        String[] delIds = { String.valueOf(id) };
+        //id=0视为多条删除
+        if(id == 0){
+            delIds = ids.split(Constants.DELIMITER);
+        }
+
+
+        for (String currId:delIds) {
+            Integer jobId = Integer.valueOf(currId);
+
+            if(jobPostService.findJobPost(jobId) == null) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+            //遍历用户的收藏列表
+            //如果没有这条兼职则添加,反之删除
+            boolean isFav = jobPostService.isPostFavorite(credential.getId(), jobId);
+
+            if(isFav) { //找到,删除收藏
+                jobPostService.unfavoritePost(credential.getId(),Integer.parseInt(currId));
+            } else { //没有找到,则添加收藏
+                jobPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
+            }
+        }
 
         return ResponseText.getSuccessResponseText();
     }
