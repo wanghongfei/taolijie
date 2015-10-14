@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.acc;
 
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -75,6 +76,9 @@ public interface CashAccService {
      * @param amt
      */
     boolean addAvailableMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException;
+
+    boolean addAvailableMoney(Integer accId, BigDecimal amt, AccFlow type)
             throws CashAccNotExistsException;
 
     /**

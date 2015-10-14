@@ -131,6 +131,45 @@ public class DefaultQuestService implements QuestService {
             addQuestSchoolRel(qsList);
 
         }
+
+
+        // 投递任务过期定时任务
+        rt.execute( (RedisConnection redisConn) -> {
+            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+
+            // 构造参数列表
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", questId.toString());
+            map.put("questId", questId.toString());
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                    MsgType.DATE_STYLE,
+                    "localhost",
+                    8080,
+                    "/api/schedule/questExpire",
+                    "GET",
+                    // 任务结束后的第25小时执行
+                    //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                    TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                    .setParmMap(map)
+                    .build();
+
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
+            return null;
+        });
     }
 
     @Override
@@ -286,8 +325,13 @@ public class DefaultQuestService implements QuestService {
     public void questExpired(Integer questId) throws CashAccNotExistsException {
         // 检查是否还有未领取的任务
         QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        Integer left = quest.getLeftAmt();
+        if (left.intValue() <= 0) {
+            return;
+        }
+
         // 计算任务的钱数
-        BigDecimal leftAmt = new BigDecimal(quest.getLeftAmt());
+        BigDecimal leftAmt = new BigDecimal(left);
         BigDecimal refund = quest.getFinalAward().multiply(leftAmt);
 
         // 向用户的现金账户中加钱

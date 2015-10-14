@@ -131,8 +131,14 @@ public class DefaultCashAccService implements CashAccService {
     @Override
     @Transactional(readOnly = false)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
+        return addAvailableMoney(accId, amt, AccFlow.CHARGE);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean addAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException {
         // 记录流水
-        flowService.recordAvaBalanceChange(accId, AccFlow.CHARGE, amt);
+        flowService.recordAvaBalanceChange(accId, type, amt);
 
         return accMapper.addAvailableAmt(accId, amt) > 0 ? true : false;
     }
