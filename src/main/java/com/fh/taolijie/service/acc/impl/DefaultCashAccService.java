@@ -148,6 +148,13 @@ public class DefaultCashAccService implements CashAccService {
     public void reduceAvailableMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException, BalanceNotEnoughException {
 
+        reduceAvailableMoney(accId, amt, AccFlow.WITHDRAW);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void reduceAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException, BalanceNotEnoughException {
+
         CashAccModel acc = accMapper.selectByPrimaryKey(accId);
         if (null == acc) {
             throw new CashAccNotExistsException("现金账户" + accId + "不存在");
@@ -165,7 +172,7 @@ public class DefaultCashAccService implements CashAccService {
         //calculateTotalBalance(acc);
 
         // 记录流水
-        flowService.recordAvaBalanceChange(accId, AccFlow.WITHDRAW, amt.negate());
+        flowService.recordAvaBalanceChange(accId, type, amt.negate());
 
 
         // 执行更新操作

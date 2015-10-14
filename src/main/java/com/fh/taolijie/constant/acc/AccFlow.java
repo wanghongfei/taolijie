@@ -10,7 +10,11 @@ public enum AccFlow {
     /**
      * 退款
      */
-    REFUND("03");
+    REFUND("03"),
+    /**
+     * 消费
+     */
+    CONSUME("04");
 
     private String code;
 

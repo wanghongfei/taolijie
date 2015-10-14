@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
@@ -86,7 +87,7 @@ public class DefaultTljAuditService implements TljAuditService {
         if (null == acc) {
             throw new CashAccNotExistsException("");
         }
-        accService.reduceAvailableMoney(acc.getId(), amt);
+        accService.reduceAvailableMoney(acc.getId(), amt, AccFlow.CONSUME);
 
         auditMapper.insertSelective(example);
     }

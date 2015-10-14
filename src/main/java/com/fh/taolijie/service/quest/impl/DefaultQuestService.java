@@ -5,6 +5,7 @@ import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.QuestCollRelModel;
@@ -101,7 +102,7 @@ public class DefaultQuestService implements QuestService {
 
 
         // 扣钱
-        accService.reduceAvailableMoney(accId, tot);
+        accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
 
         // 发布任务
         model.setCreatedTime(new Date());

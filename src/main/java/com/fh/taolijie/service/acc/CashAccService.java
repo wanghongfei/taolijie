@@ -89,6 +89,9 @@ public interface CashAccService {
     void reduceAvailableMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException, BalanceNotEnoughException;
 
+    void reduceAvailableMoney(Integer accId, BigDecimal amt, AccFlow type)
+            throws CashAccNotExistsException, BalanceNotEnoughException;
+
     /**
      * @deprecated
      * 冻结余额
