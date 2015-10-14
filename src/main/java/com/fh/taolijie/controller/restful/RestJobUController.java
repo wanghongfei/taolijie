@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
@@ -42,6 +43,9 @@ public class RestJobUController {
 
     @Autowired
     private JobPostService jobPostService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 是否已赞
@@ -196,6 +200,30 @@ public class RestJobUController {
                 jobPostService.favoritePost(credential.getId(),Integer.parseInt(currId));
             }
         }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 赞
+     * @return
+     */
+    @RequestMapping(value = "/like/{id}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText likeJob(@PathVariable("id") Integer jobId,
+                                HttpServletRequest req) {
+        // 判断是否重复赞
+        Credential cre = SessionUtils.getCredential(req);
+        if (null == cre) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        Integer userId = cre.getId();
+        boolean liked = userService.isJobPostAlreadyLiked(userId, jobId);
+        if (liked) {
+            return new ResponseText(ErrorCode.ALREADY_DONE);
+        }
+
+        userService.likeJobPost(userId, jobId);
 
         return ResponseText.getSuccessResponseText();
     }
