@@ -4,15 +4,22 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by whf on 8/26/15.
@@ -22,6 +29,15 @@ import javax.servlet.http.HttpServletRequest;
 public class RestShUController {
     @Autowired
     ShPostService shService;
+
+    @Autowired
+    private IntervalCheckService icService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private ShPostService shPostService;
 
     /**
      * 是否赞美
@@ -42,7 +58,6 @@ public class RestShUController {
 
     /**
      * 查询收藏列表
-     * @param shId
      * @param req
      * @return
      */
@@ -88,5 +103,46 @@ public class RestShUController {
         shService.updatePost(shId, example);
 
         return new ResponseText();
+    }
+
+
+    // ******* 移植接口 **************
+
+    /**
+     * 发布二手信息
+     * @return
+     */
+    @RequestMapping(value = "", method = RequestMethod.POST,produces = Constants.Produce.JSON)
+    public ResponseText postSh(@RequestParam String picIds,
+                               @Valid SHPostModel shDto,
+                               BindingResult result,
+                               HttpServletRequest req) {
+        MemberModel mem = null;
+
+        // 参数检查
+        if (result.hasErrors()) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        String username = SessionUtils.getCredential(req).getUsername();
+        mem = accountService.findMember(username, false);
+
+
+        // 查检发布时间间隔
+        if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
+
+        /*创建二手信息*/
+        shDto.setMemberId(mem.getId());
+        shDto.setPostTime(new Date());
+        //图片列表  用分号隔开
+        shDto.setPicturePath(picIds);
+        //shDto.setExpiredTime(TimeUtil.getMaxDate());
+
+        shPostService.addPost(shDto);
+        //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
+
+        return ResponseText.getSuccessResponseText();
     }
 }
