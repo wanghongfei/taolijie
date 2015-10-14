@@ -52,6 +52,13 @@ public interface QuestService {
      */
     void assignExpired(Integer assignId);
 
+    /**
+     * 任务到达过期时间
+     * @param questId
+     */
+    void questExpired(Integer questId)
+            throws CashAccNotExistsException;
+
     QuestModel findById(Integer questId);
 
     /**

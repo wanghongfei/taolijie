@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful.schedule;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
@@ -63,4 +64,20 @@ public class RestScheduleCtr {
 
         return new ResponseText();
     }
+
+    /**
+     * 任务到达过期时间后24小时
+     * @return
+     */
+    @RequestMapping(value = "/questExpire", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText questExpire(@RequestParam Integer questId) {
+        try {
+            questService.questExpired(questId);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
 }

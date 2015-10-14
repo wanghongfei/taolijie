@@ -9,6 +9,7 @@ import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
+import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -274,6 +275,24 @@ public class DefaultQuestService implements QuestService {
         // 释放任务数量
         questMapper.increaseLeftAmount(model.getQuestId());
 
+    }
+
+    /**
+     * 检查是否有未领取的任务，如果有则退款给商家
+     * @param questId
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void questExpired(Integer questId) throws CashAccNotExistsException {
+        // 检查是否还有未领取的任务
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        // 计算任务的钱数
+        BigDecimal leftAmt = new BigDecimal(quest.getLeftAmt());
+        BigDecimal refund = quest.getFinalAward().multiply(leftAmt);
+
+        // 向用户的现金账户中加钱
+        CashAccModel acc = accMapper.findByMemberId(quest.getMemberId());
+        accService.addAvailableMoney(acc.getId(), refund);
     }
 
     @Override
