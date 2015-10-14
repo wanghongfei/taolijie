@@ -30,6 +30,8 @@ public class FinishRequestModel extends Pageable {
 
     private String name;
 
+    private String regName;
+
     public FinishRequestModel() {}
 
     public FinishRequestModel(int pn, int ps) {
@@ -278,6 +280,14 @@ public class FinishRequestModel extends Pageable {
      */
     public String getName() {
         return name;
+    }
+
+    public String getRegName() {
+        return regName;
+    }
+
+    public void setRegName(String regName) {
+        this.regName = regName;
     }
 
     /**
