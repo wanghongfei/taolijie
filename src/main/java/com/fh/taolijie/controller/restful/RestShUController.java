@@ -175,4 +175,45 @@ public class RestShUController {
 
         return ResponseText.getSuccessResponseText();
     }
+
+    /**
+     * 删除二手
+     *
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText delPost(@PathVariable int id,
+                                @RequestParam(required = false) String ids,
+                                HttpServletRequest req) {
+
+        Integer uid = SessionUtils.getCredential(req).getId();
+
+        String [] delIds = { String.valueOf(id) };
+
+        //id=0视为多条删除
+        if(id==0){
+            delIds = ids.split(Constants.DELIMITER);
+        }
+
+
+        for(String currId:delIds){
+            Integer shId = Integer.valueOf(currId);
+
+            //查找兼这条兼职是不是用户发布的
+            SHPostModel sh =shPostService.findPost(shId);
+            if(sh == null){
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if(false == sh.getMember().getId().equals(uid)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+            //删除兼职
+            shPostService.deletePost(shId);
+        }
+
+
+        return ResponseText.getSuccessResponseText();
+    }
 }
