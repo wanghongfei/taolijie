@@ -95,6 +95,10 @@
         <filter-name>App Login Filter</filter-name>
         <servlet-name>appServlet</servlet-name>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>App Login Filter</filter-name>
+        <servlet-name>Image Generator</servlet-name>
+    </filter-mapping>
 
 	<!-- 配置web-security过滤器 -->
 	<filter>
