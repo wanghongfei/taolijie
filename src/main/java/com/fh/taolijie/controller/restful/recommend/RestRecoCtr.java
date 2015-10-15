@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful.schedule;
+package com.fh.taolijie.controller.restful.recommend;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;

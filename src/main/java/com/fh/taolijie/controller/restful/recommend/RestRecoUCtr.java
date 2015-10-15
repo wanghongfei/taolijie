@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.recommend;
 
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
