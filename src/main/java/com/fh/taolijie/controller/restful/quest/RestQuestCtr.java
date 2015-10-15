@@ -250,6 +250,10 @@ public class RestQuestCtr {
             // 如果是
             // 判断该任务是不是自己发布的
             QuestModel quest = questService.findById(questId);
+            if (null == quest) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
             if (!quest.getMemberId().equals(memId)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
