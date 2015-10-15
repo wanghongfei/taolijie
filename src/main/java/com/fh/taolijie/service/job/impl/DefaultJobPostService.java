@@ -95,6 +95,18 @@ public class DefaultJobPostService implements JobPostService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<JobPostModel> getInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ListResult<>(new ArrayList<>(0), 0);
+        }
+
+        List<JobPostModel> list = postMapper.getInBatch(idList);
+
+        return new ListResult<>(list, list.size());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<JobPostModel> getByComplaint(int firstResult, int capacity) {
         List<JobPostModel> list = postMapper.getByComplaint(firstResult, CollectionUtils.determineCapacity(capacity));
         long tot = postMapper.countGetByComplaint();

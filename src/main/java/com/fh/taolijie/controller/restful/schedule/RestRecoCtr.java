@@ -5,8 +5,10 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.service.RecoService;
+import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
@@ -32,6 +34,8 @@ public class RestRecoCtr {
     @Autowired
     private QuestService questService;
 
+    @Autowired
+    private JobPostService jobService;
 
     /**
      * 查询推荐帖子
@@ -53,16 +57,24 @@ public class RestRecoCtr {
         cmd.setType(rt.code());
         cmd.setValid(true);
 
+        // 查询推荐索引表
         ListResult<RecoPostModel> postLr = reService.findBy(cmd);
+        // 取出帖子id
+        List<Integer> idList = postLr.getList().stream()
+                .map(RecoPostModel::getPostId)
+                .collect(Collectors.toList());
+
+        // 根据不同的帖子类型调用不同的service方法
         switch (rt) {
             case QUEST:
-                List<Integer> idList = postLr.getList().stream()
-                        .map(RecoPostModel::getId)
-                        .collect(Collectors.toList());
-
                 List<QuestModel> list = questService.findInBatch(idList);
-                ListResult<QuestModel> lr = new ListResult<>(list, postLr.getResultCount());
-                return new ResponseText(lr);
+                ListResult<QuestModel> questLr = new ListResult<>(list, postLr.getResultCount());
+                return new ResponseText(questLr);
+
+            case JOB:
+                ListResult<JobPostModel> jobLr = jobService.getInBatch(idList);
+                return new ResponseText(jobLr);
+
 
             default:
         }

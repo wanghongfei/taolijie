@@ -50,6 +50,12 @@ public interface JobPostService extends PageService {
     ListResult<JobPostModel> getPostListByIds(Integer... ids);
 
     /**
+     * 根据多个id批量查询兼职信息
+     * @return
+     */
+    ListResult<JobPostModel> getInBatch(List<Integer> idList);
+
+    /**
      * 查询被投诉的兼职信息，值最高的在前
      * @return
      */
