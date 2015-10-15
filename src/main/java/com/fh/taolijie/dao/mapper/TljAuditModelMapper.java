@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.TljAuditModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,5 +39,5 @@ public interface TljAuditModelMapper {
      * 检查对同一个任务是否已经申请过
      * @return
      */
-    boolean checkMemberAndQuestExists(Integer memId, Integer questId);
+    boolean checkMemberAndQuestExists(@Param("memId") Integer memId, @Param("questId") Integer questId);
 }

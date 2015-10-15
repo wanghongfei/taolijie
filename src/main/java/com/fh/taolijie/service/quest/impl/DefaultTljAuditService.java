@@ -14,6 +14,7 @@ import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.TljAuditService;
@@ -63,7 +64,7 @@ public class DefaultTljAuditService implements TljAuditService {
     @Override
     @Transactional(readOnly = false)
     public void addAudit(TljAuditModel example)
-            throws BalanceNotEnoughException, CashAccNotExistsException, RequestRepeatedException {
+            throws BalanceNotEnoughException, CashAccNotExistsException, RequestRepeatedException, QuestNotFoundException {
 
         // 检查对同一个任务是否重复申请
         if (auditMapper.checkMemberAndQuestExists(example.getEmpId(), example.getQuestId())) {
@@ -75,6 +76,10 @@ public class DefaultTljAuditService implements TljAuditService {
         example.setEmpUsername(mem.getUsername());
         // 填写冗余字段 questTitle
         QuestModel quest = questMapper.selectByPrimaryKey(example.getQuestId());
+        if (null == quest) {
+            throw new QuestNotFoundException("");
+        }
+
         example.setQuestTitle(quest.getTitle());
         example.setCreatedTime(new Date());
 

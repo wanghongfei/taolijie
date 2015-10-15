@@ -429,6 +429,10 @@ public class RestQuestCtr {
 
         } catch (RequestRepeatedException e) {
             return new ResponseText(ErrorCode.REPEAT);
+
+        } catch (QuestNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
         }
 
         return ResponseText.getSuccessResponseText();

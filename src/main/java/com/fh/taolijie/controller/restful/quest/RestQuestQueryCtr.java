@@ -87,12 +87,12 @@ public class RestQuestQueryCtr {
                 // 用户已经领取了任务
                 String assignStatus = assign.getStatus();
                 AssignStatus st = AssignStatus.fromCode(assignStatus);
-                if (st == AssignStatus.ASSIGNED) {
-                    // 状态为已领取
-                    model.setStatus(QuestStatus.ASSIGNED.code());
-                } else if (st == AssignStatus.DONE) {
+                if (st == AssignStatus.DONE) {
                     // 状态为已经完成
                     model.setStatus(QuestStatus.DONE.code());
+                } else {
+                    // 状态为已领取
+                    model.setStatus(QuestStatus.ASSIGNED.code());
                 }
             }
         } else {
