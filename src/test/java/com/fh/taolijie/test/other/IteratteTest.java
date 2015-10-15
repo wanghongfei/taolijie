@@ -36,4 +36,15 @@ public class IteratteTest {
         System.out.println("after = " + str);
     }
 
+    @Test
+    public void escapeChineseTest() {
+        String str = "工作时间在周六周日";
+        System.out.println("before = " + str);
+
+        //str = StringEscapeUtils.escapeEcmaScript(str);
+        str = StringEscapeUtils.escapeHtml4(str);
+        System.out.println("after = " + str);
+
+    }
+
 }
