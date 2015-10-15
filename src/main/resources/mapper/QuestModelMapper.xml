@@ -570,6 +570,21 @@
             <if test="award != null">
                 AND qu.award = #{award}
             </if>
+
+            <!-- 按赏金范围过滤 -->
+            <if test="awardRangeQuery == true">
+                <if test="minAward != null">
+                    <![CDATA[
+                    AND qu.award >= #{minAward}
+                    ]]>
+                </if>
+                <if test="maxAward != null">
+                    <![CDATA[
+                    AND qu.award <= #{maxAward}
+                    ]]>
+                </if>
+            </if>
+
             <if test="contactName != null">
                 AND qu.contact_name = #{contactName}
             </if>
