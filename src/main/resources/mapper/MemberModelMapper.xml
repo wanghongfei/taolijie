@@ -101,7 +101,7 @@
         mem.college_name AS mem_college_name,
         mem.major AS mem_major,
 
-        mem.reg_type AS reg_type
+        mem.reg_type AS mem_reg_type
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
@@ -120,14 +120,14 @@
         mem.college_name AS mem_college_name,
         mem.major AS mem_major,
 
-        mem.reg_type AS reg_type
+        mem.reg_type AS mem_reg_type
 
     </sql>
     <sql id="less_member_column">
         mem.id AS mem_id, mem.username AS mem_username,
         mem.profile_photo_path AS mem_profile_photo_path,
         mem.profile_photo_id AS mem_profile_photo_id,
-        mem.reg_type AS reg_type
+        mem.reg_type AS mem_reg_type
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

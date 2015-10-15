@@ -397,11 +397,10 @@ public class HAuthController {
     public ResponseText findPwd(@RequestParam String mobile,
                                 @RequestParam String newPwd,
                                 @RequestParam String code,
-                                @RequestParam String identifier,
                                 HttpServletRequest req) {
 
         // 验证验证码
-        if (!codeService.validateSMSCode(identifier, code)) {
+        if (!codeService.validateSMSCode(mobile, code)) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
 
