@@ -205,7 +205,12 @@
 
         </where>
         ORDER BY
-            order_index DESC
+            <if test="orderByIndex == true">
+                order_index ASC
+            </if>
+            <if test="orderByTime == true">
+                created_time DESC
+            </if>
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>

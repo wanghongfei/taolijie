@@ -72,4 +72,6 @@ public interface QuestModelMapper {
 
     List<QuestModel> findBy(QuestModel model);
     long countFindBy(QuestModel model);
+
+    List<QuestModel> selectInBatch(List<Integer> idList);
 }

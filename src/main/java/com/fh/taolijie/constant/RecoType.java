@@ -19,4 +19,27 @@ public enum RecoType {
     public int code() {
         return this.code;
     }
+
+    public static RecoType fromCode(Integer code) {
+        if (null == code) {
+            return null;
+        }
+
+        switch (code) {
+            case 0:
+                return JOB;
+
+            case 1:
+                return SH;
+
+            case 2:
+                return RESUME;
+
+            case 3:
+                return QUEST;
+
+            default:
+                return null;
+        }
+    }
 }

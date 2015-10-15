@@ -367,6 +367,16 @@ public class DefaultQuestService implements QuestService {
         return new ListResult<>(list, tot);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<QuestModel> findInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ArrayList<>(0);
+        }
+
+        return questMapper.selectInBatch(idList);
+    }
+
     /**
      * @deprecated
      * @return

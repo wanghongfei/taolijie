@@ -77,6 +77,13 @@ public interface QuestService {
     ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps);
 
     /**
+     * 根据id批量查询
+     * @param idList
+     * @return
+     */
+    List<QuestModel> findInBatch(List<Integer> idList);
+
+    /**
      * @deprecated
      * 根据分类和赏金查询任务
      * @param cateId 分类id
