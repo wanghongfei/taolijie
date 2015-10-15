@@ -5,6 +5,7 @@ import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.*;
@@ -166,7 +167,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
         // 则向账户加钱
         if (status == RequestStatus.EMP_PASSED || status == RequestStatus.TLJ_PASSED || status == RequestStatus.AUTO_PASSED) {
             BigDecimal amt = quest.getAward();
-            accService.addAvailableMoney(acc.getId(), amt);
+            accService.addAvailableMoney(acc.getId(), amt, AccFlow.AWARD);
 
             // todo 如果是tlj审核, 则代审核申请 -1
             if (status == RequestStatus.TLJ_PASSED) {

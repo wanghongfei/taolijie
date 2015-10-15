@@ -222,7 +222,7 @@
     <select id="checkMemberIdAndQuestIdExists" resultType="boolean">
         SELECT
             EXISTS (
-                SELECT 1 FROM finish_request WHERE member_id = #{memId} AND quest_id = #{questId}
+                SELECT 1 FROM finish_request WHERE member_id = #{memId} AND quest_id = #{questId} AND status IN ('01', '04', '05', '06')
             )
     </select>
 

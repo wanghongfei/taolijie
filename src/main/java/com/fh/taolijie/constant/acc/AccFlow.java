@@ -14,7 +14,11 @@ public enum AccFlow {
     /**
      * 消费
      */
-    CONSUME("04");
+    CONSUME("04"),
+    /**
+     * 赏金
+     */
+    AWARD("05");
 
     private String code;
 
