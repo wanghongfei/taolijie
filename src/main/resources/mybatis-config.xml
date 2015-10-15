@@ -72,5 +72,7 @@
         <mapper resource="mapper/TljAuditModelMapper.xml" />
         <mapper resource="mapper/QuestCoModelMapper.xml" />
 
+        <mapper resource="mapper/RecoPostModelMapper.xml" />
+
     </mappers>
 </configuration>
