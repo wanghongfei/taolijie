@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.acc;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.taolijie.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -11,12 +12,14 @@ public class WithdrawApplyModel extends Pageable {
     private Integer memberId;
     private String username;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyTime;
 
     private BigDecimal amount;
 
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String alipayAcc;

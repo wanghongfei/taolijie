@@ -145,11 +145,6 @@ public class RestAccAdminCtr {
 
 
         Credential credential = SessionUtils.getCredential(req);
-        CashAccModel acc = accService.findByMember(credential.getId());
-        if (null == acc) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
-
 
         ListResult<PayOrderModel> lr = null;
         pn = PageUtils.getFirstResult(pn, ps);
@@ -176,7 +171,7 @@ public class RestAccAdminCtr {
      * 查询任意用户的现金账户信息
      * @return
      */
-    @RequestMapping(value = "/query/{memId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/query/{memId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText queryAccByMember(@PathVariable("memId") Integer memId,
                                       HttpServletRequest req) {
 
