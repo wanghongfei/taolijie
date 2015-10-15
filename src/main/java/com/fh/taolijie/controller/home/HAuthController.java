@@ -258,27 +258,26 @@ public class HAuthController {
      * @return
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public @ResponseBody String register(@Valid RegisterDto registerDto,
+    public @ResponseBody ResponseText register(@Valid RegisterDto registerDto,
                                          BindingResult result,
                                          @RequestParam Integer regType,
                                          @RequestParam(required = false) String code,
-                                         @RequestParam(required = false) String identifier,
                                          HttpServletResponse res) {
 
         // TODO: 需要验证邮箱的唯一性
         //验证表单错误
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         RegType type = RegType.fromCode(regType);
         if (null == type) {
-            return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         //两次密码不一致
         if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
-            return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
+            return new ResponseText(ErrorCode.RE_PASSWORD_ERROR);
         }
 
         // 创建model对象
@@ -295,17 +294,17 @@ public class HAuthController {
         if (type == RegType.MOBILE) {
             // 昵称必填
             if (null == registerDto.getNickname()) {
-                return new JsonWrapper(false, ErrorCode.BAD_USERNAME).getAjaxMessage();
+                return new ResponseText(ErrorCode.BAD_USERNAME);
             }
 
             // 参数code和identifier不能为空字符串
-            if (!StringUtils.checkNotEmpty(code) || !StringUtils.checkNotEmpty(identifier)) {
-                return new JsonWrapper(false, ErrorCode.INVALID_PARAMETER).getAjaxMessage();
+            if (!StringUtils.checkNotEmpty(code)) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
             }
 
             // 验证验证码
-            if (!codeService.validateSMSCode(identifier, code)) {
-                return new JsonWrapper(false, ErrorCode.VALIDATION_CODE_ERROR).getAjaxMessage();
+            if (!codeService.validateSMSCode(mem.getUsername(), code)) {
+                return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
             }
 
             mem.setPhone(registerDto.getUsername());
@@ -339,12 +338,10 @@ public class HAuthController {
         try {
             accountService.register(mem);
         } catch (DuplicatedUsernameException e) {
-            return new JsonWrapper(false, ErrorCode.USER_EXIST)
-                    .getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_EXIST);
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS)
-                .getAjaxMessage();
+        return ResponseText.getSuccessResponseText();
     }
 
 
@@ -378,17 +375,17 @@ public class HAuthController {
     public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
                                               HttpServletRequest req) {
 
-        String randCode = RandomStringUtils.randomAlphabetic(15);
+/*        String randCode = RandomStringUtils.randomAlphabetic(15);
         if (infoLog.isDebugEnabled()) {
             infoLog.debug("identifier generated:{}", randCode);
-        }
+        }*/
 
-        String res = codeService.genSMSValidationCode(randCode, mobile);
+        String res = codeService.genSMSValidationCode(mobile, mobile);
         if (null == res) {
             return new ResponseText(ErrorCode.FAILED);
         }
 
-        return new ResponseText(randCode);
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
