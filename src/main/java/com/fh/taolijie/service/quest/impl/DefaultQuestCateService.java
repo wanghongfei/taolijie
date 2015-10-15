@@ -66,7 +66,7 @@ public class DefaultQuestCateService implements QuestCateService {
     @Override
     @Transactional(readOnly = false)
     public void delete(Integer id) throws CategoryNotEmptyException{
-        if (!cateMapper.checkCateEmpty(id)) {
+        if (cateMapper.checkCateEmpty(id)) {
             throw new CategoryNotEmptyException("");
         }
 
