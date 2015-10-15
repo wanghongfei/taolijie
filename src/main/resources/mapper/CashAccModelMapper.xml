@@ -59,6 +59,7 @@
         casha.member_id,
         casha.username,
         casha.member_role,
+        casha.deal_password,
         casha.phone_number,
         casha.email,
         casha.name,
