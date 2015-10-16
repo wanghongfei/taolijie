@@ -213,6 +213,12 @@ public class DefaultShPostService implements ShPostService {
 
     @Override
     @Transactional(readOnly = false)
+    public boolean checkExist(Integer postId) {
+        return postMapper.checkExist(postId);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public void increasePageView(Integer postId) {
         postMapper.increasePageView(postId);
     }

@@ -124,4 +124,7 @@ public interface ShPostModelMapper {
 
     @NoCache
     boolean checkDeleted(Integer postId);
+
+    @NoCache
+    boolean checkExist(Integer postId);
 }

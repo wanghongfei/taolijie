@@ -124,4 +124,6 @@ public interface ShPostService extends PageService {
      * @param cateId
      */
     void changeCategory(Integer postId, Integer cateId);
+
+    boolean checkExist(Integer postId);
 }

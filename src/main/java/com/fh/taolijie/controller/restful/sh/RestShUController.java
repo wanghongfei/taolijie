@@ -270,14 +270,12 @@ public class RestShUController {
     public ResponseText like(@PathVariable Integer id,
                              HttpServletRequest req) {
 
-        Credential credential = SessionUtils.getCredential(req);
-
-        // 登陆检查
-        if (credential == null) {
-            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        if (!shService.checkExist(id)) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
         // 判断是否重复喜欢
+        Credential credential = SessionUtils.getCredential(req);
         boolean liked = userService.isSHPostAlreadyLiked(credential.getId(), id);
         if (liked) {
             return new ResponseText(ErrorCode.ALREADY_DONE);
