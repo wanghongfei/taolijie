@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful.job;
 
+import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
@@ -9,10 +10,12 @@ import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -62,10 +65,20 @@ public class RestJobController {
      */
     @RequestMapping(value = "/user/{memberId}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getPostByMember(@PathVariable("memberId") Integer memberId,
-                                  @RequestParam(defaultValue = "0") int pageNumber,
-                                  @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+                                        HttpServletRequest req,
+                                        @RequestParam(defaultValue = "0") int pageNumber,
+                                        @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         if (null == memberId) {
             return new ResponseText("memberId cannot be null");
+        }
+
+        // 检查要查询的用户是不是当前用户
+        Credential credential = SessionUtils.getCredential(req);
+        if (false == credential.getId().equals(memberId)) {
+            // 管理员可查询
+            if (false == SessionUtils.isAdmin(credential)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
         }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
