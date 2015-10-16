@@ -121,4 +121,7 @@ public interface JobPostModelMapper {
      */
     @NoCache
     boolean checkDeleted(Integer postId);
+
+    @NoCache
+    boolean checkExist(Integer postId);
 }

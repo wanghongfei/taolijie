@@ -162,4 +162,6 @@ public interface JobPostService extends PageService {
      * @return
      */
     boolean deleteJobPost(Integer postId);
+
+    boolean checkExist(Integer postId);
 }

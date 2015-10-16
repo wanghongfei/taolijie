@@ -252,6 +252,12 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public boolean checkExist(Integer postId) {
+        return postMapper.checkExist(postId);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void increasePageView(Integer id) {
         postMapper.increasePageView(id);

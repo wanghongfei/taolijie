@@ -1062,4 +1062,10 @@
         WHERE
             id = #{postId}
     </select>
+
+    <select id="checkExist" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM job_post WHERE id = #{postId}
+        )
+    </select>
 </mapper>

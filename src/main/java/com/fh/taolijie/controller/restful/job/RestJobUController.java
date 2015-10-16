@@ -213,12 +213,15 @@ public class RestJobUController {
     @RequestMapping(value = "/like/{id}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText likeJob(@PathVariable("id") Integer jobId,
                                 HttpServletRequest req) {
-        // 判断是否重复赞
-        Credential cre = SessionUtils.getCredential(req);
-        if (null == cre) {
-            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+
+        // 判断兼职是否存在
+        if (!jobPostService.checkExist(jobId)) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
+
+        // 判断是否重复赞
+        Credential cre = SessionUtils.getCredential(req);
         Integer userId = cre.getId();
         boolean liked = userService.isJobPostAlreadyLiked(userId, jobId);
         if (liked) {
