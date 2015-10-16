@@ -1053,4 +1053,13 @@
         WHERE
             id = #{postId}
     </update>
+
+    <select id="checkDeleted" resultType="boolean">
+        SELECT
+            deleted
+        FROM
+            job_post
+        WHERE
+            id = #{postId}
+    </select>
 </mapper>

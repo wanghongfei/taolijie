@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.exception.checked.JobNotFoundException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.service.impl.IntervalCheckService;

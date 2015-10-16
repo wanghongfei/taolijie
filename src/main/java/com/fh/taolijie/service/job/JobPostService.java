@@ -2,6 +2,7 @@ package com.fh.taolijie.service.job;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.exception.checked.JobNotFoundException;
 import com.fh.taolijie.service.PageService;
 import com.fh.taolijie.utils.Constants;
 
@@ -156,7 +157,7 @@ public interface JobPostService extends PageService {
     boolean updateJobPost(Integer postId, JobPostModel model);
 
     /**
-     * 删除兼职帖子, 同时删除帖子下的评论
+     * 删除兼职帖子. 标记删除
      * @param postId
      * @return
      */

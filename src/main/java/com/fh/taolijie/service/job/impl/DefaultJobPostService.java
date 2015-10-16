@@ -9,10 +9,12 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.exception.checked.JobNotFoundException;
 import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -240,26 +242,12 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteJobPost(Integer postId) {
-        return postMapper.setDeleted(postId, true) <= 0 ? false : true;
+        Boolean deleted = postMapper.checkDeleted(postId);
+        if (null == deleted) {
+            return false;
+        }
 
-/*        //得到所有评论
-        ReviewModel revModel = new ReviewModel(0, Integer.MAX_VALUE);
-        revModel.setPostId(postId);
-
-        List<ReviewModel> revList = revMapper.findBy(revModel);
-
-        List<Integer> idList = revList.stream()
-                .map(ReviewModel::getId)
-                .collect(Collectors.toList());
-
-        // 批量删除评论
-        revMapper.deleteInBatch(idList);
-
-        // 删除兼职本身
-        int rows = postMapper.deleteByPrimaryKey(postId);
-
-        return rows <= 0 ? false : true;*/
-
+        return postMapper.setDeleted(postId, !deleted.booleanValue()) <= 0 ? false : true;
 
     }
 

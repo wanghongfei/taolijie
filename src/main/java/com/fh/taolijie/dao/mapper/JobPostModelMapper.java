@@ -1,5 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.job.JobPostModel;
@@ -101,6 +102,9 @@ public interface JobPostModelMapper {
     @RedisEvict(JobPostModel.class)
     void decreaseLike(Integer postId);
 
+    /**
+     * @deprecated
+     */
     void postResume(@Param("resumeId") Integer resumeId, @Param("jobPostId") Integer jobPostId, @Param("memberId") Integer memberId);
 
     /**
@@ -109,4 +113,12 @@ public interface JobPostModelMapper {
      */
     @RedisEvict(JobPostModel.class)
     int setDeleted(@Param("postId") Integer postId, @Param("deleted") boolean deleted);
+
+    /**
+     * 检查是否已经删除
+     * @param postId
+     * @return
+     */
+    @NoCache
+    boolean checkDeleted(Integer postId);
 }
