@@ -68,18 +68,6 @@ public class RestJobController {
                                         HttpServletRequest req,
                                         @RequestParam(defaultValue = "0") int pageNumber,
                                         @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
-        if (null == memberId) {
-            return new ResponseText("memberId cannot be null");
-        }
-
-        // 检查要查询的用户是不是当前用户
-        Credential credential = SessionUtils.getCredential(req);
-        if (false == credential.getId().equals(memberId)) {
-            // 管理员可查询
-            if (false == SessionUtils.isAdmin(credential)) {
-                return new ResponseText(ErrorCode.PERMISSION_ERROR);
-            }
-        }
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize);
