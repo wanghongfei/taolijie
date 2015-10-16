@@ -861,8 +861,17 @@
         UPDATE
             second_hand_post
         SET
-            deleted = TRUE
+            deleted = #{delete}
         WHERE
             id = #{postId}
     </update>
+
+    <select id="checkDeleted" resultType="boolean">
+        SELECT
+            deleted
+        FROM
+            second_hand_post
+        WHERE
+            id = #{postId}
+    </select>
 </mapper>

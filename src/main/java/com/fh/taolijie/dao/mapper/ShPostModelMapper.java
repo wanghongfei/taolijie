@@ -1,5 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
+import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.domain.sh.SHPostModel;
@@ -120,4 +121,7 @@ public interface ShPostModelMapper {
 
     @RedisEvict(SHPostModel.class)
     int setDeleted(@Param("postId") Integer postId, @Param("delete") boolean delete);
+
+    @NoCache
+    boolean checkDeleted(Integer postId);
 }

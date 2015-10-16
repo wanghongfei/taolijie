@@ -180,7 +180,13 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean deletePost(Integer postId) {
-        int row = postMapper.setDeleted(postId, true);
+        Boolean deleted = postMapper.checkDeleted(postId);
+        if (null == deleted) {
+            return false;
+        }
+        boolean res = !deleted.booleanValue();
+
+        int row = postMapper.setDeleted(postId, !deleted.booleanValue());
 
         return row <= 0 ? false : true;
     }

@@ -105,7 +105,7 @@ public interface ShPostService extends PageService {
     SHPostModel findPost(Integer postId);
 
     /**
-     * 删除一个帖子
+     * 删除一个帖子. 将删除标记取反
      * @return
      */
     boolean deletePost(Integer postId);
