@@ -1,8 +1,5 @@
 {
     "loginUrl": "/login",
-    "enableAutoLogin": true,
-    "loginCookieName": "token",
-    "authBeanName": "defaultAccountService",
 
     "interceptRule": [
         {
