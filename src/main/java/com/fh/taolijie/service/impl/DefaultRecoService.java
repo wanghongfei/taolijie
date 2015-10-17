@@ -7,7 +7,7 @@ import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
-import com.fh.taolijie.exception.checked.PostNotFound;
+import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
@@ -48,7 +48,7 @@ public class DefaultRecoService implements RecoService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(RecoPostModel model) throws PostNotFound {
+    public int add(RecoPostModel model) throws PostNotFoundException {
         model.setCreatedTime(new Date());
 
         // 填写冗余字段title
@@ -59,7 +59,7 @@ public class DefaultRecoService implements RecoService {
             case JOB:
                 JobPostModel job = jobService.findJobPost(postId);
                 if (null == job) {
-                    throw new PostNotFound();
+                    throw new PostNotFoundException();
                 }
                 title = job.getTitle();
 
@@ -68,7 +68,7 @@ public class DefaultRecoService implements RecoService {
             case SH:
                 SHPostModel sh = shService.findPost(postId);
                 if (null == sh) {
-                    throw new PostNotFound();
+                    throw new PostNotFoundException();
                 }
                 title = sh.getTitle();
 
@@ -77,7 +77,7 @@ public class DefaultRecoService implements RecoService {
             case QUEST:
                 QuestModel quest = questService.findById(postId);
                 if (null == quest) {
-                    throw new PostNotFound();
+                    throw new PostNotFoundException();
                 }
                 title = quest.getTitle();
 
