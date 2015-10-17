@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
@@ -17,10 +18,7 @@ import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.impl.CodeService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.LogUtils;
-import com.fh.taolijie.utils.StringUtils;
-import com.fh.taolijie.utils.TaolijieCredential;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -37,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -115,6 +114,9 @@ public class HAuthController {
 
         Cookie nameCookie = new Cookie("un", mem.getUsername());
         res.addCookie(nameCookie);
+        Cookie sidCookie = new Cookie("sid", sid);
+        sidCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(5)); // 5天
+        res.addCookie(sidCookie);
 
         // 根据参数m判断是否是移动端
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
@@ -194,12 +196,14 @@ public class HAuthController {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(@RequestParam(required = false, value = "m") String m,
                          @RequestParam(required = false, value = "appToken") String appToken,
-                         HttpServletResponse resp,
-                         HttpSession session){
-        session.invalidate();
+                         HttpServletRequest req,
+                         HttpServletResponse resp) throws IOException {
 
         // 删除cookie
-        Cookie co = new Cookie("token", "");
+        Cookie co = new Cookie("sid", "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+        co = new Cookie("token", "");
         co.setMaxAge(0);
         resp.addCookie(co);
 
@@ -209,13 +213,16 @@ public class HAuthController {
 
         // 判断是否是app
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
-            Credential credential = CredentialUtils.getCredential(session);
+            Credential credential = SessionUtils.getCredential(req);
 
             // 删除appToken
             accountService.updateAppToken(credential.getId(), null);
 
-            return new JsonWrapper(true, ErrorCode.SUCCESS)
-                    .getAjaxMessage();
+            ResponseText rt = ResponseText.getSuccessResponseText();
+            String json = JSON.toJSONString(rt);
+            resp.getOutputStream().write(json.getBytes());
+            resp.getOutputStream().flush();
+            return "";
         }
 
         return "redirect:/";
