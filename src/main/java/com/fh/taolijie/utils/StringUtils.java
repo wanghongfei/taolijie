@@ -209,6 +209,15 @@ public class StringUtils {
         return sb.toString();
     }
 
+    public static boolean isStaticResource(String url) {
+        return url.startsWith("/admin")
+                || url.startsWith("/images")
+                || url.startsWith("/scripts")
+                || url.startsWith("/styles")
+                || url.startsWith("/fonts")
+                || url.startsWith("/about");
+    }
+
     public static String[] splitIds(String ids) {
         if (null == ids) {
             return null;

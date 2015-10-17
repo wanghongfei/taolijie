@@ -6,7 +6,8 @@ package com.fh.taolijie.constant;
 public enum RequestParamName {
     APP_TOKEN,
     HEADER_APP_TOKEN,
-    WECHAT_TOKEN;
+    WECHAT_TOKEN,
+    SESSION_ID;
 
     @Override
     public String toString() {
@@ -19,6 +20,9 @@ public enum RequestParamName {
 
             case HEADER_APP_TOKEN:
                 return "App-Token";
+
+            case SESSION_ID:
+                return "sid";
 
             default:
                 throw new IllegalStateException();

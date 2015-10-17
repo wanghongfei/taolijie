@@ -5,5 +5,6 @@ package com.fh.taolijie.constant;
  */
 public enum RedisKey {
     CREDITS_LEVEL,
-    CREDITS_OPERATION
+    CREDITS_OPERATION,
+    SESSION;
 }

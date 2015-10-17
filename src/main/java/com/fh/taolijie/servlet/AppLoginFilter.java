@@ -6,21 +6,27 @@ import cn.fh.security.utils.CredentialUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +43,8 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
     private static AccountService accountService;
 
+    private static StringRedisTemplate redisTemplate;
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         AppLoginFilter.applicationContext = applicationContext;
@@ -50,6 +58,21 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
+
+        if (StringUtils.isStaticResource(req.getRequestURI())) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        if (loginBySid(req)) {
+            if (infoLogger.isDebugEnabled()) {
+                infoLogger.debug("trying to log with sid succeeded");
+            }
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+
+        }
+
 
         // 判断是否是app请求
         // 先从header中取token
@@ -111,12 +134,76 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    private boolean loginBySid(HttpServletRequest req) {
+        if (infoLogger.isDebugEnabled()) {
+            infoLogger.debug("trying to log with sid...");
+        }
+
+        Cookie cookie = findCookie(req.getCookies(), RequestParamName.SESSION_ID.toString());
+        if (null == cookie) {
+            if (infoLogger.isDebugEnabled()) {
+                infoLogger.debug("trying to log with sid failed: no cookie found");
+            }
+            return false;
+        }
+
+        String sid = cookie.getValue();
+        String key = RedisKey.SESSION.toString() + sid;
+        StringRedisTemplate rt = retrieveRedis("redisTemplateForString");
+        Map<Object, Object> map = rt.opsForHash().entries(key);
+        if (null == map) {
+            if (infoLogger.isDebugEnabled()) {
+                infoLogger.debug("trying to log with sid failed: no session found for key:{}", key);
+            }
+            return false;
+        }
+
+        // 用户信息放到request中
+        String username = (String)map.get("username");
+        String role = (String)map.get("role");
+        String id = (String)map.get("id");
+
+        req.setAttribute("user", username);
+        req.setAttribute("role", role);
+
+        Credential credential = new DefaultCredential(Integer.valueOf(id), username);
+        credential.addRole(role);
+
+        req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
+
+
+
+        return true;
+    }
+
+    private Cookie findCookie(Cookie[] cookies, String name) {
+        if (null == cookies) {
+            return null;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
+                return cookie;
+            }
+        }
+
+        return null;
+    }
+
     private AccountService retrieveService(String beanName) {
         if (null == accountService) {
             accountService = (AccountService) applicationContext.getBean(beanName);
         }
 
         return accountService;
+    }
+
+    private StringRedisTemplate retrieveRedis(String beanName) {
+        if (null == redisTemplate) {
+            redisTemplate = (StringRedisTemplate) applicationContext.getBean(beanName);
+        }
+
+        return redisTemplate;
     }
 
     @Override

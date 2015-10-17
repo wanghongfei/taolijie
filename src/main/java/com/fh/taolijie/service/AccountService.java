@@ -180,4 +180,10 @@ public interface AccountService {
      * @param username
      */
     void sendResetPasswordEmail(String username);
+
+    /**
+     * 在Redis中保存session信息
+     * @param mem
+     */
+    void createRedisSession(MemberModel mem, String sid);
 }

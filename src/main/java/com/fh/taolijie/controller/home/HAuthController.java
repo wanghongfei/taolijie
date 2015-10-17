@@ -102,39 +102,19 @@ public class HAuthController {
 
         MemberModel mem = accountService.findMember(loginDto.getUsername(), true);
         RoleModel role = mem.getRoleList().iterator().next();
-        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
+        String sid = RandomStringUtils.randomAlphabetic(30);
+        accountService.createRedisSession(mem, sid);
+
+/*        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
 
         // 身份信息放到request中
         req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
         req.setAttribute("user", mem);
-        req.setAttribute("role",role);
+        req.setAttribute("role", role);*/
 
-        // 用户选择了remember me
-        if (loginDto.getRememberMe().equals("true")) {
-            String token = StringUtils.randomString(15);
-            mem.setLastTokenDate(new Date());
-            mem.setAutoLoginIdentifier(token);
-            accountService.updateMember(mem);
-
-            // 将自动登陆用的token放到cookie中
-            Cookie tokenCookie = new Cookie("token", token);
-            tokenCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
-            res.addCookie(tokenCookie);
-
-            // 将用户名放到cookie中
-            // 过期时间为7天
-            Cookie nameCookie = new Cookie("un", mem.getUsername());
-            nameCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
-            res.addCookie(nameCookie);
-
-        } else {
-            // 将用户名放到cookie中
-            // 浏览器关闭就过期
-            Cookie nameCookie = new Cookie("un", mem.getUsername());
-            res.addCookie(nameCookie);
-        }
-
+        Cookie nameCookie = new Cookie("un", mem.getUsername());
+        res.addCookie(nameCookie);
 
         // 根据参数m判断是否是移动端
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
@@ -148,7 +128,7 @@ public class HAuthController {
             return new ResponseText(new LoginRespDto(mem.getId(), appToken));
         }
 
-        return ResponseText.getSuccessResponseText();
+        return new ResponseText(sid);
     }
 
 
