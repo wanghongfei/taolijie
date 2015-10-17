@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
+import com.fh.taolijie.exception.checked.RecoRepeatedException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -67,6 +68,8 @@ public class RestRecoUCtr {
         } catch (PostNotFoundException postNotFoundException) {
             return new ResponseText(ErrorCode.NOT_FOUND);
 
+        } catch (RecoRepeatedException e) {
+            return new ResponseText(ErrorCode.REPEAT);
         }
 
         return ResponseText.getSuccessResponseText();

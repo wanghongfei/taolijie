@@ -3,6 +3,7 @@ package com.fh.taolijie.service;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
+import com.fh.taolijie.exception.checked.RecoRepeatedException;
 
 /**
  * 与推荐相关的业务接口
@@ -11,7 +12,8 @@ import com.fh.taolijie.exception.checked.PostNotFoundException;
 public interface RecoService {
     ListResult<RecoPostModel> findBy(RecoPostModel example);
 
-    int add(RecoPostModel model) throws PostNotFoundException;
+    int add(RecoPostModel model)
+            throws PostNotFoundException, RecoRepeatedException;
 
     int update(RecoPostModel model);
 

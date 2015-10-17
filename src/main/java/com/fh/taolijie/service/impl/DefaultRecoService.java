@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
+import com.fh.taolijie.exception.checked.RecoRepeatedException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
@@ -48,13 +49,21 @@ public class DefaultRecoService implements RecoService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(RecoPostModel model) throws PostNotFoundException {
+    public int add(RecoPostModel model) throws PostNotFoundException, RecoRepeatedException {
+        Integer postId = model.getPostId();
+
+
+        // 重复性检查
+        boolean repeat = reMapper.checkExist(postId, model.getType());
+        if (repeat) {
+            throw new RecoRepeatedException();
+        }
+
         model.setCreatedTime(new Date());
 
         // 填写冗余字段title
-        RecoType type = RecoType.fromCode(model.getType());
         String title = null;
-        Integer postId = model.getPostId();
+        RecoType type = RecoType.fromCode(model.getType());
         switch (type) {
             case JOB:
                 JobPostModel job = jobService.findJobPost(postId);

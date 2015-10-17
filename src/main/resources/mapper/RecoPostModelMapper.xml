@@ -259,4 +259,10 @@
 
         </where>
     </select>
+
+    <select id="checkExist" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM reco_post WHERE post_id = #{postId} AND type = #{type}
+        )
+    </select>
 </mapper>
