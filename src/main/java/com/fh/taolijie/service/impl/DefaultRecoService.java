@@ -1,9 +1,17 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.dao.mapper.RecoPostModelMapper;
 import com.fh.taolijie.domain.RecoPostModel;
+import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.exception.checked.PostNotFound;
 import com.fh.taolijie.service.RecoService;
+import com.fh.taolijie.service.job.JobPostService;
+import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.sh.ShPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +27,15 @@ public class DefaultRecoService implements RecoService {
     @Autowired
     private RecoPostModelMapper reMapper;
 
+    @Autowired
+    private JobPostService jobService;
+
+    @Autowired
+    private ShPostService shService;
+
+    @Autowired
+    private QuestService questService;
+
     @Override
     @Transactional(readOnly = true)
     public ListResult<RecoPostModel> findBy(RecoPostModel example) {
@@ -31,8 +48,43 @@ public class DefaultRecoService implements RecoService {
 
     @Override
     @Transactional(readOnly = false)
-    public int add(RecoPostModel model) {
+    public int add(RecoPostModel model) throws PostNotFound {
         model.setCreatedTime(new Date());
+
+        // 填写冗余字段title
+        RecoType type = RecoType.fromCode(model.getType());
+        String title = null;
+        Integer postId = model.getPostId();
+        switch (type) {
+            case JOB:
+                JobPostModel job = jobService.findJobPost(postId);
+                if (null == job) {
+                    throw new PostNotFound();
+                }
+                title = job.getTitle();
+
+                break;
+
+            case SH:
+                SHPostModel sh = shService.findPost(postId);
+                if (null == sh) {
+                    throw new PostNotFound();
+                }
+                title = sh.getTitle();
+
+                break;
+
+            case QUEST:
+                QuestModel quest = questService.findById(postId);
+                if (null == quest) {
+                    throw new PostNotFound();
+                }
+                title = quest.getTitle();
+
+                break;
+        }
+        model.setTitle(title);
+
         reMapper.insertSelective(model);
 
         return model.getId();

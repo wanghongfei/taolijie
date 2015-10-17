@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
+import com.fh.taolijie.exception.checked.PostNotFound;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -47,6 +48,7 @@ public class RestRecoUCtr {
 
         Credential credential = SessionUtils.getCredential(req);
 
+        // 创建Model
         RecoPostModel model = new RecoPostModel();
         model.setType(rt.code());
         model.setPostId(postId);
@@ -59,7 +61,13 @@ public class RestRecoUCtr {
         Date expire = TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, hours);
         model.setExpiredTime(expire);
 
-        reService.add(model);
+        try {
+            reService.add(model);
+
+        } catch (PostNotFound postNotFound) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        }
 
         return ResponseText.getSuccessResponseText();
     }
