@@ -93,16 +93,14 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
                 return;
             }
 
-            // 如果查到了, 创建Credential到Session中
-            HttpSession session = req.getSession();
-            session.setMaxInactiveInterval((int) TimeUnit.SECONDS.toSeconds(10)); // 5s
-            session.setAttribute("user", mem);
-            session.setAttribute("role", mem.getRoleList().get(0).getRolename());
+            // 用户信息放到request中
+            req.setAttribute("user", mem);
+            req.setAttribute("role", mem.getRoleList().get(0).getRolename());
 
             Credential credential = new DefaultCredential(mem.getId(), mem.getUsername());
             credential.addRole(mem.getRoleList().get(0).getRolename());
 
-            CredentialUtils.createCredential(session, credential);
+            req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
 
             if (infoLogger.isDebugEnabled()) {
                 infoLogger.debug("appToken[{}] login succeeded for user:{}", appToken, mem.getUsername());

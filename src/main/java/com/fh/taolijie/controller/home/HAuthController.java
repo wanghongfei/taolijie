@@ -75,7 +75,7 @@ public class HAuthController {
     public ResponseText login(@Valid LoginDto loginDto,
                               BindingResult result,
                               @RequestParam(value = "m", required = false) String m,
-                              HttpSession session,
+                              HttpServletRequest req,
                               HttpServletResponse res) {
 
 
@@ -105,10 +105,10 @@ public class HAuthController {
         Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
 
-        //验证身份的session
-        CredentialUtils.createCredential(session, credential);
-        session.setAttribute("user", mem);
-        session.setAttribute("role",role);
+        // 身份信息放到request中
+        req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
+        req.setAttribute("user", mem);
+        req.setAttribute("role",role);
 
         // 用户选择了remember me
         if (loginDto.getRememberMe().equals("true")) {
