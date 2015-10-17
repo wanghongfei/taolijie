@@ -92,6 +92,17 @@ public class DefaultShPostService implements ShPostService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<SHPostModel> getInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ListResult<>(new ArrayList<>(0), 0);
+        }
+
+        List<SHPostModel> list = postMapper.getInBatch(idList);
+        return new ListResult<>(list, list.size());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<SHPostModel> getUnverifiedPostList(SHPostModel model) {
         return postMapper.findBy(model);
     }

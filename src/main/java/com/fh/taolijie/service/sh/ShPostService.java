@@ -53,6 +53,8 @@ public interface ShPostService extends PageService {
      */
     ListResult<SHPostModel> filterQuery(SHPostModel model);
 
+    ListResult<SHPostModel> getInBatch(List<Integer> idList);
+
     /**
      * 查询还未审核的二手信息
      * @return

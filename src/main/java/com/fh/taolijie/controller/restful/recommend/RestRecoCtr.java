@@ -7,9 +7,11 @@ import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class RestRecoCtr {
 
     @Autowired
     private JobPostService jobService;
+
+    @Autowired
+    private ShPostService shService;
 
     /**
      * 查询推荐帖子
@@ -74,6 +79,10 @@ public class RestRecoCtr {
             case JOB:
                 ListResult<JobPostModel> jobLr = jobService.getInBatch(idList);
                 return new ResponseText(jobLr);
+
+            case SH:
+                ListResult<SHPostModel> shLr = shService.getInBatch(idList);
+                return new ResponseText(shLr);
 
 
             default:
