@@ -23,7 +23,7 @@ public class SHPostModel extends Pageable {
 
 
     @NotNull
-    @Length(min = 0, max = 20)
+    @Length(min = 0, max = 30)
     private String title;
 
     private boolean deleted = false;
@@ -42,7 +42,7 @@ public class SHPostModel extends Pageable {
     private BigDecimal originalPrice;
 
     @NotNull
-    @Min(0) @Max(9999)
+    @Min(0) @Max(99999)
     private BigDecimal sellPrice;
 
     private Integer likes;
@@ -66,11 +66,11 @@ public class SHPostModel extends Pageable {
     private String verified;
 
     @NotNull
-    @Length(max = 36)
+    @Length(max = 40)
     private String tradePlace;
 
     @NotNull
-    @Length(max = 15)
+    @Length(max = 20)
     private String contactName;
 
     //@NotNull
