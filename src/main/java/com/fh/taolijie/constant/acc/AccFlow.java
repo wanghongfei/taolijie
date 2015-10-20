@@ -6,7 +6,19 @@ package com.fh.taolijie.constant.acc;
 public enum AccFlow {
     WITHDRAW("00"),
     CHARGE("01"),
-    FROZEN("02");
+    FROZEN("02"),
+    /**
+     * 退款
+     */
+    REFUND("03"),
+    /**
+     * 消费
+     */
+    CONSUME("04"),
+    /**
+     * 赏金
+     */
+    AWARD("05");
 
     private String code;
 

@@ -4,26 +4,36 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by whf on 9/24/15.
@@ -38,7 +48,13 @@ public class RestQuestCtr {
     private CashAccService accService;
 
     @Autowired
+    private MemberModelMapper memMapper;
+
+    @Autowired
     private QuestFinishService fiService;
+
+    @Autowired
+    private TljAuditService auditService;
 
     /**
      * 商家发布任务
@@ -46,20 +62,38 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText publishQuest(@Valid QuestModel model,
                                      BindingResult br,
+                                     @RequestParam String collegeIds,
+                                     @RequestParam String schoolIds,
                                      HttpServletRequest req) {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
         if (null == credential) {
             return new ResponseText(ErrorCode.NOT_LOGGED_IN);
         }
-        // 判断当前用户是否是商家
+
+
+
+
+
+
+        
         if (!SessionUtils.isEmployer(credential)) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-
+        // 参数验证
         if (br.hasErrors()) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+        // 将id string 转换成List<Integer>
+        try {
+            List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
+            List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
+            model.setCollegeIdList(coList);
+            model.setSchoolIdList(schList);
+
+        } catch (InvalidNumberStringException e) {
+            return new ResponseText(ErrorCode.BAD_NUMBER);
         }
 
         // 查出用户对应的现金账户
@@ -99,6 +133,13 @@ public class RestQuestCtr {
         }
         // 判断当前用户是否是学生
         if (!SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断是否已经认证
+        MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
+        String status = mem.getVerified();
+        if (null == status || false == status.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
@@ -186,6 +227,114 @@ public class RestQuestCtr {
     }
 
     /**
+     * 查询指定任务的申请
+     * @return
+     */
+    @RequestMapping(value = "/submit/{questId}/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText querySubmitQuest(@PathVariable("questId") Integer questId,
+                                         @RequestParam(required = false) String status,
+                                         @RequestParam(defaultValue = "0") int pn,
+                                         @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                         HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 学生用户不能调用该接口
+        if (SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断是否是商家用户
+        if (SessionUtils.isEmployer(credential)) {
+            // 如果是
+            // 判断该任务是不是自己发布的
+            QuestModel quest = questService.findById(questId);
+            if (null == quest) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (!quest.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        }
+
+        RequestStatus st = RequestStatus.fromCode(status);
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<FinishRequestModel> lr = fiService.findByQuest(questId, st, pn, ps);
+
+        return new ResponseText(lr);
+    }
+
+
+    /**
+     * 修改提交状态
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/submit/{reqId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeStatus(@PathVariable Integer reqId,
+                                     @RequestParam String status,
+                                     @RequestParam(required = false) String memo,
+                                     HttpServletRequest req) {
+
+        // 登陆检查
+        Credential credential = SessionUtils.getCredential(req);
+        if (null == credential) {
+            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+        }
+
+        // 学生不能调用
+        if (SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        Integer memId = credential.getId();
+
+        // 判断当前是否为商家
+        if (SessionUtils.isEmployer(credential)) {
+            // 如果是
+            // 判断该任务是不是自己发布的
+            FinishRequestModel reqModel = fiService.findById(reqId);
+            if (null == reqModel) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            Integer questId = reqModel.getQuestId();
+
+            QuestModel quest = questService.findById(questId);
+            if (!quest.getMemberId().equals(memId)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+        }
+
+
+        RequestStatus st = RequestStatus.fromCode(status);
+        if (null == st) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        try {
+            fiService.updateStatus(reqId, st, memo);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (RequestNotExistException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (RequestCannotChangeException ex) {
+            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
+
+        } catch (AuditNotEnoughException ex) {
+            return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
+        }
+
+        return new ResponseText();
+    }
+
+    /**
      * 查询我发布的任务
      * @return
      */
@@ -231,6 +380,98 @@ public class RestQuestCtr {
         } else {
             lr = questService.queryAssignRecords(credential.getId(), pn, ps);
         }
+
+        return new ResponseText(lr);
+    }
+
+
+    /**
+     * 计算代审核所需的费用
+     * @param amt
+     * @return
+     */
+    @RequestMapping(value = "/audit/fee", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText calculateAuditFee(@RequestParam Integer amt) {
+        BigDecimal tot = auditService.calculateFee(amt);
+
+        return new ResponseText(tot);
+    }
+
+    /**
+     * 审核代审核任务完成申请
+     * @param amt
+     * @return
+     */
+    @RequestMapping(value = "/audit", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText applyAudit(@RequestParam Integer questId,
+                                   @RequestParam Integer amt, // 申请数量
+                                   HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        // 判断是否是商家用户
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        TljAuditModel model = new TljAuditModel();
+        model.setQuestId(questId);
+        model.setEmpId(credential.getId());
+        model.setTotAmt(amt);
+        model.setLeftAmt(amt);
+
+        try {
+            auditService.addAudit(model);
+        } catch (BalanceNotEnoughException e) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (RequestRepeatedException e) {
+            return new ResponseText(ErrorCode.REPEAT);
+
+        } catch (QuestNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+
+    /**
+     * 查询商家的代审核申请
+     * @return
+     */
+    @RequestMapping(value = "/audit/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText auditList(@RequestParam(required = false) Integer questId,
+                                  @RequestParam(defaultValue = "0") int pn,
+                                  @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                  HttpServletRequest req) {
+
+        // 只有商家才能调用该接口
+        Credential credential = SessionUtils.getCredential(req);
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        // 判断任务是不是本人发的
+        if (null != questId) {
+            QuestModel quest = questService.findById(questId);
+            if (null == quest) {
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+
+            if (!quest.getMemberId().equals(credential.getId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        }
+
+        TljAuditModel cmd = new TljAuditModel(pn, ps);
+        cmd.setQuestId(questId);
+        cmd.setEmpId(credential.getId());
+
+        ListResult<TljAuditModel> lr = auditService.findBy(cmd);
 
         return new ResponseText(lr);
     }

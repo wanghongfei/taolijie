@@ -9,7 +9,7 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +88,17 @@ public class DefaultShPostService implements ShPostService {
         long tot = postMapper.countFindBy(model);
 
         return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<SHPostModel> getInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ListResult<>(new ArrayList<>(0), 0);
+        }
+
+        List<SHPostModel> list = postMapper.getInBatch(idList);
+        return new ListResult<>(list, list.size());
     }
 
     @Override
@@ -180,7 +191,13 @@ public class DefaultShPostService implements ShPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean deletePost(Integer postId) {
-        int row = postMapper.setDeleted(postId, true);
+        Boolean deleted = postMapper.checkDeleted(postId);
+        if (null == deleted) {
+            return false;
+        }
+        boolean res = !deleted.booleanValue();
+
+        int row = postMapper.setDeleted(postId, !deleted.booleanValue());
 
         return row <= 0 ? false : true;
     }
@@ -203,6 +220,12 @@ public class DefaultShPostService implements ShPostService {
 
 
         postMapper.updateByPrimaryKeySelective(model);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean checkExist(Integer postId) {
+        return postMapper.checkExist(postId);
     }
 
     @Override

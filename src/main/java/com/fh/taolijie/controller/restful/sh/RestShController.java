@@ -1,15 +1,20 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.sh;
 
+import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by wanghongfei on 15-6-20.

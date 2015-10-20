@@ -1,7 +1,6 @@
 package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.constant.acc.UserVerifyStatus;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.EmpCertiModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -52,7 +51,7 @@ public class CertiServiceTest extends BaseSpringDataTestClass {
 
 
         MemberModel m = memMapper.selectByPrimaryKey(1);
-        Assert.assertEquals(UserVerifyStatus.DONE.code(), m.getVerified());
+        Assert.assertEquals(CertiStatus.DONE.code(), m.getVerified());
     }
 
     @Test

@@ -1,8 +1,5 @@
 {
     "loginUrl": "/login",
-    "enableAutoLogin": true,
-    "loginCookieName": "token",
-    "authBeanName": "defaultAccountService",
 
     "interceptRule": [
         {
@@ -33,6 +30,7 @@
             "toUrl": "/login/admin",
             "url": "/manage**"
         },
+
 
         {
             "roleList": ["ADMIN", "STUDENT", "EMPLOYER"],

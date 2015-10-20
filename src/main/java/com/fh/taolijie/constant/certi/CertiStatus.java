@@ -4,9 +4,10 @@ package com.fh.taolijie.constant.certi;
  * Created by whf on 9/22/15.
  */
 public enum CertiStatus {
-    WAIT_AUDIT("00"),
-    DONE("01"),
-    FAILED("02");
+    NOT_YET("00"),
+    WAIT_AUDIT("01"),
+    DONE("02"),
+    FAILED("03");
 
     private String code;
 
@@ -21,12 +22,15 @@ public enum CertiStatus {
     public static CertiStatus fromCode(String code) {
         switch (code) {
             case "00":
-                return WAIT_AUDIT;
+                return NOT_YET;
 
             case "01":
-                return DONE;
+                return WAIT_AUDIT;
 
             case "02":
+                return DONE;
+
+            case "03":
                 return FAILED;
 
             default:

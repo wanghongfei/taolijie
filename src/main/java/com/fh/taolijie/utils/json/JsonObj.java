@@ -1,7 +1,6 @@
 package com.fh.taolijie.utils.json;
 
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 

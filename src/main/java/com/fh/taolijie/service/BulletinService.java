@@ -1,7 +1,6 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.domain.BulletinModel;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface BulletinService {
     /**
      * 查询所有公告
      */
-    List<BulletinModel> getAll(int firstResult, int capacity, ObjWrapper wrap);
+    List<BulletinModel> getAll(int firstResult, int capacity);
 
     BulletinModel findOne(Integer id);
 }

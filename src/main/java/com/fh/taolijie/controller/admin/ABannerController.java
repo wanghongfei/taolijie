@@ -4,8 +4,6 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.BannerPicModel;
 import com.fh.taolijie.service.BannerPicService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

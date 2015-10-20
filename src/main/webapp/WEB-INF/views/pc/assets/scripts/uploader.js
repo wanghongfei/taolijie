@@ -62,6 +62,7 @@ jQuery(function() {
                     if(d.code ==0){
                        data['policy'] = d.data.policy;
                        data['signature'] = d.data.sign;
+                        console.log('uploadBeforeSend');
                     }else{
                         //取消发送
                         alert('您上传图片过于频繁');
@@ -79,42 +80,28 @@ jQuery(function() {
 
     // 当有文件添加进来的时候
     uploader.on( 'fileQueued', function( file ) {
-        //var $li = $(
-        //        '<div id="' + file.id + '" class="file-item thumbnail">' +
-        //        '<img>' +
-        //        '<div class="info">' + file.name + '</div>' +
-        //        '</div>'
-        //    ),
-        //    $img = $li.find('img');
-        //
-        //$list.append( $li );
-
-        // 创建缩略图
-        /*
         uploader.makeThumb( file, function( error, src ) {
             if ( error ) {
                 $img.replaceWith('<span>不能预览</span>');
                 return;
             }
+            console.log(file);
+            $('<li class="img-list-item" id="'+file.id
+                +'" data-pid="'
+                + '">'
+                + '<div class="img-mask"></div>'
+                + '<img src="' + src
+                + '" class="img-list-img"/>'
+                + '<span class="btn-img-del">x</span>'
+                + '</li>').insertBefore('.img-list-btn');
 
-            $img.attr( 'src', src );
-        }, thumbnailWidth, thumbnailHeight );
-        */
+            //$img.attr( 'src', src );
+        },200, 150);
     });
 
     // 文件上传过程中创建进度条实时显示。
     uploader.on( 'uploadProgress', function( file, percentage ) {
-        var $li = $( '#'+file.id ),
-            $percent = $li.find('.progress span');
-
-        // 避免重复创建
-        if ( !$percent.length ) {
-            $percent = $('<p class="progress"><span></span></p>')
-                .appendTo( $li )
-                .find('span');
-        }
-
-        $percent.css( 'width', percentage * 100 + '%' );
+        //console.log(percentage)
     });
 
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
@@ -122,14 +109,17 @@ jQuery(function() {
         if( $('.img-list-item').length == 3) {
             $('.img-list-btn').toggle();
         }
-        $('<li class="img-list-item" data-pid="'
-            + data.url.substr(1)
-            + '">'
-            + '<img src="http://taolijie-pic.b0.upaiyun.com/'
-            + data.url.substr(1)
-            + '!pc200" class="img-list-img"/>'
-            + '<span class="btn-img-del">x</span>'
-            + '</li>').insertBefore('.img-list-btn');
+        console.log($('#'+file.id));
+        $('#'+file.id).find('.img-mask').css('height',0);
+
+        //$('<li class="img-list-item" data-pid="'
+        //    + data.url.substr(1)
+        //    + '">'
+        //    + '<img src="http://taolijie-pic.b0.upaiyun.com/'
+        //    + data.url.substr(1)
+        //    + '!pc200" class="img-list-img"/>'
+        //    + '<span class="btn-img-del">x</span>'
+        //    + '</li>').insertBefore('.img-list-btn');
         var picIds = $('input[name=picIds]').val().split(';');
         if(picIds[0] === "") {
             picIds = [];
@@ -187,9 +177,9 @@ jQuery(function() {
                 $('<li class="img-list-item" data-pid="'
                     + data
                     + '">'
-                    + '<img src="/static/images/users/'
+                    + '<img src="http://taolijie-pic.b0.upaiyun.com/'
                     + data
-                    + '" class="img-list-img"/>'
+                    + '!pc200" class="img-list-img"/>'
                     + '<span class="btn-img-del">x</span>'
                     + '</li>').insertBefore('.img-list-btn');
             })

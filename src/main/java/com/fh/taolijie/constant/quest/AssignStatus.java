@@ -6,7 +6,14 @@ package com.fh.taolijie.constant.quest;
 public enum AssignStatus {
     ASSIGNED("00"),
     DONE("01"),
-    ENDED("02");
+    /**
+     * 已超时
+     */
+    ENDED("02"),
+    /**
+     * 已提交
+     */
+    SUBMITTED("03");
 
     private String code;
 
@@ -28,6 +35,9 @@ public enum AssignStatus {
 
             case "02":
                 return ENDED;
+
+            case "03":
+                return SUBMITTED;
 
             default:
                 return null;

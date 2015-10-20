@@ -1,23 +1,41 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.MsgType;
+import com.fh.taolijie.constant.ScheduleChannel;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.QuestCollRelModel;
+import com.fh.taolijie.domain.QuestSchRelModel;
+import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.ObjectGenerationException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.StringRedisConnection;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.applet.resources.MsgAppletViewer_zh_TW;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 轻兼职业务实现
@@ -25,6 +43,8 @@ import java.util.List;
  */
 @Service
 public class DefaultQuestService implements QuestService {
+    private static Logger logger = LoggerFactory.getLogger(DefaultQuestService.class);
+
     @Autowired
     private QuestModelMapper questMapper;
 
@@ -47,6 +67,14 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private CashAccService accService;
 
+    @Autowired
+    private QuestCollRelModelMapper qcMapper;
+    @Autowired
+    private QuestSchRelModelMapper qsMapper;
+
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    StringRedisTemplate rt;
 
     /**
      * 商家发布任务.
@@ -74,11 +102,95 @@ public class DefaultQuestService implements QuestService {
 
 
         // 扣钱
-        accService.reduceAvailableMoney(accId, tot);
+        accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
 
         // 发布任务
         model.setCreatedTime(new Date());
         questMapper.insertSelective(model);
+
+        Integer questId = model.getId();
+
+        // 添加任务对象关联信息
+        List<Integer> collList = model.getCollegeIdList();
+        List<Integer> schList = model.getSchoolIdList();
+
+        // 关联学校名
+        if (!collList.isEmpty()) {
+            List<QuestCollRelModel> qcList = collList.stream()
+                    .map( id -> new QuestCollRelModel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestCollegeRel(qcList);
+        }
+
+        // 关联学院名
+        if (!schList.isEmpty()) {
+            List<QuestSchRelModel> qsList = schList.stream()
+                    .map( id -> new QuestSchRelModel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestSchoolRel(qsList);
+
+        }
+
+
+        // 投递任务过期定时任务
+        rt.execute( (RedisConnection redisConn) -> {
+            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+
+            // 构造参数列表
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", questId.toString());
+            map.put("questId", questId.toString());
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                    MsgType.DATE_STYLE,
+                    "localhost",
+                    8080,
+                    "/api/schedule/questExpire",
+                    "GET",
+                    // 任务结束后的第25小时执行
+                    //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                    TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                    .setParmMap(map)
+                    .build();
+
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
+            return null;
+        });
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addQuestCollegeRel(List<QuestCollRelModel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        qcMapper.insertInBatch(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void addQuestSchoolRel(List<QuestSchRelModel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        qsMapper.insertInBatch(list);
     }
 
     /**
@@ -139,12 +251,93 @@ public class DefaultQuestService implements QuestService {
         assignModel.setStatus(AssignStatus.ASSIGNED.code());
         assignMapper.insertSelective(assignModel);
 
+        final int assignId = assignModel.getId();
+
 
         // 任务剩余数量减少1
         questMapper.decreaseLeftAmount(questId);
 
+        // todo 投递定时任务请求
+        rt.execute( (RedisConnection redisConn) -> {
+            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+
+            // 构造参数列表
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", String.valueOf(assignId));
+            map.put("assignId", String.valueOf(assignId));
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                        MsgType.DATE_STYLE,
+                        "localhost",
+                        8080,
+                        "/api/schedule/autoExpire",
+                        "GET",
+                        TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
+                    .setParmMap(map)
+                    .build();
+
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
+            return null;
+        });
 
         // 方法结束 == 事务结束，行锁释放
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void assignExpired(Integer assignId) {
+        // 检查任务领取表的状态是不是"03:已经提交"
+        // 如果是，则不进行任何操作，方法直接返回
+        QuestAssignModel model = assignMapper.selectByPrimaryKey(assignId);
+        if (model.getStatus().equals(AssignStatus.SUBMITTED.code())) {
+            return;
+        }
+
+        // 修改状态为"已超时"
+        QuestAssignModel example = new QuestAssignModel();
+        example.setId(assignId);
+        example.setStatus(AssignStatus.ENDED.code());
+        assignMapper.updateByPrimaryKeySelective(example);
+
+        // 释放任务数量
+        questMapper.increaseLeftAmount(model.getQuestId());
+
+    }
+
+    /**
+     * 检查是否有未领取的任务，如果有则退款给商家
+     * @param questId
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public void questExpired(Integer questId) throws CashAccNotExistsException {
+        // 检查是否还有未领取的任务
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        Integer left = quest.getLeftAmt();
+        if (left.intValue() <= 0) {
+            return;
+        }
+
+        // 计算任务的钱数
+        BigDecimal leftAmt = new BigDecimal(left);
+        BigDecimal refund = quest.getFinalAward().multiply(leftAmt);
+
+        // 向用户的现金账户中加钱
+        CashAccModel acc = accMapper.findByMemberId(quest.getMemberId());
+        accService.addAvailableMoney(acc.getId(), refund);
     }
 
     @Override
@@ -159,6 +352,9 @@ public class DefaultQuestService implements QuestService {
         return assignMapper.selectAssignByMemberAndQuest(memId, questId);
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, int pn, int ps) {
@@ -173,6 +369,20 @@ public class DefaultQuestService implements QuestService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<QuestModel> findInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ArrayList<>(0);
+        }
+
+        return questMapper.selectInBatch(idList);
+    }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<QuestModel> findByCate(Integer cateId, BigDecimal min, BigDecimal max, int pn, int ps) {
         QuestModel example = new QuestModel(pn, ps);
         example.setQuestCateId(cateId);
@@ -182,6 +392,15 @@ public class DefaultQuestService implements QuestService {
 
         List<QuestModel> list = questMapper.findBy(example);
         long tot = questMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<QuestModel> findBy(QuestModel command) {
+        List<QuestModel> list = questMapper.findBy(command);
+        long tot = questMapper.countFindBy(command);
 
         return new ListResult<>(list, tot);
     }

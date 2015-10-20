@@ -5,8 +5,10 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -14,11 +16,12 @@ import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
+import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.WithdrawService;
-import com.fh.taolijie.service.acc.impl.PhoneValidationService;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -44,7 +47,7 @@ public class RestAccCtr {
     private CashAccService accService;
 
     @Autowired
-    private PhoneValidationService codeService;
+    private CodeService codeService;
 
     @Autowired
     private WithdrawService drawService;
@@ -55,13 +58,16 @@ public class RestAccCtr {
     @Autowired
     private AccFlowService flowService;
 
+    @Autowired
+    private AccountService memService;
+
     /**
      * 开通现金账户
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText createAcc(@RequestParam String dealPwd,
-                                  @RequestParam String phone,
+                                  @RequestParam(required = false) String phone,
                                   @RequestParam(defaultValue = "") String code, // 手机验证码
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String name,
@@ -73,23 +79,37 @@ public class RestAccCtr {
 
 
 
-        // TODO 验证验证码
-/*        if (!codeService.validateCode(memId, code)) {
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-        }*/
+        }
 
         // 验证交易密码
         if (!StringUtils.checkNotEmpty(dealPwd)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        // 开通
+        // 创建model对象
         CashAccModel acc = new CashAccModel();
         acc.setDealPassword(CredentialUtils.sha(dealPwd));
-        acc.setPhoneNumber(phone);
         acc.setEmail(email);
         acc.setName(name);
         acc.setMemberId(memId);
+
+        // 判断用户的注册类型是不是手机号注册
+        MemberModel mem = memService.findMember(memId);
+        if (mem.getRegType().intValue() == RegType.MOBILE.code()) {
+            // 如果是
+            // 则直接将用户名设置为手机号
+            acc.setPhoneNumber(mem.getUsername());
+        } else {
+            // 如果不是，则设置手机号参数中的号码
+            if (!StringUtils.checkNotEmpty(phone)) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
+            acc.setPhoneNumber(phone);
+        }
 
         try {
             accService.addAcc(acc);
@@ -101,6 +121,117 @@ public class RestAccCtr {
         }
 
         return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 修改支付宝账号
+     * @return
+     */
+    @RequestMapping(value = "/alipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeAlipay(@RequestParam String alipay,
+                                     @RequestParam String code, // 手机验证码
+                                     HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        CashAccModel acc = accService.findByMember(memId);
+        try {
+            accService.updateAlipay(acc.getId(), alipay);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 修改银行卡号
+     * @return
+     */
+    @RequestMapping(value = "/bank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeBank(@RequestParam String bankAcc,
+                                   @RequestParam String code, // 手机验证码
+                                   HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        Integer memId = credential.getId();
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(memId.toString(), code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        CashAccModel acc = accService.findByMember(memId);
+        try {
+            accService.updateBankAcc(acc.getId(), bankAcc);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 更换手机号
+     * @return
+     */
+    @RequestMapping(value = "/phone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changePhone(@RequestParam String phone,
+                                    @RequestParam String code, // 手机验证码
+                                    HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        // 判断有没有解绑手机号
+        // 必须先解绑才允许操作
+        CashAccModel acc = accService.findByMember(memId);
+        String oldPhone = acc.getPhoneNumber();
+        if (null != oldPhone && !oldPhone.isEmpty()) {
+            return new ResponseText(ErrorCode.UNBIND_FIRST);
+        }
+
+        // 判断验证码是否正确
+        boolean result = codeService.validateSMSCode(memId.toString(), code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        // 更新手机号
+        Integer accId = accService.findByMember(memId).getId();
+        accService.updatePhone(accId, phone);
+
+        return new ResponseText();
+    }
+
+    /**
+     * 解绑手机号
+     * @return
+     */
+    @RequestMapping(value = "/phone", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText unbindPhone(@RequestParam String code, // 手机验证码
+                                    HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+
+
+        // 判断验证码是否正确
+        boolean result = codeService.validateSMSCode(memId.toString(), code);
+        if (!result) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        // 更新手机号
+        Integer accId = accService.findByMember(memId).getId();
+        accService.updatePhone(accId, "");
+
+        return new ResponseText();
     }
 
     /**

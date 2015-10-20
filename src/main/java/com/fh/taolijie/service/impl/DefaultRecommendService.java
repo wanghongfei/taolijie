@@ -134,10 +134,8 @@ public class DefaultRecommendService implements RecommendService {
         Map<Integer, SHPostCategoryModel> map = withList.stream()
                 .collect(Collectors.toMap(CategoryWithPost::getPostId, with -> new SHPostCategoryModel(with)));
 
-        System.out.println("############# " + map);
 
         recoList.forEach(reco -> {
-            System.out.println("8=************ doing match");
             reco.getShPost().setCategory(map.get(reco.getShId()));
         });
 

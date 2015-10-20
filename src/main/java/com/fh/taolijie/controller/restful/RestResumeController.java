@@ -153,13 +153,15 @@ public class RestResumeController {
                 .collect(Collectors.toList());
 
         // 查询简历对应的意向
-        List<ResumeWithIntend> withList = resumeService.findIntendForResume(idList);
+        if (!idList.isEmpty()) {
+            List<ResumeWithIntend> withList = resumeService.findIntendForResume(idList);
 
-        // 将意向设置到对应简历中
-        //List<ResumeModel> list = reQueryService.assignIntend(withList, lr.getList());
-        List<ResumeModel> list = resumeService.assignIntend(withList, lr.getList());
+            // 将意向设置到对应简历中
+            //List<ResumeModel> list = reQueryService.assignIntend(withList, lr.getList());
+            List<ResumeModel> list = resumeService.assignIntend(withList, lr.getList());
 
-        lr.setList(list);
+            lr.setList(list);
+        }
 
         return new ResponseText(lr);
 

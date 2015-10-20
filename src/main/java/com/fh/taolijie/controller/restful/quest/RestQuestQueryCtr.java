@@ -35,17 +35,32 @@ public class RestQuestQueryCtr {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText query(@RequestParam(required = false) Integer cateId,
-                                           //@RequestParam(required = false, defaultValue = "0") int rangeQuery,
-                                           @RequestParam(required = false) BigDecimal min,
-                                           @RequestParam(required = false) BigDecimal max,
+                              @RequestParam(required = false) Integer regionId,
+                              @RequestParam(required = false) Integer collegeId,
+                              @RequestParam(required = false) Integer schoolId,
+                              @RequestParam(required = false) BigDecimal min,
+                              @RequestParam(required = false) BigDecimal max,
 
-                                           @RequestParam(required = false, defaultValue = "0") int pn,
-                                           @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
-                                           HttpServletRequest req) {
+                              @RequestParam(required = false, defaultValue = "0") int pn,
+                              @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
+                              HttpServletRequest req) {
 
         pn = PageUtils.getFirstResult(pn, ps);
 
-        ListResult<QuestModel> lr = questService.findByCate(cateId, min, max, pn, ps);
+        QuestModel command = new QuestModel(pn, ps);
+        if (null != min || null != max) {
+            // 开启赏金范围查询
+            command.setAwardRangeQuery(true);
+            command.setMinAward(min);
+            command.setMaxAward(max);
+        }
+
+        command.setQuestCateId(cateId);
+        command.setRegionId(regionId);
+        command.setCollegeId(collegeId);
+        command.setSchoolId(schoolId);
+
+        ListResult<QuestModel> lr = questService.findBy(command);
 
         return new ResponseText(lr);
     }
@@ -72,12 +87,12 @@ public class RestQuestQueryCtr {
                 // 用户已经领取了任务
                 String assignStatus = assign.getStatus();
                 AssignStatus st = AssignStatus.fromCode(assignStatus);
-                if (st == AssignStatus.ASSIGNED) {
-                    // 状态为已领取
-                    model.setStatus(QuestStatus.ASSIGNED.code());
-                } else if (st == AssignStatus.DONE) {
+                if (st == AssignStatus.DONE) {
                     // 状态为已经完成
                     model.setStatus(QuestStatus.DONE.code());
+                } else {
+                    // 状态为已领取
+                    model.setStatus(QuestStatus.ASSIGNED.code());
                 }
             }
         } else {

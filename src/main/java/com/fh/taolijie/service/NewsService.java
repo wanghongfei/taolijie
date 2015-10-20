@@ -2,11 +2,8 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.NewsModel;
-import com.fh.taolijie.domain.NewsModel;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by wanghongfei on 15-3-5.

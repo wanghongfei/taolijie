@@ -2,6 +2,7 @@ package com.fh.taolijie.service.job;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.job.JobPostModel;
+import com.fh.taolijie.exception.checked.JobNotFoundException;
 import com.fh.taolijie.service.PageService;
 import com.fh.taolijie.utils.Constants;
 
@@ -33,6 +34,7 @@ public interface JobPostService extends PageService {
     ListResult<JobPostModel> getJobPostListByCategory(Integer cateId, int firstResult, int capacity);
 
     /**
+     * @deprecated
      * 查询未审核的post
      * @param firstResult
      * @param capacity
@@ -47,6 +49,12 @@ public interface JobPostService extends PageService {
      * @return
      */
     ListResult<JobPostModel> getPostListByIds(Integer... ids);
+
+    /**
+     * 根据多个id批量查询兼职信息
+     * @return
+     */
+    ListResult<JobPostModel> getInBatch(List<Integer> idList);
 
     /**
      * 查询被投诉的兼职信息，值最高的在前
@@ -149,9 +157,11 @@ public interface JobPostService extends PageService {
     boolean updateJobPost(Integer postId, JobPostModel model);
 
     /**
-     * 删除兼职帖子, 同时删除帖子下的评论
+     * 删除兼职帖子. 标记删除
      * @param postId
      * @return
      */
     boolean deleteJobPost(Integer postId);
+
+    boolean checkExist(Integer postId);
 }

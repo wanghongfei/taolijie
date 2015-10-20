@@ -9,10 +9,12 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.acc.MemberModel;
-import com.fh.taolijie.service.CollectionService;
+import com.fh.taolijie.exception.checked.JobNotFoundException;
+import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +75,9 @@ public class DefaultJobPostService implements JobPostService {
         return new ListResult<>(list, tot);
     }
 
+    /**
+     * @deprecated
+     */
     @Override
     @Transactional(readOnly = true)
     public List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity) {
@@ -86,6 +91,18 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     public ListResult<JobPostModel> getPostListByIds(Integer... ids) {
         List<JobPostModel> list = postMapper.getInBatch(Arrays.asList(ids));
+
+        return new ListResult<>(list, list.size());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<JobPostModel> getInBatch(List<Integer> idList) {
+        if (idList.isEmpty()) {
+            return new ListResult<>(new ArrayList<>(0), 0);
+        }
+
+        List<JobPostModel> list = postMapper.getInBatch(idList);
 
         return new ListResult<>(list, list.size());
     }
@@ -225,27 +242,19 @@ public class DefaultJobPostService implements JobPostService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteJobPost(Integer postId) {
-        return postMapper.setDeleted(postId, true) <= 0 ? false : true;
+        Boolean deleted = postMapper.checkDeleted(postId);
+        if (null == deleted) {
+            return false;
+        }
 
-/*        //得到所有评论
-        ReviewModel revModel = new ReviewModel(0, Integer.MAX_VALUE);
-        revModel.setPostId(postId);
+        return postMapper.setDeleted(postId, !deleted.booleanValue()) <= 0 ? false : true;
 
-        List<ReviewModel> revList = revMapper.findBy(revModel);
+    }
 
-        List<Integer> idList = revList.stream()
-                .map(ReviewModel::getId)
-                .collect(Collectors.toList());
-
-        // 批量删除评论
-        revMapper.deleteInBatch(idList);
-
-        // 删除兼职本身
-        int rows = postMapper.deleteByPrimaryKey(postId);
-
-        return rows <= 0 ? false : true;*/
-
-
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkExist(Integer postId) {
+        return postMapper.checkExist(postId);
     }
 
     @Override

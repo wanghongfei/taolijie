@@ -13,5 +13,5 @@ public class FieldCache {
      * K: 对象的全限定名
      * V: 这个对象的Field列表
      */
-    public static Map<String, List<Field>> cacheMap = new HashMap<>();
+    public static Map<String, List<Field>> cacheMap;
 }

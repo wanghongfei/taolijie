@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.acc;
 
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
@@ -38,6 +39,31 @@ public interface CashAccService {
             throws CashAccNotExistsException;
 
     /**
+     * 更新支付宝
+     * @param accId
+     * @param alipay
+     * @throws CashAccNotExistsException
+     */
+    void updateAlipay(Integer accId, String alipay)
+            throws CashAccNotExistsException;
+
+    /**
+     * 更新银行卡号
+     * @param accId
+     * @param bank
+     * @throws CashAccNotExistsException
+     */
+    void updateBankAcc(Integer accId, String bank)
+            throws CashAccNotExistsException;
+
+    /**
+     * 修改手机号
+     * @param accId
+     * @param phone
+     */
+    void updatePhone(Integer accId, String phone);
+
+    /**
      * 根据id检查现金账户是否存在
      * @param accId
      * @return
@@ -52,12 +78,18 @@ public interface CashAccService {
     boolean addAvailableMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException;
 
+    boolean addAvailableMoney(Integer accId, BigDecimal amt, AccFlow type)
+            throws CashAccNotExistsException;
+
     /**
      * 减少可用余额
      * @param accId
      * @param amt
      */
     void reduceAvailableMoney(Integer accId, BigDecimal amt)
+            throws CashAccNotExistsException, BalanceNotEnoughException;
+
+    void reduceAvailableMoney(Integer accId, BigDecimal amt, AccFlow type)
             throws CashAccNotExistsException, BalanceNotEnoughException;
 
     /**

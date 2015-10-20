@@ -85,6 +85,44 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public void updateAlipay(Integer accId, String alipay) throws CashAccNotExistsException {
+        if (!checkAccIdExists(accId)) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
+
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setAlipayAcc(alipay);
+        accMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateBankAcc(Integer accId, String bank) throws CashAccNotExistsException {
+        if (!checkAccIdExists(accId)) {
+            throw new CashAccNotExistsException("现金账户" + accId + "不存在");
+        }
+
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setBankAcc(bank);
+        accMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updatePhone(Integer accId, String phone) {
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setPhoneNumber(phone);
+
+        accMapper.updateByPrimaryKeySelective(example);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean checkAccIdExists(Integer accId) {
         return accMapper.checkAccIdExists(accId);
@@ -93,8 +131,14 @@ public class DefaultCashAccService implements CashAccService {
     @Override
     @Transactional(readOnly = false)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
+        return addAvailableMoney(accId, amt, AccFlow.CHARGE);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean addAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException {
         // 记录流水
-        flowService.recordAvaBalanceChange(accId, AccFlow.CHARGE, amt);
+        flowService.recordAvaBalanceChange(accId, type, amt);
 
         return accMapper.addAvailableAmt(accId, amt) > 0 ? true : false;
     }
@@ -103,6 +147,13 @@ public class DefaultCashAccService implements CashAccService {
     @Transactional(readOnly = false)
     public void reduceAvailableMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException, BalanceNotEnoughException {
+
+        reduceAvailableMoney(accId, amt, AccFlow.WITHDRAW);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void reduceAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException, BalanceNotEnoughException {
 
         CashAccModel acc = accMapper.selectByPrimaryKey(accId);
         if (null == acc) {
@@ -121,7 +172,7 @@ public class DefaultCashAccService implements CashAccService {
         //calculateTotalBalance(acc);
 
         // 记录流水
-        flowService.recordAvaBalanceChange(accId, AccFlow.WITHDRAW, amt.negate());
+        flowService.recordAvaBalanceChange(accId, type, amt.negate());
 
 
         // 执行更新操作

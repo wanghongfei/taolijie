@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.quest;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.taolijie.domain.Pageable;
 
 import java.util.Date;
@@ -13,8 +14,10 @@ public class FinishRequestModel extends Pageable {
 
     private String username;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date auditTime;
 
     private String description;
@@ -26,6 +29,8 @@ public class FinishRequestModel extends Pageable {
     private String memo;
 
     private String name;
+
+    private String regName;
 
     public FinishRequestModel() {}
 
@@ -275,6 +280,14 @@ public class FinishRequestModel extends Pageable {
      */
     public String getName() {
         return name;
+    }
+
+    public String getRegName() {
+        return regName;
+    }
+
+    public void setRegName(String regName) {
+        this.regName = regName;
     }
 
     /**

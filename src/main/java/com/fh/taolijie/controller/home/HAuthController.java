@@ -2,21 +2,26 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
+import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.dto.LoginDto;
+import com.fh.taolijie.dto.LoginRespDto;
 import com.fh.taolijie.dto.RegisterDto;
 import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.StringUtils;
-import com.fh.taolijie.utils.TaolijieCredential;
+import com.fh.taolijie.service.acc.impl.CodeService;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -30,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -39,10 +45,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Controller
 public class HAuthController {
+    private static Logger infoLog = LogUtils.getInfoLogger();
 
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    private CodeService codeService;
 
     /**
      * 登陆页面
@@ -58,77 +67,56 @@ public class HAuthController {
 
     /**
      * ajax登陆请求
-     *
-     * @param result
-     * @param session
-     * @param res
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    //region 登陆请求 login
-    public
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
-    String login(@Valid LoginDto loginDto,
-                 BindingResult result,
-                 @RequestParam(value = "m", required = false) String m,
-                 HttpSession session,
-                 HttpServletResponse res) throws Exception {
+    public ResponseText login(@Valid LoginDto loginDto,
+                              BindingResult result,
+                              @RequestParam(value = "m", required = false) String m,
+                              HttpServletRequest req,
+                              HttpServletResponse res) {
 
-        int cookieExpireTime = 1 * 24 * 60 * 60;//1天
 
-        /*验证用户信息*/
+        // 参数验证
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         /*验证用户是否存在*/
         try {
             accountService.login(loginDto.getUsername(), loginDto.getPassword());
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false, ErrorCode.USER_NOT_EXIST).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_NOT_EXIST);
+
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
+            return new ResponseText(ErrorCode.BAD_PASSWORD);
+
         } catch (UserInvalidException e) {
-            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_INVALID);
+
         }
 
         /*获取用户信息和用户权限*/
 
         MemberModel mem = accountService.findMember(loginDto.getUsername(), true);
         RoleModel role = mem.getRoleList().iterator().next();
-        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
+        String sid = RandomStringUtils.randomAlphabetic(30);
+        accountService.createRedisSession(mem, sid);
+
+/*        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
 
-        //验证身份的session
-        CredentialUtils.createCredential(session, credential);
-        session.setAttribute("user", mem);
-        session.setAttribute("role",role);
+        // 身份信息放到request中
+        req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
+        req.setAttribute("user", mem);
+        req.setAttribute("role", role);*/
 
-        // 用户选择了remember me
-        if (loginDto.getRememberMe().equals("true")) {
-            String token = StringUtils.randomString(15);
-            mem.setLastTokenDate(new Date());
-            mem.setAutoLoginIdentifier(token);
-            accountService.updateMember(mem);
-
-            // 将自动登陆用的token放到cookie中
-            Cookie tokenCookie = new Cookie("token", token);
-            tokenCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
-            res.addCookie(tokenCookie);
-
-            // 将用户名放到cookie中
-            // 过期时间为7天
-            Cookie nameCookie = new Cookie("un", mem.getUsername());
-            nameCookie.setMaxAge((int)TimeUnit.DAYS.toSeconds(7)); // 7天
-            res.addCookie(nameCookie);
-
-        } else {
-            // 将用户名放到cookie中
-            // 浏览器关闭就过期
-            Cookie nameCookie = new Cookie("un", mem.getUsername());
-            res.addCookie(nameCookie);
-        }
-
+        Cookie nameCookie = new Cookie("un", mem.getUsername());
+        res.addCookie(nameCookie);
+        Cookie sidCookie = new Cookie("sid", sid);
+        sidCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(5)); // 5天
+        res.addCookie(sidCookie);
 
         // 根据参数m判断是否是移动端
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
@@ -139,12 +127,10 @@ public class HAuthController {
             accountService.updateAppToken(mem.getId(), appToken);
 
             // 返回token给客户端
-            return new JsonWrapper(true, "id", mem.getId().toString(),
-                    "appToken", appToken)
-                    .getAjaxMessage();
+            return new ResponseText(new LoginRespDto(mem.getId(), appToken));
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
+        return new ResponseText(sid);
     }
 
 
@@ -210,12 +196,14 @@ public class HAuthController {
     @RequestMapping(value = "logout",method = RequestMethod.GET)
     public String logout(@RequestParam(required = false, value = "m") String m,
                          @RequestParam(required = false, value = "appToken") String appToken,
-                         HttpServletResponse resp,
-                         HttpSession session){
-        session.invalidate();
+                         HttpServletRequest req,
+                         HttpServletResponse resp) throws IOException {
 
         // 删除cookie
-        Cookie co = new Cookie("token", "");
+        Cookie co = new Cookie("sid", "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+        co = new Cookie("token", "");
         co.setMaxAge(0);
         resp.addCookie(co);
 
@@ -225,13 +213,16 @@ public class HAuthController {
 
         // 判断是否是app
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
-            Credential credential = CredentialUtils.getCredential(session);
+            Credential credential = SessionUtils.getCredential(req);
 
             // 删除appToken
             accountService.updateAppToken(credential.getId(), null);
 
-            return new JsonWrapper(true, ErrorCode.SUCCESS)
-                    .getAjaxMessage();
+            ResponseText rt = ResponseText.getSuccessResponseText();
+            String json = JSON.toJSONString(rt);
+            resp.getOutputStream().write(json.getBytes());
+            resp.getOutputStream().flush();
+            return "";
         }
 
         return "redirect:/";
@@ -253,23 +244,60 @@ public class HAuthController {
      * Method : POST AJAX
      * @return
      */
-    @RequestMapping(value = "/register", method = RequestMethod.POST,
-            produces = Constants.Produce.JSON)
-    public @ResponseBody String register(@Valid RegisterDto registerDto,
-                    BindingResult result,
-                    HttpSession session,
-                    HttpServletResponse res) {
-        int DEFAULT_INM_ID = 11;
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public @ResponseBody ResponseText register(@Valid RegisterDto registerDto,
+                                         BindingResult result,
+                                         @RequestParam Integer regType,
+                                         @RequestParam(required = false) String code,
+                                         HttpServletResponse res) {
 
         // TODO: 需要验证邮箱的唯一性
         //验证表单错误
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
+
+        RegType type = RegType.fromCode(regType);
+        if (null == type) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
         //两次密码不一致
         if (!(registerDto.getPassword().equals(registerDto.getRePassword()))) {
-            return new JsonWrapper(false, ErrorCode.RE_PASSWORD_ERROR).getAjaxMessage();
+            return new ResponseText(ErrorCode.RE_PASSWORD_ERROR);
         }
+
+        // 创建model对象
+        MemberModel mem = new MemberModel();
+        mem.setUsername(registerDto.getUsername());
+        mem.setName(registerDto.getNickname());
+        mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
+        mem.setValid(true);
+        mem.setVerified(CertiStatus.NOT_YET.code());
+        mem.setCreatedTime(new Date());
+        mem.setRegType(RegType.USERNAME.code());
+
+        // 手机号注册
+        if (type == RegType.MOBILE) {
+            // 昵称必填
+            if (null == registerDto.getNickname()) {
+                return new ResponseText(ErrorCode.BAD_USERNAME);
+            }
+
+            // 参数code和identifier不能为空字符串
+            if (!StringUtils.checkNotEmpty(code)) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+
+            // 验证验证码
+            if (!codeService.validateSMSCode(mem.getUsername(), code)) {
+                return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+            }
+
+            mem.setPhone(registerDto.getUsername());
+            mem.setRegType(RegType.MOBILE.code());
+        }
+
 
         //注册不同权限的账户
         //1.根据权限的名称找到对应的权限id,如果没有找到,返回false
@@ -291,27 +319,91 @@ public class HAuthController {
 
 
 
-        MemberModel mem = new MemberModel();
-        mem.setUsername(registerDto.getUsername());
-        mem.setPassword(CredentialUtils.sha(registerDto.getPassword()));
-        mem.setValid(true);
-        mem.setVerified(Constants.VerifyStatus.NONE.toString());
-        mem.setCreatedTime(new Date());
         mem.setRoleList(Arrays.asList(role));
-//        mem.setProfilePhotoId(DEFAULT_INM_ID); // 默认用户头像,更改直接换图片id
 
         //注册并且检查用户名是否存在
         try {
             accountService.register(mem);
         } catch (DuplicatedUsernameException e) {
-            return new JsonWrapper(false, ErrorCode.USER_EXIST)
-                    .getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_EXIST);
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS)
-                .getAjaxMessage();
+        return ResponseText.getSuccessResponseText();
     }
-    //endregion
 
 
+    /**
+     * 绑定wechat appid
+     * @return
+     */
+    @RequestMapping(value = "/register/bind/wechat", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public ResponseText bindWechatToken(@RequestParam String wechatToken,
+                                        @RequestParam Integer memId) {
+        MemberModel mem = new MemberModel();
+        mem.setId(memId);
+        mem.setWechatToken(wechatToken);
+
+        int row = accountService.updateMember(mem);
+        if (row <= 0) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+
+    /**
+     * (手机注册时使用)向指定手机号发送短信
+     * @return
+     */
+    @RequestMapping(value = "/register/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
+                                              HttpServletRequest req) {
+
+/*        String randCode = RandomStringUtils.randomAlphabetic(15);
+        if (infoLog.isDebugEnabled()) {
+            infoLog.debug("identifier generated:{}", randCode);
+        }*/
+
+        String res = codeService.genSMSValidationCode(mobile, mobile);
+        if (null == res) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 通过手机找回密码
+     * @return
+     */
+    @RequestMapping(value = "/findPwd", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @ResponseBody
+    public ResponseText findPwd(@RequestParam String mobile,
+                                @RequestParam String newPwd,
+                                @RequestParam String code,
+                                HttpServletRequest req) {
+
+        // 验证验证码
+        if (!codeService.validateSMSCode(mobile, code)) {
+            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+        }
+
+        MemberModel mem = accountService.findMember(mobile, true);
+        if (null == mem) {
+            return new ResponseText(ErrorCode.INVALID_PHONE_NUMBER);
+        }
+
+
+        // 修改密码
+        MemberModel example = new MemberModel();
+        example.setId(mem.getId());
+        example.setPassword(CredentialUtils.sha(newPwd));
+        accountService.updateMember(example);
+
+        return ResponseText.getSuccessResponseText();
+
+    }
 }

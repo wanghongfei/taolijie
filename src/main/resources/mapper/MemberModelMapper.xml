@@ -9,6 +9,9 @@
         <id column="mem_id" property="id" jdbcType="INTEGER"/>
         <result column="mem_username" property="username" jdbcType="VARCHAR"/>
         <result column="mem_password" property="password" jdbcType="VARCHAR"/>
+
+        <result column="mem_reg_type" property="regType" jdbcType="INTEGER"/>
+
         <result column="mem_email" property="email" jdbcType="VARCHAR"/>
         <result column="mem_name" property="name" jdbcType="VARCHAR"/>
         <result column="mem_gender" property="gender" jdbcType="VARCHAR"/>
@@ -25,6 +28,7 @@
         <result column="mem_auto_login_identifier" property="autoLoginIdentifier" jdbcType="VARCHAR"/>
         <result column="mem_last_post_time" property="lastPostTime" jdbcType="DATE"/>
         <result column="mem_reset_password_token" property="resetPasswordToken" jdbcType="VARCHAR"/>
+        <result column="mem_wechat_token" property="wechatToken" jdbcType="VARCHAR"/>
         <result column="mem_last_token_date" property="lastTokenDate" jdbcType="DATE"/>
         <result column="mem_school_organization" property="schoolOrganization" jdbcType="VARCHAR"/>
         <result column="mem_credits" property="credits" jdbcType="INTEGER"/>
@@ -60,6 +64,7 @@
         <result column="user_level" property="level" jdbcType="VARCHAR" />
     </resultMap>
 
+    <!-- wechat_token -->
     <sql id="Base_Column_List">
         id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender, verified AS mem_verified, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
         qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, created_time AS mem_created_time, valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
@@ -75,7 +80,9 @@
         city AS mem_city,
         region AS mem_region,
         college_name AS mem_college_name,
-        major AS mem_major
+        major AS mem_major,
+
+        reg_type AS reg_type
     </sql>
     <sql id="member_column">
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
@@ -92,7 +99,9 @@
         mem.city AS mem_city,
         mem.region AS mem_region,
         mem.college_name AS mem_college_name,
-        mem.major AS mem_major
+        mem.major AS mem_major,
+
+        mem.reg_type AS mem_reg_type
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
@@ -109,13 +118,16 @@
         mem.city AS mem_city,
         mem.region AS mem_region,
         mem.college_name AS mem_college_name,
-        mem.major AS mem_major
+        mem.major AS mem_major,
+
+        mem.reg_type AS mem_reg_type
 
     </sql>
     <sql id="less_member_column">
         mem.id AS mem_id, mem.username AS mem_username,
         mem.profile_photo_path AS mem_profile_photo_path,
-        mem.profile_photo_id AS mem_profile_photo_id
+        mem.profile_photo_id AS mem_profile_photo_id,
+        mem.reg_type AS mem_reg_type
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -159,7 +171,8 @@
         credits, student_id, block_list,
         applied_job_ids, liked_job_ids, liked_sh_ids,
         read_global_noti_ids,
-        app_token)
+        app_token,
+        reg_type)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -170,7 +183,8 @@
         #{credits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
         #{appliedJobIds,jdbcType=LONGVARCHAR}, #{likedJobIds,jdbcType=LONGVARCHAR}, #{likedShIds,jdbcType=LONGVARCHAR},
         #{readSysNotificationIds},
-        #{appToken})
+        #{appToken},
+        #{regType})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -267,6 +281,8 @@
 
             <if test="lastJobDate != null" >last_job_date,</if>
             <if test="lastShDate != null" >last_sh_date,</if>
+
+            <if test="regType != null" >reg_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -357,6 +373,8 @@
 
             <if test="lastJobDate != null" >#{lastJobDate},</if>
             <if test="lastShDate != null" >#{lastShDate},</if>
+
+            <if test="regType != null" >#{regType},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -454,6 +472,8 @@
 
             <if test="lastJobDate != null" >last_job_date = #{lastJobDate},</if>
             <if test="lastShDate != null" >last_sh_date = #{lastShDate},</if>
+
+            <if test="regType != null" >reg_type = #{regType},</if>
         </set>
         where id = #{id}
     </update>
@@ -493,7 +513,9 @@
 
         last_sh_date = #{lastShDate},
         last_job_date = #{lastJobDate},
-        app_token = #{appToken}
+        app_token = #{appToken},
+
+        reg_type = #{regType}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -535,6 +557,19 @@
             role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
         WHERE
             mem.auto_login_identifier = #{identifier}
+    </select>
+
+    <select id="selectByWechatToken" resultMap="BaseResultMap">
+        SELECT
+            <include refid="member_column_without_password" />,
+            r.*
+        FROM
+            member mem
+        INNER JOIN
+            role r ON r.rid = (SELECT role_rid FROM member_role WHERE member_id = mem.id)
+        WHERE
+            mem.wechat_token = #{token}
+
     </select>
 
     <select id="getMemberList" resultMap="BaseResultMap">

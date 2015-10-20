@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.Pageable;
@@ -116,9 +117,13 @@ public class JobPostModel extends Pageable implements Serializable {
 
 
     /* 查询用 */
+    @JsonIgnore
     private boolean orderByDate = true;
+    @JsonIgnore
     private boolean orderByVisit = false;
+    @JsonIgnore
     private boolean filterExpiredPost = true;
+
     private Integer cateId;
 
     public JobPostModel() {}

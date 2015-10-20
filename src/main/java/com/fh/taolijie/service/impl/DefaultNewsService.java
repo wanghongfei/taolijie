@@ -5,7 +5,6 @@ import com.fh.taolijie.dao.mapper.NewsModelMapper;
 import com.fh.taolijie.domain.NewsModel;
 import com.fh.taolijie.service.NewsService;
 import com.fh.taolijie.utils.CollectionUtils;
-import com.fh.taolijie.utils.ObjWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

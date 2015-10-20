@@ -68,11 +68,18 @@ public interface AccountService {
     /**
      * 更新用户信息.
      */
-    void updateMember(MemberModel model);
+    int updateMember(MemberModel model);
 
     void updateAppToken(Integer memId, String token);
 
     MemberModel selectByAppToken(String token);
+
+    /**
+     * 根据wechat token登陆
+     * @param wechat
+     * @return
+     */
+    MemberModel selectByWechatToken(String wechat);
 
 
     /**
@@ -173,4 +180,10 @@ public interface AccountService {
      * @param username
      */
     void sendResetPasswordEmail(String username);
+
+    /**
+     * 在Redis中保存session信息
+     * @param mem
+     */
+    void createRedisSession(MemberModel mem, String sid);
 }

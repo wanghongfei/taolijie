@@ -2,9 +2,6 @@ package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.BannerPicModel;
-import com.fh.taolijie.utils.ObjWrapper;
-
-import java.util.List;
 
 /**
  * 规定与banner有关的操作

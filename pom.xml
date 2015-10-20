@@ -28,14 +28,10 @@
 
         <org.aspectj-version>1.7.3</org.aspectj-version>
         <spring.version>4.1.5.RELEASE</spring.version>
-        <spring-data-jpa-version>1.7.1.RELEASE</spring-data-jpa-version>
 
-        <slf4j-version>1.7.7</slf4j-version>
-        <log4j-version>1.2.16</log4j-version>
 
         <junit-version>4.12</junit-version>
-        <mockito-version>1.10.19</mockito-version>
-        <web-security-version>2.1.1.RELEASE</web-security-version>
+        <web-security-version>2.1.3.RELEASE</web-security-version>
 
         <el-api-version>3.0.0</el-api-version>
         <el-impl-version>2.2</el-impl-version>
@@ -43,7 +39,6 @@
         <jsp-api-version>2.2</jsp-api-version>
         <jstl-version>1.2</jstl-version>
 
-        <h2db-version>1.4.182</h2db-version>
         <tomcat-jdbc>8.0.23</tomcat-jdbc>
 
         <spring-redis>1.5.0.RELEASE</spring-redis>
@@ -107,12 +102,6 @@
             <version>1.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2db-version}</version>
-            <scope>test</scope>
-        </dependency>
 
 
         <!-- Spring dependencies -->
@@ -131,6 +120,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
@@ -166,24 +161,7 @@
             <version>${aspectj-version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj-version}</version>
-        </dependency>
 
-
-
-        <!--        <dependency>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                    <version>2.2.2</version>
-                </dependency>-->
-<!--        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>-->
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
@@ -224,7 +202,7 @@
             <version>2.4</version>
         </dependency>
 
-        <!-- JPA -->
+        <!-- ORM -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
@@ -236,15 +214,18 @@
             <version>5.0.3.Final</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.6.8</version>
-        </dependency>
-        <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>1.1.0.Final</version>
         </dependency>
+
+        <!-- httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.1</version>
+        </dependency>
+
 
 
 
@@ -333,12 +314,6 @@
         </dependency>
 
 
-        <!-- 7牛 -->
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>sdk</artifactId>
-            <version>6.0.0</version>
-        </dependency>
 
         <!-- 邮件支持 -->
         <dependency>
@@ -346,26 +321,19 @@
             <artifactId>mail</artifactId>
             <version>${java-mail-version}</version>
         </dependency>
+
+
+        <!-- logging -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.4</version>
         </dependency>
-
-
-
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.10</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.4</version>
         </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
-        </dependency>
-
 
     </dependencies>
     <build>

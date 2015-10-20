@@ -6,7 +6,6 @@ import com.fh.taolijie.domain.resume.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumePostRecord;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.ObjWrapper;
 
 import java.util.List;
 
@@ -90,7 +89,7 @@ public interface ResumeService extends PageService {
      * @param ids
      * @return
      */
-    List<ResumeModel> getResumesByIds(int page, int capacity, ObjWrapper wrapper, Integer... ids);
+    List<ResumeModel> getResumesByIds(Integer... ids);
 
     /**
      * 修改简历信息

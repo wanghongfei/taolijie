@@ -20,7 +20,7 @@ public class FeeCalculator {
         float newSingle = (1 + rate / 100F) * single.floatValue();
 
         BigDecimal newFee = new BigDecimal(newSingle);
-        newFee.setScale(2);
+        newFee.setScale(2, BigDecimal.ROUND_HALF_UP);
 
         return newFee;
     }

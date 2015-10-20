@@ -3,6 +3,9 @@ package com.fh.taolijie.utils;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,6 +54,19 @@ public class StringUtils {
         return idList;
     }
 
+    public static String stream2String(InputStream in) throws IOException {
+        InputStreamReader reader = new InputStreamReader(in);
+
+        char[] cbuf = new char[100];
+        int len = -1;
+
+        StringBuilder sb = new StringBuilder();
+        while ( (len = reader.read(cbuf)) != -1 ) {
+            sb.append(cbuf, 0, len);
+        }
+
+        return sb.toString();
+    }
     /**
      * 构造 {@code SELECT XXX FROM XXX WHERE XXX LIKE '%XXX%' AND XXX ORDER By XXX}语句
      * @param entityName
@@ -191,6 +207,15 @@ public class StringUtils {
         }
 
         return sb.toString();
+    }
+
+    public static boolean isStaticResource(String url) {
+        return url.startsWith("/admin")
+                || url.startsWith("/images")
+                || url.startsWith("/scripts")
+                || url.startsWith("/styles")
+                || url.startsWith("/fonts")
+                || url.startsWith("/about");
     }
 
     public static String[] splitIds(String ids) {

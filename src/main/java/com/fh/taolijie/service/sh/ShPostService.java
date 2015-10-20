@@ -53,6 +53,8 @@ public interface ShPostService extends PageService {
      */
     ListResult<SHPostModel> filterQuery(SHPostModel model);
 
+    ListResult<SHPostModel> getInBatch(List<Integer> idList);
+
     /**
      * 查询还未审核的二手信息
      * @return
@@ -105,7 +107,7 @@ public interface ShPostService extends PageService {
     SHPostModel findPost(Integer postId);
 
     /**
-     * 删除一个帖子
+     * 删除一个帖子. 将删除标记取反
      * @return
      */
     boolean deletePost(Integer postId);
@@ -124,4 +126,6 @@ public interface ShPostService extends PageService {
      * @param cateId
      */
     void changeCategory(Integer postId, Integer cateId);
+
+    boolean checkExist(Integer postId);
 }

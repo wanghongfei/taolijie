@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="ju" uri="JsonUtils" %>
 <%--
   Created by IntelliJ IDEA.
   User: wynfrith
@@ -96,14 +97,14 @@
             <div class="form-group" style="position: relative">
                 <label for="">兼职标题<span class="asterisk-red">*</span></label>
                 <input type="text" class="form-control large-input" name="title" placeholder="20字以内"
-                       value="${job.title}" ng-model="job.title" ng-maxlength="20"
+                       value="" ng-model="job.title" ng-maxlength="20"
                        required ng-focus>
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.title, 'required')">请输入兼职标题</span>
                 <span class="err-span ng-cloak" ng-cloak ng-show="check(JobPostForm.title, 'maxlength')">长度要在20字以内</span>
             </div>
             <div class="form-group">
                 <label for="">选择分类<span class="asterisk-red">*</span></label>
-                <select name="jobPostCategoryId" class="form-control"  required ng-model="job.jobPostCategoryId" ng-focus >
+                <select name="jobPostCategoryId" class="form-control" ng-init="job.jobPostCategoryId = '${job.jobPostCategoryId}'" required ng-model="job.jobPostCategoryId" ng-focus >
                     <option value="" style="display: none">选择分类</option>
                     <c:forEach items="${cates}" var="cate">
                         <option value="${cate.id}" ${job.jobPostCategoryId == cate.id ? 'selected="selected"' : ''}>${cate.name}</option>
@@ -247,7 +248,31 @@
     </div>
 </div>
 
+
 <jsp:include page="../block/user-footer.jsp"></jsp:include>
+<script>
+    var job = JSON.parse(escapeSpecialChars('${ju:toJson(job)}'));
+    if(job){
+        var j = {
+            provice:job.provice,
+            region:job.region,
+            salaryUnit:job.salaryUnit,
+            jobPostCategoryId:job.jobPostCategoryId,
+            expiredTime:job.expiredTime,
+            title:job.title,
+            wage:job.wage,
+            timeToPay:job.timeToPay,
+            workTime:job.workTime,
+            workPlace:job.workPlace,
+            jobDetail:job.jobDetail,
+            jobDescription:job.jobDescription,
+            contact:job.contact,
+            contactPhone:job.contactPhone,
+            contactQq:job.contactQq,
+        }
+        job = j;
+    }
+</script>
 <script src="/scripts/picker.js"></script>
 <script src="/scripts/picker.date.js"></script>
 <script src="/scripts/zh_CN.js"></script>

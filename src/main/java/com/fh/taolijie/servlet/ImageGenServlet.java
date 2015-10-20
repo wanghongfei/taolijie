@@ -1,9 +1,15 @@
 package com.fh.taolijie.servlet;
 
+import cn.fh.security.credential.Credential;
+import com.alibaba.fastjson.JSON;
+import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.sh.ShPostService;
+import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -85,12 +91,28 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
             throws ServletException, java.io.IOException {
         String job = req.getParameter("jobId");
         String sh = req.getParameter("shId");
+        String mId = req.getParameter("mId");
 
         String phoneNumber = null;
         if (null != job) {
             phoneNumber = getJobPhone(Integer.valueOf(job));
         } else if (null != sh) {
             phoneNumber = getShNumber(Integer.valueOf(sh));
+        } else if (null != mId) {
+            // 创建检查
+            Credential credential = SessionUtils.getCredential(req);
+            if (null == credential) {
+                ResponseText rt = new ResponseText(ErrorCode.NOT_LOGGED_IN);
+                String json = JSON.toJSONString(rt);
+                resp.getOutputStream().write(json.getBytes());
+                resp.getOutputStream().close();
+
+                return;
+            }
+
+            Integer id = credential.getId();
+
+            phoneNumber = getWebCode(id);
         } else {
             return;
         }
@@ -98,7 +120,11 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
 
 
         // 定义图像buffer
-        BufferedImage buffImg = new BufferedImage(width, height,
+        int wd = width;
+        if (null != mId) {
+            wd = width / 2 + 10;
+        }
+        BufferedImage buffImg = new BufferedImage(wd, height,
                 BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffImg.createGraphics();
 
@@ -170,5 +196,15 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
         ShPostService shService = (ShPostService) applicationContext.getBean("defaultShPostService");
         SHPostModel sh = shService.findPost(shId);
         return sh.getContactPhone();
+    }
+
+    /**
+     * 生成一个web页面的验证码
+     * @param memId
+     * @return
+     */
+    private String getWebCode(Integer memId) {
+        CodeService codeService = (CodeService) applicationContext.getBean("codeService");
+        return codeService.genWebValidationCode(memId.toString());
     }
 }

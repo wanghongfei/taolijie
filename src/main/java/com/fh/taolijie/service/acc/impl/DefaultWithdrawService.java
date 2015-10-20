@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -70,6 +71,9 @@ public class DefaultWithdrawService implements WithdrawService {
             throw new BalanceNotEnoughException("");
         }
 
+        // 减少账户余额
+        accService.reduceAvailableMoney(acc.getId(), model.getAmount(), AccFlow.WITHDRAW);
+
         // 设置冗余字段
         Date now = new Date();
         model.setUsername(acc.getUsername());
@@ -99,10 +103,10 @@ public class DefaultWithdrawService implements WithdrawService {
             throw new WithdrawNotExistsException("");
         }
 
-        if (status == WithdrawStatus.DONE) {
-            // 如果状态是已派现
-            // 则增加账户余额
-            accService.reduceAvailableMoney(model.getAccId(), model.getAmount());
+        if (status == WithdrawStatus.FAILED) {
+            // 如果状态是失败
+            // 则添加账户余额
+            accService.addAvailableMoney(model.getAccId(), model.getAmount(), AccFlow.REFUND);
         }
 
         WithdrawApplyModel example = new WithdrawApplyModel();

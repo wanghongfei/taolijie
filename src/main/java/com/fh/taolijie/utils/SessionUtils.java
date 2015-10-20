@@ -12,12 +12,7 @@ public class SessionUtils {
     private SessionUtils() {}
 
     public static Credential getCredential(HttpServletRequest req) {
-        HttpSession session = req.getSession(false);
-        if (null == session) {
-            return null;
-        }
-
-        return (Credential) session.getAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE);
+        return (Credential) req.getAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE);
     }
 
     /**

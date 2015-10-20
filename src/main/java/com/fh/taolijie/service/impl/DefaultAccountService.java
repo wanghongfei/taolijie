@@ -3,6 +3,7 @@ package com.fh.taolijie.service.impl;
 import cn.fh.security.credential.AuthLogic;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
@@ -17,6 +18,11 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +46,9 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Autowired
     RoleModelMapper roleMapper;
 
-/*    @Autowired
-    RedisTemplate redisTemplate;*/
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    StringRedisTemplate rt;
 
     @Autowired(required = false)
     Mail mail;
@@ -139,8 +146,8 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateMember(MemberModel model) {
-        memMapper.updateByPrimaryKeySelective(model);
+    public int updateMember(MemberModel model) {
+        return memMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
@@ -152,6 +159,11 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Override
     public MemberModel selectByAppToken(String token) {
         return memMapper.selectByAppToken(token);
+    }
+
+    @Override
+    public MemberModel selectByWechatToken(String wechat) {
+        return memMapper.selectByWechatToken(wechat);
     }
 
     @Override
@@ -301,6 +313,24 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
         // send email
         mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
+    }
+
+    @Override
+    public void createRedisSession(MemberModel mem, String sid) {
+        rt.execute(new SessionCallback<Object>() {
+            @Override
+            public  Object execute(RedisOperations opt) throws DataAccessException {
+                opt.multi();
+
+                String key = RedisKey.SESSION.toString() + sid;
+                opt.opsForHash().put(key, "id", mem.getId().toString());
+                opt.opsForHash().put(key, "username", mem.getUsername());
+                opt.opsForHash().put(key, "role", mem.getRoleList().get(0).getRolename());
+                opt.expire(key, 5, TimeUnit.DAYS); // 5天
+
+                return opt.exec();
+            }
+        });
     }
 
     @Override

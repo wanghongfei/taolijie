@@ -7,6 +7,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
@@ -22,14 +23,15 @@ import java.util.List;
 public class SMSTest {
     @Test
     public void sendSMS() throws IOException {
-        HttpClient client = new DefaultHttpClient();
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        HttpClient client = builder.build();
         HttpPost post = new HttpPost("http://api.weimi.cc/2/sms/send.html");
 
         List<NameValuePair> parmList = new ArrayList<>();
         parmList.add(new BasicNameValuePair("uid", "Ctpc2fjQKMq3"));
         parmList.add(new BasicNameValuePair("pas", "7yaz2zeb"));
-        parmList.add(new BasicNameValuePair("mob", "18518369058"));
-        parmList.add(new BasicNameValuePair("cid", "d9Z7uIKCYqhQ"));
+        parmList.add(new BasicNameValuePair("mob", "18369905318,13287096323,15653325871,18369905893,15689093197"));
+        parmList.add(new BasicNameValuePair("cid", "vJWD1eXBm0AM"));
         parmList.add(new BasicNameValuePair("p1", "wanghongfei"));
         parmList.add(new BasicNameValuePair("type", "json"));
 
