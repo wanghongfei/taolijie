@@ -68,7 +68,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
     StringRedisTemplate rt;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void submitRequest(FinishRequestModel model)
             throws QuestNotAssignedException, RequestRepeatedException {
 
@@ -144,7 +144,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
      * @param memo
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer requestId, RequestStatus status, String memo)
             throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException {
 

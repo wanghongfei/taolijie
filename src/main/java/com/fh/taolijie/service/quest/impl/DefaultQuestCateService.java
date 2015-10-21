@@ -50,7 +50,7 @@ public class DefaultQuestCateService implements QuestCateService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int add(QuestCategoryModel model) {
         cateMapper.insertSelective(model);
 
@@ -58,13 +58,13 @@ public class DefaultQuestCateService implements QuestCateService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int update(QuestCategoryModel model) {
         return cateMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void delete(Integer id) throws CategoryNotEmptyException{
         if (cateMapper.checkCateEmpty(id)) {
             throw new CategoryNotEmptyException("");

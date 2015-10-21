@@ -50,7 +50,7 @@ public class DefaultWithdrawService implements WithdrawService {
      * @param model
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addWithdraw(WithdrawApplyModel model, String dealPwd)
             throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException {
 
@@ -94,7 +94,7 @@ public class DefaultWithdrawService implements WithdrawService {
      * @param memo 审核备注
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateStatus(Integer withId, WithdrawStatus status, String memo)
             throws WithdrawNotExistsException, CashAccNotExistsException, BalanceNotEnoughException {
 

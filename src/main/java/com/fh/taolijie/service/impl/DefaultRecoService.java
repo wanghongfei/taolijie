@@ -48,7 +48,6 @@ public class DefaultRecoService implements RecoService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public int add(RecoPostModel model) throws PostNotFoundException, RecoRepeatedException {
         Integer postId = model.getPostId();
 

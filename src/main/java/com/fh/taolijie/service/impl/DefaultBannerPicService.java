@@ -29,7 +29,7 @@ public class DefaultBannerPicService implements BannerPicService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateBanner(Integer banId, BannerPicModel model) {
         model.setId(banId);
 
@@ -37,13 +37,13 @@ public class DefaultBannerPicService implements BannerPicService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteBanner(Integer id) {
         return banMapper.deleteByPrimaryKey(id) <= 0 ? false : true;
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int addBanner(BannerPicModel model) {
         return banMapper.insert(model);
     }

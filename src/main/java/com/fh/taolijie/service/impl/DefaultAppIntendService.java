@@ -36,19 +36,19 @@ public class DefaultAppIntendService implements ApplicationIntendService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addIntend(ApplicationIntendModel model) {
         aiMapper.insert(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteIntend(ApplicationIntendModel model) {
         aiMapper.delete(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteByResume(Integer resumeId) {
         aiMapper.deleteByResumeId(resumeId);
     }

@@ -153,19 +153,19 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addNotification(PrivateNotificationModel model) {
         priMapper.insertSelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addNotification(SysNotificationModel model) {
         sysMapper.insertSelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addCommentNotification(Integer memberId, String title, String content, Integer postId, String postType) {
         // 创建通知实体
         PrivateNotificationModel priNoti = new PrivateNotificationModel();
@@ -184,7 +184,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void markPriAsRead(Integer sysId) {
         PrivateNotificationModel model = new PrivateNotificationModel();
         model.setId(sysId);
@@ -194,13 +194,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void markPriAsReadInBatch(List<Integer> priNotiList) {
         priMapper.markAsReadInBatch(priNotiList);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void markSysAsRead(Integer memId, Integer notiId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String ids = mem.getReadSysNotificationIds();
@@ -213,7 +213,7 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void markSysAsReadInBatch(Integer memId, List<Integer> idList) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String ids = mem.getReadSysNotificationIds();
@@ -227,13 +227,13 @@ public class DefaultNotificationService implements NotificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteSysNotification(Integer sysId) {
         sysMapper.deleteByPrimaryKey(sysId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deletePriNotification(Integer priId) {
         priMapper.deleteByPrimaryKey(priId);
     }

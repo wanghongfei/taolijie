@@ -43,13 +43,13 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
         return new ListResult<>(list, list.size());
     }
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addCategory(JobPostCategoryModel model) {
         cateMapper.insertSelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteCategory(Integer cateId) throws CategoryNotEmptyException {
         if (false == cateMapper.isCategoryEmpty(cateId)) {
             throw new CategoryNotEmptyException();
@@ -61,7 +61,7 @@ public class DefaultJobPostCategoryService implements JobPostCateService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateCategory(Integer cateId, JobPostCategoryModel model) {
         model.setId(cateId);
         return cateMapper.updateByPrimaryKey(model) <= 0 ? false : true;

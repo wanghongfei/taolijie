@@ -49,7 +49,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int add(RecommendedPostModel model) {
         model.setApplyTime(new Date());
         recoMapper.insertSelective(model);
@@ -58,13 +58,13 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteById(Integer recommendId) {
         recoMapper.deleteByPrimaryKey(recommendId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateByIdSelective(RecommendedPostModel model) {
         recoMapper.updateByPrimaryKeySelective(model);
     }

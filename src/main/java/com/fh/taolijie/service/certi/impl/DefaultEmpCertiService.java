@@ -27,7 +27,7 @@ public class DefaultEmpCertiService implements EmpCertiService {
     private MemberModelMapper memMapper;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addApplication(EmpCertiModel model) {
 
 /*        // 检查是否存在该用户申请的且状态为通过的记录
@@ -50,7 +50,7 @@ public class DefaultEmpCertiService implements EmpCertiService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo) {
         if (status == CertiStatus.DONE) {
             // 认证通过

@@ -33,7 +33,7 @@ public class DefaultChargeService implements ChargeService {
     private CashAccService accService;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void chargeApply(PayOrderModel model)
             throws CashAccNotExistsException {
 
@@ -57,7 +57,7 @@ public class DefaultChargeService implements ChargeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateStatus(Integer orderId, OrderStatus status, String memo)
             throws CashAccNotExistsException {
 

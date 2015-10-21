@@ -40,7 +40,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int deleteReplyByReview(Integer resumeId) {
         return reMapper.deleteReplyByReviewId(resumeId);
     }
@@ -52,19 +52,19 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public Integer addReview(ReviewModel model) {
         return reMapper.insert(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addComment(ReviewModel model) {
         reMapper.insertSelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteReview(Integer reviewId) {
         int row = reMapper.deleteByPrimaryKey(reviewId);
 
@@ -72,7 +72,7 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateReview(Integer reviewId, ReviewModel model) {
         int row = reMapper.updateByPrimaryKeySelective(model);
 

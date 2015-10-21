@@ -31,7 +31,7 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
 
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteCategory(Integer cateId) throws CascadeDeleteException {
         if (false == cateMapper.isCategoryEmpty(cateId)) {
             throw new CascadeDeleteException("category is not empty!");
@@ -54,13 +54,13 @@ public class DefaultShPostCategoryService implements ShPostCategoryService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateCategory(SHPostCategoryModel model) {
         cateMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addCategory(SHPostCategoryModel model) {
         cateMapper.insertSelective(model);
     }
