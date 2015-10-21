@@ -34,11 +34,11 @@ public class RestRecoUCtr {
     private RecoService reService;
 
     /**
-     * 申请一条推荐
+     * 申请一条置顶推荐
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText add(@RequestParam int type,
+    @RequestMapping(value = "/top", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText addTop(@RequestParam int type,
                             @RequestParam Integer postId,
                             @RequestParam int hours,
                             @RequestParam(required = false) Integer index,
@@ -78,6 +78,40 @@ public class RestRecoUCtr {
             return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
 
         } catch (CashAccNotExistsException ex) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 申请一条tag推荐
+     * @return
+     */
+    @RequestMapping(value = "/tag", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText addTag(@RequestParam Integer type,
+                               @RequestParam Integer postId,
+                               @RequestParam int hours,
+                               @RequestParam(required = false) Integer index,
+                               HttpServletRequest req) {
+
+        // 检查type参数合法性
+        RecoType rt = RecoType.fromCode(type);
+        if (null == rt || rt != RecoType.QUEST) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        try {
+            reService.addTag(postId, rt, hours);
+
+        } catch (PostNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (BalanceNotEnoughException e) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
         }

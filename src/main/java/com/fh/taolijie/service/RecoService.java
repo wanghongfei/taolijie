@@ -1,6 +1,7 @@
 package com.fh.taolijie.service;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.exception.checked.RecoRepeatedException;
@@ -14,8 +15,19 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 public interface RecoService {
     ListResult<RecoPostModel> findBy(RecoPostModel example);
 
+    /**
+     * 添加置顶推荐
+     */
     int add(RecoPostModel model)
             throws PostNotFoundException, RecoRepeatedException, CashAccNotExistsException, BalanceNotEnoughException;
+
+    /**
+     * 添加标签推荐.
+     * @param postType 目前仅支持 RecoType.QUEST
+     * @return
+     */
+    int addTag(Integer postId, RecoType postType, int hours)
+            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException;
 
     int update(RecoPostModel model);
 

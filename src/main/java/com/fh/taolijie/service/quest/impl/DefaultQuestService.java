@@ -216,6 +216,16 @@ public class DefaultQuestService implements QuestService {
         qsMapper.insertInBatch(list);
     }
 
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int updateTagExpireTime(Integer postId, Date newDate) {
+        QuestModel example = new QuestModel();
+        example.setId(postId);
+        example.setTagExpireTime(newDate);
+
+        return questMapper.updateByPrimaryKeySelective(example);
+    }
+
     /**
      * 领取任务。
      * 需要行锁。

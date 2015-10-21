@@ -1,8 +1,10 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.constant.acc.AccFlow;
+import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.RecoPostModelMapper;
 import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
 import com.fh.taolijie.domain.RecoPostModel;
@@ -19,11 +21,13 @@ import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.sh.ShPostService;
+import com.fh.taolijie.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +41,9 @@ public class DefaultRecoService implements RecoService {
 
     @Autowired
     private JobPostService jobService;
+
+    @Autowired
+    private JobPostModelMapper jobMapper;
 
     @Autowired
     private ShPostService shService;
@@ -130,14 +137,57 @@ public class DefaultRecoService implements RecoService {
         return model.getId();
     }
 
+    /**
+     * 标签推荐
+     */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int addTag(Integer postId, RecoType postType, int hours)
+            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException {
+
+        Date newDate = null;
+        Integer memId = null;
+
+        if (postType == RecoType.QUEST) {
+            // 检查帖子存在性
+            QuestModel quest = questService.findById(postId);
+            if (null == quest) {
+                throw new PostNotFoundException();
+            }
+            memId = quest.getMemberId();
+
+            // 计算新过期时间
+            newDate = TimeUtil.calculateDate(quest.getTagExpireTime(), Calendar.HOUR_OF_DAY, hours);
+        } else {
+            throw new IllegalStateException("invalid postType!");
+        }
+
+
+        // 扣钱
+        // 计算钱数
+        SysConfigModel sys = sysMapper.selectByPrimaryKey(1);
+        BigDecimal singleFee = sys.getTagFee();
+        BigDecimal finalFee = singleFee.multiply(new BigDecimal(hours));
+
+        // 从现金账户中扣除
+        Integer accId = accService.findIdByMember(memId);
+        accService.reduceAvailableMoney(accId, finalFee, AccFlow.CONSUME);
+
+
+        // 更新tag过期时间
+        questService.updateTagExpireTime(postId, newDate);
+
+        return 0;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int update(RecoPostModel model) {
         return reMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int delete(Integer id) {
         return reMapper.deleteByPrimaryKey(id);
     }

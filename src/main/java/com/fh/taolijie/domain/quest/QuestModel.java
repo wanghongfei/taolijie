@@ -64,6 +64,8 @@ public class QuestModel extends Pageable {
 
     private Boolean offline;
 
+    private Date tagExpireTime;
+
     /**
      * 商家在我的发布中看到的状态
      */
@@ -611,6 +613,14 @@ public class QuestModel extends Pageable {
 
     public void setEmpStatus(Integer empStatus) {
         this.empStatus = empStatus;
+    }
+
+    public Date getTagExpireTime() {
+        return tagExpireTime;
+    }
+
+    public void setTagExpireTime(Date tagExpireTime) {
+        this.tagExpireTime = tagExpireTime;
     }
 
     public void setOffline(Boolean offline) {

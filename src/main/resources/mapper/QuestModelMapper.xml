@@ -23,6 +23,7 @@
         <result column="qu_member_id" property="memberId" jdbcType="INTEGER"/>
 
         <result column="qu_emp_status" property="empStatus" jdbcType="INTEGER"/>
+        <result column="qu_tag_expire_time" property="tagExpireTime" jdbcType="TIMESTAMP"/>
 
         <result column="qu_contact_name" property="contactName" jdbcType="VARCHAR"/>
         <result column="qu_contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
@@ -64,6 +65,7 @@
         qu.offline,
 
         qu.emp_status,
+        qu.tag_expire_time,
 
         qu.province_id,
         qu.city_id,
@@ -108,7 +110,8 @@
         school_id,
         final_award,
         member_id,
-        emp_status
+        emp_status,
+        tag_expire_time
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -119,7 +122,8 @@
         #{provinceId}, #{cityId}, #{regionId}, #{collegeId}, #{schoolId},
         #{finalAward},
         #{memberId},
-        #{empStatus})
+        #{empStatus},
+        #{tagExpireTime})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -207,6 +211,9 @@
             <if test="empStatus != null">
                 emp_status,
             </if>
+            <if test="tagExpireTime != null">
+                tag_expire_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -287,6 +294,9 @@
             </if>
             <if test="empStatus != null">
                 #{empStatus},
+            </if>
+            <if test="tagExpireTime != null">
+                #{tagExpireTime},
             </if>
         </trim>
     </insert>
@@ -373,6 +383,9 @@
             <if test="empStatus != null">
                 emp_status = #{empStatus},
             </if>
+            <if test="tagExpireTime != null">
+                tag_expire_time = #{tagExpireTime},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -408,7 +421,8 @@
         final_award = #{finalAward},
         member_id = #{memberId},
 
-        emp_status = #{empStatus}
+        emp_status = #{empStatus},
+        tag_expire_time = #{tagExpireTime}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -545,6 +559,9 @@
             <if test="empStatus != null">
                 AND qu.emp_status = #{empStatus}
             </if>
+            <if test="empStatus != null">
+                AND qu.tag_expire_time = #{tagExpireTime}
+            </if>
 
         </where>
 
@@ -656,6 +673,10 @@
             </if>
             <if test="empStatus != null">
                 AND qu.emp_status = #{empStatus}
+            </if>
+
+            <if test="empStatus != null">
+                AND qu.tag_expire_time = #{tagExpireTime}
             </if>
 
         </where>

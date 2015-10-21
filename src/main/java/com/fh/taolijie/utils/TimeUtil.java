@@ -39,14 +39,17 @@ public class TimeUtil {
     }
 
     /**
-     * 计算指定日期之前或之后的日期
-     * @param date
+     * 计算指定日期之前或之后的日期.
+     * @param date 传入null表示以当前时间为起点
      * @param unit
      * @param value
      * @return
      */
     public static Date calculateDate(Date date, int unit, int value) {
         Calendar calendar = Calendar.getInstance();
+        if (null == date) {
+            date = new Date();
+        }
         calendar.setTime(date);
         calendar.add(unit, value);
 

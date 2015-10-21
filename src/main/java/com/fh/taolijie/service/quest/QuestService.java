@@ -11,6 +11,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +38,14 @@ public interface QuestService {
      * @param list
      */
     void addQuestSchoolRel(List<QuestSchRelModel> list);
+
+    /**
+     * 更新标签过期时间
+     * @param postId
+     * @param newDate
+     * @return 修改的结果数
+     */
+    int updateTagExpireTime(Integer postId, Date newDate);
 
     /**
      * 用户领取任务
