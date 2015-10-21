@@ -198,8 +198,8 @@
             <if test="auditTime != null">
                 AND audit_time = #{auditTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="expiredTime != null">
-                AND expired_time = #{expiredTime,jdbcType=TIMESTAMP}
+            <if test="expiredTime != null or expiredTime == null">
+                AND expired_time >= now()
             </if>
             <if test="orderIndex != null">
                 AND order_index = #{orderIndex,jdbcType=INTEGER}
@@ -211,14 +211,10 @@
                 AND title = #{title}
             </if>
 
+
         </where>
         ORDER BY
-            <if test="orderByIndex == true">
-                order_index ASC
-            </if>
-            <if test="orderByTime == true">
-                created_time DESC
-            </if>
+            created_time DESC
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>

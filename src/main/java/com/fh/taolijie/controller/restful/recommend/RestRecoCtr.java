@@ -60,7 +60,7 @@ public class RestRecoCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
         cmd.setType(rt.code());
-        cmd.setValid(true);
+        //cmd.setValid(true);
 
         // 查询推荐索引表
         ListResult<RecoPostModel> postLr = reService.findBy(cmd);
