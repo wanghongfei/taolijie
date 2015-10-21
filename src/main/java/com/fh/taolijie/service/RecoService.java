@@ -4,6 +4,8 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.exception.checked.RecoRepeatedException;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 
 /**
  * 与推荐相关的业务接口
@@ -13,7 +15,7 @@ public interface RecoService {
     ListResult<RecoPostModel> findBy(RecoPostModel example);
 
     int add(RecoPostModel model)
-            throws PostNotFoundException, RecoRepeatedException;
+            throws PostNotFoundException, RecoRepeatedException, CashAccNotExistsException, BalanceNotEnoughException;
 
     int update(RecoPostModel model);
 

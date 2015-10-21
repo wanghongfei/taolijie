@@ -109,6 +109,13 @@ public interface CashAccService {
     CashAccModel findByMember(Integer memId);
 
     /**
+     * 根据用户id查询现金账户id
+     * @param memId
+     * @return
+     */
+    Integer findIdByMember(Integer memId);
+
+    /**
      * 根据账户id查找
      * @param accId
      * @return

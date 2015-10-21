@@ -323,4 +323,13 @@
         WHERE
             casha.member_id = #{memId}
     </select>
+
+    <select id="findIdByMemberId" resultType="int">
+        SELECT
+            id
+        FROM
+            cash_acc
+        WHERE
+            member_id = #{memId}
+    </select>
 </mapper>

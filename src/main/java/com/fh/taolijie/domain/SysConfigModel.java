@@ -33,6 +33,22 @@ public class SysConfigModel {
         this.auditFee = auditFee;
     }
 
+    public BigDecimal getTopFee() {
+        return topFee;
+    }
+
+    public void setTopFee(BigDecimal topFee) {
+        this.topFee = topFee;
+    }
+
+    public BigDecimal getTagFee() {
+        return tagFee;
+    }
+
+    public void setTagFee(BigDecimal tagFee) {
+        this.tagFee = tagFee;
+    }
+
     public void setQuestFeeRate(Integer questFeeRate) {
         this.questFeeRate = questFeeRate;
     }

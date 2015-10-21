@@ -262,7 +262,9 @@
 
     <select id="checkExist" resultType="boolean">
         SELECT EXISTS (
-            SELECT 1 FROM reco_post WHERE post_id = #{postId} AND type = #{type}
+        <![CDATA[
+            SELECT 1 FROM reco_post WHERE post_id = #{postId} AND type = #{type} AND expired_time >= now()
+        ]]>
         )
     </select>
 </mapper>

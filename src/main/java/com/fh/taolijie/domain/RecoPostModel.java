@@ -35,6 +35,8 @@ public class RecoPostModel extends Pageable {
     private Boolean orderByIndex = true;
     @JsonIgnore
     private Boolean orderByTime = false;
+    @JsonIgnore
+    private int hours;
 
     public RecoPostModel(int pn, int ps) {
         super(pn, ps);
@@ -150,6 +152,14 @@ public class RecoPostModel extends Pageable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
     }
 
     public void setValid(Boolean valid) {

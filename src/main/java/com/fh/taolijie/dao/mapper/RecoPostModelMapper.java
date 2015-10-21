@@ -33,7 +33,7 @@ public interface RecoPostModelMapper {
     long countFindBy(RecoPostModel example);
 
     /**
-     * 检查是否存在postId, type相同的推荐申请
+     * 检查是否存在postId, type相同的，且没有过期的申请
      * @param postId
      * @param type
      * @return

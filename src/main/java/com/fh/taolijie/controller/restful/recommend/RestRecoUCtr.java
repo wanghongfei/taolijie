@@ -8,6 +8,8 @@ import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.exception.checked.RecoRepeatedException;
+import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
+import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -54,6 +56,7 @@ public class RestRecoUCtr {
         model.setType(rt.code());
         model.setPostId(postId);
         model.setMemberId(credential.getId());
+        model.setHours(hours);
         if (null != index) {
             model.setOrderIndex(index);
         }
@@ -70,6 +73,13 @@ public class RestRecoUCtr {
 
         } catch (RecoRepeatedException e) {
             return new ResponseText(ErrorCode.REPEAT);
+
+        } catch (BalanceNotEnoughException ex) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException ex) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
         }
 
         return ResponseText.getSuccessResponseText();
