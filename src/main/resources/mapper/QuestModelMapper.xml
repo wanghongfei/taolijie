@@ -22,6 +22,7 @@
 
         <result column="qu_member_id" property="memberId" jdbcType="INTEGER"/>
 
+        <result column="qu_emp_status" property="empStatus" jdbcType="INTEGER"/>
 
         <result column="qu_contact_name" property="contactName" jdbcType="VARCHAR"/>
         <result column="qu_contact_phone" property="contactPhone" jdbcType="VARCHAR"/>
@@ -61,6 +62,8 @@
         qu.url,
         qu.memo,
         qu.offline,
+
+        qu.emp_status,
 
         qu.province_id,
         qu.city_id,
@@ -104,7 +107,8 @@
         college_id,
         school_id,
         final_award,
-        member_id
+        member_id,
+        emp_status
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -114,7 +118,8 @@
         #{memo,jdbcType=VARCHAR}, #{offline,jdbcType=BIT},
         #{provinceId}, #{cityId}, #{regionId}, #{collegeId}, #{schoolId},
         #{finalAward},
-        #{memberId})
+        #{memberId},
+        #{empStatus})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -199,6 +204,9 @@
             <if test="memberId != null">
                 member_id,
             </if>
+            <if test="empStatus != null">
+                emp_status,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -276,6 +284,9 @@
 
             <if test="memberId != null">
                 #{memberId},
+            </if>
+            <if test="empStatus != null">
+                #{empStatus},
             </if>
         </trim>
     </insert>
@@ -359,6 +370,9 @@
             <if test="memberId != null">
                 member_id = #{memberId},
             </if>
+            <if test="empStatus != null">
+                emp_status = #{empStatus},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -392,7 +406,9 @@
         college_id = #{collegeId},
         school_id = #{schoolId},
         final_award = #{finalAward},
-        member_id = #{memberId}
+        member_id = #{memberId},
+
+        emp_status = #{empStatus}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -526,6 +542,9 @@
             <if test="memberId != null">
                 AND qu.member_id = #{memberId}
             </if>
+            <if test="empStatus != null">
+                AND qu.emp_status = #{empStatus}
+            </if>
 
         </where>
 
@@ -634,6 +653,9 @@
 
             <if test="memberId != null">
                 AND qu.member_id = #{memberId}
+            </if>
+            <if test="empStatus != null">
+                AND qu.emp_status = #{empStatus}
             </if>
 
         </where>
