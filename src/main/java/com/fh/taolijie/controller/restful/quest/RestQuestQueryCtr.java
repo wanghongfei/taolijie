@@ -41,6 +41,7 @@ public class RestQuestQueryCtr {
                               @RequestParam(required = false) Integer schoolId,
                               @RequestParam(required = false) BigDecimal min,
                               @RequestParam(required = false) BigDecimal max,
+                              @RequestParam(required = false) Integer empStatus, // 只有管理员才能使用该参数
 
                               @RequestParam(required = false, defaultValue = "0") int pn,
                               @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
@@ -62,6 +63,23 @@ public class RestQuestQueryCtr {
         command.setSchoolId(schoolId);
 
         command.setEmpStatus(EmpQuestStatus.DONE.code());
+
+        // 判断是不是管理员调用
+        Credential credential = SessionUtils.getCredential(req);
+        if (null != credential && SessionUtils.isAdmin(credential)) {
+            // 如果是，则允许查询所有状态的任务
+            // 先检查empStatus参数合法性
+            if (null != empStatus) {
+                EmpQuestStatus status = EmpQuestStatus.fromCode(empStatus);
+                if (null == status) {
+                    return new ResponseText(ErrorCode.INVALID_PARAMETER);
+                }
+
+            }
+
+            command.setEmpStatus(empStatus);
+        }
+
 
         ListResult<QuestModel> lr = questService.findBy(command);
 
