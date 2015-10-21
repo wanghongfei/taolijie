@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.constant.quest.QuestStatus;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -60,6 +61,8 @@ public class RestQuestQueryCtr {
         command.setCollegeId(collegeId);
         command.setSchoolId(schoolId);
 
+        command.setEmpStatus(EmpQuestStatus.DONE.code());
+
         ListResult<QuestModel> lr = questService.findBy(command);
 
         return new ResponseText(lr);
@@ -77,8 +80,19 @@ public class RestQuestQueryCtr {
             return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
-        // 判断是否登陆
         Credential credential = SessionUtils.getCredential(req);
+
+        // 得到商家任务状态
+        EmpQuestStatus empStatus = EmpQuestStatus.fromCode(model.getEmpStatus());
+        // 如果商家任务状态为没有通过审核, 且该任务不是当前用户发布的,
+        // 返回权限错误
+        if (EmpQuestStatus.DONE != empStatus) {
+            if (null == credential || false == credential.getId().equals(model.getMemberId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+        }
+
+        // 判断是否登陆
         if (null != credential) {
             // 如果用户已登陆了
             // 则要设置任务状态字段(status)

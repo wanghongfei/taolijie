@@ -30,4 +30,26 @@ public enum EmpQuestStatus {
     public Integer code() {
         return this.code;
     }
+
+    public static EmpQuestStatus fromCode(Integer code) {
+        if (null == code) {
+            return null;
+        }
+
+        switch (code) {
+            case 0:
+                return UNPUBLISH;
+
+            case 1:
+                return WAIT_AUDIT;
+
+            case 2:
+                return FAILED;
+
+            case 3:
+                return DONE;
+        }
+
+        return null;
+    }
 }
