@@ -26,7 +26,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String applicationResumeIds;
 
     @NotEmpty
-    @Length(min = 1, max = 20)
+    @Length(min = 1, max = 30)
     private String title;
 
     @NotNull
@@ -44,7 +44,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String workRegion;
 
     @NotNull
-    @Min(0) @Max(9999)
+    @Min(0) @Max(99999)
     private BigDecimal wage;
 
     @NotNull
@@ -54,14 +54,14 @@ public class JobPostModel extends Pageable implements Serializable {
     private boolean deleted = false;
 
     @NotNull
-    @Length(min = 0, max = 500)
+    @Length(min = 0, max = 600)
     private String jobDescription;
 
     /**
      * 联系人名
      */
     @NotNull
-    @Length(min = 0, max = 10)
+    @Length(min = 0, max = 15)
     private String contact;
 
     @NotNull
@@ -75,7 +75,7 @@ public class JobPostModel extends Pageable implements Serializable {
     private String contactQq;
 
     @NotNull
-    @Length(min = 0, max = 500)
+    @Length(min = 0, max = 600)
     private String jobDetail;
 
     private Integer likes;
@@ -95,7 +95,7 @@ public class JobPostModel extends Pageable implements Serializable {
      * 工作时间
      */
     @NotNull
-    @Length(min = 0, max = 100)
+    @Length(min = 0, max = 120)
     private String workTime;
 
     private String salaryUnit;

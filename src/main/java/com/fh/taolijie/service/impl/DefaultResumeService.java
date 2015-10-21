@@ -226,6 +226,8 @@ public class DefaultResumeService implements ResumeService {
     @Override
     @Transactional(readOnly = false)
     public boolean deleteResume(Integer resumeId) {
+        intendMapper.deleteByResumeId(resumeId);
+
         int row = reMapper.deleteByPrimaryKey(resumeId);
 
         return row <= 0 ? false : true;
