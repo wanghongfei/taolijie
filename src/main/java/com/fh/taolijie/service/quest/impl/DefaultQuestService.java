@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
@@ -102,8 +103,26 @@ public class DefaultQuestService implements QuestService {
 
 
         // 扣钱
-        accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+        try {
+            accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
 
+        } catch (BalanceNotEnoughException ex) {
+            // 如果钱不够
+            // 置状态为未发布
+            model.setEmpStatus(EmpQuestStatus.UNPUBLISH.code());
+            // 写入任务表，但不投递定时任务消息
+            doPublish(model, false);
+
+            throw ex;
+        }
+
+        // 发布任务
+        // 置状态为审核中
+        model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
+        doPublish(model, true);
+    }
+
+    private void doPublish(QuestModel model, boolean postMessage) {
         // 发布任务
         model.setCreatedTime(new Date());
         questMapper.insertSelective(model);
@@ -135,42 +154,46 @@ public class DefaultQuestService implements QuestService {
 
 
         // 投递任务过期定时任务
-        rt.execute( (RedisConnection redisConn) -> {
-            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+        if (postMessage) {
+            rt.execute( (RedisConnection redisConn) -> {
+                StringRedisConnection strConn = (StringRedisConnection) redisConn;
 
-            // 构造参数列表
-            Map<String, String> map = new HashMap<>();
-            map.put("taskId", questId.toString());
-            map.put("questId", questId.toString());
+                // 构造参数列表
+                Map<String, String> map = new HashMap<>();
+                map.put("taskId", questId.toString());
+                map.put("questId", questId.toString());
 
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol.Builder(
-                    MsgType.DATE_STYLE,
-                    "localhost",
-                    8080,
-                    "/api/schedule/questExpire",
-                    "GET",
-                    // 任务结束后的第25小时执行
-                    //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                    TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
-                    .setParmMap(map)
-                    .build();
+                // 构造消息体
+                MsgProtocol msg = new MsgProtocol.Builder(
+                        MsgType.DATE_STYLE,
+                        "localhost",
+                        8080,
+                        "/api/schedule/questExpire",
+                        "GET",
+                        // 任务结束后的第25小时执行
+                        //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                        TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                        .setParmMap(map)
+                        .build();
 
 
-            // 序列化成JSON
-            String json = JSON.toJSONString(msg);
-            if (logger.isDebugEnabled()) {
-                logger.debug("sending message: {}", json);
-            }
+                // 序列化成JSON
+                String json = JSON.toJSONString(msg);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("sending message: {}", json);
+                }
 
-            // 发布消息
-            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
+                // 发布消息
+                Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
+                if (recvAmt.longValue() <= 0) {
+                    LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+                }
 
-            return null;
-        });
+                return null;
+            });
+
+        }
+
     }
 
     @Override
