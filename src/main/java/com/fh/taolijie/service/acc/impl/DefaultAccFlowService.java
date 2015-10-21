@@ -29,7 +29,7 @@ public class DefaultAccFlowService implements AccFlowService {
     private CashAccModelMapper accMapper;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void recordAvaBalanceChange(Integer accId, AccFlow type, BigDecimal amt)
             throws CashAccNotExistsException {
 

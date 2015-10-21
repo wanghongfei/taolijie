@@ -46,19 +46,19 @@ public class DefaultNewsService implements NewsService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addNews(NewsModel model) {
         newsMapper.insertSelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateNews(NewsModel model) {
         return newsMapper.updateByPrimaryKeySelective(model) <= 0 ? false : true;
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteNews(Integer newsId) {
         return newsMapper.deleteByPrimaryKey(newsId) <= 0 ? false : true;
     }

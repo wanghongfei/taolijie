@@ -114,7 +114,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean addPost(SHPostModel model) {
         // 更新作者的上次发布时间
         MemberModel example = new MemberModel();
@@ -129,13 +129,13 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void favoritePost(Integer memId, Integer postId) {
         coService.collect(memId, postId, PostType.SH);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void unfavoritePost(Integer memId, Integer postId) {
         coService.cancelCollect(memId, postId, PostType.SH);
     }
@@ -177,7 +177,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void complaint(Integer postId) {
         postMapper.increaseComplaint(postId);
     }
@@ -189,7 +189,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deletePost(Integer postId) {
         Boolean deleted = postMapper.checkDeleted(postId);
         if (null == deleted) {
@@ -203,7 +203,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updatePost(Integer postId, SHPostModel model) {
         model.setId(postId);
         int row = postMapper.updateByPrimaryKeySelective(model);
@@ -212,7 +212,7 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void changeCategory(Integer postId, Integer cateId) {
         SHPostModel model = new SHPostModel();
         model.setId(postId);
@@ -223,13 +223,13 @@ public class DefaultShPostService implements ShPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean checkExist(Integer postId) {
         return postMapper.checkExist(postId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void increasePageView(Integer postId) {
         postMapper.increasePageView(postId);
     }

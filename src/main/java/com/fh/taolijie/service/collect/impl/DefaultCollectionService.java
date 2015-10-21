@@ -49,7 +49,7 @@ public class DefaultCollectionService implements CollectionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void collect(Integer memberId, Integer postId, PostType type) {
         CollectionModel model = new CollectionModel();
         model.setCreatedTime(new Date());
@@ -76,7 +76,7 @@ public class DefaultCollectionService implements CollectionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void cancelCollect(Integer memId, Integer postId, PostType type) {
         switch (type) {
             case JOB:

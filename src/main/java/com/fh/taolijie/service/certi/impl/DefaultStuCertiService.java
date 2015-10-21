@@ -27,7 +27,7 @@ public class DefaultStuCertiService implements StuCertiService {
     private MemberModelMapper memMapper;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addApplication(StuCertiModel model) {
 
 /*        // 检查是否已经有该用户的申请，且申请状态为通过的记录
@@ -50,7 +50,7 @@ public class DefaultStuCertiService implements StuCertiService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo) {
         if (status == CertiStatus.DONE) {
             // 认证通过

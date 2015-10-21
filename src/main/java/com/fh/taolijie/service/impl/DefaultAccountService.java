@@ -54,7 +54,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     Mail mail;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public Integer register(MemberModel model) throws DuplicatedUsernameException {
         // 检查用户是否存在
         if (true == isUserExisted(model.getUsername())) {
@@ -145,13 +145,13 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int updateMember(MemberModel model) {
         return memMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateAppToken(Integer memId, String token) {
         memMapper.updateAppToken(memId, token);
     }
@@ -167,7 +167,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteMember(Integer memberId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memberId);
         mem.setValid(false);
@@ -177,7 +177,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteMember(String username) {
         MemberModel mem = memMapper.selectByUsername(username);
         mem.setValid(false);
@@ -187,7 +187,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean addRole(RoleModel model) {
         roleMapper.insert(model);
 
@@ -195,19 +195,19 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void invalidAccount(Integer memId) {
         memMapper.validMemberById(memId, false);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void validateAccount(Integer memId) {
         memMapper.validMemberById(memId, true);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void saveLoginIdentifier(Integer memId, String identifier) {
         MemberModel mem = new MemberModel();
         mem.setId(memId);
@@ -217,7 +217,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteRole(Integer roleId) {
         roleMapper.deleteByPrimaryKey(roleId);
 
@@ -246,7 +246,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void assignRole(Integer roleId, String username) {
         MemberModel mem = memMapper.selectByUsername(username);
         MemberRoleModel mr = new MemberRoleModel();
@@ -257,7 +257,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deassignRole(Integer roleId, String username) {
         MemberModel mem = memMapper.selectByUsername(username);
         MemberRoleModel mr = new MemberRoleModel();
@@ -268,7 +268,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean resetPassword(String username, String token, String newPassword) {
         MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);
@@ -299,7 +299,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void sendResetPasswordEmail(String username) {
         MemberModel mem = memMapper.selectByUsername(username);
         CheckUtils.nullCheck(mem);

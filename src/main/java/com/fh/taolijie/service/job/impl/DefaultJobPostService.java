@@ -164,19 +164,19 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void complaint(Integer postId) {
         postMapper.complaint(postId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void favoritePost(Integer memId, Integer postId) {
         coService.collect(memId, postId, PostType.JOB);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void unfavoritePost(Integer memId, Integer postId) {
         coService.cancelCollect(memId, postId, PostType.JOB);
     }
@@ -188,7 +188,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public ListResult<JobPostModel> getFavoritePost(Integer memberId, int pn, int ps) {
         CollectionModelExample example = new CollectionModelExample(pn, ps);
         example.createCriteria()
@@ -212,13 +212,13 @@ public class DefaultJobPostService implements JobPostService {
 
     @Deprecated
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void postResume(Integer postId, Integer resumeId, Integer memberId) {
         postMapper.postResume(resumeId, postId, memberId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addJobPost(JobPostModel model) {
         // 更新作者的上次发布时间
         MemberModel example = new MemberModel();
@@ -231,7 +231,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateJobPost(Integer postId, JobPostModel model) {
         model.setId(postId);
         int row = postMapper.updateByPrimaryKeySelective(model);
@@ -240,7 +240,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteJobPost(Integer postId) {
         Boolean deleted = postMapper.checkDeleted(postId);
         if (null == deleted) {
@@ -258,7 +258,7 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void increasePageView(Integer id) {
         postMapper.increasePageView(id);
     }

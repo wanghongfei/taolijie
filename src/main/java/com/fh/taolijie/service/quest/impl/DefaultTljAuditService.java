@@ -62,7 +62,7 @@ public class DefaultTljAuditService implements TljAuditService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addAudit(TljAuditModel example)
             throws BalanceNotEnoughException, CashAccNotExistsException, RequestRepeatedException, QuestNotFoundException {
 
@@ -108,13 +108,13 @@ public class DefaultTljAuditService implements TljAuditService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateAudit(TljAuditModel example) {
         auditMapper.updateByPrimaryKeySelective(example);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void decreaseLeftAmt(Integer auditId) throws AuditNotEnoughException {
         // 查询剩余数量
         // 该查询会加行锁
@@ -128,7 +128,7 @@ public class DefaultTljAuditService implements TljAuditService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void decreaseLeftAmtByQuest(Integer questId) throws AuditNotEnoughException {
         // 查询剩余数量
         // 该查询会加行锁

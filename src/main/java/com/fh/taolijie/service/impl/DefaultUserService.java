@@ -33,7 +33,7 @@ public class DefaultUserService implements UserService {
 
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean likeJobPost(Integer memId, Integer postId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
@@ -47,7 +47,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean unLikeJobPost(Integer memId, Integer postId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedJobIds();
@@ -67,7 +67,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean likeSHPost(Integer memId, Integer shId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();
@@ -81,7 +81,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean unlikeShPost(Integer memId, Integer shId) {
         MemberModel mem = memMapper.selectByPrimaryKey(memId);
         String oldIds = mem.getLikedShIds();

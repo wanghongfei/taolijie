@@ -39,7 +39,7 @@ public class DefaultFeedbackService implements FeedbackService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public Integer addFeedback(FeedbackModel model) {
         fdMapper.insertSelective(model);
 
@@ -47,19 +47,19 @@ public class DefaultFeedbackService implements FeedbackService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateById(FeedbackModel model) {
         fdMapper.updateByPrimaryKeySelective(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteById(Integer fbId) {
         fdMapper.deleteByPrimaryKey(fbId);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteInBatch(List<Integer> idList) {
         fdMapper.deleteByPkInBatch(idList);
     }

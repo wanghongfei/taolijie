@@ -24,7 +24,7 @@ public class DefaultImageResourceService implements ImageService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public Integer saveImage(ImageModel model) {
         imgMapper.insert(model);
 
@@ -32,7 +32,7 @@ public class DefaultImageResourceService implements ImageService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteImage(Integer imageId) {
         imgMapper.deleteByPrimaryKey(imageId);
     }

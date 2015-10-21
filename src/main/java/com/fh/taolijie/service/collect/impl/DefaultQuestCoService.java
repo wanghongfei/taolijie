@@ -26,7 +26,7 @@ public class DefaultQuestCoService implements QuestCoService {
     private QuestService questService;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void collect(Integer memId, Integer questId) throws QuestNotFoundException {
         QuestModel quest = questService.findById(questId);
         if(null == quest) {
@@ -62,7 +62,7 @@ public class DefaultQuestCoService implements QuestCoService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void unCollect(Integer memId, Integer questId) {
         coMapper.deleteByMemberAndQuest(memId, questId);
     }

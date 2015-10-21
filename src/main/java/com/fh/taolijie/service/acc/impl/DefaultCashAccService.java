@@ -40,7 +40,7 @@ public class DefaultCashAccService implements CashAccService {
     private AccFlowService flowService;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addAcc(CashAccModel model) throws CashAccExistsException, UserNotExistsException {
         if (checkCashAccExists(model.getMemberId())) {
             throw new CashAccExistsException("用户" + model.getMemberId() + "的现金账户已经存在");
@@ -72,7 +72,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer accId, CashAccStatus status) throws CashAccNotExistsException{
         if (!checkAccIdExists(accId)) {
             throw new CashAccNotExistsException("现金账户" + accId + "不存在");
@@ -85,7 +85,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateAlipay(Integer accId, String alipay) throws CashAccNotExistsException {
         if (!checkAccIdExists(accId)) {
             throw new CashAccNotExistsException("现金账户" + accId + "不存在");
@@ -99,7 +99,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateBankAcc(Integer accId, String bank) throws CashAccNotExistsException {
         if (!checkAccIdExists(accId)) {
             throw new CashAccNotExistsException("现金账户" + accId + "不存在");
@@ -113,7 +113,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updatePhone(Integer accId, String phone) {
         CashAccModel example = new CashAccModel();
         example.setId(accId);
@@ -129,13 +129,13 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
         return addAvailableMoney(accId, amt, AccFlow.CHARGE);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException {
         // 记录流水
         flowService.recordAvaBalanceChange(accId, type, amt);
@@ -144,7 +144,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void reduceAvailableMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException, BalanceNotEnoughException {
 
@@ -152,7 +152,7 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void reduceAvailableMoney(Integer accId, BigDecimal amt, AccFlow type) throws CashAccNotExistsException, BalanceNotEnoughException {
 
         CashAccModel acc = accMapper.selectByPrimaryKey(accId);
@@ -199,7 +199,7 @@ public class DefaultCashAccService implements CashAccService {
      * @deprecated
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void frozenMoney(Integer accId, BigDecimal amt)
             throws CashAccNotExistsException, BalanceNotEnoughException {
 

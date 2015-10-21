@@ -19,13 +19,13 @@ public class DefaultBulletinService implements BulletinService {
     BulletinModelMapper buMapper;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addBulletin(BulletinModel model) {
         buMapper.insert(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteBulletin(Integer id) {
         buMapper.deleteByPrimaryKey(id);
     }

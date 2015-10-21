@@ -85,7 +85,7 @@ public class DefaultQuestService implements QuestService {
      * @param model
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void publishQuest(Integer accId, QuestModel model)
             throws BalanceNotEnoughException, CashAccNotExistsException {
 
@@ -197,7 +197,7 @@ public class DefaultQuestService implements QuestService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addQuestCollegeRel(List<QuestCollRelModel> list) {
         if (list.isEmpty()) {
             return;
@@ -207,7 +207,7 @@ public class DefaultQuestService implements QuestService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addQuestSchoolRel(List<QuestSchRelModel> list) {
         if (list.isEmpty()) {
             return;
@@ -224,7 +224,7 @@ public class DefaultQuestService implements QuestService {
      * @param questId 任务id
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void assignQuest(Integer memId, Integer questId)
             throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException {
 
@@ -320,7 +320,7 @@ public class DefaultQuestService implements QuestService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void assignExpired(Integer assignId) {
         // 检查任务领取表的状态是不是"03:已经提交"
         // 如果是，则不进行任何操作，方法直接返回
@@ -345,7 +345,7 @@ public class DefaultQuestService implements QuestService {
      * @param questId
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void questExpired(Integer questId) throws CashAccNotExistsException {
         // 检查是否还有未领取的任务
         QuestModel quest = questMapper.selectByPrimaryKey(questId);

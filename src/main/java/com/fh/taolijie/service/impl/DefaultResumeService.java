@@ -164,7 +164,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean updateResume(Integer resumeId, ResumeModel model) {
         model.setId(resumeId);
 
@@ -174,7 +174,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean refresh(Integer resumeId) {
         reMapper.updateTime(resumeId);
 
@@ -182,13 +182,13 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void favoriteResume(Integer memId, Integer resumeId) {
         coService.collect(memId, resumeId, PostType.RESUME);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void unFavorite(Integer memId, Integer resumeId) {
         coService.cancelCollect(memId, resumeId, PostType.RESUME);
     }
@@ -200,19 +200,19 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int addResume(ResumeModel model) {
         return reMapper.insert(model);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addIntend(ApplicationIntendModel intend) {
         intendMapper.insert(intend);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void deleteIntend(ApplicationIntendModel intendModel) {
         intendMapper.delete(intendModel);
     }
@@ -224,7 +224,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean deleteResume(Integer resumeId) {
         intendMapper.deleteByResumeId(resumeId);
 
@@ -234,7 +234,7 @@ public class DefaultResumeService implements ResumeService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void increasePageView(Integer id) {
         reMapper.increasePageView(id);
     }
