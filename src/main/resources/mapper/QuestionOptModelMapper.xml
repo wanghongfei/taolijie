@@ -165,4 +165,22 @@
             (#{_q.optName}, #{_q.optContent}, #{questionId}, #{_q.correct}, #{_q.orderIndex})
         </foreach>
     </insert>
+
+    <select id="selectInBatch" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            question_opt qo
+        WHERE
+            qo.id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </select>
+
+    <update id="increaseAnswerAmt">
+        UPDATE
+            question_opt
+        SET
+            answer_amt = answer_amt + 1
+        WHERE
+            id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </update>
 </mapper>

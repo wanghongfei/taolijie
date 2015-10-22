@@ -8,11 +8,13 @@ import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.ExamDto;
+import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
+import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.Constants;
@@ -30,7 +32,7 @@ import java.util.List;
  * Created by whf on 10/22/15.
  */
 @RestController
-@RequestMapping("/api/user/question")
+@RequestMapping("/api/user/quest/question")
 public class RestQuestionUCtr {
     @Autowired
     private QuestionService questionService;
@@ -80,6 +82,40 @@ public class RestQuestionUCtr {
         }
 
         return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 提交一个题目的答案
+     * @return
+     */
+    @RequestMapping(value = "/check", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText checkAnswer(@RequestParam Integer questionId,
+                                    @RequestParam String optIds,
+                                    HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        // id string转换成List<Integer>
+        try {
+            List<Integer> idList = StringUtils.splitIntendIds(optIds);
+            // 验证答案
+            boolean result = questionService.validateAnswer(credential.getId(), questionId, idList);
+            return new ResponseText(result);
+
+        } catch (InvalidNumberStringException e) {
+            return new ResponseText(ErrorCode.BAD_NUMBER);
+
+        } catch (QuestionNotFoundException ex) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (CashAccNotExistsException ex) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (HackException ex) {
+            return new ResponseText(ErrorCode.HACKER);
+        }
+
+
     }
 
     /**

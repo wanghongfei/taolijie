@@ -13,6 +13,10 @@ public class SysConfigModel {
 
     private BigDecimal tagFee;
 
+    private BigDecimal questionFee;
+
+    private BigDecimal surveyFee;
+
     public Integer getId() {
         return id;
     }
@@ -47,6 +51,22 @@ public class SysConfigModel {
 
     public void setTagFee(BigDecimal tagFee) {
         this.tagFee = tagFee;
+    }
+
+    public BigDecimal getQuestionFee() {
+        return questionFee;
+    }
+
+    public void setQuestionFee(BigDecimal questionFee) {
+        this.questionFee = questionFee;
+    }
+
+    public BigDecimal getSurveyFee() {
+        return surveyFee;
+    }
+
+    public void setSurveyFee(BigDecimal surveyFee) {
+        this.surveyFee = surveyFee;
     }
 
     public void setQuestFeeRate(Integer questFeeRate) {

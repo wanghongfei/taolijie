@@ -2,6 +2,7 @@ package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface QuestionModelMapper {
      * @return
      */
     List<QuestionModel> selectByQuestId(Integer questId);
+
+    int increaseAnswerAmt(@Param("correct") boolean correct, @Param("questionId") Integer questionId);
 }

@@ -51,7 +51,8 @@ public enum ErrorCode {
 
     INVALID_PHONE_NUMBER(31, "phone not found"),
 
-    NO_QUESTION_FOR_QUEST(32, "quest has no question");
+    NO_QUESTION_FOR_QUEST(32, "quest has no question"),
+    HACKER(33, "what r u doing?");
 
     private final String msg;
     private final int code;

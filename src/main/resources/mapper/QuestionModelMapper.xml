@@ -200,4 +200,16 @@
         ORDER BY
             qm.order_index ASC
     </select>
+
+    <update id="increaseAnswerAmt">
+        UPDATE
+            quest_question
+        SET
+            user_amt = user_amt + 1
+            <if test="correct == true">
+                ,correct_amt = correct_amt + 1
+            </if>
+        WHERE
+            id = #{questionId}
+    </update>
 </mapper>
