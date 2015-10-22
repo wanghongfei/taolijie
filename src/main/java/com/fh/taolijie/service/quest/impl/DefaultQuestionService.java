@@ -3,10 +3,8 @@ package com.fh.taolijie.service.quest.impl;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.QuestionType;
-import com.fh.taolijie.dao.mapper.QuestModelMapper;
-import com.fh.taolijie.dao.mapper.QuestionModelMapper;
-import com.fh.taolijie.dao.mapper.QuestionOptModelMapper;
-import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
+import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.AnRecordModel;
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.SysConfigModel;
@@ -17,6 +15,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
+import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
@@ -52,6 +51,9 @@ public class DefaultQuestionService implements QuestionService {
 
     @Autowired
     private SysConfigModelMapper sysMapper;
+
+    @Autowired
+    private AnRecordModelMapper recordMapper;
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
@@ -106,17 +108,23 @@ public class DefaultQuestionService implements QuestionService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public Boolean validateAnswer(Integer memId, Integer questionId, List<Integer> optIdList)
-            throws QuestionNotFoundException, CashAccNotExistsException, HackException {
+            throws QuestionNotFoundException, CashAccNotExistsException, HackException, RequestRepeatedException {
         //todo
         // 检查问题存在性
         QuestionModel question = qMapper.selectByPrimaryKey(questionId);
         if (null == question) {
             throw new QuestionNotFoundException();
         }
+
         // 检查选项与问题是否匹配
         List<QuestionOptModel> optList = findOptInBatch(optIdList);
         if (!checkOptMatchQuestion(questionId, optList)) {
             throw new HackException();
+        }
+
+        // 检查是否重复答题
+        if (true == recordMapper.checkExist(memId, questionId)) {
+            throw new RequestRepeatedException("");
         }
 
         // 判断任务类型
@@ -167,6 +175,13 @@ public class DefaultQuestionService implements QuestionService {
 
         // 统计信息: 增加选择该选项的人数
         optMapper.increaseAnswerAmt(optIdList);
+
+        // 答题记录
+        AnRecordModel record = new AnRecordModel();
+        record.setMemberId(memId);
+        record.setQuestionId(questionId);
+        record.setCreatedTime(new Date());
+        recordMapper.insertSelective(record);
 
         return result;
     }

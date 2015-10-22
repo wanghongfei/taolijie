@@ -10,6 +10,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
+import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 
 import java.util.List;
 
@@ -40,5 +41,5 @@ public interface QuestionService {
      * @return
      */
     Boolean validateAnswer(Integer memId, Integer questionId, List<Integer> optIdList)
-            throws QuestionNotFoundException, CashAccNotExistsException, HackException;
+            throws QuestionNotFoundException, CashAccNotExistsException, HackException, RequestRepeatedException;
 }

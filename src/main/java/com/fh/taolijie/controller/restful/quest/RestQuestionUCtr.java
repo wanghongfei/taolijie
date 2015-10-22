@@ -15,6 +15,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
+import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.Constants;
@@ -113,6 +114,9 @@ public class RestQuestionUCtr {
 
         } catch (HackException ex) {
             return new ResponseText(ErrorCode.HACKER);
+
+        } catch (RequestRepeatedException ex) {
+            return new ResponseText(ErrorCode.REPEAT);
         }
 
 
