@@ -56,6 +56,12 @@ public interface QuestService {
             throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException;
 
     /**
+     * 检查任务是否已经领取
+     * @return
+     */
+    Boolean checkAssigned(Integer memId, Integer questId);
+
+    /**
      * 让任务过期
      * @param assignId
      */

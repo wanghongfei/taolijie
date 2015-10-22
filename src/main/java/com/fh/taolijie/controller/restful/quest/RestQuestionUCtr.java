@@ -1,9 +1,9 @@
 package com.fh.taolijie.controller.restful.quest;
 
 import cn.fh.security.credential.Credential;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -11,6 +11,9 @@ import com.fh.taolijie.dto.ExamDto;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
+import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -32,6 +35,13 @@ public class RestQuestionUCtr {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private QuestService questService;
+
+    /**
+     * 发布答题或问卷任务
+     * @return
+     */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON, consumes = Constants.Produce.JSON)
     public ResponseText publishQuestion(@RequestBody @Valid ExamDto dto,
                                         BindingResult br,
@@ -72,6 +82,39 @@ public class RestQuestionUCtr {
         return ResponseText.getSuccessResponseText();
     }
 
+    /**
+     * 查询答题问卷任务的所有题目和选项
+     * @return
+     */
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryQuestionsForQuest(@RequestParam Integer questId,
+                                               HttpServletRequest req) {
+        Credential credential = SessionUtils.getCredential(req);
+
+
+        // 检查任务是否已经领取
+        Boolean assigned = questService.checkAssigned(credential.getId(), questId);
+        if (false == assigned) {
+            return new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
+        }
+
+        try {
+            ListResult<QuestionModel> lr = questionService.findQuestionList(questId);
+            return new ResponseText(lr);
+
+        } catch (QuestNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (NotQuestionQuestException e) {
+            return new ResponseText(ErrorCode.NO_QUESTION_FOR_QUEST);
+
+        }
+    }
+
+    /**
+     * 验证DTO对象合法性
+     * @return
+     */
     private boolean validateDto(ExamDto dto) {
         // 验证Quest对象
         QuestModel quest = dto.getQuest();

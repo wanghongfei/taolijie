@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.dao.mapper.QuestionModelMapper;
 import com.fh.taolijie.dao.mapper.QuestionOptModelMapper;
@@ -8,6 +9,8 @@ import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
@@ -58,5 +61,24 @@ public class DefaultQuestionService implements QuestionService {
             // S2.5: 创建问题对应的选项
             optMapper.insertInBatch(q.getId(), q.getOpts());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<QuestionModel> findQuestionList(Integer questId) throws QuestNotFoundException, NotQuestionQuestException {
+        // todo
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        if (null == quest) {
+            throw new QuestNotFoundException("");
+        }
+
+        // 根据任务查询问题列表
+        List<QuestionModel> questions = qMapper.selectByQuestId(questId);
+        // 没有查到说明这不是一个答题问卷任务
+        if (questions.isEmpty()) {
+            throw new NotQuestionQuestException();
+        }
+
+        return new ListResult<>(questions, questions.size());
     }
 }

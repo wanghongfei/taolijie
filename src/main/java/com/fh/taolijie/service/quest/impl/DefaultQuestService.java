@@ -330,6 +330,12 @@ public class DefaultQuestService implements QuestService {
     }
 
     @Override
+    @Transactional(readOnly = false)
+    public Boolean checkAssigned(Integer memId, Integer questId) {
+        return assignMapper.checkMemberIdAndQuestIdExists(memId, questId);
+    }
+
+    @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void assignExpired(Integer assignId) {
         // 检查任务领取表的状态是不是"03:已经提交"

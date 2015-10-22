@@ -49,7 +49,9 @@ public enum ErrorCode {
     UNBIND_FIRST(29, "unbind phone first"),
     AUDIT_NOT_ENOUGH(30, "audit not enough"),
 
-    INVALID_PHONE_NUMBER(31, "phone not found");
+    INVALID_PHONE_NUMBER(31, "phone not found"),
+
+    NO_QUESTION_FOR_QUEST(32, "quest has no question");
 
     private final String msg;
     private final int code;
