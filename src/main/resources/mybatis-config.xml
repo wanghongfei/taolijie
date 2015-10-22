@@ -74,5 +74,8 @@
 
         <mapper resource="mapper/RecoPostModelMapper.xml" />
 
+        <mapper resource="mapper/QuestionModelMapper.xml" />
+        <mapper resource="mapper/QuestionOptModelMapper.xml" />
+
     </mappers>
 </configuration>
