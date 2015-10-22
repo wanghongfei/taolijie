@@ -23,6 +23,14 @@
         qo.correct AS qo_correct,
         qo.order_index AS qo_order_index
     </sql>
+
+    <sql id="without_answer">
+        qo.id AS qo_id,
+        qo.opt_name AS qo_opt_name,
+        qo.opt_content AS qo_opt_content,
+        qo.question_id AS qo_question_id,
+        qo.order_index AS qo_order_index
+    </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated

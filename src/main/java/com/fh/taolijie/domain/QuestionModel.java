@@ -1,9 +1,13 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QuestionModel {
     private Integer id;
 
