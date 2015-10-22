@@ -1,7 +1,10 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.QuestionOptModel;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface QuestionOptModelMapper {
@@ -52,4 +55,6 @@ public interface QuestionOptModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(QuestionOptModel record);
+
+    void insertInBatch(@Param("questionId") Integer questionId, @Param("optList") List<QuestionOptModel> optList);
 }
