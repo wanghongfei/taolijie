@@ -119,38 +119,52 @@ public class DefaultQuestionService implements QuestionService {
             throw new HackException();
         }
 
-        boolean result = checkAllOptRight(question.getAnswerAmt(), optList);
+        // 判断任务类型
+        QuestionType type = QuestionType.fromCode(question.getType());
+        if (null == type) {
+            throw new IllegalStateException("invalid question type" + type.code());
+        }
 
-        // 如答对
-        // 加钱
-        if (result) {
-            SysConfigModel sys = sysMapper.selectByPrimaryKey(1);
 
-            // 判断任务类型
-            QuestionType type = QuestionType.fromCode(question.getType());
-            if (null == type) {
-                throw new IllegalStateException("invalid question type" + type.code());
+        // 得到各类任务对应的钱数
+        SysConfigModel sys = sysMapper.selectByPrimaryKey(1);
+        BigDecimal singleFee = null;
+        boolean result = false;
+
+        // 是答题类问题
+        if (type == QuestionType.EXAMINATION) {
+            // 答题类问题
+            // 需要检查正确性
+            singleFee = sys.getQuestionFee();
+
+            // 判断是否答对
+            result = checkAllOptRight(question.getAnswerAmt(), optList);
+
+            // 如答对
+            // 加钱
+            if (result) {
+                // 增加钱包金额
+                Integer accId = accService.findIdByMember(memId);
+                accService.addAvailableMoney(accId, singleFee, AccFlow.AWARD);
             }
 
+            // 统计信息: 增加答题人数
+            qMapper.increaseAnswerAmt(result, questionId);
 
-            BigDecimal singleFee = null;
-            if (type == QuestionType.EXAMINATION) {
-                // 答题类问题
-                singleFee = sys.getQuestionFee();
-            } else if (type == QuestionType.SURVEY) {
-                // 问卷类问题
-                singleFee = sys.getSurveyFee();
-            }
+        } else if (type == QuestionType.SURVEY) {
+            // 问卷类问题
+            // 直接加钱
+            singleFee = sys.getSurveyFee();
 
 
             // 增加钱包金额
             Integer accId = accService.findIdByMember(memId);
             accService.addAvailableMoney(accId, singleFee, AccFlow.AWARD);
 
+            // 统计信息: 增加答题人数
+            qMapper.increaseAnswerAmt(false, questionId);
         }
 
-        // 统计信息: 增加答题人数
-        qMapper.increaseAnswerAmt(result, questionId);
         // 统计信息: 增加选择该选项的人数
         optMapper.increaseAnswerAmt(optIdList);
 
