@@ -22,4 +22,6 @@ public interface AnRecordModelMapper {
 
 
     boolean checkExist(@Param("memId") Integer memId, @Param("questionId") Integer questionId);
+
+    List<AnRecordModel> selectByQuestAndMember(@Param("memId") Integer memId, @Param("questId") Integer questId);
 }

@@ -181,11 +181,17 @@ public class DefaultQuestionService implements QuestionService {
         record.setMemberId(memId);
         record.setQuestionId(questionId);
         record.setCreatedTime(new Date());
+        record.setQuestId(question.getQuestId());
         recordMapper.insertSelective(record);
 
         return result;
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public List<AnRecordModel> findAnRecordByQuest(Integer questId, Integer memId) {
+        return recordMapper.selectByQuestAndMember(memId, questId);
+    }
 
     private boolean checkAllOptRight(int correctAmt, List<QuestionOptModel> optList) {
         int sum = 0;

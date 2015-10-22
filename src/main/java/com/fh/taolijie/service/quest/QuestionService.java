@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.domain.AnRecordModel;
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -42,4 +43,11 @@ public interface QuestionService {
      */
     Boolean validateAnswer(Integer memId, Integer questionId, List<Integer> optIdList)
             throws QuestionNotFoundException, CashAccNotExistsException, HackException, RequestRepeatedException;
+
+    /**
+     * 查询指定任务的答题记录
+     * @param questId
+     * @return
+     */
+    List<AnRecordModel> findAnRecordByQuest(Integer questId, Integer memId);
 }

@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.domain.AnRecordModel;
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
@@ -120,6 +121,27 @@ public class RestQuestionUCtr {
         }
 
 
+    }
+
+    /**
+     * 查询某个任务的答题记录
+     * @return
+     */
+    @RequestMapping(value = "/record", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryRecord(@RequestParam Integer questId,
+                                    HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+
+        // 检查任务是否已经领取
+        if (false == questService.checkAssigned(credential.getId(), questId) ) {
+            return new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
+        }
+
+        List<AnRecordModel> list = questionService.findAnRecordByQuest(questId, credential.getId());
+
+        return new ResponseText(new ListResult<>(list, list.size()));
     }
 
     /**

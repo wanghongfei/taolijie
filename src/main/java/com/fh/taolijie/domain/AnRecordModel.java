@@ -1,15 +1,20 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class AnRecordModel {
     private Integer id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
     private Integer questionId;
 
     private Integer memberId;
+
+    private Integer questId;
 
     public Integer getId() {
         return id;
@@ -61,6 +66,14 @@ public class AnRecordModel {
      */
     public Integer getMemberId() {
         return memberId;
+    }
+
+    public Integer getQuestId() {
+        return questId;
+    }
+
+    public void setQuestId(Integer questId) {
+        this.questId = questId;
     }
 
     /**
