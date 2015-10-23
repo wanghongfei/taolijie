@@ -145,6 +145,12 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public boolean checkUsernameExist(String username) {
+        return memMapper.checkUserExist(username);
+    }
+
+    @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int updateMember(MemberModel model) {
         return memMapper.updateByPrimaryKeySelective(model);

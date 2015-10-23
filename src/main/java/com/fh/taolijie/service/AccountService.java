@@ -66,6 +66,13 @@ public interface AccountService {
     public Long getMemberAmount();
 
     /**
+     * 检查用户名是否重复
+     * @param username
+     * @return
+     */
+    boolean checkUsernameExist(String username);
+
+    /**
      * 更新用户信息.
      */
     int updateMember(MemberModel model);

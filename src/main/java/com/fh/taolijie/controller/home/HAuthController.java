@@ -369,6 +369,11 @@ public class HAuthController {
             infoLog.debug("identifier generated:{}", randCode);
         }*/
 
+        // 检查手机号用户名是否重复
+        if (true == accountService.checkUsernameExist(mobile)) {
+            return new ResponseText(ErrorCode.USER_EXIST);
+        }
+
         try {
             codeService.genSMSValidationCode(mobile, mobile);
 
