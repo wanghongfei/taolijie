@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.job;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.domain.acc.MemberModel;
@@ -31,10 +32,12 @@ public class JobPostModel extends Pageable implements Serializable {
 
     @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expiredTime;
 
     private Boolean expired;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date postTime;
 
     @NotEmpty
