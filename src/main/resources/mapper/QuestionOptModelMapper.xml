@@ -29,7 +29,9 @@
         qo.opt_name AS qo_opt_name,
         qo.opt_content AS qo_opt_content,
         qo.question_id AS qo_question_id,
-        qo.order_index AS qo_order_index
+        qo.order_index AS qo_order_index,
+
+        qo.answer_amt AS qo_answer_amt
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--

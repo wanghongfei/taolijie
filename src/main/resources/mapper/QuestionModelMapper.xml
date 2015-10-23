@@ -34,7 +34,10 @@
         qm.content AS qm_content,
         qm.quest_id AS qm_quest_id,
         qm.order_index AS qm_order_index,
-        qm.type AS qm_type
+        qm.type AS qm_type,
+
+        qm.user_amt AS qm_user_amt,
+        qm.correct_amt AS qm_correct_amt
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

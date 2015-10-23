@@ -5,6 +5,7 @@ import com.fh.taolijie.domain.AnRecordModel;
 import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.dto.QuestionAnalyzeDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -50,4 +51,12 @@ public interface QuestionService {
      * @return
      */
     List<AnRecordModel> findAnRecordByQuest(Integer questId, Integer memId);
+
+    /**
+     * 统计答题数据
+     * @param questId
+     * @return
+     */
+    List<QuestionAnalyzeDto> analyzeData(Integer questId)
+            throws QuestNotFoundException, NotQuestionQuestException;
 }

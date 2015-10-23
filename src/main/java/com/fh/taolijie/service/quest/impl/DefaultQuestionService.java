@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.SysConfigModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.dto.QuestionAnalyzeDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -24,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.IllegalFormatCodePointException;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by whf on 10/22/15.
@@ -188,9 +186,55 @@ public class DefaultQuestionService implements QuestionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public List<AnRecordModel> findAnRecordByQuest(Integer questId, Integer memId) {
         return recordMapper.selectByQuestAndMember(memId, questId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<QuestionAnalyzeDto> analyzeData(Integer questId) throws QuestNotFoundException, NotQuestionQuestException {
+        // 查出该任务下所有的问题
+        ListResult<QuestionModel> questionLr = findQuestionList(questId);
+
+
+        return doAnalyze(questionLr.getList());
+    }
+
+    private List<QuestionAnalyzeDto> doAnalyze(List<QuestionModel> qList) {
+        List<QuestionAnalyzeDto> dtoList = new ArrayList<>(qList.size() * 5);
+
+        // 遍历每个问题
+        qList.forEach( q -> {
+            // 计算正确率
+            int correctAmt = q.getCorrectAmt();
+            int userAmt = q.getUserAmt();
+            float percentage = 0;
+            if (userAmt > 0) {
+                percentage = (float)correctAmt / userAmt;
+            }
+
+
+            // 创建分析结果对象
+            QuestionAnalyzeDto dto = new QuestionAnalyzeDto();
+            dto.setCorrectUser(q.getCorrectAmt());
+            dto.setTotUser(q.getUserAmt());
+            dto.setPercentage(percentage);
+            dto.setQuestionId(q.getId());
+
+
+            // 设置每个选项的统计信息
+            Map<Integer, String> map = new HashMap<>(5);
+            List<QuestionOptModel> opts = q.getOpts();
+            opts.forEach( opt -> {
+                map.put(opt.getId(), opt.getAnswerAmt().toString());
+            });
+            dto.setOpts(map);
+
+            dtoList.add(dto);
+        });
+
+        return dtoList;
     }
 
     private boolean checkAllOptRight(int correctAmt, List<QuestionOptModel> optList) {

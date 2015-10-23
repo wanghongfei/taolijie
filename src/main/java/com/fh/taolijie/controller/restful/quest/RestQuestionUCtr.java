@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.QuestionModel;
 import com.fh.taolijie.domain.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.ExamDto;
+import com.fh.taolijie.dto.QuestionAnalyzeDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
@@ -171,6 +172,35 @@ public class RestQuestionUCtr {
             return new ResponseText(ErrorCode.NO_QUESTION_FOR_QUEST);
 
         }
+    }
+
+    /**
+     * 查询题目统计信息
+     * @return
+     */
+    @RequestMapping(value = "/result", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText analyzeData(@RequestParam Integer questId,
+                                    HttpServletRequest req) {
+
+        // 检查是不是自己发布的任务
+        Credential credential = SessionUtils.getCredential(req);
+        QuestModel quest = questService.findById(questId);
+        if (false == quest.getMemberId().equals(credential.getId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        try {
+            List<QuestionAnalyzeDto> data = questionService.analyzeData(questId);
+            return new ResponseText(new ListResult<>(data, data.size()));
+
+        } catch (QuestNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (NotQuestionQuestException e) {
+            return new ResponseText(ErrorCode.NO_QUESTION_FOR_QUEST);
+
+        }
+
     }
 
     /**
