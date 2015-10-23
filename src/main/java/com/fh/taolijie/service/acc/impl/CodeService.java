@@ -1,5 +1,7 @@
 package com.fh.taolijie.service.acc.impl;
 
+import com.fh.taolijie.exception.checked.code.SMSIntervalException;
+import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SMSUtils;
@@ -80,9 +82,11 @@ public class CodeService {
      *
      * @return 返回null表示两次短信发送间隔太短
      */
-    public String genSMSValidationCode(String memId, String mobile) {
+    public String genSMSValidationCode(String memId, String mobile)
+            throws SMSIntervalException, SMSVendorException {
+
         if (!checkSMSInterval(memId)) {
-            return null;
+            throw new SMSIntervalException();
         }
 
         String code = RandomStringUtils.randomNumeric(6);
@@ -93,8 +97,9 @@ public class CodeService {
         // 调用短信接口
         boolean result = SMSUtils.sendCode(code, mobile);
         if (false == result) {
-            return null;
+            throw new SMSVendorException();
         }
+
 
         // 验证码存入Redis
         // 过期时间5min

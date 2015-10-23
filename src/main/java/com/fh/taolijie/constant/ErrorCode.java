@@ -52,7 +52,9 @@ public enum ErrorCode {
     INVALID_PHONE_NUMBER(31, "phone not found"),
 
     NO_QUESTION_FOR_QUEST(32, "quest has no question"),
-    HACKER(33, "what r u doing?");
+    HACKER(33, "what r u doing?"),
+
+    SMS_INVOKE_FAILED(34, "SMS vendor refused");
 
     private final String msg;
     private final int code;

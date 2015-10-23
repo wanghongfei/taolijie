@@ -16,6 +16,8 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.code.SMSIntervalException;
+import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.*;
@@ -367,9 +369,14 @@ public class HAuthController {
             infoLog.debug("identifier generated:{}", randCode);
         }*/
 
-        String res = codeService.genSMSValidationCode(mobile, mobile);
-        if (null == res) {
-            return new ResponseText(ErrorCode.FAILED);
+        try {
+            codeService.genSMSValidationCode(mobile, mobile);
+
+        } catch (SMSIntervalException e) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+
+        } catch (SMSVendorException e) {
+            return new ResponseText(ErrorCode.SMS_INVOKE_FAILED);
         }
 
         return ResponseText.getSuccessResponseText();

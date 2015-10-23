@@ -7,6 +7,8 @@ import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.exception.checked.code.SMSIntervalException;
+import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.impl.CodeService;
@@ -56,9 +58,14 @@ public class ValidationCodeCtr {
         }
 
 
-        String res = codeService.genSMSValidationCode(credential.getId().toString(), mobile);
-        if (null == res) {
-            return new ResponseText(ErrorCode.FAILED);
+        try {
+            codeService.genSMSValidationCode(credential.getId().toString(), mobile);
+        } catch (SMSIntervalException e) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+
+        } catch (SMSVendorException e) {
+            return new ResponseText(ErrorCode.SMS_INVOKE_FAILED);
+
         }
 
         return new ResponseText();
@@ -96,9 +103,15 @@ public class ValidationCodeCtr {
         }
 
 
-        String res = codeService.genSMSValidationCode(credential.getId().toString(), mobile);
-        if (null == res) {
-            return new ResponseText(ErrorCode.FAILED);
+        try {
+            codeService.genSMSValidationCode(credential.getId().toString(), mobile);
+
+        } catch (SMSIntervalException e) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+
+        } catch (SMSVendorException e) {
+            return new ResponseText(ErrorCode.SMS_INVOKE_FAILED);
+
         }
 
         return new ResponseText();
