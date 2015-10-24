@@ -115,6 +115,7 @@ public class HAuthController {
         req.setAttribute("role", role);*/
 
         Cookie nameCookie = new Cookie("un", mem.getUsername());
+        nameCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(5)); // 5天
         res.addCookie(nameCookie);
         Cookie sidCookie = new Cookie("sid", sid);
         sidCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(5)); // 5天
