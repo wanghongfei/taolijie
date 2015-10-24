@@ -215,6 +215,7 @@ public class StringUtils {
                 || url.startsWith("/scripts")
                 || url.startsWith("/styles")
                 || url.startsWith("/fonts")
+                || url.startsWith("/static")
                 || url.startsWith("/about");
     }
 

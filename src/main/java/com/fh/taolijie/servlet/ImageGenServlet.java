@@ -89,15 +89,16 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
 
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, java.io.IOException {
-        String job = req.getParameter("jobId");
-        String sh = req.getParameter("shId");
+
+        Integer job = toInt(req.getParameter("jobId"));
+        Integer sh = toInt(req.getParameter("shId"));
         String mId = req.getParameter("mId");
 
         String phoneNumber = null;
         if (null != job) {
-            phoneNumber = getJobPhone(Integer.valueOf(job));
+            phoneNumber = getJobPhone(job);
         } else if (null != sh) {
-            phoneNumber = getShNumber(Integer.valueOf(sh));
+            phoneNumber = getShNumber(sh);
         } else if (null != mId) {
             // 创建检查
             Credential credential = SessionUtils.getCredential(req);
@@ -196,6 +197,19 @@ public class ImageGenServlet extends HttpServlet implements ApplicationContextAw
         ShPostService shService = (ShPostService) applicationContext.getBean("defaultShPostService");
         SHPostModel sh = shService.findPost(shId);
         return sh.getContactPhone();
+    }
+
+    private Integer toInt(String str) {
+        if (null == str) {
+            return null;
+        }
+
+        try {
+            Integer num = Integer.valueOf(str);
+            return num;
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 
     /**
