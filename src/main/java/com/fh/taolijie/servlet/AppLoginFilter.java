@@ -172,7 +172,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         StringRedisTemplate rt = retrieveRedis("redisTemplateForString");
         Map<Object, Object> map = rt.opsForHash().entries(key);
         // 没查到表示已经过期或者未登陆
-        if (null == map) {
+        if (null == map || map.isEmpty()) {
             if (infoLogger.isDebugEnabled()) {
                 infoLogger.debug("trying to log with sid failed: no session found for key:{}", key);
             }
