@@ -147,16 +147,27 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         }
 
         // 取出cookie中的sid
+        String sid = null;
         Cookie cookie = findCookie(req.getCookies(), RequestParamName.SESSION_ID.toString());
-        if (null == cookie) {
+        if (null != cookie) {
+            sid = cookie.getValue();
+        } else {
+            // cookie中没有
+            // 尝试从header中取
+            sid = req.getHeader(RequestParamName.SESSION_ID.toString());
+        }
+
+        // cookie和session中都没有
+        if (null == sid) {
             if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("trying to log with sid failed: no cookie found");
+                infoLogger.debug("sid not found");
             }
+
             return false;
         }
 
+
         // 根据sid向redis中查询用户信息
-        String sid = cookie.getValue();
         String key = RedisKey.SESSION.toString() + sid;
         StringRedisTemplate rt = retrieveRedis("redisTemplateForString");
         Map<Object, Object> map = rt.opsForHash().entries(key);
