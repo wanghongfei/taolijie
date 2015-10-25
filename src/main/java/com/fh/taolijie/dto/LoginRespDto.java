@@ -14,6 +14,16 @@ public class LoginRespDto {
 
     private String sid;
 
+    private String photoPath;
+
+    private String nickname;
+
+    private String gender;
+
+    private String username;
+
+    private String role;
+
     public LoginRespDto() {}
 
     public LoginRespDto(Integer id, String appToken) {
@@ -39,6 +49,46 @@ public class LoginRespDto {
 
     public void setSid(String sid) {
         this.sid = sid;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setAppToken(String appToken) {
