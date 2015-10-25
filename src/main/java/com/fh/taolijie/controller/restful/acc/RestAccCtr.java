@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
@@ -17,10 +18,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
 import com.fh.taolijie.service.AccountService;
-import com.fh.taolijie.service.acc.AccFlowService;
-import com.fh.taolijie.service.acc.CashAccService;
-import com.fh.taolijie.service.acc.ChargeService;
-import com.fh.taolijie.service.acc.WithdrawService;
+import com.fh.taolijie.service.acc.*;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
@@ -60,6 +58,9 @@ public class RestAccCtr {
 
     @Autowired
     private AccountService memService;
+
+    @Autowired
+    private SeQuestionService seService;
 
     /**
      * 开通现金账户
@@ -335,5 +336,21 @@ public class RestAccCtr {
         ListResult<AccFlowModel> lr = flowService.findByAcc(credential.getId(), start, end, pn, ps);
 
         return new ResponseText(lr);
+    }
+
+    /**
+     * 查询密保问题
+     * @return
+     */
+    @RequestMapping(value = "/question", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText querySeQuestion(HttpServletRequest req) {
+        Credential credential = SessionUtils.getCredential(req);
+
+        SeQuestionModel model = seService.findByMember(credential.getId(), false);
+        if (null == model) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        return new ResponseText(model);
     }
 }
