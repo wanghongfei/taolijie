@@ -11,12 +11,14 @@ import com.fh.taolijie.dto.QuestionAnalyzeDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
 import com.fh.taolijie.exception.checked.quest.RequestRepeatedException;
 import com.fh.taolijie.service.acc.SeQuestionService;
 import com.fh.taolijie.service.quest.QuestionService;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,13 +36,26 @@ public class DefaultSeQuestionService implements SeQuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public SeQuestionModel findByMember(Integer memId) {
-        return seMapper.findByMemberId(memId);
+    public SeQuestionModel findByMember(Integer memId, boolean answer) {
+        SeQuestionModel model = null;
+        if (answer) {
+            model = seMapper.selectByMemberId(memId);
+        } else {
+            model = seMapper.selectByMemberIdWithoutAnswer(memId);
+        }
+
+        return model;
     }
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public int add(SeQuestionModel model) {
+    public int add(SeQuestionModel model) throws SecretQuestionExistException {
+        // 先检查是否已经设置了问题
+        boolean exist = seMapper.checkExistByMemberId(model.getMemberId());
+        if (exist) {
+            throw new SecretQuestionExistException();
+        }
+
         model.setCreatedTime(new Date());
 
         return seMapper.insertSelective(model);
@@ -50,5 +65,20 @@ public class DefaultSeQuestionService implements SeQuestionService {
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int deleteByMember(Integer memId) {
         return seMapper.deleteByMemberId(memId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkAnswer(Integer memId, String answer) {
+        if (false == StringUtils.checkNotEmpty(answer)) {
+            return false;
+        }
+
+        SeQuestionModel question = seMapper.selectByMemberId(memId);
+        if ( false == question.getAnswer().equals(answer) ) {
+            return false;
+        }
+
+        return true;
     }
 }

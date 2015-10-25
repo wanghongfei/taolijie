@@ -18,9 +18,10 @@ public interface SeQuestionModelMapper {
     int updateByPrimaryKey(SeQuestionModel record);
 
 
-    SeQuestionModel findByMemberId(Integer memId);
+    SeQuestionModel selectByMemberId(Integer memId);
+    SeQuestionModel selectByMemberIdWithoutAnswer(Integer memId);
 
-    SeQuestionModel findByAccId(Integer accId);
+    SeQuestionModel selectByAccId(Integer accId);
 
     boolean checkExistByMemberId(Integer memId);
     boolean checkExistByAccId(Integer accId);
