@@ -89,17 +89,8 @@ public class DefaultQuestService implements QuestService {
     public void publishQuest(Integer accId, QuestModel model)
             throws BalanceNotEnoughException, CashAccNotExistsException {
 
-        // 计算单个任务的最终价格
-        // 获取费率
-        int rate = configMapper.selectByPrimaryKey(1).getQuestFeeRate();
-        // 单个任务的原始价格
-        BigDecimal single = model.getAward();
-        // 单个任务的最终价格
-        single = feeCal.calculateFee(rate, single);
-        // 将最终价格设置到model中
-        model.setFinalAward(single);
         // 计算总钱数
-        BigDecimal tot = single.multiply(new BigDecimal(model.getTotalAmt()));
+        BigDecimal tot = feeCal.computeQuestFee(model.getTotalAmt());
 
 
         // 扣钱

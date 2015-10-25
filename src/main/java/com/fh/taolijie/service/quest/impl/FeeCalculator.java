@@ -1,27 +1,43 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.fh.taolijie.constant.RedisKey;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
- * 红包费用计算
+ * 费用计算
  * Created by whf on 9/21/15.
  */
 @Service
 public class FeeCalculator {
+
+    @Qualifier("redisTemplateForString")
+    @Autowired
+    private StringRedisTemplate rt;
+
+
     /**
-     * 根据费率计算单个红包的最终价格
-     * @param rate
-     * @param single
+     * 计算发布任务费用
+     * @param amt 任务数量
      * @return
      */
-    public BigDecimal calculateFee(int rate, BigDecimal single) {
-        float newSingle = (1 + rate / 100F) * single.floatValue();
+    public BigDecimal computeQuestFee(int amt) {
+        // 得到单个任务的费用
+        Map<Object, Object> map = retrieveConfig();
+        String strSingleFee = (String) map.get(RedisKey.QUEST_FEE_RATE.toString());
+        double singleFee = Double.valueOf(strSingleFee);
+        double result = (1 + singleFee / 100) * amt;
 
-        BigDecimal newFee = new BigDecimal(newSingle);
-        newFee.setScale(2, BigDecimal.ROUND_HALF_UP);
+        // 计算总费用
+        return new BigDecimal(result);
+    }
 
-        return newFee;
+    private Map<Object, Object> retrieveConfig() {
+        return rt.opsForHash().entries(RedisKey.SYSCONF.toString());
     }
 }
