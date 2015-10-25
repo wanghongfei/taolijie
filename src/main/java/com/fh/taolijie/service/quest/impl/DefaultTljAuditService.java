@@ -46,6 +46,9 @@ public class DefaultTljAuditService implements TljAuditService {
     @Autowired
     private QuestModelMapper questMapper;
 
+    @Autowired
+    private FeeCalculator feeService;
+
     @Override
     @Transactional(readOnly = true)
     public TljAuditModel findById(Integer auditId) {
@@ -100,11 +103,7 @@ public class DefaultTljAuditService implements TljAuditService {
     @Override
     @Transactional(readOnly = true)
     public BigDecimal calculateFee(Integer amt) {
-        // 计算金额
-        SysConfigModel conf = confMapper.selectByPrimaryKey(1);
-        BigDecimal tot = conf.getAuditFee().multiply(new BigDecimal(amt));
-
-        return tot;
+        return feeService.computeTljAuditFee(amt);
     }
 
     @Override

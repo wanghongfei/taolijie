@@ -37,6 +37,75 @@ public class FeeCalculator {
         return new BigDecimal(result);
     }
 
+    /**
+     * 计算桃李街代审核费用
+     * @param amt
+     * @return
+     */
+    public BigDecimal computeTljAuditFee(int amt) {
+        double result = multiple(RedisKey.AUDIT_FEE, amt);
+
+        return new BigDecimal(result);
+    }
+
+    /**
+     * 计算顶置费用
+     * @param hours
+     * @return
+     */
+    public BigDecimal computeTopFee(int hours) {
+        double result = multiple(RedisKey.TOP_FEE, hours);
+
+        return new BigDecimal(result);
+
+    }
+
+    /**
+     * 计算加标签费用
+     * @param hours
+     * @return
+     */
+    public BigDecimal computeTagFee(int hours) {
+        double result = multiple(RedisKey.TAG_FEE, hours);
+
+        return new BigDecimal(result);
+
+    }
+
+    /**
+     * 计算调查问卷费用
+     * @param amt
+     * @return
+     */
+    public BigDecimal computeSurveyFee(int amt) {
+        double result = multiple(RedisKey.SURVEY_FEE, amt);
+
+        return new BigDecimal(result);
+
+    }
+
+    /**
+     * 计算题目费用
+     * @param amt
+     * @return
+     */
+    public BigDecimal computeQuestionFee(int amt) {
+        double result = multiple(RedisKey.QUESTION_FEE, amt);
+
+        return new BigDecimal(result);
+
+    }
+
+    private double multiple(RedisKey key, int amt) {
+        // 得到单个任务的费用
+        Map<Object, Object> map = retrieveConfig();
+        String strSingleFee = (String) map.get(RedisKey.TOP_FEE.toString());
+        double singleFee = Double.valueOf(strSingleFee);
+
+        return singleFee * amt;
+
+    }
+
     private Map<Object, Object> retrieveConfig() {
         return rt.opsForHash().entries(RedisKey.SYSCONF.toString());
     }
