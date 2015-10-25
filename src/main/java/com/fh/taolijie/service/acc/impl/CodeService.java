@@ -2,6 +2,7 @@ package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.exception.checked.code.SMSIntervalException;
 import com.fh.taolijie.exception.checked.code.SMSVendorException;
+import com.fh.taolijie.service.pool.FixSizeThreadPool;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SMSUtils;
@@ -36,7 +37,14 @@ public class CodeService {
 
     @Qualifier("redisTemplateForString")
     @Autowired
-    StringRedisTemplate rt;
+    private StringRedisTemplate rt;
+
+    /**
+     * 线程池
+     */
+    @Autowired
+    private FixSizeThreadPool pool;
+
 
     /**
      * 生成一个在网页中显示的验证码
@@ -95,10 +103,14 @@ public class CodeService {
         }
 
         // 调用短信接口
-        boolean result = SMSUtils.sendCode(code, mobile);
+        pool.getPool().submit(() -> {
+            SMSUtils.sendCode(code, mobile);
+        });
+
+/*        boolean result = SMSUtils.sendCode(code, mobile);
         if (false == result) {
             throw new SMSVendorException();
-        }
+        }*/
 
 
         // 验证码存入Redis
