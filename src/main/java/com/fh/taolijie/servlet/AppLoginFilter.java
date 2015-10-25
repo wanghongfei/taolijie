@@ -65,6 +65,15 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
             return;
         }
 
+        // *************** DEBUG *******************
+
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        // *************** DEBUG *******************
+
         // 先尝试通过sid登陆
         if (loginBySid(req)) {
             if (infoLogger.isDebugEnabled()) {
