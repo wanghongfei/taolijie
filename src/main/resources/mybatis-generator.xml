@@ -43,7 +43,8 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="answer_record" domainObjectName="AnRecordModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="secret_question" domainObjectName="SeQuestionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+<!--        <table tableName="answer_record" domainObjectName="AnRecordModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="quest_question" domainObjectName="QuestionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
         <table tableName="question_opt" domainObjectName="QuestionOptModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="reco_post" domainObjectName="RecoPostModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
