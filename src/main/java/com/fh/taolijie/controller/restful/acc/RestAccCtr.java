@@ -13,10 +13,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
+import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.*;
 import com.fh.taolijie.service.acc.impl.CodeService;
@@ -176,6 +173,44 @@ public class RestAccCtr {
         }
 
         return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 修改交易密码
+     * @return
+     */
+    @RequestMapping(value = "/dealPwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText changeDealPwd(@RequestParam String answer,
+                                      @RequestParam String dealPwd,
+                                      HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        // 验证密保
+        try {
+            boolean result = seService.checkAnswer(memId, answer);
+            if (!result) {
+                return new ResponseText(ErrorCode.WRONG_ANSWER);
+            }
+
+        } catch (SecretQuestionNotExistException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        }
+
+        // 验证dealPwd参数
+        if (false == StringUtils.checkNotEmpty(dealPwd)) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        // 修改交易密码
+        try {
+            accService.updateDealPwd(memId, dealPwd);
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return new ResponseText();
     }
 
     /**

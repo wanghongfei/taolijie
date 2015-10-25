@@ -2,6 +2,7 @@ package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
 
 /**
  * Created by whf on 10/25/15.
@@ -37,5 +38,5 @@ public interface SeQuestionService {
      * @param answer
      * @return
      */
-    boolean checkAnswer(Integer memId, String answer);
+    boolean checkAnswer(Integer memId, String answer) throws SecretQuestionNotExistException;
 }

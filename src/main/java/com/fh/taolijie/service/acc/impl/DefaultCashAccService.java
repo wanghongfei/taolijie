@@ -123,6 +123,21 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void updateDealPwd(Integer memId, String pwd) throws CashAccNotExistsException {
+        Integer accId = accMapper.findIdByMemberId(memId);
+        if (null == accId) {
+            throw new CashAccNotExistsException("memId = " + memId);
+        }
+
+        CashAccModel example = new CashAccModel();
+        example.setId(accId);
+        example.setDealPassword(pwd);
+        accMapper.updateByPrimaryKeySelective(example);
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean checkAccIdExists(Integer accId) {
         return accMapper.checkAccIdExists(accId);

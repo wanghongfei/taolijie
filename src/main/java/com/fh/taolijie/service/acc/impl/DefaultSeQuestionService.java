@@ -12,6 +12,7 @@ import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
@@ -69,12 +70,16 @@ public class DefaultSeQuestionService implements SeQuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean checkAnswer(Integer memId, String answer) {
+    public boolean checkAnswer(Integer memId, String answer) throws SecretQuestionNotExistException {
         if (false == StringUtils.checkNotEmpty(answer)) {
             return false;
         }
 
         SeQuestionModel question = seMapper.selectByMemberId(memId);
+        if (null == question) {
+            throw new SecretQuestionNotExistException();
+        }
+
         if ( false == question.getAnswer().equals(answer) ) {
             return false;
         }
