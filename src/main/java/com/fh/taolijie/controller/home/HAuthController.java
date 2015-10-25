@@ -133,7 +133,10 @@ public class HAuthController {
             return new ResponseText(new LoginRespDto(mem.getId(), appToken));
         }
 
-        return new ResponseText(sid);
+        LoginRespDto respDto = new LoginRespDto();
+        respDto.setId(mem.getId());
+        respDto.setSid(sid);
+        return new ResponseText(respDto);
     }
 
 
