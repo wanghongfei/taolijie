@@ -34,6 +34,9 @@ public class RestUserController {
         if (null == mem) {
             return new ResponseText(ErrorCode.NOT_FOUND);
         }
+        mem.setPassword(null);
+        mem.setAppToken(null);
+        mem.setResetPasswordToken(null);
 
         return new ResponseText(mem);
     }
@@ -46,7 +49,9 @@ public class RestUserController {
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
     public ResponseText getById(@PathVariable Integer id) {
         MemberModel mem = accService.findMember(id);
-        //mem.setPassword(null);
+        mem.setPassword(null);
+        mem.setAppToken(null);
+        mem.setResetPasswordToken(null);
 
         return new ResponseText(mem);
     }
