@@ -136,6 +136,11 @@ public class HAuthController {
         LoginRespDto respDto = new LoginRespDto();
         respDto.setId(mem.getId());
         respDto.setSid(sid);
+        respDto.setGender(mem.getGender());
+        respDto.setNickname(mem.getName());
+        respDto.setPhotoPath(mem.getProfilePhotoPath());
+        respDto.setRole(mem.getRoleList().get(0).getRolename());
+        respDto.setUsername(mem.getUsername());
         return new ResponseText(respDto);
     }
 
