@@ -90,7 +90,7 @@ public class DefaultQuestService implements QuestService {
             throws BalanceNotEnoughException, CashAccNotExistsException {
 
         // 计算总钱数
-        BigDecimal tot = feeCal.computeQuestFee(model.getTotalAmt());
+        BigDecimal tot = feeCal.computeQuestFee(model.getAward().doubleValue(), model.getTotalAmt());
 
 
         // 扣钱

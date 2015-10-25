@@ -57,7 +57,9 @@ public enum ErrorCode {
     SMS_INVOKE_FAILED(34, "SMS vendor refused"),
 
     WRONG_ANSWER(35, "answer's wrong"),
-    ANSWER_EXIST(36, "answer exists");
+    ANSWER_EXIST(36, "answer exists"),
+
+    AWARD_TOO_LITTLE(37, "not enough award");
 
     private final String msg;
     private final int code;

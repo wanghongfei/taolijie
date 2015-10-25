@@ -20,6 +20,7 @@ import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.quest.impl.FeeCalculator;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,9 @@ public class DefaultRecoService implements RecoService {
 
     @Autowired
     private CashAccService accService;
+
+    @Autowired
+    private FeeCalculator feeService;
 
     @Override
     @Transactional(readOnly = true)
@@ -124,11 +128,8 @@ public class DefaultRecoService implements RecoService {
         reMapper.insertSelective(model);
 
         // 扣钱
-        // 查询费用设置
-        SysConfigModel sys = sysMapper.selectByPrimaryKey(1);
-        BigDecimal singleFee = sys.getTopFee();
-        BigDecimal hours = new BigDecimal(model.getHours());
-        BigDecimal finalFee = singleFee.multiply(hours);
+        // 计算费用
+        BigDecimal finalFee = feeService.computeTopFee(model.getHours());
 
         // 扣除余额
         Integer accId = accService.findIdByMember(model.getMemberId());
@@ -165,9 +166,7 @@ public class DefaultRecoService implements RecoService {
 
         // 扣钱
         // 计算钱数
-        SysConfigModel sys = sysMapper.selectByPrimaryKey(1);
-        BigDecimal singleFee = sys.getTagFee();
-        BigDecimal finalFee = singleFee.multiply(new BigDecimal(hours));
+        BigDecimal finalFee = feeService.computeTagFee(hours);
 
         // 从现金账户中扣除
         Integer accId = accService.findIdByMember(memId);

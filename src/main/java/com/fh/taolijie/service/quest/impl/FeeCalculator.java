@@ -26,12 +26,13 @@ public class FeeCalculator {
      * @param amt 任务数量
      * @return
      */
-    public BigDecimal computeQuestFee(int amt) {
+    public BigDecimal computeQuestFee(double award, int amt) {
         // 得到单个任务的费用
         Map<Object, Object> map = retrieveConfig();
         String strSingleFee = (String) map.get(RedisKey.QUEST_FEE_RATE.toString());
-        double singleFee = Double.valueOf(strSingleFee);
-        double result = (1 + singleFee / 100) * amt;
+        double feeRate = Double.valueOf(strSingleFee) / 100;
+        double singleFee = (1 + feeRate) * award;
+        double result = singleFee * amt;
 
         // 计算总费用
         return new BigDecimal(result);

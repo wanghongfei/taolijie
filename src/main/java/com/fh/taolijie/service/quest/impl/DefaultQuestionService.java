@@ -53,6 +53,9 @@ public class DefaultQuestionService implements QuestionService {
     @Autowired
     private AnRecordModelMapper recordMapper;
 
+    @Autowired
+    private FeeCalculator feeService;
+
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void publishQuestions(QuestModel quest, List<QuestionModel> questionList)

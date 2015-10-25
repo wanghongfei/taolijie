@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -57,6 +58,17 @@ public class RestQuestionUCtr {
         }
         if (!validateDto(dto)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        // award最低为0.10
+        BigDecimal award = dto.getQuest().getAward();
+        if (award.compareTo(new BigDecimal("0.10")) < 0) {
+            return new ResponseText(ErrorCode.AWARD_TOO_LITTLE);
+        }
+
+        // 检查任务数量与问题数量是否匹配
+        if ( false == dto.getQuest().getTotalAmt().equals(dto.getQuestions().size()) ) {
+            return new ResponseText(ErrorCode.HACKER);
         }
 
         // 将id string 转换成List<Integer>
