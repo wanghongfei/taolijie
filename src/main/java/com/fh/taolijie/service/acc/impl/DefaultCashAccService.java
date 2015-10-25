@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.dao.mapper.AccFlowModelMapper;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
@@ -12,8 +13,10 @@ import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.acc.SeQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +42,14 @@ public class DefaultCashAccService implements CashAccService {
     @Autowired
     private AccFlowService flowService;
 
+    @Autowired
+    private SeQuestionService seService;
+
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void addAcc(CashAccModel model) throws CashAccExistsException, UserNotExistsException {
+    public void addAcc(CashAccModel model, SeQuestionModel question)
+            throws CashAccExistsException, UserNotExistsException, SecretQuestionExistException {
+
         if (checkCashAccExists(model.getMemberId())) {
             throw new CashAccExistsException("用户" + model.getMemberId() + "的现金账户已经存在");
         }
@@ -58,6 +66,11 @@ public class DefaultCashAccService implements CashAccService {
         model.setUpdateTime(new Date());
         model.setCreatedTime(new Date());
         accMapper.insertSelective(model);
+
+
+        // 创建密保问题
+        seService.add(question);
+
     }
 
     /**

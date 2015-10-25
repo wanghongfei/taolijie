@@ -65,8 +65,10 @@ public class RestAccCtr {
      */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText createAcc(@RequestParam String dealPwd,
-                                  @RequestParam(required = false) String phone,
-                                  @RequestParam(defaultValue = "") String code, // 手机验证码
+                                  @RequestParam String seContent,
+                                  @RequestParam String seAnswer,
+                                  //@RequestParam(required = false) String phone,
+                                  //@RequestParam(defaultValue = "") String code, // 手机验证码
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String name,
                                   HttpServletRequest req) {
@@ -78,21 +80,22 @@ public class RestAccCtr {
 
 
         // 验证验证码
-        if (!codeService.validateSMSCode(memId.toString(), code)) {
+/*        if (!codeService.validateSMSCode(memId.toString(), code)) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-        }
+        }*/
 
         // 验证交易密码
         if (!StringUtils.checkNotEmpty(dealPwd)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        // 创建model对象
+        // 创建账户model对象
         CashAccModel acc = new CashAccModel();
         acc.setDealPassword(CredentialUtils.sha(dealPwd));
         acc.setEmail(email);
         acc.setName(name);
         acc.setMemberId(memId);
+
 
         // 判断用户的注册类型是不是手机号注册
         MemberModel mem = memService.findMember(memId);
@@ -102,20 +105,33 @@ public class RestAccCtr {
             acc.setPhoneNumber(mem.getUsername());
         } else {
             // 如果不是，则设置手机号参数中的号码
-            if (!StringUtils.checkNotEmpty(phone)) {
+            return new ResponseText(ErrorCode.HACKER);
+/*            if (!StringUtils.checkNotEmpty(phone)) {
                 return new ResponseText(ErrorCode.PERMISSION_ERROR);
             }
 
-            acc.setPhoneNumber(phone);
+            acc.setPhoneNumber(phone);*/
         }
 
+        //
+
+        // 创建密保问题model
+        SeQuestionModel question = new SeQuestionModel();
+        question.setMemberId(memId);
+        question.setContent(seContent);
+        question.setAnswer(seAnswer);
+
         try {
-            accService.addAcc(acc);
+            accService.addAcc(acc, question);
         } catch (CashAccExistsException e) {
             return new ResponseText(ErrorCode.EXISTS);
 
         } catch (UserNotExistsException e) {
             return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (SecretQuestionExistException ex) {
+            return new ResponseText(ErrorCode.ANSWER_EXIST);
+
         }
 
         return ResponseText.getSuccessResponseText();

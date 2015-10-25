@@ -2,11 +2,13 @@ package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
+import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
 
 import java.math.BigDecimal;
 
@@ -16,12 +18,11 @@ import java.math.BigDecimal;
 public interface CashAccService {
     /**
      * 创建账户
-     * @param memId
      * @exception CashAccExistsException 该用户已经有现金账户了
      * @exception UserNotExistsException memberId不存在
      */
-    void addAcc(CashAccModel model)
-            throws CashAccExistsException, UserNotExistsException;
+    void addAcc(CashAccModel model, SeQuestionModel question)
+            throws CashAccExistsException, UserNotExistsException, SecretQuestionExistException;
 
     /**
      * 检查指定用户的现金账户是否已经存在了

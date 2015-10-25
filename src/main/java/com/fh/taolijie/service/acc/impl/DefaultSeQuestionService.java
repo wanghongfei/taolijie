@@ -1,6 +1,7 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.SeQuestionModelMapper;
 import com.fh.taolijie.domain.AnRecordModel;
 import com.fh.taolijie.domain.QuestionModel;
@@ -35,6 +36,9 @@ public class DefaultSeQuestionService implements SeQuestionService {
     @Autowired
     private SeQuestionModelMapper seMapper;
 
+    @Autowired
+    private CashAccModelMapper accMapper;
+
     @Override
     @Transactional(readOnly = true)
     public SeQuestionModel findByMember(Integer memId, boolean answer) {
@@ -58,6 +62,9 @@ public class DefaultSeQuestionService implements SeQuestionService {
         }
 
         model.setCreatedTime(new Date());
+        // 设置accId
+        Integer accId = accMapper.findIdByMemberId(model.getMemberId());
+        model.setAccId(accId);
 
         return seMapper.insertSelective(model);
     }
