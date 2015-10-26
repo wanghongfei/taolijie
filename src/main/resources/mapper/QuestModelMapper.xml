@@ -10,6 +10,7 @@
         <id column="qu_id" property="id" jdbcType="INTEGER"/>
         <result column="qu_title" property="title" jdbcType="VARCHAR"/>
         <result column="qu_created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <result column="qu_flush_time" property="flushTime" jdbcType="TIMESTAMP"/>
         <result column="qu_quest_cate_id" property="questCateId" jdbcType="INTEGER"/>
         <result column="qu_start_time" property="startTime" jdbcType="TIMESTAMP"/>
         <result column="qu_end_time" property="endTime" jdbcType="TIMESTAMP"/>
@@ -49,6 +50,7 @@
         qu.id,
         qu.title,
         qu.created_time,
+        qu.flush_time,
         qu.quest_cate_id,
         qu.start_time,
         qu.end_time,
@@ -114,7 +116,8 @@
         member_id,
         emp_status,
         tag_expire_time,
-        question_amt
+        question_amt,
+        flush_time
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -127,7 +130,8 @@
         #{memberId},
         #{empStatus},
         #{tagExpireTime},
-        #{questionAmt})
+        #{questionAmt},
+        #{flushTime})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -221,6 +225,9 @@
             <if test="questionAmt != null">
                 question_amt,
             </if>
+            <if test="flushTime != null">
+                flush_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -307,6 +314,9 @@
             </if>
             <if test="questionAmt != null">
                 #{questionAmt},
+            </if>
+            <if test="flushTime != null">
+                #{flushTime},
             </if>
         </trim>
     </insert>
@@ -399,6 +409,9 @@
             <if test="questionAmt != null">
                 question_amt = #{questionAmt},
             </if>
+            <if test="flushTime != null">
+                flush_time = #{flushTime},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -436,7 +449,8 @@
 
         emp_status = #{empStatus},
         tag_expire_time = #{tagExpireTime},
-        question_amt = #{questionAmt}
+        question_amt = #{questionAmt},
+        flush_time = #{flushTime}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -579,6 +593,9 @@
             <if test="questionAmt != null">
                 AND qu.question_amt = #{questionAmt}
             </if>
+            <if test="flushTime != null">
+                AND qu.flush_time = #{flushTime}
+            </if>
 
         </where>
 
@@ -697,6 +714,9 @@
             </if>
             <if test="questionAmt != null">
                 AND qu.question_amt = #{questionAmt}
+            </if>
+            <if test="flushTime != null">
+                AND qu.flush_time = #{flushTime}
             </if>
 
         </where>

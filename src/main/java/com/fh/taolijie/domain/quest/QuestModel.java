@@ -19,6 +19,8 @@ public class QuestModel extends Pageable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    private Date flushTime;
+
     @NotNull
     private Integer questCateId;
 
@@ -616,6 +618,14 @@ public class QuestModel extends Pageable {
 
     public void setQuestionAmt(Integer questionAmt) {
         this.questionAmt = questionAmt;
+    }
+
+    public Date getFlushTime() {
+        return flushTime;
+    }
+
+    public void setFlushTime(Date flushTime) {
+        this.flushTime = flushTime;
     }
 
     public void setOffline(Boolean offline) {
