@@ -600,7 +600,7 @@
         </where>
 
         ORDER BY
-            qu.created_time DESC
+            qu.flush_time DESC
 
         LIMIT
           #{pageNumber}, #{pageSize}
