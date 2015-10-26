@@ -17,7 +17,8 @@ public enum RedisKey {
     QUESTION_FEE,
     SURVEY_FEE,
     MAX_EMP_WITHDRAW_DAY,
-    MAX_STU_WITHDRAW_DAY;
+    MAX_STU_WITHDRAW_DAY,
+    FLUSH_FEE;
 
     public String toString() {
         switch (this) {
@@ -56,6 +57,9 @@ public enum RedisKey {
 
             case MAX_STU_WITHDRAW_DAY:
                 return "max_stu_withdraw_fee";
+
+            case FLUSH_FEE:
+                return "flush_fee";
         }
 
         return null;

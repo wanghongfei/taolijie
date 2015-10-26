@@ -117,6 +117,32 @@ public class RestQuestCtr {
         return new ResponseText();
     }
 
+    /**
+     * 刷新帖子
+     * @param questId
+     * @return
+     */
+    @RequestMapping(value = "/flush/{questId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText flushPost(@PathVariable Integer questId,
+                                  HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        try {
+            questService.flush(memId, questId);
+        } catch (QuestNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (BalanceNotEnoughException e) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
 
     /**
      * 学生领取任务

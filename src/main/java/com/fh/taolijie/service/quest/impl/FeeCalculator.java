@@ -74,6 +74,17 @@ public class FeeCalculator {
     }
 
     /**
+     * 计算刷新费用
+     * @return
+     */
+    public BigDecimal computeFlushFee() {
+        Map<Object, Object> map = retrieveConfig();
+        String strSingleFee = (String) map.get(RedisKey.FLUSH_FEE.toString());
+
+        return new BigDecimal(strSingleFee);
+    }
+
+    /**
      * 计算调查问卷费用
      * @param amt
      * @return

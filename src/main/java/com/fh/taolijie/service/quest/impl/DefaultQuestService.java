@@ -219,6 +219,26 @@ public class DefaultQuestService implements QuestService {
         return questMapper.updateByPrimaryKeySelective(example);
     }
 
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int flush(Integer memId, Integer postId)
+            throws QuestNotFoundException, BalanceNotEnoughException, CashAccNotExistsException {
+
+        // 扣钱
+        BigDecimal fee = feeCal.computeFlushFee();
+        Integer accId = accMapper.findIdByMemberId(memId);
+        accService.reduceAvailableMoney(accId, fee, AccFlow.CONSUME);
+
+        // 执行刷新
+        int row = questMapper.flush(postId);
+
+        if (row <= 0) {
+            throw new QuestNotFoundException("");
+        }
+
+        return row;
+    }
+
     /**
      * 领取任务。
      * 需要行锁。

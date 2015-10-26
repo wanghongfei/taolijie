@@ -48,6 +48,14 @@ public interface QuestService {
     int updateTagExpireTime(Integer postId, Date newDate);
 
     /**
+     * 刷新时间
+     * @param postId
+     * @return
+     */
+    int flush(Integer memId, Integer postId)
+            throws QuestNotFoundException, BalanceNotEnoughException, CashAccNotExistsException;
+
+    /**
      * 用户领取任务
      * @param memId 领取任务的用户id.
      * @param questId 任务id

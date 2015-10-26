@@ -22,5 +22,6 @@ pipe.hset('sysconf', 'question_fee', 0.10)
 pipe.hset('sysconf', 'survey_fee', 0.10)
 pipe.hset('sysconf', 'max_emp_withdraw_day', 1000)
 pipe.hset('sysconf', 'max_stu_withdraw_day', 100)
+pipe.hset('sysconf', 'flush_fee', 0.5)
 print pipe.execute()
 

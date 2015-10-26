@@ -731,4 +731,13 @@
         WHERE
             qu.id IN <foreach collection="list" item="_id" open="(" close=")" separator=",">#{_id}</foreach>
     </select>
+
+    <update id="flush">
+        UPDATE
+            quest
+        SET
+            flush_time = now()
+        WHERE
+            id = #{postId}
+    </update>
 </mapper>
