@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     private static final Logger log = LoggerFactory.getLogger(CacheFilter.class);
 
     private static ApplicationContext ctx;
-    private static StringRedisTemplate redis;
+    private static Jedis jedisClient;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -90,14 +91,18 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ctx = applicationContext;
-        redis = (StringRedisTemplate)ctx.getBean("redisTemplateForString");
+        jedisClient = (Jedis) ctx.getBean("jedis");
     }
 
     private String getHtmlFromCache() {
-        return redis.opsForValue().get("home");
+        return jedisClient.get("home");
     }
 
     private void putIntoCache(String html) {
-        redis.opsForValue().set("home", html, 10, TimeUnit.MINUTES); // 10分钟
+        Pipeline pip = jedisClient.pipelined();
+        pip.set("home", html);
+        pip.expire("home", (int) TimeUnit.MINUTES.toSeconds(10)); // 10分钟
+        pip.sync();
+
     }
 }

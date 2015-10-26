@@ -26,7 +26,7 @@ public class RestStatisticsAdminController {
      */
     @RequestMapping(value = "/pageView", produces = Constants.Produce.JSON)
     public ResponseText pageViewStatistics() {
-        Map<String, Integer> map = staService.getPageViewStatistics();
+        Map<String, String> map = staService.getPageViewStatistics();
 
         return new ResponseText(map);
     }

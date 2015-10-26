@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -43,7 +43,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
     private static AccountService accountService;
 
-    private static StringRedisTemplate redisTemplate;
+    private static Jedis jedisClient;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -178,8 +178,8 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // 根据sid向redis中查询用户信息
         String key = RedisKey.SESSION.toString() + sid;
-        StringRedisTemplate rt = retrieveRedis("redisTemplateForString");
-        Map<Object, Object> map = rt.opsForHash().entries(key);
+        Jedis jedis = retrieveRedis("jedis");
+        Map<String, String> map = jedis.hgetAll(key);
         // 没查到表示已经过期或者未登陆
         if (null == map || map.isEmpty()) {
             if (infoLogger.isDebugEnabled()) {
@@ -190,9 +190,9 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // 查到
         // 取出用户信息放到request中
-        String username = (String)map.get("username");
-        String role = (String)map.get("role");
-        String id = (String)map.get("id");
+        String username = map.get("username");
+        String role = map.get("role");
+        String id = map.get("id");
 
         req.setAttribute("user", username);
         req.setAttribute("role", role);
@@ -229,12 +229,12 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         return accountService;
     }
 
-    private StringRedisTemplate retrieveRedis(String beanName) {
-        if (null == redisTemplate) {
-            redisTemplate = (StringRedisTemplate) applicationContext.getBean(beanName);
+    private Jedis retrieveRedis(String beanName) {
+        if (null == jedisClient) {
+            jedisClient = (Jedis) applicationContext.getBean(beanName);
         }
 
-        return redisTemplate;
+        return jedisClient;
     }
 
     @Override

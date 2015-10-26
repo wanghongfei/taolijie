@@ -11,8 +11,9 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import java.io.File;
 import java.util.Calendar;
@@ -34,9 +35,8 @@ public class SeqService {
     @Autowired
     private SeqJobModelMapper jobMapper;
 
-    @Qualifier("redisTemplateForString")
     @Autowired
-    StringRedisTemplate rt;
+    private Jedis jedis;
 
 
     /**
@@ -66,7 +66,7 @@ public class SeqService {
      */
     public boolean checkInterval(Integer memId) {
         String key = genRedisKey(memId);
-        String value = rt.opsForValue().get(key);
+        String value = jedis.get(key);
 
         if (null != value) {
             // 如果有值
@@ -76,7 +76,11 @@ public class SeqService {
 
         // 如果没值，则将当前的值放到redis中
         // 并设置过期时间为2s
-        rt.opsForValue().set(key, "T", 2, TimeUnit.SECONDS);
+        Pipeline pip = jedis.pipelined();
+        pip.set(key, "T");
+        pip.expire(key, 2);
+        pip.sync();
+
         return true;
     }
 

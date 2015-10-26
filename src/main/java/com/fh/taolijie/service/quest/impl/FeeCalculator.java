@@ -3,8 +3,8 @@ package com.fh.taolijie.service.quest.impl;
 import com.fh.taolijie.constant.RedisKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -16,9 +16,8 @@ import java.util.Map;
 @Service
 public class FeeCalculator {
 
-    @Qualifier("redisTemplateForString")
     @Autowired
-    private StringRedisTemplate rt;
+    private Jedis jedis;
 
 
     /**
@@ -28,8 +27,8 @@ public class FeeCalculator {
      */
     public BigDecimal computeQuestFee(double award, int amt) {
         // 得到单个任务的费用
-        Map<Object, Object> map = retrieveConfig();
-        String strSingleFee = (String) map.get(RedisKey.QUEST_FEE_RATE.toString());
+        Map<String, String> map = retrieveConfig();
+        String strSingleFee = map.get(RedisKey.QUEST_FEE_RATE.toString());
         double feeRate = Double.valueOf(strSingleFee) / 100;
         double singleFee = (1 + feeRate) * award;
         double result = singleFee * amt;
@@ -78,8 +77,8 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeFlushFee() {
-        Map<Object, Object> map = retrieveConfig();
-        String strSingleFee = (String) map.get(RedisKey.FLUSH_FEE.toString());
+        Map<String, String> map = retrieveConfig();
+        String strSingleFee = map.get(RedisKey.FLUSH_FEE.toString());
 
         return new BigDecimal(strSingleFee);
     }
@@ -110,15 +109,15 @@ public class FeeCalculator {
 
     private double multiple(RedisKey key, int amt) {
         // 得到单个任务的费用
-        Map<Object, Object> map = retrieveConfig();
-        String strSingleFee = (String) map.get(RedisKey.TOP_FEE.toString());
+        Map<String, String> map = retrieveConfig();
+        String strSingleFee = map.get(RedisKey.TOP_FEE.toString());
         double singleFee = Double.valueOf(strSingleFee);
 
         return singleFee * amt;
 
     }
 
-    private Map<Object, Object> retrieveConfig() {
-        return rt.opsForHash().entries(RedisKey.SYSCONF.toString());
+    private Map<String, String> retrieveConfig() {
+        return jedis.hgetAll(RedisKey.SYSCONF.toString());
     }
 }

@@ -10,5 +10,5 @@ public interface StatisticsService {
      * 查询页面访问量统计信息
      * @return
      */
-    Map<String, Integer> getPageViewStatistics();
+    Map<String, String> getPageViewStatistics();
 }

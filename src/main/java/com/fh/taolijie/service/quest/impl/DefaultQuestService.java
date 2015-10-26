@@ -27,11 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 import sun.applet.resources.MsgAppletViewer_zh_TW;
 
 import java.math.BigDecimal;
@@ -73,9 +72,8 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private QuestSchRelModelMapper qsMapper;
 
-    @Qualifier("redisTemplateForString")
     @Autowired
-    StringRedisTemplate rt;
+    private Jedis jedis;
 
     /**
      * 商家发布任务.
@@ -147,44 +145,35 @@ public class DefaultQuestService implements QuestService {
 
 
         // 投递任务过期定时任务
-        if (postMessage) {
-            rt.execute( (RedisConnection redisConn) -> {
-                StringRedisConnection strConn = (StringRedisConnection) redisConn;
+        // 构造参数列表
+        Map<String, String> map = new HashMap<>();
+        map.put("taskId", questId.toString());
+        map.put("questId", questId.toString());
 
-                // 构造参数列表
-                Map<String, String> map = new HashMap<>();
-                map.put("taskId", questId.toString());
-                map.put("questId", questId.toString());
-
-                // 构造消息体
-                MsgProtocol msg = new MsgProtocol.Builder(
-                        MsgType.DATE_STYLE,
-                        "localhost",
-                        8080,
-                        "/api/schedule/questExpire",
-                        "GET",
-                        // 任务结束后的第25小时执行
-                        //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                        TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
-                        .setParmMap(map)
-                        .build();
+        // 构造消息体
+        MsgProtocol msg = new MsgProtocol.Builder(
+                MsgType.DATE_STYLE,
+                "localhost",
+                8080,
+                "/api/schedule/questExpire",
+                "GET",
+                // 任务结束后的第25小时执行
+                //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                .setParmMap(map)
+                .build();
 
 
-                // 序列化成JSON
-                String json = JSON.toJSONString(msg);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("sending message: {}", json);
-                }
+        // 序列化成JSON
+        String json = JSON.toJSONString(msg);
+        if (logger.isDebugEnabled()) {
+            logger.debug("sending message: {}", json);
+        }
 
-                // 发布消息
-                Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
-                if (recvAmt.longValue() <= 0) {
-                    LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-                }
-
-                return null;
-            });
-
+        // 发布消息
+        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+        if (recvAmt.longValue() <= 0) {
+            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
         }
 
     }
@@ -304,40 +293,34 @@ public class DefaultQuestService implements QuestService {
         questMapper.decreaseLeftAmount(questId);
 
         // todo 投递定时任务请求
-        rt.execute( (RedisConnection redisConn) -> {
-            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+        // 构造参数列表
+        Map<String, String> map = new HashMap<>();
+        map.put("taskId", String.valueOf(assignId));
+        map.put("assignId", String.valueOf(assignId));
 
-            // 构造参数列表
-            Map<String, String> map = new HashMap<>();
-            map.put("taskId", String.valueOf(assignId));
-            map.put("assignId", String.valueOf(assignId));
-
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol.Builder(
-                        MsgType.DATE_STYLE,
-                        "localhost",
-                        8080,
-                        "/api/schedule/autoExpire",
-                        "GET",
-                        TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
-                    .setParmMap(map)
-                    .build();
+        // 构造消息体
+        MsgProtocol msg = new MsgProtocol.Builder(
+                MsgType.DATE_STYLE,
+                "localhost",
+                8080,
+                "/api/schedule/autoExpire",
+                "GET",
+                TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
+                .setParmMap(map)
+                .build();
 
 
-            // 序列化成JSON
-            String json = JSON.toJSONString(msg);
-            if (logger.isDebugEnabled()) {
-                logger.debug("sending message: {}", json);
-            }
+        // 序列化成JSON
+        String json = JSON.toJSONString(msg);
+        if (logger.isDebugEnabled()) {
+            logger.debug("sending message: {}", json);
+        }
 
-            // 发布消息
-            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
-
-            return null;
-        });
+        // 发布消息
+        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+        if (recvAmt.longValue() <= 0) {
+            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+        }
 
         // 方法结束 == 事务结束，行锁释放
     }

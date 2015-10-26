@@ -12,8 +12,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,9 +36,7 @@ public class CodeService {
      */
     public static final String SMS_CONSTRAIN_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB" + Constants.DELIMITER + "CONSTRAIN";
 
-    @Qualifier("redisTemplateForString")
-    @Autowired
-    private StringRedisTemplate rt;
+    private Jedis jedis;
 
     /**
      * 线程池
@@ -58,7 +57,10 @@ public class CodeService {
         String code = RandomStringUtils.randomAlphabetic(6).toLowerCase();
         // 放入redis中
         // 有效时间10min
-        rt.opsForValue().set(key, code, 10, TimeUnit.MINUTES);
+        Pipeline pip = jedis.pipelined();
+        pip.set(key, code);
+        pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(10));
+        pip.sync();
 
         return code;
     }
@@ -73,14 +75,14 @@ public class CodeService {
         String key = genKeyForWEB(memId);
 
         // 从redis中取出code
-        String redisCode = rt.opsForValue().get(key);
+        String redisCode = jedis.get(key);
         if (null == redisCode) {
             // 已经过期了
             return false;
         }
 
         // 从redis中清除该code
-        rt.delete(key);
+        jedis.del(key);
 
         return redisCode.equals(code);
     }
@@ -115,7 +117,11 @@ public class CodeService {
 
         // 验证码存入Redis
         // 过期时间5min
-        rt.opsForValue().set(genKeyForSMS(memId), code, 5, TimeUnit.MINUTES);
+        String key = genKeyForSMS(memId);
+        Pipeline pip = jedis.pipelined();
+        pip.set(key, code);
+        pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(5));
+        pip.sync();
 
 
         return code;
@@ -128,7 +134,7 @@ public class CodeService {
      */
     public boolean validateSMSCode(String memId, String code) {
         String key = genKeyForSMS(memId);
-        String realCode = rt.opsForValue().get(key);
+        String realCode = jedis.get(key);
         if (null == realCode) {
             // 已经过期
             return false;
@@ -138,7 +144,7 @@ public class CodeService {
         // 只有当验证码正确时才
         // 从Redis中清除
         if (result) {
-            rt.delete(key);
+            jedis.del(key);
         }
 
         return result;
@@ -152,14 +158,17 @@ public class CodeService {
     private boolean checkSMSInterval(String memId) {
         String key = genKeyForSMSConstrain(memId);
 
-        String val = rt.opsForValue().get(key);
+        String val = jedis.get(key);
 
         // 如果没取到
         // 说明距离上次发送已经超过1min了
         if (null == val) {
             // 将本次发送验证码的状态保存到redis中
             // 过期时间为1min
-            rt.opsForValue().set(key, "T", 1, TimeUnit.MINUTES);
+            Pipeline pip = jedis.pipelined();
+            pip.set(key, "T");
+            pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(1));
+            pip.sync();
 
             return true;
         }

@@ -16,11 +16,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -37,10 +35,9 @@ import java.util.List;
 public class RedisCacheAspect {
     public static final Logger infoLog = LogUtils.getInfoLogger();
 
-    @Qualifier("redisTemplateForString")
-    @Autowired
-    StringRedisTemplate rt;
 
+    @Autowired
+    private Jedis jedis;
 
     /**
      * 方法调用前，先查询缓存。如果存在缓存，则返回缓存数据，阻止方法调用;
@@ -86,7 +83,8 @@ public class RedisCacheAspect {
         // 检查redis中是否有缓存
         String value = null;
         try {
-            value = (String)rt.opsForHash().get(modelType.getName(), key);
+            //value = (String)rt.opsForHash().get(modelType.getName(), key);
+            value = jedis.hget(modelType.getName(), key);
         } catch (Exception ex) {
             // 如果扔异常，说明Redis出了问题
             // 此时直接查数据库，绕开Redis
@@ -114,40 +112,20 @@ public class RedisCacheAspect {
 
             String hashName = modelType.getName();
 
+
+
             // 序列化结果放入缓存
-            try {
-                rt.execute(new RedisCallback<Object>() {
-                    @Override
-                    public Object doInRedis(RedisConnection redisConn) throws DataAccessException {
-                        // 配置文件中指定了这是一个String类型的连接
-                        // 所以这里向下强制转换一定是安全的
-                        StringRedisConnection conn = (StringRedisConnection) redisConn;
-
-
-                        // 判断hash名是否存在
-                        // 如果不存在，创建该hash并设置过期时间
-                        if (false == conn.exists(hashName) ){
-                            conn.hSet(hashName, key, json);
-                            conn.expire(hashName, Constants.HASH_EXPIRE_TIME);
-                        } else {
-                            conn.hSet(hashName, key, json);
-                        }
-
-                        return null;
-                    }
-                });
-            } catch (Exception ex) {
-                // 如果扔异常，说明Redis出了问题
-                // 此时直接查数据库，绕开Redis
-
-                // 日志记录
-                String errMsg = LogUtils.getStackTrace(ex);
-                LogUtils.getErrorLogger().error(errMsg);
-
-                // 执行数据库查询方法
-                result = jp.proceed(args);
-                return result;
+            // 判断hash名是否存在
+            Boolean exist = jedis.exists(hashName);
+            Pipeline pip = jedis.pipelined();
+            // 更新hash
+            pip.hset(hashName, key, json);
+            // 如果不存在，设置过期时间
+            if (false == exist) {
+                pip.expire(hashName, (int) Constants.HASH_EXPIRE_TIME);
             }
+            pip.sync();
+
         } else {
             // 缓存命中
             if (infoLog.isDebugEnabled()) {
@@ -208,7 +186,7 @@ public class RedisCacheAspect {
             }
 
             // 清除对应缓存
-            rt.delete(clazz.getName());
+            jedis.del(clazz.getName());
         }
 
 

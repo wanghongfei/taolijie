@@ -20,11 +20,10 @@ import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.SessionCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -46,9 +45,8 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Autowired
     RoleModelMapper roleMapper;
 
-    @Qualifier("redisTemplateForString")
     @Autowired
-    StringRedisTemplate rt;
+    private Jedis jedis;
 
     @Autowired(required = false)
     Mail mail;
@@ -323,20 +321,14 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     public void createRedisSession(MemberModel mem, String sid) {
-        rt.execute(new SessionCallback<Object>() {
-            @Override
-            public  Object execute(RedisOperations opt) throws DataAccessException {
-                opt.multi();
+        String key = RedisKey.SESSION.toString() + sid;
 
-                String key = RedisKey.SESSION.toString() + sid;
-                opt.opsForHash().put(key, "id", mem.getId().toString());
-                opt.opsForHash().put(key, "username", mem.getUsername());
-                opt.opsForHash().put(key, "role", mem.getRoleList().get(0).getRolename());
-                opt.expire(key, 5, TimeUnit.DAYS); // 5天
+        Pipeline pip = jedis.pipelined();
+        pip.hset(key, "id", mem.getId().toString());
+        pip.hset(key, "username", mem.getUsername());
+        pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
+        pip.sync();
 
-                return opt.exec();
-            }
-        });
     }
 
     @Override

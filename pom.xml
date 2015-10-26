@@ -41,8 +41,7 @@
 
         <tomcat-jdbc>8.0.23</tomcat-jdbc>
 
-        <spring-redis>1.5.0.RELEASE</spring-redis>
-        <jedis>2.6.2</jedis>
+        <jedis>2.7.2</jedis>
 
         <jackson-version>1.9.13</jackson-version>
         <aspectj-version>1.8.6</aspectj-version>
@@ -169,12 +168,7 @@
         </dependency>
 
 
-        <!-- Spring Data Redis -->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>${spring-redis}</version>
-        </dependency>
+        <!-- Jedis -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>

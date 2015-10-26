@@ -24,11 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.StringRedisConnection;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -63,9 +61,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Autowired
     private TljAuditService auditService;
 
-    @Qualifier("redisTemplateForString")
+
     @Autowired
-    StringRedisTemplate rt;
+    private Jedis jedis;
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
@@ -101,40 +99,34 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
 
         // 投递24小时后自动通过定时任务
-        rt.execute( (RedisConnection redisConn) -> {
-            StringRedisConnection strConn = (StringRedisConnection) redisConn;
+        // 构造参数列表
+        Map<String, String> parmMap = new HashMap<>();
+        parmMap.put("taskId", reqId.toString());
+        parmMap.put("reqId", reqId.toString());
 
-            // 构造参数列表
-            Map<String, String> parmMap = new HashMap<>();
-            parmMap.put("taskId", reqId.toString());
-            parmMap.put("reqId", reqId.toString());
-
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol.Builder(
-                        MsgType.DATE_STYLE,
-                        "localhost",
-                        8080,
-                        "/api/schedule/autoAudit",
-                        "GET",
-                        TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24)
-                    ).setParmMap(parmMap)
-                    .build();
+        // 构造消息体
+        MsgProtocol msg = new MsgProtocol.Builder(
+                MsgType.DATE_STYLE,
+                "localhost",
+                8080,
+                "/api/schedule/autoAudit",
+                "GET",
+                TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24)
+        ).setParmMap(parmMap)
+                .build();
 
 
-            // 序列化成JSON
-            String json = JSON.toJSONString(msg);
-            if (logger.isDebugEnabled()) {
-                logger.debug("sending message: {}", json);
-            }
+        // 序列化成JSON
+        String json = JSON.toJSONString(msg);
+        if (logger.isDebugEnabled()) {
+            logger.debug("sending message: {}", json);
+        }
 
-            // 发布消息
-            Long recvAmt = strConn.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0 ) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
-
-            return null;
-        });
+        // 发布消息
+        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+        if (recvAmt.longValue() <= 0 ) {
+            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+        }
     }
 
     /**

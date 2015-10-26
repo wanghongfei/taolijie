@@ -5,10 +5,10 @@ import cn.fh.security.servlet.PageProtectionFilter;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,9 +20,9 @@ import java.util.Arrays;
  */
 @Component
 public class StatisticsInterceptor extends HandlerInterceptorAdapter {
+
     @Autowired
-    @Qualifier("redisTemplateForString")
-    RedisTemplate rt;
+    private Jedis jedis;
 
     /**
      * 用hash set数据结构存放 uri - number 键值对
@@ -37,7 +37,7 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         }
 
-        rt.opsForHash().increment(Constants.RedisKey.PAGE_STATISTICS, uri, 1);
+        jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1);
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
         return super.preHandle(request, response, handler);
