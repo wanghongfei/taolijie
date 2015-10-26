@@ -115,7 +115,9 @@ public class DefaultQuestService implements QuestService {
 
     private void doPublish(QuestModel model, boolean postMessage) {
         // 发布任务
-        model.setCreatedTime(new Date());
+        Date now = new Date();
+        model.setCreatedTime(now);
+        model.setFlushTime(now);
         questMapper.insertSelective(model);
 
         Integer questId = model.getId();
