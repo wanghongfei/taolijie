@@ -83,7 +83,12 @@ public class DefaultCouponService implements CouponService {
         }
 
         // 将取到的coupon状态设为已领取
-        couMapper.updateStatus(coupon.getId(), CouponStatus.ASSIGNED.code());
+        CouponModel example = new CouponModel();
+        example.setId(coupon.getId());
+        example.setStatus(CouponStatus.ASSIGNED.code());
+        example.setAcquireTime(new Date());
+        example.setMemId(memId);
+        couMapper.updateByPrimaryKeySelective(example);
 
         // 将对应任务的coupon数量-1
         questMapper.decreaseCouponAmt(questId);

@@ -15,6 +15,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -379,6 +380,13 @@ public class RestQuestCtr {
 
         } catch (AuditNotEnoughException ex) {
             return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
+
+        } catch (NotEnoughCouponException ex) {
+            return new ResponseText(ErrorCode.ASSIGN_COUPON_FAILED);
+
+        } catch (HackException ex) {
+            return new ResponseText(ErrorCode.HACKER);
+
         }
 
         return new ResponseText();

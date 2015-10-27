@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
+import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 
@@ -25,7 +26,7 @@ public interface QuestFinishService {
      * @param memo
      */
     void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException;
+            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException, NotEnoughCouponException, HackException;
 
     /**
      * 查询所有请求

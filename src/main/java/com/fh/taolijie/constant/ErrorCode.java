@@ -59,7 +59,9 @@ public enum ErrorCode {
     WRONG_ANSWER(35, "answer's wrong"),
     ANSWER_EXIST(36, "answer exists"),
 
-    AWARD_TOO_LITTLE(37, "not enough award");
+    AWARD_TOO_LITTLE(37, "not enough award"),
+
+    ASSIGN_COUPON_FAILED(38, "assign coupon failed");
 
     private final String msg;
     private final int code;

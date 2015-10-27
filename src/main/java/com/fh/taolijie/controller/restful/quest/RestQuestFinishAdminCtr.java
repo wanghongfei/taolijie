@@ -4,8 +4,10 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
+import com.fh.taolijie.exception.checked.quest.NotEnoughCouponException;
 import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
 import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
 import com.fh.taolijie.service.quest.QuestFinishService;
@@ -65,6 +67,12 @@ public class RestQuestFinishAdminCtr {
 
         } catch (AuditNotEnoughException e) {
             return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
+
+        } catch (NotEnoughCouponException e) {
+            return new ResponseText(ErrorCode.ASSIGN_COUPON_FAILED);
+
+        } catch (HackException ex) {
+            return new ResponseText(ErrorCode.HACKER);
         }
 
         return new ResponseText();

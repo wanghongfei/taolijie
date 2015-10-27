@@ -13,9 +13,11 @@ import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.utils.LogUtils;
@@ -60,6 +62,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
 
     @Autowired
     private TljAuditService auditService;
+
+    @Autowired
+    private CouponService couponService;
 
 
     @Autowired
@@ -138,7 +143,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer requestId, RequestStatus status, String memo)
-            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException {
+            throws CashAccNotExistsException, RequestNotExistException, RequestCannotChangeException, AuditNotEnoughException, NotEnoughCouponException, HackException {
 
         FinishRequestModel req = fiMapper.selectByPrimaryKey(requestId);
         if (null == req) {
@@ -156,10 +161,16 @@ public class DefaultQuestFinishService implements QuestFinishService {
         CashAccModel acc = accMapper.findByMemberId(req.getMemberId());
 
         // 如果是审核通过
-        // 则向账户加钱
         if (status == RequestStatus.EMP_PASSED || status == RequestStatus.TLJ_PASSED || status == RequestStatus.AUTO_PASSED) {
+            // 则向账户加钱
             BigDecimal amt = quest.getAward();
             accService.addAvailableMoney(acc.getId(), amt, AccFlow.AWARD);
+
+            // 如果任务有coupon, 则领取一张coupon
+            Boolean hasCoupon = quest.getCoupon();
+            if (hasCoupon) {
+                couponService.acquireCoupon(quest.getId(), req.getMemberId());
+            }
 
             // todo 如果是tlj审核, 则代审核申请 -1
             if (status == RequestStatus.TLJ_PASSED) {
