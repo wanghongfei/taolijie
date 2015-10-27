@@ -86,6 +86,13 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
+        // 验证是否已认证
+        MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
+        String status = mem.getVerified();
+        if (null == status || false == status.equals(CertiStatus.DONE.code())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
         // 参数验证
         if (br.hasErrors()) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
