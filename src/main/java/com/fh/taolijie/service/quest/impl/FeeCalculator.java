@@ -29,12 +29,12 @@ public class FeeCalculator {
         // 得到单个任务的费用
         Map<String, String> map = retrieveConfig();
         String strSingleFee = map.get(RedisKey.QUEST_FEE_RATE.toString());
-        double feeRate = Double.valueOf(strSingleFee) / 100;
-        double singleFee = (1 + feeRate) * award;
-        double result = singleFee * amt;
 
-        // 计算总费用
-        return new BigDecimal(result);
+        BigDecimal feeRate = new BigDecimal(strSingleFee).divide(BigDecimal.valueOf(100));
+        BigDecimal singleFee = BigDecimal.ONE.add(feeRate).multiply(BigDecimal.valueOf(award));
+        BigDecimal result = singleFee.multiply(BigDecimal.valueOf(amt));
+
+        return result;
     }
 
     /**
@@ -43,9 +43,7 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeTljAuditFee(int amt) {
-        double result = multiple(RedisKey.AUDIT_FEE, amt);
-
-        return new BigDecimal(result);
+        return multiple(RedisKey.AUDIT_FEE, amt);
     }
 
     /**
@@ -54,10 +52,7 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeTopFee(int hours) {
-        double result = multiple(RedisKey.TOP_FEE, hours);
-
-        return new BigDecimal(result);
-
+        return multiple(RedisKey.TOP_FEE, hours);
     }
 
     /**
@@ -66,9 +61,7 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeTagFee(int hours) {
-        double result = multiple(RedisKey.TAG_FEE, hours);
-
-        return new BigDecimal(result);
+        return multiple(RedisKey.TAG_FEE, hours);
 
     }
 
@@ -89,10 +82,7 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeSurveyFee(int amt) {
-        double result = multiple(RedisKey.SURVEY_FEE, amt);
-
-        return new BigDecimal(result);
-
+        return multiple(RedisKey.SURVEY_FEE, amt);
     }
 
     /**
@@ -101,19 +91,17 @@ public class FeeCalculator {
      * @return
      */
     public BigDecimal computeQuestionFee(int amt) {
-        double result = multiple(RedisKey.QUESTION_FEE, amt);
-
-        return new BigDecimal(result);
+        return multiple(RedisKey.QUESTION_FEE, amt);
 
     }
 
-    private double multiple(RedisKey key, int amt) {
+    private BigDecimal multiple(RedisKey key, int amt) {
         // 得到单个任务的费用
         Map<String, String> map = retrieveConfig();
-        String strSingleFee = map.get(RedisKey.TOP_FEE.toString());
-        double singleFee = Double.valueOf(strSingleFee);
+        String strSingleFee = map.get(key.toString());
+        BigDecimal singleFee = new BigDecimal(strSingleFee);
 
-        return singleFee * amt;
+        return singleFee.multiply(BigDecimal.valueOf(amt));
 
     }
 
