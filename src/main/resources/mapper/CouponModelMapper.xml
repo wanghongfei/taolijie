@@ -8,7 +8,7 @@
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="code" property="code" jdbcType="VARCHAR"/>
-        <result column="created_time" property="createdTime" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="acquire_time" property="acquireTime" jdbcType="TIMESTAMP"/>
         <result column="emp_id" property="empId" jdbcType="INTEGER"/>
         <result column="mem_id" property="memId" jdbcType="INTEGER"/>
@@ -57,7 +57,7 @@
         quest_title, quest_id, comp_name,
         title, description, expired_time,
         logo_path, status)
-        values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{createdTime,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{createdTime},
         #{acquireTime,jdbcType=TIMESTAMP}, #{empId,jdbcType=INTEGER}, #{memId,jdbcType=INTEGER},
         #{questTitle,jdbcType=VARCHAR}, #{questId,jdbcType=INTEGER}, #{compName,jdbcType=VARCHAR},
         #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{expiredTime,jdbcType=TIMESTAMP},
@@ -121,7 +121,7 @@
                 #{code,jdbcType=VARCHAR},
             </if>
             <if test="createdTime != null">
-                #{createdTime,jdbcType=VARCHAR},
+                #{createdTime},
             </if>
             <if test="acquireTime != null">
                 #{acquireTime,jdbcType=TIMESTAMP},
@@ -158,6 +158,16 @@
             </if>
         </trim>
     </insert>
+
+    <insert id="insertInBatch">
+        INSERT INTO
+            coupon (code, created_time, acquire_time, emp_id, mem_id, quest_title, quest_id, comp_name, title, description, expired_time, logo_path, status)
+        VALUES
+            <foreach collection="codeList" separator="," item="_c">
+                (#{_c}, #{coupon.createdTime}, #{coupon.acquireTime}, #{coupon.empId}, #{coupon.memId}, #{coupon.questTitle}, #{coupon.questId}, #{coupon.compName}, #{coupon.title}, #{coupon.description}, #{coupon.expiredTime}, #{coupon.logoPath}, #{coupon.status})
+            </foreach>
+    </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.fh.taolijie.domain.CouponModel">
         <!--
           WARNING - @mbggenerated
@@ -169,7 +179,7 @@
                 code = #{code,jdbcType=VARCHAR},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=VARCHAR},
+                created_time = #{createdTime},
             </if>
             <if test="acquireTime != null">
                 acquire_time = #{acquireTime,jdbcType=TIMESTAMP},
@@ -214,7 +224,7 @@
         -->
         update coupon
         set code = #{code,jdbcType=VARCHAR},
-        created_time = #{createdTime,jdbcType=VARCHAR},
+        created_time = #{createdTime},
         acquire_time = #{acquireTime,jdbcType=TIMESTAMP},
         emp_id = #{empId,jdbcType=INTEGER},
         mem_id = #{memId,jdbcType=INTEGER},
@@ -228,4 +238,5 @@
         status = #{status,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
 </mapper>

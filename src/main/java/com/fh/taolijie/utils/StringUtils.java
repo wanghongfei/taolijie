@@ -283,6 +283,21 @@ public class StringUtils {
         return true;
     }
 
+    /**
+     * 检查字符串是否全部非空
+     * @param strs
+     * @return
+     */
+    public static boolean checkAllNotEmpty(String... strs) {
+        for (String str : strs) {
+            if (null == str || str.isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     /**
      * 将所有参数做为字符串拼接在一起

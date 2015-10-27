@@ -2,6 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
@@ -24,7 +25,7 @@ public interface QuestService {
      * @param accId 商家账户
      * @param model
      */
-    void publishQuest(Integer accId, QuestModel model)
+    void publishQuest(Integer accId, QuestModel model, CouponModel coupon)
             throws BalanceNotEnoughException, CashAccNotExistsException;
 
     /**

@@ -9,6 +9,7 @@ import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.dao.mapper.*;
+import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.QuestCollRelModel;
 import com.fh.taolijie.domain.QuestSchRelModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
@@ -20,6 +21,7 @@ import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.TimeUtil;
@@ -73,6 +75,9 @@ public class DefaultQuestService implements QuestService {
     private QuestSchRelModelMapper qsMapper;
 
     @Autowired
+    private CouponService couponService;
+
+    @Autowired
     private Jedis jedis;
 
     /**
@@ -84,7 +89,7 @@ public class DefaultQuestService implements QuestService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void publishQuest(Integer accId, QuestModel model)
+    public void publishQuest(Integer accId, QuestModel model, CouponModel coupon)
             throws BalanceNotEnoughException, CashAccNotExistsException {
 
         // 计算总钱数
@@ -105,10 +110,22 @@ public class DefaultQuestService implements QuestService {
             throw ex;
         }
 
+        // 如果设置了coupon
+        // 则添加coupon信息到任务中
+        if (null != coupon) {
+            model.setCoupon(true);
+            model.setCouponLeft(coupon.getAmt());
+        }
+
         // 发布任务
         // 置状态为审核中
         model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
         doPublish(model, true);
+
+        // 插入coupon数据
+        if (null != coupon) {
+            couponService.add(coupon, model);
+        }
     }
 
     private void doPublish(QuestModel model, boolean postMessage) {
@@ -144,36 +161,39 @@ public class DefaultQuestService implements QuestService {
         }
 
 
-        // 投递任务过期定时任务
-        // 构造参数列表
-        Map<String, String> map = new HashMap<>();
-        map.put("taskId", questId.toString());
-        map.put("questId", questId.toString());
+        if (postMessage) {
+            // 投递任务过期定时任务
+            // 构造参数列表
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", questId.toString());
+            map.put("questId", questId.toString());
 
-        // 构造消息体
-        MsgProtocol msg = new MsgProtocol.Builder(
-                MsgType.DATE_STYLE,
-                "localhost",
-                8080,
-                "/api/schedule/questExpire",
-                "GET",
-                // 任务结束后的第25小时执行
-                //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
-                .setParmMap(map)
-                .build();
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                    MsgType.DATE_STYLE,
+                    "localhost",
+                    8080,
+                    "/api/schedule/questExpire",
+                    "GET",
+                    // 任务结束后的第25小时执行
+                    //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                    TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                    .setParmMap(map)
+                    .build();
 
 
-        // 序列化成JSON
-        String json = JSON.toJSONString(msg);
-        if (logger.isDebugEnabled()) {
-            logger.debug("sending message: {}", json);
-        }
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
 
-        // 发布消息
-        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-        if (recvAmt.longValue() <= 0) {
-            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            // 发布消息
+            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
         }
 
     }

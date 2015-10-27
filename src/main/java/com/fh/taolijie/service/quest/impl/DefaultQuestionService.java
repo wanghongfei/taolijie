@@ -65,7 +65,7 @@ public class DefaultQuestionService implements QuestionService {
 
         // S1: 创建Quest
         Integer accId = accService.findIdByMember(quest.getMemberId());
-        questService.publishQuest(accId, quest);
+        questService.publishQuest(accId, quest, null);
 
 
         // S2: 创建问题对象

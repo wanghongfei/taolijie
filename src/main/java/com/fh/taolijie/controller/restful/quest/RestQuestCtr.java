@@ -8,6 +8,7 @@ import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.TljAuditModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
@@ -27,12 +28,14 @@ import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,19 +67,15 @@ public class RestQuestCtr {
                                      BindingResult br,
                                      @RequestParam String collegeIds,
                                      @RequestParam String schoolIds,
+                                     // coupon信息
+                                     @RequestParam(required = false) String couponTitle,
+                                     @RequestParam(required = false) String couponDesp,
+                                     @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date expiredTime,
+                                     @RequestParam(required = false) String logo,
+                                     @RequestParam(required = false) Integer couponAmt,
                                      HttpServletRequest req) {
-        // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
-        if (null == credential) {
-            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
-        }
 
-
-
-
-
-
-        
         if (!SessionUtils.isEmployer(credential)) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
@@ -85,6 +84,18 @@ public class RestQuestCtr {
         if (br.hasErrors()) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
+
+        // 标记变量
+        // 记录该任务是否需要coupon
+        boolean coupon = false;
+        // couponTitle, couponDesp, expiredTime和logo要么全为null, 要么都不为null
+        if (null != couponAmt) {
+            coupon = true;
+            if (false == StringUtils.checkAllNotEmpty(couponTitle, couponDesp, logo) || null == expiredTime) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+        }
+
         // 将id string 转换成List<Integer>
         try {
             List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
@@ -97,15 +108,28 @@ public class RestQuestCtr {
         }
 
         // 查出用户对应的现金账户
-        CashAccModel acc = accService.findByMember(credential.getId());
-        if (null == acc) {
+        Integer accId = accService.findIdByMember(credential.getId());
+        if (null == accId) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
         }
         model.setMemberId(credential.getId());
         model.setLeftAmt(model.getTotalAmt());
 
         try {
-            questService.publishQuest(acc.getId(), model);
+            // 任务有coupon信息
+            if (coupon) {
+                CouponModel couponModel = new CouponModel();
+                couponModel.setEmpId(credential.getId());
+                couponModel.setTitle(couponTitle);
+                couponModel.setDescription(couponDesp);
+                couponModel.setLogoPath(logo);
+                couponModel.setExpiredTime(expiredTime);
+                couponModel.setAmt(couponAmt);
+
+                questService.publishQuest(accId, model, couponModel);
+            } else {
+                questService.publishQuest(accId, model, null);
+            }
 
         } catch (BalanceNotEnoughException e) {
             return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
