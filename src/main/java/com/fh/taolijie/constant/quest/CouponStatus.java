@@ -25,4 +25,23 @@ public enum CouponStatus {
     public int code() {
         return this.code;
     }
+
+    public static CouponStatus fromCode(Integer code) {
+        if (null == code) {
+            return null;
+        }
+
+        switch (code) {
+            case 0:
+                return NOT_ASSIGNED;
+
+            case 1:
+                return ASSIGNED;
+
+            case 2:
+                return USED;
+        }
+
+        return null;
+    }
 }

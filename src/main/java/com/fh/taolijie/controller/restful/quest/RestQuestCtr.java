@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.CouponStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.CouponModel;
@@ -452,6 +453,7 @@ public class RestQuestCtr {
      */
     @RequestMapping(value = "/coupon/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText queryMyCoupon(HttpServletRequest req,
+                                      @RequestParam(required = false) Integer status,
                                       @RequestParam(required = false, defaultValue = "0") int pn,
                                       @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps
                                       ) {
@@ -462,11 +464,22 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
+
         Integer memId = credential.getId();
 
         pn = PageUtils.getFirstResult(pn, ps);
+
         CouponModel model = new CouponModel(pn, ps);
         model.setMemId(memId);
+        if (null != status) {
+            CouponStatus cs = CouponStatus.fromCode(status);
+            if (null == cs) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+
+            model.setStatus(status);
+        }
+
         ListResult<CouponModel> lr = couponService.findBy(model);
 
         return new ResponseText(lr);
