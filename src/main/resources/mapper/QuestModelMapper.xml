@@ -40,6 +40,9 @@
         <result column="qu_region_id" property="regionId" jdbcType="INTEGER"/>
         <result column="qu_college_id" property="collegeId" jdbcType="INTEGER"/>
         <result column="qu_school_id" property="schoolId" jdbcType="INTEGER"/>
+
+        <result column="qu_coupon_left" property="couponLeft" jdbcType="INTEGER"/>
+        <result column="qu_coupon" property="coupon" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -76,7 +79,10 @@
         qu.region_id,
         qu.college_id,
         qu.school_id,
-        qu.member_id
+        qu.member_id,
+
+        qu.coupon,
+        qu.coupon_left
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -117,7 +123,9 @@
         emp_status,
         tag_expire_time,
         question_amt,
-        flush_time
+        flush_time,
+        coupon,
+        coupon_left
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -131,7 +139,9 @@
         #{empStatus},
         #{tagExpireTime},
         #{questionAmt},
-        #{flushTime})
+        #{flushTime},
+        #{coupon},
+        #{couponLeft})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -228,6 +238,13 @@
             <if test="flushTime != null">
                 flush_time,
             </if>
+
+            <if test="coupon != null">
+                coupon,
+            </if>
+            <if test="couponLeft != null">
+                coupon_left,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -317,6 +334,13 @@
             </if>
             <if test="flushTime != null">
                 #{flushTime},
+            </if>
+
+            <if test="coupon != null">
+                #{coupon},
+            </if>
+            <if test="couponLeft != null">
+                #{couponLeft},
             </if>
         </trim>
     </insert>
@@ -412,6 +436,13 @@
             <if test="flushTime != null">
                 flush_time = #{flushTime},
             </if>
+
+            <if test="couponLeft != null">
+                coupon_left = #{couponLeft},
+            </if>
+            <if test="coupon != null">
+                coupon = #{coupon},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -450,7 +481,10 @@
         emp_status = #{empStatus},
         tag_expire_time = #{tagExpireTime},
         question_amt = #{questionAmt},
-        flush_time = #{flushTime}
+        flush_time = #{flushTime},
+
+        coupon = #{coupon},
+        coupon_left = #{couponLeft}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -597,6 +631,13 @@
                 AND qu.flush_time = #{flushTime}
             </if>
 
+            <if test="coupon != null">
+                AND qu.coupon = #{coupon}
+            </if>
+            <if test="couponLeft != null">
+                AND qu.coupon_left = #{couponLeft}
+            </if>
+
         </where>
 
         ORDER BY
@@ -719,6 +760,12 @@
                 AND qu.flush_time = #{flushTime}
             </if>
 
+            <if test="coupon != null">
+                AND qu.coupon = #{coupon}
+            </if>
+            <if test="couponLeft != null">
+                AND qu.coupon_left = #{couponLeft}
+            </if>
         </where>
 
     </select>
