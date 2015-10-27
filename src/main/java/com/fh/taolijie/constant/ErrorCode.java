@@ -64,7 +64,7 @@ public enum ErrorCode {
     ASSIGN_COUPON_FAILED(38, "assign coupon failed"),
     COUPON_INVALID(39, "coupon's invalid"),
     COUPON_USED(40, "coupon has been used"),
-    COUPON_EXPIRED(40, "coupon expired");
+    COUPON_EXPIRED(41, "coupon expired");
 
     private final String msg;
     private final int code;
