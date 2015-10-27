@@ -4,7 +4,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.HackException;
-import com.fh.taolijie.exception.checked.quest.NotEnoughCouponException;
+import com.fh.taolijie.exception.checked.quest.*;
 
 /**
  * Created by whf on 10/27/15.
@@ -24,6 +24,14 @@ public interface CouponService {
      */
     CouponModel acquireCoupon(Integer questId, Integer memId)
             throws NotEnoughCouponException, HackException;
+
+    /**
+     * 商家验证coupon code
+     * @param code
+     * @return
+     */
+    boolean validateCoupon(String code)
+            throws CouponNotFoundException, InvalidCouponException, CouponUsedException, CouponExpiredException;
 
     ListResult<CouponModel> findBy(CouponModel model);
 }

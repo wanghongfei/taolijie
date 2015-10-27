@@ -61,7 +61,10 @@ public enum ErrorCode {
 
     AWARD_TOO_LITTLE(37, "not enough award"),
 
-    ASSIGN_COUPON_FAILED(38, "assign coupon failed");
+    ASSIGN_COUPON_FAILED(38, "assign coupon failed"),
+    COUPON_INVALID(39, "coupon's invalid"),
+    COUPON_USED(40, "coupon has been used"),
+    COUPON_EXPIRED(40, "coupon expired");
 
     private final String msg;
     private final int code;

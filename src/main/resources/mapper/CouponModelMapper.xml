@@ -362,4 +362,14 @@
 
         </where>
     </select>
+
+    <select id="selectByCode" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            coupon
+        WHERE
+            code = #{code}
+        FOR UPDATE
+    </select>
 </mapper>

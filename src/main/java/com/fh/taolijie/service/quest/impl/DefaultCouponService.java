@@ -10,8 +10,7 @@ import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.HackException;
-import com.fh.taolijie.exception.checked.quest.NotEnoughCouponException;
-import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
+import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.quest.CouponService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +94,40 @@ public class DefaultCouponService implements CouponService {
         questMapper.decreaseCouponAmt(questId);
 
         return coupon;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public boolean validateCoupon(String code) throws CouponNotFoundException, InvalidCouponException, CouponUsedException, CouponExpiredException {
+        CouponModel coupon = couMapper.selectByCode(code);
+        if (null == coupon) {
+            throw new CouponNotFoundException();
+        }
+
+        // 检查coupon状态
+        int status = coupon.getStatus().intValue();
+        if (CouponStatus.NOT_ASSIGNED.code() == status) {
+            // coupon还没有创建
+            throw new InvalidCouponException();
+        }
+        if (CouponStatus.USED.code() == status) {
+            // 已经使用过了
+            throw new CouponUsedException();
+        }
+
+        // 检查是否过期
+        if (coupon.getExpiredTime().compareTo(new Date()) < 0) {
+            throw new CouponExpiredException();
+        }
+
+        // 标记coupon为已经使用
+        CouponModel example = new CouponModel();
+        example.setId(coupon.getId());
+        example.setStatus(CouponStatus.USED.code());
+        couMapper.updateByPrimaryKeySelective(example);
+
+
+        return true;
     }
 
     @Override

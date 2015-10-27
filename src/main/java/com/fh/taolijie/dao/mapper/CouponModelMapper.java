@@ -40,4 +40,11 @@ public interface CouponModelMapper {
 
     List<CouponModel> findBy(CouponModel model);
     long countFindBy(CouponModel model);
+
+    /**
+     * 加行锁
+     * @param code
+     * @return
+     */
+    CouponModel selectByCode(String code);
 }

@@ -456,7 +456,13 @@ public class RestQuestCtr {
                                       @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps
                                       ) {
 
-        Integer memId = SessionUtils.getCredential(req).getId();
+        // 只有学生才能调用
+        Credential credential = SessionUtils.getCredential(req);
+        if (!SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        Integer memId = credential.getId();
 
         pn = PageUtils.getFirstResult(pn, ps);
         CouponModel model = new CouponModel(pn, ps);
@@ -464,6 +470,38 @@ public class RestQuestCtr {
         ListResult<CouponModel> lr = couponService.findBy(model);
 
         return new ResponseText(lr);
+    }
+
+    /**
+     * 商家验证coupon
+     * @return
+     */
+    @RequestMapping(value = "/coupon/check", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText validateCoupon(@RequestParam String code,
+                                       HttpServletRequest req) {
+
+        // 只有商家用户可以调用
+        Credential credential = SessionUtils.getCredential(req);
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        try {
+            couponService.validateCoupon(code);
+        } catch (CouponNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (InvalidCouponException e) {
+            return new ResponseText(ErrorCode.COUPON_INVALID);
+
+        } catch (CouponUsedException e) {
+            return new ResponseText(ErrorCode.COUPON_USED);
+
+        } catch (CouponExpiredException e) {
+            return new ResponseText(ErrorCode.COUPON_EXPIRED);
+        }
+
+        return ResponseText.getSuccessResponseText();
     }
 
     /**
