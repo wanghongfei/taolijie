@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.quest;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.HackException;
@@ -23,4 +24,6 @@ public interface CouponService {
      */
     CouponModel acquireCoupon(Integer questId, Integer memId)
             throws NotEnoughCouponException, HackException;
+
+    ListResult<CouponModel> findBy(CouponModel model);
 }

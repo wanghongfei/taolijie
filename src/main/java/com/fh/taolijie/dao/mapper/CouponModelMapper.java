@@ -37,4 +37,7 @@ public interface CouponModelMapper {
     CouponModel selectOneByQuestIdWithLock(Integer questId);
 
     int updateStatus(Integer couponId, Integer status);
+
+    List<CouponModel> findBy(CouponModel model);
+    long countFindBy(CouponModel model);
 }

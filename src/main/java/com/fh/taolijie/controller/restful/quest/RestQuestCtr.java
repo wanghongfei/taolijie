@@ -21,6 +21,7 @@ import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.TljAuditService;
@@ -59,6 +60,9 @@ public class RestQuestCtr {
 
     @Autowired
     private TljAuditService auditService;
+
+    @Autowired
+    private CouponService couponService;
 
     /**
      * 商家发布任务
@@ -442,6 +446,25 @@ public class RestQuestCtr {
         return new ResponseText(lr);
     }
 
+    /**
+     * 查询我领取的coupon
+     * @return
+     */
+    @RequestMapping(value = "/coupon/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryMyCoupon(HttpServletRequest req,
+                                      @RequestParam(required = false, defaultValue = "0") int pn,
+                                      @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps
+                                      ) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        CouponModel model = new CouponModel(pn, ps);
+        model.setMemId(memId);
+        ListResult<CouponModel> lr = couponService.findBy(model);
+
+        return new ResponseText(lr);
+    }
 
     /**
      * 计算代审核所需的费用

@@ -1,16 +1,19 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
-public class CouponModel {
+public class CouponModel extends Pageable {
     private Integer id;
 
     private String code;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date acquireTime;
 
     private Integer empId;
@@ -27,6 +30,8 @@ public class CouponModel {
 
     private String description;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expiredTime;
 
     private String logoPath;
@@ -35,6 +40,12 @@ public class CouponModel {
 
     @JsonIgnore
     private Integer amt;
+
+    public CouponModel(int pn, int ps) {
+        super(pn, ps);
+    }
+
+    public CouponModel() {}
 
     public Integer getId() {
         return id;

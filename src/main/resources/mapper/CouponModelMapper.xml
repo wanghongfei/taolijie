@@ -261,4 +261,105 @@
             id = #{couponId}
     </update>
 
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            coupon
+        <where>
+            <if test="code != null">
+                AND code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime}
+            </if>
+            <if test="acquireTime != null">
+                AND acquire_time = #{acquireTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="empId != null">
+                AND emp_id = #{empId,jdbcType=INTEGER}
+            </if>
+            <if test="memId != null">
+                AND mem_id = #{memId,jdbcType=INTEGER}
+            </if>
+            <if test="questTitle != null">
+                AND quest_title = #{questTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="questId != null">
+                AND quest_id = #{questId,jdbcType=INTEGER}
+            </if>
+            <if test="compName != null">
+                AND comp_name = #{compName,jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                AND title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="description != null">
+                AND description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="expiredTime != null">
+                AND expired_time = #{expiredTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="logoPath != null">
+                AND logo_path = #{logoPath,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND status = #{status,jdbcType=INTEGER}
+            </if>
+
+        </where>
+        ORDER BY
+            expired_time DESC
+
+        LIMIT
+            #{pageNumber}, #{pageSize}
+    </select>
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            coupon
+        <where>
+            <if test="code != null">
+                AND code = #{code,jdbcType=VARCHAR}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime}
+            </if>
+            <if test="acquireTime != null">
+                AND acquire_time = #{acquireTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="empId != null">
+                AND emp_id = #{empId,jdbcType=INTEGER}
+            </if>
+            <if test="memId != null">
+                AND mem_id = #{memId,jdbcType=INTEGER}
+            </if>
+            <if test="questTitle != null">
+                AND quest_title = #{questTitle,jdbcType=VARCHAR}
+            </if>
+            <if test="questId != null">
+                AND quest_id = #{questId,jdbcType=INTEGER}
+            </if>
+            <if test="compName != null">
+                AND comp_name = #{compName,jdbcType=VARCHAR}
+            </if>
+            <if test="title != null">
+                AND title = #{title,jdbcType=VARCHAR}
+            </if>
+            <if test="description != null">
+                AND description = #{description,jdbcType=VARCHAR}
+            </if>
+            <if test="expiredTime != null">
+                AND expired_time = #{expiredTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="logoPath != null">
+                AND logo_path = #{logoPath,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                AND status = #{status,jdbcType=INTEGER}
+            </if>
+
+        </where>
+    </select>
 </mapper>

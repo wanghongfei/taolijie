@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.quest.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.CouponStatus;
 import com.fh.taolijie.dao.mapper.CouponModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -94,5 +95,14 @@ public class DefaultCouponService implements CouponService {
         questMapper.decreaseCouponAmt(questId);
 
         return coupon;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<CouponModel> findBy(CouponModel model) {
+        List<CouponModel> list = couMapper.findBy(model);
+        long tot = couMapper.countFindBy(model);
+
+        return new ListResult<>(list, tot);
     }
 }
