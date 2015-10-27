@@ -91,7 +91,7 @@ public class RestQuestCtr {
         // couponTitle, couponDesp, expiredTime和logo要么全为null, 要么都不为null
         if (null != couponAmt) {
             coupon = true;
-            if (false == StringUtils.checkAllNotEmpty(couponTitle, couponDesp, logo) || null == expiredTime) {
+            if (false == StringUtils.checkAllNotEmpty(couponTitle, couponDesp) || null == expiredTime) {
                 return new ResponseText(ErrorCode.INVALID_PARAMETER);
             }
         }
