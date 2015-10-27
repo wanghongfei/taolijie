@@ -3,10 +3,13 @@ package com.fh.taolijie.service.quest.impl;
 import com.fh.taolijie.constant.quest.CouponStatus;
 import com.fh.taolijie.dao.mapper.CouponModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.QuestAssignModelMapper;
 import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.HackException;
+import com.fh.taolijie.exception.checked.quest.NotEnoughCouponException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.quest.CouponService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,6 +31,9 @@ public class DefaultCouponService implements CouponService {
 
     @Autowired
     private QuestModelMapper questMapper;
+
+    @Autowired
+    private QuestAssignModelMapper assignMapper;
 
     @Autowired
     private MemberModelMapper memMapper;
@@ -56,5 +62,32 @@ public class DefaultCouponService implements CouponService {
 
         // 批量插入
         return couMapper.insertInBatch(codeList, model);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public CouponModel acquireCoupon(Integer questId, Integer memId) throws NotEnoughCouponException, HackException {
+        // 检查用户是否已经领取了该任务
+        Boolean assigned = assignMapper.checkMemberIdAndQuestIdExists(memId, questId);
+        // 任务没有领取
+        if (false == assigned) {
+            throw new HackException();
+        }
+
+
+        // 领取coupon
+        CouponModel coupon = couMapper.selectOneByQuestIdWithLock(questId);
+        // 返回null表示领取失败
+        if (null == coupon) {
+            throw new NotEnoughCouponException();
+        }
+
+        // 将取到的coupon状态设为已领取
+        couMapper.updateStatus(coupon.getId(), CouponStatus.ASSIGNED.code());
+
+        // 将对应任务的coupon数量-1
+        questMapper.decreaseCouponAmt(questId);
+
+        return coupon;
     }
 }

@@ -787,4 +787,14 @@
         WHERE
             id = #{postId}
     </update>
+
+    <update id="decreaseCouponAmt">
+        UPDATE
+            quest
+        SET
+            coupon_left = coupon_left - 1
+        WHERE
+            id = #{questId}
+    </update>
+
 </mapper>

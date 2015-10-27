@@ -22,5 +22,19 @@ public interface CouponModelMapper {
     int updateByPrimaryKey(CouponModel record);
 
 
+    /**
+     * 批量插入coupon
+     * @param codeList
+     * @param coupon
+     * @return
+     */
     int insertInBatch(@Param("codeList") List<String> codeList, @Param("coupon") CouponModel coupon);
+
+    /**
+     * 根据任务返回一个coupon, 然后加行锁
+     * @return
+     */
+    CouponModel selectOneByQuestIdWithLock(Integer questId);
+
+    int updateStatus(Integer couponId, Integer status);
 }

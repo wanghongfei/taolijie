@@ -39,6 +39,19 @@
         from coupon
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectOneByQuestIdWithLock" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            coupon
+        WHERE
+            quest_id = #{questId} AND status = 0
+        LIMIT
+            0, 1
+        FOR UPDATE
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated
@@ -237,6 +250,15 @@
         logo_path = #{logoPath,jdbcType=VARCHAR},
         status = #{status,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE
+            coupon
+        SET
+            status = #{status}
+        WHERE
+            id = #{couponId}
     </update>
 
 </mapper>

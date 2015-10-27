@@ -75,5 +75,7 @@ public interface QuestModelMapper {
 
     List<QuestModel> selectInBatch(List<Integer> idList);
 
+    int decreaseCouponAmt(Integer questId);
+
     int flush(Integer postId);
 }
