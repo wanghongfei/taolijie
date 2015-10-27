@@ -78,6 +78,7 @@
         <mapper resource="mapper/QuestionOptModelMapper.xml" />
         <mapper resource="mapper/AnRecordModelMapper.xml" />
         <mapper resource="mapper/SeQuestionModelMapper.xml" />
+        <mapper resource="mapper/CouponModelMapper.xml" />
 
     </mappers>
 </configuration>
