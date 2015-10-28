@@ -193,4 +193,6 @@ public interface AccountService {
      * @param mem
      */
     void createRedisSession(MemberModel mem, String sid);
+
+    void deleteRedisSession(String sid);
 }

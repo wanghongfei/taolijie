@@ -222,9 +222,12 @@ public class HAuthController {
         co.setMaxAge(0);
         resp.addCookie(co);
 
+        Credential credential = SessionUtils.getCredential(req);
+        String sid = SessionUtils.getFromCookie(req, "sid");
+        accountService.deleteRedisSession(sid);
+
         // 判断是否是app
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {
-            Credential credential = SessionUtils.getCredential(req);
 
             // 删除appToken
             accountService.updateAppToken(credential.getId(), null);
@@ -238,6 +241,7 @@ public class HAuthController {
 
         return "redirect:/";
     }
+
 
 
     /**

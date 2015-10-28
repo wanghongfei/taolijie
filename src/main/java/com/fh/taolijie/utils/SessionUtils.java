@@ -2,6 +2,7 @@ package com.fh.taolijie.utils;
 
 import cn.fh.security.credential.Credential;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -40,5 +41,26 @@ public class SessionUtils {
      */
     public static boolean isAdmin(Credential credential) {
         return credential.getRoleList().get(0).equals(Constants.RoleType.ADMIN.toString());
+    }
+
+    /**
+     * 从cookie中取出指定值, 如果没找到返回null
+     * @param req
+     * @param key
+     * @return
+     */
+    public static String getFromCookie(HttpServletRequest req, String key) {
+        Cookie[] cookies = req.getCookies();
+        if (null == cookies) {
+            return null;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(key)) {
+                return cookie.getValue();
+            }
+        }
+
+        return null;
     }
 }

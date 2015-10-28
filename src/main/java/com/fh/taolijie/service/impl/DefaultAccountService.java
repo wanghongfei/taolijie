@@ -332,6 +332,13 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
+    public void deleteRedisSession(String sid) {
+        String key = RedisKey.SESSION.toString() + sid;
+        jedis.del(key);
+
+    }
+
+    @Override
     public Map<String, Object> loginByToken(String s) {
         MemberModel mem = memMapper.selectByIdentifier(s);
         if (null == mem) {
