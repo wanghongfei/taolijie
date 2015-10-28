@@ -607,7 +607,7 @@
                 AND qu.id IN (SELECT qc_rel.quest_id FROM quest_college_rel qc_rel WHERE qc_rel.college_id = #{collegeId} )
             </if>
             <if test="schoolId != null">
-                AND qu.in IN (SELECT qs_rel.quest_id FROM quest_school_rel qs_rel WHERE qs_rel.school_id = #{schoolId})
+                AND qu.id IN (SELECT qs_rel.quest_id FROM quest_school_rel qs_rel WHERE qs_rel.school_id = #{schoolId})
             </if>
 
 
@@ -735,7 +735,7 @@
                 AND qu.id IN (SELECT qc_rel.quest_id FROM quest_college_rel qc_rel WHERE qc_rel.college_id = #{collegeId} )
             </if>
             <if test="schoolId != null">
-                AND qu.in IN (SELECT qs_rel.quest_id FROM quest_school_rel qs_rel WHERE qs_rel.school_id = #{schoolId})
+                AND qu.id IN (SELECT qs_rel.quest_id FROM quest_school_rel qs_rel WHERE qs_rel.school_id = #{schoolId})
             </if>
 
 
