@@ -4,7 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
-import com.fh.taolijie.domain.QuestCoModel;
+import com.fh.taolijie.domain.quest.QuestCoModel;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.collect.QuestCoService;
 import com.fh.taolijie.utils.Constants;

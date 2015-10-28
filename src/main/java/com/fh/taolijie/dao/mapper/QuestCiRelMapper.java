@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.QuestCiRel;
+import com.fh.taolijie.domain.quest.QuestCiRel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +21,6 @@ public interface QuestCiRelMapper {
 
 
     int insertInBatch(List<QuestCiRel> list);
+
+    List<QuestCiRel> selectByQuestId(Integer questId);
 }

@@ -2,8 +2,8 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.AnRecordModel;
-import com.fh.taolijie.domain.QuestionModel;
-import com.fh.taolijie.domain.QuestionOptModel;
+import com.fh.taolijie.domain.quest.QuestionModel;
+import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.QuestionAnalyzeDto;
 import com.fh.taolijie.exception.checked.HackException;

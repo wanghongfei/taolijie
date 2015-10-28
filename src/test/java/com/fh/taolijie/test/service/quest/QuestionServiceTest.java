@@ -1,19 +1,16 @@
 package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
-import com.fh.taolijie.domain.QuestionModel;
-import com.fh.taolijie.domain.QuestionOptModel;
+import com.fh.taolijie.domain.quest.QuestionModel;
+import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
-import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.service.quest.impl.DefaultQuestionService;
 import com.fh.taolijie.test.BaseSpringDataTestClass;
 import com.fh.taolijie.utils.TimeUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

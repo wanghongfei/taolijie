@@ -1,4 +1,4 @@
-package com.fh.taolijie.domain;
+package com.fh.taolijie.domain.quest;
 
 public class QuestCollRelModel {
     private Integer id;
@@ -7,6 +7,8 @@ public class QuestCollRelModel {
 
     private Integer collegeId;
     private String collegeName;
+
+    public QuestCollRelModel() {}
 
     public QuestCollRelModel(Integer questId, Integer collegeId) {
         this.questId = questId;

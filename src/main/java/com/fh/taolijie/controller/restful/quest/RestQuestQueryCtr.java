@@ -10,6 +10,7 @@ import com.fh.taolijie.constant.quest.QuestStatus;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.quest.QuestTargetService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -29,6 +30,9 @@ import java.util.Date;
 public class RestQuestQueryCtr {
     @Autowired
     private QuestService questService;
+
+    @Autowired
+    private QuestTargetService questTargetService;
 
     /**
      * 条件查询
@@ -107,7 +111,7 @@ public class RestQuestQueryCtr {
 
         // 得到商家任务状态
         EmpQuestStatus empStatus = EmpQuestStatus.fromCode(model.getEmpStatus());
-        // 如果商家任务状态为没有通过审核, 且该任务不是当前用户发布的,
+        // 如果商家任务状态为没有通过审核, 或该任务不是当前用户发布的,
         // 返回权限错误
         if (EmpQuestStatus.DONE != empStatus) {
             if (null == credential || false == credential.getId().equals(model.getMemberId())) {
@@ -144,6 +148,8 @@ public class RestQuestQueryCtr {
             }
         }
 
+        // 填写任务对象信息
+        questTargetService.fillTarget(model);
 
         return new ResponseText(model);
     }

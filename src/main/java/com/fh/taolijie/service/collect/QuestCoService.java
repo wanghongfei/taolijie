@@ -1,7 +1,7 @@
 package com.fh.taolijie.service.collect;
 
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.domain.QuestCoModel;
+import com.fh.taolijie.domain.quest.QuestCoModel;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 
 /**

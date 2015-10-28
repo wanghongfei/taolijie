@@ -2,7 +2,7 @@ package com.fh.taolijie.service.collect.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.dao.mapper.QuestCoModelMapper;
-import com.fh.taolijie.domain.QuestCoModel;
+import com.fh.taolijie.domain.quest.QuestCoModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.collect.QuestCoService;

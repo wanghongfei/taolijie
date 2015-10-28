@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.QuestProRel;
+import com.fh.taolijie.domain.quest.QuestProRel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +21,6 @@ public interface QuestProRelMapper {
 
 
     int insertInBatch(List<QuestProRel> list);
+
+    List<QuestProRel> selectByQuestId(Integer questId);
 }

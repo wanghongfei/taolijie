@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.QuestCoModel;
+import com.fh.taolijie.domain.quest.QuestCoModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

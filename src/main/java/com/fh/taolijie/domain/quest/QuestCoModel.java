@@ -1,6 +1,7 @@
-package com.fh.taolijie.domain;
+package com.fh.taolijie.domain.quest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fh.taolijie.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;

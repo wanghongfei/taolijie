@@ -2,6 +2,8 @@ package com.fh.taolijie.domain.quest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QuestModel extends Pageable {
     private Integer id;
 
@@ -66,6 +69,7 @@ public class QuestModel extends Pageable {
 
     private Boolean offline;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date tagExpireTime;
 
     private Integer questionAmt;
@@ -88,6 +92,13 @@ public class QuestModel extends Pageable {
 
     private Integer collegeId;
     private Integer schoolId;
+
+    // 以下只作为返回值使用
+    private List<QuestSchRelModel> schools;
+    private List<QuestCollRelModel> colleges;
+    private List<QuestCiRel> cities;
+    private List<QuestProRel> pros;
+    // 以上只作为返回值使用
 
 
     // ******** 仅作为请求参数使用 ********
@@ -582,6 +593,38 @@ public class QuestModel extends Pageable {
 
     public List<Integer> getCityIdList() {
         return cityIdList;
+    }
+
+    public List<QuestSchRelModel> getSchools() {
+        return schools;
+    }
+
+    public void setSchools(List<QuestSchRelModel> schools) {
+        this.schools = schools;
+    }
+
+    public List<QuestCollRelModel> getColleges() {
+        return colleges;
+    }
+
+    public void setColleges(List<QuestCollRelModel> colleges) {
+        this.colleges = colleges;
+    }
+
+    public List<QuestCiRel> getCities() {
+        return cities;
+    }
+
+    public void setCities(List<QuestCiRel> cities) {
+        this.cities = cities;
+    }
+
+    public List<QuestProRel> getPros() {
+        return pros;
+    }
+
+    public void setPros(List<QuestProRel> pros) {
+        this.pros = pros;
     }
 
     public void setCityIdList(List<Integer> cityIdList) {

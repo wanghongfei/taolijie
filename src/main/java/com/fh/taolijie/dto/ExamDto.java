@@ -4,7 +4,7 @@ package com.fh.taolijie.dto;
  * Created by whf on 10/22/15.
  */
 
-import com.fh.taolijie.domain.QuestionModel;
+import com.fh.taolijie.domain.quest.QuestionModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 
 import javax.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
 package com.fh.taolijie.dao.mapper;
 
-import com.fh.taolijie.domain.QuestSchRelModel;
+import com.fh.taolijie.domain.quest.QuestSchRelModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +20,6 @@ public interface QuestSchRelModelMapper {
     int updateByPrimaryKey(QuestSchRelModel record);
 
     void insertInBatch(List<QuestSchRelModel> list);
+
+    List<QuestSchRelModel> selectByQuestId(Integer questId);
 }

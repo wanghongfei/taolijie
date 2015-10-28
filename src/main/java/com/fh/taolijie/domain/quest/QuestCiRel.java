@@ -1,4 +1,4 @@
-package com.fh.taolijie.domain;
+package com.fh.taolijie.domain.quest;
 
 public class QuestCiRel {
     private Integer id;

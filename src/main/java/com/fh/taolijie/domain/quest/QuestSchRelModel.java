@@ -1,4 +1,4 @@
-package com.fh.taolijie.domain;
+package com.fh.taolijie.domain.quest;
 
 public class QuestSchRelModel {
     private Integer id;
@@ -7,6 +7,8 @@ public class QuestSchRelModel {
 
     private Integer schoolId;
     private String schoolName;
+
+    public QuestSchRelModel() {}
 
     public QuestSchRelModel(Integer questId, Integer schoolId) {
         this.questId = questId;
