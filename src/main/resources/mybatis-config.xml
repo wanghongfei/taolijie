@@ -68,6 +68,8 @@
 
         <mapper resource="mapper/QuestCollRelModelMapper.xml" />
         <mapper resource="mapper/QuestSchRelModelMapper.xml" />
+        <mapper resource="mapper/QuestCiRelMapper.xml" />
+        <mapper resource="mapper/QuestProRelMapper.xml" />
 
         <mapper resource="mapper/TljAuditModelMapper.xml" />
         <mapper resource="mapper/QuestCoModelMapper.xml" />
