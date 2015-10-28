@@ -73,6 +73,8 @@ public class RestQuestCtr {
                                      BindingResult br,
                                      @RequestParam String collegeIds,
                                      @RequestParam String schoolIds,
+                                     @RequestParam String cityIds, // 城市id
+                                     @RequestParam String proIds, // 省id
                                      // coupon信息
                                      @RequestParam(required = false) String couponTitle,
                                      @RequestParam(required = false) String couponDesp,
@@ -113,8 +115,13 @@ public class RestQuestCtr {
         try {
             List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
             List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
+            List<Integer> proList = StringUtils.splitIntendIds(proIds);
+            List<Integer> cityList = StringUtils.splitIntendIds(cityIds);
+
             model.setCollegeIdList(coList);
             model.setSchoolIdList(schList);
+            model.setProvinceIdList(proList);
+            model.setCityIdList(cityList);
 
         } catch (InvalidNumberStringException e) {
             return new ResponseText(ErrorCode.BAD_NUMBER);

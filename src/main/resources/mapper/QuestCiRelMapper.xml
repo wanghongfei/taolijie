@@ -100,4 +100,13 @@
         city_id = #{cityId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <insert id="insertInBatch">
+        INSERT INTO
+            quest_city_rel (quest_id, city_id)
+        VALUES
+            <foreach collection="list" separator="," item="_rel">
+                ( #{_rel.questId}, #{_rel.cityId} )
+            </foreach>
+    </insert>
 </mapper>

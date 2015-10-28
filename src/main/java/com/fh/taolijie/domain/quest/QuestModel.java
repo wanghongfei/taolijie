@@ -104,6 +104,10 @@ public class QuestModel extends Pageable {
     private List<Integer> collegeIdList;
     @JsonIgnore
     private List<Integer> schoolIdList;
+    @JsonIgnore
+    private List<Integer> cityIdList;
+    @JsonIgnore
+    private List<Integer> provinceIdList;
 
     // ******** 仅作为请求参数使用 ********
 
@@ -574,6 +578,22 @@ public class QuestModel extends Pageable {
 
     public void setFlushTime(Date flushTime) {
         this.flushTime = flushTime;
+    }
+
+    public List<Integer> getCityIdList() {
+        return cityIdList;
+    }
+
+    public void setCityIdList(List<Integer> cityIdList) {
+        this.cityIdList = cityIdList;
+    }
+
+    public List<Integer> getProvinceIdList() {
+        return provinceIdList;
+    }
+
+    public void setProvinceIdList(List<Integer> provinceIdList) {
+        this.provinceIdList = provinceIdList;
     }
 
     public void setOffline(Boolean offline) {

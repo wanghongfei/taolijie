@@ -9,9 +9,7 @@ import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.dao.mapper.*;
-import com.fh.taolijie.domain.CouponModel;
-import com.fh.taolijie.domain.QuestCollRelModel;
-import com.fh.taolijie.domain.QuestSchRelModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
@@ -73,6 +71,10 @@ public class DefaultQuestService implements QuestService {
     private QuestCollRelModelMapper qcMapper;
     @Autowired
     private QuestSchRelModelMapper qsMapper;
+    @Autowired
+    private QuestCiRelMapper qciMapper;
+    @Autowired
+    private QuestProRelMapper qproRel;
 
     @Autowired
     private CouponService couponService;
@@ -140,8 +142,10 @@ public class DefaultQuestService implements QuestService {
         // 添加任务对象关联信息
         List<Integer> collList = model.getCollegeIdList();
         List<Integer> schList = model.getSchoolIdList();
+        List<Integer> cityList = model.getCityIdList();
+        List<Integer> proList = model.getProvinceIdList();
 
-        // 关联学校名
+        // 关联学校
         if (!collList.isEmpty()) {
             List<QuestCollRelModel> qcList = collList.stream()
                     .map( id -> new QuestCollRelModel(questId, id) )
@@ -150,7 +154,7 @@ public class DefaultQuestService implements QuestService {
             addQuestCollegeRel(qcList);
         }
 
-        // 关联学院名
+        // 关联学院
         if (!schList.isEmpty()) {
             List<QuestSchRelModel> qsList = schList.stream()
                     .map( id -> new QuestSchRelModel(questId, id) )
@@ -158,6 +162,24 @@ public class DefaultQuestService implements QuestService {
 
             addQuestSchoolRel(qsList);
 
+        }
+
+        // 关联城市
+        if (!cityList.isEmpty()) {
+            List<QuestCiRel> qcList = cityList.stream()
+                    .map( id -> new  QuestCiRel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestCityRel(qcList);
+        }
+
+        // 关联省
+        if (!proList.isEmpty()) {
+            List<QuestProRel> qpList = proList.stream()
+                    .map( id -> new QuestProRel(questId, id) )
+                    .collect(Collectors.toList());
+
+            addQuestProvinceRel(qpList);
         }
 
 
@@ -216,6 +238,26 @@ public class DefaultQuestService implements QuestService {
         }
 
         qsMapper.insertInBatch(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void addQuestCityRel(List<QuestCiRel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+       qciMapper.insertInBatch(list) ;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void addQuestProvinceRel(List<QuestProRel> list) {
+        if (list.isEmpty()) {
+            return;
+        }
+
+        qproRel.insertInBatch(list);
     }
 
     @Override

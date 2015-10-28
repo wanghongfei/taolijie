@@ -8,7 +8,7 @@
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="province_id" property="provinceId" jdbcType="INTEGER"/>
-        <result column="quest_id" property="questId" jdbcType="VARCHAR"/>
+        <result column="quest_id" property="questId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--
@@ -42,7 +42,7 @@
         -->
         insert into quest_province_rel (id, province_id, quest_id
         )
-        values (#{id,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, #{questId,jdbcType=VARCHAR}
+        values (#{id,jdbcType=INTEGER}, #{provinceId,jdbcType=INTEGER}, #{questId}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.QuestProRel">
@@ -70,7 +70,7 @@
                 #{provinceId,jdbcType=INTEGER},
             </if>
             <if test="questId != null">
-                #{questId,jdbcType=VARCHAR},
+                #{questId},
             </if>
         </trim>
     </insert>
@@ -85,7 +85,7 @@
                 province_id = #{provinceId,jdbcType=INTEGER},
             </if>
             <if test="questId != null">
-                quest_id = #{questId,jdbcType=VARCHAR},
+                quest_id = #{questId},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -97,7 +97,16 @@
         -->
         update quest_province_rel
         set province_id = #{provinceId,jdbcType=INTEGER},
-        quest_id = #{questId,jdbcType=VARCHAR}
+        quest_id = #{questId}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <insert id="insertInBatch">
+        INSERT INTO
+            quest_province_rel (province_id, quest_id)
+        VALUES
+            <foreach collection="list" item="_rel" separator=",">
+                ( #{_rel.provinceId}, #{_rel.questId} )
+            </foreach>
+    </insert>
 </mapper>

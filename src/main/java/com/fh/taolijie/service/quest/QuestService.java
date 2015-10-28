@@ -2,9 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
-import com.fh.taolijie.domain.CouponModel;
-import com.fh.taolijie.domain.QuestCollRelModel;
-import com.fh.taolijie.domain.QuestSchRelModel;
+import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
@@ -39,6 +37,14 @@ public interface QuestService {
      * @param list
      */
     void addQuestSchoolRel(List<QuestSchRelModel> list);
+
+    /**
+     * 批量插入 任务-城市关联
+     * @param list
+     */
+    void addQuestCityRel(List<QuestCiRel> list);
+
+    void addQuestProvinceRel(List<QuestProRel> list);
 
     /**
      * 更新标签过期时间
