@@ -40,7 +40,7 @@ public class RestRecoUCtr {
     @RequestMapping(value = "/top", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText addTop(@RequestParam int type,
                             @RequestParam Integer postId,
-                            @RequestParam int hours,
+                            @RequestParam int days,
                             @RequestParam(required = false) Integer index,
                             HttpServletRequest req) {
 
@@ -56,13 +56,13 @@ public class RestRecoUCtr {
         model.setType(rt.code());
         model.setPostId(postId);
         model.setMemberId(credential.getId());
-        model.setHours(hours);
+        model.setHours(days);
         if (null != index) {
             model.setOrderIndex(index);
         }
 
         // 计算过期时间
-        Date expire = TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, hours);
+        Date expire = TimeUtil.calculateDate(new Date(), Calendar.DAY_OF_MONTH, days);
         model.setExpiredTime(expire);
 
         try {
@@ -92,7 +92,7 @@ public class RestRecoUCtr {
     @RequestMapping(value = "/tag", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText addTag(@RequestParam Integer type,
                                @RequestParam Integer postId,
-                               @RequestParam int hours,
+                               @RequestParam int days,
                                @RequestParam(required = false) Integer index,
                                HttpServletRequest req) {
 
@@ -103,7 +103,7 @@ public class RestRecoUCtr {
         }
 
         try {
-            reService.addTag(postId, rt, hours);
+            reService.addTag(postId, rt, days);
 
         } catch (PostNotFoundException e) {
             return new ResponseText(ErrorCode.NOT_FOUND);

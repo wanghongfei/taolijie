@@ -158,7 +158,7 @@ public class DefaultRecoService implements RecoService {
             memId = quest.getMemberId();
 
             // 计算新过期时间
-            newDate = TimeUtil.calculateDate(quest.getTagExpireTime(), Calendar.HOUR_OF_DAY, hours);
+            newDate = TimeUtil.calculateDate(quest.getTagExpireTime(), Calendar.DAY_OF_MONTH, hours);
         } else {
             throw new IllegalStateException("invalid postType!");
         }

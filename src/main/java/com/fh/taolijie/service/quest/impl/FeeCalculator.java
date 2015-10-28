@@ -48,20 +48,20 @@ public class FeeCalculator {
 
     /**
      * 计算顶置费用
-     * @param hours
+     * @param days
      * @return
      */
-    public BigDecimal computeTopFee(int hours) {
-        return multiple(RedisKey.TOP_FEE, hours);
+    public BigDecimal computeTopFee(int days) {
+        return multiple(RedisKey.TOP_FEE, days);
     }
 
     /**
      * 计算加标签费用
-     * @param hours
+     * @param days
      * @return
      */
-    public BigDecimal computeTagFee(int hours) {
-        return multiple(RedisKey.TAG_FEE, hours);
+    public BigDecimal computeTagFee(int days) {
+        return multiple(RedisKey.TAG_FEE, days);
 
     }
 
