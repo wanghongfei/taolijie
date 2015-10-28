@@ -11,6 +11,7 @@ import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.UploadUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +56,8 @@ public class UIndexController {
      * 个人资料GET
      */
     @RequestMapping(value = "/profile",method = RequestMethod.GET)
-    public String user(HttpSession session,Model model){
-        Credential credential = CredentialUtils.getCredential(session);
+    public String user(HttpServletRequest req, Model model){
+        Credential credential = SessionUtils.getCredential(req);
         if(credential==null){
             return "redirect:/login";
         }
@@ -72,14 +73,14 @@ public class UIndexController {
 
     /**
      * 个人资料修改
-     * @param session
      * @param profileDto
      * @return
      */
     //region 个人资料修改 profile
     @RequestMapping(value = "/profile", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String profile(HttpSession session,ProfileDto profileDto){
-        Credential credential = CredentialUtils.getCredential(session);
+    public @ResponseBody String profile(HttpServletRequest req, ProfileDto profileDto){
+        Credential credential = SessionUtils.getCredential(req);
+
         if(credential==null){
             return "redirect:/login";
         }
@@ -107,20 +108,19 @@ public class UIndexController {
 
     /**
      * 修改密码
-     * @param session
      * @return
      */
     //region 修改密码 security
     @RequestMapping(value = "/setting/security",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String security(@Valid ChangePasswordDto dto,
                                          BindingResult result,
-                                         HttpSession session){
+                                         HttpServletRequest req){
 
         if(result.hasErrors()){
             return new JsonWrapper(false,result.getAllErrors()).getAjaxMessage();
         }
 
-        String username = CredentialUtils.getCredential(session).getUsername();
+        String username = SessionUtils.getCredential(req).getUsername();
 
         MemberModel mem = accountService.findMember(username, false);
 
@@ -154,12 +154,14 @@ public class UIndexController {
 
     /**
      * 意见反馈页面 post ajax
-     * @param session
      * @return
      */
     @RequestMapping(value = "feedback",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String feedback(@RequestParam String content,@RequestParam String  email, HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+    public @ResponseBody String feedback(@RequestParam String content,
+                                         @RequestParam String  email,
+                                         HttpServletRequest req){
+
+        Credential credential = SessionUtils.getCredential(req);
 //        mail.sendMailAsync("反馈人:  "+credential.getUsername()+"/n"
 //                +"用户类型:  "+credential.getRoleList()+"/n"
 //                +"反馈内容:  "+content+"/n"
@@ -186,8 +188,10 @@ public class UIndexController {
     @RequestMapping(value = "changePhoto", method =RequestMethod.POST, produces = "application/json; charset=utf-8")
     public @ResponseBody String upload(@RequestParam MultipartFile file,
                                        HttpServletResponse response,
-                                       HttpSession session) {
-        Credential credential = CredentialUtils.getCredential(session);
+                                       HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
         if(credential == null){
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         }
@@ -221,7 +225,8 @@ public class UIndexController {
 
             accountService.updateMember(user);
 
-            session.setAttribute("user", user);
+            req.setAttribute("user", user);
+            //session.setAttribute("user", user);
 
             System.out.println(imageId);
             // 返回成功信息

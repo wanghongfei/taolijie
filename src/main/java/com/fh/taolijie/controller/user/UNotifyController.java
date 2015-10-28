@@ -9,10 +9,7 @@ import com.fh.taolijie.domain.noti.PrivateNotificationModel;
 import com.fh.taolijie.domain.noti.SysNotificationModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.NotificationService;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.LogUtils;
-import com.fh.taolijie.utils.PageUtils;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +48,12 @@ public class UNotifyController {
      */
     @RequestMapping(value = "pri", method = RequestMethod.GET)
     public String priNotes(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                              HttpSession session, Model model){
+                           @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                           HttpServletRequest req,
+                           Model model){
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
+
         MemberModel mem = accountService.findMember(credential.getId());
         RoleModel role = mem.getRoleList().iterator().next();
         List<String> range = new ArrayList<>();
@@ -125,10 +125,11 @@ public class UNotifyController {
      */
     @RequestMapping(value = "sys", method = RequestMethod.GET)
     public String sysNotes(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                              HttpSession session, Model model){
+                           @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
+                           HttpServletRequest req,
+                           Model model){
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
 
         if(page < 0) page = 0;
 

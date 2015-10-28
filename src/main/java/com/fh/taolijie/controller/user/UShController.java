@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -60,8 +61,8 @@ public class UShController {
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
     public String myPost(@RequestParam(defaultValue = "0") int page,
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
-                         HttpSession session, Model model){
-        Credential credential = CredentialUtils.getCredential(session);
+                         HttpServletRequest req, Model model){
+        Credential credential = SessionUtils.getCredential(req);
         if(page < 0) page = 0;
         page = PageUtils.getFirstResult(page, pageSize);
         ListResult<SHPostModel> shs =shPostService.getPostList(credential.getId(), false, page, pageSize);
@@ -90,8 +91,9 @@ public class UShController {
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
     public String fav(@RequestParam (defaultValue = "0") int page,
                       @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
-                      HttpSession session, Model model){
-        Credential credential = CredentialUtils.getCredential(session);
+                      HttpServletRequest req, Model model){
+
+        Credential credential = SessionUtils.getCredential(req);
 
         page = PageUtils.getFirstResult(page, pageSize);
         List<SHPostModel> shs = shPostService.getFavoritePost(credential.getId(), page, pageSize)
@@ -117,11 +119,11 @@ public class UShController {
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String post(HttpSession session,Model model) {
+    public String post(HttpServletRequest req,Model model) {
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if (credential == null) {
             return "redirect:/login";
         }
@@ -143,11 +145,11 @@ public class UShController {
      */
     @RequestMapping(value = "change/{id}", method = RequestMethod.GET)
     //region 修改简历页面 change
-    public String change(@PathVariable int id, HttpSession session,Model model) {
+    public String change(@PathVariable int id, HttpServletRequest req,Model model) {
         /**
          * 如果该sh不是用户发送的,则返回404
          */
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         SHPostModel sh =shPostService.findPost(id);
         if(sh == null|| !ControllerHelper.isCurrentUser(credential, sh)){
             return "redirect:/404";
@@ -165,7 +167,6 @@ public class UShController {
     /**
      * 发布二手信息 post ajax
      *
-     * @param session
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -173,13 +174,13 @@ public class UShController {
     String postSh(@RequestParam String picIds,
                @Valid SHPostModel shDto,
                BindingResult result,
-               HttpSession session){
+               HttpServletRequest req){
         MemberModel mem = null;
 
         if (result.hasErrors()) {
             return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
         }
-        String username = CredentialUtils.getCredential(session).getUsername();
+        String username = SessionUtils.getCredential(req).getUsername();
         mem = accountService.findMember(username, false);
 
 
@@ -210,9 +211,9 @@ public class UShController {
     public @ResponseBody String change(SHPostModel shPostModel,
                                        @RequestParam("picIds") String picIds,
                                        @PathVariable("shId") Integer shId,
-                                       HttpSession session,
+                                       HttpServletRequest req,
                                        HttpServletResponse resp ){
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
 
         if (null == shPostModel) {
             resp.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -272,9 +273,9 @@ public class UShController {
     public @ResponseBody
     String delPost(@PathVariable  int id,
                    @RequestParam(required = false) String ids,
-                   HttpSession session) {
+                   HttpServletRequest req) {
 
-        int uid= CredentialUtils.getCredential(session).getId();
+        int uid= SessionUtils.getCredential(req).getId();
 
         String [] delIds = { String.valueOf(id) };
         //id=0视为多条删除
@@ -311,8 +312,8 @@ public class UShController {
     //region 收藏一条简历 fav
     public @ResponseBody String fav (@PathVariable int id,
                                      @RequestParam(required = false) String ids,
-                                     HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+                                     HttpServletRequest req){
+        Credential credential = SessionUtils.getCredential(req);
         if(credential == null)
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 
@@ -353,9 +354,9 @@ public class UShController {
      */
     @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
-    public @ResponseBody String complaint(HttpSession session,@PathVariable int id){
+    public @ResponseBody String complaint(HttpServletRequest req, @PathVariable int id){
         //TODO:限定举报数目
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if(credential == null){
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -378,11 +379,11 @@ public class UShController {
      * @param session 用户的信息
      */
     @RequestMapping(value = "refresh/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String refresh(@PathVariable int id, HttpSession session) {
+    public @ResponseBody String refresh(@PathVariable int id, HttpServletRequest req) {
         /**
          * 如果该sh不是用户发送的,则错误json
          */
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         SHPostModel sh = shPostService.findPost(id);
         if(sh == null) {
             return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
@@ -410,13 +411,13 @@ public class UShController {
      */
     @RequestMapping(value = "/{id}/review/post",method = RequestMethod.POST,
             produces = "application/json;charset=utf-8")
-    public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpSession session){
+    public @ResponseBody String review(@PathVariable int id,@RequestParam String content,HttpServletRequest req){
 
         //获取评论内容,已经用户的的信息
         if(content.trim().equals("")){
             return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if(credential == null)
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         int memId = credential.getId();
@@ -459,7 +460,6 @@ public class UShController {
     /**
      * 删除一条兼职评论
      * @param id
-     * @param session
      * @return
      */
 
@@ -467,8 +467,8 @@ public class UShController {
             produces = "application/json;charset=utf-8")
     public @ResponseBody String reviewDelete(@PathVariable int id,
                                              @PathVariable int reviewId,
-                                             HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+                                             HttpServletRequest req){
+        Credential credential = SessionUtils.getCredential(req);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
@@ -496,8 +496,8 @@ public class UShController {
      */
     @RequestMapping(value = "/{id}/like",method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String like(@PathVariable Integer id, HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+    public String like(@PathVariable Integer id, HttpServletRequest req){
+        Credential credential = SessionUtils.getCredential(req);
         //先查看是否登陆,发偶泽返回错误信息
         if(credential == null)
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
@@ -525,9 +525,9 @@ public class UShController {
     @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
     public String unlikeSh(@PathVariable("id") Integer shId,
-                            HttpSession session) {
+                            HttpServletRequest req) {
         // 登陆判断
-        Credential cre = CredentialUtils.getCredential(session);
+        Credential cre = SessionUtils.getCredential(req);
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -550,9 +550,9 @@ public class UShController {
     @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     @ResponseBody
     public String checkLike(@PathVariable("id") Integer shId,
-                            HttpSession session) {
+                            HttpServletRequest req) {
         // 登陆判断
-        Credential cre = CredentialUtils.getCredential(session);
+        Credential cre = SessionUtils.getCredential(req);
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }

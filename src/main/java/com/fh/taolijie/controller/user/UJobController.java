@@ -15,6 +15,7 @@ import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -64,9 +66,10 @@ public class UJobController {
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
     public String myPost(@RequestParam(defaultValue = "0") int page,
                          @RequestParam (defaultValue = Constants.PAGE_CAPACITY + "") int pageSize,
-                         HttpSession session, Model model){
+                         HttpServletRequest req,
+                         Model model){
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if(page < 0) page = 0;
         page = PageUtils.getFirstResult(page, pageSize);
         List<JobPostModel> jobs = jobPostService.getJobPostListByMember(credential.getId(), page, pageSize)
@@ -91,15 +94,15 @@ public class UJobController {
     /**
      * 获取已收藏的列表
      * @param page
-     * @param session
      * @param model
      * @return
      */
     @RequestMapping(value = "myfav" ,method = RequestMethod.GET)
     public String fav(@RequestParam (defaultValue = "0") int page,
                       @RequestParam (defaultValue = Constants.PAGE_CAPACITY+"") int pageSize,
-                      HttpSession session, Model model){
-        Credential credential = CredentialUtils.getCredential(session);
+                      HttpServletRequest req,
+                      Model model){
+        Credential credential = SessionUtils.getCredential(req);
         //ObjWrapper objWrapper = new ObjWrapper();
         int totalPage = 0;
 
@@ -127,11 +130,11 @@ public class UJobController {
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String post(HttpSession session,Model model) {
+    public String post(HttpServletRequest req, Model model) {
         int page = 0;
         int pageSize = Integer.MAX_VALUE;
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if (credential == null) {
             return "redirect:/login";
         }
@@ -152,12 +155,10 @@ public class UJobController {
      * @return
      */
     @RequestMapping(value = "change/{id}", method = RequestMethod.GET)
-    //region 修改兼职页面 change
-    public String change(@PathVariable int id, HttpSession session,Model model) {
-        /**
-         * 如果该job不是用户发送的,则返回404
-         */
-        Credential credential = CredentialUtils.getCredential(session);
+    public String change(@PathVariable int id, HttpServletRequest req, Model model) {
+        //如果该job不是用户发送的,则返回404
+        Credential credential = SessionUtils.getCredential(req);
+
         JobPostModel job = jobPostService.findJobPost(id);
         if(job == null|| !ControllerHelper.isCurrentUser(credential, job)){
             return "redirect:/404";
@@ -181,20 +182,19 @@ public class UJobController {
     @RequestMapping(value = "/post", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String post(@Valid JobPostModel job,
                 BindingResult result,
-                HttpSession session) {
+                HttpServletRequest req) {
 
         if (result.hasErrors()) {
             JsonWrapper jw = new JsonWrapper(false, result.getAllErrors());
             return jw.getAjaxMessage();
         }
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
 
         // 检查发送时间间隔
-        Date nowTime = new Date();
         if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
             return new JsonWrapper(false, ErrorCode.TOO_FREQUENT).getAjaxMessage();
         }
@@ -218,7 +218,6 @@ public class UJobController {
     /**
      * 删除兼职 post ajax
      *
-     * @param session
      * @return
      */
     //region 删除兼职 ajax String post
@@ -226,9 +225,9 @@ public class UJobController {
     public @ResponseBody
     String delPost(@PathVariable  int id,
                    @RequestParam(required = false) String ids,
-                HttpSession session) {
+                   HttpServletRequest req) {
 
-        int uid= CredentialUtils.getCredential(session).getId();
+        int uid = SessionUtils.getCredential(req).getId();
 
         String[] delIds = { String.valueOf(id) };
 
@@ -266,8 +265,9 @@ public class UJobController {
     @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     public @ResponseBody String fav (@PathVariable int id,
                                      @RequestParam(required = false) String ids,
-                                     HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+                                     HttpServletRequest req){
+
+        Credential credential = SessionUtils.getCredential(req);
         if(credential == null)
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
 
@@ -308,9 +308,9 @@ public class UJobController {
      * 取消收藏一条兼职 或多条
      */
     @RequestMapping(value = "/fav/del",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String fav (HttpSession session,
+    public @ResponseBody String fav (HttpServletRequest req,
                                      @RequestParam(required = false) String ids){
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
 
         /*删除一个或多个*/
         try{
@@ -333,9 +333,10 @@ public class UJobController {
     @RequestMapping(value = "/{id}/like", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
     public String likeJob(@PathVariable("id") Integer jobId,
-                          HttpSession session) {
+                          HttpServletRequest req) {
         // 判断是否重复赞
-        Credential cre = CredentialUtils.getCredential(session);
+        Credential cre = SessionUtils.getCredential(req);
+
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -362,9 +363,9 @@ public class UJobController {
     @RequestMapping(value = "/{id}/unlike", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     @ResponseBody
     public String unlikeJob(@PathVariable("id") Integer jobId,
-                                  HttpSession session) {
+                            HttpServletRequest req) {
         // 登陆判断
-        Credential cre = CredentialUtils.getCredential(session);
+        Credential cre = SessionUtils.getCredential(req);
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -387,9 +388,9 @@ public class UJobController {
     @RequestMapping(value = "/{id}/checklike", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     @ResponseBody
     public String checkLike(@PathVariable("id") Integer jobId,
-                            HttpSession session) {
+                            HttpServletRequest req) {
         // 登陆判断
-        Credential cre = CredentialUtils.getCredential(session);
+        Credential cre = SessionUtils.getCredential(req);
         if (null == cre) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -403,11 +404,10 @@ public class UJobController {
      * @deprecated
      * 举报一条兼职
      */
-    @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST,
-            produces = "application/json;charset=utf-8")
-    public @ResponseBody String complaint(HttpSession session,@PathVariable int id){
+    @RequestMapping(value = "/complaint/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public @ResponseBody String complaint(HttpServletRequest req, @PathVariable int id){
         //TODO:限定举报数目
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         if(credential == null){
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -428,9 +428,10 @@ public class UJobController {
     @RequestMapping(value = "/change/{jobId}",method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public @ResponseBody String change(@PathVariable("jobId") Integer jobId,
                                        JobPostModel jobPostModel,
-                                       HttpSession session,
+                                       HttpServletRequest req,
                                        HttpServletResponse resp){
-        Credential credential = CredentialUtils.getCredential(session);
+
+        Credential credential = SessionUtils.getCredential(req);
 
         if (null == jobPostModel) {
             resp.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -440,7 +441,7 @@ public class UJobController {
         // 检查是不是本用户发布的信息
         jobPostModel.setId(jobId);
         JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
-        if (null == job) {
+        if ( false == credential.getId().equals(job.getMemberId()) ) {
             return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
         }
 
@@ -463,11 +464,10 @@ public class UJobController {
     @RequestMapping(value = "refresh/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public
     @ResponseBody
-    String refresh(@PathVariable int id, HttpSession session) {
-        /**
-         * 如果该job不是用户发送的,则错误json
-         */
-        Credential credential = CredentialUtils.getCredential(session);
+    String refresh(@PathVariable int id, HttpServletRequest req) {
+        //如果该job不是用户发送的,则错误json
+        Credential credential = SessionUtils.getCredential(req);
+
         JobPostModel job = jobPostService.findJobPost(id);
         if(job == null) {
             return new JsonWrapper(false, ErrorCode.NOT_FOUND).getAjaxMessage();
@@ -493,8 +493,9 @@ public class UJobController {
     @ResponseBody
     public String postReview(@PathVariable("jobId") Integer jobId,
                              ReviewModel model,
-                             HttpSession session) {
-        Credential credential = CredentialUtils.getCredential(session);
+                             HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
         if (null == credential) {
             return new JsonWrapper(false, ErrorCode.NOT_LOGGED_IN).getAjaxMessage();
         }
@@ -531,10 +532,10 @@ public class UJobController {
     @ResponseBody
     public String deleteReview(@PathVariable("jobId") Integer jobId,
                                @PathVariable("reviewId") Integer reviewId,
-                               HttpSession session
+                               HttpServletRequest req
                                ) {
         // 判断是不是自己发的评论
-        Integer curUserId = CredentialUtils.getCredential(session).getId();
+        Integer curUserId = SessionUtils.getCredential(req).getId();
         Integer targetUserId = reviewService.getById(reviewId).getMember().getId();
         if (false == curUserId.equals(targetUserId)) {
             return new JsonWrapper(false, "非法操作").getAjaxMessage();

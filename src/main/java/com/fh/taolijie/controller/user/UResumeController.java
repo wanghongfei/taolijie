@@ -13,14 +13,17 @@ import com.fh.taolijie.service.*;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.ControllerHelper;
+import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -56,11 +59,11 @@ public class UResumeController {
      * @return
      */
     @RequestMapping(value = "/create" ,method = RequestMethod.GET)
-    public String create(HttpSession session,Model model){
+    public String create(HttpServletRequest req, Model model){
         int page = 0;
         int capacity = Integer.MAX_VALUE;
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         List<ResumeModel> resumeDtoList = resumeService.getResumeList(credential.getId(), 0, 0);
         if(resumeDtoList.size()>0){
             return "redirect:/user/resume/view";
@@ -86,13 +89,14 @@ public class UResumeController {
                   BindingResult result,
                   @RequestParam(required = false) Integer intend, // 留着这个只是为了兼容以前的接口，防止400
                   @RequestParam(required = false) String intendIds,
-                  HttpSession session){
+                  HttpServletRequest req) {
+
         if (null == intendIds || intendIds.isEmpty()) {
             return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
 
         // 判断角色权限
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = null;
 
         String roleName = credential.getRoleList().iterator().next();
@@ -141,8 +145,9 @@ public class UResumeController {
      */
 
     @RequestMapping(value = "/view",method = RequestMethod.GET)
-    public String view(HttpSession session,Model model)  {
-        Credential credential = CredentialUtils.getCredential(session);
+    public String view(HttpServletRequest req, Model model)  {
+        Credential credential = SessionUtils.getCredential(req);
+
         List<ResumeModel> list = resumeService.getResumeList(credential.getId(), 0, 0);
 
         /*因为简历只有一张,所以直接用遍历得到*/
@@ -179,8 +184,9 @@ public class UResumeController {
      * @return
      */
     @RequestMapping(value = "del",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String del(HttpSession session,HttpServletResponse response) throws IOException {
-        Credential credential = CredentialUtils.getCredential(session);
+    public @ResponseBody String del(HttpServletRequest req, HttpServletResponse response) throws IOException {
+        Credential credential = SessionUtils.getCredential(req);
+
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
         List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
@@ -213,8 +219,9 @@ public class UResumeController {
      */
     @RequestMapping(value = "/fav/{id}",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     //region 收藏一条兼职 fav
-    public @ResponseBody String fav (@PathVariable int id,HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+    public @ResponseBody String fav(@PathVariable int id,HttpServletRequest req){
+        Credential credential = SessionUtils.getCredential(req);
+
         if(credential == null)
             return  new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
         if(resumeService.findResume(id) == null)
@@ -245,11 +252,11 @@ public class UResumeController {
      * @return
      */
     @RequestMapping(value = "/change",method = RequestMethod.GET)
-    public String changeJob(HttpSession session,Model model) {
+    public String changeJob(HttpServletRequest req, Model model) {
         /**
          * 先得到用户的简历
          */
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
         List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
@@ -288,12 +295,12 @@ public class UResumeController {
     public @ResponseBody String change(@Valid ResumeModel resume,
                                        BindingResult result,
                                        @RequestParam(required = false) String intendIds,
-                                       HttpSession session){
+                                       HttpServletRequest req){
         if (null == intendIds || intendIds.isEmpty()) {
             return new JsonWrapper(false, ErrorCode.EMPTY_FIELD).getAjaxMessage();
         }
 
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
 
         List<ResumeModel> rList = resumeService.getResumeList(credential.getId(), 0, 1);
         if(rList.size()<1 ){
@@ -340,11 +347,11 @@ public class UResumeController {
      * @param session  用户的信息
      */
     @RequestMapping(value = "refresh",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String refresh(HttpSession session){
+    public @ResponseBody String refresh(HttpServletRequest req) {
         /**
          * 如果该job不是用户发送的,则错误json
          */
-        Credential credential = CredentialUtils.getCredential(session);
+        Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
         List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
@@ -372,8 +379,9 @@ public class UResumeController {
      * @return
      */
     @RequestMapping(value = "open",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
-    public @ResponseBody String open(HttpSession session){
-        Credential credential = CredentialUtils.getCredential(session);
+    public @ResponseBody String open(HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = accountService.findMember(credential.getUsername(), false);
 
         List<ResumeModel> list = resumeService.getResumeList(mem.getId(), 0, 0);
