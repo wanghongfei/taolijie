@@ -30,7 +30,6 @@ public class JobPostModel extends Pageable implements Serializable {
     @Length(min = 1, max = 30)
     private String title;
 
-    @NotNull
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expiredTime;
