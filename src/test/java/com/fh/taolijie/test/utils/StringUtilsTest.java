@@ -97,4 +97,27 @@ public class StringUtilsTest {
         Assert.assertFalse(StringUtils.checkIdExists(ids, "4"));
         Assert.assertFalse(StringUtils.checkIdExists(ids, "5"));
     }
+
+    @Test
+    public void testValidateLadderString() {
+        String[] strs = {
+                null, null, "OK", "OK"
+        };
+
+        Assert.assertTrue(StringUtils.validateLadderString(strs));
+
+        strs = Arrays.asList( "OK", null, "OK", "OK" ).toArray(new String[]{});
+        Assert.assertFalse(StringUtils.validateLadderString(strs));
+
+        strs = Arrays.asList( null, null, null, null ).toArray(new String[]{});
+        Assert.assertTrue(StringUtils.validateLadderString(strs));
+
+
+
+        strs = null;
+        Assert.assertTrue(StringUtils.validateLadderString(strs));
+
+        strs = Arrays.asList( null, null, "OK", null ).toArray(new String[]{});
+        Assert.assertFalse(StringUtils.validateLadderString(strs));
+    }
 }

@@ -68,6 +68,7 @@ public class StringUtils {
         return sb.toString();
     }
     /**
+     * @deprecated
      * 构造 {@code SELECT XXX FROM XXX WHERE XXX LIKE '%XXX%' AND XXX ORDER By XXX}语句
      * @param entityName
      * @param likeParam
@@ -114,6 +115,7 @@ public class StringUtils {
     }
 
     /**
+     * @deprecated
      * 构造 {@code SELECT XXX FROM XXX WHERE XXX = 'XXX' AND XXX ORDER By XXX}语句
      * @param objAlias
      * @param entityName
@@ -193,6 +195,38 @@ public class StringUtils {
         sb.replace(pos, pos + fullString.length(), "");
 
         return sb.toString();
+    }
+
+    /**
+     * 验证传入的参数是否符合: if strs[i] exists then strs[i+1] must exist
+     * @param strs
+     * @return
+     */
+    public static boolean validateLadderString(String... strs) {
+        if (null == strs) {
+            return true;
+        }
+
+        final int LEN = strs.length;
+        if (LEN <= 1) {
+            return true;
+        }
+
+        for (int ix = 0 ; ix < LEN ; ++ix) {
+            if (null != strs[ix]) {
+                // 找到第一个不为null的元素
+                // 判断从该元素开始后面的元素是不是都不为空
+                for (int j = ix ; j < LEN ; ++j) {
+                    if (null == strs[j]) {
+                        return false;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        return true;
     }
 
     public static String addToString(String originalStr, String newStr) {

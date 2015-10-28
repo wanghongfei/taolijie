@@ -71,8 +71,8 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText publishQuest(@Valid QuestModel model,
                                      BindingResult br,
-                                     @RequestParam String collegeIds,
                                      @RequestParam String schoolIds,
+                                     @RequestParam String collegeIds,
                                      @RequestParam String cityIds, // 城市id
                                      @RequestParam String proIds, // 省id
                                      // coupon信息
@@ -88,6 +88,12 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
+
+        // 参数验证
+        if (br.hasErrors()) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
         // 验证是否已认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
         String status = mem.getVerified();
@@ -95,10 +101,11 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-        // 参数验证
-        if (br.hasErrors()) {
+        // 验证任务对象参数
+        if (false == StringUtils.validateLadderString(schoolIds, collegeIds, cityIds, proIds)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
+
 
         // 标记变量
         // 记录该任务是否需要coupon

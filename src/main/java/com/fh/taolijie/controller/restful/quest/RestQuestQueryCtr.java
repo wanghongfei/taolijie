@@ -36,9 +36,12 @@ public class RestQuestQueryCtr {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText query(@RequestParam(required = false) Integer cateId,
-                              @RequestParam(required = false) Integer regionId,
+                              // 任务对象信息
                               @RequestParam(required = false) Integer collegeId,
                               @RequestParam(required = false) Integer schoolId,
+                              @RequestParam(required = false) Integer cityId,
+                              @RequestParam(required = false) Integer proId,
+
                               @RequestParam(required = false) BigDecimal min,
                               @RequestParam(required = false) BigDecimal max,
                               @RequestParam(required = false) Integer empStatus, // 只有管理员才能使用该参数
@@ -58,9 +61,11 @@ public class RestQuestQueryCtr {
         }
 
         command.setQuestCateId(cateId);
-        command.setRegionId(regionId);
+        //command.setRegionId(regionId);
         command.setCollegeId(collegeId);
         command.setSchoolId(schoolId);
+        command.setCityId(cityId);
+        command.setProvinceId(proId);
 
         command.setEmpStatus(EmpQuestStatus.DONE.code());
 
