@@ -37,7 +37,7 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         }
 
-        jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1);
+        jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1L);
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
         return super.preHandle(request, response, handler);
