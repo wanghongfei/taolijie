@@ -17,7 +17,9 @@
 
     <!-- Jedis连接池配置 -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxTotal" value="50" />
+        <property name="maxTotal" value="30" />
+        <property name="maxIdle" value="30" />
+        <property name="testOnBorrow" value="true" />
         <!-- 当连接池用光时池阻塞 -->
         <property name="blockWhenExhausted" value="true" />
     </bean>
