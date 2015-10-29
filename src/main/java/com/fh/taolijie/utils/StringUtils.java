@@ -229,6 +229,25 @@ public class StringUtils {
         return true;
     }
 
+    /**
+     * 生成请求参数字符串
+     * @param map
+     * @return
+     */
+    public static String genUrlQueryString(Map<String, String> map) {
+        StringBuilder sb = new StringBuilder(map.size() * 20);
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            sb.append(entry.getKey());
+            sb.append("=");
+            sb.append(entry.getValue());
+            sb.append("&");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+
+        return sb.toString();
+    }
+
     public static String addToString(String originalStr, String newStr) {
         StringBuilder sb = new StringBuilder();
         if (null == originalStr) {
