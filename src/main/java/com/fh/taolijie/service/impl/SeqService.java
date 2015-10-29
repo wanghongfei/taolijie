@@ -8,11 +8,14 @@ import com.fh.taolijie.domain.sequence.SeqAvatarModel;
 import com.fh.taolijie.domain.sequence.SeqJobModel;
 import com.fh.taolijie.domain.sequence.SeqShModel;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.JedisUtils;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import java.io.File;
@@ -36,7 +39,7 @@ public class SeqService {
     private SeqJobModelMapper jobMapper;
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
 
     /**
@@ -66,20 +69,34 @@ public class SeqService {
      */
     public boolean checkInterval(Integer memId) {
         String key = genRedisKey(memId);
-        String value = jedis.get(key);
 
-        if (null != value) {
-            // 如果有值
-            // 说明间隔太短
-            return false;
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+
+            String value = jedis.get(key);
+
+            if (null != value) {
+                // 如果有值
+                // 说明间隔太短
+                return false;
+            }
+
+            // 如果没值，则将当前的值放到redis中
+            // 并设置过期时间为2s
+            Pipeline pip = jedis.pipelined();
+            pip.set(key, "T");
+            pip.expire(key, 2);
+            pip.sync();
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+            throw ex;
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
         }
 
-        // 如果没值，则将当前的值放到redis中
-        // 并设置过期时间为2s
-        Pipeline pip = jedis.pipelined();
-        pip.set(key, "T");
-        pip.expire(key, 2);
-        pip.sync();
 
         return true;
     }

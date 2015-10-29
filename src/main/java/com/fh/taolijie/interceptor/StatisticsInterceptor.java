@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 public class StatisticsInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     /**
      * 用hash set数据结构存放 uri - number 键值对
@@ -37,7 +38,10 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         }
 
+        Jedis jedis = jedisPool.getResource();
         jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1L);
+        jedisPool.returnResourceObject(jedis);
+
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
         return super.preHandle(request, response, handler);

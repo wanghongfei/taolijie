@@ -1,10 +1,13 @@
 package com.fh.taolijie.service.quest.impl;
 
 import com.fh.taolijie.constant.RedisKey;
+import com.fh.taolijie.utils.JedisUtils;
+import com.fh.taolijie.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -17,7 +20,7 @@ import java.util.Map;
 public class FeeCalculator {
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
 
     /**
@@ -106,6 +109,18 @@ public class FeeCalculator {
     }
 
     private Map<String, String> retrieveConfig() {
-        return jedis.hgetAll(RedisKey.SYSCONF.toString());
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.hgetAll(RedisKey.SYSCONF.toString());
+
+        } catch (Exception e) {
+            LogUtils.logException(e);
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
+        }
+
+        return null;
     }
 }

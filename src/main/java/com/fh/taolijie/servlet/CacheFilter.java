@@ -1,12 +1,15 @@
 package com.fh.taolijie.servlet;
 
 import com.fh.taolijie.component.ResponseWrapper;
+import com.fh.taolijie.utils.JedisUtils;
+import com.fh.taolijie.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import javax.servlet.*;
@@ -26,7 +29,7 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     private static final Logger log = LoggerFactory.getLogger(CacheFilter.class);
 
     private static ApplicationContext ctx;
-    private static Jedis jedisClient;
+    private static JedisPool jedisPool;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -91,18 +94,40 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ctx = applicationContext;
-        jedisClient = (Jedis) ctx.getBean("jedis");
+        jedisPool = (JedisPool) ctx.getBean("jedisPool");
     }
 
     private String getHtmlFromCache() {
-        return jedisClient.get("home");
+        Jedis jedis = null;
+
+        try {
+            return jedis.get("home");
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
+        }
+
+        return null;
     }
 
     private void putIntoCache(String html) {
-        Pipeline pip = jedisClient.pipelined();
-        pip.set("home", html);
-        pip.expire("home", (int) TimeUnit.MINUTES.toSeconds(10)); // 10分钟
-        pip.sync();
+        Jedis jedis = null;
+
+        try {
+            Pipeline pip = jedis.pipelined();
+            pip.set("home", html);
+            pip.expire("home", (int) TimeUnit.MINUTES.toSeconds(10)); // 10分钟
+            pip.sync();
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
+        }
 
     }
 }

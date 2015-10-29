@@ -19,6 +19,7 @@ import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.TimeUtil;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -75,7 +77,7 @@ public class DefaultQuestService implements QuestService {
     private CouponService couponService;
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     /**
      * 商家发布任务.
@@ -206,10 +208,23 @@ public class DefaultQuestService implements QuestService {
             }
 
             // 发布消息
-            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            Jedis jedis = null;
+            try {
+                jedis = jedisPool.getResource();
+
+                Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+                if (recvAmt.longValue() <= 0) {
+                    LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+                }
+
+            } catch (Exception ex) {
+                LogUtils.logException(ex);
+                throw ex;
+
+            } finally {
+                JedisUtils.returnJedis(jedisPool, jedis);
             }
+
 
         }
 
@@ -374,9 +389,21 @@ public class DefaultQuestService implements QuestService {
         }
 
         // 发布消息
-        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-        if (recvAmt.longValue() <= 0) {
-            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+
+            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+            throw ex;
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
         }
 
         // 方法结束 == 事务结束，行锁释放

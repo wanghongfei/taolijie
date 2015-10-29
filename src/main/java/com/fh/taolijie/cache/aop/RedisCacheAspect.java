@@ -7,6 +7,7 @@ import com.fh.taolijie.cache.annotation.NoCache;
 import com.fh.taolijie.cache.annotation.RedisCache;
 import com.fh.taolijie.cache.annotation.RedisEvict;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import java.lang.annotation.Annotation;
@@ -37,7 +39,7 @@ public class RedisCacheAspect {
 
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     /**
      * 方法调用前，先查询缓存。如果存在缓存，则返回缓存数据，阻止方法调用;
@@ -63,6 +65,8 @@ public class RedisCacheAspect {
             return jp.proceed(jp.getArgs());
         }
 
+        Jedis jedis = jedisPool.getResource();
+
         // 得到类名、方法名和参数
         //String clazzName = jp.getTarget().getClass().getName();
         String methodName = jp.getSignature().getName();
@@ -83,8 +87,52 @@ public class RedisCacheAspect {
         // 检查redis中是否有缓存
         String value = null;
         try {
-            //value = (String)rt.opsForHash().get(modelType.getName(), key);
             value = jedis.hget(modelType.getName(), key);
+
+            if (null == value) {
+                // 缓存未命中
+                if (infoLog.isDebugEnabled()) {
+                    infoLog.debug("缓存未命中");
+                }
+
+                // 调用数据库查询方法
+                result = jp.proceed(args);
+
+                // 序列化查询结果
+                String json = serialize(result);
+
+                String hashName = modelType.getName();
+
+
+
+                // 序列化结果放入缓存
+                // 判断hash名是否存在
+                Boolean exist = jedis.exists(hashName);
+                Pipeline pip = jedis.pipelined();
+                // 更新hash
+                pip.hset(hashName, key, json);
+                // 如果不存在，设置过期时间
+                if (false == exist) {
+                    pip.expire(hashName, (int) Constants.HASH_EXPIRE_TIME);
+                }
+                pip.sync();
+
+            } else {
+                // 缓存命中
+                if (infoLog.isDebugEnabled()) {
+                    infoLog.debug("缓存命中, value = {}", value);
+                }
+
+                // 得到被代理方法的返回值类型
+                Class returnType = ((MethodSignature) jp.getSignature()).getReturnType();
+
+                // 反序列化从缓存中拿到的json
+                result = deserialize(value, returnType, modelType);
+
+                if (infoLog.isDebugEnabled()) {
+                    infoLog.debug("反序列化结果 = {}", result);
+                }
+            }
         } catch (Exception ex) {
             // 如果扔异常，说明Redis出了问题
             // 此时直接查数据库，绕开Redis
@@ -96,52 +144,11 @@ public class RedisCacheAspect {
             // 执行数据库查询方法
             result = jp.proceed(args);
             return result;
+
+        } finally {
+            jedisPool.returnResourceObject(jedis);
         }
 
-        if (null == value) {
-            // 缓存未命中
-            if (infoLog.isDebugEnabled()) {
-                infoLog.debug("缓存未命中");
-            }
-
-            // 调用数据库查询方法
-            result = jp.proceed(args);
-
-            // 序列化查询结果
-            String json = serialize(result);
-
-            String hashName = modelType.getName();
-
-
-
-            // 序列化结果放入缓存
-            // 判断hash名是否存在
-            Boolean exist = jedis.exists(hashName);
-            Pipeline pip = jedis.pipelined();
-            // 更新hash
-            pip.hset(hashName, key, json);
-            // 如果不存在，设置过期时间
-            if (false == exist) {
-                pip.expire(hashName, (int) Constants.HASH_EXPIRE_TIME);
-            }
-            pip.sync();
-
-        } else {
-            // 缓存命中
-            if (infoLog.isDebugEnabled()) {
-                infoLog.debug("缓存命中, value = {}", value);
-            }
-
-            // 得到被代理方法的返回值类型
-            Class returnType = ((MethodSignature) jp.getSignature()).getReturnType();
-
-            // 反序列化从缓存中拿到的json
-            result = deserialize(value, returnType, modelType);
-
-            if (infoLog.isDebugEnabled()) {
-                infoLog.debug("反序列化结果 = {}", result);
-            }
-        }
 
         return result;
     }
@@ -186,7 +193,17 @@ public class RedisCacheAspect {
             }
 
             // 清除对应缓存
-            jedis.del(clazz.getName());
+            Jedis jedis = null;
+            try {
+                jedis = jedisPool.getResource();
+                jedis.del(clazz.getName());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            } finally {
+                JedisUtils.returnJedis(jedisPool, jedis);
+            }
         }
 
 

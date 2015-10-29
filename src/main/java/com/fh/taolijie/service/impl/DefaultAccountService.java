@@ -23,6 +23,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import java.util.Date;
@@ -46,7 +47,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     RoleModelMapper roleMapper;
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     @Autowired(required = false)
     Mail mail;
@@ -323,18 +324,43 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     public void createRedisSession(MemberModel mem, String sid) {
         String key = RedisKey.SESSION.toString() + sid;
 
-        Pipeline pip = jedis.pipelined();
-        pip.hset(key, "id", mem.getId().toString());
-        pip.hset(key, "username", mem.getUsername());
-        pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
-        pip.sync();
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+
+            Pipeline pip = jedis.pipelined();
+            pip.hset(key, "id", mem.getId().toString());
+            pip.hset(key, "username", mem.getUsername());
+            pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
+            pip.sync();
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+            throw ex;
+
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
+        }
+
 
     }
 
     @Override
     public void deleteRedisSession(String sid) {
         String key = RedisKey.SESSION.toString() + sid;
-        jedis.del(key);
+
+        Jedis jedis = null;
+
+        try {
+            jedis = jedisPool.getResource();
+            jedis.del(key);
+
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+            throw ex;
+        } finally {
+            JedisUtils.returnJedis(jedisPool, jedis);
+        }
 
     }
 

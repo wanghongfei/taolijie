@@ -19,6 +19,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -43,7 +44,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
     private static AccountService accountService;
 
-    private static Jedis jedisClient;
+    private static JedisPool jedisPool;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -178,8 +179,12 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // 根据sid向redis中查询用户信息
         String key = RedisKey.SESSION.toString() + sid;
-        Jedis jedis = retrieveRedis("jedis");
+
+        JedisPool pool = retrieveRedis("jedisPool");
+        Jedis jedis = pool.getResource();
         Map<String, String> map = jedis.hgetAll(key);
+        pool.returnResourceObject(jedis);
+
         // 没查到表示已经过期或者未登陆
         if (null == map || map.isEmpty()) {
             if (infoLogger.isDebugEnabled()) {
@@ -229,12 +234,12 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         return accountService;
     }
 
-    private Jedis retrieveRedis(String beanName) {
-        if (null == jedisClient) {
-            jedisClient = (Jedis) applicationContext.getBean(beanName);
+    private JedisPool retrieveRedis(String beanName) {
+        if (null == jedisPool) {
+            jedisPool = (JedisPool) applicationContext.getBean(beanName);
         }
 
-        return jedisClient;
+        return jedisPool;
     }
 
     @Override
