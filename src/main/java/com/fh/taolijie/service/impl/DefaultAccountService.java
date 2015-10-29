@@ -324,43 +324,23 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     public void createRedisSession(MemberModel mem, String sid) {
         String key = RedisKey.SESSION.toString() + sid;
 
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        Pipeline pip = jedis.pipelined();
+        pip.hset(key, "id", mem.getId().toString());
+        pip.hset(key, "username", mem.getUsername());
+        pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
+        pip.sync();
 
-            Pipeline pip = jedis.pipelined();
-            pip.hset(key, "id", mem.getId().toString());
-            pip.hset(key, "username", mem.getUsername());
-            pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
-            pip.sync();
-
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
-            throw ex;
-
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
-        }
-
-
+        JedisUtils.returnJedis(jedisPool, jedis);
     }
 
     @Override
     public void deleteRedisSession(String sid) {
         String key = RedisKey.SESSION.toString() + sid;
 
-        Jedis jedis = null;
-
-        try {
-            jedis = jedisPool.getResource();
-            jedis.del(key);
-
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
-            throw ex;
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
-        }
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        jedis.del(key);
+        JedisUtils.returnJedis(jedisPool, jedis);
 
     }
 

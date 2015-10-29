@@ -11,6 +11,7 @@ import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
@@ -181,9 +182,9 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         String key = RedisKey.SESSION.toString() + sid;
 
         JedisPool pool = retrieveRedis("jedisPool");
-        Jedis jedis = pool.getResource();
+        Jedis jedis = JedisUtils.getClient(pool);
         Map<String, String> map = jedis.hgetAll(key);
-        pool.returnResourceObject(jedis);
+        JedisUtils.returnJedis(pool, jedis);
 
         // 没查到表示已经过期或者未登陆
         if (null == map || map.isEmpty()) {
