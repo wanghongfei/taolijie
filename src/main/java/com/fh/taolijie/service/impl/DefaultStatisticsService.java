@@ -2,6 +2,7 @@ package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.service.StatisticsService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,19 +23,12 @@ public class DefaultStatisticsService implements StatisticsService {
 
     @Override
     public Map<String, String> getPageViewStatistics() {
-        Jedis jedis = null;
+        Jedis jedis = JedisUtils.getClient(jedisPool);
 
-        try {
-            jedis = jedisPool.getResource();
-            return jedis.hgetAll(Constants.RedisKey.PAGE_STATISTICS);
+        Map<String, String> map = jedis.hgetAll(Constants.RedisKey.PAGE_STATISTICS);
 
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
+        JedisUtils.returnJedis(jedisPool, jedis);
 
-        } finally {
-            jedisPool.returnResourceObject(jedis);
-        }
-
-        return null;
+        return map;
     }
 }

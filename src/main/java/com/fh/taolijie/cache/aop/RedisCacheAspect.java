@@ -65,7 +65,7 @@ public class RedisCacheAspect {
             return jp.proceed(jp.getArgs());
         }
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = JedisUtils.getClient(jedisPool);
 
         // 得到类名、方法名和参数
         //String clazzName = jp.getTarget().getClass().getName();

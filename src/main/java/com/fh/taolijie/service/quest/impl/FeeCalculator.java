@@ -109,18 +109,12 @@ public class FeeCalculator {
     }
 
     private Map<String, String> retrieveConfig() {
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            return jedis.hgetAll(RedisKey.SYSCONF.toString());
+        Jedis jedis = JedisUtils.getClient(jedisPool);
 
-        } catch (Exception e) {
-            LogUtils.logException(e);
+        Map<String, String> map = jedis.hgetAll(RedisKey.SYSCONF.toString());
 
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
-        }
+        JedisUtils.returnJedis(jedisPool, jedis);
 
-        return null;
+        return map;
     }
 }

@@ -208,22 +208,12 @@ public class DefaultQuestService implements QuestService {
             }
 
             // 发布消息
-            Jedis jedis = null;
-            try {
-                jedis = jedisPool.getResource();
-
-                Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-                if (recvAmt.longValue() <= 0) {
-                    LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-                }
-
-            } catch (Exception ex) {
-                LogUtils.logException(ex);
-                throw ex;
-
-            } finally {
-                JedisUtils.returnJedis(jedisPool, jedis);
+            Jedis jedis = JedisUtils.getClient(jedisPool);
+            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
             }
+            JedisUtils.returnJedis(jedisPool, jedis);
 
 
         }
@@ -389,22 +379,13 @@ public class DefaultQuestService implements QuestService {
         }
 
         // 发布消息
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-
-            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
-
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
-            throw ex;
-
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+        if (recvAmt.longValue() <= 0) {
+            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
         }
+        JedisUtils.returnJedis(jedisPool, jedis);
+
 
         // 方法结束 == 事务结束，行锁释放
     }

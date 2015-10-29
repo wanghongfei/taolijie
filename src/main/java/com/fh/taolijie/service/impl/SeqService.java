@@ -70,33 +70,23 @@ public class SeqService {
     public boolean checkInterval(Integer memId) {
         String key = genRedisKey(memId);
 
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        String value = jedis.get(key);
 
-            String value = jedis.get(key);
-
-            if (null != value) {
-                // 如果有值
-                // 说明间隔太短
-                return false;
-            }
-
-            // 如果没值，则将当前的值放到redis中
-            // 并设置过期时间为2s
-            Pipeline pip = jedis.pipelined();
-            pip.set(key, "T");
-            pip.expire(key, 2);
-            pip.sync();
-
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
-            throw ex;
-
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
+        if (null != value) {
+            // 如果有值
+            // 说明间隔太短
+            return false;
         }
 
+        // 如果没值，则将当前的值放到redis中
+        // 并设置过期时间为2s
+        Pipeline pip = jedis.pipelined();
+        pip.set(key, "T");
+        pip.expire(key, 2);
+        pip.sync();
+
+        JedisUtils.returnJedis(jedisPool, jedis);
 
         return true;
     }

@@ -114,20 +114,13 @@ public class CacheFilter implements Filter, ApplicationContextAware {
     }
 
     private void putIntoCache(String html) {
-        Jedis jedis = null;
+        Jedis jedis = JedisUtils.getClient(jedisPool);
 
-        try {
-            Pipeline pip = jedis.pipelined();
-            pip.set("home", html);
-            pip.expire("home", (int) TimeUnit.MINUTES.toSeconds(10)); // 10分钟
-            pip.sync();
+        Pipeline pip = jedis.pipelined();
+        pip.set("home", html);
+        pip.expire("home", (int) TimeUnit.MINUTES.toSeconds(10)); // 10分钟
+        pip.sync();
 
-        } catch (Exception ex) {
-            LogUtils.logException(ex);
-
-        } finally {
-            JedisUtils.returnJedis(jedisPool, jedis);
-        }
-
+        JedisUtils.returnJedis(jedisPool, jedis);
     }
 }
