@@ -395,11 +395,16 @@ public class RestAccCtr {
             // 签名
             // todo
             Map<String, String> map = new HashMap<>(6);
-            map.put("subject", subject);
+            map.put("subject", StringUtils.surroundQuotation(subject));
+            map.put("payment_type", StringUtils.surroundQuotation(paymentType));
+            map.put("total_fee", StringUtils.surroundQuotation(totalFee));
+            map.put("body", StringUtils.surroundQuotation(body));
+            map.put("out_trade_no", StringUtils.surroundQuotation(orderId.toString()));
+/*            map.put("subject", subject);
             map.put("payment_type", paymentType);
             map.put("total_fee", totalFee);
             map.put("body", body);
-            map.put("out_trade_no", orderId.toString());
+            map.put("out_trade_no", orderId.toString()); */
             String sign = payService.sign(map, PayType.ALIPAY);
 
             OrderSignDto dto = new OrderSignDto();

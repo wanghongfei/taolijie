@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -42,6 +44,7 @@ public class DefaultPayService implements PayService {
             String charset = redisMap.get(RedisKey.CHARSET.toString());
             String url = redisMap.get(RedisKey.NOTIFY_URL.toString());
             String acc = redisMap.get(RedisKey.ALIPAY_ACC.toString());
+            String signType = redisMap.get(RedisKey.SIGN_TYPE.toString());
 
             JedisUtils.returnJedis(jedisPool, jedis);
 
@@ -51,11 +54,17 @@ public class DefaultPayService implements PayService {
                 return key1.compareTo(key2);
             });
 
-            sortedMap.put("service", servName);
+            sortedMap.put("service", StringUtils.surroundQuotation(servName));
+            sortedMap.put("partner", StringUtils.surroundQuotation(pid));
+            sortedMap.put("_input_charset", StringUtils.surroundQuotation(charset));
+            sortedMap.put("notify_url", StringUtils.surroundQuotation(url));
+            sortedMap.put("seller_id", StringUtils.surroundQuotation(acc));
+
+/*            sortedMap.put("service", servName);
             sortedMap.put("partner", pid);
             sortedMap.put("_input_charset", charset);
             sortedMap.put("notify_url", url);
-            sortedMap.put("seller_id", acc);
+            sortedMap.put("seller_id", acc);*/
             sortedMap.putAll(map);
 
             // 拼接请求参数
@@ -65,7 +74,12 @@ public class DefaultPayService implements PayService {
 
             }
             // 签名
-            return SignUtils.sign(queryStr, priKey, charset);
+            String sign = SignUtils.sign(queryStr, priKey, charset);
+            try {
+                return URLEncoder.encode(sign, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;

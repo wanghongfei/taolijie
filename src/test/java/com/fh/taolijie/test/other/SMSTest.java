@@ -50,4 +50,39 @@ public class SMSTest {
 
 
     }
+
+    @Test
+    public void testAlipay() throws Exception{
+        HttpClientBuilder builder = HttpClientBuilder.create();
+        HttpClient client = builder.build();
+        HttpPost post = new HttpPost("https://mapi.alipay.com/gateway.do");
+
+        List<NameValuePair> parmList = new ArrayList<>();
+        parmList.add(new BasicNameValuePair("payment_type", "1"));
+        parmList.add(new BasicNameValuePair("subject", "test"));
+        parmList.add(new BasicNameValuePair("total_fee", "1.00"));
+        parmList.add(new BasicNameValuePair("body", "test"));
+        parmList.add(new BasicNameValuePair("service", "mobile.securitypay.pay"));
+        parmList.add(new BasicNameValuePair("partner", "2088021861615600"));
+        parmList.add(new BasicNameValuePair("_input_charset", "utf-8"));
+        parmList.add(new BasicNameValuePair("sign_type", "RSA"));
+        parmList.add(new BasicNameValuePair("sign", "gZwmb+gCMF7ejlTvOYMjAY3yJL3wR34I977vurffGKAm9BL3VNgzpjyq410qsVMcPTYeNdJ8HCCY1IidtwvK8pxl79rT3tQjInBmYm7d5rtHsAI7Tsv4FdDyXUSt0kC7SxgGYLgI2b+QW2FuuydLMP98/FisZGWsI/TO9+1VgIo="));
+        parmList.add(new BasicNameValuePair("notify_url", "http://120.24.218.56"));
+        parmList.add(new BasicNameValuePair("seller_id", "taolijie@vip.sina.com"));
+        parmList.add(new BasicNameValuePair("out_trade_no", "44"));
+
+        post.setEntity(new UrlEncodedFormEntity(parmList, HTTP.UTF_8));
+
+        HttpResponse resp = client.execute(post);
+        InputStream in = resp.getEntity().getContent();
+
+        InputStreamReader inReader = new InputStreamReader(in);
+        BufferedReader reader = new BufferedReader(inReader);
+
+        String line = null;
+        while ( (line = reader.readLine()) != null ) {
+            System.out.println(line);
+        }
+
+    }
 }

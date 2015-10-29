@@ -248,6 +248,21 @@ public class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * 在字符串前后加上双引号
+     * @param str
+     * @return
+     */
+    public static String surroundQuotation(String str) {
+        StringBuilder sb = new StringBuilder(str.length() + 2);
+
+        sb.append("\"");
+        sb.append(str);
+        sb.append("\"");
+
+        return sb.toString();
+    }
+
     public static String addToString(String originalStr, String newStr) {
         StringBuilder sb = new StringBuilder();
         if (null == originalStr) {
