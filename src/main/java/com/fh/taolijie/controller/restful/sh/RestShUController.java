@@ -13,12 +13,14 @@ import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import com.fh.taolijie.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -142,10 +144,16 @@ public class RestShUController {
         shDto.setPostTime(new Date());
         //图片列表  用分号隔开
         shDto.setPicturePath(picIds);
-        //shDto.setExpiredTime(TimeUtil.getMaxDate());
+
+        // 如果没有填写过期时间
+        // 则设过期时间为1year
+        Date expiredTime = shDto.getExpiredTime();
+        if (null == expiredTime) {
+            expiredTime = TimeUtil.calculateDate(new Date(), Calendar.YEAR, 1);
+            shDto.setExpiredTime(expiredTime);
+        }
 
         shPostService.addPost(shDto);
-        //userService.changeCredits(mem.getId(), OperationType.POST, mem.getCredits());
 
         return ResponseText.getSuccessResponseText();
     }
