@@ -74,12 +74,7 @@ public class DefaultPayService implements PayService {
 
             }
             // 签名
-            String sign = SignUtils.sign(queryStr, priKey, charset);
-            try {
-                return URLEncoder.encode(sign, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            return SignUtils.sign(queryStr, priKey, charset);
         }
 
         return null;
