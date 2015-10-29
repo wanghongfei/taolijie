@@ -6,12 +6,15 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.acc.OrderType;
+import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
+import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.AccountService;
@@ -31,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by whf on 9/24/15.
@@ -58,6 +63,9 @@ public class RestAccCtr {
 
     @Autowired
     private SeQuestionService seService;
+
+    @Autowired
+    private PayService payService;
 
     /**
      * 开通现金账户
@@ -342,31 +350,65 @@ public class RestAccCtr {
     }
 
     /**
-     * 申请充值
+     * 申请充值.
      * @return
      */
     @RequestMapping(value = "/charge", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText chargeApply(@RequestParam BigDecimal amt,
-                                    @RequestParam String tradeNum,
+    public ResponseText chargeApply(
+                                    // alipay接口参数
+                                    @RequestParam(value = "app_id", required = false) String appId,
+                                    @RequestParam(value = "app_env", required = false) String appenv,
+                                    @RequestParam String subject,
+                                    @RequestParam(value = "payment_type", defaultValue = "1") String paymentType,
+                                    @RequestParam(value = "total_fee") String totalFee,
+                                    @RequestParam String body,
+
+                                    @RequestParam String orderType,
                                     HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
 
+        // 验证orderType
+        OrderType type = OrderType.fromCode(orderType);
+        if (null == type) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
         PayOrderModel order = new PayOrderModel();
         order.setMemberId(memId);
         order.setTitle("账户充值订单");
-        order.setAlipayTradeNum(tradeNum);
-        order.setAmount(amt);
+        //order.setAlipayTradeNum(tradeNum);
+        order.setAmount(new BigDecimal(totalFee));
+        order.setType(orderType);
+
 
         try {
+            // 生成订单
             chargeService.chargeApply(order);
+            // 得到订单号
+            Integer orderId = order.getId();
+
+            // 签名
+            // todo
+            Map<String, String> map = new HashMap<>(6);
+            map.put("app_id", appId);
+            map.put("app_env", appenv);
+            map.put("subject", subject);
+            map.put("payment_type", paymentType);
+            map.put("total_fee", totalFee);
+            map.put("body", body);
+            String sign = payService.sign(map, PayType.ALIPAY);
+
+            OrderSignDto dto = new OrderSignDto();
+            dto.setOrderId(orderId);
+            dto.setSign(sign);
+            return new ResponseText(dto);
 
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
         }
 
-        return ResponseText.getSuccessResponseText();
     }
 
     /**

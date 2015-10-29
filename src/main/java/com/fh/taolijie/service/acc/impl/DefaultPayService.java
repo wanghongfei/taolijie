@@ -1,11 +1,18 @@
 package com.fh.taolijie.service.acc.impl;
 
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.service.acc.PayService;
+import com.fh.taolijie.utils.JedisUtils;
+import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
-import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -15,23 +22,50 @@ import java.util.TreeMap;
  */
 @Service
 public class DefaultPayService implements PayService {
-    public static final String SIGN_ALGORITHM = "RSA";
+    public static Logger infoLog = LogUtils.getInfoLogger();
 
-/*    @Autowired
-    private Jedis jedis;*/
+
+    @Autowired
+    private JedisPool jedisPool;
 
 
     @Override
     public String sign(Map<String, String> map, PayType type) {
         if (type == PayType.ALIPAY) {
+            // 得到固定的参数值
+            Jedis jedis = JedisUtils.getClient(jedisPool);
+
+            Map<String, String> redisMap = jedis.hgetAll(RedisKey.ALIPAY_CONF.toString());
+            String priKey = jedis.hget(RedisKey.SYSCONF.toString(), RedisKey.RSA_PRI_KEY.toString());
+            String servName = redisMap.get(RedisKey.SERVICE_NAME.toString());
+            String pid = redisMap.get(RedisKey.PID.toString());
+            String charset = redisMap.get(RedisKey.CHARSET.toString());
+            String url = redisMap.get(RedisKey.NOTIFY_URL.toString());
+            String acc = redisMap.get(RedisKey.ALIPAY_ACC.toString());
+
+            JedisUtils.returnJedis(jedisPool, jedis);
+
+
             // 对参数map排序
             SortedMap<String, String> sortedMap = new TreeMap<>( (String key1, String key2) -> {
                 return key1.compareTo(key2);
             });
 
+            sortedMap.put("service", servName);
+            sortedMap.put("partner", pid);
+            sortedMap.put("_input_charset", charset);
+            sortedMap.put("notify_url", url);
+            sortedMap.put("seller_id", acc);
             sortedMap.putAll(map);
 
-            return StringUtils.genUrlQueryString(sortedMap);
+            // 拼接请求参数
+            String queryStr = StringUtils.genUrlQueryString(sortedMap);
+            if (infoLog.isDebugEnabled()) {
+                infoLog.debug("query = {}, priKey = {}, charset = {}", queryStr, priKey, charset);
+
+            }
+            // 签名
+            return SignUtils.sign(queryStr, priKey, charset);
         }
 
         return null;

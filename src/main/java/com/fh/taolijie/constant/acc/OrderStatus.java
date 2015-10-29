@@ -4,9 +4,9 @@ package com.fh.taolijie.constant.acc;
  * Created by whf on 9/21/15.
  */
 public enum OrderStatus {
-    WAIT_AUDIT("00"),
+    PAY_WAIT("00"),
     DONE("01"),
-    FAILED("02");
+    PAY_FAILED("02");
 
     private String code;
 
@@ -25,13 +25,13 @@ public enum OrderStatus {
 
         switch (code) {
             case "00":
-                return WAIT_AUDIT;
+                return PAY_WAIT;
 
             case "01":
                 return DONE;
 
             case "02":
-                return FAILED;
+                return PAY_FAILED;
 
             default:
                 return null;

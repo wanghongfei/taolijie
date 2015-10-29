@@ -18,10 +18,48 @@ public enum RedisKey {
     SURVEY_FEE,
     MAX_EMP_WITHDRAW_DAY,
     MAX_STU_WITHDRAW_DAY,
-    FLUSH_FEE;
+    FLUSH_FEE,
+    RSA_PUB_KEY,
+    RSA_PRI_KEY,
+
+    // for alipay
+    ALIPAY_CONF,
+    ALIPAY_ACC,
+    PID,
+    SERVICE_NAME,
+    CHARSET,
+    SIGN_TYPE,
+    NOTIFY_URL;
 
     public String toString() {
         switch (this) {
+            case ALIPAY_ACC:
+                return "acc";
+
+            case RSA_PRI_KEY:
+                return "rsa_pri_key";
+
+            case RSA_PUB_KEY:
+                return "rsa_pub_key";
+
+            case ALIPAY_CONF:
+                return "conf:alipay";
+
+            case PID:
+                return "PID";
+
+            case SERVICE_NAME:
+                return "app_pay_service";
+
+            case CHARSET:
+                return "charset";
+
+            case SIGN_TYPE:
+                return "RSA";
+
+            case NOTIFY_URL:
+                return "notify_url";
+
             case SESSION:
                 return "SESSION";
 

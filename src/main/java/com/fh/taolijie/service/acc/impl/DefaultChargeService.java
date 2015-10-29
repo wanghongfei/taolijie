@@ -42,8 +42,8 @@ public class DefaultChargeService implements ChargeService {
         model.setTitle("账户充值申请");
         model.setCreatedTime(now);
         model.setUpdateTime(now);
-        model.setType(OrderType.CHARGE.code());
-        model.setStatus(OrderStatus.WAIT_AUDIT.code());
+        //model.setType(OrderType.CHARGE.code());
+        model.setStatus(OrderStatus.PAY_WAIT.code());
 
         // 查出账户id
         CashAccModel acc = accMapper.findByMemberId(model.getMemberId());
