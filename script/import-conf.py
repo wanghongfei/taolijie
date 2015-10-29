@@ -32,7 +32,7 @@ pipe.hset('conf:alipay', 'PID', '2088021861615600')
 pipe.hset('conf:alipay', 'app_pay_service', 'mobile.securitypay.pay')
 pipe.hset('conf:alipay', 'charset', 'utf-8')
 pipe.hset('conf:alipay', 'sign_type', 'RSA')
-pipe.hset('conf:alipay', 'notify_url', 'http://127.0.0.1')
+pipe.hset('conf:alipay', 'notify_url', 'http://120.24.218.56')
 pipe.hset('conf:alipay', 'acc', 'taolijie@vip.sina.com')
 
 print pipe.execute()

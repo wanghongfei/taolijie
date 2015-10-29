@@ -24,6 +24,7 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -356,8 +359,8 @@ public class RestAccCtr {
     @RequestMapping(value = "/charge", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText chargeApply(
                                     // alipay接口参数
-                                    @RequestParam(value = "app_id", required = false) String appId,
-                                    @RequestParam(value = "app_env", required = false) String appenv,
+/*                                    @RequestParam(value = "app_id", required = false) String appId,
+                                    @RequestParam(value = "app_env", required = false) String appenv,*/
                                     @RequestParam String subject,
                                     @RequestParam(value = "payment_type", defaultValue = "1") String paymentType,
                                     @RequestParam(value = "total_fee") String totalFee,
@@ -392,12 +395,11 @@ public class RestAccCtr {
             // 签名
             // todo
             Map<String, String> map = new HashMap<>(6);
-            map.put("app_id", appId);
-            map.put("app_env", appenv);
             map.put("subject", subject);
             map.put("payment_type", paymentType);
             map.put("total_fee", totalFee);
             map.put("body", body);
+            map.put("out_trade_no", orderId.toString());
             String sign = payService.sign(map, PayType.ALIPAY);
 
             OrderSignDto dto = new OrderSignDto();
@@ -408,6 +410,7 @@ public class RestAccCtr {
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
         }
+
 
     }
 
