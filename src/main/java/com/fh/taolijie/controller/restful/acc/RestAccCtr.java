@@ -55,8 +55,6 @@ public class RestAccCtr {
     @Autowired
     private WithdrawService drawService;
 
-    @Autowired
-    private ChargeService chargeService;
 
     @Autowired
     private AccFlowService flowService;
@@ -67,8 +65,6 @@ public class RestAccCtr {
     @Autowired
     private SeQuestionService seService;
 
-    @Autowired
-    private PayService payService;
 
     /**
      * 开通现金账户
@@ -352,64 +348,6 @@ public class RestAccCtr {
 
     }
 
-    /**
-     * 下单
-     * @return
-     */
-    @RequestMapping(value = "/order", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText chargeApply(
-                                    // alipay接口参数
-/*                                    @RequestParam(value = "app_id", required = false) String appId,
-                                    @RequestParam(value = "app_env", required = false) String appenv,*/
-                                    @RequestParam String subject,
-                                    @RequestParam(defaultValue = "1") String paymentType,
-                                    @RequestParam String totalFee,
-                                    @RequestParam String body,
-
-                                    @RequestParam String orderType,
-                                    HttpServletRequest req) {
-
-        Credential credential = SessionUtils.getCredential(req);
-        Integer memId = credential.getId();
-
-        // 验证orderType
-        OrderType type = OrderType.fromCode(orderType);
-        if (null == type) {
-            return new ResponseText(ErrorCode.INVALID_PARAMETER);
-        }
-
-        PayOrderModel order = new PayOrderModel();
-        order.setMemberId(memId);
-        //order.setAlipayTradeNum(tradeNum);
-        order.setAmount(new BigDecimal(totalFee));
-        order.setType(orderType);
-
-
-        try {
-            // 生成订单
-            chargeService.chargeApply(order);
-            // 得到订单号
-            Integer orderId = order.getId();
-
-            // 签名
-            Map<String, String> map = new HashMap<>(6);
-            map.put("subject", StringUtils.surroundQuotation(subject));
-            map.put("payment_type", StringUtils.surroundQuotation(paymentType));
-            map.put("total_fee", StringUtils.surroundQuotation(totalFee));
-            map.put("body", StringUtils.surroundQuotation(body));
-            map.put("out_trade_no", StringUtils.surroundQuotation(orderId.toString()));
-
-            OrderSignDto dto = payService.sign(map, PayType.ALIPAY);
-            dto.setOrderId(orderId);
-
-            return new ResponseText(dto);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
-
-
-    }
 
     /**
      * 查询账户流水
