@@ -2,14 +2,18 @@ package com.fh.taolijie.controller.restful.pay;
 
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
+import com.fh.taolijie.constant.AlipayOrderStatus;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.constant.acc.PayChanType;
 import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.order.PayOrderModel;
+import com.fh.taolijie.dto.AlipayAsyncDto;
 import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.ChargeService;
+import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -37,6 +41,9 @@ public class RestPayCtr {
 
     @Autowired
     private PayService payService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 下单
@@ -101,5 +108,28 @@ public class RestPayCtr {
         }
 
 
+    }
+
+    /**
+     * 支付宝异步通知
+     * @return
+     */
+    @RequestMapping(value = "/alipay/async", method = RequestMethod.POST)
+    public String alipayAsyncNotification(AlipayAsyncDto dto) {
+        try {
+            Integer orderId = Integer.valueOf(dto.out_trade_no);
+
+            // 只处理支付成功的通知
+            if (dto.getTrade_status().equals(AlipayOrderStatus.TRADE_SUCCESS)) {
+                // 标记订单状态为支付成功
+                orderService.updateStatus(orderId, OrderStatus.PAY_SUCCEED, dto.trade_no);
+            }
+
+        } catch (Exception ex) {
+            return "F";
+        }
+
+
+        return "success";
     }
 }

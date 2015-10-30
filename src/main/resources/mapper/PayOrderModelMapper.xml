@@ -310,4 +310,10 @@
             </if>
         </where>
     </select>
+
+    <select id="checkExist" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM pay_order WHERE id = #{orderId}
+        )
+    </select>
 </mapper>
