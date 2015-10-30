@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.acc.OrderType;
+import com.fh.taolijie.constant.acc.PayChanType;
 import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.dto.OrderSignDto;
@@ -48,6 +49,7 @@ public class RestPayCtr {
                                     @RequestParam String body,
 
                                     @RequestParam String orderType,
+                                    @RequestParam Integer payChan,
                                     HttpServletRequest req) {
 
         // 登陆检查
@@ -60,8 +62,11 @@ public class RestPayCtr {
 
         // 验证orderType
         OrderType type = OrderType.fromCode(orderType);
-        if (null == type) {
+        // 验证payChan
+        PayChanType chanType = PayChanType.fromCode(payChan);
+        if (null == chanType || null == type) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
+
         }
 
         PayOrderModel order = new PayOrderModel();

@@ -16,6 +16,7 @@
         <result column="payo_amount" property="amount" jdbcType="DECIMAL"/>
         <result column="payo_type" property="type" jdbcType="VARCHAR"/>
         <result column="payo_status" property="status" jdbcType="VARCHAR"/>
+        <result column="payo_pay_chan" property="payChan" jdbcType="INTEGER"/>
         <result column="payo_alipay_trade_num" property="alipayTradeNum" jdbcType="VARCHAR"/>
         <result column="payo_memo" property="memo" jdbcType="VARCHAR"/>
     </resultMap>
@@ -33,6 +34,7 @@
         payo.amount,
         payo.type,
         payo.status,
+        payo.pay_chan,
         payo.alipay_trade_num,
         payo.memo
     </sql>
@@ -62,11 +64,12 @@
         insert into pay_order (id, cash_acc_id, member_id,
         title, created_time, update_time,
         amount, type, status,
-        alipay_trade_num, memo)
+        alipay_trade_num, memo,
+        pay_chan)
         values (#{id,jdbcType=INTEGER}, #{cashAccId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER},
         #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
         #{amount,jdbcType=DECIMAL}, #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
-        #{alipayTradeNum,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
+        #{alipayTradeNum,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{payChan})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.order.PayOrderModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -108,6 +111,9 @@
             <if test="memo != null">
                 memo,
             </if>
+            <if test="payChan != null">
+                pay_chan,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -142,6 +148,9 @@
             </if>
             <if test="memo != null">
                 #{memo,jdbcType=VARCHAR},
+            </if>
+            <if test="payChan != null">
+                #{payChan},
             </if>
         </trim>
     </insert>
@@ -182,6 +191,9 @@
             <if test="memo != null">
                 memo = #{memo,jdbcType=VARCHAR},
             </if>
+            <if test="payChan != null">
+                pay_chan = #{payChan},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -200,7 +212,8 @@
         type = #{type,jdbcType=VARCHAR},
         status = #{status,jdbcType=VARCHAR},
         alipay_trade_num = #{alipayTradeNum,jdbcType=VARCHAR},
-        memo = #{memo,jdbcType=VARCHAR}
+        memo = #{memo,jdbcType=VARCHAR},
+        pay_chan = #{payChan}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -242,6 +255,9 @@
             </if>
             <if test="memo != null">
                 AND payo.memo = #{memo}
+            </if>
+            <if test="payChan != null">
+                AND payo.pay_chan = #{payChan}
             </if>
         </where>
         ORDER BY
@@ -288,6 +304,9 @@
             </if>
             <if test="memo != null">
                 AND payo.memo = #{memo}
+            </if>
+            <if test="payChan != null">
+                AND payo.pay_chan = #{payChan}
             </if>
         </where>
     </select>

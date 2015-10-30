@@ -24,6 +24,8 @@ public class PayOrderModel extends Pageable {
 
     private String status;
 
+    private Integer payChan;
+
     private String alipayTradeNum;
 
     private String memo;
@@ -283,6 +285,14 @@ public class PayOrderModel extends Pageable {
      */
     public String getMemo() {
         return memo;
+    }
+
+    public Integer getPayChan() {
+        return payChan;
+    }
+
+    public void setPayChan(Integer payChan) {
+        this.payChan = payChan;
     }
 
     /**
