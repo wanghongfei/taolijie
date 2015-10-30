@@ -55,7 +55,7 @@ public enum RedisKey {
                 return "charset";
 
             case SIGN_TYPE:
-                return "RSA";
+                return "sign_type";
 
             case NOTIFY_URL:
                 return "notify_url";

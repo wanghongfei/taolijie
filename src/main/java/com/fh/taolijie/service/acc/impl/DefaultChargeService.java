@@ -39,10 +39,9 @@ public class DefaultChargeService implements ChargeService {
 
         Date now = new Date();
 
-        model.setTitle("账户充值申请");
+        model.setTitle(OrderType.fromCode(model.getType()).memo());
         model.setCreatedTime(now);
         model.setUpdateTime(now);
-        //model.setType(OrderType.CHARGE.code());
         model.setStatus(OrderStatus.PAY_WAIT.code());
 
         // 查出账户id

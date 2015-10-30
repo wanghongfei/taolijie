@@ -353,10 +353,10 @@ public class RestAccCtr {
     }
 
     /**
-     * 申请充值.
+     * 下单
      * @return
      */
-    @RequestMapping(value = "/charge", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/order", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText chargeApply(
                                     // alipay接口参数
 /*                                    @RequestParam(value = "app_id", required = false) String appId,
@@ -380,7 +380,6 @@ public class RestAccCtr {
 
         PayOrderModel order = new PayOrderModel();
         order.setMemberId(memId);
-        order.setTitle("账户充值订单");
         //order.setAlipayTradeNum(tradeNum);
         order.setAmount(new BigDecimal(totalFee));
         order.setType(orderType);
@@ -393,23 +392,16 @@ public class RestAccCtr {
             Integer orderId = order.getId();
 
             // 签名
-            // todo
             Map<String, String> map = new HashMap<>(6);
             map.put("subject", StringUtils.surroundQuotation(subject));
             map.put("payment_type", StringUtils.surroundQuotation(paymentType));
             map.put("total_fee", StringUtils.surroundQuotation(totalFee));
             map.put("body", StringUtils.surroundQuotation(body));
             map.put("out_trade_no", StringUtils.surroundQuotation(orderId.toString()));
-/*            map.put("subject", subject);
-            map.put("payment_type", paymentType);
-            map.put("total_fee", totalFee);
-            map.put("body", body);
-            map.put("out_trade_no", orderId.toString()); */
-            String sign = payService.sign(map, PayType.ALIPAY);
 
-            OrderSignDto dto = new OrderSignDto();
+            OrderSignDto dto = payService.sign(map, PayType.ALIPAY);
             dto.setOrderId(orderId);
-            dto.setSign(sign);
+
             return new ResponseText(dto);
 
         } catch (CashAccNotExistsException e) {

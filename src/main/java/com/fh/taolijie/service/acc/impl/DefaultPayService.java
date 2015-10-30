@@ -2,6 +2,7 @@ package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.acc.PayType;
+import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
@@ -32,7 +33,7 @@ public class DefaultPayService implements PayService {
 
 
     @Override
-    public String sign(Map<String, String> map, PayType type) {
+    public OrderSignDto sign(Map<String, String> map, PayType type) {
         if (type == PayType.ALIPAY) {
             // 得到固定的参数值
             Jedis jedis = JedisUtils.getClient(jedisPool);
@@ -60,11 +61,6 @@ public class DefaultPayService implements PayService {
             sortedMap.put("notify_url", StringUtils.surroundQuotation(url));
             sortedMap.put("seller_id", StringUtils.surroundQuotation(acc));
 
-/*            sortedMap.put("service", servName);
-            sortedMap.put("partner", pid);
-            sortedMap.put("_input_charset", charset);
-            sortedMap.put("notify_url", url);
-            sortedMap.put("seller_id", acc);*/
             sortedMap.putAll(map);
 
             // 拼接请求参数
@@ -74,7 +70,16 @@ public class DefaultPayService implements PayService {
 
             }
             // 签名
-            return SignUtils.sign(queryStr, priKey, charset);
+            String sign = SignUtils.sign(queryStr, priKey, charset);
+
+            OrderSignDto dto = new OrderSignDto();
+            dto.setCharset(charset);
+            dto.setSign(sign);
+            dto.setPartner(pid);
+            dto.setServName(servName);
+            dto.setSignType(signType);
+
+            return dto;
         }
 
         return null;
