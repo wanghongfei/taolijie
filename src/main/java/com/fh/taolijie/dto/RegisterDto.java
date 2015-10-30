@@ -19,6 +19,8 @@ public class RegisterDto {
     @Email
     private String email;
 
+    private String photoPath = "cdn.taolijie.cn/resources/default.jpg";
+
     /**
      * 昵称
      */
@@ -68,6 +70,14 @@ public class RegisterDto {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public void setIsEmployer(boolean isEmployer) {

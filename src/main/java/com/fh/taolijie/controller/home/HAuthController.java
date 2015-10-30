@@ -290,6 +290,7 @@ public class HAuthController {
         mem.setValid(true);
         mem.setVerified(CertiStatus.NOT_YET.code());
         mem.setCreatedTime(new Date());
+        mem.setProfilePhotoPath(registerDto.getPhotoPath());
         mem.setRegType(RegType.USERNAME.code());
 
         // 手机号注册
