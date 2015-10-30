@@ -3,10 +3,7 @@ package com.fh.taolijie.service.acc.impl;
 import com.fh.taolijie.exception.checked.code.SMSIntervalException;
 import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.service.pool.FixSizeThreadPool;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.LogUtils;
-import com.fh.taolijie.utils.SMSUtils;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
@@ -14,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import java.util.concurrent.TimeUnit;
@@ -36,7 +34,8 @@ public class CodeService {
      */
     public static final String SMS_CONSTRAIN_KEY_PREFIX = "code" + Constants.DELIMITER + "WEB" + Constants.DELIMITER + "CONSTRAIN";
 
-    private Jedis jedis;
+    @Autowired
+    private JedisPool jedisPool;
 
     /**
      * 线程池
@@ -57,10 +56,13 @@ public class CodeService {
         String code = RandomStringUtils.randomAlphabetic(6).toLowerCase();
         // 放入redis中
         // 有效时间10min
+        Jedis jedis = JedisUtils.getClient(jedisPool);
         Pipeline pip = jedis.pipelined();
         pip.set(key, code);
         pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(10));
         pip.sync();
+        JedisUtils.returnJedis(jedisPool, jedis);
+
 
         return code;
     }
@@ -75,14 +77,17 @@ public class CodeService {
         String key = genKeyForWEB(memId);
 
         // 从redis中取出code
+        Jedis jedis = JedisUtils.getClient(jedisPool);
         String redisCode = jedis.get(key);
         if (null == redisCode) {
             // 已经过期了
+            JedisUtils.returnJedis(jedisPool, jedis);
             return false;
         }
 
         // 从redis中清除该code
         jedis.del(key);
+        JedisUtils.returnJedis(jedisPool, jedis);
 
         return redisCode.equals(code);
     }
@@ -118,10 +123,12 @@ public class CodeService {
         // 验证码存入Redis
         // 过期时间5min
         String key = genKeyForSMS(memId);
+        Jedis jedis = JedisUtils.getClient(jedisPool);
         Pipeline pip = jedis.pipelined();
         pip.set(key, code);
         pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(5));
         pip.sync();
+        JedisUtils.returnJedis(jedisPool, jedis);
 
 
         return code;
@@ -134,9 +141,13 @@ public class CodeService {
      */
     public boolean validateSMSCode(String memId, String code) {
         String key = genKeyForSMS(memId);
+
+        Jedis jedis = JedisUtils.getClient(jedisPool);
         String realCode = jedis.get(key);
+
         if (null == realCode) {
             // 已经过期
+            JedisUtils.returnJedis(jedisPool, jedis);
             return false;
         }
 
@@ -146,6 +157,7 @@ public class CodeService {
         if (result) {
             jedis.del(key);
         }
+        JedisUtils.returnJedis(jedisPool, jedis);
 
         return result;
     }
@@ -158,6 +170,7 @@ public class CodeService {
     private boolean checkSMSInterval(String memId) {
         String key = genKeyForSMSConstrain(memId);
 
+        Jedis jedis = JedisUtils.getClient(jedisPool);
         String val = jedis.get(key);
 
         // 如果没取到
@@ -170,9 +183,11 @@ public class CodeService {
             pip.expire(key, (int) TimeUnit.MINUTES.toSeconds(1));
             pip.sync();
 
+            JedisUtils.returnJedis(jedisPool, jedis);
             return true;
         }
 
+        JedisUtils.returnJedis(jedisPool, jedis);
         return false;
     }
 
