@@ -362,8 +362,8 @@ public class RestAccCtr {
 /*                                    @RequestParam(value = "app_id", required = false) String appId,
                                     @RequestParam(value = "app_env", required = false) String appenv,*/
                                     @RequestParam String subject,
-                                    @RequestParam(value = "payment_type", defaultValue = "1") String paymentType,
-                                    @RequestParam(value = "total_fee") String totalFee,
+                                    @RequestParam(defaultValue = "1") String paymentType,
+                                    @RequestParam String totalFee,
                                     @RequestParam String body,
 
                                     @RequestParam String orderType,
