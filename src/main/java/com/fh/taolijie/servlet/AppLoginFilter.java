@@ -70,10 +70,12 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         // *************** DEBUG *******************
 
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setHeader("Access-Control-Allow-Headers", "*");
+/*        response.setHeader("Access-Control-Allow-Headers", "*");
         response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
+        response.setHeader("Access-Control-Allow-Origin", "*");*/
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, sid");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS ");
+        response.setHeader("Access-Control-Allow-Origin", "http://cdn.taolijie.cn");
         // *************** DEBUG *******************
 
         // 先尝试通过sid登陆
