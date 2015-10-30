@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -24,6 +25,7 @@ public final class JsonUtils {
         // NULL字段不序列化
         mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         return mapper.writeValueAsString(value);
     }
 }
