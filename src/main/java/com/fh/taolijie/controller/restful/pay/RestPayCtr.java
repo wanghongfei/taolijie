@@ -74,6 +74,7 @@ public class RestPayCtr {
         //order.setAlipayTradeNum(tradeNum);
         order.setAmount(new BigDecimal(totalFee));
         order.setType(orderType);
+        order.setPayChan(payChan);
 
 
         try {
