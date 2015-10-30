@@ -54,6 +54,7 @@ public class RestQuestionUCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON, consumes = Constants.Produce.JSON)
     public ResponseText publishQuestion(@RequestBody @Valid ExamDto dto,
                                         BindingResult br,
+                                        @RequestParam(required = false) Integer orderId,
                                         HttpServletRequest req) {
         // 参数合法性检查
         if (br.hasErrors()) {

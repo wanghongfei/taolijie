@@ -61,14 +61,14 @@ public class DefaultQuestionService implements QuestionService {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void publishQuestions(QuestModel quest, List<QuestionModel> questionList)
+    public void publishQuestions(QuestModel quest, List<QuestionModel> questionList, Integer orderId)
             throws CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException {
 
         Date now = new Date();
 
         // S1: 创建Quest
         Integer accId = accService.findIdByMember(quest.getMemberId());
-        questService.publishQuest(accId, quest, null, null);
+        questService.publishQuest(accId, quest, orderId, null);
 
 
         // S2: 创建问题对象
