@@ -170,7 +170,7 @@ public class RestShUController {
 
         Credential credential = SessionUtils.getCredential(req);
         // 检查是不是本用户发布的信息
-        SHPostModel sh = shPostService.findPost(shPostModel.getId());
+        SHPostModel sh = shPostService.findPost(shId);
         if (null == sh || false == sh.getMemberId().equals(credential.getId())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
