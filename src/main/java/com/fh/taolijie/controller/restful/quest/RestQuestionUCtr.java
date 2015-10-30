@@ -10,10 +10,13 @@ import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.ExamDto;
 import com.fh.taolijie.dto.QuestionAnalyzeDto;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
@@ -94,6 +97,15 @@ public class RestQuestionUCtr {
 
         } catch (BalanceNotEnoughException e) {
             return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (FinalStatusException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (PermissionException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (OrderNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
         return ResponseText.getSuccessResponseText();

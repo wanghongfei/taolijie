@@ -83,15 +83,14 @@ public class QuestModel extends Pageable {
      */
     private Integer empStatus;
 
-    @NotNull
+    // ********* 查询使用 ***********
     private Integer provinceId;
-    @NotNull
     private Integer cityId;
-    @NotNull
     private Integer regionId;
 
     private Integer collegeId;
     private Integer schoolId;
+    // ********* 查询使用 ***********
 
     // 以下只作为返回值使用
     private List<QuestSchRelModel> schools;

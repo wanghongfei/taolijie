@@ -16,10 +16,13 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.quest.CouponService;
@@ -81,7 +84,10 @@ public class RestQuestCtr {
                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date expiredTime,
                                      @RequestParam(required = false) String logo,
                                      @RequestParam(required = false) Integer couponAmt,
+
+                                     @RequestParam(required = false) Integer orderId,
                                      HttpServletRequest req) {
+
         Credential credential = SessionUtils.getCredential(req);
 
         if (!SessionUtils.isEmployer(credential)) {
@@ -153,9 +159,9 @@ public class RestQuestCtr {
                 couponModel.setExpiredTime(expiredTime);
                 couponModel.setAmt(couponAmt);
 
-                questService.publishQuest(accId, model, couponModel);
+                questService.publishQuest(accId, model, orderId, couponModel);
             } else {
-                questService.publishQuest(accId, model, null);
+                questService.publishQuest(accId, model, orderId, null);
             }
 
         } catch (BalanceNotEnoughException e) {
@@ -163,6 +169,16 @@ public class RestQuestCtr {
 
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (OrderNotFoundException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (PermissionException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (FinalStatusException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
         }
 
         return new ResponseText();

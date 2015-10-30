@@ -6,17 +6,24 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
+import com.fh.taolijie.constant.acc.OrderStatus;
+import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.quest.*;
+import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.JedisUtils;
@@ -79,6 +86,9 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private JedisPool jedisPool;
 
+    @Autowired
+    private OrderService orderService;
+
     /**
      * 商家发布任务.
      *
@@ -88,26 +98,62 @@ public class DefaultQuestService implements QuestService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void publishQuest(Integer accId, QuestModel model, CouponModel coupon)
-            throws BalanceNotEnoughException, CashAccNotExistsException {
+    public void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon)
+            throws BalanceNotEnoughException, CashAccNotExistsException, OrderNotFoundException, FinalStatusException, PermissionException {
 
         // 计算总钱数
         BigDecimal tot = feeCal.computeQuestFee(model.getAward().doubleValue(), model.getTotalAmt());
 
+        // 如果orderId存在, 则不从钱包扣钱
+        if (orderId != null) {
+            PayOrderModel order = orderService.findOrder(orderId);
+            if (null == order) {
+                throw new OrderNotFoundException();
+            }
 
-        // 扣钱
-        try {
-            accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+            // 检查订单状态是不是已支付
+            OrderStatus status = OrderStatus.fromCode(order.getStatus());
+            if (status != OrderStatus.PAY_SUCCEED) {
+                throw new FinalStatusException();
+            }
 
-        } catch (BalanceNotEnoughException ex) {
-            // 如果钱不够
-            // 置状态为未发布
-            model.setEmpStatus(EmpQuestStatus.UNPUBLISH.code());
-            // 写入任务表，但不投递定时任务消息
-            doPublish(model, false);
+            // 检查订单类型是不是任务
+            OrderType type = OrderType.fromCode(order.getType());
+            if (type != OrderType.QUEST_PUBLISH) {
+                throw new FinalStatusException();
+            }
 
-            throw ex;
+            // 检查订单是不是自己提交的
+            if (false == model.getMemberId().equals(order.getMemberId())) {
+                throw new PermissionException();
+            }
+
+            // 核对订单金额
+            if (false == order.getAmount().equals(tot)) {
+                throw new PermissionException();
+            }
+
+            // 允许发布
+
+
+        } else {
+            // 从钱包扣钱
+            try {
+                accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+
+            } catch (BalanceNotEnoughException ex) {
+                // 如果钱不够
+                // 置状态为未发布
+                model.setEmpStatus(EmpQuestStatus.UNPUBLISH.code());
+                // 写入任务表，但不投递定时任务消息
+                doPublish(model, false);
+
+                //throw ex;
+            }
         }
+
+
+
 
         // 如果设置了coupon
         // 则添加coupon信息到任务中
@@ -118,7 +164,9 @@ public class DefaultQuestService implements QuestService {
 
         // 发布任务
         // 置状态为审核中
-        model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
+        if (null == model.getEmpStatus()) {
+            model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
+        }
         doPublish(model, true);
 
         // 插入coupon数据

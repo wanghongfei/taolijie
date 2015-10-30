@@ -10,9 +10,12 @@ import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.SysConfigModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.QuestionAnalyzeDto;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.HackException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
@@ -59,13 +62,13 @@ public class DefaultQuestionService implements QuestionService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void publishQuestions(QuestModel quest, List<QuestionModel> questionList)
-            throws CashAccNotExistsException, BalanceNotEnoughException {
+            throws CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException {
 
         Date now = new Date();
 
         // S1: 创建Quest
         Integer accId = accService.findIdByMember(quest.getMemberId());
-        questService.publishQuest(accId, quest, null);
+        questService.publishQuest(accId, quest, null, null);
 
 
         // S2: 创建问题对象

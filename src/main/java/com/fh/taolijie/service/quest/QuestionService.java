@@ -6,9 +6,12 @@ import com.fh.taolijie.domain.quest.QuestionModel;
 import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.QuestionAnalyzeDto;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.HackException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.NotQuestionQuestException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.exception.checked.quest.QuestionNotFoundException;
@@ -26,7 +29,7 @@ public interface QuestionService {
      * @param questionList
      */
     void publishQuestions(QuestModel quest, List<QuestionModel> questionList)
-            throws CashAccNotExistsException, BalanceNotEnoughException;
+            throws CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException;
 
     /**
      * 查询答题问卷任务下的所有问题

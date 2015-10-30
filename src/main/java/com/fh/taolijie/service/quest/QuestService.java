@@ -4,8 +4,11 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.quest.*;
+import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.*;
 
 import java.math.BigDecimal;
@@ -22,8 +25,8 @@ public interface QuestService {
      * @param accId 商家账户
      * @param model
      */
-    void publishQuest(Integer accId, QuestModel model, CouponModel coupon)
-            throws BalanceNotEnoughException, CashAccNotExistsException;
+    void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon)
+            throws BalanceNotEnoughException, CashAccNotExistsException, OrderNotFoundException, FinalStatusException, PermissionException;
 
     /**
      * 批量插入 任务-学校 关联
