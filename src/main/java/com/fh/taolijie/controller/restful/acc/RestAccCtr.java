@@ -6,15 +6,12 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
-import com.fh.taolijie.constant.acc.OrderType;
-import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
-import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
-import com.fh.taolijie.dto.OrderSignDto;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.AccountService;
@@ -24,7 +21,6 @@ import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by whf on 9/24/15.
@@ -65,6 +57,8 @@ public class RestAccCtr {
     @Autowired
     private SeQuestionService seService;
 
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 开通现金账户
@@ -305,6 +299,33 @@ public class RestAccCtr {
         CashAccModel acc = accService.findByMember(credential.getId());
         return new ResponseText(acc);
     }
+
+
+    /**
+     * 钱包充值接口
+     * @return
+     */
+    @RequestMapping(value = "/charge", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText charge(@RequestParam Integer orderId,
+                               HttpServletRequest req) {
+
+
+        try {
+            accService.charge(orderId, SessionUtils.getCredential(req).getId());
+
+        } catch (OrderNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (PermissionException e) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
+
     /**
      * 发起提现申请
      * @return

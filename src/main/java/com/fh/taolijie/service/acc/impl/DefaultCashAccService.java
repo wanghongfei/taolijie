@@ -2,18 +2,20 @@ package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
+import com.fh.taolijie.constant.acc.OrderStatus;
+import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.AccFlowModelMapper;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
+import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.domain.order.PayOrderModel;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
+import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.SeQuestionService;
@@ -44,6 +46,51 @@ public class DefaultCashAccService implements CashAccService {
 
     @Autowired
     private SeQuestionService seService;
+
+    @Autowired
+    private PayOrderModelMapper orderMapper;
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int charge(Integer orderId, Integer memId) throws OrderNotFoundException, PermissionException, CashAccNotExistsException {
+        // 验证订单存在性
+        PayOrderModel order = orderMapper.selectByPrimaryKey(orderId);
+        if (null == order) {
+            throw new OrderNotFoundException();
+        }
+
+        // 验证是不是自己发起的订单
+        if (false == memId.equals(order.getMemberId())) {
+            throw new PermissionException();
+        }
+
+        // 验证订单状态
+        OrderStatus status = OrderStatus.fromCode(order.getStatus());
+        // 只状态为已经支付才允许
+        if (status != OrderStatus.PAY_SUCCEED) {
+            throw new PermissionException();
+        }
+
+        // 验证订单类型是不是充值订单
+        OrderType type = OrderType.fromCode(order.getType());
+        if (type != OrderType.CHARGE) {
+            throw new PermissionException();
+        }
+
+        // 取出订单金额
+        BigDecimal amt = order.getAmount();
+        // 充值
+        Integer accId = accMapper.findIdByMemberId(memId);
+        addAvailableMoney(accId, amt, AccFlow.CHARGE);
+
+        // 更新订单状态为已完成
+        PayOrderModel example = new PayOrderModel();
+        example.setId(orderId);
+        example.setStatus(OrderStatus.DONE.code());
+        orderMapper.updateByPrimaryKeySelective(example);
+
+        return 1;
+    }
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)

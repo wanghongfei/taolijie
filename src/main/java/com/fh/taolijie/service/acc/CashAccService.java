@@ -4,11 +4,9 @@ import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
-import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.acc.SecretQuestionExistException;
+import com.fh.taolijie.exception.checked.acc.*;
 
 import java.math.BigDecimal;
 
@@ -16,6 +14,13 @@ import java.math.BigDecimal;
  * Created by whf on 9/20/15.
  */
 public interface CashAccService {
+    /**
+     * 充值
+     * @return
+     */
+    int charge(Integer orderId, Integer memId)
+            throws OrderNotFoundException, PermissionException, CashAccNotExistsException;
+
     /**
      * 创建账户
      * @exception CashAccExistsException 该用户已经有现金账户了

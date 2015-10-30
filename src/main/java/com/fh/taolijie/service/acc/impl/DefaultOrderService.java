@@ -21,6 +21,11 @@ public class DefaultOrderService implements OrderService {
     @Autowired
     private PayOrderModelMapper orderMapper;
 
+    @Override
+    @Transactional(readOnly = true)
+    public PayOrderModel findOrder(Integer orderId) {
+        return orderMapper.selectByPrimaryKey(orderId);
+    }
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
