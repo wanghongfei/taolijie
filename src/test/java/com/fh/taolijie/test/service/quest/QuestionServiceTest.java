@@ -51,6 +51,6 @@ public class QuestionServiceTest extends BaseSpringDataTestClass {
         questionModel.setOpts(Arrays.asList(optModel));
         questionList.add(questionModel);
 
-        service.publishQuestions(quest, questionList);
+        //service.publishQuestions(quest, questionList);
     }
 }

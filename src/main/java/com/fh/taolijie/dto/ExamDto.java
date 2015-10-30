@@ -19,6 +19,8 @@ public class ExamDto {
     @NotNull
     private QuestModel quest;
 
+    private Integer orderId;
+
     @NotNull
     private String collegeIds;
     @NotNull
@@ -50,6 +52,14 @@ public class ExamDto {
 
     public void setSchoolIds(String schoolIds) {
         this.schoolIds = schoolIds;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
     public void setQuest(QuestModel quest) {

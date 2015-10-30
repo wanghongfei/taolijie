@@ -54,7 +54,6 @@ public class RestQuestionUCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON, consumes = Constants.Produce.JSON)
     public ResponseText publishQuestion(@RequestBody @Valid ExamDto dto,
                                         BindingResult br,
-                                        @RequestParam(required = false) Integer orderId,
                                         HttpServletRequest req) {
         // 参数合法性检查
         if (br.hasErrors()) {
@@ -91,7 +90,7 @@ public class RestQuestionUCtr {
         dto.getQuest().setMemberId(credential.getId());
 
         try {
-            questionService.publishQuestions(dto.getQuest(), dto.getQuestions());
+            questionService.publishQuestions(dto.getQuest(), dto.getQuestions(), dto.getOrderId());
 
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);

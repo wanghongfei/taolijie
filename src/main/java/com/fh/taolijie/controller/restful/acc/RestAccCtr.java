@@ -11,6 +11,7 @@ import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
@@ -321,6 +322,10 @@ public class RestAccCtr {
 
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+
+        } catch (FinalStatusException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
         }
 
         return ResponseText.getSuccessResponseText();
