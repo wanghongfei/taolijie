@@ -4,6 +4,7 @@ import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
@@ -19,7 +20,7 @@ public interface CashAccService {
      * @return
      */
     int charge(Integer orderId, Integer memId)
-            throws OrderNotFoundException, PermissionException, CashAccNotExistsException;
+            throws OrderNotFoundException, PermissionException, CashAccNotExistsException, FinalStatusException;
 
     /**
      * 创建账户

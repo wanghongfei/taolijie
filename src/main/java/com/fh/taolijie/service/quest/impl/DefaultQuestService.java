@@ -106,35 +106,12 @@ public class DefaultQuestService implements QuestService {
 
         // 如果orderId存在, 则不从钱包扣钱
         if (orderId != null) {
-            PayOrderModel order = orderService.findOrder(orderId);
-            if (null == order) {
-                throw new OrderNotFoundException();
-            }
-
-            // 检查订单状态是不是已支付
-            OrderStatus status = OrderStatus.fromCode(order.getStatus());
-            if (status != OrderStatus.PAY_SUCCEED) {
-                throw new FinalStatusException();
-            }
-
-            // 检查订单类型是不是任务
-            OrderType type = OrderType.fromCode(order.getType());
-            if (type != OrderType.QUEST_PUBLISH) {
-                throw new FinalStatusException();
-            }
-
-            // 检查订单是不是自己提交的
-            if (false == model.getMemberId().equals(order.getMemberId())) {
-                throw new PermissionException();
-            }
-
-            // 核对订单金额
-            if (false == order.getAmount().equals(tot)) {
-                throw new PermissionException();
-            }
+            // 订单检查
+            orderService.orderPayCheck(orderId, model.getMemberId(), OrderType.QUEST_PUBLISH, tot);
+            // 更新订单状态
+            orderService.updateStatus(orderId, OrderStatus.DONE, null);
 
             // 允许发布
-
 
         } else {
             // 从钱包扣钱

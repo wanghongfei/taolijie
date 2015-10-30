@@ -1,15 +1,18 @@
 package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.constant.acc.OrderStatus;
+import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.service.acc.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -20,6 +23,9 @@ import java.util.Date;
 public class DefaultOrderService implements OrderService {
     @Autowired
     private PayOrderModelMapper orderMapper;
+
+    @Autowired
+    private OrderService orderService;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,5 +61,41 @@ public class DefaultOrderService implements OrderService {
         example.setAlipayTradeNum(buyer);
 
         return orderMapper.updateByPrimaryKeySelective(example);
+    }
+
+    @Override
+    public PayOrderModel orderPayCheck(Integer orderId, Integer memId, OrderType type, BigDecimal amt)
+            throws OrderNotFoundException, PermissionException, FinalStatusException {
+
+        PayOrderModel order = orderService.findOrder(orderId);
+        if (null == order) {
+            throw new OrderNotFoundException();
+        }
+
+        // 检查订单状态是不是已支付
+        OrderStatus status = OrderStatus.fromCode(order.getStatus());
+        if (status != OrderStatus.PAY_SUCCEED) {
+            throw new FinalStatusException();
+        }
+
+        // 检查订单类型是不是任务
+        OrderType ot = OrderType.fromCode(order.getType());
+        if (ot != OrderType.QUEST_PUBLISH) {
+            throw new FinalStatusException();
+        }
+
+        // 检查订单是不是自己提交的
+        if (false == memId.equals(order.getMemberId())) {
+            throw new PermissionException();
+        }
+
+        // 核对订单金额
+        if (null != amt) {
+            if (false == order.getAmount().equals(amt)) {
+                throw new PermissionException();
+            }
+        }
+
+        return order;
     }
 }
