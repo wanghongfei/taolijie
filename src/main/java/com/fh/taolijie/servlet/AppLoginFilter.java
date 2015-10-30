@@ -164,6 +164,9 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         Cookie cookie = findCookie(req.getCookies(), RequestParamName.SESSION_ID.toString());
         if (null != cookie) {
             sid = cookie.getValue();
+            if (null == sid) {
+                return false;
+            }
         } else {
             // cookie中没有
             // 尝试从header中取
