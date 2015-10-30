@@ -16,7 +16,7 @@ mvn clean install -Dmaven.test.skip=true
 check_success
 
 echo "deploying static resources..."
-rm -rf /www/resources/*
+#rm -rf /www/resources/*
 cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/about /www/resources
 cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/admin /www/resources
 cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/fonts /www/resources
@@ -26,21 +26,21 @@ cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/styles /ww
 echo "done"
 
 # shut server down
-/opt/apache-tomcat-7.0.62/bin/shutdown.sh
+$TOMCAT_HOME/bin/shutdown.sh
 check_success
 
 echo "deploying war file..."
-rm -rf /opt/apache-tomcat-7.0.62/webapps/ROOT/*
+rm -rf $TOMCAT_HOME/webapps/ROOT/*
 cp /root/projects/taolijie/target/taolijie.war /tmp
 cd /tmp
 unzip -q taolijie.war
-mv WEB-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
-mv META-INF/ /opt/apache-tomcat-7.0.62/webapps/ROOT/
+mv WEB-INF/ $TOMCAT_HOME/webapps/ROOT/
+mv META-INF/ $TOMCAT_HOME/webapps/ROOT/
 rm -rf WEB-INF/
 rm -rf META-INF/
 rm taolijie.war
 
 # start server
-/opt/apache-tomcat-7.0.62/bin/startup.sh
+$TOMCAT_HOME/bin/startup.sh
 check_success
 echo "done"
