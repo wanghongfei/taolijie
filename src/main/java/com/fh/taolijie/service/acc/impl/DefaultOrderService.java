@@ -24,8 +24,6 @@ public class DefaultOrderService implements OrderService {
     @Autowired
     private PayOrderModelMapper orderMapper;
 
-    @Autowired
-    private OrderService orderService;
 
     @Override
     @Transactional(readOnly = true)
@@ -67,7 +65,7 @@ public class DefaultOrderService implements OrderService {
     public PayOrderModel orderPayCheck(Integer orderId, Integer memId, OrderType type, BigDecimal amt)
             throws OrderNotFoundException, PermissionException, FinalStatusException {
 
-        PayOrderModel order = orderService.findOrder(orderId);
+        PayOrderModel order = orderMapper.selectByPrimaryKey(orderId);
         if (null == order) {
             throw new OrderNotFoundException();
         }
