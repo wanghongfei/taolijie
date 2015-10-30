@@ -29,6 +29,7 @@ import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.TljAuditService;
+import com.fh.taolijie.service.quest.impl.FeeCalculator;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -67,6 +68,9 @@ public class RestQuestCtr {
 
     @Autowired
     private CouponService couponService;
+
+    @Autowired
+    private FeeCalculator feeService;
 
     /**
      * 商家发布任务
@@ -170,18 +174,24 @@ public class RestQuestCtr {
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
-        } catch (OrderNotFoundException e) {
+        } catch (OrderNotFoundException | PermissionException | FinalStatusException e) {
             return new ResponseText(ErrorCode.HACKER);
-
-        } catch (PermissionException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (FinalStatusException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
         }
 
+
         return new ResponseText();
+    }
+
+    /**
+     * 计算任务费用
+     * @return
+     */
+    @RequestMapping(value = "/fee", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText computeQuestFee(@RequestParam BigDecimal award,
+                                        @RequestParam Integer amt) {
+        BigDecimal fee = feeService.computeQuestFee(award.doubleValue(), amt);
+
+        return new ResponseText(fee);
     }
 
     /**
