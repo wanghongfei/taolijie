@@ -19,7 +19,7 @@ public class RegisterDto {
     @Email
     private String email;
 
-    private String photoPath = "cdn.taolijie.cn/resources/default.jpg";
+    private String photoPath = "http://cdn.taolijie.cn/resources/default.jpg";
 
     /**
      * 昵称
