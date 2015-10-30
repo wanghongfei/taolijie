@@ -4,6 +4,8 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.constant.acc.AccFlow;
+import com.fh.taolijie.constant.acc.OrderStatus;
+import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.RecoPostModelMapper;
 import com.fh.taolijie.dao.mapper.SysConfigModelMapper;
@@ -12,12 +14,16 @@ import com.fh.taolijie.domain.SysConfigModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.exception.checked.RecoRepeatedException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.impl.FeeCalculator;
@@ -53,13 +59,13 @@ public class DefaultRecoService implements RecoService {
     private QuestService questService;
 
     @Autowired
-    private SysConfigModelMapper sysMapper;
-
-    @Autowired
     private CashAccService accService;
 
     @Autowired
     private FeeCalculator feeService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Override
     @Transactional(readOnly = true)
@@ -73,8 +79,9 @@ public class DefaultRecoService implements RecoService {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public int add(RecoPostModel model)
-            throws PostNotFoundException, RecoRepeatedException, CashAccNotExistsException, BalanceNotEnoughException {
+    public int add(RecoPostModel model, Integer orderId)
+            throws PostNotFoundException, RecoRepeatedException, CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException {
+
         Integer postId = model.getPostId();
 
 
@@ -131,9 +138,19 @@ public class DefaultRecoService implements RecoService {
         // 计算费用
         BigDecimal finalFee = feeService.computeTopFee(model.getHours());
 
-        // 扣除余额
-        Integer accId = accService.findIdByMember(model.getMemberId());
-        accService.reduceAvailableMoney(accId, finalFee, AccFlow.CONSUME);
+        // 订单支付
+        if (null != orderId) {
+            orderService.orderPayCheck(orderId, model.getMemberId(), OrderType.QUEST_TOP_ORDER, finalFee);
+            orderService.updateStatus(orderId, OrderStatus.DONE, null);
+        } else {
+            // 钱包支付
+            // 扣除余额
+            Integer accId = accService.findIdByMember(model.getMemberId());
+            accService.reduceAvailableMoney(accId, finalFee, AccFlow.CONSUME);
+
+        }
+
+
 
         return model.getId();
     }

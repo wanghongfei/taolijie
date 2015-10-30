@@ -6,10 +6,13 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
+import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.PostNotFoundException;
 import com.fh.taolijie.exception.checked.RecoRepeatedException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
+import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.service.RecoService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -39,9 +42,10 @@ public class RestRecoUCtr {
      */
     @RequestMapping(value = "/top", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText addTop(@RequestParam int type,
-                            @RequestParam Integer postId,
-                            @RequestParam int days,
-                            @RequestParam(required = false) Integer index,
+                               @RequestParam Integer postId,
+                               @RequestParam int days,
+                               @RequestParam(required = false) Integer index,
+                               @RequestParam(required = false) Integer orderId,
                             HttpServletRequest req) {
 
         RecoType rt = RecoType.fromCode(type);
@@ -66,7 +70,7 @@ public class RestRecoUCtr {
         model.setExpiredTime(expire);
 
         try {
-            reService.add(model);
+            reService.add(model, orderId);
 
         } catch (PostNotFoundException postNotFoundException) {
             return new ResponseText(ErrorCode.NOT_FOUND);
@@ -80,6 +84,14 @@ public class RestRecoUCtr {
         } catch (CashAccNotExistsException ex) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
+        } catch (FinalStatusException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (PermissionException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (OrderNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
         return ResponseText.getSuccessResponseText();
