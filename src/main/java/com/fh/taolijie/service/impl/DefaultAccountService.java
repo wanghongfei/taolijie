@@ -329,6 +329,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
         pip.hset(key, "id", mem.getId().toString());
         pip.hset(key, "username", mem.getUsername());
         pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
+        pip.expire(key, (int)TimeUnit.DAYS.toSeconds(30));
         pip.sync();
 
         JedisUtils.returnJedis(jedisPool, jedis);
