@@ -106,6 +106,7 @@ public class RestRecoUCtr {
                                @RequestParam Integer postId,
                                @RequestParam int days,
                                @RequestParam(required = false) Integer index,
+                               @RequestParam(required = false) Integer orderId,
                                HttpServletRequest req) {
 
         // 检查type参数合法性
@@ -115,9 +116,9 @@ public class RestRecoUCtr {
         }
 
         try {
-            reService.addTag(postId, rt, days);
+            reService.addTag(postId, rt, days, orderId);
 
-        } catch (PostNotFoundException e) {
+        } catch (PostNotFoundException | OrderNotFoundException e) {
             return new ResponseText(ErrorCode.NOT_FOUND);
 
         } catch (BalanceNotEnoughException e) {
@@ -126,6 +127,8 @@ public class RestRecoUCtr {
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
+        } catch (FinalStatusException | PermissionException ex) {
+            return new ResponseText(ErrorCode.HACKER);
         }
 
         return ResponseText.getSuccessResponseText();

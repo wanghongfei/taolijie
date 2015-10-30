@@ -160,8 +160,8 @@ public class DefaultRecoService implements RecoService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public int addTag(Integer postId, RecoType postType, int hours)
-            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException {
+    public int addTag(Integer postId, RecoType postType, int hours, Integer orderId)
+            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException, FinalStatusException, OrderNotFoundException, PermissionException {
 
         Date newDate = null;
         Integer memId = null;
@@ -185,9 +185,17 @@ public class DefaultRecoService implements RecoService {
         // 计算钱数
         BigDecimal finalFee = feeService.computeTagFee(hours);
 
-        // 从现金账户中扣除
-        Integer accId = accService.findIdByMember(memId);
-        accService.reduceAvailableMoney(accId, finalFee, AccFlow.CONSUME);
+        // 订单支付
+        if (null != orderId) {
+            orderService.orderPayCheck(orderId, memId, OrderType.QUEST_TAG_ORDER, finalFee);
+            orderService.updateStatus(orderId, OrderStatus.DONE, null);
+        } else {
+            // 从现金账户中扣除
+            Integer accId = accService.findIdByMember(memId);
+            accService.reduceAvailableMoney(accId, finalFee, AccFlow.CONSUME);
+
+        }
+
 
 
         // 更新tag过期时间

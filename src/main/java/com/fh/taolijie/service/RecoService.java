@@ -29,8 +29,8 @@ public interface RecoService {
      * @param postType 目前仅支持 RecoType.QUEST
      * @return
      */
-    int addTag(Integer postId, RecoType postType, int hours)
-            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException;
+    int addTag(Integer postId, RecoType postType, int hours, Integer orderId)
+            throws PostNotFoundException, BalanceNotEnoughException, CashAccNotExistsException, FinalStatusException, OrderNotFoundException, PermissionException;
 
     int update(RecoPostModel model);
 
