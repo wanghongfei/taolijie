@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.sh;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.Pageable;
@@ -32,6 +33,7 @@ public class SHPostModel extends Pageable {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date expiredTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date postTime;
 
     private String depreciationRate;
