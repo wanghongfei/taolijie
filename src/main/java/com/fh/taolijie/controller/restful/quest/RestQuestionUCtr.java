@@ -62,6 +62,10 @@ public class RestQuestionUCtr {
         if (!validateDto(dto)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
+        // 验证任务对象合法性
+        if (false == StringUtils.validateLadderString(dto.getSchoolIds(), dto.getCollegeIds(), dto.getCityIds(), dto.getProIds()) ) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
 
         // award最低为0.10
         BigDecimal award = dto.getQuest().getAward();
