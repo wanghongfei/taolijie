@@ -8,14 +8,12 @@ import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
+import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.MemberRoleModel;
 import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.acc.RoleModel;
-import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
-import com.fh.taolijie.exception.checked.PasswordIncorrectException;
-import com.fh.taolijie.exception.checked.UserInvalidException;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionWrongException;
 import com.fh.taolijie.exception.checked.acc.UsernameExistException;
@@ -381,11 +379,20 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public int changePhoneByCode(Integer memId, String newPhone, String code) throws SMSCodeMismatchException, UsernameExistException {
+    public int changePhoneByCode(Integer memId, String newPhone, String code) throws SMSCodeMismatchException, UsernameExistException, PermissionException {
+        // 检查是否设置了密保问题
+        // 如果设置了则不允许调用此方法
+
+        SeQuestionModel question = seService.findByMember(memId, false);
+        if (null != question) {
+            throw new PermissionException();
+        }
+
         // 查询用户信息
         // 判断注册类型
         MemberModel member = memMapper.selectByPrimaryKey(memId);
         RegType regType = RegType.fromCode(member.getRegType());
+
 
         if (RegType.MOBILE == regType) {
             // 手机注册

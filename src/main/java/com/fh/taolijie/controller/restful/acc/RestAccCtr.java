@@ -251,7 +251,7 @@ public class RestAccCtr {
                 memService.changePhoneByCode(memId, phone, code);
             }
 
-        } catch (SecretQuestionNotExistException e) {
+        } catch (SecretQuestionNotExistException | PermissionException e) {
             return new ResponseText(ErrorCode.HACKER);
 
         } catch (SecretQuestionWrongException e) {

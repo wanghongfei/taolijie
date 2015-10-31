@@ -3,10 +3,7 @@ package com.fh.taolijie.service;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
-import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
-import com.fh.taolijie.exception.checked.PasswordIncorrectException;
-import com.fh.taolijie.exception.checked.UserInvalidException;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
 import com.fh.taolijie.exception.checked.acc.SecretQuestionWrongException;
 import com.fh.taolijie.exception.checked.acc.UsernameExistException;
@@ -205,7 +202,7 @@ public interface AccountService {
      * @return
      */
     int changePhoneByCode(Integer memId, String newPhone, String code)
-            throws SMSCodeMismatchException, UsernameExistException;
+            throws SMSCodeMismatchException, UsernameExistException, PermissionException;
 
     /**
      * 根据密保和验证码修改手机号
