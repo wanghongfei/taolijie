@@ -21,10 +21,11 @@ public class ExamDto {
 
     private Integer orderId;
 
-    @NotNull
+    // 任务对象信息
     private String collegeIds;
-    @NotNull
     private String schoolIds;
+    private String cityIds;
+    private String proIds;
 
     public List<QuestionModel> getQuestions() {
         return questions;
@@ -60,6 +61,22 @@ public class ExamDto {
 
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
+    }
+
+    public String getCityIds() {
+        return cityIds;
+    }
+
+    public void setCityIds(String cityIds) {
+        this.cityIds = cityIds;
+    }
+
+    public String getProIds() {
+        return proIds;
+    }
+
+    public void setProIds(String proIds) {
+        this.proIds = proIds;
     }
 
     public void setQuest(QuestModel quest) {

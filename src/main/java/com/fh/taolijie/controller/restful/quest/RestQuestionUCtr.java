@@ -79,8 +79,12 @@ public class RestQuestionUCtr {
         try {
             List<Integer> coList = StringUtils.splitIntendIds(dto.getCollegeIds());
             List<Integer> schList = StringUtils.splitIntendIds(dto.getSchoolIds());
+            List<Integer> cityList = StringUtils.splitIntendIds(dto.getCityIds());
+            List<Integer> proList = StringUtils.splitIntendIds(dto.getProIds());
             model.setCollegeIdList(coList);
             model.setSchoolIdList(schList);
+            model.setCityIdList(cityList);
+            model.setProvinceIdList(proList);
 
         } catch (InvalidNumberStringException e) {
             return new ResponseText(ErrorCode.BAD_NUMBER);
