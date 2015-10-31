@@ -15,6 +15,7 @@ import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
+import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.*;
 import com.fh.taolijie.service.acc.impl.CodeService;
@@ -238,35 +239,40 @@ public class RestAccCtr {
     @RequestMapping(value = "/phone", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changePhone(@RequestParam String phone,
                                     @RequestParam String code, // 手机验证码
+                                    @RequestParam(required = false) String answer, // 密保答案
                                     HttpServletRequest req) {
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
-        // 判断有没有解绑手机号
-        // 必须先解绑才允许操作
-        CashAccModel acc = accService.findByMember(memId);
-        String oldPhone = acc.getPhoneNumber();
-        if (null != oldPhone && !oldPhone.isEmpty()) {
-            return new ResponseText(ErrorCode.UNBIND_FIRST);
-        }
+        try {
+            if (null != answer) {
+                memService.changePhoneByQuestionAndCode(memId, answer, phone, code);
+            } else {
+                memService.changePhoneByCode(memId, phone, code);
+            }
 
-        // 判断验证码是否正确
-        boolean result = codeService.validateSMSCode(memId.toString(), code);
-        if (!result) {
+        } catch (SecretQuestionNotExistException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (SecretQuestionWrongException e) {
+            return new ResponseText(ErrorCode.WRONG_ANSWER);
+
+        } catch (SMSCodeMismatchException e) {
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+
+        } catch (UsernameExistException e) {
+            return new ResponseText(ErrorCode.USER_EXIST);
         }
 
-        // 更新手机号
-        Integer accId = accService.findByMember(memId).getId();
-        accService.updatePhone(accId, phone);
 
         return new ResponseText();
     }
 
-    /**
+/*    *//**
+     * @deprecated
      * 解绑手机号
      * @return
-     */
+     *//*
     @RequestMapping(value = "/phone", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
     public ResponseText unbindPhone(@RequestParam String code, // 手机验证码
                                     HttpServletRequest req) {
@@ -286,7 +292,7 @@ public class RestAccCtr {
         accService.updatePhone(accId, "");
 
         return new ResponseText();
-    }
+    }*/
 
     /**
      * 查询当前用户的现金账户

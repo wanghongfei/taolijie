@@ -7,6 +7,10 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionWrongException;
+import com.fh.taolijie.exception.checked.acc.UsernameExistException;
+import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 
 import java.util.List;
 
@@ -195,4 +199,22 @@ public interface AccountService {
     void createRedisSession(MemberModel mem, String sid);
 
     void deleteRedisSession(String sid);
+
+    /**
+     * 根据手机验证码修改手机号
+     * @return
+     */
+    int changePhoneByCode(Integer memId, String newPhone, String code)
+            throws SMSCodeMismatchException, UsernameExistException;
+
+    /**
+     * 根据密保和验证码修改手机号
+     * @param memId
+     * @param answer 密保答题
+     * @param newPhone
+     * @param code 验证码
+     * @return
+     */
+    int changePhoneByQuestionAndCode(Integer memId, String answer, String newPhone, String code)
+            throws SecretQuestionNotExistException, SecretQuestionWrongException, SMSCodeMismatchException, UsernameExistException;
 }

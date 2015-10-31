@@ -4,6 +4,7 @@ import cn.fh.security.credential.AuthLogic;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.RedisKey;
+import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
@@ -15,8 +16,16 @@ import com.fh.taolijie.exception.checked.DuplicatedUsernameException;
 import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.UserInvalidException;
 import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
+import com.fh.taolijie.exception.checked.acc.SecretQuestionWrongException;
+import com.fh.taolijie.exception.checked.acc.UsernameExistException;
+import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.acc.SeQuestionService;
+import com.fh.taolijie.service.acc.impl.CodeService;
+import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.*;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -37,6 +46,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class DefaultAccountService implements AccountService, AuthLogic {
+    public static Logger logger = LogUtils.getInfoLogger();
+
     @Autowired
     MemberModelMapper memMapper;
 
@@ -48,6 +59,12 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Autowired
     private JedisPool jedisPool;
+
+    @Autowired
+    private CodeService codeService;
+
+    @Autowired
+    private SeQuestionService seService;
 
     @Autowired(required = false)
     Mail mail;
@@ -360,5 +377,118 @@ public class DefaultAccountService implements AccountService, AuthLogic {
         map.put(AuthLogic.MODEL, mem);
 
         return map;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int changePhoneByCode(Integer memId, String newPhone, String code) throws SMSCodeMismatchException, UsernameExistException {
+        // 查询用户信息
+        // 判断注册类型
+        MemberModel member = memMapper.selectByPrimaryKey(memId);
+        RegType regType = RegType.fromCode(member.getRegType());
+
+        if (RegType.MOBILE == regType) {
+            // 手机注册
+
+            // 验证验证码
+            if ( false == codeService.validateSMSCode(newPhone, code) ) {
+                // 验证失败
+                throw new SMSCodeMismatchException();
+            }
+
+            // 更新手机号
+            // 退出登陆
+            // 清除appToken
+            updatePhone(memId, newPhone, true);
+            // 更新用户名
+            updateUsername(memId, newPhone);
+
+
+        } else {
+            // 其它注册类型
+            // 验证验证码
+            if ( false == codeService.validateSMSCode(newPhone, code) ) {
+                // 验证失败
+                throw new SMSCodeMismatchException();
+            }
+
+            // 更新手机号
+            // 退出登陆
+            // 清除appToken
+            updatePhone(memId, newPhone, false);
+        }
+
+        return 0;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int changePhoneByQuestionAndCode(Integer memId, String answer, String newPhone, String code)
+            throws SecretQuestionNotExistException, SecretQuestionWrongException, SMSCodeMismatchException, UsernameExistException {
+
+        // 验证问题
+        boolean result = seService.checkAnswer(memId, answer);
+        if (!result) {
+            throw new SecretQuestionWrongException();
+        }
+
+        // 验证验证码
+        if ( false == codeService.validateSMSCode(newPhone, code) ) {
+            // 验证失败
+            throw new SMSCodeMismatchException();
+        }
+
+        // 判断注册类型
+        MemberModel member = memMapper.selectByPrimaryKey(memId);
+        RegType regType = RegType.fromCode(member.getRegType());
+
+        if (RegType.MOBILE == regType) {
+            // 手机注册
+
+            // 更新手机号
+            // 退出登陆
+            // 清除appToken
+            updatePhone(memId, newPhone, true);
+            // 更新用户名
+            updateUsername(memId, newPhone);
+
+        } else {
+            // 其它注册类型
+            updatePhone(memId, newPhone, false);
+        }
+
+        return 0;
+    }
+
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    private int updatePhone(Integer memId, String phone, boolean cleanToken) {
+        MemberModel mem = new MemberModel();
+        mem.setId(memId);
+        mem.setPhone(phone);
+        if (cleanToken) {
+            mem.setAppToken("");
+        }
+
+        return memMapper.updateByPrimaryKeySelective(mem);
+    }
+
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    private int updateUsername(Integer memId, String username) throws UsernameExistException {
+        if (false == StringUtils.checkNotEmpty(username)) {
+            throw new IllegalArgumentException("username cannot be null");
+        }
+
+        // 先检查用户名是否重复
+        boolean exist = checkUsernameExist(username);
+        if (exist) {
+            throw new UsernameExistException();
+        }
+
+        // 更新用户名
+        MemberModel mem = new MemberModel();
+        mem.setId(memId);
+        mem.setUsername(username);
+
+        return memMapper.updateByPrimaryKeySelective(mem);
     }
 }
