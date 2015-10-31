@@ -59,7 +59,7 @@ public interface QuestService {
      * @param status
      * @return
      */
-    int changeEmpStatus(Integer questId, EmpQuestStatus status);
+    int changeEmpStatus(Integer questId, EmpQuestStatus status) throws QuestNotFoundException;
 
     /**
      * 更新标签过期时间

@@ -285,8 +285,12 @@ public class DefaultQuestService implements QuestService {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public int changeEmpStatus(Integer questId, EmpQuestStatus status) {
+    public int changeEmpStatus(Integer questId, EmpQuestStatus status) throws QuestNotFoundException {
         QuestModel model = questMapper.selectByPrimaryKey(questId);
+
+        if (null == model) {
+            throw new QuestNotFoundException("");
+        }
 
         if (status == EmpQuestStatus.DONE) {
             // 置状态为审核通过
