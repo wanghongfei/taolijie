@@ -27,6 +27,8 @@ public class ExamDto {
     private String cityIds;
     private String proIds;
 
+    private Integer save = 0;
+
     public List<QuestionModel> getQuestions() {
         return questions;
     }
@@ -77,6 +79,14 @@ public class ExamDto {
 
     public void setProIds(String proIds) {
         this.proIds = proIds;
+    }
+
+    public Integer getSave() {
+        return save;
+    }
+
+    public void setSave(Integer save) {
+        this.save = save;
     }
 
     public void setQuest(QuestModel quest) {
