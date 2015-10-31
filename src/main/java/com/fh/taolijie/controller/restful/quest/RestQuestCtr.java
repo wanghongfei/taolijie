@@ -90,6 +90,7 @@ public class RestQuestCtr {
                                      @RequestParam(required = false) Integer couponAmt,
 
                                      @RequestParam(required = false) Integer orderId,
+                                     @RequestParam(defaultValue = "0") Integer save, // 保存(1) or 发布(0)
                                      HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
@@ -100,7 +101,7 @@ public class RestQuestCtr {
 
 
         // 参数验证
-        if (br.hasErrors()) {
+        if (br.hasErrors() || model.getTotalAmt() <= 0) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
@@ -163,9 +164,9 @@ public class RestQuestCtr {
                 couponModel.setExpiredTime(expiredTime);
                 couponModel.setAmt(couponAmt);
 
-                questService.publishQuest(accId, model, orderId, couponModel);
+                questService.publishQuest(accId, model, orderId, couponModel, save);
             } else {
-                questService.publishQuest(accId, model, orderId, null);
+                questService.publishQuest(accId, model, orderId, null, save);
             }
 
         } catch (BalanceNotEnoughException e) {

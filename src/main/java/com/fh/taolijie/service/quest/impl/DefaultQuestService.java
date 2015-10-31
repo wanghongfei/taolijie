@@ -98,25 +98,37 @@ public class DefaultQuestService implements QuestService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon)
+    public void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon, Integer save)
             throws BalanceNotEnoughException, CashAccNotExistsException, OrderNotFoundException, FinalStatusException, PermissionException {
 
-        // 计算总钱数
-        BigDecimal tot = feeCal.computeQuestFee(model.getAward().doubleValue(), model.getTotalAmt());
+        // save == 1 表示当前只是保存任务而不需要发布
+        // 只有当 save == 0时才执行扣钱流程
+        if (0 == save) {
+            // 计算总钱数
+            BigDecimal tot = feeCal.computeQuestFee(model.getAward().doubleValue(), model.getTotalAmt());
 
-        // 如果orderId存在, 则不从钱包扣钱
-        if (orderId != null) {
-            // 订单检查
-            orderService.orderPayCheck(orderId, model.getMemberId(), OrderType.QUEST_PUBLISH, tot);
-            // 更新订单状态
-            orderService.updateStatus(orderId, OrderStatus.DONE, null);
+            // 如果orderId存在, 则不从钱包扣钱
+            if (orderId != null) {
+                // 订单检查
+                orderService.orderPayCheck(orderId, model.getMemberId(), OrderType.QUEST_PUBLISH, tot);
+                // 更新订单状态
+                orderService.updateStatus(orderId, OrderStatus.DONE, null);
 
-            // 允许发布
+                // 允许发布
+
+            } else {
+                // 从钱包扣钱
+                accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+            }
+
+            // 置状态为审核中
+            model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
 
         } else {
-            // 从钱包扣钱
-            accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+            // 置状态为未发布
+            model.setEmpStatus(EmpQuestStatus.UNPUBLISH.code());
         }
+
 
 
 
@@ -129,9 +141,8 @@ public class DefaultQuestService implements QuestService {
         }
 
         // 发布任务
-        // 置状态为审核中
-        model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
-        doPublish(model, true);
+        // 只有当前是真正发布任务时( save == 0 ), 第二个参数才为true, 表示投递定时任务信息
+        doPublish(model, 0 == save);
 
         // 插入coupon数据
         if (null != coupon) {
@@ -207,8 +218,8 @@ public class DefaultQuestService implements QuestService {
                     "/api/schedule/questExpire",
                     "GET",
                     // 任务结束后的第25小时执行
-                    //TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                    TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                    TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                    //TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
                     .setParmMap(map)
                     .build();
 
@@ -270,6 +281,63 @@ public class DefaultQuestService implements QuestService {
         }
 
         qproRel.insertInBatch(list);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public int changeEmpStatus(Integer questId, EmpQuestStatus status) {
+        QuestModel model = questMapper.selectByPrimaryKey(questId);
+
+        if (status == EmpQuestStatus.DONE) {
+            // 置状态为审核通过
+
+            // 此时投递定时任务信息
+
+            // 投递任务过期定时任务
+            // 构造参数列表
+            Map<String, String> map = new HashMap<>();
+            map.put("taskId", questId.toString());
+            map.put("questId", questId.toString());
+
+            // 构造消息体
+            MsgProtocol msg = new MsgProtocol.Builder(
+                    MsgType.DATE_STYLE,
+                    "localhost",
+                    8080,
+                    "/api/schedule/questExpire",
+                    "GET",
+                    // 任务结束后的第25小时执行
+                    TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
+                    //TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
+                    .setParmMap(map)
+                    .build();
+
+
+            // 序列化成JSON
+            String json = JSON.toJSONString(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("sending message: {}", json);
+            }
+
+            // 发布消息
+            Jedis jedis = JedisUtils.getClient(jedisPool);
+            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
+            if (recvAmt.longValue() <= 0) {
+                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            }
+
+            JedisUtils.returnJedis(jedisPool, jedis);
+
+        }
+
+        // 修改状态值
+        QuestModel example = new QuestModel();
+        example.setId(questId);
+        example.setEmpStatus(status.code());
+        questMapper.updateByPrimaryKeySelective(example);
+
+
+        return 0;
     }
 
     @Override

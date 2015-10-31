@@ -28,7 +28,7 @@ public interface QuestionService {
      * 添加问题
      * @param questionList
      */
-    void publishQuestions(QuestModel quest, List<QuestionModel> questionList, Integer orderId)
+    void publishQuestions(QuestModel quest, List<QuestionModel> questionList, Integer orderId, Integer save)
             throws CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException;
 
     /**

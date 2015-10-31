@@ -2,6 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.AssignStatus;
+import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.quest.*;
 import com.fh.taolijie.exception.checked.FinalStatusException;
@@ -25,7 +26,7 @@ public interface QuestService {
      * @param accId 商家账户
      * @param model
      */
-    void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon)
+    void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon, Integer save)
             throws BalanceNotEnoughException, CashAccNotExistsException, OrderNotFoundException, FinalStatusException, PermissionException;
 
     /**
@@ -46,7 +47,19 @@ public interface QuestService {
      */
     void addQuestCityRel(List<QuestCiRel> list);
 
+    /**
+     * 批量插入 任务-省关联
+     * @param list
+     */
     void addQuestProvinceRel(List<QuestProRel> list);
+
+    /**
+     * 管理员修改任务审核状态
+     * @param questId
+     * @param status
+     * @return
+     */
+    int changeEmpStatus(Integer questId, EmpQuestStatus status);
 
     /**
      * 更新标签过期时间
