@@ -42,15 +42,11 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
         jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1L);
         jedisPool.returnResourceObject(jedis);
 
-/*        response.setHeader("Access-Control-Allow-Origin", "http://cdn.taolijie.cn");
-        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");*/
         return super.preHandle(request, response, handler);
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-/*        response.setHeader("Access-Control-Allow-Origin", "http://cdn.taolijie.cn");
-        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With");*/
 
         super.postHandle(request, response, handler, modelAndView);
     }

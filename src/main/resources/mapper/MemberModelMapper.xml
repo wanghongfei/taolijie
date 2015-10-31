@@ -21,7 +21,7 @@
         <result column="mem_qq" property="qq" jdbcType="VARCHAR"/>
         <result column="mem_age" property="age" jdbcType="INTEGER"/>
         <result column="mem_company_name" property="companyName" jdbcType="VARCHAR"/>
-        <result column="mem_created_time" property="createdTime" jdbcType="DATE"/>
+        <result column="mem_created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="mem_valid" property="valid" jdbcType="BIT"/>
         <result column="mem_complaint" property="complaint" jdbcType="INTEGER"/>
         <result column="mem_profile_photo_id" property="profilePhotoId" jdbcType="INTEGER"/>
@@ -177,7 +177,7 @@
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
         #{qq,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR},
-        #{createdTime,jdbcType=DATE}, #{valid,jdbcType=BIT}, #{complaint,jdbcType=INTEGER},
+        #{createdTime}, #{valid,jdbcType=BIT}, #{complaint,jdbcType=INTEGER},
         #{profilePhotoId,jdbcType=INTEGER}, #{autoLoginIdentifier,jdbcType=VARCHAR}, #{lastPostTime,jdbcType=DATE},
         #{resetPasswordToken,jdbcType=VARCHAR}, #{lastTokenDate,jdbcType=DATE}, #{schoolOrganization,jdbcType=VARCHAR},
         #{credits,jdbcType=INTEGER}, #{studentId,jdbcType=LONGVARCHAR}, #{blockList,jdbcType=LONGVARCHAR},
@@ -319,7 +319,7 @@
                 #{companyName,jdbcType=VARCHAR},
             </if>
             <if test="createdTime != null">
-                #{createdTime,jdbcType=DATE},
+                #{createdTime},
             </if>
             <if test="valid != null">
                 #{valid,jdbcType=BIT},
@@ -418,7 +418,7 @@
                 company_name = #{companyName,jdbcType=VARCHAR},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime,jdbcType=DATE},
+                created_time = #{createdTime},
             </if>
             <if test="valid != null">
                 valid = #{valid,jdbcType=BIT},
@@ -494,7 +494,7 @@
         qq = #{qq,jdbcType=VARCHAR},
         age = #{age,jdbcType=INTEGER},
         company_name = #{companyName,jdbcType=VARCHAR},
-        created_time = #{createdTime,jdbcType=DATE},
+        created_time = #{createdTime},
         valid = #{valid,jdbcType=BIT},
         complaint = #{complaint,jdbcType=INTEGER},
         profile_photo_id = #{profilePhotoId,jdbcType=INTEGER},
