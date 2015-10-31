@@ -115,18 +115,7 @@ public class DefaultQuestService implements QuestService {
 
         } else {
             // 从钱包扣钱
-            try {
-                accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
-
-            } catch (BalanceNotEnoughException ex) {
-                // 如果钱不够
-                // 置状态为未发布
-                model.setEmpStatus(EmpQuestStatus.UNPUBLISH.code());
-                // 写入任务表，但不投递定时任务消息
-                doPublish(model, false);
-
-                //throw ex;
-            }
+            accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
         }
 
 
@@ -141,9 +130,7 @@ public class DefaultQuestService implements QuestService {
 
         // 发布任务
         // 置状态为审核中
-        if (null == model.getEmpStatus()) {
-            model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
-        }
+        model.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
         doPublish(model, true);
 
         // 插入coupon数据
