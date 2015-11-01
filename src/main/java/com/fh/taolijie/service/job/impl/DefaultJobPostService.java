@@ -176,8 +176,10 @@ public class DefaultJobPostService implements JobPostService {
     public JobPostModel findJobPostWithPV(Integer postId) {
         JobPostModel post = postMapper.selectByPrimaryKey(postId);
 
-        String pv = pvService.getJobPV(postId);
-        post.setPv(pv);
+        if (null != post) {
+            String pv = pvService.getJobPV(postId);
+            post.setPv(pv);
+        }
 
         return post;
     }

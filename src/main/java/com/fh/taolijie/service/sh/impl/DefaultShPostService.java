@@ -196,6 +196,7 @@ public class DefaultShPostService implements ShPostService {
     @Transactional(readOnly = true)
     public SHPostModel findPostWithPV(Integer postId) {
         SHPostModel sh = postMapper.selectByPrimaryKey(postId);
+
         if (null != sh) {
             String pv = pvService.getShPV(postId);
             sh.setPv(pv);
