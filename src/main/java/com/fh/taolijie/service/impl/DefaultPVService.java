@@ -3,6 +3,7 @@ package com.fh.taolijie.service.impl;
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.PVModelMapper;
 import com.fh.taolijie.domain.PVModel;
+import com.fh.taolijie.domain.PVable;
 import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.JedisUtils;
@@ -11,11 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by whf on 11/1/15.
@@ -88,6 +87,35 @@ public class DefaultPVService implements PVService {
         }
 
         return 0;
+    }
+
+    @Override
+    public void pvMatch(List<? extends PVable> queryList) {
+        if (null == queryList) {
+            return;
+        }
+
+        // 一次查询多个PV信息
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        Pipeline pip = jedis.pipelined();
+        queryList.forEach( model -> {
+            pip.hget(RedisKey.HASH_PV_JOB.toString(), model.getId().toString());
+        });
+
+        // 得到批量查询结果
+        List<Object> pvList = pip.syncAndReturnAll();
+        JedisUtils.returnJedis(jedisPool, jedis);
+
+        // 赋值
+        final int LEN = queryList.size();
+        for (int ix = 0 ; ix < LEN ; ++ix) {
+            String pv = (String) pvList.get(ix);
+            if (null == pv) {
+                pv = "0";
+            }
+            queryList.get(ix).setPv(pv);
+        }
+
     }
 
     private String queryPV(Integer postId, RedisKey key) {

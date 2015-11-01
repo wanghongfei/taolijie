@@ -3,6 +3,7 @@ package com.fh.taolijie.domain.job;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fh.taolijie.domain.PVable;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.Pageable;
 import org.hibernate.validator.constraints.Length;
@@ -17,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class JobPostModel extends Pageable implements Serializable {
+public class JobPostModel extends Pageable implements Serializable, PVable {
     private Integer id;
 
     //@NotNull

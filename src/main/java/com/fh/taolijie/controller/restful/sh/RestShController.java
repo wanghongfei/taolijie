@@ -28,6 +28,9 @@ public class RestShController {
     @Autowired
     ShPostCategoryService cateService;
 
+    @Autowired
+    private PVService pvService;
+
     /**
      * 查询全部j
      * @return
@@ -38,6 +41,8 @@ public class RestShController {
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize);
+
+        pvService.pvMatch(shList.getList());
 
         return new ResponseText(shList);
     }
@@ -66,6 +71,7 @@ public class RestShController {
         example.setPageSize(pageSize);
 
         ListResult<SHPostModel> lr = shService.filterQuery(example);
+        pvService.pvMatch(lr.getList());
 
         return new ResponseText(lr);
     }
@@ -92,6 +98,8 @@ public class RestShController {
             shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize);
         }
 
+        pvService.pvMatch(shList.getList());
+
         return new ResponseText(shList);
     }
 
@@ -112,6 +120,8 @@ public class RestShController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize);
+        pvService.pvMatch(shList.getList());
+
         return new ResponseText(shList);
     }
 
@@ -124,6 +134,8 @@ public class RestShController {
     public ResponseText search(SHPostModel model) {
 
         ListResult<SHPostModel> shList = shService.runSearch(model);
+        pvService.pvMatch(shList.getList());
+
         return new ResponseText(shList);
     }
 

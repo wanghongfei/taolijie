@@ -1,5 +1,9 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.domain.PVable;
+
+import java.util.List;
+
 /**
  * Created by whf on 11/1/15.
  */
@@ -28,4 +32,10 @@ public interface PVService {
      * @return
      */
     int saveAllPV();
+
+    /**
+     * 一次查询多个PV信息
+     * @param queryList
+     */
+    void pvMatch(List<? extends PVable> queryList);
 }
