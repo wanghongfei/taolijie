@@ -22,6 +22,10 @@ public enum RedisKey {
     RSA_PUB_KEY,
     RSA_PRI_KEY,
 
+    // 统计信息
+    HASH_PV_SH,
+    HASH_PV_JOB,
+
     // for alipay
     ALIPAY_CONF,
     ALIPAY_ACC,
@@ -33,6 +37,11 @@ public enum RedisKey {
 
     public String toString() {
         switch (this) {
+            case HASH_PV_JOB:
+                return "pv:job";
+            case HASH_PV_SH:
+                return "pv:sh";
+
             case ALIPAY_ACC:
                 return "acc";
 

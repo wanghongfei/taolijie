@@ -33,10 +33,6 @@ public class StatisticsInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         String uri = request.getRequestURI();
-        // 放过表态资源
-        if (true == isStaticResource(uri)) {
-            return super.preHandle(request, response, handler);
-        }
 
         Jedis jedis = jedisPool.getResource();
         jedis.hincrBy(Constants.RedisKey.PAGE_STATISTICS, uri, 1L);

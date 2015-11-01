@@ -249,6 +249,41 @@ public class StringUtils {
     }
 
     /**
+     * 得到URL中最后一个'/'后面的字符串. 如/api/user/12结果为12
+     * @param url
+     * @return
+     */
+    public static String getLastToken(String url) {
+        if (null == url) {
+            return null;
+        }
+
+        int pos = url.lastIndexOf('/');
+
+        return url.substring(pos + 1);
+    }
+
+    /**
+     * 检查字符串的每个字符是不是数字字符
+     * @param str
+     * @return
+     */
+    public static boolean isAllDigitChar(String str) {
+        if (null == str) {
+            return false;
+        }
+
+        final int LEN = str.length();
+        for (int ix = 0 ; ix < LEN ; ++ix ) {
+            if ( false == Character.isDigit(str.charAt(ix)) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * 在字符串前后加上双引号
      * @param str
      * @return
