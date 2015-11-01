@@ -17,4 +17,15 @@ public interface PVService {
      * @return
      */
     String getShPV(Integer shId);
+
+    /**
+     * 分时间段统计总PV
+     */
+    void incrAllPV();
+
+    /**
+     * 保存当天PV信息到数据库
+     * @return
+     */
+    int saveAllPV();
 }

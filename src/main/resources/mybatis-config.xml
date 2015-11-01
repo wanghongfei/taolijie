@@ -82,5 +82,7 @@
         <mapper resource="mapper/SeQuestionModelMapper.xml" />
         <mapper resource="mapper/CouponModelMapper.xml" />
 
+        <mapper resource="mapper/PVModelMapper.xml" />
+
     </mappers>
 </configuration>

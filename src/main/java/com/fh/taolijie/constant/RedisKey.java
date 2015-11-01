@@ -25,6 +25,7 @@ public enum RedisKey {
     // 统计信息
     HASH_PV_SH,
     HASH_PV_JOB,
+    HASH_PV_ALL,
 
     // for alipay
     ALIPAY_CONF,
@@ -39,8 +40,12 @@ public enum RedisKey {
         switch (this) {
             case HASH_PV_JOB:
                 return "pv:job";
+
             case HASH_PV_SH:
                 return "pv:sh";
+
+            case HASH_PV_ALL:
+                return "pv:all";
 
             case ALIPAY_ACC:
                 return "acc";

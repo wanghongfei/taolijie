@@ -10,6 +10,7 @@ import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
 import com.fh.taolijie.exception.checked.quest.NotEnoughCouponException;
 import com.fh.taolijie.exception.checked.quest.RequestCannotChangeException;
 import com.fh.taolijie.exception.checked.quest.RequestNotExistException;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
@@ -30,6 +31,10 @@ public class RestScheduleCtr {
 
     @Autowired
     private QuestService questService;
+
+    @Autowired
+    private PVService pvService;
+
 
     /**
      * 任务请求自动审核通过
@@ -90,4 +95,18 @@ public class RestScheduleCtr {
         return ResponseText.getSuccessResponseText();
     }
 
+    /**
+     * 每日总PV落地
+     */
+    @RequestMapping(value = "/pv/all", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText saveAllPVDaily() {
+        try {
+            pvService.saveAllPV();
+
+        } catch (Exception e) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
 }
