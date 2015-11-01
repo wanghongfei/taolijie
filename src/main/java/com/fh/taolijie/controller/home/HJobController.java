@@ -40,6 +40,9 @@ public class HJobController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    private PVService pvService;
+
 
     /**
      * 兼职二级页面
@@ -72,6 +75,9 @@ public class HJobController {
         }else if(jobs.getList().size() == pageSize){
             pageStatus = 2;
         }
+
+        pvService.pvMatch(jobs.getList());
+
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs", jobs);
         model.addAttribute("page", page);
@@ -84,7 +90,6 @@ public class HJobController {
     /**
      * 查询一条兼职
      * @param id
-     * @param session
      * @param model
      * @return
      */

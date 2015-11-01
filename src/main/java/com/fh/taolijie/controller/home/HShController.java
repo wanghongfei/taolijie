@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.ReviewService;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.service.sh.ShPostService;
@@ -40,6 +41,9 @@ public class HShController {
     @Autowired
     ReviewService reviewService;
 
+    @Autowired
+    private PVService pvService;
+
     /**
      * 二手列表
      * 默认每页12个
@@ -71,6 +75,9 @@ public class HShController {
         }else if(shs.getList().size() == pageSize){
             pageStatus = 2;
         }
+
+        pvService.pvMatch(shs.getList());
+
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs", shs.getList());
         model.addAttribute("page", page);
