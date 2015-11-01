@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.PVService;
@@ -42,7 +43,7 @@ public class RestShController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize);
 
-        pvService.pvMatch(shList.getList());
+        pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
     }
@@ -71,7 +72,7 @@ public class RestShController {
         example.setPageSize(pageSize);
 
         ListResult<SHPostModel> lr = shService.filterQuery(example);
-        pvService.pvMatch(lr.getList());
+        pvService.pvMatch(lr.getList(), PostType.SH);
 
         return new ResponseText(lr);
     }
@@ -98,7 +99,7 @@ public class RestShController {
             shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize);
         }
 
-        pvService.pvMatch(shList.getList());
+        pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
     }
@@ -120,7 +121,7 @@ public class RestShController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize);
-        pvService.pvMatch(shList.getList());
+        pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
     }
@@ -134,7 +135,7 @@ public class RestShController {
     public ResponseText search(SHPostModel model) {
 
         ListResult<SHPostModel> shList = shService.runSearch(model);
-        pvService.pvMatch(shList.getList());
+        pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
     }

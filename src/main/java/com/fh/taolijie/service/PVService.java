@@ -1,5 +1,6 @@
 package com.fh.taolijie.service;
 
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.PVable;
 
 import java.util.List;
@@ -37,5 +38,5 @@ public interface PVService {
      * 一次查询多个PV信息
      * @param queryList
      */
-    void pvMatch(List<? extends PVable> queryList);
+    void pvMatch(List<? extends PVable> queryList, PostType type);
 }

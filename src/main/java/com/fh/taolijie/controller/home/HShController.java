@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.domain.acc.RoleModel;
@@ -76,7 +77,7 @@ public class HShController {
             pageStatus = 2;
         }
 
-        pvService.pvMatch(shs.getList());
+        pvService.pvMatch(shs.getList(), PostType.SH);
 
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("shs", shs.getList());

@@ -2,6 +2,7 @@ package com.fh.taolijie.controller.home;
 
 import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
@@ -76,7 +77,7 @@ public class HJobController {
             pageStatus = 2;
         }
 
-        pvService.pvMatch(jobs.getList());
+        pvService.pvMatch(jobs.getList(), PostType.JOB);
 
         model.addAttribute("pageStatus",pageStatus);
         model.addAttribute("jobs", jobs);

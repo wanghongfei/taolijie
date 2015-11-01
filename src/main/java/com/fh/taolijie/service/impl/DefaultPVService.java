@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.PVModelMapper;
 import com.fh.taolijie.domain.PVModel;
@@ -90,16 +91,26 @@ public class DefaultPVService implements PVService {
     }
 
     @Override
-    public void pvMatch(List<? extends PVable> queryList) {
+    public void pvMatch(List<? extends PVable> queryList, PostType type) {
         if (null == queryList) {
             return;
         }
+
+
+        RedisKey key = null;
+        if (type == PostType.JOB) {
+            key = RedisKey.HASH_PV_JOB;
+        } else if (type == PostType.SH) {
+            key = RedisKey.HASH_PV_SH;
+        }
+
+        RedisKey redisKey = key;
 
         // 一次查询多个PV信息
         Jedis jedis = JedisUtils.getClient(jedisPool);
         Pipeline pip = jedis.pipelined();
         queryList.forEach( model -> {
-            pip.hget(RedisKey.HASH_PV_JOB.toString(), model.getId().toString());
+            pip.hget(redisKey.toString(), model.getId().toString());
         });
 
         // 得到批量查询结果

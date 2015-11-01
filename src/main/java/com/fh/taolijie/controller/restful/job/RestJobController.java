@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.job.JobPostCategoryModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.service.PVService;
@@ -46,7 +47,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize);
 
-        pvService.pvMatch( jobList.getList() );
+        pvService.pvMatch(jobList.getList(), PostType.JOB);
 
         return new ResponseText(jobList);
     }
@@ -60,7 +61,7 @@ public class RestJobController {
         model.setPageNumber(PageUtils.getFirstResult(model.getPageNumber(), model.getPageSize()));
         ListResult<JobPostModel> list = jobService.findByExample(model);
 
-        pvService.pvMatch( list.getList() );
+        pvService.pvMatch( list.getList(), PostType.JOB );
 
         return new ResponseText(list);
     }
@@ -81,7 +82,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize);
 
-        pvService.pvMatch( list.getList() );
+        pvService.pvMatch( list.getList(),PostType.JOB );
 
         return new ResponseText(list);
     }
@@ -100,7 +101,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize);
 
-        pvService.pvMatch( list.getList() );
+        pvService.pvMatch( list.getList(), PostType.JOB );
 
         return new ResponseText(list);
     }
@@ -115,7 +116,7 @@ public class RestJobController {
 
         ListResult<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
 
-        pvService.pvMatch( postList.getList() );
+        pvService.pvMatch(postList.getList(), PostType.JOB);
 
         return new ResponseText(postList);
     }
@@ -129,9 +130,9 @@ public class RestJobController {
                                    @RequestParam(defaultValue = "0") int pageNumber,
                                    @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-        
+
         ListResult<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize);
-        pvService.pvMatch( postList.getList() );
+        pvService.pvMatch( postList.getList(), PostType.JOB );
 
         return new ResponseText(postList);
     }
