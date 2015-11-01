@@ -26,6 +26,7 @@ import java.util.List;
 public class RestJobController {
     @Autowired
     JobPostService jobService;
+
     @Autowired
     JobPostCateService cateService;
 
@@ -125,7 +126,8 @@ public class RestJobController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getPostById(@PathVariable(value = "id") Integer postId) {
 
-        JobPostModel model = jobService.findJobPost(postId);
+        JobPostModel model = jobService.findJobPostWithPV(postId);
+
         return new ResponseText(model);
     }
 

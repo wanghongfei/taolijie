@@ -2,6 +2,7 @@ package com.fh.taolijie.service.job.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
@@ -10,14 +11,18 @@ import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.exception.checked.JobNotFoundException;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.JedisUtils;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +45,9 @@ public class DefaultJobPostService implements JobPostService {
 
     @Autowired
     CollectionService coService;
+
+    @Autowired
+    private PVService pvService;
 
     @Override
     @Transactional(readOnly = true)
@@ -161,6 +169,17 @@ public class DefaultJobPostService implements JobPostService {
     @Transactional(readOnly = true)
     public JobPostModel findJobPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public JobPostModel findJobPostWithPV(Integer postId) {
+        JobPostModel post = postMapper.selectByPrimaryKey(postId);
+
+        String pv = pvService.getJobPV(postId);
+        post.setPv(pv);
+
+        return post;
     }
 
     @Override

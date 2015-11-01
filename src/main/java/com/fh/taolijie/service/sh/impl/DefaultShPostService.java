@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.acc.CollectionModel;
 import com.fh.taolijie.domain.acc.CollectionModelExample;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
@@ -33,6 +34,9 @@ public class DefaultShPostService implements ShPostService {
 
     @Autowired
     CollectionService coService;
+
+    @Autowired
+    private PVService pvService;
 
     @Override
     @Transactional(readOnly = true)
@@ -186,6 +190,18 @@ public class DefaultShPostService implements ShPostService {
     @Transactional(readOnly = true)
     public SHPostModel findPost(Integer postId) {
         return postMapper.selectByPrimaryKey(postId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public SHPostModel findPostWithPV(Integer postId) {
+        SHPostModel sh = postMapper.selectByPrimaryKey(postId);
+        if (null != sh) {
+            String pv = pvService.getShPV(postId);
+            sh.setPv(pv);
+        }
+
+        return sh;
     }
 
     @Override

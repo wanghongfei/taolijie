@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.sh.SHPostCategoryModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
@@ -47,7 +48,7 @@ public class RestShController {
      */
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
     public ResponseText getAll(@PathVariable Integer id) {
-        SHPostModel model = shService.findPost(id);
+        SHPostModel model = shService.findPostWithPV(id);
 
         return new ResponseText(model);
     }

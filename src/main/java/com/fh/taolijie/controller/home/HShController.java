@@ -88,7 +88,7 @@ public class HShController {
                          @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
                          @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize,
                          Model model) {
-        SHPostModel sh = shPostService.findPost(id);
+        SHPostModel sh = shPostService.findPostWithPV(id);
         if (sh == null) {
             return "redirect:/404";
         }

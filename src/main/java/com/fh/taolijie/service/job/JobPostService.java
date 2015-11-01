@@ -100,6 +100,8 @@ public interface JobPostService extends PageService {
      */
     JobPostModel findJobPost(Integer postId);
 
+    JobPostModel findJobPostWithPV(Integer postId);
+
     /**
      * 投诉数+1
      */

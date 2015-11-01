@@ -114,6 +114,8 @@ public class JobPostModel extends Pageable implements Serializable {
     private String city;
     private String region;
 
+    private String pv;
+
     private MemberModel member;
     private JobPostCategoryModel category;
 
@@ -880,6 +882,14 @@ public class JobPostModel extends Pageable implements Serializable {
         sb.append(pageSize);
 
         return sb.toString();
+    }
+
+    public String getPv() {
+        return pv;
+    }
+
+    public void setPv(String pv) {
+        this.pv = pv;
     }
 
     public void setApplicantAmount(Integer applicantAmount) {

@@ -7,6 +7,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.ReviewModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.service.ReviewService;
@@ -95,7 +96,7 @@ public class HJobController {
                           @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
                           @RequestParam(value = "pageSize", defaultValue = Constants.PAGE_CAPACITY + "") Integer pageSize,
                           Model model) {
-        JobPostModel job = jobPostService.findJobPost(id);
+        JobPostModel job = jobPostService.findJobPostWithPV(id);
 
         if (job == null) {
             return "redirect:/404";

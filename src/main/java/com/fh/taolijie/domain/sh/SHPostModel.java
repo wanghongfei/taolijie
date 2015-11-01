@@ -83,6 +83,8 @@ public class SHPostModel extends Pageable {
     @Length(max = 20)
     private String contactPhone;
 
+    private String pv;
+
 
     private MemberModel member;
     private SHPostCategoryModel category;
@@ -339,6 +341,14 @@ public class SHPostModel extends Pageable {
         sb.append(pageSize);
 
         return sb.toString();
+    }
+
+    public String getPv() {
+        return pv;
+    }
+
+    public void setPv(String pv) {
+        this.pv = pv;
     }
 
     public void setTradePlace(String tradePlace) {
