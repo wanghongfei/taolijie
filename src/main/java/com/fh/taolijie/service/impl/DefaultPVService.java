@@ -52,10 +52,10 @@ public class DefaultPVService implements PVService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public int saveAllPV() {
-        // 从Redis中查出今日PV数据
         Jedis jedis = null;
 
         try {
+            // 从Redis中查出今日PV数据
             jedis = JedisUtils.getClient(jedisPool);
             Map<String, String> map = jedis.hgetAll(RedisKey.HASH_PV_ALL.toString());
 
@@ -66,6 +66,9 @@ public class DefaultPVService implements PVService {
             // 遍历
             StringBuilder sb = new StringBuilder(120);
             for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
+                // 一组数据的格式: "序号:PV值", 每组数据之前以;分隔
+                sb.append(entry.getKey());
+                sb.append(":");
                 sb.append(entry.getValue());
                 sb.append(Constants.DELIMITER);
             }
