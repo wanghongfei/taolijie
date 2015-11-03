@@ -37,4 +37,6 @@ public interface CashAccModelMapper {
     CashAccModel findByMemberId(Integer memId);
 
     Integer findIdByMemberId(Integer memId);
+
+    BigDecimal selectBalance(Integer memId);
 }

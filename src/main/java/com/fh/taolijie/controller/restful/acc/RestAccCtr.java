@@ -141,6 +141,22 @@ public class RestAccCtr {
     }
 
     /**
+     * 查询当前账户余额
+     * @return
+     */
+    @RequestMapping(value = "/balance", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText checkBalance(HttpServletRequest req) {
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        BigDecimal res = accService.checkBalance(memId);
+        if (null == res ) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return new ResponseText(res);
+    }
+
+    /**
      * 修改支付宝账号
      * @return
      */

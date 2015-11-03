@@ -85,6 +85,13 @@ public interface CashAccService {
     boolean checkAccIdExists(Integer accId);
 
     /**
+     * 查询指定账户余额
+     * @param memId
+     * @return
+     */
+    BigDecimal checkBalance(Integer memId);
+
+    /**
      * 添加可用余额
      * @param accId
      * @param amt

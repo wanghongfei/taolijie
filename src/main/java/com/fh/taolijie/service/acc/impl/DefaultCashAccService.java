@@ -186,6 +186,12 @@ public class DefaultCashAccService implements CashAccService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public BigDecimal checkBalance(Integer memId) {
+        return accMapper.selectBalance(memId);
+    }
+
+    @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public boolean addAvailableMoney(Integer accId, BigDecimal amt) throws CashAccNotExistsException{
         return addAvailableMoney(accId, amt, AccFlow.CHARGE);

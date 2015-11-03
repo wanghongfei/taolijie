@@ -332,4 +332,13 @@
         WHERE
             member_id = #{memId}
     </select>
+
+    <select id="selectBalance" resultType="decimal">
+        SELECT
+            available_balance
+        FROM
+            cash_acc
+        WHERE
+            member_id = #{memId}
+    </select>
 </mapper>
