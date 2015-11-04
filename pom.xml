@@ -27,7 +27,7 @@
         <java-mail-version>1.4.7</java-mail-version>
 
         <org.aspectj-version>1.7.3</org.aspectj-version>
-        <spring.version>4.1.5.RELEASE</spring.version>
+        <spring.version>4.2.2.RELEASE</spring.version>
 
 
         <junit-version>4.12</junit-version>
