@@ -27,7 +27,7 @@ public class XSSWrapper extends HttpServletRequestWrapper {
 
         int LEN = originalParam.length;
         for (int ix = 0 ; ix < LEN ; ++ix) {
-            originalParam[ix] = StringEscapeUtils.escapeHtml4(originalParam[ix]);
+            originalParam[ix] = StringEscapeUtils.escapeXml10(originalParam[ix]);
         }
 
         return originalParam;
@@ -45,6 +45,6 @@ public class XSSWrapper extends HttpServletRequestWrapper {
             return null;
         }
 
-        return StringEscapeUtils.escapeHtml4(originalParam);
+        return StringEscapeUtils.escapeXml10(originalParam);
     }
 }
