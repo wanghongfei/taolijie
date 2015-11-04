@@ -12,6 +12,7 @@
         <result column="qm_user_amt" property="userAmt" jdbcType="INTEGER"/>
         <result column="qm_correct_amt" property="correctAmt" jdbcType="INTEGER"/>
         <result column="qm_answer_amt" property="answerAmt" jdbcType="INTEGER"/>
+        <result column="qm_award" property="award" jdbcType="DECIMAL"/>
 
         <collection property="opts" resultMap="com.fh.taolijie.dao.mapper.QuestionOptModelMapper.BaseResultMap" javaType="arraylist" />
     </resultMap>
@@ -25,7 +26,8 @@
         qm.type AS qm_type,
         qm.user_amt AS qm_user_amt,
         qm.correct_amt AS qm_correct_amt,
-        qm.answer_amt AS qm_answer_amt
+        qm.answer_amt AS qm_answer_amt,
+        qm.award AS qm_award
     </sql>
 
     <sql id="without_answer">
@@ -37,7 +39,8 @@
         qm.type AS qm_type,
 
         qm.user_amt AS qm_user_amt,
-        qm.correct_amt AS qm_correct_amt
+        qm.correct_amt AS qm_correct_amt,
+        qm.award AS qm_award
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -65,11 +68,13 @@
         -->
         insert into quest_question (id, created_time, content,
         quest_id, order_index, type,
-        user_amt, correct_amt, answer_amt
+        user_amt, correct_amt, answer_amt,
+        award
         )
         values (#{id,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR},
         #{questId,jdbcType=INTEGER}, #{orderIndex,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
-        #{userAmt,jdbcType=INTEGER}, #{correctAmt,jdbcType=INTEGER}, #{answerAmt,jdbcType=INTEGER}
+        #{userAmt,jdbcType=INTEGER}, #{correctAmt,jdbcType=INTEGER}, #{answerAmt,jdbcType=INTEGER},
+        #{award}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestionModel" useGeneratedKeys="true" keyProperty="id">
@@ -106,6 +111,9 @@
             <if test="answerAmt != null">
                 answer_amt,
             </if>
+            <if test="award != null">
+                award,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -134,6 +142,9 @@
             </if>
             <if test="answerAmt != null">
                 #{answerAmt,jdbcType=INTEGER},
+            </if>
+            <if test="award != null">
+                #{award},
             </if>
         </trim>
     </insert>
@@ -168,6 +179,9 @@
             <if test="answerAmt != null">
                 answer_amt = #{answerAmt,jdbcType=INTEGER},
             </if>
+            <if test="award != null">
+                award = #{award},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -184,7 +198,8 @@
         type = #{type,jdbcType=INTEGER},
         user_amt = #{userAmt,jdbcType=INTEGER},
         correct_amt = #{correctAmt,jdbcType=INTEGER},
-        answer_amt = #{answerAmt,jdbcType=INTEGER}
+        answer_amt = #{answerAmt,jdbcType=INTEGER},
+        award = #{award}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

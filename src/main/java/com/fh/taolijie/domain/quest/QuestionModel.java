@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class QuestionModel {
     private Integer correctAmt;
 
     private Integer answerAmt;
+
+    private BigDecimal award;
 
     /**
      * 问题选项
@@ -230,6 +233,14 @@ public class QuestionModel {
 
     public void setOpts(List<QuestionOptModel> opts) {
         this.opts = opts;
+    }
+
+    public BigDecimal getAward() {
+        return award;
+    }
+
+    public void setAward(BigDecimal award) {
+        this.award = award;
     }
 
     /**
