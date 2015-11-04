@@ -161,7 +161,7 @@ public class HAuthController {
     @RequestMapping(value = "login/admin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String AdminLogin(@Valid LoginDto login,
                       BindingResult result,
-                      HttpSession session,
+                      HttpServletRequest req,
                       HttpServletResponse res) {
 
         int cookieExpireTime = (int) TimeUnit.DAYS.toSeconds(1); // 一天
@@ -183,12 +183,18 @@ public class HAuthController {
 
         /*获取用户信息和用户权限*/
         MemberModel mem = accountService.findMember(login.getUsername(), true);
-        RoleModel role = mem.getRoleList().iterator().next();
 
-        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
-        credential.addRole(role.getRolename());
 
-        CredentialUtils.createCredential(session, credential);
+        String sid = RandomStringUtils.randomAlphabetic(30);
+        accountService.createRedisSession(mem, sid);
+
+
+        Cookie nameCookie = new Cookie("un", mem.getUsername());
+        nameCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        res.addCookie(nameCookie);
+        Cookie sidCookie = new Cookie("sid", sid);
+        sidCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        res.addCookie(sidCookie);
 
          /*如果选择自动登陆,加入cookie*/
         if (login.getRememberMe().equals("true")) {
