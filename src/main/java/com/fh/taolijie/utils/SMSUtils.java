@@ -70,7 +70,7 @@ public class SMSUtils {
             // 发送请求
             HttpResponse resp = client.execute(post);
             String str = StringUtils.stream2String(resp.getEntity().getContent());
-            infoLog.info("[phone]: response received for {}:", mobList, str);
+            infoLog.info("[phone]: response received for {}:{}", mobList, str);
             if (infoLog.isDebugEnabled()) {
                 infoLog.debug("SMS response received: {}, content = {}", resp.getStatusLine().getStatusCode(), str);
             }
