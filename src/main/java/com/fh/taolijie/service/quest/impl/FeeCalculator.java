@@ -90,11 +90,10 @@ public class FeeCalculator {
 
     /**
      * 计算题目费用
-     * @param amt
      * @return
      */
-    public BigDecimal computeQuestionFee(int amt) {
-        return multiple(RedisKey.QUESTION_FEE, amt);
+    public BigDecimal computeQuestionFee(BigDecimal questAward, int questionAmt) {
+        return questAward.divide(BigDecimal.valueOf(questionAmt), BigDecimal.ROUND_HALF_UP);
 
     }
 

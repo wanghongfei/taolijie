@@ -69,12 +69,15 @@ public class DefaultQuestionService implements QuestionService {
         // S1: 创建Quest
         Integer accId = accService.findIdByMember(quest.getMemberId());
         questService.publishQuest(accId, quest, orderId, null, save);
+        // 计算答对单个问题的赏金
+        BigDecimal fee = feeService.computeQuestionFee(quest.getAward(), questionList.size());
 
 
         // S2: 创建问题对象
         for (QuestionModel q : questionList) {
             q.setQuestId(quest.getId());
             q.setCreatedTime(now);
+            q.setAward(fee);
             qMapper.insertSelective(q);
             // S2.5: 创建问题对应的选项
             optMapper.insertInBatch(q.getId(), q.getOpts());
@@ -147,7 +150,8 @@ public class DefaultQuestionService implements QuestionService {
         if (type == QuestionType.EXAMINATION) {
             // 答题类问题
             // 需要检查正确性
-            singleFee = sys.getQuestionFee();
+            //singleFee = sys.getQuestionFee();
+            singleFee = question.getAward();
 
             // 判断是否答对
             result = checkAllOptRight(question.getAnswerAmt(), optList);
