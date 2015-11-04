@@ -191,9 +191,11 @@ public class HAuthController {
 
         Cookie nameCookie = new Cookie("un", mem.getUsername());
         nameCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        nameCookie.setPath("/");
         res.addCookie(nameCookie);
         Cookie sidCookie = new Cookie("sid", sid);
         sidCookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(30)); // 30天
+        sidCookie.setPath("/");
         res.addCookie(sidCookie);
 
          /*如果选择自动登陆,加入cookie*/
