@@ -48,7 +48,7 @@ public class Mail {
      * @param toAddresses
      */
     public void sendMailAsync(String content, Constants.MailType type, String... toAddresses) {
-        logger.info("发送邮件给");
+        logger.info("[email] sending email to: {}", toAddresses);
 
         if (logger.isDebugEnabled()) {
             logger.debug("类型 = {}, 内容 = {}", type, content);
