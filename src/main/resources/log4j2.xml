@@ -17,6 +17,17 @@
             </Policies>
         </RollingFile>
 
+        <!-- 普通日志文件 -->
+        <RollingFile name="INFO-APPENDER" fileName="/data/taolijie/tlj-info.log"
+                     filePattern="logs/%d{MM-dd-yyyy}log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+
     </Appenders>
 
     <Loggers>
@@ -50,6 +61,7 @@
 
         <!-- Root Logger -->
         <Root level="info">
+            <AppenderRef ref="INFO-APPENDER" />
             <AppenderRef ref="console" />
         </Root>
 
