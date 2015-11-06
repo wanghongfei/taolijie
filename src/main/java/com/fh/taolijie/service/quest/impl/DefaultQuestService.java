@@ -10,6 +10,9 @@ import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
+import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.controller.restful.acc.RestCertiAdminCtr;
+import com.fh.taolijie.controller.restful.schedule.RestScheduleCtr;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
@@ -215,7 +218,7 @@ public class DefaultQuestService implements QuestService {
                     MsgType.DATE_STYLE,
                     "localhost",
                     8080,
-                    "/api/schedule/questExpire",
+                    RestScheduleCtr.fullUrl(RestScheduleCtr.URL_QUEST_EXPIRE),
                     "GET",
                     // 任务结束后的第25小时执行
                     TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
@@ -308,7 +311,7 @@ public class DefaultQuestService implements QuestService {
                     MsgType.DATE_STYLE,
                     "localhost",
                     8080,
-                    "/api/schedule/questExpire",
+                    RestScheduleCtr.fullUrl(RestScheduleCtr.URL_QUEST_EXPIRE),
                     "GET",
                     // 任务结束后的第25小时执行
                     TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
@@ -449,7 +452,7 @@ public class DefaultQuestService implements QuestService {
                 MsgType.DATE_STYLE,
                 "localhost",
                 8080,
-                "/api/schedule/autoExpire",
+                RestScheduleCtr.fullUrl(RestScheduleCtr.URL_AUTO_EXPIRE),
                 "GET",
                 TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
                 .setParmMap(map)

@@ -5,6 +5,7 @@
 
 <%--头部--%>
 <jsp:include page="block/start.jsp"></jsp:include>
+<%@ page session="false" %>
 
 <body class="sticky-header">
 

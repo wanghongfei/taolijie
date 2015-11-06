@@ -14,6 +14,7 @@ import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,12 +36,33 @@ public class RestScheduleCtr {
     @Autowired
     private PVService pvService;
 
+    /**
+     * 任务自动审核通过
+     */
+    public static final String URL_AUTO_AUDIT = "/autoAudit";
+    /**
+     * 领取的任务过期
+     */
+    public static final String URL_AUTO_EXPIRE = "/autoExpire";
+    /**
+     * 任务过期后25小时结算退款
+     */
+    public static final String URL_QUEST_EXPIRE = "/questExpire";
+    /**
+     * 每日pv落地
+     */
+    public static final String URL_PV_ALL = "/pv/all";
+
+    public static String fullUrl(String path) {
+        return StringUtils.concat(40, "/api/schedule", path);
+    }
+
 
     /**
      * 任务请求自动审核通过
      * @return
      */
-    @RequestMapping(value = "/autoAudit", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = URL_AUTO_AUDIT, method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText autoAudit(@RequestParam Integer reqId) {
         try {
             fiService.updateStatus(reqId, RequestStatus.AUTO_PASSED, null);
@@ -73,7 +95,7 @@ public class RestScheduleCtr {
      * 任务自动过期
      * @return
      */
-    @RequestMapping(value = "/autoExpire", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = URL_AUTO_EXPIRE, method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText autoExpire(@RequestParam Integer assignId) {
         questService.assignExpired(assignId);
 
@@ -84,7 +106,7 @@ public class RestScheduleCtr {
      * 任务到达过期时间后24小时
      * @return
      */
-    @RequestMapping(value = "/questExpire", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = URL_QUEST_EXPIRE, method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText questExpire(@RequestParam Integer questId) {
         try {
             questService.questExpired(questId);
@@ -98,7 +120,7 @@ public class RestScheduleCtr {
     /**
      * 每日总PV落地
      */
-    @RequestMapping(value = "/pv/all", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    @RequestMapping(value = URL_PV_ALL, method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText saveAllPVDaily() {
         try {
             pvService.saveAllPV();

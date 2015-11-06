@@ -61,6 +61,8 @@ public class SMSUtils {
                 infoLog.debug("generate mobile list:{}", mobList);
             }
 
+            infoLog.info("[phone]: sending SMS to {}", mobList);
+
             parmList.add(new BasicNameValuePair("mob", mobList));
 
             post.setEntity(new UrlEncodedFormEntity(parmList, HTTP.UTF_8));
@@ -68,6 +70,7 @@ public class SMSUtils {
             // 发送请求
             HttpResponse resp = client.execute(post);
             String str = StringUtils.stream2String(resp.getEntity().getContent());
+            infoLog.info("[phone]: response received for {}:{}", mobList, str);
             if (infoLog.isDebugEnabled()) {
                 infoLog.debug("SMS response received: {}, content = {}", resp.getStatusLine().getStatusCode(), str);
             }

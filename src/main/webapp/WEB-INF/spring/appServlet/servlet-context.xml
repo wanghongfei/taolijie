@@ -129,7 +129,7 @@
             <mvc:exclude-mapping path="/scripts/**" />
             <mvc:exclude-mapping path="/styles/**" />
             <mvc:exclude-mapping path="/fonts/**" />
-            <mvc:exclude-mapping path="/about/**" />
+            <mvc:exclude-mapping path="/about**" />
 
             <bean class="com.fh.taolijie.interceptor.JobPVInterceptor"></bean>
         </mvc:interceptor>
