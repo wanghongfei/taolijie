@@ -8,6 +8,7 @@ import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.controller.restful.schedule.RestScheduleCtr;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
@@ -116,7 +117,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
                 MsgType.DATE_STYLE,
                 "localhost",
                 8080,
-                "/api/schedule/autoAudit",
+                RestScheduleCtr.fullUrl(RestScheduleCtr.URL_AUTO_AUDIT),
                 "GET",
                 TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24)
         ).setParmMap(parmMap)
