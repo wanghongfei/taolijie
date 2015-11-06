@@ -27,6 +27,18 @@
         from pv
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectByInterval" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            pv
+        WHERE
+        <![CDATA[
+            created_time >= #{start} AND created_time <= #{end}
+        ]]>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated
