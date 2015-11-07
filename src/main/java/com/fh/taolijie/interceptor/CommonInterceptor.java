@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class CommonInterceptor extends HandlerInterceptorAdapter{
+
     public static Logger infoLogger = LogUtils.getInfoLogger();
 
     @Autowired
