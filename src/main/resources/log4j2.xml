@@ -3,7 +3,7 @@
     <Appenders>
         <!-- 普通日志 -->
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %C %-5p: %m%n" />
         </Console>
 
         <!-- 错误日志写入到文件中 -->
@@ -21,7 +21,7 @@
         <RollingFile name="INFO-APPENDER" fileName="/data/taolijie/tlj-info.log"
                      filePattern="logs/%d{MM-dd-yyyy}log">
             <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %C %-5p: %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy />
