@@ -27,9 +27,14 @@
 
         {
             "roleList": ["ADMIN"],
-            "toUrl": "/login/admin",
+            "toUrl": "/login",
             "url": "/manage**"
         },
+        {
+            "roleList": ["ADMIN"],
+            "toUrl": "/login",
+            "url": "/api/manage**"
+          },
 
 
         {

@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.PVModelMapper;
@@ -130,6 +131,13 @@ public class DefaultPVService implements PVService {
             queryList.get(ix).setPv(pv);
         }
 
+    }
+
+    @Override
+    public ListResult<PVModel> queryPv(Date start, Date end) {
+        List<PVModel> list = pvMapper.selectByInterval(start, end);
+
+        return new ListResult<>(list, list.size());
     }
 
     private String queryPV(Integer postId, RedisKey key) {
