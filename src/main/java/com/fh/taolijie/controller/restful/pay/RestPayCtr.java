@@ -16,8 +16,11 @@ import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import com.fh.taolijie.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +40,8 @@ import java.util.TreeMap;
 @RestController
 @RequestMapping("/api/pay")
 public class RestPayCtr {
+
+    private static Logger logger = LoggerFactory.getLogger(RestPayCtr.class);
 
     @Autowired
     private ChargeService chargeService;
@@ -112,18 +118,46 @@ public class RestPayCtr {
     }
 
     /**
-     * 支付宝异步通知
+     * 支付宝异步通知.
+     *
+     * 两步验证: 1. 验证签名是否正确
+     * 2. 验证notify_id是否合法
      * @return
      */
     @RequestMapping(value = "/alipay/async", method = RequestMethod.POST)
     public String alipayAsyncNotification(AlipayAsyncDto dto,
                                           HttpServletRequest req) {
 
+        if (logger.isDebugEnabled()) {
+            logger.debug("alipay async message:{}", dto.toString());
+        }
+
         // 验证签名
         Map<String, String> paramMap = SessionUtils.getAllParameters(req);
         String sign = payService.sign(paramMap, PayType.ALIPAY).getSign();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("alipay sign = {}, my sign = {}", dto.getSign(), sign);
+        }
+
         if (false == dto.getSign().equals(sign)) {
             return "FUCK YOU";
+        }
+
+        // 验证通知是否是支付宝发送
+        // (验证notify_id参数)
+        try {
+            boolean result = payService.verifyNotify(dto.getNotify_id());
+            // 验证失败
+            if (!result) {
+                return "invalid request";
+            }
+
+        } catch (IOException e) {
+            LogUtils.logException(e);
+            e.printStackTrace();
+            return "500";
+
         }
 
 

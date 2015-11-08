@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.acc.impl;
 
+import com.fh.taolijie.component.http.HttpClientFactory;
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.dto.OrderSignDto;
@@ -8,12 +9,17 @@ import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
@@ -25,8 +31,13 @@ import java.util.TreeMap;
  */
 @Service
 public class DefaultPayService implements PayService {
-    public static Logger infoLog = LogUtils.getInfoLogger();
+    public static Logger infoLog = LoggerFactory.getLogger(DefaultPayService.class);
 
+    /**
+     * 支付宝网关
+     */
+    public static final String ALIPAY_GATEWAY = "https://mapi.alipay.com/gateway.do";
+    public static final String ALIPAY_VERIFY_SERV_NAME = "notify_verify";
 
     @Autowired
     private JedisPool jedisPool;
@@ -83,5 +94,31 @@ public class DefaultPayService implements PayService {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean verifyNotify(String notifyId) throws IOException {
+        if (false == StringUtils.checkNotEmpty(notifyId)) {
+            return false;
+        }
+
+        // 拼接GET请求
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+        // 得到PID
+        String pid = jedis.hget(RedisKey.ALIPAY_CONF.toString(), RedisKey.PID.toString());
+        JedisUtils.returnJedis(jedisPool, jedis);
+
+        String get = StringUtils.concat(150, ALIPAY_GATEWAY, "?", "service=", ALIPAY_VERIFY_SERV_NAME, "&partner=", pid, "&notify_id=", notifyId);
+
+
+        HttpClient client = HttpClientFactory.getClient();
+        HttpGet getMethod = new HttpGet(get);
+        HttpResponse resp = client.execute(getMethod);
+
+        String response = StringUtils.stream2String(resp.getEntity().getContent());
+        infoLog.info("alipay verify response: {}", response);
+
+
+        return response.equals("true");
     }
 }
