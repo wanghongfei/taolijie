@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by whf on 10/30/15.
@@ -115,8 +116,19 @@ public class RestPayCtr {
      * @return
      */
     @RequestMapping(value = "/alipay/async", method = RequestMethod.POST)
-    public String alipayAsyncNotification(AlipayAsyncDto dto) {
+    public String alipayAsyncNotification(AlipayAsyncDto dto,
+                                          HttpServletRequest req) {
+
+        // 验证签名
+        Map<String, String> paramMap = SessionUtils.getAllParameters(req);
+        String sign = payService.sign(paramMap, PayType.ALIPAY).getSign();
+        if (false == dto.getSign().equals(sign)) {
+            return "FUCK YOU";
+        }
+
+
         try {
+            // 取出订单号
             Integer orderId = Integer.valueOf(dto.out_trade_no);
 
             // 只处理支付成功的通知
