@@ -95,4 +95,6 @@ public interface DictProvinceModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(DictProvinceModel record);
+
+    List<DictProvinceModel> selectAll();
 }

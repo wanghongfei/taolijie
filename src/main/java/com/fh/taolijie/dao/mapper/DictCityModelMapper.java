@@ -95,4 +95,6 @@ public interface DictCityModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(DictCityModel record);
+
+    List<DictCityModel> selectAll();
 }

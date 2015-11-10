@@ -95,4 +95,6 @@ public interface DictCollegeModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(DictCollegeModel record);
+
+    List<DictCollegeModel> selectAll();
 }
