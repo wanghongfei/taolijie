@@ -14,6 +14,7 @@ import com.fh.taolijie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
@@ -53,6 +54,9 @@ public class SeqService {
                 return genJobKey();
 
             case SH:
+                return genShKey();
+
+            case EMP_CERTI: // 商家认证图片跟二手用同一个算法
                 return genShKey();
 
             case AVATAR:
@@ -107,7 +111,9 @@ public class SeqService {
         SeqShModel model = new SeqShModel();
         shMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "sh-", model.getId());
+
+        String key = StringUtils.concat(genDatePath(), "sh-", model.getId());
+        return DigestUtils.md5DigestAsHex(key.getBytes());
     }
 
     private String genJobKey() {

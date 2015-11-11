@@ -7,7 +7,11 @@ package com.fh.taolijie.constant;
 public enum PicType {
     JOB(0),
     SH(1),
-    AVATAR(2);
+    AVATAR(2),
+    /**
+     * 商家认证
+     */
+    EMP_CERTI(3);
 
     private int code;
 
@@ -30,6 +34,9 @@ public enum PicType {
 
             case 2:
                 return AVATAR;
+
+            case 3:
+                return EMP_CERTI;
 
             default:
                 return null;
