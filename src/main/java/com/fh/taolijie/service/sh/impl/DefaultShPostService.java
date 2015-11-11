@@ -158,7 +158,7 @@ public class DefaultShPostService implements ShPostService {
             if (null != expTime) {
                 // 判断
                 // 已经过期但是标记还是未过期的帖子
-                if (now.compareTo(expTime) >= 0 || false == job.getExpired()) {
+                if (now.compareTo(expTime) >= 0 && false == job.getExpired()) {
                     expiredList.add(job);
                 }
             }
