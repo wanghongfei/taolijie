@@ -880,4 +880,14 @@
             SELECT 1 FROM second_hand_post WEHRE id = #{postId}
         )
     </select>
+
+
+    <update id="setExpired">
+        UPDATE
+            second_hand_post
+        SET
+            expired = #{expired}
+        WHERE
+            id IN <foreach collection="idList" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </update>
 </mapper>

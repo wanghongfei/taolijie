@@ -74,6 +74,8 @@ public interface ShPostService extends PageService {
      */
     boolean addPost(SHPostModel model);
 
+    void checkExpired(List<SHPostModel> postList);
+
     /**
      * 收藏二手信息
      * @param memId
