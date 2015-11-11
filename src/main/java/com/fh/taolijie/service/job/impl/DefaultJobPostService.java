@@ -2,7 +2,6 @@ package com.fh.taolijie.service.job.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
-import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
@@ -16,14 +15,9 @@ import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.JedisUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
