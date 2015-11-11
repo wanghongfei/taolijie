@@ -208,8 +208,9 @@ public class DefaultJobPostService implements JobPostService {
         list.forEach( job -> {
             Date expTime = job.getExpiredTime();
             if (null != expTime) {
-                // 判断是否已经过期
-                if (now.compareTo(expTime) >= 0) {
+                // 判断
+                // 已经过期但是标记还是未过期的帖子
+                if (now.compareTo(expTime) >= 0 || false == job.getExpired()) {
                     expiredList.add(job);
                 }
             }
