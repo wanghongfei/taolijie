@@ -1,6 +1,5 @@
 package com.fh.taolijie.controller.restful.job;
 
-import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -47,6 +47,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> jobList = jobService.getAllJobPostList(pageNumber, pageSize);
 
+        jobService.checkExpired(jobList.getList());
         pvService.pvMatch(jobList.getList(), PostType.JOB);
 
         return new ResponseText(jobList);
@@ -61,6 +62,7 @@ public class RestJobController {
         model.setPageNumber(PageUtils.getFirstResult(model.getPageNumber(), model.getPageSize()));
         ListResult<JobPostModel> list = jobService.findByExample(model);
 
+        jobService.checkExpired(list.getList());
         pvService.pvMatch( list.getList(), PostType.JOB );
 
         return new ResponseText(list);
@@ -82,6 +84,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> list = jobService.getJobPostListByMember(memberId, pageNumber, pageSize);
 
+        jobService.checkExpired(list.getList());
         pvService.pvMatch( list.getList(),PostType.JOB );
 
         return new ResponseText(list);
@@ -101,6 +104,7 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<JobPostModel> list = jobService.getJobPostListByCategory(categoryId, pageNumber, pageSize);
 
+        jobService.checkExpired(list.getList());
         pvService.pvMatch( list.getList(), PostType.JOB );
 
         return new ResponseText(list);
@@ -116,6 +120,7 @@ public class RestJobController {
 
         ListResult<JobPostModel> postList = jobService.getPostListByIds(idList.toArray(new Integer[0]));
 
+        jobService.checkExpired(postList.getList());
         pvService.pvMatch(postList.getList(), PostType.JOB);
 
         return new ResponseText(postList);
@@ -132,6 +137,8 @@ public class RestJobController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         ListResult<JobPostModel> postList = jobService.runSearch(model, pageNumber, pageSize);
+
+        jobService.checkExpired(postList.getList());
         pvService.pvMatch( postList.getList(), PostType.JOB );
 
         return new ResponseText(postList);
@@ -146,6 +153,7 @@ public class RestJobController {
     public ResponseText getPostById(@PathVariable(value = "id") Integer postId) {
 
         JobPostModel model = jobService.findJobPostWithPV(postId);
+        jobService.checkExpired(Arrays.asList(model));
 
         return new ResponseText(model);
     }
