@@ -115,6 +115,15 @@ public interface JobPostModelMapper {
     int setDeleted(@Param("postId") Integer postId, @Param("deleted") boolean deleted);
 
     /**
+     * 批量设置过期字段
+     * @param idList
+     * @param expired
+     * @return
+     */
+    @RedisEvict(JobPostModel.class)
+    int setExpired(@Param("idList") List<Integer> idList, @Param("expired") boolean expired);
+
+    /**
      * 检查是否已经删除
      * @param postId
      * @return

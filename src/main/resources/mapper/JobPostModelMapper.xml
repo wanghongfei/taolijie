@@ -1054,6 +1054,15 @@
             id = #{postId}
     </update>
 
+    <update id="setExpired">
+        UPDATE
+            job_post
+        SET
+            expired = #{expired}
+        WHERE
+            id IN <foreach collection="idList" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </update>
+
     <select id="checkDeleted" resultType="boolean">
         SELECT
             deleted
