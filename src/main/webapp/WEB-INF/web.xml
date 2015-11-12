@@ -111,6 +111,9 @@
         <servlet-name>appServlet</servlet-name>
     </filter-mapping>
 
+    <error-page>
+        <location>/error.jsp</location>
+    </error-page>
 
 
 	<session-config>
