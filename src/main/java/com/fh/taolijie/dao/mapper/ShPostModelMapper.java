@@ -127,4 +127,7 @@ public interface ShPostModelMapper {
 
     @NoCache
     boolean checkExist(Integer postId);
+
+    @RedisEvict(SHPostModel.class)
+    int setExpired(@Param("idList") List<Integer> idList, @Param("expired") boolean expired);
 }

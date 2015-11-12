@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,6 +131,62 @@ public class DefaultShPostService implements ShPostService {
         postMapper.insertSelective(model);
 
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void checkExpired(List<SHPostModel> postList) {
+        if (null == postList || postList.isEmpty()) {
+            return;
+        }
+
+        List<SHPostModel> expiredList = selectExpiredPost(postList);
+        flagAndUpdate(expiredList);
+
+    }
+
+    /**
+     * 找出已经过期的帖子
+     * @return
+     */
+    private List<SHPostModel> selectExpiredPost(List<SHPostModel> list) {
+        Date now = new Date();
+
+        List<SHPostModel> expiredList = new ArrayList<>(list.size() / 3);
+        list.forEach( job -> {
+            Date expTime = job.getExpiredTime();
+            if (null != expTime) {
+                // 判断
+                // 已经过期但是标记还是未过期的帖子
+                if (now.compareTo(expTime) >= 0 && false == job.getExpired()) {
+                    expiredList.add(job);
+                }
+            }
+        });
+
+        return expiredList;
+    }
+
+    /**
+     * 标记为已过期并更新到数据库
+     * @param list
+     */
+    private int flagAndUpdate(List<SHPostModel> list) {
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        List<Integer> idList = new ArrayList<>(list.size());
+
+        // 标记过期的帖子
+        int amt = 0;
+        list.forEach( job -> {
+            job.setExpired(true);
+            idList.add(job.getId());
+        });
+
+        // 更新到数据库
+        return postMapper.setExpired(idList, true);
     }
 
     @Override

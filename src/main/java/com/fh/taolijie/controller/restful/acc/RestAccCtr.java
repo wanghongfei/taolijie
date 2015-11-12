@@ -432,4 +432,25 @@ public class RestAccCtr {
 
         return new ResponseText(model);
     }
+
+    /**
+     * 绑定微信openId
+     * @return
+     */
+    @RequestMapping(value = "/bind/wechat", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText bindWechatToken(@RequestParam String openId,
+                                        HttpServletRequest req) {
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        MemberModel mem = new MemberModel();
+        mem.setId(memId);
+        mem.setWechatToken(openId);
+
+        int row = memService.updateMember(mem);
+        if (row <= 0) {
+            return new ResponseText(ErrorCode.FAILED);
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
 }

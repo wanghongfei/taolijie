@@ -2,7 +2,6 @@ package com.fh.taolijie.service.job.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.PostType;
-import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.JobPostModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.ReviewModelMapper;
@@ -16,16 +15,13 @@ import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.JedisUtils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -182,6 +178,61 @@ public class DefaultJobPostService implements JobPostService {
         }
 
         return post;
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void checkExpired(List<JobPostModel> postList) {
+        if (null == postList || postList.isEmpty()) {
+            return;
+        }
+
+        List<JobPostModel> expiredList = selectExpiredPost(postList);
+        flagAndUpdate(expiredList);
+    }
+
+    /**
+     * 找出已经过期的帖子
+     * @return
+     */
+    private List<JobPostModel> selectExpiredPost(List<JobPostModel> list) {
+        Date now = new Date();
+
+        List<JobPostModel> expiredList = new ArrayList<>(list.size() / 3);
+        list.forEach( job -> {
+            Date expTime = job.getExpiredTime();
+            if (null != expTime) {
+                // 判断
+                // 已经过期但是标记还是未过期的帖子
+                if (now.compareTo(expTime) >= 0 && false == job.getExpired()) {
+                    expiredList.add(job);
+                }
+            }
+        });
+
+        return expiredList;
+    }
+
+    /**
+     * 标记为已过期并更新到数据库
+     * @param list
+     */
+    private int flagAndUpdate(List<JobPostModel> list) {
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        List<Integer> idList = new ArrayList<>(list.size());
+
+        // 标记过期的帖子
+        int amt = 0;
+        list.forEach( job -> {
+            job.setExpired(true);
+            idList.add(job.getId());
+        });
+
+        // 更新到数据库
+        return postMapper.setExpired(idList, true);
     }
 
     @Override

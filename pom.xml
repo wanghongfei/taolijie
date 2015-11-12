@@ -31,7 +31,7 @@
 
 
         <junit-version>4.12</junit-version>
-        <web-security-version>2.1.3.RELEASE</web-security-version>
+        <web-security-version>2.1.3.DEBUG</web-security-version>
 
         <el-api-version>3.0.0</el-api-version>
         <el-impl-version>2.2</el-impl-version>
@@ -340,6 +340,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>

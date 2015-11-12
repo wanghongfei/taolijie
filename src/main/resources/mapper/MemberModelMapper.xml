@@ -172,7 +172,8 @@
         applied_job_ids, liked_job_ids, liked_sh_ids,
         read_global_noti_ids,
         app_token,
-        reg_type)
+        reg_type,
+        wechat_token)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -184,7 +185,8 @@
         #{appliedJobIds,jdbcType=LONGVARCHAR}, #{likedJobIds,jdbcType=LONGVARCHAR}, #{likedShIds,jdbcType=LONGVARCHAR},
         #{readSysNotificationIds},
         #{appToken},
-        #{regType})
+        #{regType},
+        #{wechatToken})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -283,6 +285,7 @@
             <if test="lastShDate != null" >last_sh_date,</if>
 
             <if test="regType != null" >reg_type,</if>
+            <if test="wechatToken != null" >wechat_token,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -375,6 +378,7 @@
             <if test="lastShDate != null" >#{lastShDate},</if>
 
             <if test="regType != null" >#{regType},</if>
+            <if test="wechatToken != null" >#{wechatToken},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -474,6 +478,7 @@
             <if test="lastShDate != null" >last_sh_date = #{lastShDate},</if>
 
             <if test="regType != null" >reg_type = #{regType},</if>
+            <if test="wechatToken != null" >wechat_token = #{wechatToken},</if>
         </set>
         where id = #{id}
     </update>
@@ -515,7 +520,8 @@
         last_job_date = #{lastJobDate},
         app_token = #{appToken},
 
-        reg_type = #{regType}
+        reg_type = #{regType},
+        wechat_token = #{wechatToken}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 

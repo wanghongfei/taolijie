@@ -77,6 +77,7 @@ public class HJobController {
             pageStatus = 2;
         }
 
+        jobPostService.checkExpired(jobs.getList());
         pvService.pvMatch(jobs.getList(), PostType.JOB);
 
         model.addAttribute("pageStatus",pageStatus);

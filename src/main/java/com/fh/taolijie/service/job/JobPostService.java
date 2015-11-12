@@ -38,7 +38,6 @@ public interface JobPostService extends PageService {
      * 查询未审核的post
      * @param firstResult
      * @param capacity
-     * @param wrapper
      * @return
      */
     List<JobPostModel> getUnverifiedPostList(int firstResult, int capacity);
@@ -85,8 +84,6 @@ public interface JobPostService extends PageService {
 
     /**
      * 根据兼职信息的某个字段执行模糊查询
-     * @param field {@link JobPostModel}的某个字段名
-     * @param includeString
      * @return
      */
     ListResult<JobPostModel> runSearch(JobPostModel model, int firstResult, int capacity);
@@ -101,6 +98,13 @@ public interface JobPostService extends PageService {
     JobPostModel findJobPost(Integer postId);
 
     JobPostModel findJobPostWithPV(Integer postId);
+
+    /**
+     * 根据过期时间字段检查帖子是否过期.
+     * 如果过期, 则更新expired字段为true, 并同时更新到数据库中
+     * @param postList
+     */
+    void checkExpired(List<JobPostModel> postList);
 
     /**
      * 投诉数+1

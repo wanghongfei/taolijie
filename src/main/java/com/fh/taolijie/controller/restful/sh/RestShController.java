@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 /**
  * Created by wanghongfei on 15-6-20.
@@ -43,6 +44,7 @@ public class RestShController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         ListResult<SHPostModel> shList = shService.getAllPostList(pageNumber, pageSize);
 
+        shService.checkExpired(shList.getList());
         pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
@@ -55,6 +57,7 @@ public class RestShController {
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
     public ResponseText getAll(@PathVariable Integer id) {
         SHPostModel model = shService.findPostWithPV(id);
+        shService.checkExpired(Arrays.asList(model));
 
         return new ResponseText(model);
     }
@@ -72,6 +75,8 @@ public class RestShController {
         example.setPageSize(pageSize);
 
         ListResult<SHPostModel> lr = shService.filterQuery(example);
+
+        shService.checkExpired(lr.getList());
         pvService.pvMatch(lr.getList(), PostType.SH);
 
         return new ResponseText(lr);
@@ -99,6 +104,7 @@ public class RestShController {
             shList = shService.getAndFilter(categoryId, pageView, pageNumber, pageSize);
         }
 
+        shService.checkExpired(shList.getList());
         pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
@@ -121,6 +127,7 @@ public class RestShController {
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
 
         ListResult<SHPostModel> shList = shService.getPostList(userId, filter, pageNumber, pageSize);
+        shService.checkExpired(shList.getList());
         pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);
@@ -135,6 +142,7 @@ public class RestShController {
     public ResponseText search(SHPostModel model) {
 
         ListResult<SHPostModel> shList = shService.runSearch(model);
+        shService.checkExpired(shList.getList());
         pvService.pvMatch(shList.getList(), PostType.SH);
 
         return new ResponseText(shList);

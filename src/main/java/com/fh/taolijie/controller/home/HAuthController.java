@@ -356,25 +356,6 @@ public class HAuthController {
     }
 
 
-    /**
-     * 绑定wechat appid
-     * @return
-     */
-    @RequestMapping(value = "/register/bind/wechat", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    @ResponseBody
-    public ResponseText bindWechatToken(@RequestParam String wechatToken,
-                                        @RequestParam Integer memId) {
-        MemberModel mem = new MemberModel();
-        mem.setId(memId);
-        mem.setWechatToken(wechatToken);
-
-        int row = accountService.updateMember(mem);
-        if (row <= 0) {
-            return new ResponseText(ErrorCode.FAILED);
-        }
-
-        return ResponseText.getSuccessResponseText();
-    }
 
 
     /**
