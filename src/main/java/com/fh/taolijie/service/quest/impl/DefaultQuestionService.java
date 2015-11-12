@@ -64,6 +64,9 @@ public class DefaultQuestionService implements QuestionService {
     public void publishQuestions(QuestModel quest, List<QuestionModel> questionList, Integer orderId, Integer save)
             throws CashAccNotExistsException, BalanceNotEnoughException, FinalStatusException, OrderNotFoundException, PermissionException {
 
+        // 置任务剩余数量为任务总数量
+        quest.setLeftAmt(quest.getTotalAmt());
+
         Date now = new Date();
 
         // S1: 创建Quest

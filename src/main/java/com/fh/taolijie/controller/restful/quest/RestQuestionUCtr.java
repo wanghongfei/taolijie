@@ -74,9 +74,9 @@ public class RestQuestionUCtr {
         }
 
         // 检查任务数量与问题数量是否匹配
-        if ( false == dto.getQuest().getTotalAmt().equals(dto.getQuestions().size()) ) {
+/*        if ( false == dto.getQuest().getTotalAmt().equals(dto.getQuestions().size()) ) {
             return new ResponseText(ErrorCode.HACKER);
-        }
+        }*/
 
         // 将id string 转换成List<Integer>
         QuestModel model = dto.getQuest();
