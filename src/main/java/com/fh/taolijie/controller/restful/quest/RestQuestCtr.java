@@ -78,10 +78,10 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText publishQuest(@Valid QuestModel model,
                                      BindingResult br,
-                                     @RequestParam String schoolIds,
-                                     @RequestParam String collegeIds,
-                                     @RequestParam String cityIds, // 城市id
-                                     @RequestParam String proIds, // 省id
+                                     @RequestParam(required = false) String schoolIds,
+                                     @RequestParam(required = false) String collegeIds,
+                                     @RequestParam(required = false) String cityIds, // 城市id
+                                     @RequestParam(required = false) String proIds, // 省id
                                      // coupon信息
                                      @RequestParam(required = false) String couponTitle,
                                      @RequestParam(required = false) String couponDesp,
@@ -181,6 +181,41 @@ public class RestQuestCtr {
 
 
         return new ResponseText();
+    }
+
+    /**
+     * 发布任务草稿
+     * @param questId
+     * @param orderId
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText publishDraft(@RequestParam Integer questId,
+                                     @RequestParam(required = false) Integer orderId,
+                                     HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+        try {
+            questService.publishDraft(memId, questId, orderId);
+
+        } catch (QuestionNotFoundException | OrderNotFoundException e) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+
+        } catch (PermissionException e) {
+            return new ResponseText(ErrorCode.HACKER);
+
+        } catch (FinalStatusException e) {
+            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
+
+        } catch (BalanceNotEnoughException e) {
+            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
+
+        } catch (CashAccNotExistsException e) {
+            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
+        }
+
+        return ResponseText.getSuccessResponseText();
     }
 
     /**

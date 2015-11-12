@@ -29,6 +29,15 @@ public interface QuestService {
     void publishQuest(Integer accId, QuestModel model, Integer orderId, CouponModel coupon, Integer save)
             throws BalanceNotEnoughException, CashAccNotExistsException, OrderNotFoundException, FinalStatusException, PermissionException;
 
+
+    /**
+     * 发布处于草稿状态的任务(变为待审核状态)
+     * @param memId
+     * @param questId
+     * @param orderId
+     */
+    void publishDraft(Integer memId, Integer questId, Integer orderId) throws QuestionNotFoundException, PermissionException, OrderNotFoundException, FinalStatusException, BalanceNotEnoughException, CashAccNotExistsException;
+
     /**
      * 批量插入 任务-学校 关联
      * @param list

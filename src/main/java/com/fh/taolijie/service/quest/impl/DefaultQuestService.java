@@ -145,7 +145,7 @@ public class DefaultQuestService implements QuestService {
 
         // 发布任务
         // 只有当前是真正发布任务时( save == 0 ), 第二个参数才为true, 表示投递定时任务信息
-        doPublish(model, 0 == save);
+        doPublish(model, 0 == save, false);
 
         // 插入coupon数据
         if (null != coupon) {
@@ -153,7 +153,20 @@ public class DefaultQuestService implements QuestService {
         }
     }
 
-    private void doPublish(QuestModel model, boolean postMessage) {
+    private void doPublish(QuestModel model, boolean postMessage, boolean update) {
+        // 检查任务状态是不是未发布
+        if (update) {
+            // 如果是
+            // 只修改任务状态
+            QuestModel example = new QuestModel();
+            example.setId(model.getId());
+            example.setEmpStatus(EmpQuestStatus.WAIT_AUDIT.code());
+            questMapper.updateByPrimaryKeySelective(example);
+
+            return;
+        }
+
+
         // 发布任务
         Date now = new Date();
         model.setCreatedTime(now);
@@ -243,6 +256,49 @@ public class DefaultQuestService implements QuestService {
 
 
         }
+
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void publishDraft(Integer memId, Integer questId, Integer orderId) throws QuestionNotFoundException, PermissionException, OrderNotFoundException, FinalStatusException, BalanceNotEnoughException, CashAccNotExistsException {
+        // 检查任务存在性
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        if (null == quest) {
+            throw new QuestionNotFoundException();
+        }
+
+        // 检查是不是自己的任务
+        if (false == memId.equals(quest.getMemberId())) {
+            throw new PermissionException();
+        }
+
+        // 检查任务状态是不是未发布
+        EmpQuestStatus status = EmpQuestStatus.fromCode(quest.getEmpStatus());
+        if (status != EmpQuestStatus.UNPUBLISH) {
+            throw new PermissionException();
+        }
+
+
+        // 计算总钱数
+        BigDecimal tot = feeCal.computeQuestFee(quest.getAward().doubleValue(), quest.getTotalAmt());
+
+        // 如果orderId存在, 则不从钱包扣钱
+        if (orderId != null) {
+            // 订单检查
+            orderService.orderPayCheck(orderId, quest.getMemberId(), OrderType.QUEST_PUBLISH, tot);
+            // 更新订单状态
+            orderService.updateStatus(orderId, OrderStatus.DONE, null);
+
+            // 允许发布
+
+        } else {
+            // 从钱包扣钱
+            Integer accId = accMapper.findIdByMemberId(memId);
+            accService.reduceAvailableMoney(accId, tot, AccFlow.CONSUME);
+        }
+
+        doPublish(quest, false, true);
 
     }
 

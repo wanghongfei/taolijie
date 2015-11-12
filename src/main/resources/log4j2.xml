@@ -36,11 +36,11 @@
             <AppenderRef ref="ERROR-APPENDER" />
         </Logger>
 
-        <Logger name="info" level="info">
+        <Logger name="info" level="debug">
         </Logger>
 
         <!-- Application Loggers -->
-        <Logger name="com.fh.taolijie" level="info">
+        <Logger name="com.fh.taolijie" level="debug">
         </Logger>
 
         <Logger name="cn.fh.security" level="info">
