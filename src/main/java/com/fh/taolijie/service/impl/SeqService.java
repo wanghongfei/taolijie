@@ -112,8 +112,10 @@ public class SeqService {
         shMapper.insert(model);
 
 
-        String key = StringUtils.concat(genDatePath(), "sh-", model.getId());
-        return DigestUtils.md5DigestAsHex(key.getBytes());
+        String datePath = genDatePath();
+        String picId = StringUtils.concat("sh-", model.getId());
+        String key = StringUtils.concat(datePath, DigestUtils.md5DigestAsHex(picId.getBytes()));
+        return key;
     }
 
     private String genJobKey() {
