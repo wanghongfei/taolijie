@@ -12,6 +12,8 @@ public class EmpCertiModel extends Pageable {
     private Integer memberId;
     private String username;
 
+    private Integer industryId;
+
     private String memo;
 
     private String address;
@@ -199,6 +201,14 @@ public class EmpCertiModel extends Pageable {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public Integer getIndustryId() {
+        return industryId;
+    }
+
+    public void setIndustryId(Integer industryId) {
+        this.industryId = industryId;
     }
 
     /**

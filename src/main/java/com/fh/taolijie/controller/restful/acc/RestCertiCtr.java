@@ -83,7 +83,9 @@ public class RestCertiCtr {
     public ResponseText empApply(@RequestParam String compName,
                                  @RequestParam String addr,
                                  @RequestParam String picIds,
+                                 @RequestParam Integer cateId, // 行业分类id
                                  HttpServletRequest req) {
+
 
         // 先检查是否已经认证过了
         Credential credential = SessionUtils.getCredential(req);
@@ -105,6 +107,7 @@ public class RestCertiCtr {
         model.setCompanyName(compName);
         model.setAddress(addr);
         model.setPicIds(picIds);
+        model.setIndustryId(cateId);
 
         empService.addApplication(model);
 
