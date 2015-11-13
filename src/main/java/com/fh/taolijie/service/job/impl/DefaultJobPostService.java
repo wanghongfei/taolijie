@@ -195,7 +195,7 @@ public class DefaultJobPostService implements JobPostService {
      */
     private List<JobPostModel> selectExpiredPost(List<JobPostModel> list) {
         Date now = new Date();
-        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, 1);
+        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, -1);
 
         List<JobPostModel> expiredList = new ArrayList<>(list.size() / 3);
         list.forEach( job -> {
