@@ -15,14 +15,12 @@ import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.CollectionUtils;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -197,6 +195,7 @@ public class DefaultJobPostService implements JobPostService {
      */
     private List<JobPostModel> selectExpiredPost(List<JobPostModel> list) {
         Date now = new Date();
+        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, 1);
 
         List<JobPostModel> expiredList = new ArrayList<>(list.size() / 3);
         list.forEach( job -> {
@@ -204,7 +203,7 @@ public class DefaultJobPostService implements JobPostService {
             if (null != expTime) {
                 // 判断
                 // 已经过期但是标记还是未过期的帖子
-                if (now.compareTo(expTime) >= 0 && false == job.getExpired()) {
+                if (nextDay.compareTo(expTime) >= 0 && false == job.getExpired()) {
                     expiredList.add(job);
                 }
             }

@@ -13,11 +13,13 @@ import com.fh.taolijie.service.PVService;
 import com.fh.taolijie.service.collect.CollectionService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.CollectionUtils;
+import com.fh.taolijie.utils.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -151,6 +153,7 @@ public class DefaultShPostService implements ShPostService {
      */
     private List<SHPostModel> selectExpiredPost(List<SHPostModel> list) {
         Date now = new Date();
+        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, 1);
 
         List<SHPostModel> expiredList = new ArrayList<>(list.size() / 3);
         list.forEach( job -> {
@@ -158,7 +161,7 @@ public class DefaultShPostService implements ShPostService {
             if (null != expTime) {
                 // 判断
                 // 已经过期但是标记还是未过期的帖子
-                if (now.compareTo(expTime) >= 0 && false == job.getExpired()) {
+                if (nextDay.compareTo(expTime) >= 0 && false == job.getExpired()) {
                     expiredList.add(job);
                 }
             }
