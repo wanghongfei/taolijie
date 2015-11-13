@@ -447,7 +447,7 @@ public class UShController {
 
         // 创建通知
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子[",
+        String commentContent = StringUtils.concat(50, "你的帖子[",
                 job.getTitle(),
                 "]被评论了:",
                 content);

@@ -403,12 +403,17 @@ public class StringUtils {
 
 
     /**
-     * 将所有参数做为字符串拼接在一起
+     * 字符串拼接
+     * @param capacity 可以指定最终的字符串长度, 提高性能
      * @param objs
      * @return
      */
-    public static String concat(Object... objs) {
-        StringBuilder sb = new StringBuilder();
+    public static String concat(int capacity, Object... objs) {
+        if (capacity <= 0) {
+            capacity = 30;
+        }
+
+        StringBuilder sb = new StringBuilder(capacity);
 
         Arrays.stream(objs).forEach( o -> sb.append(o) );
 

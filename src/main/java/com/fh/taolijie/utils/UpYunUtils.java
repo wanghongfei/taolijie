@@ -34,7 +34,7 @@ public class UpYunUtils {
      */
     public static String sign(String policy) {
         // policy跟KEY组合
-        String concat = StringUtils.concat(policy, DELIMITER, KEY);
+        String concat = StringUtils.concat(0, policy, DELIMITER, KEY);
 
         // 计算md5
         return md5(concat);
@@ -48,7 +48,7 @@ public class UpYunUtils {
         // 计算policy
         String policy = genPolicy(parmMap);
         // policy跟KEY组合
-        String concat = StringUtils.concat(policy, DELIMITER, key);
+        String concat = StringUtils.concat(0, policy, DELIMITER, key);
 
         // 计算md5
         return md5(concat);

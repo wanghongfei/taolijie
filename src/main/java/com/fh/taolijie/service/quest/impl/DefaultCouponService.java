@@ -12,6 +12,8 @@ import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.quest.CouponService;
+import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,8 +58,11 @@ public class DefaultCouponService implements CouponService {
         // 生成code值
         int amt = model.getAmt();
         List<String> codeList = new ArrayList<>(amt);
+        String nowDate = TimeUtil.today();
         for (int ix = 0 ; ix < amt ; ++ix) {
-            codeList.add(RandomStringUtils.randomAlphabetic(30));
+            String code = RandomStringUtils.randomAlphabetic(30);
+            String finalCode = StringUtils.concat(40, nowDate, code);
+            codeList.add(finalCode);
         }
 
         // 批量插入

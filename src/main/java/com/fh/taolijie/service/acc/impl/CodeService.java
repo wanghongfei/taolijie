@@ -198,14 +198,14 @@ public class CodeService {
      * @return
      */
     private String genKeyForSMS(String memId) {
-        return StringUtils.concat(SMS_KEY_PREFIX, Constants.DELIMITER, memId);
+        return StringUtils.concat(0, SMS_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 
     private String genKeyForSMSConstrain(String memId) {
-        return StringUtils.concat(SMS_CONSTRAIN_KEY_PREFIX, Constants.DELIMITER, memId);
+        return StringUtils.concat(0, SMS_CONSTRAIN_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 
     private String genKeyForWEB(String memId) {
-        return StringUtils.concat(WEB_KEY_PREFIX, Constants.DELIMITER, memId);
+        return StringUtils.concat(0, WEB_KEY_PREFIX, Constants.DELIMITER, memId);
     }
 }

@@ -514,7 +514,7 @@ public class UJobController {
 
         // 创建通知
         String commentTitle = "评论通知";
-        String commentContent = StringUtils.concat("你的帖子<a href=\"/item/job/",job.getId(),"\">[",
+        String commentContent = StringUtils.concat(50, "你的帖子<a href=\"/item/job/",job.getId(),"\">[",
                 job.getTitle(),
                 "]</a>被评论了:",
                 model.getContent());

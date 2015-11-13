@@ -12,6 +12,10 @@ import java.util.concurrent.TimeUnit;
 public class TimeUtil {
     private TimeUtil() {}
 
+    /**
+     * 精确到日的格式
+     */
+    public static final String FORMAT_DAY = "yyyyMMdd";
 
     /**
      * 2030-12-30
@@ -54,6 +58,16 @@ public class TimeUtil {
         calendar.add(unit, value);
 
         return calendar.getTime();
+    }
+
+    /**
+     * 获取今天的日期, 精确到天, 以紧凑字符串形式返回
+     * @return
+     */
+    public static String today() {
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DAY);
+        return sdf.format(now);
     }
 
     public static boolean intervalGreaterThan(Date newerDate, Date olderDate, long interval, TimeUnit timeUnit) {

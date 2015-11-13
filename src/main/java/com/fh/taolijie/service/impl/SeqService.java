@@ -96,7 +96,7 @@ public class SeqService {
     }
 
     private String genRedisKey(Integer memId) {
-        return StringUtils.concat(TOKEN_PREFIX, memId, Constants.DELIMITER);
+        return StringUtils.concat(0, TOKEN_PREFIX, memId, Constants.DELIMITER);
     }
 
 
@@ -104,7 +104,7 @@ public class SeqService {
         SeqAvatarModel model = new SeqAvatarModel();
         avaMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "avatar-", model.getId());
+        return StringUtils.concat(0, genDatePath(), "avatar-", model.getId());
     }
 
     private String genShKey() {
@@ -113,8 +113,8 @@ public class SeqService {
 
 
         String datePath = genDatePath();
-        String picId = StringUtils.concat("sh-", model.getId());
-        String key = StringUtils.concat(datePath, DigestUtils.md5DigestAsHex(picId.getBytes()));
+        String picId = StringUtils.concat(0, "sh-", model.getId());
+        String key = StringUtils.concat(0, datePath, DigestUtils.md5DigestAsHex(picId.getBytes()));
         return key;
     }
 
@@ -122,7 +122,7 @@ public class SeqService {
         SeqJobModel model = new SeqJobModel();
         jobMapper.insert(model);
 
-        return StringUtils.concat(genDatePath(), "job-", model.getId());
+        return StringUtils.concat(0, genDatePath(), "job-", model.getId());
     }
 
     /**
@@ -132,7 +132,7 @@ public class SeqService {
     private String genDatePath() {
         Calendar calendar = Calendar.getInstance();
 
-        return StringUtils.concat(File.separator,
+        return StringUtils.concat(50, File.separator,
                 calendar.get(Calendar.YEAR),
                 File.separator,
                 calendar.get(Calendar.MONTH) + 1,
