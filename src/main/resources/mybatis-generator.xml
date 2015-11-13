@@ -43,7 +43,8 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="pv" domainObjectName="PVModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="dict_industry" domainObjectName="DictIndustryModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+<!--        <table tableName="pv" domainObjectName="PVModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="quest_province_rel" domainObjectName="QuestProRel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" /> <table tableName="quest_city_rel" domainObjectName="QuestCiRel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="coupon" domainObjectName="CouponModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="secret_question" domainObjectName="SeQuestionModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->

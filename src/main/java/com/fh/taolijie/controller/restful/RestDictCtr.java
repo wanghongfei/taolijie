@@ -5,16 +5,19 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.dao.mapper.DictCityModelMapper;
 import com.fh.taolijie.dao.mapper.DictCollegeModelMapper;
 import com.fh.taolijie.dao.mapper.DictProvinceModelMapper;
+import com.fh.taolijie.domain.DictIndustryModel;
 import com.fh.taolijie.domain.dict.DictCityModel;
 import com.fh.taolijie.domain.dict.DictCollegeModel;
 import com.fh.taolijie.domain.dict.DictProvinceModel;
 import com.fh.taolijie.domain.dict.DictSchoolModel;
+import com.fh.taolijie.service.impl.DictService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by whf on 11/10/15.
@@ -30,6 +33,9 @@ public class RestDictCtr {
 
     @Autowired
     private DictCollegeModelMapper collegeMapper;
+
+    @Autowired
+    private DictService dictService;
 
     /**
      * 查询省信息
@@ -65,5 +71,16 @@ public class RestDictCtr {
         ListResult<DictCollegeModel> lr = new ListResult<>(collList, collList.size());
 
         return new ResponseText(lr);
+    }
+
+    /**
+     * 行业分类
+     * @return
+     */
+    @RequestMapping(value = "/industry", produces = Constants.Produce.JSON)
+    public ResponseText industry() {
+        Map<DictIndustryModel, List<DictIndustryModel>> map = dictService.findIndustryList();
+
+        return new ResponseText(map);
     }
 }

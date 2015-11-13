@@ -57,6 +57,7 @@
         <mapper resource="mapper/DictRegionModelMapper.xml" />
         <mapper resource="mapper/DictCollegeModelMapper.xml" />
         <mapper resource="mapper/DictSchoolModelMapper.xml" />
+        <mapper resource="mapper/DictIndustryModelMapper.xml" />
         <mapper resource="mapper/StuCertiModelMapper.xml" />
         <mapper resource="mapper/EmpCertiModelMapper.xml" />
         <mapper resource="mapper/SysConfigModelMapper.xml" />
