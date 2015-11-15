@@ -42,9 +42,11 @@ public class RestCertiCtr {
      */
     @RequestMapping(value = "/stu", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText stuApply(@RequestParam String name,
+                                 @RequestParam Integer cityId,
                                  @RequestParam Integer collegeId,
                                  @RequestParam Integer schoolId,
                                  @RequestParam String picIds,
+                                 @RequestParam(required = false) String cname, // 班级
                                  HttpServletRequest req) {
 
         // 先检查是否已经认证过了
@@ -65,9 +67,11 @@ public class RestCertiCtr {
         StuCertiModel model = new StuCertiModel();
         model.setMemberId(mem.getId());
         model.setName(name);
+        model.setCityId(cityId);
         model.setCollegeId(collegeId);
         model.setSchoolId(schoolId);
         model.setPicIds(picIds);
+        model.setClazz(cname);
 
         stuService.addApplication(model);
 

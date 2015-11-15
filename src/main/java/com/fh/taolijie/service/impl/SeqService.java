@@ -59,6 +59,9 @@ public class SeqService {
             case EMP_CERTI: // 商家认证图片跟二手用同一个算法
                 return genShKey();
 
+            case STU_CERTI:
+                return genShKey();
+
             case AVATAR:
                 return genAvatarKey();
         }

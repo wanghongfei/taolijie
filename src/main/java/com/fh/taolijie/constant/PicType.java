@@ -11,7 +11,11 @@ public enum PicType {
     /**
      * 商家认证
      */
-    EMP_CERTI(3);
+    EMP_CERTI(3),
+    /**
+     * 学生认证
+     */
+    STU_CERTI(4);
 
     private int code;
 
@@ -37,6 +41,9 @@ public enum PicType {
 
             case 3:
                 return EMP_CERTI;
+
+            case 4:
+                return STU_CERTI;
 
             default:
                 return null;
