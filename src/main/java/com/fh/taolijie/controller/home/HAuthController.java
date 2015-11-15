@@ -24,6 +24,7 @@ import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Controller
 public class HAuthController {
-    private static Logger infoLog = LogUtils.getInfoLogger();
+    private static Logger infoLog = LoggerFactory.getLogger(HAuthController.class);
 
     @Autowired
     AccountService accountService;

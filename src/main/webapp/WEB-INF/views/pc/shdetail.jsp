@@ -189,7 +189,9 @@ To change this template use File | Settings | File Templates.
                                     <span id="complaint" data-id="${sh.id}" class="text" style="cursor: pointer" >举报</span>
                                 </div>--%>
             </div>
-            <jsp:include page="block/comment.jsp">
+
+            <%-- 评论部分关闭 --%>
+            <%-- <jsp:include page="block/comment.jsp">
                 <jsp:param name="postId" value="${sh.id}"/>
            </jsp:include>
 
@@ -207,7 +209,7 @@ To change this template use File | Settings | File Templates.
 
             <div class="load-more" style="text-align: center;display: none">
               <button id="loadMore">加载更多评论</button>
-            </div>
+            </div> --%>
 
             <%--
             <div class="review-bar">

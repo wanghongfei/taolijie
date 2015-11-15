@@ -132,7 +132,9 @@
           <span id="complaint" data-id="${job.id}" class="text" style="cursor: pointer" >举报</span>
         </div>--%>
       </div>
-      <jsp:include page="block/comment.jsp">
+
+<%-- 评论部分关闭 --%>
+      <%-- <jsp:include page="block/comment.jsp">
         <jsp:param name="postId" value="${job.id}"/>
       </jsp:include>
       <div class="content" id="contents">
@@ -149,7 +151,10 @@
 
       <div class="load-more" style="text-align: center;display: none">
         <button id="loadMore">加载更多评论</button>
-      </div>
+      </div> --%>
+
+
+
     </div>
   </div>
 </div>

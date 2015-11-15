@@ -10,6 +10,7 @@ import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.service.sh.ShPostCategoryService;
 import com.fh.taolijie.utils.LogUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class CommonInterceptor extends HandlerInterceptorAdapter{
 
-    public static Logger infoLogger = LogUtils.getInfoLogger();
+    public static Logger infoLogger = LoggerFactory.getLogger(CommonInterceptor.class);
 
     @Autowired
     NewsService newsService;

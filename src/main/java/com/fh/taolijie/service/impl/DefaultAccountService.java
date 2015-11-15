@@ -24,6 +24,7 @@ import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.*;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -44,7 +45,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class DefaultAccountService implements AccountService, AuthLogic {
-    public static Logger logger = LogUtils.getInfoLogger();
+    public static Logger logger = LoggerFactory.getLogger(DefaultAccountService.class);
 
     @Autowired
     MemberModelMapper memMapper;

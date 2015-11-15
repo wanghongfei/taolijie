@@ -195,7 +195,7 @@ public class DefaultJobPostService implements JobPostService {
      */
     private List<JobPostModel> selectExpiredPost(List<JobPostModel> list) {
         Date now = new Date();
-        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, 1);
+        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, -1);
 
         List<JobPostModel> expiredList = new ArrayList<>(list.size() / 3);
         list.forEach( job -> {
@@ -224,7 +224,6 @@ public class DefaultJobPostService implements JobPostService {
         List<Integer> idList = new ArrayList<>(list.size());
 
         // 标记过期的帖子
-        int amt = 0;
         list.forEach( job -> {
             job.setExpired(true);
             idList.add(job.getId());

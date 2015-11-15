@@ -153,7 +153,7 @@ public class DefaultShPostService implements ShPostService {
      */
     private List<SHPostModel> selectExpiredPost(List<SHPostModel> list) {
         Date now = new Date();
-        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, 1);
+        Date nextDay = TimeUtil.calculateDate(now, Calendar.DAY_OF_MONTH, -1);
 
         List<SHPostModel> expiredList = new ArrayList<>(list.size() / 3);
         list.forEach( job -> {
