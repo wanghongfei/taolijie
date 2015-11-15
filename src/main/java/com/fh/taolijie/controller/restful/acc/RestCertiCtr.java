@@ -85,7 +85,7 @@ public class RestCertiCtr {
      */
     @RequestMapping(value = "/emp", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText empApply(@RequestParam String compName,
-                                 @RequestParam String compPhone,
+                                 @RequestParam(required = false) String compPhone,
                                  @RequestParam String addr,
                                  @RequestParam String picIds,
                                  @RequestParam Integer cateId, // 行业分类id
@@ -112,6 +112,7 @@ public class RestCertiCtr {
         model.setCompanyName(compName);
         model.setAddress(addr);
         model.setPicIds(picIds);
+        model.setCompPhone(compPhone);
         model.setIndustryId(cateId);
 
         empService.addApplication(model);
