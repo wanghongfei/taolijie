@@ -85,6 +85,7 @@ public class RestCertiCtr {
      */
     @RequestMapping(value = "/emp", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText empApply(@RequestParam String compName,
+                                 @RequestParam String compPhone,
                                  @RequestParam String addr,
                                  @RequestParam String picIds,
                                  @RequestParam Integer cateId, // 行业分类id
