@@ -3,7 +3,7 @@
     <Appenders>
         <!-- 普通日志 -->
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p - %c: %m%n" />
         </Console>
 
         <!-- 错误日志写入到文件中 -->

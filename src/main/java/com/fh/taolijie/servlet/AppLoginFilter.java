@@ -16,6 +16,7 @@ import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  * Created by whf on 8/17/15.
  */
 public class AppLoginFilter implements Filter, ApplicationContextAware {
-    private static final Logger infoLogger = LogUtils.getInfoLogger();
+    private static final Logger infoLogger = LoggerFactory.getLogger(AppLoginFilter.class);
 
     /**
      * 持有容器

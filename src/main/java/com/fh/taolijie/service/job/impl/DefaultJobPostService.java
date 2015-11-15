@@ -224,7 +224,6 @@ public class DefaultJobPostService implements JobPostService {
         List<Integer> idList = new ArrayList<>(list.size());
 
         // 标记过期的帖子
-        int amt = 0;
         list.forEach( job -> {
             job.setExpired(true);
             idList.add(job.getId());

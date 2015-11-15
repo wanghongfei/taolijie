@@ -9,6 +9,7 @@ import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
@@ -25,7 +26,7 @@ import java.util.TreeMap;
  */
 @Service
 public class DefaultPayService implements PayService {
-    public static Logger infoLog = LogUtils.getInfoLogger();
+    public static Logger infoLog = LoggerFactory.getLogger(DefaultPayService.class);
 
 
     @Autowired

@@ -28,7 +28,7 @@ import java.util.List;
  * Created by whf on 10/8/15.
  */
 public class SMSUtils {
-    private static final Logger infoLog = LogUtils.getInfoLogger();
+    private static final Logger infoLog = LoggerFactory.getLogger(SMSUtils.class);
 
     private static final String SMS_URL = "http://api.weimi.cc/2/sms/send.html";
     private static final String SMS_UID = "Ctpc2fjQKMq3";
