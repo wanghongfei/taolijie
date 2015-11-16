@@ -42,6 +42,8 @@ public class MemberModel extends Pageable implements Serializable {
 
     private String stuCerti;
 
+    private String empCerti;
+
     private String profilePhotoPath;
 
     private String phone;
@@ -731,6 +733,14 @@ public class MemberModel extends Pageable implements Serializable {
 
     public void setStuCerti(String stuCerti) {
         this.stuCerti = stuCerti;
+    }
+
+    public String getEmpCerti() {
+        return empCerti;
+    }
+
+    public void setEmpCerti(String empCerti) {
+        this.empCerti = empCerti;
     }
 
     public void setCredits(Integer credits) {
