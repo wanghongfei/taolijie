@@ -13,6 +13,8 @@ public class EmpCertiModel extends Pageable {
     private Integer memberId;
     private String username;
 
+    private String contactName;
+
     private Integer industryId;
 
     private String memo;
@@ -218,6 +220,14 @@ public class EmpCertiModel extends Pageable {
 
     public void setCompPhone(String compPhone) {
         this.compPhone = compPhone;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
     public void setUpdateTime(Date updateTime) {
