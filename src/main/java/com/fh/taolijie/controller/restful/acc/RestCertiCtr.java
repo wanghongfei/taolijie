@@ -92,20 +92,20 @@ public class RestCertiCtr {
                                  HttpServletRequest req) {
 
 
-        // 先检查是否已经认证过了
         Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = accService.findMember(credential.getId());
 
-        String certiStatus = mem.getIdCerti();
+        // 检查是否是商家用户
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
 
-        if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.toString())) {
+        // 先检查是否已经认证过了
+        String certiStatus = mem.getEmpCerti();
+        if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.ALREADY_VERIFIED);
         }
 
-        // 检查是否是商家用户
-        if (!credential.getRoleList().get(0).equals(Constants.RoleType.EMPLOYER.toString())) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
-        }
 
         EmpCertiModel model = new EmpCertiModel();
         model.setMemberId(mem.getId());

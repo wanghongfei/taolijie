@@ -89,7 +89,7 @@
     </sql>
     <sql id="member_column">
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name,
-        mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi, mem.emp_certi AS mem_empt_certi,
+        mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi, mem.emp_certi AS mem_emp_certi,
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name,
         mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint,
