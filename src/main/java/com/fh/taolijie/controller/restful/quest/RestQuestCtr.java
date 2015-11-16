@@ -107,7 +107,7 @@ public class RestQuestCtr {
 
         // 验证是否已认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
-        String status = mem.getVerified();
+        String status = mem.getIdCerti();
         if (null == status || false == status.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
@@ -277,7 +277,7 @@ public class RestQuestCtr {
 
         // 判断是否已经认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
-        String status = mem.getVerified();
+        String status = mem.getIdCerti();
         if (null == status || false == status.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }

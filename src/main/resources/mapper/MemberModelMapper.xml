@@ -15,7 +15,7 @@
         <result column="mem_email" property="email" jdbcType="VARCHAR"/>
         <result column="mem_name" property="name" jdbcType="VARCHAR"/>
         <result column="mem_gender" property="gender" jdbcType="VARCHAR"/>
-        <result column="mem_verified" property="verified" jdbcType="VARCHAR"/>
+        <result column="mem_id_certi" property="idCerti" jdbcType="VARCHAR"/>
         <result column="mem_profile_photo_path" property="profilePhotoPath" jdbcType="VARCHAR"/>
         <result column="mem_phone" property="phone" jdbcType="VARCHAR"/>
         <result column="mem_qq" property="qq" jdbcType="VARCHAR"/>
@@ -85,7 +85,7 @@
         reg_type AS reg_type
     </sql>
     <sql id="member_column">
-        mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
+        mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
         mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
         mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids, mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids,
@@ -105,7 +105,7 @@
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
-        mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.verified AS mem_verified,
+        mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.id_certi AS mem_id_certi,
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid,
         mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id,
@@ -163,7 +163,7 @@
         -->
         INSERT INTO member (username, password,
         email, name, gender,
-        verified, profile_photo_path, phone,
+        id_certi, profile_photo_path, phone,
         qq, age, company_name,
         created_time, valid, complaint,
         profile_photo_id, auto_login_identifier, last_post_time,
@@ -176,7 +176,7 @@
         wechat_token)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
-        #{verified,jdbcType=VARCHAR}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+        #{idCerti}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
         #{qq,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR},
         #{createdTime}, #{valid,jdbcType=BIT}, #{complaint,jdbcType=INTEGER},
         #{profilePhotoId,jdbcType=INTEGER}, #{autoLoginIdentifier,jdbcType=VARCHAR}, #{lastPostTime,jdbcType=DATE},
@@ -213,8 +213,8 @@
             <if test="gender != null">
                 gender,
             </if>
-            <if test="verified != null">
-                verified,
+            <if test="idCerti != null">
+                id_certi,
             </if>
             <if test="profilePhotoPath != null">
                 profile_photo_path,
@@ -303,8 +303,8 @@
             <if test="gender != null">
                 #{gender,jdbcType=VARCHAR},
             </if>
-            <if test="verified != null">
-                #{verified,jdbcType=VARCHAR},
+            <if test="idCerti != null">
+                #{idCerti},
             </if>
             <if test="profilePhotoPath != null">
                 #{profilePhotoPath,jdbcType=VARCHAR},
@@ -403,8 +403,8 @@
             <if test="gender != null">
                 gender = #{gender,jdbcType=VARCHAR},
             </if>
-            <if test="verified != null">
-                verified = #{verified,jdbcType=VARCHAR},
+            <if test="idCerti != null">
+                id_certi = #{idCerti},
             </if>
             <if test="profilePhotoPath != null">
                 profile_photo_path = #{profilePhotoPath,jdbcType=VARCHAR},
@@ -493,7 +493,7 @@
         email = #{email,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
         gender = #{gender,jdbcType=VARCHAR},
-        verified = #{verified,jdbcType=VARCHAR},
+        id_certi = #{idCerti},
         profile_photo_path = #{profilePhotoPath,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
         qq = #{qq,jdbcType=VARCHAR},

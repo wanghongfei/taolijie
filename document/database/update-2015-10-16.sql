@@ -1,0 +1,1 @@
+alter table taolijie.member change column verified id_certi varchar(3);

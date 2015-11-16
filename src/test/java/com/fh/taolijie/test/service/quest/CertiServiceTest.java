@@ -51,7 +51,7 @@ public class CertiServiceTest extends BaseSpringDataTestClass {
 
 
         MemberModel m = memMapper.selectByPrimaryKey(1);
-        Assert.assertEquals(CertiStatus.DONE.code(), m.getVerified());
+        Assert.assertEquals(CertiStatus.DONE.code(), m.getIdCerti());
     }
 
     @Test

@@ -57,7 +57,7 @@ public class DefaultEmpCertiService implements EmpCertiService {
             // 将用户设置为已经认证
             MemberModel example = new MemberModel();
             example.setId(memId);
-            example.setVerified(CertiStatus.DONE.code());
+            example.setIdCerti(CertiStatus.DONE.code());
             memMapper.updateByPrimaryKeySelective(example);
         }
 
