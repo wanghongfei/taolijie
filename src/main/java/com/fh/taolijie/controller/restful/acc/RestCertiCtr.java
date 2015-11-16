@@ -79,7 +79,7 @@ public class RestCertiCtr {
     public ResponseText stuApply(@RequestParam String name,
                                  @RequestParam Integer cityId,
                                  @RequestParam Integer collegeId,
-                                 @RequestParam Integer schoolId,
+                                 //@RequestParam Integer schoolId,
                                  @RequestParam String picIds,
                                  @RequestParam(required = false) String cname, // 班级
                                  HttpServletRequest req) {
@@ -104,7 +104,7 @@ public class RestCertiCtr {
         model.setName(name);
         model.setCityId(cityId);
         model.setCollegeId(collegeId);
-        model.setSchoolId(schoolId);
+        //model.setSchoolId(schoolId);
         model.setPicIds(picIds);
         model.setClazz(cname);
 

@@ -78,7 +78,7 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText publishQuest(@Valid QuestModel model,
                                      BindingResult br,
-                                     @RequestParam(required = false) String schoolIds,
+                                     //@RequestParam(required = false) String schoolIds,
                                      @RequestParam(required = false) String collegeIds,
                                      @RequestParam(required = false) String cityIds, // 城市id
                                      @RequestParam(required = false) String proIds, // 省id
@@ -113,7 +113,7 @@ public class RestQuestCtr {
         }
 
         // 验证任务对象参数
-        if (false == StringUtils.validateLadderString(schoolIds, collegeIds, cityIds, proIds)) {
+        if (false == StringUtils.validateLadderString(collegeIds, cityIds, proIds)) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
@@ -132,12 +132,12 @@ public class RestQuestCtr {
         // 将id string 转换成List<Integer>
         try {
             List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
-            List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
+            //List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
             List<Integer> proList = StringUtils.splitIntendIds(proIds);
             List<Integer> cityList = StringUtils.splitIntendIds(cityIds);
 
             model.setCollegeIdList(coList);
-            model.setSchoolIdList(schList);
+            //model.setSchoolIdList(schList);
             model.setProvinceIdList(proList);
             model.setCityIdList(cityList);
 
