@@ -25,6 +25,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.certi.StuCertiService;
 import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.QuestService;
@@ -71,6 +72,9 @@ public class RestQuestCtr {
 
     @Autowired
     private FeeCalculator feeService;
+
+    @Autowired
+    private StuCertiService stuService;
 
     /**
      * 商家发布任务
@@ -276,11 +280,12 @@ public class RestQuestCtr {
         }
 
         // 判断是否已经认证
-        MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
-        String status = mem.getIdCerti();
-        if (null == status || false == status.equals(CertiStatus.DONE.code())) {
+        // 判断是否通过了学生认证
+        boolean verified = stuService.checkVerified(credential.getId());
+        if (!verified) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
+
 
         try {
             questService.assignQuest(credential.getId(), questId);
