@@ -40,6 +40,8 @@ public class MemberModel extends Pageable implements Serializable {
 
     private String idCerti;
 
+    private String stuCerti;
+
     private String profilePhotoPath;
 
     private String phone;
@@ -721,6 +723,14 @@ public class MemberModel extends Pageable implements Serializable {
 
     public void setWechatToken(String wechatToken) {
         this.wechatToken = wechatToken;
+    }
+
+    public String getStuCerti() {
+        return stuCerti;
+    }
+
+    public void setStuCerti(String stuCerti) {
+        this.stuCerti = stuCerti;
     }
 
     public void setCredits(Integer credits) {

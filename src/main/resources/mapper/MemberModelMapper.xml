@@ -16,6 +16,7 @@
         <result column="mem_name" property="name" jdbcType="VARCHAR"/>
         <result column="mem_gender" property="gender" jdbcType="VARCHAR"/>
         <result column="mem_id_certi" property="idCerti" jdbcType="VARCHAR"/>
+        <result column="mem_stu_certi" property="stuCerti" jdbcType="VARCHAR"/>
         <result column="mem_profile_photo_path" property="profilePhotoPath" jdbcType="VARCHAR"/>
         <result column="mem_phone" property="phone" jdbcType="VARCHAR"/>
         <result column="mem_qq" property="qq" jdbcType="VARCHAR"/>
@@ -66,7 +67,8 @@
 
     <!-- wechat_token -->
     <sql id="Base_Column_List">
-        id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender, verified AS mem_verified, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
+        id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender,
+        id_certi AS mem_id_certi, stu_certi AS mem_stu_certi, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
         qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, created_time AS mem_created_time, valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
         last_post_time AS mem_last_post_time, reset_password_token AS mem_reset_password_token, last_token_date AS mem_last_token_date, school_organization AS mem_school_organization, credits AS mem_credits,
         student_id AS mem_student_id, block_list AS mem_block_list, applied_job_ids AS mem_applied_job_ids, liked_job_ids AS mem_liked_job_ids, liked_sh_ids AS mem_liked_sh_ids,
@@ -85,10 +87,16 @@
         reg_type AS reg_type
     </sql>
     <sql id="member_column">
-        mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
-        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
-        mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token, mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
-        mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids, mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids,
+        mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name,
+        mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi,
+        mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
+        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name,
+        mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint,
+        mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
+        mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token,
+        mem.last_token_date AS mem_last_token_date, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
+        mem.student_id AS mem_student_id, mem.block_list AS mem_block_list, mem.applied_job_ids AS mem_applied_job_ids,
+        mem.liked_job_ids AS mem_liked_job_ids, mem.liked_sh_ids AS mem_liked_sh_ids,
         mem.read_global_noti_ids AS mem_read_global_noti_ids,
         mem.last_sh_date AS mem_last_sh_date,
         mem.last_job_date AS mem_last_job_date,
@@ -105,7 +113,8 @@
     </sql>
     <sql id="member_column_without_password">
         mem.id AS mem_id, mem.username AS mem_username,
-        mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender, mem.id_certi AS mem_id_certi,
+        mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender,
+        mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi,
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
         mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.created_time AS mem_created_time, mem.valid AS mem_valid,
         mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id,
@@ -173,7 +182,8 @@
         read_global_noti_ids,
         app_token,
         reg_type,
-        wechat_token)
+        wechat_token,
+        stu_certi)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{idCerti}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -186,7 +196,8 @@
         #{readSysNotificationIds},
         #{appToken},
         #{regType},
-        #{wechatToken})
+        #{wechatToken},
+        #{stuCerti})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -286,6 +297,8 @@
 
             <if test="regType != null" >reg_type,</if>
             <if test="wechatToken != null" >wechat_token,</if>
+
+            <if test="stuCerti != null" >stu_certi,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -379,6 +392,8 @@
 
             <if test="regType != null" >#{regType},</if>
             <if test="wechatToken != null" >#{wechatToken},</if>
+
+            <if test="stuCerti != null" >#{stuCerti},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -479,6 +494,8 @@
 
             <if test="regType != null" >reg_type = #{regType},</if>
             <if test="wechatToken != null" >wechat_token = #{wechatToken},</if>
+
+            <if test="stuCerti != null" >stu_certi = #{stuCerti},</if>
         </set>
         where id = #{id}
     </update>
@@ -521,7 +538,8 @@
         app_token = #{appToken},
 
         reg_type = #{regType},
-        wechat_token = #{wechatToken}
+        wechat_token = #{wechatToken},
+        stu_certi = #{stuCerti}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
