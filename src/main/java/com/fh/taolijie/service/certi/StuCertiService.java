@@ -10,13 +10,13 @@ import com.fh.taolijie.domain.certi.StuCertiModel;
  */
 public interface StuCertiService {
     /**
-     * 申请认证
+     * 申请学生认证
      * @param model
      */
     void addApplication(StuCertiModel model);
 
     /**
-     * 更新认证状态
+     * 更新学生认证状态
      * @param certiId
      * @param memId 被认证用户的id
      * @param status

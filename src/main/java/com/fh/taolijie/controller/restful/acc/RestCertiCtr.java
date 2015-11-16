@@ -53,7 +53,7 @@ public class RestCertiCtr {
         Credential credential = SessionUtils.getCredential(req);
         MemberModel mem = accService.findMember(credential.getId());
 
-        String certiStatus = mem.getIdCerti();
+        String certiStatus = mem.getStuCerti();
 
         if (null != certiStatus && certiStatus.equals(CertiStatus.DONE.code())) {
             return new ResponseText(ErrorCode.ALREADY_VERIFIED);

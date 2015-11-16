@@ -47,25 +47,30 @@ public class DefaultStuCertiService implements StuCertiService {
         model.setUsername(m.getUsername());
 
         certiMapper.insertSelective(model);
+
+        // 更新member表的学生认证状态
+        MemberModel example = new MemberModel();
+        example.setId(m.getId());
+        example.setStuCerti(CertiStatus.WAIT_AUDIT.code());
+        memMapper.updateByPrimaryKeySelective(example);
     }
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo) {
-        if (status == CertiStatus.DONE) {
-            // 认证通过
-            // 将用户设置为已经认证
-            MemberModel example = new MemberModel();
-            example.setId(memId);
-            example.setIdCerti(CertiStatus.DONE.code());
-            memMapper.updateByPrimaryKeySelective(example);
-        }
 
+        // 更新认证表
         StuCertiModel example = new StuCertiModel();
         example.setId(certiId);
         example.setMemo(memo);
         example.setStatus(status.code());
         certiMapper.updateByPrimaryKeySelective(example);
+
+        // 更新用户表认证状态
+        MemberModel memExample = new MemberModel();
+        memExample.setId(memId);
+        memExample.setStuCerti(CertiStatus.DONE.code());
+        memMapper.updateByPrimaryKeySelective(memExample);
 
     }
 
