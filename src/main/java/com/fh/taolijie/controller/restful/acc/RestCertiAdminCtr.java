@@ -3,9 +3,11 @@ package com.fh.taolijie.controller.restful.acc;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
+import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.domain.certi.EmpCertiModel;
 import com.fh.taolijie.domain.certi.StuCertiModel;
 import com.fh.taolijie.service.certi.EmpCertiService;
+import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
 import com.fh.taolijie.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,35 @@ public class RestCertiAdminCtr {
 
     @Autowired
     private EmpCertiService empService;
+
+    @Autowired
+    private IdCertiService idService;
+
+    /**
+     * 审核个人身份
+     * @return
+     */
+    @RequestMapping(value = "/id", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText verifyId(@RequestParam Integer certiId,
+                                 @RequestParam String status,
+                                 @RequestParam(required = false) String memo) {
+
+        // 验证参数合法性
+        CertiStatus st = CertiStatus.fromCode(status);
+        if (null == st) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+
+        IdCertiModel model = idService.findById(certiId);
+        if (null == model) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        idService.updateStatus(certiId, model.getMemId(), st, memo);
+
+        return ResponseText.getSuccessResponseText();
+    }
 
     /**
      * 审核学生身份

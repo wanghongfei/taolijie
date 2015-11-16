@@ -64,7 +64,7 @@ public class RestCertiCtr {
             idService.addApplication(model);
 
         } catch (ApplicationDuplicatedException e) {
-            return new ResponseText(ErrorCode.REPEAT);
+            return new ResponseText(ErrorCode.ALREADY_VERIFIED);
 
         }
 

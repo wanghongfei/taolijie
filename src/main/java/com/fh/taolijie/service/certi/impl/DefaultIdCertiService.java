@@ -50,4 +50,29 @@ public class DefaultIdCertiService implements IdCertiService {
         example.setIdCerti(CertiStatus.WAIT_AUDIT.code());
         memMapper.updateByPrimaryKeySelective(example);
     }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo) {
+        // 更新认证表状态
+        Date now = new Date();
+        IdCertiModel idExample = new IdCertiModel();
+        idExample.setId(certiId);
+        idExample.setUpdateTime(now);
+        idExample.setStatus(status.code());
+        idExample.setMemo(memo);
+        idMapper.updateByPrimaryKeySelective(idExample);
+
+        // 更新用户表状态
+        MemberModel mem = new MemberModel();
+        mem.setId(memId);
+        mem.setIdCerti(status.code());
+        memMapper.updateByPrimaryKeySelective(mem);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public IdCertiModel findById(Integer certiId) {
+        return idMapper.selectByPrimaryKey(certiId);
+    }
 }

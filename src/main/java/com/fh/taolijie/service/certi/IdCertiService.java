@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.certi;
 
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 
@@ -12,4 +13,14 @@ public interface IdCertiService {
      */
     void addApplication(IdCertiModel model)
             throws ApplicationDuplicatedException;
+
+    /**
+     * 更新认证状态
+     * @param memId
+     * @param status
+     * @param memo
+     */
+    void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo);
+
+    IdCertiModel findById(Integer certiId);
 }
