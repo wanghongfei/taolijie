@@ -283,7 +283,7 @@ public class RestQuestCtr {
         // 判断是否通过了学生认证
         boolean verified = stuService.checkVerified(credential.getId());
         if (!verified) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            return new ResponseText(ErrorCode.LACK_STU_CERTIFICATION);
         }
 
 
