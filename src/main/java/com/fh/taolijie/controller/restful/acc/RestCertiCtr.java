@@ -4,11 +4,14 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
+import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.domain.certi.EmpCertiModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.certi.StuCertiModel;
+import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.certi.EmpCertiService;
+import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
@@ -34,7 +37,39 @@ public class RestCertiCtr {
     private EmpCertiService empService;
 
     @Autowired
+    private IdCertiService idService;
+
+    @Autowired
     private AccountService accService;
+
+    /**
+     * 个人身份认证
+     * @return
+     */
+    @RequestMapping(value = "/id", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText idApply(@RequestParam String name,
+                                @RequestParam String id,
+                                @RequestParam String picIds,
+                                HttpServletRequest req) {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+        IdCertiModel model = new IdCertiModel();
+
+        model.setName(name);
+        model.setIdNum(id);
+        model.setPicIds(picIds);
+        model.setMemId(memId);
+
+        try {
+            idService.addApplication(model);
+
+        } catch (ApplicationDuplicatedException e) {
+            return new ResponseText(ErrorCode.REPEAT);
+
+        }
+
+        return ResponseText.getSuccessResponseText();
+    }
 
     /**
      * 学生申请认证

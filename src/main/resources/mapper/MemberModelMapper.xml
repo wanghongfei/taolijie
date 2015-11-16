@@ -674,6 +674,15 @@
         WHERE mem.id = info.id
     </select>
 
+    <select id="selectUsername" resultType="string">
+        SELECT
+            username
+        FROM
+            member
+        WHERE
+            id = #{memId}
+    </select>
+
     <update id="updateAppToken">
         UPDATE
             member
