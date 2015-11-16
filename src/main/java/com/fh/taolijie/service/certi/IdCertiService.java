@@ -22,5 +22,12 @@ public interface IdCertiService {
      */
     void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo);
 
+    /**
+     * 检查用户是否通过了个人认证
+     * @param memId
+     * @return
+     */
+    boolean checkVerified(Integer memId);
+
     IdCertiModel findById(Integer certiId);
 }

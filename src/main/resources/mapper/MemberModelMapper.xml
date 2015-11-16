@@ -654,6 +654,33 @@
             id = #{memId}
     </update>
 
+    <select id="selectEmpVerified" resultType="string">
+        SELECT
+            emp_certi
+        FROM
+            member
+        WHERE
+            id = #{memId}
+    </select>
+
+    <select id="selectStuVerified" resultType="string">
+        SELECT
+            stu_certi.
+        FROM
+            member
+        WHERE
+            id = #{memId}
+    </select>
+
+    <select id="selectIdVerified" resultType="string">
+        SELECT
+            id_certi.
+        FROM
+            member
+        WHERE
+            id = #{memId}
+    </select>
+
     <select id="selectByAppToken" resultMap="BaseResultMap">
         SELECT
             <include refid="member_column"/>,

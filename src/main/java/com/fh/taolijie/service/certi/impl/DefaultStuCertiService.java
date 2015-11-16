@@ -76,6 +76,17 @@ public class DefaultStuCertiService implements StuCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public boolean checkVerified(Integer memId) {
+        String status = memMapper.selectStuVerified(memId);
+        if (null != status && status.equals(CertiStatus.DONE.code())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public StuCertiModel findById(Integer certiId) {
         return certiMapper.selectByPrimaryKey(certiId);
     }

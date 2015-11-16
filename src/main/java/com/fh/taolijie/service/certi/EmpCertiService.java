@@ -25,6 +25,13 @@ public interface EmpCertiService {
      */
     void updateStatus(Integer certiId, Integer memId, CertiStatus status, String memo);
 
+    /**
+     * 检查是否已经认证
+     * @param memId
+     * @return
+     */
+    boolean checkVerified(Integer memId);
+
     EmpCertiModel findById(Integer certiId);
 
     /**

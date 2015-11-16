@@ -72,6 +72,17 @@ public class DefaultIdCertiService implements IdCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public boolean checkVerified(Integer memId) {
+        String status = memMapper.selectIdVerified(memId);
+        if (null != status && status.equals(CertiStatus.DONE.code())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public IdCertiModel findById(Integer certiId) {
         return idMapper.selectByPrimaryKey(certiId);
     }
