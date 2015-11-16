@@ -92,7 +92,7 @@ public class RestCertiAdminCtr {
                                   @RequestParam(required = false) String memo) {
 
         EmpCertiModel stuModel = empService.findById(certiId);
-        if (null == certiId) {
+        if (null == stuModel) {
             return new ResponseText(ErrorCode.NOT_FOUND);
         }
 
