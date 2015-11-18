@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.certi;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
@@ -28,6 +29,15 @@ public interface IdCertiService {
      * @return
      */
     boolean checkVerified(Integer memId);
+
+    /**
+     * 根据状态筛选个人认证申请
+     * @param status
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<IdCertiModel> findByStatus(CertiStatus status, int pn, int ps);
 
     IdCertiModel findById(Integer certiId);
 }

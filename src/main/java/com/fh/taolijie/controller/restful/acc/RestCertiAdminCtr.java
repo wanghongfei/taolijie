@@ -60,6 +60,28 @@ public class RestCertiAdminCtr {
         return ResponseText.getSuccessResponseText();
     }
 
+
+    /**
+     * 查询个人认证审核列表
+     * @return
+     */
+    @RequestMapping(value = "/id/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText idList(@RequestParam String status,
+                               @RequestParam(defaultValue = "0") int pn,
+                               @RequestParam(defaultValue = Constants.PAGE_CAP) int ps) {
+
+        CertiStatus cs = CertiStatus.fromCode(status);
+        if (null == cs) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<IdCertiModel> lr = idService.findByStatus(cs, pn, ps);
+
+
+        return new ResponseText(lr);
+    }
+
     /**
      * 审核学生身份
      * @return

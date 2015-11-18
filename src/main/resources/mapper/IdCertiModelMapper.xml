@@ -183,4 +183,90 @@
         status = #{status}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            id_certi
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="memId != null">
+                AND mem_id = #{memId}
+            </if>
+            <if test="username != null">
+                AND username = #{username}
+            </if>
+            <if test="idNum != null">
+                AND id_num = #{idNum}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime}
+            </if>
+            <if test="updateTime != null">
+                AND update_time = #{updateTime}
+            </if>
+            <if test="picIds != null">
+                AND pic_ids = #{picIds}
+            </if>
+            <if test="memo != null">
+                AND memo = #{memId}
+            </if>
+            <if test="status != null">
+                ANd status = #{status}
+            </if>
+
+        </where>
+
+        ORDER BY
+            created_time DESC
+        LIMIT
+            #{pageNumber}, #{pageSize}
+
+    </select>
+
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            id_certi
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="memId != null">
+                AND mem_id = #{memId}
+            </if>
+            <if test="username != null">
+                AND username = #{username}
+            </if>
+            <if test="idNum != null">
+                AND id_num = #{idNum}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime}
+            </if>
+            <if test="updateTime != null">
+                AND update_time = #{updateTime}
+            </if>
+            <if test="picIds != null">
+                AND pic_ids = #{picIds}
+            </if>
+            <if test="memo != null">
+                AND memo = #{memId}
+            </if>
+            <if test="status != null">
+                ANd status = #{status}
+            </if>
+
+        </where>
+    </select>
 </mapper>

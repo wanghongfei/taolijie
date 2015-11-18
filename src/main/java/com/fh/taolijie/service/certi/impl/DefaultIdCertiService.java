@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.certi.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.IdCertiModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by whf on 11/16/15.
@@ -79,6 +81,16 @@ public class DefaultIdCertiService implements IdCertiService {
         }
 
         return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<IdCertiModel> findByStatus(CertiStatus status, int pn, int ps) {
+        IdCertiModel example = new IdCertiModel(pn, ps);
+        List<IdCertiModel> list = idMapper.findBy(example);
+        long tot = idMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
