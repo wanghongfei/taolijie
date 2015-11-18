@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.certi;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.taolijie.domain.Pageable;
 
 import java.util.Date;
@@ -25,8 +26,10 @@ public class EmpCertiModel extends Pageable {
 
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     public EmpCertiModel() {}

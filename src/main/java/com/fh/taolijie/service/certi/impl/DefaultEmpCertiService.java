@@ -92,6 +92,18 @@ public class DefaultEmpCertiService implements EmpCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<EmpCertiModel> findByStatus(CertiStatus status, int pn, int ps) {
+        EmpCertiModel example = new EmpCertiModel(pn, ps);
+
+        example.setStatus(status.code());
+        List<EmpCertiModel> list = certiMapper.findBy(example);
+        long tot = certiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<EmpCertiModel> findByMember(Integer memId) {
         EmpCertiModel example = new EmpCertiModel();
         example.setMemberId(memId);

@@ -4,6 +4,8 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.certi.EmpCertiModel;
 
+import java.util.List;
+
 
 /**
  * 商家认证业务接口
@@ -33,6 +35,8 @@ public interface EmpCertiService {
     boolean checkVerified(Integer memId);
 
     EmpCertiModel findById(Integer certiId);
+
+    ListResult<EmpCertiModel> findByStatus(CertiStatus status, int pn, int ps);
 
     /**
      * 查找商家用户的认证申请记录

@@ -87,6 +87,7 @@ public class DefaultIdCertiService implements IdCertiService {
     @Transactional(readOnly = true)
     public ListResult<IdCertiModel> findByStatus(CertiStatus status, int pn, int ps) {
         IdCertiModel example = new IdCertiModel(pn, ps);
+        example.setStatus(status.code());
         List<IdCertiModel> list = idMapper.findBy(example);
         long tot = idMapper.countFindBy(example);
 

@@ -148,4 +148,24 @@ public class RestCertiAdminCtr {
 
         return ResponseText.getSuccessResponseText();
     }
+
+    /**
+     * 查询商家认证列表
+     * @return
+     */
+    @RequestMapping(value = "/emp/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText empList(@RequestParam String status,
+                                @RequestParam(defaultValue = "0") int pn,
+                                @RequestParam(defaultValue = Constants.PAGE_CAP) int ps) {
+
+        CertiStatus cs = CertiStatus.fromCode(status);
+        if (null == cs) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<EmpCertiModel> lr = empService.findByStatus(cs, pn, ps);
+
+        return new ResponseText(lr);
+    }
 }
