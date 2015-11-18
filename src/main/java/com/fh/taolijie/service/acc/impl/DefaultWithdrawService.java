@@ -2,16 +2,14 @@ package com.fh.taolijie.service.acc.impl;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.AccFlow;
+import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.WithdrawApplyModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
-import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
-import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
+import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +49,40 @@ public class DefaultWithdrawService implements WithdrawService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void addWithdraw(WithdrawApplyModel model, String dealPwd)
-            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException {
+    public void addWithdraw(WithdrawApplyModel model, String dealPwd, PayType payType)
+            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException, AccountNotSetException {
 
+        // 查询钱包账户
         CashAccModel acc = accMapper.findByMemberId(model.getMemberId());
         if (null == acc) {
             throw new CashAccNotExistsException("");
+        }
+
+        // 创建提现申请model对象
+        Date now = new Date();
+        model.setUsername(acc.getUsername());
+        model.setApplyTime(now);
+        model.setUpdateTime(now);
+        model.setAccId(acc.getId());
+        model.setStatus(WithdrawStatus.WAIT_AUDIT.code());
+        // 根据支付类型判断相关账号是否已经设置
+        switch (payType) {
+            case ALIPAY:
+                if (null == acc.getAlipayAcc()) {
+                    throw new AccountNotSetException();
+                }
+                model.setAlipayAcc(acc.getAlipayAcc());
+                break;
+
+            case WECHAT: // 暂时不支持微信
+                throw new AccountNotSetException();
+
+            case BANK_ACC:
+                if (null == acc.getBankAcc()) {
+                    throw new AccountNotSetException();
+                }
+                model.setBankAcc(acc.getBankAcc());
+                break;
         }
 
         // 验证交易密码
@@ -74,16 +100,9 @@ public class DefaultWithdrawService implements WithdrawService {
         // 减少账户余额
         accService.reduceAvailableMoney(acc.getId(), model.getAmount(), AccFlow.WITHDRAW);
 
-        // 设置冗余字段
-        Date now = new Date();
-        model.setUsername(acc.getUsername());
-        model.setApplyTime(now);
-        model.setUpdateTime(now);
-        model.setAccId(acc.getId());
-        model.setStatus(WithdrawStatus.WAIT_AUDIT.code());
-
-        // 插入记录
+        // 插入提现申请记录
         drawMapper.insertSelective(model);
+
     }
 
     /**

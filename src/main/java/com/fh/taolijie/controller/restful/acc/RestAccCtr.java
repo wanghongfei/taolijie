@@ -6,6 +6,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.AccFlowModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
@@ -360,12 +361,14 @@ public class RestAccCtr {
     @RequestMapping(value = "/withdraw", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText withdraw(@RequestParam BigDecimal amt,
                                  @RequestParam String dealPwd,
+                                 @RequestParam Integer payType,
                                  @RequestParam(required = false) String alipayAcc,
                                  @RequestParam(required = false) String bankAcc,
                                  HttpServletRequest req) {
 
-        // 支付宝和银行卡不能同时为空
-        if (null == alipayAcc && null == bankAcc) {
+        // 参数验证
+        PayType type = PayType.fromCode(payType);
+        if (null == payType) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
@@ -380,7 +383,7 @@ public class RestAccCtr {
         model.setBankAcc(bankAcc);
 
         try {
-            drawService.addWithdraw(model, CredentialUtils.sha(dealPwd));
+            drawService.addWithdraw(model, CredentialUtils.sha(dealPwd), type);
         } catch (CashAccNotExistsException e) {
             return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
 
@@ -390,6 +393,8 @@ public class RestAccCtr {
         } catch (InvalidDealPwdException e) {
             return new ResponseText(ErrorCode.BAD_PASSWORD);
 
+        } catch (AccountNotSetException e) {
+            return new ResponseText(ErrorCode.ACC_NOT_SET);
         }
 
         return ResponseText.getSuccessResponseText();

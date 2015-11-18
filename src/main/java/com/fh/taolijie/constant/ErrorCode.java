@@ -67,7 +67,9 @@ public enum ErrorCode {
     COUPON_EXPIRED(41, "coupon expired"),
 
     LACK_STU_CERTIFICATION(42, "student certification needed"),
-    LACK_EMP_CERTIFICATION(43, "employee certification needed");
+    LACK_EMP_CERTIFICATION(43, "employee certification needed"),
+
+    ACC_NOT_SET(44, "account not set");
 
     private final String msg;
     private final int code;

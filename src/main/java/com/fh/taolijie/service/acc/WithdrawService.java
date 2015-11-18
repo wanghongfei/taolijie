@@ -1,12 +1,10 @@
 package com.fh.taolijie.service.acc;
 
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
-import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
-import com.fh.taolijie.exception.checked.acc.InvalidDealPwdException;
-import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
+import com.fh.taolijie.exception.checked.acc.*;
 
 /**
  * 提现申请相关业务接口
@@ -17,8 +15,8 @@ public interface WithdrawService {
      * 创建提现申请
      * @param model
      */
-    void addWithdraw(WithdrawApplyModel model, String dealPwd)
-            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException;
+    void addWithdraw(WithdrawApplyModel model, String dealPwd, PayType payType)
+            throws CashAccNotExistsException, BalanceNotEnoughException, InvalidDealPwdException, AccountNotSetException;
 
     /**
      * 更新状态
