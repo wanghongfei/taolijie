@@ -93,6 +93,18 @@ public class DefaultStuCertiService implements StuCertiService {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<StuCertiModel> findByStatus(CertiStatus status, int pn, int ps) {
+        StuCertiModel example = new StuCertiModel(pn, ps);
+        example.setStatus(status.code());
+
+        List<StuCertiModel> list = certiMapper.findBy(example);
+        long tot = certiMapper.countFindBy(example);
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<StuCertiModel> findByMember(Integer memId) {
         StuCertiModel example = new StuCertiModel();
         example.setMemberId(memId);

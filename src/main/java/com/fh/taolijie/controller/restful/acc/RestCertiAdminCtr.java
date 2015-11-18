@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful.acc;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
@@ -10,6 +11,7 @@ import com.fh.taolijie.service.certi.EmpCertiService;
 import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,6 +82,25 @@ public class RestCertiAdminCtr {
         stuService.updateStatus(certiId, stuModel.getMemberId(), st, memo);
 
         return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 查询学生身份认证申请列表
+     * @return
+     */
+    @RequestMapping(value = "/stu/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText stuList(@RequestParam String status,
+                                @RequestParam(defaultValue = "0") int pn,
+                                @RequestParam(defaultValue = Constants.PAGE_CAP) int ps) {
+        CertiStatus cs = CertiStatus.fromCode(status);
+        if (null == cs) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<StuCertiModel> lr = stuService.findByStatus(cs, pn, ps);
+
+        return new ResponseText(lr);
     }
 
     /**

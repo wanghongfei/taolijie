@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.certi;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.taolijie.domain.Pageable;
 
 import javax.validation.constraints.NotNull;
@@ -9,8 +10,10 @@ public class StuCertiModel extends Pageable {
     private Integer id;
 
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private Integer memberId;
