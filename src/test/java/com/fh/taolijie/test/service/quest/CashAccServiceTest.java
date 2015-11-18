@@ -2,9 +2,7 @@ package com.fh.taolijie.test.service.quest;
 
 import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.acc.CashAccModel;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
-import com.fh.taolijie.exception.checked.acc.CashAccExistsException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.impl.DefaultAccFlowService;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * Created by whf on 9/20/15.

@@ -6,7 +6,7 @@ import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.PermissionException;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.acc.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
 
 import java.math.BigDecimal;

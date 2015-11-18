@@ -15,7 +15,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.PermissionException;
-import com.fh.taolijie.exception.checked.UserNotExistsException;
+import com.fh.taolijie.exception.checked.acc.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.AccFlowService;
 import com.fh.taolijie.service.acc.CashAccService;

@@ -1,5 +1,6 @@
 package com.fh.taolijie.exception.checked.quest;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
@@ -9,5 +10,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class QuestAssignedException extends GeneralCheckedException {
     public QuestAssignedException(String msg) {
         super(msg);
+        setCode(ErrorCode.QUEST_ASSIGNED);
     }
 }

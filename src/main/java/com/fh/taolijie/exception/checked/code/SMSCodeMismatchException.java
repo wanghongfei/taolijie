@@ -1,5 +1,6 @@
 package com.fh.taolijie.exception.checked.code;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
@@ -8,5 +9,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class SMSCodeMismatchException extends GeneralCheckedException {
     public SMSCodeMismatchException() {
         super("");
+        setCode(ErrorCode.VALIDATION_CODE_ERROR);
     }
 }

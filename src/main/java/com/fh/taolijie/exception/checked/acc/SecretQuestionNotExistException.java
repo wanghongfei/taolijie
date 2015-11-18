@@ -1,5 +1,6 @@
 package com.fh.taolijie.exception.checked.acc;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
@@ -8,5 +9,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class SecretQuestionNotExistException extends GeneralCheckedException {
     public SecretQuestionNotExistException() {
         super("");
+        setCode(ErrorCode.NOT_FOUND);
     }
 }

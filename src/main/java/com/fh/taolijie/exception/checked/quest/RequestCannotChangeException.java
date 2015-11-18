@@ -1,5 +1,6 @@
 package com.fh.taolijie.exception.checked.quest;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
@@ -8,5 +9,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class RequestCannotChangeException extends GeneralCheckedException {
     public RequestCannotChangeException() {
         super("");
+        setCode(ErrorCode.STATUS_CANNOT_CHANGE);
     }
 }

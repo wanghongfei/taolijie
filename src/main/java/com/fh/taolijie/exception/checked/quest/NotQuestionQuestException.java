@@ -1,5 +1,6 @@
 package com.fh.taolijie.exception.checked.quest;
 
+import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
@@ -8,5 +9,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class NotQuestionQuestException extends GeneralCheckedException {
     public NotQuestionQuestException() {
         super("");
+        setCode(ErrorCode.NO_QUESTION_FOR_QUEST);
     }
 }

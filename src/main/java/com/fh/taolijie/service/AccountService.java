@@ -4,9 +4,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
 import com.fh.taolijie.exception.checked.*;
-import com.fh.taolijie.exception.checked.acc.SecretQuestionNotExistException;
-import com.fh.taolijie.exception.checked.acc.SecretQuestionWrongException;
-import com.fh.taolijie.exception.checked.acc.UsernameExistException;
+import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 
 import java.util.List;
