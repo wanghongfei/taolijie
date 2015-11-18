@@ -13,6 +13,7 @@ import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
@@ -364,7 +365,7 @@ public class RestAccCtr {
                                  @RequestParam Integer payType,
                                  @RequestParam(required = false) String alipayAcc,
                                  @RequestParam(required = false) String bankAcc,
-                                 HttpServletRequest req) {
+                                 HttpServletRequest req) throws GeneralCheckedException {
 
         // 参数验证
         PayType type = PayType.fromCode(payType);
@@ -382,20 +383,7 @@ public class RestAccCtr {
         model.setAlipayAcc(alipayAcc);
         model.setBankAcc(bankAcc);
 
-        try {
-            drawService.addWithdraw(model, CredentialUtils.sha(dealPwd), type);
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (InvalidDealPwdException e) {
-            return new ResponseText(ErrorCode.BAD_PASSWORD);
-
-        } catch (AccountNotSetException e) {
-            return new ResponseText(ErrorCode.ACC_NOT_SET);
-        }
+        drawService.addWithdraw(model, CredentialUtils.sha(dealPwd), type);
 
         return ResponseText.getSuccessResponseText();
 

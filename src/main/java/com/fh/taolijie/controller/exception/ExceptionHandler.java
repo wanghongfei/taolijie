@@ -37,6 +37,8 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         // 200
         if (ex instanceof GeneralCheckedException) {
             GeneralCheckedException gex = (GeneralCheckedException) ex;
+
+            // 创建返回JSON信息
             ResponseText rt = new ResponseText(gex.getCode());
             String json = JSON.toJSONString(rt);
             req.setAttribute("json", json);

@@ -13,7 +13,7 @@ public class ResponseText {
     private int code = ErrorCode.SUCCESS.value();
     private boolean isOk = true;
 
-    private Object data;
+    private Object data = "";
 
 
     /**
