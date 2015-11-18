@@ -76,7 +76,7 @@ public class RestAccCtr {
                                   //@RequestParam(defaultValue = "") String code, // 手机验证码
                                   @RequestParam(required = false) String email,
                                   @RequestParam(required = false) String name,
-                                  HttpServletRequest req) {
+                                  HttpServletRequest req) throws GeneralCheckedException {
 
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -126,18 +126,7 @@ public class RestAccCtr {
         question.setContent(seContent);
         question.setAnswer(seAnswer);
 
-        try {
-            accService.addAcc(acc, question);
-        } catch (CashAccExistsException e) {
-            return new ResponseText(ErrorCode.EXISTS);
-
-        } catch (UserNotExistsException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (SecretQuestionExistException ex) {
-            return new ResponseText(ErrorCode.ANSWER_EXIST);
-
-        }
+        accService.addAcc(acc, question);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -165,7 +154,7 @@ public class RestAccCtr {
     @RequestMapping(value = "/alipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeAlipay(@RequestParam String alipay,
                                      @RequestParam String code, // 手机验证码
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
@@ -176,11 +165,7 @@ public class RestAccCtr {
         }
 
         CashAccModel acc = accService.findByMember(memId);
-        try {
-            accService.updateAlipay(acc.getId(), alipay);
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+        accService.updateAlipay(acc.getId(), alipay);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -192,7 +177,7 @@ public class RestAccCtr {
     @RequestMapping(value = "/bank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeBank(@RequestParam String bankAcc,
                                    @RequestParam String code, // 手机验证码
-                                   HttpServletRequest req) {
+                                   HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
@@ -203,11 +188,7 @@ public class RestAccCtr {
         }
 
         CashAccModel acc = accService.findByMember(memId);
-        try {
-            accService.updateBankAcc(acc.getId(), bankAcc);
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+        accService.updateBankAcc(acc.getId(), bankAcc);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -219,20 +200,14 @@ public class RestAccCtr {
     @RequestMapping(value = "/dealPwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeDealPwd(@RequestParam String answer,
                                       @RequestParam String dealPwd,
-                                      HttpServletRequest req) {
+                                      HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
         // 验证密保
-        try {
-            boolean result = seService.checkAnswer(memId, answer);
-            if (!result) {
-                return new ResponseText(ErrorCode.WRONG_ANSWER);
-            }
-
-        } catch (SecretQuestionNotExistException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
+        boolean result = seService.checkAnswer(memId, answer);
+        if (!result) {
+            return new ResponseText(ErrorCode.WRONG_ANSWER);
         }
 
         // 验证dealPwd参数
@@ -241,11 +216,7 @@ public class RestAccCtr {
         }
 
         // 修改交易密码
-        try {
-            accService.updateDealPwd(memId, dealPwd);
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+        accService.updateDealPwd(memId, dealPwd);
 
         return new ResponseText();
     }
@@ -258,28 +229,14 @@ public class RestAccCtr {
     public ResponseText changePhone(@RequestParam String phone,
                                     @RequestParam String code, // 手机验证码
                                     @RequestParam(required = false) String answer, // 密保答案
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
-        try {
-            if (null != answer) {
-                memService.changePhoneByQuestionAndCode(memId, answer, phone, code);
-            } else {
-                memService.changePhoneByCode(memId, phone, code);
-            }
-
-        } catch (SecretQuestionNotExistException | PermissionException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (SecretQuestionWrongException e) {
-            return new ResponseText(ErrorCode.WRONG_ANSWER);
-
-        } catch (SMSCodeMismatchException e) {
-            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-
-        } catch (UsernameExistException e) {
-            return new ResponseText(ErrorCode.USER_EXIST);
+        if (null != answer) {
+            memService.changePhoneByQuestionAndCode(memId, answer, phone, code);
+        } else {
+            memService.changePhoneByCode(memId, phone, code);
         }
 
 
@@ -332,25 +289,10 @@ public class RestAccCtr {
      */
     @RequestMapping(value = "/charge", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText charge(@RequestParam Integer orderId,
-                               HttpServletRequest req) {
+                               HttpServletRequest req) throws GeneralCheckedException {
 
 
-        try {
-            accService.charge(orderId, SessionUtils.getCredential(req).getId());
-
-        } catch (OrderNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (PermissionException e) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (FinalStatusException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        }
+        accService.charge(orderId, SessionUtils.getCredential(req).getId());
 
         return ResponseText.getSuccessResponseText();
     }

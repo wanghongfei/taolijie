@@ -10,10 +10,7 @@ import com.fh.taolijie.domain.quest.QuestionOptModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.dto.ExamDto;
 import com.fh.taolijie.dto.QuestionAnalyzeDto;
-import com.fh.taolijie.exception.checked.FinalStatusException;
-import com.fh.taolijie.exception.checked.HackException;
-import com.fh.taolijie.exception.checked.InvalidNumberStringException;
-import com.fh.taolijie.exception.checked.PermissionException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
@@ -54,7 +51,7 @@ public class RestQuestionUCtr {
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON, consumes = Constants.Produce.JSON)
     public ResponseText publishQuestion(@RequestBody @Valid ExamDto dto,
                                         BindingResult br,
-                                        HttpServletRequest req) {
+                                        HttpServletRequest req) throws GeneralCheckedException {
         // 参数合法性检查
         if (br.hasErrors()) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
@@ -80,38 +77,20 @@ public class RestQuestionUCtr {
 
         // 将id string 转换成List<Integer>
         QuestModel model = dto.getQuest();
-        try {
-            List<Integer> coList = StringUtils.splitIntendIds(dto.getCollegeIds());
-            List<Integer> schList = StringUtils.splitIntendIds(dto.getSchoolIds());
-            List<Integer> cityList = StringUtils.splitIntendIds(dto.getCityIds());
-            List<Integer> proList = StringUtils.splitIntendIds(dto.getProIds());
-            model.setCollegeIdList(coList);
-            model.setSchoolIdList(schList);
-            model.setCityIdList(cityList);
-            model.setProvinceIdList(proList);
 
-        } catch (InvalidNumberStringException e) {
-            return new ResponseText(ErrorCode.BAD_NUMBER);
-        }
+        List<Integer> coList = StringUtils.splitIntendIds(dto.getCollegeIds());
+        List<Integer> schList = StringUtils.splitIntendIds(dto.getSchoolIds());
+        List<Integer> cityList = StringUtils.splitIntendIds(dto.getCityIds());
+        List<Integer> proList = StringUtils.splitIntendIds(dto.getProIds());
+        model.setCollegeIdList(coList);
+        model.setSchoolIdList(schList);
+        model.setCityIdList(cityList);
+        model.setProvinceIdList(proList);
 
         Credential credential = SessionUtils.getCredential(req);
         dto.getQuest().setMemberId(credential.getId());
 
-        try {
-            questionService.publishQuestions(dto.getQuest(), dto.getQuestions(), dto.getOrderId(), dto.getSave());
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (FinalStatusException | PermissionException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (OrderNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-        }
+        questionService.publishQuestions(dto.getQuest(), dto.getQuestions(), dto.getOrderId(), dto.getSave());
 
         return ResponseText.getSuccessResponseText();
     }
@@ -123,34 +102,15 @@ public class RestQuestionUCtr {
     @RequestMapping(value = "/check", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText checkAnswer(@RequestParam Integer questionId,
                                     @RequestParam String optIds,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
 
         // id string转换成List<Integer>
-        try {
-            List<Integer> idList = StringUtils.splitIntendIds(optIds);
-            // 验证答案
-            boolean result = questionService.validateAnswer(credential.getId(), questionId, idList);
-            return new ResponseText(result);
-
-        } catch (InvalidNumberStringException e) {
-            return new ResponseText(ErrorCode.BAD_NUMBER);
-
-        } catch (QuestionNotFoundException ex) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (CashAccNotExistsException ex) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (HackException ex) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (RequestRepeatedException ex) {
-            return new ResponseText(ErrorCode.REPEAT);
-        }
-
-
+        List<Integer> idList = StringUtils.splitIntendIds(optIds);
+        // 验证答案
+        boolean result = questionService.validateAnswer(credential.getId(), questionId, idList);
+        return new ResponseText(result);
     }
 
     /**
@@ -180,7 +140,7 @@ public class RestQuestionUCtr {
      */
     @RequestMapping(value = "", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText queryQuestionsForQuest(@RequestParam Integer questId,
-                                               HttpServletRequest req) {
+                                               HttpServletRequest req) throws GeneralCheckedException {
         Credential credential = SessionUtils.getCredential(req);
 
 
@@ -190,17 +150,8 @@ public class RestQuestionUCtr {
             return new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
         }
 
-        try {
-            ListResult<QuestionModel> lr = questionService.findQuestionList(questId);
-            return new ResponseText(lr);
-
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (NotQuestionQuestException e) {
-            return new ResponseText(ErrorCode.NO_QUESTION_FOR_QUEST);
-
-        }
+        ListResult<QuestionModel> lr = questionService.findQuestionList(questId);
+        return new ResponseText(lr);
     }
 
     /**
@@ -209,7 +160,7 @@ public class RestQuestionUCtr {
      */
     @RequestMapping(value = "/result", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText analyzeData(@RequestParam Integer questId,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         // 检查是不是自己发布的任务
         Credential credential = SessionUtils.getCredential(req);
@@ -218,18 +169,8 @@ public class RestQuestionUCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-        try {
-            List<QuestionAnalyzeDto> data = questionService.analyzeData(questId);
-            return new ResponseText(new ListResult<>(data, data.size()));
-
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (NotQuestionQuestException e) {
-            return new ResponseText(ErrorCode.NO_QUESTION_FOR_QUEST);
-
-        }
-
+        List<QuestionAnalyzeDto> data = questionService.analyzeData(questId);
+        return new ResponseText(new ListResult<>(data, data.size()));
     }
 
     /**

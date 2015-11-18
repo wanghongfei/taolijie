@@ -9,6 +9,7 @@ import com.fh.taolijie.constant.acc.WithdrawStatus;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.WithdrawNotExistsException;
@@ -46,24 +47,14 @@ public class RestAccAdminCtr {
     public ResponseText auditWithdraw(@RequestParam Integer drawId,
                                       @RequestParam String status,
                                       @RequestParam(required = false) String memo,
-                                      HttpServletRequest req) {
+                                      HttpServletRequest req) throws GeneralCheckedException {
 
         WithdrawStatus st = WithdrawStatus.fromCode(status);
         if (null == st) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            drawService.updateStatus(drawId, st, memo);
-        } catch (WithdrawNotExistsException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-        }
+        drawService.updateStatus(drawId, st, memo);
 
         return ResponseText.getSuccessResponseText();
 
@@ -114,19 +105,14 @@ public class RestAccAdminCtr {
     public ResponseText auditCharge(@RequestParam Integer orderId,
                                     @RequestParam String status,
                                     @RequestParam(required = false) String memo,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         OrderStatus st = OrderStatus.fromCode(status);
         if (null == st) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            chargeService.updateStatus(orderId, st, memo);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+        chargeService.updateStatus(orderId, st, memo);
 
         return ResponseText.getSuccessResponseText();
     }

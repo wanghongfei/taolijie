@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.code.SMSIntervalException;
 import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.service.AccountService;
@@ -46,7 +47,7 @@ public class ValidationCodeCtr {
     @RequestMapping(value = "/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText sendSMS(@RequestParam String mobile,
                                 @RequestParam String code,
-                                HttpServletRequest req) {
+                                HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
@@ -58,15 +59,7 @@ public class ValidationCodeCtr {
         }
 
 
-        try {
-            codeService.genSMSValidationCode(credential.getId().toString(), mobile);
-        } catch (SMSIntervalException e) {
-            return new ResponseText(ErrorCode.TOO_FREQUENT);
-
-        } catch (SMSVendorException e) {
-            return new ResponseText(ErrorCode.SMS_INVOKE_FAILED);
-
-        }
+        codeService.genSMSValidationCode(credential.getId().toString(), mobile);
 
         return new ResponseText();
     }
@@ -77,8 +70,7 @@ public class ValidationCodeCtr {
      * @return
      */
     @RequestMapping(value = "/sms", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText sendSMS(
-                                HttpServletRequest req) {
+    public ResponseText sendSMS(HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
@@ -103,16 +95,7 @@ public class ValidationCodeCtr {
         }
 
 
-        try {
-            codeService.genSMSValidationCode(credential.getId().toString(), mobile);
-
-        } catch (SMSIntervalException e) {
-            return new ResponseText(ErrorCode.TOO_FREQUENT);
-
-        } catch (SMSVendorException e) {
-            return new ResponseText(ErrorCode.SMS_INVOKE_FAILED);
-
-        }
+        codeService.genSMSValidationCode(credential.getId().toString(), mobile);
 
         return new ResponseText();
     }

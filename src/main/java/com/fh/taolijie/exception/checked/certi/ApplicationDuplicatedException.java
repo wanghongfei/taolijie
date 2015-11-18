@@ -9,6 +9,6 @@ import com.fh.taolijie.exception.checked.GeneralCheckedException;
 public class ApplicationDuplicatedException extends GeneralCheckedException {
     public ApplicationDuplicatedException(String msg) {
         super(msg);
-        setCode(ErrorCode.REPEAT);
+        setCode(ErrorCode.ALREADY_VERIFIED);
     }
 }

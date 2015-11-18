@@ -7,6 +7,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.resume.ResumeModel;
 import com.fh.taolijie.domain.middle.ResumeWithIntend;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
 import com.fh.taolijie.service.ResumeService;
 import com.fh.taolijie.utils.Constants;
@@ -126,7 +127,7 @@ public class RestResumeController {
     @RequestMapping(value = "/filter", produces = Constants.Produce.JSON)
     public ResponseText filter( ResumeModel model,
                                 @RequestParam(defaultValue = "0") int pageNumber,
-                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
+                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) throws GeneralCheckedException{
 
         pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
         model.setPageNumber(pageNumber);
@@ -135,13 +136,8 @@ public class RestResumeController {
         // 是否根据意向查询
         String ids = model.getIntendIds();
         if (null != ids) {
-            try {
-                List<Integer> idList = StringUtils.splitIntendIds(ids);
-                model.setIntendIdList(idList);
-
-            } catch (InvalidNumberStringException e) {
-                return new ResponseText(ErrorCode.INVALID_PARAMETER);
-            }
+            List<Integer> idList = StringUtils.splitIntendIds(ids);
+            model.setIntendIdList(idList);
         }
 
         // 简历

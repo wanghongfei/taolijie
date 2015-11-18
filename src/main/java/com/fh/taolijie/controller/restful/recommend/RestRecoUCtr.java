@@ -6,10 +6,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RecoType;
 import com.fh.taolijie.domain.RecoPostModel;
-import com.fh.taolijie.exception.checked.FinalStatusException;
-import com.fh.taolijie.exception.checked.PermissionException;
-import com.fh.taolijie.exception.checked.PostNotFoundException;
-import com.fh.taolijie.exception.checked.RecoRepeatedException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
@@ -46,7 +43,7 @@ public class RestRecoUCtr {
                                @RequestParam int days,
                                @RequestParam(required = false) Integer index,
                                @RequestParam(required = false) Integer orderId,
-                            HttpServletRequest req) {
+                            HttpServletRequest req) throws GeneralCheckedException {
 
         RecoType rt = RecoType.fromCode(type);
         if (null == rt) {
@@ -69,30 +66,7 @@ public class RestRecoUCtr {
         Date expire = TimeUtil.calculateDate(new Date(), Calendar.DAY_OF_MONTH, days);
         model.setExpiredTime(expire);
 
-        try {
-            reService.add(model, orderId);
-
-        } catch (PostNotFoundException postNotFoundException) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (RecoRepeatedException e) {
-            return new ResponseText(ErrorCode.REPEAT);
-
-        } catch (BalanceNotEnoughException ex) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException ex) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (FinalStatusException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (PermissionException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (OrderNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-        }
+        reService.add(model, orderId);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -107,7 +81,7 @@ public class RestRecoUCtr {
                                @RequestParam int days,
                                @RequestParam(required = false) Integer index,
                                @RequestParam(required = false) Integer orderId,
-                               HttpServletRequest req) {
+                               HttpServletRequest req) throws GeneralCheckedException {
 
         // 检查type参数合法性
         RecoType rt = RecoType.fromCode(type);
@@ -115,21 +89,7 @@ public class RestRecoUCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            reService.addTag(postId, rt, days, orderId);
-
-        } catch (PostNotFoundException | OrderNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (FinalStatusException | PermissionException ex) {
-            return new ResponseText(ErrorCode.HACKER);
-        }
+        reService.addTag(postId, rt, days, orderId);
 
         return ResponseText.getSuccessResponseText();
     }

@@ -4,6 +4,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
@@ -63,30 +64,8 @@ public class RestScheduleCtr {
      * @return
      */
     @RequestMapping(value = URL_AUTO_AUDIT, method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText autoAudit(@RequestParam Integer reqId) {
-        try {
-            fiService.updateStatus(reqId, RequestStatus.AUTO_PASSED, null);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.FAILED);
-
-        } catch (RequestNotExistException e) {
-            return new ResponseText(ErrorCode.FAILED);
-
-        } catch (RequestCannotChangeException e) {
-            return new ResponseText(ErrorCode.FAILED);
-
-        } catch (AuditNotEnoughException e) {
-            return new ResponseText(ErrorCode.FAILED);
-
-        } catch (HackException ex) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (NotEnoughCouponException e) {
-            return new ResponseText(ErrorCode.ASSIGN_COUPON_FAILED);
-
-        }
-
+    public ResponseText autoAudit(@RequestParam Integer reqId) throws GeneralCheckedException {
+        fiService.updateStatus(reqId, RequestStatus.AUTO_PASSED, null);
 
         return new ResponseText();
     }
@@ -107,12 +86,8 @@ public class RestScheduleCtr {
      * @return
      */
     @RequestMapping(value = URL_QUEST_EXPIRE, method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText questExpire(@RequestParam Integer questId) {
-        try {
-            questService.questExpired(questId);
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+    public ResponseText questExpire(@RequestParam Integer questId) throws GeneralCheckedException {
+        questService.questExpired(questId);
 
         return ResponseText.getSuccessResponseText();
     }

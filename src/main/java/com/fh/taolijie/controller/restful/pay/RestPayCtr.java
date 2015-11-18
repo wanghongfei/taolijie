@@ -11,6 +11,7 @@ import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.dto.AlipayAsyncDto;
 import com.fh.taolijie.dto.OrderSignDto;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.OrderService;
@@ -64,7 +65,7 @@ public class RestPayCtr {
 
                                     @RequestParam String orderType,
                                     @RequestParam Integer payChan,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -91,30 +92,23 @@ public class RestPayCtr {
         order.setPayChan(payChan);
 
 
-        try {
-            // 生成订单
-            chargeService.chargeApply(order);
-            // 得到订单号
-            Integer orderId = order.getId();
+        // 生成订单
+        chargeService.chargeApply(order);
+        // 得到订单号
+        Integer orderId = order.getId();
 
-            // 签名
-            Map<String, String> map = new HashMap<>(6);
-            map.put("subject", StringUtils.surroundQuotation(subject));
-            map.put("payment_type", StringUtils.surroundQuotation(paymentType));
-            map.put("total_fee", StringUtils.surroundQuotation(totalFee));
-            map.put("body", StringUtils.surroundQuotation(body));
-            map.put("out_trade_no", StringUtils.surroundQuotation(orderId.toString()));
+        // 签名
+        Map<String, String> map = new HashMap<>(6);
+        map.put("subject", StringUtils.surroundQuotation(subject));
+        map.put("payment_type", StringUtils.surroundQuotation(paymentType));
+        map.put("total_fee", StringUtils.surroundQuotation(totalFee));
+        map.put("body", StringUtils.surroundQuotation(body));
+        map.put("out_trade_no", StringUtils.surroundQuotation(orderId.toString()));
 
-            OrderSignDto dto = payService.sign(map, PayType.ALIPAY);
-            dto.setOrderId(orderId);
+        OrderSignDto dto = payService.sign(map, PayType.ALIPAY);
+        dto.setOrderId(orderId);
 
-            return new ResponseText(dto);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
-
-
+        return new ResponseText(dto);
     }
 
     /**

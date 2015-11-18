@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.domain.certi.EmpCertiModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.certi.StuCertiModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.certi.EmpCertiService;
@@ -50,7 +51,7 @@ public class RestCertiCtr {
     public ResponseText idApply(@RequestParam String name,
                                 @RequestParam String id,
                                 @RequestParam String picIds,
-                                HttpServletRequest req) {
+                                HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
         IdCertiModel model = new IdCertiModel();
@@ -60,13 +61,7 @@ public class RestCertiCtr {
         model.setPicIds(picIds);
         model.setMemId(memId);
 
-        try {
-            idService.addApplication(model);
-
-        } catch (ApplicationDuplicatedException e) {
-            return new ResponseText(ErrorCode.ALREADY_VERIFIED);
-
-        }
+        idService.addApplication(model);
 
         return ResponseText.getSuccessResponseText();
     }

@@ -16,10 +16,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
-import com.fh.taolijie.exception.checked.FinalStatusException;
-import com.fh.taolijie.exception.checked.HackException;
-import com.fh.taolijie.exception.checked.InvalidNumberStringException;
-import com.fh.taolijie.exception.checked.PermissionException;
+import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
@@ -95,7 +92,7 @@ public class RestQuestCtr {
 
                                      @RequestParam(required = false) Integer orderId,
                                      @RequestParam(defaultValue = "0") Integer save, // 保存(1) or 发布(0)
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
 
@@ -134,20 +131,13 @@ public class RestQuestCtr {
         }
 
         // 将id string 转换成List<Integer>
-        try {
-            List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
-            //List<Integer> schList = StringUtils.splitIntendIds(schoolIds);
-            List<Integer> proList = StringUtils.splitIntendIds(proIds);
-            List<Integer> cityList = StringUtils.splitIntendIds(cityIds);
+        List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
+        List<Integer> proList = StringUtils.splitIntendIds(proIds);
+        List<Integer> cityList = StringUtils.splitIntendIds(cityIds);
 
-            model.setCollegeIdList(coList);
-            //model.setSchoolIdList(schList);
-            model.setProvinceIdList(proList);
-            model.setCityIdList(cityList);
-
-        } catch (InvalidNumberStringException e) {
-            return new ResponseText(ErrorCode.BAD_NUMBER);
-        }
+        model.setCollegeIdList(coList);
+        model.setProvinceIdList(proList);
+        model.setCityIdList(cityList);
 
         // 查出用户对应的现金账户
         Integer accId = accService.findIdByMember(credential.getId());
@@ -157,30 +147,19 @@ public class RestQuestCtr {
         model.setMemberId(credential.getId());
         model.setLeftAmt(model.getTotalAmt());
 
-        try {
-            // 任务有coupon信息
-            if (coupon) {
-                CouponModel couponModel = new CouponModel();
-                couponModel.setEmpId(credential.getId());
-                couponModel.setTitle(couponTitle);
-                couponModel.setDescription(couponDesp);
-                couponModel.setLogoPath(logo);
-                couponModel.setExpiredTime(expiredTime);
-                couponModel.setAmt(couponAmt);
+        // 任务有coupon信息
+        if (coupon) {
+            CouponModel couponModel = new CouponModel();
+            couponModel.setEmpId(credential.getId());
+            couponModel.setTitle(couponTitle);
+            couponModel.setDescription(couponDesp);
+            couponModel.setLogoPath(logo);
+            couponModel.setExpiredTime(expiredTime);
+            couponModel.setAmt(couponAmt);
 
-                questService.publishQuest(accId, model, orderId, couponModel, save);
-            } else {
-                questService.publishQuest(accId, model, orderId, null, save);
-            }
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (OrderNotFoundException | PermissionException | FinalStatusException e) {
-            return new ResponseText(ErrorCode.HACKER);
+            questService.publishQuest(accId, model, orderId, couponModel, save);
+        } else {
+            questService.publishQuest(accId, model, orderId, null, save);
         }
 
 
@@ -197,27 +176,10 @@ public class RestQuestCtr {
     @RequestMapping(value = "", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText publishDraft(@RequestParam Integer questId,
                                      @RequestParam(required = false) Integer orderId,
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
-        try {
-            questService.publishDraft(memId, questId, orderId);
-
-        } catch (QuestionNotFoundException | OrderNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (PermissionException e) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        } catch (FinalStatusException e) {
-            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-        }
+        questService.publishDraft(memId, questId, orderId);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -241,22 +203,11 @@ public class RestQuestCtr {
      */
     @RequestMapping(value = "/flush/{questId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText flushPost(@PathVariable Integer questId,
-                                  HttpServletRequest req) {
+                                  HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
-        try {
-            questService.flush(memId, questId);
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        }
+        questService.flush(memId, questId);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -268,7 +219,7 @@ public class RestQuestCtr {
      */
     @RequestMapping(value = "/assign/{questId}", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText assignQuest(@PathVariable Integer questId,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
         if (null == credential) {
@@ -287,23 +238,7 @@ public class RestQuestCtr {
         }
 
 
-        try {
-            questService.assignQuest(credential.getId(), questId);
-        } catch (QuestAssignedException e) {
-            return new ResponseText(ErrorCode.QUEST_ASSIGNED);
-
-        } catch (QuestZeroException e) {
-            return new ResponseText(ErrorCode.QUEST_ZERO);
-
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (QuestExpiredException e) {
-            return new ResponseText(ErrorCode.QUEST_EXPIRED);
-
-        } catch (QuestNotStartException e) {
-            return new ResponseText(ErrorCode.NOT_STARTED);
-        }
+        questService.assignQuest(credential.getId(), questId);
 
         return new ResponseText();
     }
@@ -321,7 +256,7 @@ public class RestQuestCtr {
                                     @RequestParam("imageIds") String imgIds,
                                     @RequestParam(required = false) String name,
                                     @RequestParam(required = false) String memo,
-                                    HttpServletRequest req) {
+                                    HttpServletRequest req) throws GeneralCheckedException {
 
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -341,14 +276,7 @@ public class RestQuestCtr {
         model.setName(name);
         model.setMemo(memo);
 
-        try {
-            fiService.submitRequest(model);
-        } catch (QuestNotAssignedException e) {
-            return new ResponseText(ErrorCode.QUEST_NOT_ASSIGNED);
-
-        } catch (RequestRepeatedException e) {
-            return new ResponseText(ErrorCode.REPEAT);
-        }
+        fiService.submitRequest(model);
 
         return new ResponseText();
     }
@@ -420,7 +348,7 @@ public class RestQuestCtr {
     public ResponseText changeStatus(@PathVariable Integer reqId,
                                      @RequestParam String status,
                                      @RequestParam(required = false) String memo,
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -459,28 +387,7 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            fiService.updateStatus(reqId, st, memo);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (RequestNotExistException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (RequestCannotChangeException ex) {
-            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
-
-        } catch (AuditNotEnoughException ex) {
-            return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
-
-        } catch (NotEnoughCouponException ex) {
-            return new ResponseText(ErrorCode.ASSIGN_COUPON_FAILED);
-
-        } catch (HackException ex) {
-            return new ResponseText(ErrorCode.HACKER);
-
-        }
+        fiService.updateStatus(reqId, st, memo);
 
         return new ResponseText();
     }
@@ -579,7 +486,7 @@ public class RestQuestCtr {
      */
     @RequestMapping(value = "/coupon/check", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText validateCoupon(@RequestParam String code,
-                                       HttpServletRequest req) {
+                                       HttpServletRequest req) throws GeneralCheckedException {
 
         // 只有商家用户可以调用
         Credential credential = SessionUtils.getCredential(req);
@@ -587,20 +494,7 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
-        try {
-            couponService.validateCoupon(code);
-        } catch (CouponNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (InvalidCouponException e) {
-            return new ResponseText(ErrorCode.COUPON_INVALID);
-
-        } catch (CouponUsedException e) {
-            return new ResponseText(ErrorCode.COUPON_USED);
-
-        } catch (CouponExpiredException e) {
-            return new ResponseText(ErrorCode.COUPON_EXPIRED);
-        }
+        couponService.validateCoupon(code);
 
         return ResponseText.getSuccessResponseText();
     }
@@ -625,7 +519,7 @@ public class RestQuestCtr {
     @RequestMapping(value = "/audit", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText applyAudit(@RequestParam Integer questId,
                                    @RequestParam Integer amt, // 申请数量
-                                   HttpServletRequest req) {
+                                   HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         // 判断是否是商家用户
@@ -639,21 +533,7 @@ public class RestQuestCtr {
         model.setTotAmt(amt);
         model.setLeftAmt(amt);
 
-        try {
-            auditService.addAudit(model);
-        } catch (BalanceNotEnoughException e) {
-            return new ResponseText(ErrorCode.BALANCE_NOT_ENOUGH);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (RequestRepeatedException e) {
-            return new ResponseText(ErrorCode.REPEAT);
-
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        }
+        auditService.addAudit(model);
 
         return ResponseText.getSuccessResponseText();
     }

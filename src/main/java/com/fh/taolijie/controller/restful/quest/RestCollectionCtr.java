@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.quest.QuestCoModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.collect.QuestCoService;
 import com.fh.taolijie.utils.Constants;
@@ -31,16 +32,11 @@ public class RestCollectionCtr {
      */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText collect(@RequestParam Integer questId,
-                                HttpServletRequest req) {
+                                HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
 
-        try {
-            coService.collect(credential.getId(), questId);
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        }
+        coService.collect(credential.getId(), questId);
 
         return ResponseText.getSuccessResponseText();
     }

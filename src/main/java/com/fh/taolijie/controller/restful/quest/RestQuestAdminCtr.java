@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful.quest;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.utils.Constants;
@@ -27,20 +28,14 @@ public class RestQuestAdminCtr {
     @RequestMapping(value = "/{questId}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeStatus(@PathVariable Integer questId,
                                      @RequestParam Integer status,
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         EmpQuestStatus empStatus = EmpQuestStatus.fromCode(status);
         if (null == empStatus) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            questService.changeEmpStatus(questId, empStatus);
-
-        } catch (QuestNotFoundException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        }
+        questService.changeEmpStatus(questId, empStatus);
 
         return ResponseText.getSuccessResponseText();
     }

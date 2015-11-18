@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.quest.RequestStatus;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.AuditNotEnoughException;
@@ -36,7 +37,7 @@ public class RestQuestFinishAdminCtr {
     public ResponseText changeStatus(@PathVariable Integer reqId,
                                      @RequestParam String status,
                                      @RequestParam(required = false) String memo,
-                                     HttpServletRequest req) {
+                                     HttpServletRequest req) throws GeneralCheckedException {
 
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
@@ -53,27 +54,7 @@ public class RestQuestFinishAdminCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            fiService.updateStatus(reqId, st, memo);
-
-        } catch (CashAccNotExistsException e) {
-            return new ResponseText(ErrorCode.CASH_ACC_NOT_EXIST);
-
-        } catch (RequestNotExistException e) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-
-        } catch (RequestCannotChangeException e) {
-            return new ResponseText(ErrorCode.STATUS_CANNOT_CHANGE);
-
-        } catch (AuditNotEnoughException e) {
-            return new ResponseText(ErrorCode.AUDIT_NOT_ENOUGH);
-
-        } catch (NotEnoughCouponException e) {
-            return new ResponseText(ErrorCode.ASSIGN_COUPON_FAILED);
-
-        } catch (HackException ex) {
-            return new ResponseText(ErrorCode.HACKER);
-        }
+        fiService.updateStatus(reqId, st, memo);
 
         return new ResponseText();
     }

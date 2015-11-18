@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.noti.PrivateNotificationModel;
 import com.fh.taolijie.domain.noti.SysNotificationModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.NotificationService;
 import com.fh.taolijie.utils.Constants;
@@ -277,7 +278,7 @@ public class RestNotificationController {
      */
     @RequestMapping(value = "/sys/mark", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText markSysAsRead(@RequestParam("notiId") String notiIdString,
-                                      HttpServletRequest req) {
+                                      HttpServletRequest req) throws GeneralCheckedException {
         // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
         if (null == credential) {
@@ -291,29 +292,12 @@ public class RestNotificationController {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        try {
-            List<Integer> idList = Arrays.stream(idStrs)
-                    .map( id -> Integer.valueOf(id) )
-                    .collect(Collectors.toList());
+        List<Integer> idList = Arrays.stream(idStrs)
+                .map( id -> Integer.valueOf(id) )
+                .collect(Collectors.toList());
 
-
-/*                // 检查通知是否存在
-                SysNotificationModel noti = notiService.findSysById(id);
-                if (null == noti) {
-                    return new ResponseText(ErrorCode.NOT_FOUND);
-                }
-                // 检查是不是发给自己的
-                if (false == noti.getAccessRange().equals(credential.getRoleList().get(0))) {
-                    return new ResponseText(ErrorCode.PERMISSION_ERROR);
-                }
-            } */
-
-            // 批量标记为已读
-            notiService.markSysAsReadInBatch(credential.getId(), idList);
-
-        } catch (NumberFormatException ex) {
-            return new ResponseText(ErrorCode.INVALID_PARAMETER);
-        }
+        // 批量标记为已读
+        notiService.markSysAsReadInBatch(credential.getId(), idList);
 
         return ResponseText.getSuccessResponseText();
     }
