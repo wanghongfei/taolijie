@@ -340,7 +340,7 @@ public class RestQuestCtr {
 
 
     /**
-     * 修改提交状态
+     * 商家任务审核
      * @param req
      * @return
      */
@@ -350,10 +350,12 @@ public class RestQuestCtr {
                                      @RequestParam(required = false) String memo,
                                      HttpServletRequest req) throws GeneralCheckedException {
 
-        // 登陆检查
         Credential credential = SessionUtils.getCredential(req);
-        if (null == credential) {
-            return new ResponseText(ErrorCode.NOT_LOGGED_IN);
+
+        // 参数验证
+        RequestStatus st = RequestStatus.fromCode(status);
+        if (null == st) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         // 学生不能调用
@@ -366,6 +368,11 @@ public class RestQuestCtr {
         // 判断当前是否为商家
         if (SessionUtils.isEmployer(credential)) {
             // 如果是
+            // 商家不能使用status = 03, 04, 06
+            if (st == RequestStatus.AUTO_PASSED || st == RequestStatus.TLJ_FAILED || st == RequestStatus.TLJ_PASSED) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
+
             // 判断该任务是不是自己发布的
             FinishRequestModel reqModel = fiService.findById(reqId);
             if (null == reqModel) {
@@ -382,10 +389,6 @@ public class RestQuestCtr {
         }
 
 
-        RequestStatus st = RequestStatus.fromCode(status);
-        if (null == st) {
-            return new ResponseText(ErrorCode.INVALID_PARAMETER);
-        }
 
         fiService.updateStatus(reqId, st, memo);
 
