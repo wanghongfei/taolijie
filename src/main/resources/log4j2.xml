@@ -10,7 +10,7 @@
         <RollingFile name="ERROR-APPENDER" fileName="/data/taolijie/tlj-error.log"
                      filePattern="logs/%d{MM-dd-yyyy}log">
             <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p - %c: %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy />
@@ -21,7 +21,7 @@
         <RollingFile name="INFO-APPENDER" fileName="/data/taolijie/tlj-info.log"
                      filePattern="logs/%d{MM-dd-yyyy}log">
             <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p - %c: %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy />
