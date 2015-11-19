@@ -78,6 +78,8 @@ public class QuestModel extends Pageable {
 
     private Integer couponLeft;
 
+    private Integer couponTot;
+
     /**
      * 商家在我的发布中看到的状态
      */
@@ -636,6 +638,14 @@ public class QuestModel extends Pageable {
 
     public void setProvinceIdList(List<Integer> provinceIdList) {
         this.provinceIdList = provinceIdList;
+    }
+
+    public Integer getCouponTot() {
+        return couponTot;
+    }
+
+    public void setCouponTot(Integer couponTot) {
+        this.couponTot = couponTot;
     }
 
     public void setOffline(Boolean offline) {

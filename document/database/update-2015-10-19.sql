@@ -1,0 +1,1 @@
+alter table taolijie.quest add column coupon_tot int default 0;
