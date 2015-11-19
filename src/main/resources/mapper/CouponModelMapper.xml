@@ -29,6 +29,12 @@
         id, code, created_time, acquire_time, emp_id, mem_id, quest_title, quest_id, comp_name,
         title, description, expired_time, logo_path, status
     </sql>
+
+    <sql id="coupon_less_info">
+        id, created_time, emp_id, mem_id, quest_title, quest_id, comp_name,
+        title, description, expired_time, logo_path
+    </sql>
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
           WARNING - @mbggenerated
@@ -371,5 +377,17 @@
         WHERE
             code = #{code}
         FOR UPDATE
+    </select>
+
+    <select id="selectOneGroupByQuestId" resultMap="BaseResultMap">
+        SELECT
+            <include refid="coupon_less_info"/>
+        FROM
+            coupon
+        WHERE
+            quest_id IN <foreach collection="list" separator="," open="(" close=")" item="_id">#{_id}</foreach>
+        GROUP BY
+            quest_id
+
     </select>
 </mapper>

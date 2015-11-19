@@ -16,6 +16,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.quest.QuestAssignModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.dto.CouponInfoDto;
 import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -479,6 +480,29 @@ public class RestQuestCtr {
         }
 
         ListResult<CouponModel> lr = couponService.findBy(model);
+
+        return new ResponseText(lr);
+    }
+
+    /**
+     * 商家查询自己发布的卡券信息
+     * @param pn
+     * @param ps
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/coupon/emp/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryCouponList(@RequestParam(defaultValue = "0") int pn,
+                                        @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                        HttpServletRequest req) {
+        // 只有商家才能调用
+        Credential credential = SessionUtils.getCredential(req);
+        if (!SessionUtils.isEmployer(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<CouponInfoDto> lr = couponService.findByEmp(credential.getId(), pn, ps);
 
         return new ResponseText(lr);
     }

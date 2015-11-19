@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.dto.CouponInfoDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.quest.*;
 
@@ -33,5 +34,19 @@ public interface CouponService {
     boolean validateCoupon(String code)
             throws CouponNotFoundException, InvalidCouponException, CouponUsedException, CouponExpiredException;
 
+    /**
+     * 条件查询
+     * @param model
+     * @return
+     */
     ListResult<CouponModel> findBy(CouponModel model);
+
+    /**
+     * 查询商家发的卡券信息
+     * @param empId
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<CouponInfoDto> findByEmp(Integer empId, int pn, int ps);
 }

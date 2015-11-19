@@ -47,4 +47,10 @@ public interface CouponModelMapper {
      * @return
      */
     CouponModel selectByCode(String code);
+
+    /**
+     * 每个qusetId各取一条卡券记录
+     * @return
+     */
+    List<CouponModel> selectOneGroupByQuestId(List<Integer> questIdList);
 }

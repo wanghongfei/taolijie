@@ -2,9 +2,11 @@ package com.fh.taolijie.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class CouponModel extends Pageable {
     private Integer id;
 

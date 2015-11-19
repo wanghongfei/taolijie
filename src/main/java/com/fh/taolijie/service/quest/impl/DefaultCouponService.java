@@ -9,6 +9,7 @@ import com.fh.taolijie.dao.mapper.QuestModelMapper;
 import com.fh.taolijie.domain.CouponModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.dto.CouponInfoDto;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.quest.CouponService;
@@ -39,6 +40,9 @@ public class DefaultCouponService implements CouponService {
 
     @Autowired
     private MemberModelMapper memMapper;
+
+    @Autowired
+    private CouponModelMapper couponMapper;
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
@@ -142,5 +146,39 @@ public class DefaultCouponService implements CouponService {
         long tot = couMapper.countFindBy(model);
 
         return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<CouponInfoDto> findByEmp(Integer empId, int pn, int ps) {
+        // 查出employee发的带卡券的任务
+        QuestModel questCmd = new QuestModel(pn, ps);
+        questCmd.setMemberId(empId);
+        questCmd.setCoupon(true);
+        List<QuestModel> questList = questMapper.findBy(questCmd);
+        // 如果商家没有发布任务任务
+        // 则终止后续查询
+        if (questList.isEmpty()) {
+            return new ListResult<>();
+        }
+
+        long tot = questMapper.countFindBy(questCmd);
+
+        // 将任务id转换成List
+        List<Integer> idList = StringUtils.model2IdList(questList);
+
+        // 查出任务对应的coupon
+        List<CouponModel> couponList = couponMapper.selectOneGroupByQuestId(idList);
+
+        // 生成DTO对象
+        int LEN = idList.size();
+        List<CouponInfoDto> dtoList = new ArrayList<>(LEN);
+        for (int ix = 0 ; ix < LEN ; ++ix) {
+            QuestModel quest = questList.get(ix);
+            dtoList.add(new CouponInfoDto(couponList.get(ix), quest.getTotalAmt(), quest.getLeftAmt()));
+        }
+
+
+        return new ListResult<>(dtoList, tot);
     }
 }

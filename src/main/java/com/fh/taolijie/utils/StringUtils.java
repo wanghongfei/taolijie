@@ -1,6 +1,7 @@
 package com.fh.taolijie.utils;
 
 import com.fh.taolijie.exception.checked.InvalidNumberStringException;
+import com.fh.taolijie.service.prop.IdAware;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.io.IOException;
@@ -52,6 +53,21 @@ public class StringUtils {
         }
 
         return idList;
+    }
+
+    /**
+     * 将集体类中对象的id转换成List
+     * @param co
+     * @return
+     */
+    public static List<Integer> model2IdList(Collection<? extends IdAware> co) {
+        if (null == co) {
+            throw new IllegalArgumentException("parameter co cannot be null!");
+        }
+
+        return co.stream()
+                .map( IdAware::getId )
+                .collect(Collectors.toList());
     }
 
     public static String stream2String(InputStream in) throws IOException {

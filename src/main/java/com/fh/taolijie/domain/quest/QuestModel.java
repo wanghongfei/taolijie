@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.Pageable;
+import com.fh.taolijie.service.prop.IdAware;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class QuestModel extends Pageable {
+public class QuestModel extends Pageable implements IdAware {
     private Integer id;
 
     @NotNull
