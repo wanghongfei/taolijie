@@ -141,6 +141,7 @@ public class DefaultQuestService implements QuestService {
         if (null != coupon) {
             model.setCoupon(true);
             model.setCouponLeft(coupon.getAmt());
+            model.setCouponTot(coupon.getAmt());
         }
 
         // 发布任务
