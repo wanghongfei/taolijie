@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -116,15 +117,15 @@ public class DefaultPayService implements PayService {
 
             // 拼接请求参数
             String queryStr = StringUtils.genUrlQueryString(sortedMap);
+
+            // 拼接API密钥
+            queryStr = StringUtils.concat(queryStr.length() + 40, queryStr, "&", secret);
             if (infoLog.isDebugEnabled()) {
                 infoLog.debug("WECHAT: query = {}", queryStr);
             }
 
-            // 拼接API密钥
-            queryStr = StringUtils.concat(queryStr.length() + 40, "&", secret);
-
             // MD5
-            String md5 = Md5Crypt.md5Crypt(queryStr.getBytes()).toUpperCase();
+            String md5 = DigestUtils.md5DigestAsHex(queryStr.getBytes()).toUpperCase();
             if (infoLog.isDebugEnabled()) {
                 infoLog.debug("WECHAT: sign = {}", md5);
             }
