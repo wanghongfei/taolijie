@@ -113,7 +113,8 @@ public class DefaultPayService implements PayService {
             sortedMap.putAll(map);
             sortedMap.put("mch_appid", appId);
             sortedMap.put("mchid", mchId);
-            sortedMap.put("nonce_str", RandomStringUtils.randomAlphabetic(30));
+            String randStr = RandomStringUtils.randomAlphabetic(30);
+            sortedMap.put("nonce_str", randStr);
 
             // 拼接请求参数
             String queryStr = StringUtils.genUrlQueryString(sortedMap);
@@ -132,6 +133,9 @@ public class DefaultPayService implements PayService {
 
             OrderSignDto dto = new OrderSignDto();
             dto.setSign(md5);
+            dto.mch_appid = appId;
+            dto.mchid = mchId;
+            dto.nonce_str = randStr;
 
             return dto;
         }

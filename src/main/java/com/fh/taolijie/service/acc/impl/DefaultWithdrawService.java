@@ -9,15 +9,45 @@ import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.WithdrawApplyModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
+import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.CashAccService;
+import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.service.acc.WithdrawService;
+import com.fh.taolijie.utils.StringUtils;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
+import com.thoughtworks.xstream.io.xml.XppDriver;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.net.ssl.SSLContext;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.security.KeyStore;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,6 +56,8 @@ import java.util.List;
  */
 @Service
 public class DefaultWithdrawService implements WithdrawService {
+    private static final Logger log = LoggerFactory.getLogger(DefaultWithdrawService.class);
+
     @Autowired
     private WithdrawApplyModelMapper drawMapper;
 
@@ -37,6 +69,11 @@ public class DefaultWithdrawService implements WithdrawService {
 
     @Autowired
     private CashAccService accService;
+
+    @Autowired
+    private PayService payService;
+
+    public static final String PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
 
     /**
      * 创建提现申请.
@@ -103,6 +140,73 @@ public class DefaultWithdrawService implements WithdrawService {
         // 插入提现申请记录
         drawMapper.insertSelective(model);
 
+    }
+
+    /**
+     * todo For test only!!
+     * @throws Exception
+     */
+    public void doWechatPaymentHttp() throws Exception {
+        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
+        FileInputStream instream = new FileInputStream(new File("/Users/whf/projects/taolijie/apiclient_cert.p12"));
+        try {
+            keyStore.load(instream, "1279805401".toCharArray());
+        } finally {
+            instream.close();
+        }
+
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, "1279805401".toCharArray())
+                .build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[] { "TLSv1" },
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+        try {
+
+            // 生成XML字符串
+            OrderSignDto sign = payService.sign(new HashMap<>(), PayType.WECHAT);
+
+            XStream xStream = new XStream(new XppDriver(new XmlFriendlyReplacer("_-", "_")));
+            xStream.alias("xml", OrderSignDto.class);
+            String xml = xStream.toXML(sign);
+            log.info("xml = {}", xml);
+
+            // 创建POST请求
+            HttpPost httpPost = new HttpPost(PAY_URL);
+            httpPost.setEntity(new StringEntity(xml));
+
+
+            //System.out.println("executing request" + httpget.getRequestLine());
+
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            try {
+                HttpEntity entity = response.getEntity();
+
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                if (entity != null) {
+                    System.out.println("Response content length: " + entity.getContentLength());
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent()));
+                    String text;
+                    while ((text = bufferedReader.readLine()) != null) {
+                        System.out.println(text);
+                    }
+
+                }
+                EntityUtils.consume(entity);
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
     }
 
     /**

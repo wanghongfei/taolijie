@@ -65,4 +65,6 @@ public interface WithdrawService {
     ListResult<WithdrawApplyModel> findByMember(Integer memId, WithdrawStatus status, int pn, int ps);
 
     WithdrawApplyModel findById(Integer drawId);
+
+    void doWechatPaymentHttp() throws Exception;
 }

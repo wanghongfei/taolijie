@@ -16,6 +16,7 @@ import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.service.acc.ChargeService;
 import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.acc.PayService;
+import com.fh.taolijie.service.acc.WithdrawService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SessionUtils;
@@ -52,6 +53,9 @@ public class RestPayCtr {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private WithdrawService withdrawService;
 
     /**
      * 下单
@@ -171,5 +175,11 @@ public class RestPayCtr {
 
 
         return "success";
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public ResponseText wechatPayment() throws Exception {
+        withdrawService.doWechatPaymentHttp();
+        return ResponseText.getSuccessResponseText();
     }
 }

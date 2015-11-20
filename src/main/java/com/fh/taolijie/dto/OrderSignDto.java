@@ -17,6 +17,27 @@ public class OrderSignDto {
 
     private String signType;
 
+
+    // 下面是微信需要的字段
+    public String mch_appid;
+
+    public String mchid;
+
+    public String nonce_str;
+
+    public String partner_trade_no;
+
+    public String openid;
+
+    public String check_name;
+
+    public String amount;
+
+    public String desc;
+
+    public String spbill_create_ip;
+    // 上面是微信需要的字段
+
     public Integer getOrderId() {
         return orderId;
     }
