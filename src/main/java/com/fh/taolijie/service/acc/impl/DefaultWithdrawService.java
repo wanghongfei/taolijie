@@ -10,6 +10,7 @@ import com.fh.taolijie.dao.mapper.WithdrawApplyModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.dto.OrderSignDto;
+import com.fh.taolijie.dto.WeichatRespDto;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.PayService;
@@ -20,6 +21,7 @@ import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -143,21 +145,24 @@ public class DefaultWithdrawService implements WithdrawService {
     }
 
     /**
-     * todo For test only!!
+     * 创建带证书的HTTP Client
+     * @param mchid
+     * @param certiPath
+     * @return
      * @throws Exception
      */
-    public void doWechatPaymentHttp() throws Exception {
+    private CloseableHttpClient initSSLClient(String mchid, String certiPath) throws Exception {
         KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File("/Users/whf/projects/taolijie/apiclient_cert.p12"));
+        FileInputStream instream = new FileInputStream(new File(certiPath));
         try {
-            keyStore.load(instream, "1279805401".toCharArray());
+            keyStore.load(instream, mchid.toCharArray());
         } finally {
             instream.close();
         }
 
         // Trust own CA and all self-signed certs
         SSLContext sslcontext = SSLContexts.custom()
-                .loadKeyMaterial(keyStore, "1279805401".toCharArray())
+                .loadKeyMaterial(keyStore, mchid.toCharArray())
                 .build();
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
@@ -165,9 +170,19 @@ public class DefaultWithdrawService implements WithdrawService {
                 new String[] { "TLSv1" },
                 null,
                 SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-        CloseableHttpClient httpclient = HttpClients.custom()
+        return  HttpClients.custom()
                 .setSSLSocketFactory(sslsf)
                 .build();
+
+    }
+
+    /**
+     * todo For test only!!
+     * @throws Exception
+     */
+    public void doWechatPaymentHttp() throws Exception {
+        CloseableHttpClient httpclient = initSSLClient("1279805401", "/Users/whf/projects/taolijie/apiclient_cert.p12");
+
         try {
 
             // 生成XML字符串
@@ -185,19 +200,21 @@ public class DefaultWithdrawService implements WithdrawService {
 
             //System.out.println("executing request" + httpget.getRequestLine());
 
+            // 发起POST请求
             CloseableHttpResponse response = httpclient.execute(httpPost);
             try {
+                // 读取返回数据
                 HttpEntity entity = response.getEntity();
 
-                System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());
                 if (entity != null) {
                     System.out.println("Response content length: " + entity.getContentLength());
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent()));
-                    String text;
-                    while ((text = bufferedReader.readLine()) != null) {
-                        System.out.println(text);
-                    }
+
+                    // XML转换成对象
+                    String respXML = StringUtils.stream2String(entity.getContent());
+                    WeichatRespDto respDTO = xml2Dto(respXML);
+
+                    System.out.println(respDTO);
 
                 }
                 EntityUtils.consume(entity);
@@ -207,6 +224,17 @@ public class DefaultWithdrawService implements WithdrawService {
         } finally {
             httpclient.close();
         }
+    }
+
+    /**
+     * XML转换成DTO对象
+     * @param xml
+     * @return
+     */
+    private WeichatRespDto xml2Dto(String xml) {
+        XStream xs = new XStream();
+        xs.alias("xml", WeichatRespDto.class);
+        return (WeichatRespDto) xs.fromXML(xml);
     }
 
     /**
