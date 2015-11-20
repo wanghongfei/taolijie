@@ -8,6 +8,7 @@ import com.fh.taolijie.dao.mapper.CashAccModelMapper;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.WithdrawApplyModelMapper;
 import com.fh.taolijie.domain.acc.CashAccModel;
+import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.WithdrawApplyModel;
 import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.dto.WeichatRespDto;
@@ -16,6 +17,7 @@ import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.service.acc.WithdrawService;
 import com.fh.taolijie.service.impl.IntervalCheckService;
+import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
@@ -114,8 +116,19 @@ public class DefaultWithdrawService implements WithdrawService {
                 model.setAlipayAcc(acc.getAlipayAcc());
                 break;
 
-            case WECHAT: // 暂时不支持微信
-                throw new AccountNotSetException();
+            case WECHAT:
+            {
+                // 判断用户有没有绑定openid
+                MemberModel mem = memMapper.selectByPrimaryKey(model.getMemberId());
+                String openid = mem.getWechatToken();
+
+                if (null == openid) {
+                    throw new AccountNotSetException();
+                }
+
+                model.setOpenid(openid);
+                break;
+            }
 
             case BANK_ACC:
                 if (null == acc.getBankAcc()) {
@@ -135,6 +148,22 @@ public class DefaultWithdrawService implements WithdrawService {
         if (balance.compareTo(model.getAmount()) < 0) {
             // 余额不足
             throw new BalanceNotEnoughException("");
+        }
+
+        // 是微信支付, 则自动打款
+        if (payType == PayType.WECHAT) {
+            try {
+                doWechatPayRequest();
+
+                // 置提现状态为成功
+                model.setStatus(WithdrawStatus.DONE.code());
+
+            } catch (Exception e) {
+                // 记录错误信息到日志
+                LogUtils.logException(e);
+                // 置提现状态为失败
+                model.setStatus(WithdrawStatus.FAILED.code());
+            }
         }
 
         // 减少账户余额
@@ -177,19 +206,6 @@ public class DefaultWithdrawService implements WithdrawService {
 
     }
 
-    /**
-     * todo For test only!!
-     * @throws Exception
-     */
-    @Override
-    public void wechatPay(Integer amount) throws Exception {
-        // 1. 创建提现申请
-
-        // 2. 发起自动打款HTTP请求
-        doWechatPayRequest();
-
-        // 3. 修改提现申请状态
-    }
 
     /**
      * 发起微信接口调用请求

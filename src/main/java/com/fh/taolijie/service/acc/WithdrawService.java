@@ -66,10 +66,4 @@ public interface WithdrawService {
 
     WithdrawApplyModel findById(Integer drawId);
 
-    /**
-     * 微信提现
-     * @param amount
-     * @throws Exception
-     */
-    void wechatPay(Integer amount) throws Exception;
 }
