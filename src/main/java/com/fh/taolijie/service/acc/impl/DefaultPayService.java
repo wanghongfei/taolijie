@@ -10,6 +10,7 @@ import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
 import org.apache.commons.codec.digest.Md5Crypt;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -111,6 +112,7 @@ public class DefaultPayService implements PayService {
             sortedMap.putAll(map);
             sortedMap.put("mch_appid", appId);
             sortedMap.put("mchid", mchId);
+            sortedMap.put("nonce_str", RandomStringUtils.randomAlphabetic(30));
 
             // 拼接请求参数
             String queryStr = StringUtils.genUrlQueryString(sortedMap);
