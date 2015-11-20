@@ -8,4 +8,12 @@ import com.fh.taolijie.domain.quest.QuestModel;
  */
 public interface QuestTargetService {
     void fillTarget(QuestModel quest);
+
+    /**
+     * 检查用户的身份与任务对象是否匹配
+     * @param memId
+     * @param questId
+     * @return
+     */
+    boolean checkTarget(Integer memId, Integer questId);
 }

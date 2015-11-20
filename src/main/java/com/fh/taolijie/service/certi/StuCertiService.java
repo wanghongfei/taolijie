@@ -48,4 +48,11 @@ public interface StuCertiService {
      * @return
      */
     ListResult<StuCertiModel> findByMember(Integer memId);
+
+    /**
+     * 查找指定用户通过了的认证信息
+     * @param memId
+     * @return
+     */
+    StuCertiModel findDoneByMember(Integer memId);
 }

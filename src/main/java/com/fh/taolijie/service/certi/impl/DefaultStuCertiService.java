@@ -114,4 +114,19 @@ public class DefaultStuCertiService implements StuCertiService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public StuCertiModel findDoneByMember(Integer memId) {
+        StuCertiModel cmd = new StuCertiModel(0, 1);
+        cmd.setMemberId(memId);
+        cmd.setStatus(CertiStatus.DONE.code());
+        List<StuCertiModel> list = certiMapper.findBy(cmd);
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        return list.get(0);
+    }
 }

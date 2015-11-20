@@ -20,6 +20,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.quest.*;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -29,6 +30,7 @@ import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestService;
+import com.fh.taolijie.service.quest.QuestTargetService;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.TimeUtil;
@@ -91,6 +93,9 @@ public class DefaultQuestService implements QuestService {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private QuestTargetService targetService;
 
     /**
      * 商家发布任务.
@@ -443,9 +448,7 @@ public class DefaultQuestService implements QuestService {
      */
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void assignQuest(Integer memId, Integer questId)
-            throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException {
-
+    public void assignQuest(Integer memId, Integer questId) throws GeneralCheckedException {
         QuestModel questModel = questMapper.selectByPrimaryKey(questId);
         // 检查任务是否存在
         if (null == questModel) {
@@ -466,6 +469,10 @@ public class DefaultQuestService implements QuestService {
         boolean repeat = assignMapper.checkMemberIdAndQuestIdExists(memId, questId);
         if (repeat) {
             throw new QuestAssignedException("");
+        }
+
+        if (false == targetService.checkTarget(memId, questId)) {
+            throw new QuestTargetMismatchException();
         }
 
         // 判断剩余任务数量

@@ -6,6 +6,7 @@ import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.quest.*;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
@@ -92,7 +93,7 @@ public interface QuestService {
      * @param questId 任务id
      */
     void assignQuest(Integer memId, Integer questId)
-            throws QuestAssignedException, QuestZeroException, QuestNotFoundException, QuestExpiredException, QuestNotStartException;
+            throws GeneralCheckedException;
 
     /**
      * 检查任务是否已经领取

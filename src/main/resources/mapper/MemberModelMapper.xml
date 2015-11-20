@@ -665,7 +665,7 @@
 
     <select id="selectStuVerified" resultType="string">
         SELECT
-            stu_certi.
+            stu_certi
         FROM
             member
         WHERE
@@ -674,7 +674,7 @@
 
     <select id="selectIdVerified" resultType="string">
         SELECT
-            id_certi.
+            id_certi
         FROM
             member
         WHERE

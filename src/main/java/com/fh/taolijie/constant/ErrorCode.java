@@ -69,7 +69,9 @@ public enum ErrorCode {
     LACK_STU_CERTIFICATION(42, "student certification needed"),
     LACK_EMP_CERTIFICATION(43, "employee certification needed"),
 
-    ACC_NOT_SET(44, "account not set");
+    ACC_NOT_SET(44, "account not set"),
+
+    QUEST_TARGET_MISMATCH(45, "quest target mismatch");
 
     private final String msg;
     private final int code;
