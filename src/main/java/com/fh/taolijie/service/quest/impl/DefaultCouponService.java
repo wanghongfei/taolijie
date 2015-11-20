@@ -64,8 +64,9 @@ public class DefaultCouponService implements CouponService {
         List<String> codeList = new ArrayList<>(amt);
         String nowDate = TimeUtil.today();
         for (int ix = 0 ; ix < amt ; ++ix) {
-            String code = RandomStringUtils.randomAlphabetic(30);
-            String finalCode = StringUtils.concat(40, nowDate, code);
+            //String code = RandomStringUtils.randomAlphabetic(30);
+            String code = RandomStringUtils.randomNumeric(20);
+            String finalCode = StringUtils.concat(30, nowDate, code);
             codeList.add(finalCode);
         }
 
