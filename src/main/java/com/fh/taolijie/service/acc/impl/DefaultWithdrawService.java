@@ -15,6 +15,7 @@ import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.service.acc.CashAccService;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.service.acc.WithdrawService;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.utils.StringUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
@@ -180,7 +181,20 @@ public class DefaultWithdrawService implements WithdrawService {
      * todo For test only!!
      * @throws Exception
      */
-    public void doWechatPaymentHttp() throws Exception {
+    @Override
+    public void wechatPay(Integer amount) throws Exception {
+        // 1. 创建提现申请
+
+        // 2. 发起自动打款HTTP请求
+        doWechatPayRequest();
+
+        // 3. 修改提现申请状态
+    }
+
+    /**
+     * 发起微信接口调用请求
+     */
+    private void doWechatPayRequest() throws Exception {
         CloseableHttpClient httpclient = initSSLClient("1279805401", "/Users/whf/projects/taolijie/apiclient_cert.p12");
 
         try {
@@ -224,6 +238,7 @@ public class DefaultWithdrawService implements WithdrawService {
         } finally {
             httpclient.close();
         }
+
     }
 
     /**

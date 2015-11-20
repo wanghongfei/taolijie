@@ -136,6 +136,8 @@ public class DefaultPayService implements PayService {
             dto.mch_appid = appId;
             dto.mchid = mchId;
             dto.nonce_str = randStr;
+            dto.check_name = "NO_CHECK";
+            dto.spbill_create_ip = "127.0.0.1";
 
             return dto;
         }
