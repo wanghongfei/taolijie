@@ -16,6 +16,7 @@
         <result column="withd_update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="withd_alipay_acc" property="alipayAcc" jdbcType="VARCHAR"/>
         <result column="withd_bank_acc" property="bankAcc" jdbcType="VARCHAR"/>
+        <result column="withd_openid" property="openid" jdbcType="VARCHAR"/>
         <result column="withd_memo" property="memo" jdbcType="VARCHAR"/>
 
         <result column="withd_acc_id" property="accId" jdbcType="INTEGER"/>
@@ -35,6 +36,7 @@
         withd.alipay_acc,
         withd.bank_acc,
         withd.memo,
+        withd.openid,
         withd.acc_id
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -64,12 +66,14 @@
         apply_time, amount, status,
         update_time, alipay_acc, bank_acc,
         memo,
-        acc_id)
+        acc_id,
+        openid)
         values (#{id,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
         #{applyTime,jdbcType=TIMESTAMP}, #{amount,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR},
         #{updateTime,jdbcType=TIMESTAMP}, #{alipayAcc,jdbcType=VARCHAR}, #{bankAcc,jdbcType=VARCHAR},
         #{memo,jdbcType=VARCHAR},
-        #{accId})
+        #{accId},
+        #{openid})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.acc.WithdrawApplyModel">
         <!--
@@ -112,6 +116,9 @@
             <if test="accId != null">
                 acc_id,
             </if>
+            <if test="openid != null">
+                openid,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -147,6 +154,9 @@
 
             <if test="accId != null">
                 #{accId},
+            </if>
+            <if test="openid != null">
+                #{openid},
             </if>
         </trim>
     </insert>
@@ -188,6 +198,9 @@
             <if test="accId != null">
                 acc_id = #{accId},
             </if>
+            <if test="openid != null">
+                openid = #{openid},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -206,7 +219,8 @@
         alipay_acc = #{alipayAcc,jdbcType=VARCHAR},
         bank_acc = #{bankAcc,jdbcType=VARCHAR},
         memo = #{memo,jdbcType=VARCHAR},
-        acc_id = #{accId}
+        acc_id = #{accId},
+        openid = #{openid}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -249,6 +263,9 @@
 
             <if test="accId != null">
                 AND withd.acc_id = #{accId}
+            </if>
+            <if test="openid != null">
+                AND withd.openid = #{openid}
             </if>
         </where>
         LIMIT
@@ -294,6 +311,9 @@
 
             <if test="accId != null">
                 AND withd.acc_id = #{accId}
+            </if>
+            <if test="openid != null">
+                AND withd.openid = #{openid}
             </if>
         </where>
     </select>
