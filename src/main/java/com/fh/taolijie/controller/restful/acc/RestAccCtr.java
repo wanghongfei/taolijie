@@ -305,8 +305,8 @@ public class RestAccCtr {
     public ResponseText withdraw(@RequestParam BigDecimal amt,
                                  @RequestParam String dealPwd,
                                  @RequestParam Integer payType,
-                                 @RequestParam(required = false) String alipayAcc,
-                                 @RequestParam(required = false) String bankAcc,
+                                 //@RequestParam(required = false) String alipayAcc,
+                                 //@RequestParam(required = false) String bankAcc,
                                  HttpServletRequest req) throws GeneralCheckedException {
 
         // 参数验证
@@ -322,8 +322,8 @@ public class RestAccCtr {
         WithdrawApplyModel model = new WithdrawApplyModel();
         model.setMemberId(memId);
         model.setAmount(amt);
-        model.setAlipayAcc(alipayAcc);
-        model.setBankAcc(bankAcc);
+        //model.setAlipayAcc(alipayAcc);
+        //model.setBankAcc(bankAcc);
 
         drawService.addWithdraw(model, CredentialUtils.sha(dealPwd), type);
 
