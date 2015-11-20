@@ -167,6 +167,14 @@
             <version>${jackson-version}</version>
         </dependency>
 
+        <!-- XML Parsing -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.8</version>
+        </dependency>
+
+
 
         <!-- Jedis -->
         <dependency>
