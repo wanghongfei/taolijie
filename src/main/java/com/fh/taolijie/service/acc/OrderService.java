@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.acc;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.domain.order.PayOrderModel;
@@ -13,7 +14,20 @@ import java.math.BigDecimal;
  * Created by whf on 10/30/15.
  */
 public interface OrderService {
+    /**
+     * 根据id查询order
+     * @param orderId
+     * @return
+     */
     PayOrderModel findOrder(Integer orderId);
+
+    /**
+     * 查询所有订单
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<PayOrderModel> findAll(int pn, int ps);
 
     /**
      * 更新订单状态

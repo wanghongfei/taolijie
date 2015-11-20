@@ -1,5 +1,6 @@
 package com.fh.taolijie.service.acc.impl;
 
+import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.dao.mapper.PayOrderModelMapper;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -29,6 +31,16 @@ public class DefaultOrderService implements OrderService {
     @Transactional(readOnly = true)
     public PayOrderModel findOrder(Integer orderId) {
         return orderMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<PayOrderModel> findAll(int pn, int ps) {
+        PayOrderModel cmd = new PayOrderModel(pn, ps);
+        List<PayOrderModel> list = orderMapper.findBy(cmd);
+        long tot = orderMapper.countFindBy(cmd);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override

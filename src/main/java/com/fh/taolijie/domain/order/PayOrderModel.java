@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.order;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fh.taolijie.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -14,8 +15,10 @@ public class PayOrderModel extends Pageable {
 
     private String title;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private BigDecimal amount;
