@@ -185,7 +185,7 @@ public class RestPayCtr {
      */
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public ResponseText wechatPayment(@RequestParam Integer amount) throws Exception {
-        withdrawService.doWechatPaymentHttp();
+        withdrawService.wechatPay(amount);
         return ResponseText.getSuccessResponseText();
     }
 }
