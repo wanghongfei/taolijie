@@ -7,10 +7,7 @@ import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by whf on 11/20/15.
@@ -33,5 +30,17 @@ public class RestOrderAdminCtr {
         ListResult<PayOrderModel> lr = orderService.findAll(pn, ps);
 
         return new ResponseText(lr);
+    }
+
+    /**
+     * 根据id查询订单
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText byId(@PathVariable("id") Integer orderId) {
+        PayOrderModel order = orderService.findOrder(orderId);
+
+        return new ResponseText(order);
     }
 }
