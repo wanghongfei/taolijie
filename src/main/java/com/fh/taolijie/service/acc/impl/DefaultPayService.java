@@ -9,6 +9,7 @@ import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
+import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -77,9 +78,9 @@ public class DefaultPayService implements PayService {
             // 拼接请求参数
             String queryStr = StringUtils.genUrlQueryString(sortedMap);
             if (infoLog.isDebugEnabled()) {
-                infoLog.debug("query = {}, priKey = {}, charset = {}", queryStr, priKey, charset);
-
+                infoLog.debug("ALIPAY: query = {}, priKey = {}, charset = {}", queryStr, priKey, charset);
             }
+
             // 签名
             String sign = SignUtils.sign(queryStr, priKey, charset);
 
@@ -89,6 +90,45 @@ public class DefaultPayService implements PayService {
             dto.setPartner(pid);
             dto.setServName(servName);
             dto.setSignType(signType);
+
+            return dto;
+
+        } else if (type == PayType.WECHAT) {
+            // 微信支付签名
+            Jedis jedis = JedisUtils.getClient(jedisPool);
+            Map<String, String> wechatConf = jedis.hgetAll(RedisKey.WECHAT_CONF.toString());
+            JedisUtils.returnJedis(jedisPool, jedis);
+
+            String appId = wechatConf.get(RedisKey.WECHAT_APPID.toString());
+            String mchId = wechatConf.get(RedisKey.WECHAT_MCHID.toString());
+            String secret = wechatConf.get(RedisKey.WECHAT_SECRET.toString());
+
+            // 对参数map排序
+            SortedMap<String, String> sortedMap = new TreeMap<>( (String key1, String key2) -> {
+                return key1.compareTo(key2);
+            });
+
+            sortedMap.putAll(map);
+            sortedMap.put("mch_appid", appId);
+            sortedMap.put("mchid", mchId);
+
+            // 拼接请求参数
+            String queryStr = StringUtils.genUrlQueryString(sortedMap);
+            if (infoLog.isDebugEnabled()) {
+                infoLog.debug("WECHAT: query = {}", queryStr);
+            }
+
+            // 拼接API密钥
+            queryStr = StringUtils.concat(queryStr.length() + 40, "&", secret);
+
+            // MD5
+            String md5 = Md5Crypt.md5Crypt(queryStr.getBytes()).toUpperCase();
+            if (infoLog.isDebugEnabled()) {
+                infoLog.debug("WECHAT: sign = {}", md5);
+            }
+
+            OrderSignDto dto = new OrderSignDto();
+            dto.setSign(md5);
 
             return dto;
         }

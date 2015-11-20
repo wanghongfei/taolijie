@@ -35,5 +35,9 @@ pipe.hset('conf:alipay', 'sign_type', 'RSA')
 pipe.hset('conf:alipay', 'notify_url', 'http://120.24.218.56')
 pipe.hset('conf:alipay', 'acc', 'taolijie@vip.sina.com')
 
+pipe.hset('conf:wechat', 'appid', 'wxb5b95b3df3bc8a0b')
+pipe.hset('conf:wechat', 'mchid', '1279805401')
+pipe.hset('conf:wechat', 'secret', 'd4624c36b6795d1d99dcf0547af5443d')
+
 print pipe.execute()
 

@@ -34,10 +34,28 @@ public enum RedisKey {
     SERVICE_NAME,
     CHARSET,
     SIGN_TYPE,
-    NOTIFY_URL;
+    NOTIFY_URL,
+
+    // for weichat
+    WECHAT_CONF,
+    WECHAT_APPID,
+    WECHAT_MCHID,
+    WECHAT_SECRET;
 
     public String toString() {
         switch (this) {
+            case WECHAT_SECRET:
+                return "secret";
+
+            case WECHAT_CONF:
+                return "conf:wechat";
+
+            case WECHAT_APPID:
+                return "appid";
+
+            case WECHAT_MCHID:
+                return "mchid";
+
             case HASH_PV_JOB:
                 return "pv:job";
 
