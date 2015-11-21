@@ -50,10 +50,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.security.KeyStore;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 提现申请业务实现
@@ -122,6 +119,8 @@ public class DefaultWithdrawService implements WithdrawService {
                 MemberModel mem = memMapper.selectByPrimaryKey(model.getMemberId());
                 String openid = mem.getWechatToken();
 
+                log.debug("openid = {}", openid);
+
                 if (null == openid) {
                     throw new AccountNotSetException();
                 }
@@ -150,13 +149,22 @@ public class DefaultWithdrawService implements WithdrawService {
             throw new BalanceNotEnoughException("");
         }
 
+        // 插入提现申请记录
+        drawMapper.insertSelective(model);
+
         // 是微信支付, 则自动打款
         if (payType == PayType.WECHAT) {
             try {
-                doWechatPayRequest();
+                // 发起HTTPS请求
+                boolean result = doWechatPayRequest(model.getAmount(), model.getId(), model.getOpenid());
+                if (result) {
+                    // 置提现状态为成功
+                    model.setStatus(WithdrawStatus.DONE.code());
+                } else {
+                    // 置提现状态为失败
+                    model.setStatus(WithdrawStatus.FAILED.code());
+                }
 
-                // 置提现状态为成功
-                model.setStatus(WithdrawStatus.DONE.code());
 
             } catch (Exception e) {
                 // 记录错误信息到日志
@@ -169,58 +177,36 @@ public class DefaultWithdrawService implements WithdrawService {
         // 减少账户余额
         accService.reduceAvailableMoney(acc.getId(), model.getAmount(), AccFlow.WITHDRAW);
 
-        // 插入提现申请记录
-        drawMapper.insertSelective(model);
 
     }
 
-    /**
-     * 创建带证书的HTTP Client
-     * @param mchid
-     * @param certiPath
-     * @return
-     * @throws Exception
-     */
-    private CloseableHttpClient initSSLClient(String mchid, String certiPath) throws Exception {
-        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        FileInputStream instream = new FileInputStream(new File(certiPath));
-        try {
-            keyStore.load(instream, mchid.toCharArray());
-        } finally {
-            instream.close();
-        }
-
-        // Trust own CA and all self-signed certs
-        SSLContext sslcontext = SSLContexts.custom()
-                .loadKeyMaterial(keyStore, mchid.toCharArray())
-                .build();
-        // Allow TLSv1 protocol only
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
-                new String[] { "TLSv1" },
-                null,
-                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-        return  HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .build();
-
-    }
 
 
     /**
      * 发起微信接口调用请求
      */
-    private void doWechatPayRequest() throws Exception {
+    private boolean doWechatPayRequest(BigDecimal amount, Integer orderId, String openid) throws Exception {
+        boolean result = true;
+
+        log.info("preparing issue POST request to Wechat: {}", PAY_URL);
+
+        // 创建HTTPS客户端对象
         CloseableHttpClient httpclient = initSSLClient("1279805401", "/Users/whf/projects/taolijie/apiclient_cert.p12");
 
         try {
 
-            // 生成XML字符串
-            OrderSignDto sign = payService.sign(new HashMap<>(), PayType.WECHAT);
+            // 参数签名
+            OrderSignDto sign = payService.sign(new HashMap<>(0), PayType.WECHAT);
+            sign.amount = toCent(amount).toString();
+            sign.desc = "微信提现";
+            sign.partner_trade_no = orderId.toString();
+            sign.openid = openid;
 
+            // 将参数数据转换为XML字符串
             XStream xStream = new XStream(new XppDriver(new XmlFriendlyReplacer("_-", "_")));
             xStream.alias("xml", OrderSignDto.class);
             String xml = xStream.toXML(sign);
+
             log.info("xml = {}", xml);
 
             // 创建POST请求
@@ -228,33 +214,51 @@ public class DefaultWithdrawService implements WithdrawService {
             httpPost.setEntity(new StringEntity(xml));
 
 
-            //System.out.println("executing request" + httpget.getRequestLine());
 
             // 发起POST请求
+            log.info("sending POST request");
             CloseableHttpResponse response = httpclient.execute(httpPost);
             try {
                 // 读取返回数据
                 HttpEntity entity = response.getEntity();
 
-                System.out.println(response.getStatusLine());
+                log.info("response status line: {}", response.getStatusLine());
+
                 if (entity != null) {
-                    System.out.println("Response content length: " + entity.getContentLength());
 
                     // XML转换成对象
                     String respXML = StringUtils.stream2String(entity.getContent());
                     WeichatRespDto respDTO = xml2Dto(respXML);
 
-                    System.out.println(respDTO);
+                    // 检查return_code字段是否为成功
+                    if (false == "SUCCESS".equals(respDTO.result_code)) {
+                        LogUtils.getErrorLogger().error("wechat returned error message");
+                        result = false;
+                    }
+
+
+                    log.info("response content:{}", respDTO);
 
                 }
+
                 EntityUtils.consume(entity);
             } finally {
                 response.close();
             }
         } finally {
             httpclient.close();
+            return result;
         }
 
+    }
+
+    /**
+     * 将金额转换成分
+     * @param amt
+     * @return
+     */
+    private Integer toCent(BigDecimal amt) {
+        return amt.multiply(BigDecimal.valueOf(100)).intValue();
     }
 
     /**
@@ -353,5 +357,37 @@ public class DefaultWithdrawService implements WithdrawService {
     @Transactional(readOnly = true)
     public WithdrawApplyModel findById(Integer drawId) {
         return drawMapper.selectByPrimaryKey(drawId);
+    }
+
+    /**
+     * 创建带证书的HTTP Client
+     * @param mchid
+     * @param certiPath
+     * @return
+     * @throws Exception
+     */
+    private CloseableHttpClient initSSLClient(String mchid, String certiPath) throws Exception {
+        KeyStore keyStore  = KeyStore.getInstance("PKCS12");
+        FileInputStream instream = new FileInputStream(new File(certiPath));
+        try {
+            keyStore.load(instream, mchid.toCharArray());
+        } finally {
+            instream.close();
+        }
+
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, mchid.toCharArray())
+                .build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[] { "TLSv1" },
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        return  HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+
     }
 }

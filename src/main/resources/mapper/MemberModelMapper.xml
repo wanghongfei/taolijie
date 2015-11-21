@@ -110,6 +110,8 @@
         mem.college_name AS mem_college_name,
         mem.major AS mem_major,
 
+        mem.wechat_token AS mem_wechat_token,
+
         mem.reg_type AS mem_reg_type
     </sql>
     <sql id="member_column_without_password">
