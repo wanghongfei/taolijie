@@ -153,6 +153,7 @@ public class DefaultWithdrawService implements WithdrawService {
         drawMapper.insertSelective(model);
 
         // 是微信支付, 则自动打款
+        boolean reduceBalance = true;
         if (payType == PayType.WECHAT) {
             try {
                 // 发起HTTPS请求
@@ -163,6 +164,7 @@ public class DefaultWithdrawService implements WithdrawService {
                 } else {
                     // 置提现状态为失败
                     model.setStatus(WithdrawStatus.FAILED.code());
+                    reduceBalance = false;
                 }
 
 
@@ -175,7 +177,9 @@ public class DefaultWithdrawService implements WithdrawService {
         }
 
         // 减少账户余额
-        accService.reduceAvailableMoney(acc.getId(), model.getAmount(), AccFlow.WITHDRAW);
+        if (reduceBalance) {
+            accService.reduceAvailableMoney(acc.getId(), model.getAmount(), AccFlow.WITHDRAW);
+        }
 
 
     }
