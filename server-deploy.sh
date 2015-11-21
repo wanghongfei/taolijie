@@ -8,6 +8,9 @@ check_success() {
     fi
 }
 
+STATIC_RESOURCE='/www/resources'
+STATIC_ASSETS='/root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets'
+
 echo "building project..."
 git pull coding master
 check_success
@@ -17,12 +20,12 @@ check_success
 
 echo "deploying static resources..."
 #rm -rf /www/resources/*
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/about /www/resources
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/admin /www/resources
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/fonts /www/resources
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/images /www/resources
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/scripts /www/resources
-cp -r /root/projects/taolijie/src/main/webapp/WEB-INF/views/pc/assets/styles /www/resources
+cp -r ${STATIC_ASSETS}/about ${STATIC_RESOURCE}
+cp -r ${STATIC_ASSETS}/admin ${STATIC_RESOURCE}
+cp -r ${STATIC_ASSETS}/fonts ${STATIC_RESOURCE}
+cp -r ${STATIC_ASSETS}/images ${STATIC_RESOURCE}
+cp -r ${STATIC_ASSETS}/scripts ${STATIC_RESOURCE}
+cp -r ${STATIC_ASSETS}/styles ${STATIC_RESOURCE}
 echo "done"
 
 # shut server down
@@ -41,6 +44,7 @@ rm -rf META-INF/
 rm taolijie.war
 
 # start server
+su web
 $TOMCAT_HOME/bin/startup.sh
 check_success
 echo "done"
