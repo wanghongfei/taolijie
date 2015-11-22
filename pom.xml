@@ -47,6 +47,7 @@
         <aspectj-version>1.8.6</aspectj-version>
 
         <commons-lang-version>3.4</commons-lang-version>
+        <qiniu>7.0.0</qiniu>
     </properties>
 
     <dependencies>
@@ -181,6 +182,13 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>${jedis}</version>
+        </dependency>
+
+        <!-- 7牛SDK -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>${qiniu}</version>
         </dependency>
 
 

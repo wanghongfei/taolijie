@@ -1,6 +1,7 @@
 package com.fh.taolijie.test.other;
 
 import com.fh.taolijie.utils.UpYunUtils;
+import com.qiniu.util.Auth;
 import org.junit.Assert;
 import org.junit.Test;
 
