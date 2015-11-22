@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Controller
 public class HAuthController {
-    private static Logger infoLog = LoggerFactory.getLogger(HAuthController.class);
+    private static Logger logger = LoggerFactory.getLogger(HAuthController.class);
 
     @Autowired
     AccountService accountService;
@@ -360,22 +360,25 @@ public class HAuthController {
 
 
     /**
-     * (手机注册时使用)向指定手机号发送短信
+     * 向指定手机号发送短信
      * @return
      */
     @RequestMapping(value = "/register/sms", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     @ResponseBody
     public ResponseText sendSMSAtRegistration(@RequestParam String mobile,
+                                              @RequestParam(defaultValue = "0") int reg, // 0: 注册使用, 1:找回密码
                                               HttpServletRequest req) {
 
-/*        String randCode = RandomStringUtils.randomAlphabetic(15);
-        if (infoLog.isDebugEnabled()) {
-            infoLog.debug("identifier generated:{}", randCode);
-        }*/
 
-        // 检查手机号用户名是否重复
-        if (true == accountService.checkUsernameExist(mobile)) {
-            return new ResponseText(ErrorCode.USER_EXIST);
+        if (0 == reg) {
+            // 检查手机号用户名是否重复
+            if (true == accountService.checkUsernameExist(mobile)) {
+                return new ResponseText(ErrorCode.USER_EXIST);
+            }
+
+            logger.info("send SMS for registration");
+        } else {
+            logger.info("send SMS for retrieving password");
         }
 
         try {
