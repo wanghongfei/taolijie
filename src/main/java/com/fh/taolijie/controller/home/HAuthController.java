@@ -405,8 +405,11 @@ public class HAuthController {
                                 @RequestParam String code,
                                 HttpServletRequest req) {
 
+        logger.info("user {} tried to retrieve password", mobile);
+
         // 验证验证码
         if (!codeService.validateSMSCode(mobile, code)) {
+            logger.info("user {}: code validation failed. input = {}", mobile, code);
             return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
         }
 
@@ -421,6 +424,8 @@ public class HAuthController {
         example.setId(mem.getId());
         example.setPassword(CredentialUtils.sha(newPwd));
         accountService.updateMember(example);
+
+        logger.info("user {} succeeded in retrieving password", mobile);
 
         return ResponseText.getSuccessResponseText();
 
