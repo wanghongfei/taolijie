@@ -1,16 +1,19 @@
 package com.fh.taolijie.service.impl;
 
 import com.fh.taolijie.constant.PicType;
+import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.dao.mapper.SeqAvatarModelMapper;
 import com.fh.taolijie.dao.mapper.SeqJobModelMapper;
 import com.fh.taolijie.dao.mapper.SeqShModelMapper;
 import com.fh.taolijie.domain.sequence.SeqAvatarModel;
 import com.fh.taolijie.domain.sequence.SeqJobModel;
 import com.fh.taolijie.domain.sequence.SeqShModel;
+import com.fh.taolijie.dto.SignAndPolicy;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
+import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import redis.clients.jedis.Pipeline;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,9 +46,46 @@ public class SeqService {
     @Autowired
     private JedisPool jedisPool;
 
+    private Auth qiniuAuth;
+    private String bucket;
 
     /**
-     * 生成上传凭证
+     * 生成7牛上传token
+     * @return
+     */
+    public SignAndPolicy genQiniuToken() {
+        if (null == qiniuAuth) {
+            initQiniu();
+        }
+
+        String key = genShKey();
+        String token = qiniuAuth.uploadToken(bucket, key);
+
+        SignAndPolicy sap = new SignAndPolicy();
+        sap.saveKey = key;
+        sap.sign = token;
+
+        return sap;
+    }
+
+    /**
+     * 初始化7牛Auth对象
+     */
+    private void initQiniu() {
+        Jedis jedis = JedisUtils.getClient(jedisPool);
+
+        Map<String, String> map = jedis.hgetAll(RedisKey.CONF_QINIU.toString());
+        String AK = map.get(RedisKey.CONF_QINIU_AK.toString());
+        String SK = map.get(RedisKey.CONF_QINIU_SK.toString());
+        this.bucket = map.get(RedisKey.CONF_QINIU_BUCKET.toString());
+
+        JedisUtils.returnJedis(jedisPool, jedis);
+
+        this.qiniuAuth = Auth.create(AK, SK);
+    }
+
+    /**
+     * 生成上传key
      * @param type
      * @return
      */

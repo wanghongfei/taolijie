@@ -4,6 +4,7 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.PicType;
+import com.fh.taolijie.dto.SignAndPolicy;
 import com.fh.taolijie.service.impl.SeqService;
 import com.fh.taolijie.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,14 @@ import java.util.Map;
 public class RestSignController {
     @Autowired
     private SeqService seqService;
+
+    /**
+     * 生成七牛签名
+     */
+    @RequestMapping(value = "/n", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText qiniuSign() {
+        return new ResponseText(seqService.genQiniuToken());
+    }
 
     /**
      * 生成签名
@@ -107,34 +116,4 @@ public class RestSignController {
     }
 
 
-    private class SignAndPolicy {
-        public String sign;
-        public String policy;
-
-        public String saveKey;
-
-        public String getSign() {
-            return sign;
-        }
-
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
-
-        public String getPolicy() {
-            return policy;
-        }
-
-        public void setPolicy(String policy) {
-            this.policy = policy;
-        }
-
-        public String getSaveKey() {
-            return saveKey;
-        }
-
-        public void setSaveKey(String saveKey) {
-            this.saveKey = saveKey;
-        }
-    }
 }

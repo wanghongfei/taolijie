@@ -22,6 +22,12 @@ public enum RedisKey {
     RSA_PUB_KEY,
     RSA_PRI_KEY,
 
+    // for qiniu
+    CONF_QINIU,
+    CONF_QINIU_AK,
+    CONF_QINIU_SK,
+    CONF_QINIU_BUCKET,
+
     // 统计信息
     HASH_PV_SH,
     HASH_PV_JOB,
@@ -38,6 +44,18 @@ public enum RedisKey {
 
     public String toString() {
         switch (this) {
+            case CONF_QINIU_BUCKET:
+                return "bucket";
+
+            case CONF_QINIU:
+                return "conf:qiniu";
+
+            case CONF_QINIU_AK:
+                return "ak";
+
+            case CONF_QINIU_SK:
+                return "sk";
+
             case HASH_PV_JOB:
                 return "pv:job";
 
