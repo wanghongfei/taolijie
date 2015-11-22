@@ -40,10 +40,14 @@ public enum RedisKey {
     WECHAT_CONF,
     WECHAT_APPID,
     WECHAT_MCHID,
-    WECHAT_SECRET;
+    WECHAT_SECRET,
+    WECHAT_CERTI_PATH;
 
     public String toString() {
         switch (this) {
+            case WECHAT_CERTI_PATH:
+                return "certi_path";
+
             case WECHAT_SECRET:
                 return "secret";
 

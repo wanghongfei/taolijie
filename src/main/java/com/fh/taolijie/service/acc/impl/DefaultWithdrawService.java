@@ -194,17 +194,18 @@ public class DefaultWithdrawService implements WithdrawService {
 
         log.info("preparing issue POST request to Wechat: {}", PAY_URL);
 
+        // 参数签名
+        OrderSignDto sign = payService.sign(new HashMap<>(0), PayType.WECHAT);
+        sign.amount = toCent(amount).toString();
+        sign.desc = "微信提现";
+        sign.partner_trade_no = orderId.toString();
+        sign.openid = openid;
+
         // 创建HTTPS客户端对象
-        CloseableHttpClient httpclient = initSSLClient("1279805401", "/Users/whf/projects/taolijie/apiclient_cert.p12");
+        CloseableHttpClient httpclient = initSSLClient(sign.mchid, sign.certiPath);
 
         try {
 
-            // 参数签名
-            OrderSignDto sign = payService.sign(new HashMap<>(0), PayType.WECHAT);
-            sign.amount = toCent(amount).toString();
-            sign.desc = "微信提现";
-            sign.partner_trade_no = orderId.toString();
-            sign.openid = openid;
 
             // 将参数数据转换为XML字符串
             XStream xStream = new XStream(new XppDriver(new XmlFriendlyReplacer("_-", "_")));

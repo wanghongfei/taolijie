@@ -1,5 +1,7 @@
 package com.fh.taolijie.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 订单信息 + 签名信息
  * Created by whf on 10/29/15.
@@ -37,6 +39,9 @@ public class OrderSignDto {
 
     public String spbill_create_ip;
     // 上面是微信需要的字段
+
+    @JsonIgnore
+    public String certiPath;
 
     public Integer getOrderId() {
         return orderId;

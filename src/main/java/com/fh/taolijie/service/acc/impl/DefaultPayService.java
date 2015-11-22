@@ -6,10 +6,8 @@ import com.fh.taolijie.constant.acc.PayType;
 import com.fh.taolijie.dto.OrderSignDto;
 import com.fh.taolijie.service.acc.PayService;
 import com.fh.taolijie.utils.JedisUtils;
-import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SignUtils;
 import com.fh.taolijie.utils.StringUtils;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -23,8 +21,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -104,6 +100,7 @@ public class DefaultPayService implements PayService {
             String appId = wechatConf.get(RedisKey.WECHAT_APPID.toString());
             String mchId = wechatConf.get(RedisKey.WECHAT_MCHID.toString());
             String secret = wechatConf.get(RedisKey.WECHAT_SECRET.toString());
+            String certiPath = wechatConf.get(RedisKey.WECHAT_CERTI_PATH.toString());
 
             // 对参数map排序
             SortedMap<String, String> sortedMap = new TreeMap<>( (String key1, String key2) -> {
@@ -133,6 +130,7 @@ public class DefaultPayService implements PayService {
 
             OrderSignDto dto = new OrderSignDto();
             dto.setSign(md5);
+            dto.certiPath = certiPath;
             dto.mch_appid = appId;
             dto.mchid = mchId;
             dto.nonce_str = randStr;
