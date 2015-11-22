@@ -30,7 +30,15 @@ public class RestSignController {
      * 生成七牛签名
      */
     @RequestMapping(value = "/n", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText qiniuSign() {
+    public ResponseText qiniuSign(HttpServletRequest req) {
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        // 检查上次请求间隔
+        // 不能少于1s
+        if (!seqService.checkInterval(memId)) {
+            return new ResponseText(ErrorCode.TOO_FREQUENT);
+        }
+
         return new ResponseText(seqService.genQiniuToken());
     }
 

@@ -128,7 +128,7 @@ public class SeqService {
         // 并设置过期时间为2s
         Pipeline pip = jedis.pipelined();
         pip.set(key, "T");
-        pip.expire(key, 2);
+        pip.expire(key, 1);
         pip.sync();
 
         JedisUtils.returnJedis(jedisPool, jedis);
