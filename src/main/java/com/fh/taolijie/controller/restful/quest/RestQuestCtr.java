@@ -114,11 +114,30 @@ public class RestQuestCtr {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
+        // 标记变量coupon
+        // 记录该任务是否需要coupon
+        boolean coupon = false;
+        // couponTitle, couponDesp, expiredTime和logo要么全为null, 要么都不为null
+        if (null != couponAmt) {
+            coupon = true;
+            if (false == StringUtils.checkAllNotEmpty(couponTitle, couponDesp) || null == expiredTime) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+        }
+
         // 验证是否已认证
+        // 验证是否通过身份认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
         String status = mem.getIdCerti();
         if (null == status || false == status.equals(CertiStatus.DONE.code())) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            return new ResponseText(ErrorCode.LACK_ID_CERTIFICATION);
+        }
+        // 如果发布卡券，验证是否通过商家认证
+        if (coupon) {
+            String empStatus = mem.getEmpCerti();
+            if (null == status || false == empStatus.endsWith(CertiStatus.DONE.code())) {
+                return new ResponseText(ErrorCode.LACK_EMP_CERTIFICATION);
+            }
         }
 
         // 验证任务对象参数
@@ -132,16 +151,6 @@ public class RestQuestCtr {
 
 
 
-        // 标记变量
-        // 记录该任务是否需要coupon
-        boolean coupon = false;
-        // couponTitle, couponDesp, expiredTime和logo要么全为null, 要么都不为null
-        if (null != couponAmt) {
-            coupon = true;
-            if (false == StringUtils.checkAllNotEmpty(couponTitle, couponDesp) || null == expiredTime) {
-                return new ResponseText(ErrorCode.INVALID_PARAMETER);
-            }
-        }
 
         // 将id string 转换成List<Integer>
         List<Integer> coList = StringUtils.splitIntendIds(collegeIds);
