@@ -36,6 +36,10 @@ public class StringUtils {
      * @throws InvalidNumberStringException
      */
     public static List<Integer> splitIntendIds(String intendIds) throws InvalidNumberStringException {
+        if (null == intendIds) {
+            return new ArrayList<>(0);
+        }
+
         String[] ids = intendIds.split(Constants.DELIMITER);
         if (null == ids || 0 == ids.length) {
             throw new InvalidNumberStringException("intendIds格式错误");
@@ -239,6 +243,11 @@ public class StringUtils {
                 }
 
                 break;
+            }
+
+            // 执行下面的if表示所有值都为null
+            if (ix == LEN - 1) {
+                return false;
             }
         }
 

@@ -43,6 +43,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by whf on 9/24/15.
@@ -91,6 +92,8 @@ public class RestQuestCtr {
                                      @RequestParam(required = false) String logo,
                                      @RequestParam(required = false) Integer couponAmt,
 
+                                     @RequestParam(defaultValue = "0") Integer all, // 任务对象是否是所有人, 1表示所有人
+
                                      @RequestParam(required = false) Integer orderId,
                                      @RequestParam(defaultValue = "0") Integer save, // 保存(1) or 发布(0)
                                      HttpServletRequest req) throws GeneralCheckedException {
@@ -106,6 +109,10 @@ public class RestQuestCtr {
         if (br.hasErrors() || model.getTotalAmt() <= 0) {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
+        int isAll = all.intValue();
+        if (isAll != 0 && isAll != 1) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
 
         // 验证是否已认证
         MemberModel mem = memMapper.selectByPrimaryKey(credential.getId());
@@ -115,9 +122,14 @@ public class RestQuestCtr {
         }
 
         // 验证任务对象参数
-        if (false == StringUtils.validateLadderString(collegeIds, cityIds, proIds)) {
-            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        // 0 == all 说明任务对象不是所有人
+        // 这时验证任务对象参数是否合法
+        if (0 == isAll) {
+            if (false == StringUtils.validateLadderString(collegeIds, cityIds, proIds)) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
         }
+
 
 
         // 标记变量
@@ -139,6 +151,7 @@ public class RestQuestCtr {
         model.setCollegeIdList(coList);
         model.setProvinceIdList(proList);
         model.setCityIdList(cityList);
+        model.setIsTargetAll(isAll == 1);
 
         // 查出用户对应的现金账户
         Integer accId = accService.findIdByMember(credential.getId());
