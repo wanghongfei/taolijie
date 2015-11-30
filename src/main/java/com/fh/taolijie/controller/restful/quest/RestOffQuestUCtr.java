@@ -38,7 +38,7 @@ public class RestOffQuestUCtr {
     public ResponseText publish(@RequestParam String title,
                                 @RequestParam("cate") Integer cateId,
                                 @RequestParam BigDecimal award,
-                                @RequestParam("wt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date workDate,
+                                @RequestParam("wt") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date workDate,
                                 @RequestParam("wp") String workPlace,
                                 @RequestParam("desp") String description,
                                 @RequestParam("m") String mobile,
@@ -62,6 +62,7 @@ public class RestOffQuestUCtr {
         }
 
         OffQuestModel model = new OffQuestModel();
+        model.setMemId(memId);
         model.setTitle(title);
         model.setCateId(cateId);
         model.setAward(award);
