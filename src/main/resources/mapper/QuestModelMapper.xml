@@ -35,11 +35,11 @@
         <result column="qu_memo" property="memo" jdbcType="VARCHAR"/>
         <result column="qu_offline" property="offline" jdbcType="BIT"/>
 
-        <result column="qu_province_id" property="provinceId" jdbcType="INTEGER"/>
+<!--        <result column="qu_province_id" property="provinceId" jdbcType="INTEGER"/>
         <result column="qu_city_id" property="cityId" jdbcType="INTEGER"/>
         <result column="qu_region_id" property="regionId" jdbcType="INTEGER"/>
         <result column="qu_college_id" property="collegeId" jdbcType="INTEGER"/>
-        <result column="qu_school_id" property="schoolId" jdbcType="INTEGER"/>
+        <result column="qu_school_id" property="schoolId" jdbcType="INTEGER"/>-->
 
         <result column="qu_coupon_left" property="couponLeft" jdbcType="INTEGER"/>
         <result column="qu_coupon_tot" property="couponTot" jdbcType="INTEGER"/>
@@ -75,11 +75,6 @@
         qu.tag_expire_time,
         qu.question_amt,
 
-        qu.province_id,
-        qu.city_id,
-        qu.region_id,
-        qu.college_id,
-        qu.school_id,
         qu.member_id,
 
         qu.coupon,
@@ -115,11 +110,6 @@
         award, contact_name, contact_phone,
         description, quest_detail, url,
         memo, offline,
-        province_id,
-        city_id,
-        region_id,
-        college_id,
-        school_id,
         final_award,
         member_id,
         emp_status,
@@ -136,7 +126,6 @@
         #{award,jdbcType=DECIMAL}, #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR},
         #{description,jdbcType=VARCHAR}, #{questDetail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
         #{memo,jdbcType=VARCHAR}, #{offline,jdbcType=BIT},
-        #{provinceId}, #{cityId}, #{regionId}, #{collegeId}, #{schoolId},
         #{finalAward},
         #{memberId},
         #{empStatus},
@@ -207,21 +196,6 @@
             </if>
 
 
-            <if test="provinceId != null">
-                province_id,
-            </if>
-            <if test="cityId != null">
-                city_id,
-            </if>
-            <if test="regionId != null">
-                region_id,
-            </if>
-            <if test="collegeId != null">
-                college_id,
-            </if>
-            <if test="schoolId != null">
-                school_id,
-            </if>
 
             <if test="finalAward != null">
                 final_award,
@@ -307,21 +281,6 @@
             </if>
 
 
-            <if test="provinceId != null">
-                #{provinceId},
-            </if>
-            <if test="cityId != null">
-                #{cityId},
-            </if>
-            <if test="regionId != null">
-                #{regionId},
-            </if>
-            <if test="collegeId != null">
-                #{collegeId},
-            </if>
-            <if test="schoolId != null">
-                #{schoolId},
-            </if>
 
             <if test="finalAward != null">
                 #{finalAward},
@@ -411,21 +370,6 @@
             </if>
 
 
-            <if test="provinceId != null">
-                province_id = #{provinceId},
-            </if>
-            <if test="cityId != null">
-                city_id = #{cityId},
-            </if>
-            <if test="regionId != null">
-                region_id = #{regionId},
-            </if>
-            <if test="collegeId != null">
-                college_id = #{collegeId},
-            </if>
-            <if test="schoolId != null">
-                school_id = #{schoolId},
-            </if>
 
             <if test="finalAward != null">
                 final_award = #{finalAward},
@@ -482,12 +426,6 @@
         memo = #{memo,jdbcType=VARCHAR},
         offline = #{offline,jdbcType=BIT},
 
-        province_id = #{provinceId},
-        city_id = #{cityId},
-        region_id = #{regionId},
-
-        college_id = #{collegeId},
-        school_id = #{schoolId},
         final_award = #{finalAward},
         member_id = #{memberId},
 
@@ -606,15 +544,6 @@
                 ANd qu.offline = #{offline}
             </if>
 
-            <if test="provinceId != null">
-                AND qu.province_id = #{provinceId}
-            </if>
-            <if test="cityId != null">
-                AND qu.city_id = #{cityId}
-            </if>
-            <if test="regionId != null">
-                AND qu.region_id = #{regionId}
-            </if>
 
             <!-- 根据大学,学院, 城市, 省筛选 -->
             <if test="collegeId != null">
@@ -741,16 +670,6 @@
                 ANd qu.offline = #{offline}
             </if>
 
-
-            <if test="provinceId != null">
-                AND qu.province_id = #{provinceId}
-            </if>
-            <if test="cityId != null">
-                AND qu.city_id = #{cityId}
-            </if>
-            <if test="regionId != null">
-                AND qu.region_id = #{regionId}
-            </if>
 
 
             <!-- 根据大学和学院筛选 -->
