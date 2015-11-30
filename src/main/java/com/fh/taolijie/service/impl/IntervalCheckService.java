@@ -16,7 +16,7 @@ public class IntervalCheckService {
     @Autowired
     private AccountService accountService;
 
-    public final boolean checkInterval(Integer memId, Date lastDate, int interval, TimeUnit unit) {
+    public final boolean checkInterval(Date lastDate, int interval, TimeUnit unit) {
         Date nowTime = new Date();
         if (null == lastDate) {
             return true;

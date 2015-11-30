@@ -112,7 +112,7 @@ public class RestJobUController {
 
 
         // 检查发送时间间隔
-        if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
+        if (false == icService.checkInterval(mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
             return new ResponseText(ErrorCode.TOO_FREQUENT);
         }
 

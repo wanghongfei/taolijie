@@ -186,7 +186,7 @@ public class UShController {
 
 
         // 查检发布时间间隔
-        if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
+        if (false == icService.checkInterval(mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
             return new JsonWrapper(false, ErrorCode.TOO_FREQUENT).getAjaxMessage();
         }
 

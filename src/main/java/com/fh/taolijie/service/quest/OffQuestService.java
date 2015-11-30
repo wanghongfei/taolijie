@@ -2,6 +2,7 @@ package com.fh.taolijie.service.quest;
 
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.OffQuestModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 
 /**
  * 线下任务业务接口
@@ -12,7 +13,7 @@ public interface OffQuestService {
      * 发布线下任务
      * @param model
      */
-    void publish(OffQuestModel model);
+    void publish(OffQuestModel model) throws GeneralCheckedException;
 
     /**
      * 条件查询

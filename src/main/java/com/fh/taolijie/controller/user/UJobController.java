@@ -195,7 +195,7 @@ public class UJobController {
 
 
         // 检查发送时间间隔
-        if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
+        if (false == icService.checkInterval(mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
             return new JsonWrapper(false, ErrorCode.TOO_FREQUENT).getAjaxMessage();
         }
 

@@ -135,7 +135,7 @@ public class RestShUController {
 
 
         // 查检发布时间间隔
-        if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
+        if (false == icService.checkInterval(mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
             return new ResponseText(ErrorCode.TOO_FREQUENT);
         }
 
