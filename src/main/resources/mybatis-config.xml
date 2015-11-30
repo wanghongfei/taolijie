@@ -88,5 +88,7 @@
 
         <mapper resource="mapper/PVModelMapper.xml" />
 
+        <mapper resource="mapper/OffQuestModelMapper.xml" />
+
     </mappers>
 </configuration>

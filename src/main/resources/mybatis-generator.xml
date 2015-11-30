@@ -43,7 +43,8 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="id_certi" domainObjectName="IdCertiModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+        <table tableName="off_quest" domainObjectName="OffQuestModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />
+<!--        <table tableName="id_certi" domainObjectName="IdCertiModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="dict_industry" domainObjectName="DictIndustryModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="pv" domainObjectName="PVModel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
 <!--        <table tableName="quest_province_rel" domainObjectName="QuestProRel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" /> <table tableName="quest_city_rel" domainObjectName="QuestCiRel" enableDeleteByPrimaryKey="true" enableUpdateByPrimaryKey="true" enableSelectByExample="false" enableUpdateByExample="false" enableCountByExample="false" enableDeleteByExample="false" />-->
