@@ -471,7 +471,8 @@ public class DefaultQuestService implements QuestService {
             throw new QuestAssignedException("");
         }
 
-        if (false == targetService.checkTarget(memId, questId)) {
+        // 检查任务对象
+        if (false == targetService.checkTarget(memId, questModel)) {
             throw new QuestTargetMismatchException();
         }
 

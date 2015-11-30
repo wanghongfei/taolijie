@@ -15,5 +15,5 @@ public interface QuestTargetService {
      * @param questId
      * @return
      */
-    boolean checkTarget(Integer memId, Integer questId);
+    boolean checkTarget(Integer memId, QuestModel quest);
 }

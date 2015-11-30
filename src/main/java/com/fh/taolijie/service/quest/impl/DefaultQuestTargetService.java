@@ -51,20 +51,27 @@ public class DefaultQuestTargetService implements QuestTargetService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean checkTarget(Integer memId, Integer questId) {
+    public boolean checkTarget(Integer memId, QuestModel quest) {
+        // 检查任务对象是不是所有人
+        if (quest.getIsTargetAll() == true) {
+            return true;
+        }
+
         // 查询学生的认证信息
         StuCertiModel certi = stuService.findDoneByMember(memId);
+
+        Integer questId = quest.getId();
 
         // 查出任务对象
 
         // 验证学校学校
-        List<QuestSchRelModel> schRel = schMapper.selectByQuestId(questId);
+/*        List<QuestSchRelModel> schRel = schMapper.selectByQuestId(questId);
         // 非空表示该任务设置了学校任务对象
         if (false == schRel.isEmpty()) {
             // 检查学生所在学校是否在任务对象中
             Integer schId = certi.getSchoolId();
             return schRel.stream().anyMatch( sch -> sch.getId().equals(schId) );
-        }
+        }*/
 
         // 验证城市城市
         List<QuestCiRel> ciRel = cityMapper.selectByQuestId(questId);
