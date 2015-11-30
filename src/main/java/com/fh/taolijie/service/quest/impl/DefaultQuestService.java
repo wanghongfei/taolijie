@@ -197,14 +197,14 @@ public class DefaultQuestService implements QuestService {
         }
 
         // 关联学院
-        if (!schList.isEmpty()) {
+/*        if (!schList.isEmpty()) {
             List<QuestSchRelModel> qsList = schList.stream()
                     .map( id -> new QuestSchRelModel(questId, id) )
                     .collect(Collectors.toList());
 
             addQuestSchoolRel(qsList);
 
-        }
+        }*/
 
         // 关联城市
         if (!cityList.isEmpty()) {
