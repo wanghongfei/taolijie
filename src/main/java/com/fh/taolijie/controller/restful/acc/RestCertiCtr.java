@@ -4,23 +4,23 @@ import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
+import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.IdCertiModel;
 import com.fh.taolijie.domain.certi.EmpCertiModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.certi.StuCertiModel;
+import com.fh.taolijie.dto.CertiInfoDto;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.certi.ApplicationDuplicatedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.certi.EmpCertiService;
 import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,6 +42,20 @@ public class RestCertiCtr {
 
     @Autowired
     private AccountService accService;
+
+
+    /**
+     * 查询当前用户的认证状态
+     * @return
+     */
+    @RequestMapping(value = "/status", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText checkCertiStatus(HttpServletRequest req) {
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        CertiInfoDto dto = accService.selectCertiStatus(memId);
+
+        return new ResponseText(dto);
+    }
 
     /**
      * 个人身份认证

@@ -3,6 +3,7 @@ package com.fh.taolijie.service;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
+import com.fh.taolijie.dto.CertiInfoDto;
 import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
@@ -78,6 +79,11 @@ public interface AccountService {
 
     void updateAppToken(Integer memId, String token);
 
+    /**
+     * 根据appToken查询用户
+     * @param token
+     * @return
+     */
     MemberModel selectByAppToken(String token);
 
     /**
@@ -86,6 +92,13 @@ public interface AccountService {
      * @return
      */
     MemberModel selectByWechatToken(String wechat);
+
+    /**
+     * 查询指定用户的认证状态
+     * @param memId
+     * @return
+     */
+    CertiInfoDto selectCertiStatus(Integer memId);
 
 
     /**

@@ -13,6 +13,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.MemberRoleModel;
 import com.fh.taolijie.domain.Pagination;
 import com.fh.taolijie.domain.acc.RoleModel;
+import com.fh.taolijie.dto.CertiInfoDto;
 import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
@@ -180,6 +181,16 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Override
     public MemberModel selectByWechatToken(String wechat) {
         return memMapper.selectByWechatToken(wechat);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CertiInfoDto selectCertiStatus(Integer memId) {
+        String idCerti = memMapper.selectIdVerified(memId);
+        String empCerti = memMapper.selectEmpVerified(memId);
+        String stuCerti = memMapper.selectStuVerified(memId);
+
+        return new CertiInfoDto(idCerti, empCerti, stuCerti);
     }
 
     @Override
