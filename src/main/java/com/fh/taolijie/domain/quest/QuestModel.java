@@ -81,6 +81,8 @@ public class QuestModel extends Pageable implements IdAware {
 
     private Integer couponTot;
 
+    private Boolean isTargetAll;
+
     /**
      * 商家在我的发布中看到的状态
      */
@@ -651,5 +653,13 @@ public class QuestModel extends Pageable implements IdAware {
 
     public void setOffline(Boolean offline) {
         this.offline = offline;
+    }
+
+    public Boolean getIsTargetAll() {
+        return isTargetAll;
+    }
+
+    public void setIsTargetAll(Boolean isTargetAll) {
+        this.isTargetAll = isTargetAll;
     }
 }

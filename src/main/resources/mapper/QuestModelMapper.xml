@@ -44,6 +44,8 @@
         <result column="qu_coupon_left" property="couponLeft" jdbcType="INTEGER"/>
         <result column="qu_coupon_tot" property="couponTot" jdbcType="INTEGER"/>
         <result column="qu_coupon" property="coupon" jdbcType="BOOLEAN"/>
+
+        <result column="qu_is_target_all" property="isTargetAll" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -79,7 +81,9 @@
 
         qu.coupon,
         qu.coupon_left,
-        qu.coupon_tot
+        qu.coupon_tot,
+
+        qu.is_target_all
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         <!--
@@ -118,7 +122,8 @@
         flush_time,
         coupon,
         coupon_left,
-        coupon_tot
+        coupon_tot,
+        is_target_all
         )
         values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP},
         #{questCateId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
@@ -134,7 +139,8 @@
         #{flushTime},
         #{coupon},
         #{couponLeft},
-        #{couponTot})
+        #{couponTot},
+        #{isTargetAll})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.QuestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -226,6 +232,9 @@
             <if test="couponTot != null">
                 coupon_tot,
             </if>
+            <if test="isTargetAll != null">
+                is_target_all,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -310,6 +319,9 @@
             </if>
             <if test="couponTot != null">
                 #{couponTot},
+            </if>
+            <if test="isTargetAll != null">
+                #{isTargetAll}
             </if>
         </trim>
     </insert>
@@ -400,6 +412,9 @@
             <if test="couponTot != null">
                 coupon_tot = #{couponTot},
             </if>
+            <if test="isTargetAll != null">
+                is_target_all = #{isTargetAll},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -436,7 +451,8 @@
 
         coupon = #{coupon},
         coupon_left = #{couponLeft},
-        coupon_tot = #{couponTot}
+        coupon_tot = #{couponTot},
+        is_target_all = #{isTargetAll}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -589,6 +605,9 @@
             <if test="couponTot != null">
                 AND qu.coupon_tot = #{couponTot}
             </if>
+            <if test="isTargetAll != null">
+                AND qu.is_target_all = #{isTargetAll}
+            </if>
 
         </where>
 
@@ -716,6 +735,9 @@
             </if>
             <if test="couponTot != null">
                 AND qu.coupon_tot = #{couponTot}
+            </if>
+            <if test="isTargetAll != null">
+                AND qu.is_target_all = #{isTargetAll}
             </if>
         </where>
 
