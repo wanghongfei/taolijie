@@ -47,6 +47,9 @@ public class RestOffQuestUCtr {
                                 @RequestParam("cid") Integer cityId,
                                 @RequestParam("rid") Integer regionId,
 
+                                @RequestParam("la") BigDecimal latitude, // 纬度
+                                @RequestParam("lo") BigDecimal longitude, // 经度
+
                                 HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
@@ -73,6 +76,9 @@ public class RestOffQuestUCtr {
         model.setProvinceId(provinceId);
         model.setCityId(cityId);
         model.setRegionId(regionId);
+
+        model.setLatitude(latitude);
+        model.setLongitude(longitude);
 
         offService.publish(model);
 

@@ -21,10 +21,14 @@ import com.fh.taolijie.service.quest.OffQuestService;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +38,10 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -97,6 +100,9 @@ public class DefaultOffQuestService implements OffQuestService {
         model.setStatus(OffQuestStatus.PUBLISHED.code());
 
         questMapper.insertSelective(model);
+
+        // 向百度地图加点
+        sendPosition(model.getLongitude(), model.getLatitude(), model.getId(), model.getId().toString());
     }
 
     /**
@@ -110,29 +116,35 @@ public class DefaultOffQuestService implements OffQuestService {
         String geotableId = map.get(RedisKey.MAP_GEOTABLE_ID.toString());
         String addr = map.get(RedisKey.MAP_CREATE_PT.toString());
 
+        logger.debug("ak = {}, coord = {}, geotableId = {}, addr = {}", AK, coord, geotableId, addr);
 
-        // 拼接GET请求参数
-        Map<String, String> parmMap = new HashMap<>(15);
-        parmMap.put("ak", AK);
-        parmMap.put("coord_type", coord);
-        parmMap.put("geotable_id", geotableId);
-        parmMap.put("longitude", longitude.toString());
-        parmMap.put("latitude", latitude.toString());
-        parmMap.put("quest_id", questId.toString());
-        parmMap.put("title", title);
 
-        String queryStr = StringUtils.genUrlQueryString(parmMap);
-        String finalUrl = StringUtils.concat(addr.length() + queryStr.length() + 1, "?", addr, queryStr);
-
-        logger.info("sending GET request {}", finalUrl);
-
+        logger.info("sending GET request to {}", addr);
         // 发送请求
         CloseableHttpClient client = HttpClientFactory.getClient();
-        HttpGet GET = new HttpGet(finalUrl);
+        // 构建请求
+        HttpPost POST = new HttpPost(addr);
+        // 构建参数
+
+
+        List<NameValuePair> parmList = new ArrayList<>(6);
+        parmList.add(new BasicNameValuePair("ak", AK));
+        parmList.add(new BasicNameValuePair("coord_type", coord));
+        parmList.add(new BasicNameValuePair("geotable_id", geotableId));
+        parmList.add(new BasicNameValuePair("longitude", longitude.toEngineeringString()));
+        parmList.add(new BasicNameValuePair("latitude", latitude.toEngineeringString()));
+        parmList.add(new BasicNameValuePair("quest_id", questId.toString()));
+        parmList.add(new BasicNameValuePair("title", title));
+        logger.debug("param = {}", parmList);
+
+
+
         boolean result = true;
         try {
+            POST.setEntity(new UrlEncodedFormEntity(parmList));
+
             // 实际发出请求
-            CloseableHttpResponse resp = client.execute(GET, HttpClientContext.create());
+            CloseableHttpResponse resp = client.execute(POST, HttpClientContext.create());
 
             try {
                 // 读取返回报文
@@ -147,10 +159,8 @@ public class DefaultOffQuestService implements OffQuestService {
                 if (false == "0".equals(dto.status)) {
                     // 失败
                     LogUtils.getErrorLogger().error("create point failed");
-                    result = false;
+                    throw new HTTPConnectionException();
                 }
-
-            } catch (IOException e) {
 
             } finally {
                 resp.close();

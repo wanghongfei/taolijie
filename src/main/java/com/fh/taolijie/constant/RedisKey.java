@@ -62,7 +62,7 @@ public enum RedisKey {
                 return "url_create_pt";
 
             case MAP_CONF:
-                return "map";
+                return "conf:map";
 
             case MAP_AK:
                 return "ak";
