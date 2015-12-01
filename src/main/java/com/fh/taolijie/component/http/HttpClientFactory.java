@@ -1,7 +1,9 @@
 package com.fh.taolijie.component.http;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +13,14 @@ import org.slf4j.LoggerFactory;
  * Created by whf on 10/7/15.
  */
 public class HttpClientFactory {
-    private static Logger infoLog = LoggerFactory.getLogger("info");
+    private static Logger infoLog = LoggerFactory.getLogger(HttpClientFactory.class);
 
     private static PoolingHttpClientConnectionManager pool;
 
-    private static HttpClientBuilder builder;
+    /**
+     * Client对象是线程安全的
+     */
+    private static CloseableHttpClient client;
 
     public static int MAX_PER_ROUTE = 20;
     public static int MAX_TOTAL = 50;
@@ -28,13 +33,15 @@ public class HttpClientFactory {
         pool.setDefaultMaxPerRoute(MAX_PER_ROUTE);
         pool.setMaxTotal(MAX_TOTAL);
 
-        builder = HttpClientBuilder.create();
-        builder.setConnectionManager(pool);
+
+        client = HttpClients.custom()
+                .setConnectionManager(pool)
+                .build();
 
         infoLog.info("done creating HTTP connection pool");
     }
 
-    public static HttpClient getClient() {
-        return builder.build();
+    public static CloseableHttpClient getClient() {
+        return client;
     }
 }

@@ -8,10 +8,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +50,7 @@ public class SMSUtils {
      */
     public static boolean sendCode(String code, String... mobs) {
         try {
-            HttpClient client = HttpClientFactory.getClient();
+            CloseableHttpClient client = HttpClientFactory.getClient();
             HttpPost post = new HttpPost(SMS_URL);
 
             List<NameValuePair> parmList = new ArrayList<>(6);
@@ -68,14 +72,16 @@ public class SMSUtils {
             post.setEntity(new UrlEncodedFormEntity(parmList, HTTP.UTF_8));
 
             // 发送请求
-            HttpResponse resp = client.execute(post);
-            String str = StringUtils.stream2String(resp.getEntity().getContent());
-            infoLog.info("[phone]: response received for {}:{}", mobList, str);
-            if (infoLog.isDebugEnabled()) {
-                infoLog.debug("SMS response received: {}, content = {}", resp.getStatusLine().getStatusCode(), str);
-            }
+            CloseableHttpResponse resp = client.execute(post, HttpClientContext.create());
 
             try {
+                // 将返回报文转换成对象
+                String str = StringUtils.stream2String(resp.getEntity().getContent());
+                infoLog.info("[phone]: response received for {}:{}", mobList, str);
+                if (infoLog.isDebugEnabled()) {
+                    infoLog.debug("SMS response received: {}, content = {}", resp.getStatusLine().getStatusCode(), str);
+                }
+
                 SMSResponse smsResponse = JSON.parseObject(str, SMSResponse.class);
                 Integer respCode = smsResponse.getCode();
                 if (null == respCode || respCode.intValue() != 0) {
@@ -86,6 +92,8 @@ public class SMSUtils {
             } catch (JSONException ex) {
                 LogUtils.logException(ex);
                 return false;
+            } finally {
+                resp.close();
             }
 
 

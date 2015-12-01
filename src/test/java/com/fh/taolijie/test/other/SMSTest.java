@@ -1,5 +1,6 @@
 package com.fh.taolijie.test.other;
 
+import com.fh.taolijie.utils.SMSUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -49,6 +50,11 @@ public class SMSTest {
         }
 
 
+    }
+
+    @Test
+    public void testSMSUtils() {
+        SMSUtils.sendCode("123456", "18518369058");
     }
 
     @Test
