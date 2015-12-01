@@ -30,24 +30,6 @@ public class IntervalCheckService {
      */
     private final String OFF_QUEST_INTERVAL_PREFIX = "interval" + Constants.DELIMITER + "offquest";
 
-    /**
-     * 标记线下任务发布时间点, 用于发布间隔检查
-     * @param memId
-     */
-    public final void markOffQuestPost(Integer memId) {
-        // 生成redis key
-        String key = genKey(memId);
-
-
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-
-        Pipeline line = jedis.pipelined();
-        line.set(key, "T");
-        line.expire(key, 15); // 15s
-
-        line.sync();
-        JedisUtils.returnJedis(jedisPool, jedis);
-    }
 
     /**
      * 检查线下任务时间间隔是否合法
@@ -57,11 +39,24 @@ public class IntervalCheckService {
     public final boolean checkOffQuestPostInterval(Integer memId) {
         String key = genKey(memId);
 
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-        String val = jedis.get(key);
-        JedisUtils.returnJedis(jedisPool, jedis);
 
-        return !StringUtils.checkNotEmpty(val);
+        boolean res = JedisUtils.performOnce(jedisPool, jedis -> {
+            String val = jedis.get(key);
+            boolean result = !StringUtils.checkNotEmpty(val);
+
+            // 如果result == true
+            // 表示redis中没有对应的key, 即间隔合法
+            if (result) {
+                Pipeline pip = jedis.pipelined();
+                jedis.set(key, "T");
+                jedis.expire(key, 10);
+                pip.sync();
+            }
+
+            return result;
+        });
+
+        return res;
     }
 
     private String genKey(Integer memId) {
