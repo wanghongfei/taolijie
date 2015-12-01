@@ -1,5 +1,8 @@
 package com.fh.taolijie.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -18,8 +21,10 @@ public class OffQuestModel extends Pageable {
 
     private BigDecimal award;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date workTime;
 
     private String workPlace;
@@ -37,7 +42,9 @@ public class OffQuestModel extends Pageable {
     private Integer regionId;
 
 
+    @JsonIgnore
     private BigDecimal longitude;
+    @JsonIgnore
     private BigDecimal latitude;
 
     public OffQuestModel() {}

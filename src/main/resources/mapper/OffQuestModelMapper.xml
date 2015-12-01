@@ -306,6 +306,9 @@
             </if>
 
         </where>
+        ORDER BY
+            created_time DESC
+
         LIMIT
             #{pageNumber}, #{pageSize}
     </select>

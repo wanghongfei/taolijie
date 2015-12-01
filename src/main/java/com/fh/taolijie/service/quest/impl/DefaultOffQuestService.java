@@ -178,8 +178,12 @@ public class DefaultOffQuestService implements OffQuestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ListResult<OffQuestModel> findBy(OffQuestModel cmd) {
-        return null;
+        List<OffQuestModel> list = questMapper.findBy(cmd);
+        long tot = questMapper.countFindBy(cmd);
+
+        return new ListResult<>(list, tot);
     }
 
     @Override
