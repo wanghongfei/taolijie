@@ -49,6 +49,8 @@ public class OffQuestModel extends Pageable {
     private BigDecimal longitude;
     @JsonIgnore
     private BigDecimal latitude;
+    @JsonIgnore
+    private Integer distance;
 
     public OffQuestModel() {}
 
@@ -450,6 +452,14 @@ public class OffQuestModel extends Pageable {
 
     public void setFlushTime(Date flushTime) {
         this.flushTime = flushTime;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.fh.taolijie.dto;
+package com.fh.taolijie.dto.map;
 
 /**
  * Created by whf on 12/1/15.

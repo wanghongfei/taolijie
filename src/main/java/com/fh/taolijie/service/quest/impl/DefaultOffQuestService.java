@@ -10,7 +10,8 @@ import com.fh.taolijie.dao.mapper.OffCateModelMapper;
 import com.fh.taolijie.dao.mapper.OffQuestModelMapper;
 import com.fh.taolijie.domain.OffCateModel;
 import com.fh.taolijie.domain.OffQuestModel;
-import com.fh.taolijie.dto.BaiduMapDto;
+import com.fh.taolijie.dto.map.BaiduMapDto;
+import com.fh.taolijie.dto.map.BaiduMapNearbyRespDto;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HTTPConnectionException;
 import com.fh.taolijie.exception.checked.PermissionException;
@@ -36,14 +37,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -229,9 +229,98 @@ public class DefaultOffQuestService implements OffQuestService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws HTTPConnectionException {
+        List<Integer> idList = queryNearbyQuest(longitude, latitude, radis, pn, ps);
+        if (null == idList || idList.isEmpty()) {
+            return new ListResult<>();
+        }
+
+        List<OffQuestModel> list = questMapper.selectInBatch(idList);
+
+        return new ListResult<>(list, list.size());
+    }
 
     @Override
     public int distance(double start, double end) {
         return 0;
+    }
+
+    /**
+     * 向百度地图发起范围查询
+     */
+    private List<Integer> queryNearbyQuest(BigDecimal longitude, BigDecimal latitude, int range, int pn, int ps) throws HTTPConnectionException {
+        // 从redis中取出连接参数
+        Map<String, String> map = JedisUtils.performOnce(jedisPool, jedis -> jedis.hgetAll(RedisKey.MAP_CONF.toString()) );
+        String AK = map.get(RedisKey.MAP_AK.toString());
+        String geotableId = map.get(RedisKey.MAP_GEOTABLE_ID.toString());
+        String addr = map.get(RedisKey.MAP_RANGE_QUERY.toString());
+
+        logger.debug("ak = {}, coord = {}, addr = {}", AK, geotableId, addr);
+
+        // 拼接GET请求
+        Map<String, String> paramMap = new HashMap<>(10);
+        paramMap.put("ak", AK);
+        paramMap.put("geotable_id", geotableId);
+        paramMap.put("radis", String.valueOf(range));
+        paramMap.put("sortBy", "distance");
+        paramMap.put("page_index", String.valueOf(pn) );
+        paramMap.put("page_size", String.valueOf(ps) );
+        String location = StringUtils.concat(60, longitude.toString(), ",", latitude.toString());
+        paramMap.put("location", location);
+        String queryStr = StringUtils.genUrlQueryString(paramMap);
+
+        String finalUrl = StringUtils.concat(queryStr.length() + addr.length() + 5, addr, "?", queryStr);
+
+        logger.info("sending request to {}", finalUrl);
+
+        // 创建httpclient
+        CloseableHttpClient client = HttpClientFactory.getClient();
+        HttpGet GET = new HttpGet(finalUrl);
+
+        // 发送请求
+        List<Integer> idList = null;
+        try {
+            CloseableHttpResponse resp = client.execute(GET, HttpClientContext.create());
+
+            try {
+                // 读取返回报文
+                String data = StringUtils.stream2String(resp.getEntity().getContent());
+                logger.info("response data = {}", data);
+
+                // to DTO
+                BaiduMapNearbyRespDto dto = JSON.parseObject(data, BaiduMapNearbyRespDto.class);
+                logger.debug("dto = {}", dto);
+
+                // 判断是否成功
+                if (false == "0".equals(dto.status)) {
+                    // 失败
+                    LogUtils.getErrorLogger().error("nearby search failed");
+                    throw new HTTPConnectionException();
+                }
+
+                // 得到任务id List
+                idList = Stream.of(dto.contents)
+                        .map( content -> content.quest_id )
+                        .collect(Collectors.toList());
+
+                logger.debug("id list = {}", idList);
+
+
+            } catch (Exception e) {
+                LogUtils.logException(e);
+                throw new HTTPConnectionException();
+
+            } finally {
+                resp.close();
+            }
+
+        } catch (IOException e) {
+            LogUtils.logException(e);
+            throw new HTTPConnectionException();
+        }
+
+        return idList;
     }
 }

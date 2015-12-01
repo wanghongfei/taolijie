@@ -1,6 +1,7 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.OffQuestModel;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,4 +58,6 @@ public interface OffQuestModelMapper {
 
     List<OffQuestModel> findBy(OffQuestModel cmd);
     long countFindBy(OffQuestModel cmd);
+
+    List<OffQuestModel> selectInBatch(List<Integer> idList);
 }

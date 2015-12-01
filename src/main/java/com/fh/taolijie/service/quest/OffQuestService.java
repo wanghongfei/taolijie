@@ -4,7 +4,10 @@ import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.OffQuestStatus;
 import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
+import com.fh.taolijie.exception.checked.HTTPConnectionException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
+
+import java.math.BigDecimal;
 
 /**
  * 线下任务业务接口
@@ -36,6 +39,14 @@ public interface OffQuestService {
      * @throws GeneralCheckedException
      */
     void flush(Integer questId, Integer memId) throws GeneralCheckedException;
+
+    /**
+     * 查询附近的任务
+     * @param longitude
+     * @param latitude
+     * @return
+     */
+    ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws HTTPConnectionException;
 
     /**
      * 根据经纬度计算两点之间的距离

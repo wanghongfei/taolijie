@@ -388,4 +388,13 @@
 
         </where>
     </select>
+
+    <select id="selectInBatch" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            off_quest
+        WHERE
+            id IN <foreach collection="list" open="(" close=")" separator="," item="_id">#{_id}</foreach>
+    </select>
 </mapper>

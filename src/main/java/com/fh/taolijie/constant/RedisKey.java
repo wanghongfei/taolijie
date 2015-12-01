@@ -54,10 +54,14 @@ public enum RedisKey {
     MAP_AK,
     MAP_COORD_TYPE,
     MAP_CREATE_PT,
+    MAP_RANGE_QUERY,
     MAP_GEOTABLE_ID;
 
     public String toString() {
         switch (this) {
+            case MAP_RANGE_QUERY:
+                return "url_range_query";
+
             case MAP_CREATE_PT:
                 return "url_create_pt";
 

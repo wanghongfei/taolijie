@@ -50,6 +50,7 @@ pipe.hset('conf:map', 'ak', 'unwkAe2gFKlzKAXftIyGSNxx')
 pipe.hset('conf:map', 'geotable_id', '125616')
 pipe.hset('conf:map', 'coord_type', '1')
 pipe.hset('conf:map', 'url_create_pt', 'http://api.map.baidu.com/geodata/v3/poi/create')
+pipe.hset('conf:map', 'url_range_query', 'http://api.map.baidu.com/geosearch/v3/nearby')
 
 print pipe.execute()
 
