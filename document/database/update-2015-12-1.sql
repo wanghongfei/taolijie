@@ -1,0 +1,1 @@
+alter table taolijie.off_quest add COLUMN flush_time datetime;

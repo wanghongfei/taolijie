@@ -41,6 +41,9 @@ public class OffQuestModel extends Pageable {
 
     private Integer regionId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date flushTime;
+
 
     @JsonIgnore
     private BigDecimal longitude;
@@ -439,6 +442,14 @@ public class OffQuestModel extends Pageable {
 
     public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
+    }
+
+    public Date getFlushTime() {
+        return flushTime;
+    }
+
+    public void setFlushTime(Date flushTime) {
+        this.flushTime = flushTime;
     }
 
     /**

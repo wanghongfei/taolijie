@@ -30,6 +30,14 @@ public interface OffQuestService {
     void updateStatus(Integer questId, Integer memId, OffQuestStatus status) throws GeneralCheckedException;
 
     /**
+     * 刷新发布时间
+     * @param questId
+     * @param memId
+     * @throws GeneralCheckedException
+     */
+    void flush(Integer questId, Integer memId) throws GeneralCheckedException;
+
+    /**
      * 根据经纬度计算两点之间的距离
      * @param start 经度
      * @param end 纬度

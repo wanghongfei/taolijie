@@ -108,6 +108,21 @@ public class RestOffQuestUCtr {
     }
 
     /**
+     * 刷新时间
+     * @return
+     */
+    @RequestMapping(value = "/f", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText flush(@RequestParam("q") Integer questId,
+                              HttpServletRequest req) throws GeneralCheckedException{
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+        offService.flush(questId, memId);;
+
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
      * 查询当前用户发布的线下任务
      * @return
      */

@@ -91,7 +91,8 @@ public class DefaultOffQuestService implements OffQuestService {
 
 
         // 执行发布
-        model.setCreatedTime(new Date());
+        Date now = new Date();
+        model.setCreatedTime(now);
         // 设置username冗余字段
         String username = memMapper.selectUsername(memId);
         model.setUsername(username);
@@ -100,6 +101,7 @@ public class DefaultOffQuestService implements OffQuestService {
         model.setCateName(cate.getName());
         // 设置状态为已发布
         model.setStatus(OffQuestStatus.PUBLISHED.code());
+        model.setFlushTime(now);
 
         questMapper.insertSelective(model);
 
@@ -191,6 +193,29 @@ public class DefaultOffQuestService implements OffQuestService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void updateStatus(Integer questId, Integer memId, OffQuestStatus status) throws GeneralCheckedException {
+        checkOwner(questId, memId);
+
+        // 修改状态
+        OffQuestModel cmd = new OffQuestModel();
+        cmd.setId(questId);
+        cmd.setStatus(status.code());
+        questMapper.updateByPrimaryKeySelective(cmd);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void flush(Integer questId, Integer memId) throws GeneralCheckedException {
+        checkOwner(questId, memId);
+
+        // 修改状态
+        OffQuestModel cmd = new OffQuestModel();
+        cmd.setId(questId);
+        cmd.setFlushTime(new Date());
+        questMapper.updateByPrimaryKeySelective(cmd);
+
+    }
+
+    private void checkOwner(Integer questId, Integer memId) throws GeneralCheckedException {
         OffQuestModel quest = questMapper.selectByPrimaryKey(questId);
         // 验证任务存在性
         if (null == quest) {
@@ -202,13 +227,8 @@ public class DefaultOffQuestService implements OffQuestService {
             throw new PermissionException();
         }
 
-
-        // 修改状态
-        OffQuestModel cmd = new OffQuestModel();
-        cmd.setId(questId);
-        cmd.setStatus(status.code());
-        questMapper.updateByPrimaryKeySelective(cmd);
     }
+
 
     @Override
     public int distance(double start, double end) {
