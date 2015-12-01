@@ -232,12 +232,22 @@ public class DefaultOffQuestService implements OffQuestService {
     @Override
     @Transactional(readOnly = true)
     public ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws HTTPConnectionException {
-        List<Integer> idList = queryNearbyQuest(longitude, latitude, radis, pn, ps);
-        if (null == idList || idList.isEmpty()) {
+        // 向地图查询附近的坐标点
+        Map<Integer, Integer> questDistMap = queryNearbyQuest(longitude, latitude, radis, pn, ps);
+        if (null == questDistMap || questDistMap.isEmpty()) {
             return new ListResult<>();
         }
 
+        // 根据任务id查询数据库
+        List<Integer> idList = questDistMap.keySet().stream()
+                .collect(Collectors.toList());
         List<OffQuestModel> list = questMapper.selectInBatch(idList);
+
+        // 为结果集中的distance赋值
+        list.forEach( quest -> {
+            Integer dist = questDistMap.get(quest.getId());
+            quest.setDistance(dist);
+        });
 
         return new ListResult<>(list, list.size());
     }
@@ -249,8 +259,9 @@ public class DefaultOffQuestService implements OffQuestService {
 
     /**
      * 向百度地图发起范围查询
+     * @return key: 任务id, val: 距离
      */
-    private List<Integer> queryNearbyQuest(BigDecimal longitude, BigDecimal latitude, int range, int pn, int ps) throws HTTPConnectionException {
+    private Map<Integer, Integer> queryNearbyQuest(BigDecimal longitude, BigDecimal latitude, int range, int pn, int ps) throws HTTPConnectionException {
         // 从redis中取出连接参数
         Map<String, String> map = JedisUtils.performOnce(jedisPool, jedis -> jedis.hgetAll(RedisKey.MAP_CONF.toString()) );
         String AK = map.get(RedisKey.MAP_AK.toString());
@@ -280,7 +291,7 @@ public class DefaultOffQuestService implements OffQuestService {
         HttpGet GET = new HttpGet(finalUrl);
 
         // 发送请求
-        List<Integer> idList = null;
+        Map<Integer, Integer> questDistanceMap = null;
         try {
             CloseableHttpResponse resp = client.execute(GET, HttpClientContext.create());
 
@@ -301,11 +312,10 @@ public class DefaultOffQuestService implements OffQuestService {
                 }
 
                 // 得到任务id List
-                idList = Stream.of(dto.contents)
-                        .map( content -> content.quest_id )
-                        .collect(Collectors.toList());
+                questDistanceMap = Stream.of(dto.contents)
+                        .collect(Collectors.toMap(con -> con.quest_id, con -> con.distance) );
 
-                logger.debug("id list = {}", idList);
+                logger.debug("id list = {}", questDistanceMap);
 
 
             } catch (Exception e) {
@@ -321,6 +331,6 @@ public class DefaultOffQuestService implements OffQuestService {
             throw new HTTPConnectionException();
         }
 
-        return idList;
+        return questDistanceMap;
     }
 }

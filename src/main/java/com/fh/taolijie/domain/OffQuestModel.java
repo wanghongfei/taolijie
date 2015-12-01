@@ -49,7 +49,7 @@ public class OffQuestModel extends Pageable {
     private BigDecimal longitude;
     @JsonIgnore
     private BigDecimal latitude;
-    @JsonIgnore
+    //@JsonIgnore
     private Integer distance;
 
     public OffQuestModel() {}
