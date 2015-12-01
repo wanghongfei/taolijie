@@ -45,5 +45,11 @@ pipe.hset('conf:wechat', 'secret', 'd4624c36b6795d1d99dcf0547af5443d')
 pipe.hset('conf:wechat', 'certi', 'apiclient_cert.p12')
 pipe.hset('conf:wechat', 'certi_path', '/Users/whf/projects/taolijie/apiclient_cert.p12')
 
+
+pipe.hset('conf:map', 'ak', 'unwkAe2gFKlzKAXftIyGSNxx')
+pipe.hset('conf:map', 'geotable_id', '125616')
+pipe.hset('conf:map', 'coord_type', '1')
+pipe.hset('conf:map', 'url_create_pt', 'http://api.map.baidu.com/geodata/v3/poi/create')
+
 print pipe.execute()
 

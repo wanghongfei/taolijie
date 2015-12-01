@@ -72,7 +72,9 @@ public enum ErrorCode {
     ACC_NOT_SET(44, "account not set"),
 
     QUEST_TARGET_MISMATCH(45, "quest target mismatch"),
-    LACK_ID_CERTIFICATION(46, "id certification needed");
+    LACK_ID_CERTIFICATION(46, "id certification needed"),
+
+    HTTP_CONN_ERROR(47, "http connection error");
 
     private final String msg;
     private final int code;

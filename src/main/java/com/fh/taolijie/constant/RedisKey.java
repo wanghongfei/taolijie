@@ -47,10 +47,32 @@ public enum RedisKey {
     WECHAT_APPID,
     WECHAT_MCHID,
     WECHAT_SECRET,
-    WECHAT_CERTI_PATH;
+    WECHAT_CERTI_PATH,
+
+    // for Baidu Map
+    MAP_CONF,
+    MAP_AK,
+    MAP_COORD_TYPE,
+    MAP_CREATE_PT,
+    MAP_GEOTABLE_ID;
 
     public String toString() {
         switch (this) {
+            case MAP_CREATE_PT:
+                return "url_create_pt";
+
+            case MAP_CONF:
+                return "map";
+
+            case MAP_AK:
+                return "ak";
+
+            case MAP_COORD_TYPE:
+                return "coord_type";
+
+            case MAP_GEOTABLE_ID:
+                return "geotable_id";
+
             case WECHAT_CERTI_PATH:
                 return "certi_path";
 

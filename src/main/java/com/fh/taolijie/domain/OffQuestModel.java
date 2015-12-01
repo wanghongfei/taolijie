@@ -36,6 +36,10 @@ public class OffQuestModel extends Pageable {
 
     private Integer regionId;
 
+
+    private BigDecimal longitude;
+    private BigDecimal latitude;
+
     public OffQuestModel() {}
 
     public OffQuestModel(int pn, int ps) {
@@ -412,6 +416,22 @@ public class OffQuestModel extends Pageable {
      */
     public Integer getRegionId() {
         return regionId;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
     }
 
     /**
