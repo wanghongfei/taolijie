@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.restful.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
+import com.fh.taolijie.constant.quest.OffQuestStatus;
 import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.service.quest.OffQuestService;
@@ -86,16 +87,22 @@ public class RestOffQuestUCtr {
     }
 
     /**
-     * 任务下架
+     * 任务上下架
      * @return
      */
     @RequestMapping(value = "/offline", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText offline(@RequestParam("q") Integer questId,
+                                @RequestParam(value = "off", defaultValue = "1") int isOffline, // 是否下线, 默认为1 = 下线
                                 HttpServletRequest req) throws GeneralCheckedException {
+
+        // 参数验证
+        if (isOffline != 0 && isOffline != 1) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
-        offService.offline(questId, memId);
+        offService.updateStatus(questId, memId, isOffline == 1 ? OffQuestStatus.OFFLINE : OffQuestStatus.PUBLISHED);
 
         return ResponseText.getSuccessResponseText();
     }

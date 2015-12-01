@@ -190,7 +190,7 @@ public class DefaultOffQuestService implements OffQuestService {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
-    public void offline(Integer questId, Integer memId) throws GeneralCheckedException {
+    public void updateStatus(Integer questId, Integer memId, OffQuestStatus status) throws GeneralCheckedException {
         OffQuestModel quest = questMapper.selectByPrimaryKey(questId);
         // 验证任务存在性
         if (null == quest) {
@@ -203,10 +203,10 @@ public class DefaultOffQuestService implements OffQuestService {
         }
 
 
-        // 下架
+        // 修改状态
         OffQuestModel cmd = new OffQuestModel();
         cmd.setId(questId);
-        cmd.setStatus(OffQuestStatus.OFFLINE.code());
+        cmd.setStatus(status.code());
         questMapper.updateByPrimaryKeySelective(cmd);
     }
 
