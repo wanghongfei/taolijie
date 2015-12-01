@@ -86,6 +86,21 @@ public class RestOffQuestUCtr {
     }
 
     /**
+     * 任务下架
+     * @return
+     */
+    @RequestMapping(value = "/offline", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText offline(@RequestParam("q") Integer questId,
+                                HttpServletRequest req) throws GeneralCheckedException {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        offService.offline(questId, memId);
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
      * 查询当前用户发布的线下任务
      * @return
      */

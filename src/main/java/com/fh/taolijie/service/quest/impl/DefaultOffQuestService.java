@@ -13,8 +13,10 @@ import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.dto.BaiduMapDto;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HTTPConnectionException;
+import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.PostIntervalException;
 import com.fh.taolijie.exception.checked.certi.IdUnverifiedException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.quest.OffQuestService;
@@ -184,6 +186,28 @@ public class DefaultOffQuestService implements OffQuestService {
         long tot = questMapper.countFindBy(cmd);
 
         return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void offline(Integer questId, Integer memId) throws GeneralCheckedException {
+        OffQuestModel quest = questMapper.selectByPrimaryKey(questId);
+        // 验证任务存在性
+        if (null == quest) {
+            throw new QuestNotFoundException(questId.toString());
+        }
+
+        // 验证任务所有者是不是memId
+        if (false == quest.getMemId().equals(memId)) {
+            throw new PermissionException();
+        }
+
+
+        // 下架
+        OffQuestModel cmd = new OffQuestModel();
+        cmd.setId(questId);
+        cmd.setStatus(OffQuestStatus.OFFLINE.code());
+        questMapper.updateByPrimaryKeySelective(cmd);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
+import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 
 /**
  * 线下任务业务接口
@@ -21,6 +22,11 @@ public interface OffQuestService {
      * @return
      */
     ListResult<OffQuestModel> findBy(OffQuestModel cmd);
+
+    /**
+     * 任务下线
+     */
+    void offline(Integer questId, Integer memId) throws GeneralCheckedException;
 
     /**
      * 根据经纬度计算两点之间的距离
