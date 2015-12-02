@@ -1,12 +1,15 @@
 package com.fh.taolijie.controller.restful.quest;
 
+import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
+import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.quest.OffQuestService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
+import com.fh.taolijie.utils.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 线下任务控制器
@@ -35,6 +39,9 @@ public class RestOffQuestCtr {
     @Autowired
     private OffQuestService questService;
 
+    @Autowired
+    private IdCertiService idService;
+
     /**
      * 附近的任务
      * @return
@@ -47,9 +54,34 @@ public class RestOffQuestCtr {
 
         ListResult<OffQuestModel> lr = questService.nearbyQuest(longitude, latitude, NEAR_RANGE, 0, ps);
 
+        // 根据用户状态处理联系手机号的显示
+        Credential credential = SessionUtils.getCredential(req);
+        // 未登陆
+        if (null == credential) {
+            hideMobile(lr.getList());
+
+        } else {
+            // 已登陆
+            boolean verified = idService.checkVerified(credential.getId());
+            // 但是未认证
+            if (false == verified) {
+                hideMobile(lr.getList());
+            }
+        }
+
         return new ResponseText(lr);
     }
 
+    private void hideMobile(List<OffQuestModel> list) {
+        list.forEach( model -> {
+            String num = model.getContactPhone();
+
+            StringBuffer sb = new StringBuffer(num);
+            sb.replace(3, 7, "XXXX");
+
+            model.setContactPhone(sb.toString());
+        });
+    }
 
     /**
      * 根据区域查询线下任务
