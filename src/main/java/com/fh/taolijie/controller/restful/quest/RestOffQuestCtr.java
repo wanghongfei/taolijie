@@ -6,6 +6,7 @@ import com.fh.taolijie.domain.OffQuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.service.quest.OffQuestService;
 import com.fh.taolijie.utils.Constants;
+import com.fh.taolijie.utils.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,27 @@ public class RestOffQuestCtr {
                                HttpServletRequest req) throws GeneralCheckedException {
 
         ListResult<OffQuestModel> lr = questService.nearbyQuest(longitude, latitude, NEAR_RANGE, 0, ps);
+
+        return new ResponseText(lr);
+    }
+
+
+    /**
+     * 根据区域查询线下任务
+     * @return
+     */
+    @RequestMapping(value = "/region", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText byRegion(@RequestParam("rid") Integer regionId,
+                                 @RequestParam(defaultValue = "") int pn,
+                                 @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                 HttpServletRequest req) {
+
+        pn = PageUtils.getFirstResult(pn, ps);
+
+        OffQuestModel cmd = new OffQuestModel(pn, ps);
+        cmd.setRegionId(regionId);
+
+        ListResult<OffQuestModel> lr = questService.findBy(cmd);
 
         return new ResponseText(lr);
     }
