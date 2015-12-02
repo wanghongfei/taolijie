@@ -18,7 +18,7 @@ public class BaiduMapNearbyRespDto {
         sb.append("status='").append(status).append('\'');
         sb.append(", size='").append(size).append('\'');
         sb.append(", total='").append(total).append('\'');
-        sb.append(", contents=").append(contents.toString());
+        sb.append(", contents=").append(contents);
         sb.append('}');
         return sb.toString();
     }

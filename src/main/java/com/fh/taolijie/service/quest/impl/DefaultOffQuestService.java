@@ -19,6 +19,7 @@ import com.fh.taolijie.exception.checked.PostIntervalException;
 import com.fh.taolijie.exception.checked.certi.IdUnverifiedException;
 import com.fh.taolijie.exception.checked.quest.QuestNotFoundException;
 import com.fh.taolijie.service.certi.IdCertiService;
+import com.fh.taolijie.service.channel.BaiduMapService;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.quest.OffQuestService;
 import com.fh.taolijie.utils.JedisUtils;
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMethod;
 import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
@@ -68,6 +70,9 @@ public class DefaultOffQuestService implements OffQuestService {
 
     @Autowired
     private OffCateModelMapper cateMapper;
+
+    @Autowired
+    private BaiduMapService mapService;
 
     @Autowired
     private JedisPool jedisPool;
@@ -112,7 +117,7 @@ public class DefaultOffQuestService implements OffQuestService {
     /**
      * 将任务经纬度发送到百度地图
      */
-    private boolean sendPosition(BigDecimal longitude, BigDecimal latitude, Integer questId, String title) throws HTTPConnectionException {
+    private boolean sendPosition(BigDecimal longitude, BigDecimal latitude, Integer questId, String title) throws GeneralCheckedException {
         // 从redis中取出连接参数
         Map<String, String> map = JedisUtils.performOnce(jedisPool, jedis -> jedis.hgetAll(RedisKey.MAP_CONF.toString()) );
         String AK = map.get(RedisKey.MAP_AK.toString());
@@ -122,62 +127,27 @@ public class DefaultOffQuestService implements OffQuestService {
 
         logger.debug("ak = {}, coord = {}, geotableId = {}, addr = {}", AK, coord, geotableId, addr);
 
+        Map<String, String> parmMap = new HashMap<>(13);
+        parmMap.put("ak", AK);
+        parmMap.put("coord_type", coord);
+        parmMap.put("geotable_id", geotableId);
+        parmMap.put("longitude", longitude.toString() );
+        parmMap.put("latitude", latitude.toString() );
+        parmMap.put("quest_id", questId.toString());
+        parmMap.put("title", title);
 
-        logger.info("sending GET request to {}", addr);
         // 发送请求
-        CloseableHttpClient client = HttpClientFactory.getClient();
-        // 构建请求
-        HttpPost POST = new HttpPost(addr);
-        // 构建参数
+        BaiduMapDto dto = mapService.sendRequest(addr, parmMap, RequestMethod.POST, BaiduMapDto.class);
 
-
-        List<NameValuePair> parmList = new ArrayList<>(6);
-        parmList.add(new BasicNameValuePair("ak", AK));
-        parmList.add(new BasicNameValuePair("coord_type", coord));
-        parmList.add(new BasicNameValuePair("geotable_id", geotableId));
-        parmList.add(new BasicNameValuePair("longitude", longitude.toEngineeringString()));
-        parmList.add(new BasicNameValuePair("latitude", latitude.toEngineeringString()));
-        parmList.add(new BasicNameValuePair("quest_id", questId.toString()));
-        parmList.add(new BasicNameValuePair("title", title));
-        logger.debug("param = {}", parmList);
-
-
-
-        boolean result = true;
-        try {
-            POST.setEntity(new UrlEncodedFormEntity(parmList));
-
-            // 实际发出请求
-            CloseableHttpResponse resp = client.execute(POST, HttpClientContext.create());
-
-            try {
-                // 读取返回报文
-                String data = StringUtils.stream2String(resp.getEntity().getContent());
-                logger.info("response data:{}", data);
-
-                // 转换成DTO对象
-                BaiduMapDto dto = JSON.parseObject(data, BaiduMapDto.class);
-                logger.debug("dto = {}", dto);
-
-                // 判断结果是否成功
-                if (false == "0".equals(dto.status)) {
-                    // 失败
-                    LogUtils.getErrorLogger().error("create point failed");
-                    throw new HTTPConnectionException();
-                }
-
-            } finally {
-                resp.close();
-            }
-
-        } catch (IOException e) {
-            // 发生连接错误
-            // 记日志
-            LogUtils.logException(e);
-            throw new HTTPConnectionException();
+        // 判断是否成功
+        if (false == "0".equals(dto.status)) {
+            // 失败
+            LogUtils.getErrorLogger().error("Position sending failed");
+            return false;
         }
 
-        return result;
+
+        return true;
 
     }
 
@@ -231,7 +201,7 @@ public class DefaultOffQuestService implements OffQuestService {
 
     @Override
     @Transactional(readOnly = true)
-    public ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws HTTPConnectionException {
+    public ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws GeneralCheckedException {
         // 向地图查询附近的坐标点
         Map<Integer, Integer> questDistMap = queryNearbyQuest(longitude, latitude, radis, pn, ps);
         if (null == questDistMap || questDistMap.isEmpty()) {
@@ -261,7 +231,7 @@ public class DefaultOffQuestService implements OffQuestService {
      * 向百度地图发起范围查询
      * @return key: 任务id, val: 距离
      */
-    private Map<Integer, Integer> queryNearbyQuest(BigDecimal longitude, BigDecimal latitude, int range, int pn, int ps) throws HTTPConnectionException {
+    private Map<Integer, Integer> queryNearbyQuest(BigDecimal longitude, BigDecimal latitude, int range, int pn, int ps) throws GeneralCheckedException {
         // 从redis中取出连接参数
         Map<String, String> map = JedisUtils.performOnce(jedisPool, jedis -> jedis.hgetAll(RedisKey.MAP_CONF.toString()) );
         String AK = map.get(RedisKey.MAP_AK.toString());
@@ -280,57 +250,17 @@ public class DefaultOffQuestService implements OffQuestService {
         paramMap.put("page_size", String.valueOf(ps) );
         String location = StringUtils.concat(60, longitude.toString(), ",", latitude.toString());
         paramMap.put("location", location);
-        String queryStr = StringUtils.genUrlQueryString(paramMap);
-
-        String finalUrl = StringUtils.concat(queryStr.length() + addr.length() + 5, addr, "?", queryStr);
-
-        logger.info("sending request to {}", finalUrl);
-
-        // 创建httpclient
-        CloseableHttpClient client = HttpClientFactory.getClient();
-        HttpGet GET = new HttpGet(finalUrl);
 
         // 发送请求
-        Map<Integer, Integer> questDistanceMap = null;
-        try {
-            CloseableHttpResponse resp = client.execute(GET, HttpClientContext.create());
-
-            try {
-                // 读取返回报文
-                String data = StringUtils.stream2String(resp.getEntity().getContent());
-                logger.info("response data = {}", data);
-
-                // to DTO
-                BaiduMapNearbyRespDto dto = JSON.parseObject(data, BaiduMapNearbyRespDto.class);
-                logger.debug("dto = {}", dto);
-
-                // 判断是否成功
-                if (false == "0".equals(dto.status)) {
-                    // 失败
-                    LogUtils.getErrorLogger().error("nearby search failed");
-                    throw new HTTPConnectionException();
-                }
-
-                // 得到任务id List
-                questDistanceMap = Stream.of(dto.contents)
-                        .collect(Collectors.toMap(con -> con.quest_id, con -> con.distance) );
-
-                logger.debug("id list = {}", questDistanceMap);
-
-
-            } catch (Exception e) {
-                LogUtils.logException(e);
-                throw new HTTPConnectionException();
-
-            } finally {
-                resp.close();
-            }
-
-        } catch (IOException e) {
-            LogUtils.logException(e);
+        BaiduMapNearbyRespDto dto = mapService.sendRequest(addr, paramMap, RequestMethod.GET, BaiduMapNearbyRespDto.class);
+        // 判断是否成功
+        if (false == "0".equals(dto.status)) {
+            // 失败
+            LogUtils.getErrorLogger().error("nearby search failed");
             throw new HTTPConnectionException();
         }
 
-        return questDistanceMap;
+        return Stream.of(dto.contents)
+                .collect(Collectors.toMap(con -> con.quest_id, con -> con.distance) );
     }
 }

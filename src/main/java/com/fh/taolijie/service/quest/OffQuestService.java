@@ -46,7 +46,7 @@ public interface OffQuestService {
      * @param latitude
      * @return
      */
-    ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws HTTPConnectionException;
+    ListResult<OffQuestModel> nearbyQuest(BigDecimal longitude, BigDecimal latitude, int radis, int pn, int ps) throws GeneralCheckedException;
 
     /**
      * 根据经纬度计算两点之间的距离
