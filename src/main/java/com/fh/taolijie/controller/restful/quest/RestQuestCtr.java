@@ -361,6 +361,26 @@ public class RestQuestCtr {
         return new ResponseText(lr);
     }
 
+    /**
+     * 商家查询任务审核表, 根据quest_id分组
+     * @return
+     */
+    @RequestMapping(value = "/submit/audit/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryAuditList(@RequestParam(defaultValue = "0") int pn,
+                                       @RequestParam(defaultValue = Constants.PAGE_CAP) int ps,
+                                       HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+        // 学生不能调用
+        if (SessionUtils.isStudent(credential)) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<FinishRequestModel> lr = fiService.findGroupByQuest(credential.getId(), pn, ps);
+
+        return new ResponseText(lr);
+    }
 
     /**
      * 商家任务审核

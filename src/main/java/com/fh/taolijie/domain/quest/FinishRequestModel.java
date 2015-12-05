@@ -12,6 +12,7 @@ public class FinishRequestModel extends Pageable {
     private String questTitle;
 
     private Integer memberId;
+    private Integer empId;
 
     private String username;
 
@@ -33,6 +34,11 @@ public class FinishRequestModel extends Pageable {
 
     private String regName;
 
+    /**
+     * 已经提交的数量
+     * 仅做为返回参数使用
+     */
+    private Integer amt;
 
     public FinishRequestModel() {}
 
@@ -298,6 +304,22 @@ public class FinishRequestModel extends Pageable {
 
     public void setQuestTitle(String questTitle) {
         this.questTitle = questTitle;
+    }
+
+    public Integer getAmt() {
+        return amt;
+    }
+
+    public void setAmt(Integer amt) {
+        this.amt = amt;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
     }
 
     /**

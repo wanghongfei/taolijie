@@ -36,6 +36,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 任务提交申请业务实现
@@ -104,6 +105,8 @@ public class DefaultQuestFinishService implements QuestFinishService {
         // 设置冗余字段quest_title
         QuestModel quest = questMapper.selectByPrimaryKey(model.getQuestId());
         model.setQuestTitle(quest.getTitle());
+        // 设置冗余字段emp_id
+        model.setEmpId(quest.getMemberId());
 
         fiMapper.insertSelective(model);
         Integer reqId = model.getId();
@@ -215,6 +218,19 @@ public class DefaultQuestFinishService implements QuestFinishService {
         long tot = fiMapper.countFindBy(example);
 
         return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ListResult<FinishRequestModel> findGroupByQuest(Integer empId, int pn, int ps) {
+        // 查任务提交表, 执行group操作
+        List<FinishRequestModel> fiList = fiMapper.selectByEmpIdGroupByQuest(empId, pn, ps);
+        List<Long> totList = fiMapper.countSelectByEmpIdGroupByQuest(empId);
+
+        //long tot = totList.stream().reduce(0L, (sum, elem) -> sum + elem);
+
+
+        return new ListResult<>(fiList, totList.size());
     }
 
     @Override

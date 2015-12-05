@@ -38,6 +38,15 @@ public interface QuestFinishService {
     ListResult<FinishRequestModel> findAll(int pn, int ps);
 
     /**
+     * 查询任务提交记录, 按任务id分组, 并执行COUNT(*)
+     * @param empId
+     * @param pn
+     * @param ps
+     * @return
+     */
+    ListResult<FinishRequestModel> findGroupByQuest(Integer empId, int pn, int ps);
+
+    /**
      * 根据状态查询请求
      * @param status
      * @param pn

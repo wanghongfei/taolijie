@@ -63,4 +63,7 @@ public interface FinishRequestModelMapper {
 
     List<FinishRequestModel> findBy(FinishRequestModel model);
     long countFindBy(FinishRequestModel model);
+
+    List<FinishRequestModel> selectByEmpIdGroupByQuest(@Param("empId") Integer empId, @Param("pn") int pn, @Param("ps") int ps);
+    List<Long> countSelectByEmpIdGroupByQuest(@Param("empId") Integer empId);
 }
