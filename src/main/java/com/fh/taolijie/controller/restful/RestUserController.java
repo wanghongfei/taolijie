@@ -112,5 +112,25 @@ public class RestUserController {
 
     }
 
+    /**
+     * 完善企业信息
+     */
+    @RequestMapping(value = "/emp", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText updateProfile(@RequestParam String compName,
+                                      @RequestParam String compAddr,
+                                      HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        MemberModel user = new MemberModel();
+        user.setId(credential.getId());
+        user.setCompanyName(compName);
+        user.setCompanyAddr(compAddr);
+
+        accService.updateMember(user);
+        return ResponseText.getSuccessResponseText();
+
+    }
+
 
 }
