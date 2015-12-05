@@ -19,7 +19,12 @@ public enum EmpQuestStatus {
     /**
      * 审核通过
      */
-    DONE(3);
+    DONE(3),
+
+    /**
+     * 已经过期(结束)
+     */
+    ENDED(4);
 
     private int code;
 
@@ -48,6 +53,9 @@ public enum EmpQuestStatus {
 
             case 3:
                 return DONE;
+
+            case 4:
+                return ENDED;
         }
 
         return null;

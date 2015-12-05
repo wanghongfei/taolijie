@@ -7,6 +7,7 @@ import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.CouponStatus;
+import com.fh.taolijie.constant.quest.EmpQuestStatus;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.domain.CouponModel;
@@ -445,12 +446,28 @@ public class RestQuestCtr {
     @RequestMapping(value = "/publish/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText queryPublishQuests(@RequestParam(required = false, defaultValue = "0") int pn,
                                            @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
+                                           @RequestParam Integer status, // 根据状态筛选
                                            HttpServletRequest req) {
+
+        // 验证status参数
+        EmpQuestStatus empStatus = EmpQuestStatus.fromCode(status);
+        if (null == empStatus) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
 
         Credential credential = SessionUtils.getCredential(req);
 
         pn = PageUtils.getFirstResult(pn, ps);
-        ListResult<QuestModel> lr = questService.findByMember(credential.getId(), pn, ps);
+        //ListResult<QuestModel> lr = questService.findByMember(credential.getId(), pn, ps);
+        QuestModel cmd = new QuestModel(pn, ps);
+        cmd.setMemberId(credential.getId());
+        if (EmpQuestStatus.ENDED == empStatus) {
+            cmd.setEnded(true);
+        } else {
+            cmd.setEmpStatus(status);
+        }
+
+        ListResult<QuestModel> lr = questService.findBy(cmd);
 
         return new ResponseText(lr);
     }

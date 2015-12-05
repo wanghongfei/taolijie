@@ -516,6 +516,13 @@
             <if test="endTime != null">
                 AND qu.end_time = #{endTime}
             </if>
+            <!-- 只查询已经结果的 -->
+            <if test="ended == true">
+                <![CDATA[
+                AND qu.end_time <= now()
+                ]]>
+            </if>
+
             <if test="limitTime != null">
                 AND qu.limit_time = #{limitTime}
             </if>
@@ -591,9 +598,6 @@
             <if test="empStatus != null">
                 AND qu.emp_status = #{empStatus}
             </if>
-            <if test="empStatus != null">
-                AND qu.tag_expire_time = #{tagExpireTime}
-            </if>
             <if test="questionAmt != null">
                 AND qu.question_amt = #{questionAmt}
             </if>
@@ -644,6 +648,12 @@
             </if>
             <if test="endTime != null">
                 AND qu.end_time = #{endTime}
+            </if>
+            <!-- 只查询已经结果的 -->
+            <if test="ended == true">
+                <![CDATA[
+                AND qu.end_time <= now()
+                ]]>
             </if>
             <if test="limitTime != null">
                 AND qu.limit_time = #{limitTime}
@@ -722,9 +732,6 @@
                 AND qu.emp_status = #{empStatus}
             </if>
 
-            <if test="empStatus != null">
-                AND qu.tag_expire_time = #{tagExpireTime}
-            </if>
             <if test="questionAmt != null">
                 AND qu.question_amt = #{questionAmt}
             </if>

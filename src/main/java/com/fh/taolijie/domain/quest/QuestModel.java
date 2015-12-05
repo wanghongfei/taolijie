@@ -91,12 +91,19 @@ public class QuestModel extends Pageable implements IdAware {
     private Integer empStatus;
 
     // ********* 查询使用 ***********
+    @JsonIgnore
     private Integer provinceId;
+    @JsonIgnore
     private Integer cityId;
+    @JsonIgnore
     private Integer regionId;
 
+    @JsonIgnore
     private Integer collegeId;
+    @JsonIgnore
     private Integer schoolId;
+    @JsonIgnore
+    private Boolean ended = false;
     // ********* 查询使用 ***********
 
     // 以下只作为返回值使用
@@ -661,6 +668,14 @@ public class QuestModel extends Pageable implements IdAware {
         return isTargetAll;
     }
 
+
+    public Boolean getEnded() {
+        return ended;
+    }
+
+    public void setEnded(Boolean ended) {
+        this.ended = ended;
+    }
 
     public void setIsTargetAll(Boolean isTargetAll) {
         this.isTargetAll = isTargetAll;
