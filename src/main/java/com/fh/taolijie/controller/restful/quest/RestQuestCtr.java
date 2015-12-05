@@ -507,6 +507,34 @@ public class RestQuestCtr {
     }
 
     /**
+     * 根据id查询coupon
+     * @return
+     */
+    @RequestMapping(value = "/coupon/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
+    public ResponseText queryCouponById(@PathVariable Integer id,
+                                        HttpServletRequest req) {
+
+        CouponModel model = new CouponModel();
+        model.setId(id);
+        ListResult<CouponModel> lr = couponService.findBy(model);
+
+        // 没找到
+        if (0 == lr.getResultCount()) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        // 检查是不是自己的
+        Credential credential = SessionUtils.getCredential(req);
+        //System.out.println("cuID = " + credential.getId() + ", postID = " + lr.getList().get(0).getMemId());
+        if (false == credential.getId().equals(lr.getList().get(0).getMemId())) {
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        }
+
+        return new ResponseText(lr.getList().get(0));
+
+    }
+
+    /**
      * 商家查询自己发布的卡券信息
      * @param pn
      * @param ps
