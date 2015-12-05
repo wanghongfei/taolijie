@@ -9,6 +9,7 @@
         <!-- prefix = finishr -->
         <id column="finishr_id" property="id" jdbcType="INTEGER"/>
         <result column="finishr_quest_id" property="questId" jdbcType="INTEGER"/>
+        <result column="finishr_quest_title" property="questTitle" jdbcType="VARCHAR"/>
         <result column="finishr_member_id" property="memberId" jdbcType="INTEGER"/>
         <result column="finishr_username" property="username" jdbcType="VARCHAR"/>
         <result column="finishr_created_time" property="createdTime" jdbcType="TIMESTAMP"/>
@@ -28,6 +29,7 @@
         -->
         finishr.id,
         finishr.quest_id,
+        finishr.quest_title,
         finishr.member_id,
         finishr.username,
         finishr.created_time,
@@ -66,12 +68,14 @@
         username, created_time, audit_time,
         description, image_ids, status,
         memo, name,
-        reg_name)
+        reg_name,
+        quest_title)
         values (#{id,jdbcType=INTEGER}, #{questId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER},
         #{username,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{auditTime,jdbcType=TIMESTAMP},
         #{description,jdbcType=VARCHAR}, #{imageIds,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
         #{memo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
-        #{regName})
+        #{regName},
+        #{questTitle})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.FinishRequestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -116,6 +120,9 @@
             <if test="regName != null">
                 reg_name,
             </if>
+            <if test="questTitle != null">
+                quest_title,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -153,6 +160,9 @@
             </if>
             <if test="regName != null">
                 #{reg_name},
+            </if>
+            <if test="questTitle != null">
+                #{quest_title},
             </if>
         </trim>
     </insert>
@@ -196,6 +206,9 @@
             <if test="regName != null">
                 reg_name = #{regName},
             </if>
+            <if test="questTitle != null">
+                quest_title = #{questTitle},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -215,7 +228,8 @@
         status = #{status,jdbcType=VARCHAR},
         memo = #{memo,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
-        reg_name = #{regName}
+        reg_name = #{regName},
+        quest_title = #{questTitle}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -265,6 +279,9 @@
             <if test="regName != null">
                 AND finishr.reg_name = #{regName}
             </if>
+            <if test="questTitle != null">
+                AND finishr.quest_title = #{questTitle}
+            </if>
 
         </where>
         ORDER BY
@@ -312,6 +329,9 @@
             </if>
             <if test="regName != null">
                 AND finishr.reg_name = #{regName}
+            </if>
+            <if test="questTitle != null">
+                AND finishr.quest_title = #{questTitle}
             </if>
 
         </where>

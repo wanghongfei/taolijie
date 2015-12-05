@@ -9,6 +9,7 @@ public class FinishRequestModel extends Pageable {
     private Integer id;
 
     private Integer questId;
+    private String questTitle;
 
     private Integer memberId;
 
@@ -31,6 +32,7 @@ public class FinishRequestModel extends Pageable {
     private String name;
 
     private String regName;
+
 
     public FinishRequestModel() {}
 
@@ -288,6 +290,14 @@ public class FinishRequestModel extends Pageable {
 
     public void setRegName(String regName) {
         this.regName = regName;
+    }
+
+    public String getQuestTitle() {
+        return questTitle;
+    }
+
+    public void setQuestTitle(String questTitle) {
+        this.questTitle = questTitle;
     }
 
     /**
