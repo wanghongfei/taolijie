@@ -11,9 +11,7 @@ public class FinishRequestModel extends Pageable {
     private Integer id;
 
     private Integer questId;
-    private String questTitle;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date questCreatedTime;
+    private QuestModel quest;
 
     private String cateName;
 
@@ -304,14 +302,6 @@ public class FinishRequestModel extends Pageable {
         this.regName = regName;
     }
 
-    public String getQuestTitle() {
-        return questTitle;
-    }
-
-    public void setQuestTitle(String questTitle) {
-        this.questTitle = questTitle;
-    }
-
     public Integer getAmt() {
         return amt;
     }
@@ -336,12 +326,13 @@ public class FinishRequestModel extends Pageable {
         this.cateName = cateName;
     }
 
-    public Date getQuestCreatedTime() {
-        return questCreatedTime;
+
+    public QuestModel getQuest() {
+        return quest;
     }
 
-    public void setQuestCreatedTime(Date questCreatedTime) {
-        this.questCreatedTime = questCreatedTime;
+    public void setQuest(QuestModel quest) {
+        this.quest = quest;
     }
 
     /**

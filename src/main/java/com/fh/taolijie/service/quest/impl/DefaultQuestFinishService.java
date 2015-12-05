@@ -105,16 +105,12 @@ public class DefaultQuestFinishService implements QuestFinishService {
         // 设置冗余字段username
         MemberModel m = memMapper.selectByPrimaryKey(model.getMemberId());
         model.setUsername(m.getUsername());
-        // 设置冗余字段quest_title
-        QuestModel quest = questMapper.selectByPrimaryKey(model.getQuestId());
-        model.setQuestTitle(quest.getTitle());
         // 设置冗余字段emp_id
+        QuestModel quest = questMapper.selectByPrimaryKey(model.getQuestId());
         model.setEmpId(quest.getMemberId());
         // 设置冗余字段cate_name
         String cateName = questCateMapper.selectByPrimaryKey(quest.getQuestCateId()).getName();
         model.setCateName(cateName);
-        // 设置冗余字段created_time
-        model.setQuestCreatedTime(quest.getCreatedTime());
 
         fiMapper.insertSelective(model);
         Integer reqId = model.getId();
@@ -233,7 +229,22 @@ public class DefaultQuestFinishService implements QuestFinishService {
     public ListResult<FinishRequestModel> findGroupByQuest(Integer empId, int pn, int ps) {
         // 查任务提交表, 执行group操作
         List<FinishRequestModel> fiList = fiMapper.selectByEmpIdGroupByQuest(empId, pn, ps);
+        if (fiList.isEmpty()) {
+            return new ListResult<>();
+        }
         List<Long> totList = fiMapper.countSelectByEmpIdGroupByQuest(empId);
+
+        // 查询任务提交表对应的任务信息
+        List<Integer> idList = fiList.stream()
+                .map(FinishRequestModel::getQuestId)
+                .collect(Collectors.toList());
+        List<QuestModel> questList = questMapper.selectInBatch(idList);
+        // 设置到对应的quest变量中
+        fiList.forEach( fi -> {
+            QuestModel qu = questList.stream().filter( quest -> quest.getId().equals(fi.getQuestId()) ).findFirst().get();
+            fi.setQuest(qu);
+        });
+
 
         //long tot = totList.stream().reduce(0L, (sum, elem) -> sum + elem);
 

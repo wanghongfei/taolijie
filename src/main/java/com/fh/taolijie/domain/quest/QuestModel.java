@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class QuestModel extends Pageable implements IdAware {
@@ -659,6 +660,7 @@ public class QuestModel extends Pageable implements IdAware {
     public Boolean getIsTargetAll() {
         return isTargetAll;
     }
+
 
     public void setIsTargetAll(Boolean isTargetAll) {
         this.isTargetAll = isTargetAll;

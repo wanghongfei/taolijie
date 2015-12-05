@@ -25,7 +25,6 @@
         <!-- prefix = finishr -->
         <id column="finishr_id" property="id" jdbcType="INTEGER"/>
         <result column="finishr_quest_id" property="questId" jdbcType="INTEGER"/>
-        <result column="finishr_quest_title" property="questTitle" jdbcType="VARCHAR"/>
         <result column="finishr_member_id" property="memberId" jdbcType="INTEGER"/>
         <result column="finishr_emp_id" property="empId" jdbcType="INTEGER"/>
         <result column="finishr_username" property="username" jdbcType="VARCHAR"/>
@@ -36,7 +35,6 @@
         <result column="finishr_status" property="status" jdbcType="VARCHAR"/>
         <result column="finishr_memo" property="memo" jdbcType="VARCHAR"/>
         <result column="finishr_quest_cate_name" property="cateName" jdbcType="VARCHAR"/>
-        <result column="finishr_quest_created_time" property="questCreatedTime" jdbcType="TIMESTAMP"/>
         <result column="finishr_name" property="name" jdbcType="VARCHAR"/>
 
         <result column="reg_name" property="regName" jdbcType="VARCHAR"/>
@@ -46,7 +44,6 @@
     <sql id="Base_Column_List">
         finishr.id,
         finishr.quest_id,
-        finishr.quest_title,
         finishr.member_id,
         finishr.username,
         finishr.created_time,
@@ -63,11 +60,9 @@
 
     <sql id="with_amt">
         finishr.quest_id,
-        finishr.quest_title,
         finishr.image_ids,
         finishr.emp_id,
         finishr.quest_cate_name AS finishr_quest_cate_name,
-        finishr.quest_created_time AS finishr_quest_created_time,
         COUNT(*) AS amt
     </sql>
 
@@ -99,19 +94,15 @@
         description, image_ids, status,
         memo, name,
         reg_name,
-        quest_title,
         emp_id,
-        quest_cate_name,
-        quest_created_time)
+        quest_cate_name)
         values (#{id,jdbcType=INTEGER}, #{questId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER},
         #{username,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{auditTime,jdbcType=TIMESTAMP},
         #{description,jdbcType=VARCHAR}, #{imageIds,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
         #{memo,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
         #{regName},
-        #{questTitle},
         #{empId},
-        #{cateName},
-        #{questCreatedTime})
+        #{cateName})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.FinishRequestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -156,17 +147,11 @@
             <if test="regName != null">
                 reg_name,
             </if>
-            <if test="questTitle != null">
-                quest_title,
-            </if>
             <if test="empId != null">
                 emp_id,
             </if>
             <if test="cateName != null">
                 quest_cate_name,
-            </if>
-            <if test="questCreatedTime != null">
-                quest_created_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -206,17 +191,11 @@
             <if test="regName != null">
                 #{reg_name},
             </if>
-            <if test="questTitle != null">
-                #{questTitle},
-            </if>
             <if test="empId != null">
                 #{empId},
             </if>
             <if test="cateName != null">
                 #{cateName},
-            </if>
-            <if test="questCreatedTime != null">
-                #{questCreatedTime},
             </if>
         </trim>
     </insert>
@@ -260,14 +239,8 @@
             <if test="regName != null">
                 reg_name = #{regName},
             </if>
-            <if test="questTitle != null">
-                quest_title = #{questTitle},
-            </if>
             <if test="empId != null">
                 emp_id = #{empId},
-            </if>
-            <if test="cateName != null">
-                quest_cate_name = #{cateName},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -289,7 +262,6 @@
         memo = #{memo,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
         reg_name = #{regName},
-        quest_title = #{questTitle},
         emp_id = #{empId},
         quest_cate_name = #{cateName}
         where id = #{id,jdbcType=INTEGER}
@@ -340,9 +312,6 @@
             </if>
             <if test="regName != null">
                 AND finishr.reg_name = #{regName}
-            </if>
-            <if test="questTitle != null">
-                AND finishr.quest_title = #{questTitle}
             </if>
             <if test="empId != null">
                 AND finishr.emp_id = #{empId}
@@ -397,9 +366,6 @@
             </if>
             <if test="regName != null">
                 AND finishr.reg_name = #{regName}
-            </if>
-            <if test="questTitle != null">
-                AND finishr.quest_title = #{questTitle}
             </if>
             <if test="empId != null">
                 AND finishr.emp_id = #{empId}
