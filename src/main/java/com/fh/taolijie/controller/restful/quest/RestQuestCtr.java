@@ -525,8 +525,8 @@ public class RestQuestCtr {
 
         // 检查是不是自己的
         Credential credential = SessionUtils.getCredential(req);
-        //System.out.println("cuID = " + credential.getId() + ", postID = " + lr.getList().get(0).getMemId());
-        if (false == credential.getId().equals(lr.getList().get(0).getMemId())) {
+        CouponModel coupon = lr.getList().get(0);
+        if (false == credential.getId().equals(coupon.getEmpId()) && credential.getId().equals(coupon.getMemId()) ) {
             return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
