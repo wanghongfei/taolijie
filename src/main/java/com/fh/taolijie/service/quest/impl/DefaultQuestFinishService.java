@@ -71,6 +71,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Autowired
     private CouponService couponService;
 
+    @Autowired
+    private QuestCategoryModelMapper questCateMapper;
+
 
     @Autowired
     private JedisPool jedisPool;
@@ -107,6 +110,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
         model.setQuestTitle(quest.getTitle());
         // 设置冗余字段emp_id
         model.setEmpId(quest.getMemberId());
+        // 设置冗余字段cate_name
+        String cateName = questCateMapper.selectByPrimaryKey(quest.getQuestCateId()).getName();
+        model.setCateName(cateName);
 
         fiMapper.insertSelective(model);
         Integer reqId = model.getId();

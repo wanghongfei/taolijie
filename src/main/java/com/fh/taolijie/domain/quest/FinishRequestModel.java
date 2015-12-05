@@ -1,15 +1,19 @@
 package com.fh.taolijie.domain.quest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.domain.Pageable;
 
 import java.util.Date;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class FinishRequestModel extends Pageable {
     private Integer id;
 
     private Integer questId;
     private String questTitle;
+
+    private String cateName;
 
     private Integer memberId;
     private Integer empId;
@@ -320,6 +324,14 @@ public class FinishRequestModel extends Pageable {
 
     public void setEmpId(Integer empId) {
         this.empId = empId;
+    }
+
+    public String getCateName() {
+        return cateName;
+    }
+
+    public void setCateName(String cateName) {
+        this.cateName = cateName;
     }
 
     /**

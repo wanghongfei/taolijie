@@ -15,6 +15,7 @@
         <result column="finishr_image_ids" property="imageIds" jdbcType="VARCHAR"/>
         <result column="finishr_status" property="status" jdbcType="VARCHAR"/>
         <result column="finishr_memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="finishr_quest_cate_name" property="cateName" jdbcType="VARCHAR"/>
         <result column="finishr_name" property="name" jdbcType="VARCHAR"/>
 
         <result column="reg_name" property="regName" jdbcType="VARCHAR"/>
@@ -34,6 +35,7 @@
         <result column="finishr_image_ids" property="imageIds" jdbcType="VARCHAR"/>
         <result column="finishr_status" property="status" jdbcType="VARCHAR"/>
         <result column="finishr_memo" property="memo" jdbcType="VARCHAR"/>
+        <result column="finishr_quest_cate_name" property="cateName" jdbcType="VARCHAR"/>
         <result column="finishr_name" property="name" jdbcType="VARCHAR"/>
 
         <result column="reg_name" property="regName" jdbcType="VARCHAR"/>
@@ -54,24 +56,16 @@
         finishr.memo,
         finishr.name,
         finishr.reg_name,
-        finishr.emp_id
+        finishr.emp_id,
+        finishr.quest_cate_name AS finishr_quest_cate_name
     </sql>
 
     <sql id="with_amt">
-        finishr.id,
         finishr.quest_id,
         finishr.quest_title,
-        finishr.member_id,
-        finishr.username,
-        finishr.created_time,
-        finishr.audit_time,
-        finishr.description,
         finishr.image_ids,
-        finishr.status,
-        finishr.memo,
-        finishr.name,
-        finishr.reg_name,
         finishr.emp_id,
+        finishr.quest_cate_name AS finishr_quest_cate_name,
         COUNT(*) AS amt
     </sql>
 
