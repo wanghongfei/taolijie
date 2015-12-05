@@ -44,4 +44,10 @@ public interface EmpCertiService {
      * @return
      */
     ListResult<EmpCertiModel> findByMember(Integer memId);
+
+    /**
+     * 查询最近的一次认证成功的认证信息
+     * @return
+     */
+    EmpCertiModel findLastSuccessCerti(Integer memId);
 }

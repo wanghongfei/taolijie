@@ -25,4 +25,6 @@ public interface EmpCertiModelMapper {
     long countFindBy(EmpCertiModel example);
 
     boolean checkApplyExists(Integer memId);
+
+    EmpCertiModel selectLastSuccess(Integer memId);
 }

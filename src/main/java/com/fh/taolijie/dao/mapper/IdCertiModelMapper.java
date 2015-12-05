@@ -22,4 +22,6 @@ public interface IdCertiModelMapper {
 
     List<IdCertiModel> findBy(IdCertiModel example);
     long countFindBy(IdCertiModel example);
+
+    IdCertiModel selectLastSuccess(Integer memId);
 }

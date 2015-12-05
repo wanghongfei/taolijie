@@ -5,6 +5,7 @@ import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
 import com.fh.taolijie.dao.mapper.MemberRoleModelMapper;
 import com.fh.taolijie.dao.mapper.RoleModelMapper;
@@ -20,6 +21,9 @@ import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.SeQuestionService;
 import com.fh.taolijie.service.acc.impl.CodeService;
+import com.fh.taolijie.service.certi.EmpCertiService;
+import com.fh.taolijie.service.certi.IdCertiService;
+import com.fh.taolijie.service.certi.StuCertiService;
 import com.fh.taolijie.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +64,15 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Autowired
     private SeQuestionService seService;
+
+    @Autowired
+    private EmpCertiService empService;
+
+    @Autowired
+    private IdCertiService idService;
+
+    @Autowired
+    private StuCertiService stuService;
 
     @Autowired(required = false)
     Mail mail;
@@ -186,11 +199,29 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Override
     @Transactional(readOnly = true)
     public CertiInfoDto selectCertiStatus(Integer memId) {
-        String idCerti = memMapper.selectIdVerified(memId);
-        String empCerti = memMapper.selectEmpVerified(memId);
-        String stuCerti = memMapper.selectStuVerified(memId);
+        CertiInfoDto dto = new CertiInfoDto();
 
-        return new CertiInfoDto(idCerti, empCerti, stuCerti);
+        String idCerti = memMapper.selectIdVerified(memId);
+        dto.setIdCerti(idCerti);
+        // 如果是已经认证
+        // 则查出认证信息, 下同
+        if (CertiStatus.DONE.code().endsWith(idCerti)) {
+            dto.setIdInfo(idService.findLastSuccess(memId));
+        }
+
+        String empCerti = memMapper.selectEmpVerified(memId);
+        dto.setEmpCerti(empCerti);
+        if (CertiStatus.DONE.code().equals(empCerti)) {
+            dto.setEmpInfo(empService.findLastSuccessCerti(memId));
+        }
+
+        String stuCerti = memMapper.selectStuVerified(memId);
+        dto.setStuCerti(stuCerti);
+        if (CertiStatus.DONE.code().equals(stuCerti)) {
+            dto.setStuInfo(stuService.findDoneByMember(memId));
+        }
+
+        return dto;
     }
 
     @Override

@@ -269,4 +269,18 @@
 
         </where>
     </select>
+
+    <select id="selectLastSuccess" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            id_certi
+        WHERE
+            mem_id = #{memId} AND status = '02'
+        ORDER BY
+            update_time DESC
+        LIMIT
+            0, 1
+
+    </select>
 </mapper>

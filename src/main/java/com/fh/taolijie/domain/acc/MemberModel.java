@@ -1,5 +1,6 @@
 package com.fh.taolijie.domain.acc;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fh.taolijie.domain.Pageable;
 
@@ -54,6 +55,7 @@ public class MemberModel extends Pageable implements Serializable {
 
     private String companyName;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     private Boolean valid;
 

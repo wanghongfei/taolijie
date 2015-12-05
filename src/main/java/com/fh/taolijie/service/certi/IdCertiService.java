@@ -40,4 +40,11 @@ public interface IdCertiService {
     ListResult<IdCertiModel> findByStatus(CertiStatus status, int pn, int ps);
 
     IdCertiModel findById(Integer certiId);
+
+    /**
+     * 查找最新的认证成功的认证信息
+     * @param memId
+     * @return
+     */
+    IdCertiModel findLastSuccess(Integer memId);
 }

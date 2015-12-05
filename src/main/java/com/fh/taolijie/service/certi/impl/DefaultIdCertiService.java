@@ -99,4 +99,10 @@ public class DefaultIdCertiService implements IdCertiService {
     public IdCertiModel findById(Integer certiId) {
         return idMapper.selectByPrimaryKey(certiId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public IdCertiModel findLastSuccess(Integer memId) {
+        return idMapper.selectLastSuccess(memId);
+    }
 }

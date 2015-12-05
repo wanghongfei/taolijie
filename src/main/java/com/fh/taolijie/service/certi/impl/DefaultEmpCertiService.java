@@ -113,4 +113,10 @@ public class DefaultEmpCertiService implements EmpCertiService {
 
         return new ListResult<>(list, tot);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public EmpCertiModel findLastSuccessCerti(Integer memId) {
+        return certiMapper.selectLastSuccess(memId);
+    }
 }

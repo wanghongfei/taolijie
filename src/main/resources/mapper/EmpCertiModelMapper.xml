@@ -333,4 +333,18 @@
                 SELECT 1 FROM emp_certi WHERE member_id = #{memId} AND status = '01'
             )
     </select>
+
+    <select id="selectLastSuccess" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            emp_certi
+        WHERE
+            member_id = #{memId} AND status = '02'
+        ORDER BY
+            update_time DESC
+        LIMIT
+            0, 1
+
+    </select>
 </mapper>
