@@ -113,6 +113,8 @@ public class DefaultQuestFinishService implements QuestFinishService {
         // 设置冗余字段cate_name
         String cateName = questCateMapper.selectByPrimaryKey(quest.getQuestCateId()).getName();
         model.setCateName(cateName);
+        // 设置冗余字段created_time
+        model.setQuestCreatedTime(quest.getCreatedTime());
 
         fiMapper.insertSelective(model);
         Integer reqId = model.getId();

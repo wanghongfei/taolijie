@@ -36,6 +36,7 @@
         <result column="finishr_status" property="status" jdbcType="VARCHAR"/>
         <result column="finishr_memo" property="memo" jdbcType="VARCHAR"/>
         <result column="finishr_quest_cate_name" property="cateName" jdbcType="VARCHAR"/>
+        <result column="finishr_quest_created_time" property="questCreatedTime" jdbcType="TIMESTAMP"/>
         <result column="finishr_name" property="name" jdbcType="VARCHAR"/>
 
         <result column="reg_name" property="regName" jdbcType="VARCHAR"/>
@@ -66,6 +67,7 @@
         finishr.image_ids,
         finishr.emp_id,
         finishr.quest_cate_name AS finishr_quest_cate_name,
+        finishr.quest_created_time AS finishr_quest_created_time,
         COUNT(*) AS amt
     </sql>
 
@@ -99,7 +101,8 @@
         reg_name,
         quest_title,
         emp_id,
-        quest_cate_name)
+        quest_cate_name,
+        quest_created_time)
         values (#{id,jdbcType=INTEGER}, #{questId,jdbcType=INTEGER}, #{memberId,jdbcType=INTEGER},
         #{username,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{auditTime,jdbcType=TIMESTAMP},
         #{description,jdbcType=VARCHAR}, #{imageIds,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
@@ -107,7 +110,8 @@
         #{regName},
         #{questTitle},
         #{empId},
-        #{cateName})
+        #{cateName},
+        #{questCreatedTime})
     </insert>
     <insert id="insertSelective" parameterType="com.fh.taolijie.domain.quest.FinishRequestModel" useGeneratedKeys="true" keyProperty="id">
         <!--
@@ -161,6 +165,9 @@
             <if test="cateName != null">
                 quest_cate_name,
             </if>
+            <if test="questCreatedTime != null">
+                quest_created_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -207,6 +214,9 @@
             </if>
             <if test="cateName != null">
                 #{cateName},
+            </if>
+            <if test="questCreatedTime != null">
+                #{questCreatedTime},
             </if>
         </trim>
     </insert>

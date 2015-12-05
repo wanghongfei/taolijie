@@ -23,6 +23,7 @@ public class QuestModel extends Pageable implements IdAware {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date flushTime;
 
     @NotNull
