@@ -162,7 +162,7 @@
                 #{reg_name},
             </if>
             <if test="questTitle != null">
-                #{quest_title},
+                #{questTitle},
             </if>
         </trim>
     </insert>

@@ -14,6 +14,7 @@ import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
@@ -76,7 +77,7 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void submitRequest(FinishRequestModel model)
-            throws QuestNotAssignedException, RequestRepeatedException {
+            throws GeneralCheckedException {
 
         // 先检查用户是否已经领取该任务且状态不为"02:已超时"
         boolean assigned = assignMapper.checkMemberIdAndQuestIdExists(model.getMemberId(), model.getQuestId());
@@ -100,6 +101,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
         // 设置冗余字段username
         MemberModel m = memMapper.selectByPrimaryKey(model.getMemberId());
         model.setUsername(m.getUsername());
+        // 设置冗余字段quest_title
+        QuestModel quest = questMapper.selectByPrimaryKey(model.getQuestId());
+        model.setQuestTitle(quest.getTitle());
 
         fiMapper.insertSelective(model);
         Integer reqId = model.getId();

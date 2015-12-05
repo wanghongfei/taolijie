@@ -3,6 +3,7 @@ package com.fh.taolijie.service.quest;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.quest.RequestStatus;
 import com.fh.taolijie.domain.quest.FinishRequestModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HackException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
@@ -17,7 +18,7 @@ public interface QuestFinishService {
      * @param model
      */
     void submitRequest(FinishRequestModel model)
-            throws QuestNotAssignedException, RequestRepeatedException;
+            throws GeneralCheckedException;
 
     /**
      * 更新审核状态
