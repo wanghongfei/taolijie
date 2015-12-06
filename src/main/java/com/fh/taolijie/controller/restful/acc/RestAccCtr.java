@@ -216,7 +216,7 @@ public class RestAccCtr {
         }
 
         // 修改交易密码
-        accService.updateDealPwd(memId, dealPwd);
+        accService.updateDealPwd(memId, CredentialUtils.sha(dealPwd));
 
         return new ResponseText();
     }
