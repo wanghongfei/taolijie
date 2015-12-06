@@ -14,6 +14,8 @@ import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
+import com.fh.taolijie.exception.checked.PasswordIncorrectException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
@@ -175,8 +177,27 @@ public class DefaultCashAccService implements CashAccService {
         CashAccModel example = new CashAccModel();
         example.setId(accId);
         example.setDealPassword(pwd);
+        example.setUpdateTime(new Date());
         accMapper.updateByPrimaryKeySelective(example);
 
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void updateDealPwd(Integer memId, String oldPwd, String newPwd) throws GeneralCheckedException {
+        // 验证老密码正确性
+        CashAccModel acc = accMapper.findByMemberId(memId);
+        if (null == acc) {
+            throw new CashAccNotExistsException("");
+        }
+
+        String old = acc.getDealPassword();
+        if (null == old || false == oldPwd.equals(old)) {
+            throw new PasswordIncorrectException();
+        }
+
+        // 修改密码
+        updateDealPwd(memId, newPwd);
     }
 
     @Override

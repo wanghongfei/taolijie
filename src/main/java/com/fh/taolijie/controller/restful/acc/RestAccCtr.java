@@ -198,25 +198,36 @@ public class RestAccCtr {
      * @return
      */
     @RequestMapping(value = "/dealPwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText changeDealPwd(@RequestParam String answer,
+    public ResponseText changeDealPwd(@RequestParam(required = false) String answer,
                                       @RequestParam String dealPwd,
+                                      @RequestParam(required = false) String oldPwd,
                                       HttpServletRequest req) throws GeneralCheckedException {
 
         Integer memId = SessionUtils.getCredential(req).getId();
 
         // 验证密保
-        boolean result = seService.checkAnswer(memId, answer);
-        if (!result) {
-            return new ResponseText(ErrorCode.WRONG_ANSWER);
-        }
+        if (StringUtils.checkNotEmpty(answer)) {
+            boolean result = seService.checkAnswer(memId, answer);
+            if (!result) {
+                return new ResponseText(ErrorCode.WRONG_ANSWER);
+            }
 
-        // 验证dealPwd参数
-        if (false == StringUtils.checkNotEmpty(dealPwd)) {
+            // 直接修改交易密码
+            accService.updateDealPwd(memId, CredentialUtils.sha(dealPwd));
+
+        } else if (StringUtils.checkNotEmpty(oldPwd)) {
+            // 验证dealPwd参数
+            if (false == StringUtils.checkNotEmpty(dealPwd)) {
+                return new ResponseText(ErrorCode.INVALID_PARAMETER);
+            }
+
+            // 通过老密码修改
+            accService.updateDealPwd(memId, CredentialUtils.sha(oldPwd), CredentialUtils.sha(dealPwd));
+
+        } else {
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
-        // 修改交易密码
-        accService.updateDealPwd(memId, CredentialUtils.sha(dealPwd));
 
         return new ResponseText();
     }

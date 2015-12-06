@@ -5,6 +5,7 @@ import com.fh.taolijie.constant.acc.CashAccStatus;
 import com.fh.taolijie.domain.SeQuestionModel;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.exception.checked.FinalStatusException;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.PermissionException;
 import com.fh.taolijie.exception.checked.acc.UserNotExistsException;
 import com.fh.taolijie.exception.checked.acc.*;
@@ -71,11 +72,20 @@ public interface CashAccService {
     void updatePhone(Integer accId, String phone);
 
     /**
-     * 修改交易密码
+     * 直接修改交易密码
      * @param memId
      * @param pwd
      */
     void updateDealPwd(Integer memId, String pwd) throws CashAccNotExistsException;
+
+    /**
+     * 通过老密码修改新密码
+     * @param memId
+     * @param oldPwd
+     * @param newPwd
+     * @throws CashAccNotExistsException
+     */
+    void updateDealPwd(Integer memId, String oldPwd, String newPwd) throws GeneralCheckedException;
 
     /**
      * 根据id检查现金账户是否存在
