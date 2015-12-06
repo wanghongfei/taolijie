@@ -191,6 +191,20 @@ public class RestQuestCtr {
     }
 
     /**
+     * 删除处于草稿状态的任务
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText deleteDraft(@PathVariable("id") Integer questId,
+                                    HttpServletRequest req) throws GeneralCheckedException {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+        questService.deleteDraft(memId, questId);
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
      * 发布任务草稿
      * @param questId
      * @param orderId

@@ -310,6 +310,31 @@ public class DefaultQuestService implements QuestService {
 
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void deleteDraft(Integer memId, Integer questId) throws GeneralCheckedException {
+        // 验证任务所有权
+        QuestModel quest = questMapper.selectByPrimaryKey(questId);
+        if (null == quest) {
+            throw new QuestNotFoundException(questId.toString());
+        }
+
+        if (false == memId.equals(quest.getMemberId())) {
+            // 不是自己发布的任务
+            throw new PermissionException();
+        }
+
+        // 验证任务是否处于草稿状态
+        Integer status = quest.getEmpStatus();
+        if (false == EmpQuestStatus.UNPUBLISH.code().equals(status)) {
+            // 任务非草稿状态
+            throw new PermissionException();
+        }
+
+        // 删除任务
+        questMapper.deleteByPrimaryKey(questId);
+    }
+
+    @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void addQuestCollegeRel(List<QuestCollRelModel> list) {
         if (list.isEmpty()) {
             return;

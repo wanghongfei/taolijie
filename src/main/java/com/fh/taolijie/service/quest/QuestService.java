@@ -40,6 +40,11 @@ public interface QuestService {
     void publishDraft(Integer memId, Integer questId, Integer orderId) throws QuestionNotFoundException, PermissionException, OrderNotFoundException, FinalStatusException, BalanceNotEnoughException, CashAccNotExistsException;
 
     /**
+     * 删除处于草稿状态的任务
+     */
+    void deleteDraft(Integer memId, Integer questId) throws GeneralCheckedException;
+
+    /**
      * 批量插入 任务-学校 关联
      * @param list
      */
