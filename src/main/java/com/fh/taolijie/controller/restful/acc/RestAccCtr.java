@@ -153,18 +153,24 @@ public class RestAccCtr {
      */
     @RequestMapping(value = "/alipay", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeAlipay(@RequestParam String alipay,
-                                     @RequestParam String code, // 手机验证码
+                                     @RequestParam(defaultValue = "") String code, // 手机验证码
                                      HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
 
-        // 验证验证码
-        if (!codeService.validateSMSCode(memId.toString(), code)) {
-            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-        }
-
         CashAccModel acc = accService.findByMember(memId);
+        // 如果用户已经设置了账号，则需要验证code
+        if (acc.getAlipayAcc() != null) {
+            // 验证验证码
+            if (!codeService.validateSMSCode(memId.toString(), code)) {
+                return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+            }
+
+        }
+        // 如果用户没有设置支付宝, 则不需要验证code直接修改
+
+
         accService.updateAlipay(acc.getId(), alipay);
 
         return ResponseText.getSuccessResponseText();
@@ -176,18 +182,23 @@ public class RestAccCtr {
      */
     @RequestMapping(value = "/bank", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
     public ResponseText changeBank(@RequestParam String bankAcc,
-                                   @RequestParam String code, // 手机验证码
+                                   @RequestParam(defaultValue = "") String code, // 手机验证码
                                    HttpServletRequest req) throws GeneralCheckedException {
 
         Credential credential = SessionUtils.getCredential(req);
         Integer memId = credential.getId();
 
-        // 验证验证码
-        if (!codeService.validateSMSCode(memId.toString(), code)) {
-            return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
-        }
-
+        // 如果用户已经设置了账号，则需要验证code
         CashAccModel acc = accService.findByMember(memId);
+        if (null != acc.getBankAcc()) {
+            // 验证验证码
+            if (!codeService.validateSMSCode(memId.toString(), code)) {
+                return new ResponseText(ErrorCode.VALIDATION_CODE_ERROR);
+            }
+
+        }
+        // 如果用户没有设置银行卡, 则不需要验证code直接修改
+
         accService.updateBankAcc(acc.getId(), bankAcc);
 
         return ResponseText.getSuccessResponseText();
