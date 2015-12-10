@@ -80,6 +80,13 @@ public interface AccountService {
     void updateAppToken(Integer memId, String token);
 
     /**
+     * 根据老密码修改新密码
+     * @param oldPwd
+     * @param newPwd
+     */
+    void changePwd(Integer memId, String oldPwd, String newPwd) throws GeneralCheckedException ;
+
+    /**
      * 根据appToken查询用户
      * @param token
      * @return

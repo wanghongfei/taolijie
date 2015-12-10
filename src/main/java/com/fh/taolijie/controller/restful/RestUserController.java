@@ -1,11 +1,13 @@
 package com.fh.taolijie.controller.restful;
 
 import cn.fh.security.credential.Credential;
+import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.dto.CreditsInfo;
 import com.fh.taolijie.domain.acc.MemberModel;
+import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
 import com.fh.taolijie.utils.Constants;
@@ -13,6 +15,7 @@ import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.security.krb5.internal.CredentialsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -110,6 +113,29 @@ public class RestUserController {
         return ResponseText.getSuccessResponseText();
 
 
+    }
+
+    /**
+     * 修改密码
+     * @return
+     */
+    @RequestMapping(value = "/pwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText chPwd(@RequestParam String oldPwd,
+                              @RequestParam String newPwd,
+                              HttpServletRequest req) throws GeneralCheckedException {
+
+        Integer memId = SessionUtils.getCredential(req).getId();
+
+        // 参数验证
+        int LEN = newPwd.length();
+        if (LEN < 1 || LEN > 30) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+        // 修改密码
+        accService.changePwd(memId, CredentialUtils.sha(oldPwd), CredentialUtils.sha(newPwd));
+
+        return ResponseText.getSuccessResponseText();
     }
 
     /**

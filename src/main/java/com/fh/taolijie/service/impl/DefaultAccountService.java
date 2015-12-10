@@ -187,6 +187,22 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void changePwd(Integer memId, String oldPwd, String newPwd) throws GeneralCheckedException {
+        // 验证老密码
+        MemberModel mem = memMapper.selectByPrimaryKey(memId);
+        if (false == oldPwd.equals(mem.getPassword())) {
+            throw new PasswordIncorrectException("");
+        }
+
+        // 更新密码
+        MemberModel cmd = new MemberModel();
+        cmd.setId(memId);
+        cmd.setPassword(newPwd);
+        memMapper.updateByPrimaryKeySelective(cmd);
+    }
+
+    @Override
     public MemberModel selectByAppToken(String token) {
         return memMapper.selectByAppToken(token);
     }
