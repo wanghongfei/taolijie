@@ -15,6 +15,8 @@ import com.fh.taolijie.service.job.JobPostService;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.PageUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping(value = "/api/u/job")
 public class RestJobUController {
+    private static Logger log = LoggerFactory.getLogger(RestJobUController.class);
+
     @Autowired
     JobPostService jobService;
 
@@ -103,6 +107,7 @@ public class RestJobUController {
                                      HttpServletRequest req) {
 
         if (result.hasErrors()) {
+            log.warn("[validation failed] {}", result.getAllErrors());
             return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
@@ -113,6 +118,7 @@ public class RestJobUController {
 
         // 检查发送时间间隔
         if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
+            log.warn("too frequency");
             return new ResponseText(ErrorCode.TOO_FREQUENT);
         }
 

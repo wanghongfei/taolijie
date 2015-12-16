@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,10 +22,10 @@ import java.util.Date;
 public class JobPostModel extends Pageable implements Serializable, PVable {
     private Integer id;
 
-    //@NotNull
-    //@Length(min = 15, max = 500)
+    @Null
     private String introduce; // 这个字段是干啥的来着??
 
+    @Null
     private String applicationResumeIds;
 
     @NotEmpty
@@ -51,6 +52,7 @@ public class JobPostModel extends Pageable implements Serializable, PVable {
     private BigDecimal wage;
 
     @NotNull
+    @Length(max = 10)
     private String timeToPay;
 
 
@@ -81,17 +83,22 @@ public class JobPostModel extends Pageable implements Serializable, PVable {
     @Length(min = 0, max = 600)
     private String jobDetail;
 
+    @Null
     private Integer likes;
 
+    @Null
     private Integer dislikes;
 
     @NotNull
     private Integer jobPostCategoryId;
 
+    @Null
     private Integer memberId;
 
+    @Null
     private String educationLevel;
 
+    @Null
     private Integer complaint;
 
     /**
@@ -103,18 +110,23 @@ public class JobPostModel extends Pageable implements Serializable, PVable {
 
     private String salaryUnit;
 
+    @Null
     private Integer pageView;
 
+    @Null
     private String verified;
 
+    @Null
     private String jobPostcol;
 
+    @Null
     private Integer applicantAmount;
 
     private String province;
     private String city;
     private String region;
 
+    @Null
     private String pv;
 
     private MemberModel member;
