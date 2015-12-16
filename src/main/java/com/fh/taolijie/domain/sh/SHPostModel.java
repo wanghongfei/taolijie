@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,6 +35,7 @@ public class SHPostModel extends Pageable implements PVable {
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date expiredTime;
 
+    @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date postTime;
 
@@ -48,17 +50,22 @@ public class SHPostModel extends Pageable implements PVable {
     @Min(0) @Max(99999)
     private BigDecimal sellPrice;
 
+    @Null
     private Integer likes;
 
+    @Null
     private Integer dislikes;
 
+    @Null
     private Integer memberId;
 
     @NotNull
     private Integer secondHandPostCategoryId;
 
+    @Null
     private Integer complaint;
 
+    @Null
     private Integer pageView;
 
     /**
@@ -66,6 +73,7 @@ public class SHPostModel extends Pageable implements PVable {
      */
     private Boolean expired;
 
+    @Null
     private String verified;
 
     @NotNull
@@ -84,6 +92,7 @@ public class SHPostModel extends Pageable implements PVable {
     @Length(max = 20)
     private String contactPhone;
 
+    @Null
     private String pv;
 
 
