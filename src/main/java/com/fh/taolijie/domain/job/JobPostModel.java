@@ -74,7 +74,7 @@ public class JobPostModel extends Pageable implements Serializable, PVable {
     private String contactEmail;
 
     //@NotNull
-    //@Length(min = 3, max = 20)
+    @Length(max = 15)
     private String contactQq;
 
     @NotNull
