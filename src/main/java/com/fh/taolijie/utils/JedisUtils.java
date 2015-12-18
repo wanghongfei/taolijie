@@ -1,5 +1,7 @@
 package com.fh.taolijie.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -52,9 +54,18 @@ public class JedisUtils {
     public static <R> R performOnce(JedisPool pool, Function<Jedis, R> func) {
         Jedis jedis = pool.getResource();
 
-        R retVal = func.apply(jedis);
+        R retVal = null;
+        try {
+            // 执行资源操作逻辑
+            retVal = func.apply(jedis);
 
-        pool.returnResourceObject(jedis);
+        } catch (Exception ex) {
+            LogUtils.logException(ex);
+
+        } finally {
+            pool.returnResourceObject(jedis);
+        }
+
 
         return retVal;
     }
