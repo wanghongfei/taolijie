@@ -3,6 +3,7 @@ package com.fh.taolijie.utils;
 import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.constant.ScheduleChannel;
+import com.fh.taolijie.exception.checked.ScheduleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ScheduleUtils {
      * @param body 任务对象
      * @param chan 要投递的Redis channel
      */
-    public void postMessage(MsgProtocol body, ScheduleChannel chan) {
+    public void postMessage(MsgProtocol body, ScheduleChannel chan) throws ScheduleException {
         // 序列化成JSON
         String json = JSON.toJSONString(body);
         log.info("sending message: {}", json);
@@ -38,7 +39,7 @@ public class ScheduleUtils {
         });
 
         if (recvAmt.longValue() <= 0) {
-            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
+            throw new ScheduleException("receive amount:" + recvAmt);
         }
 
     }

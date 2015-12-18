@@ -22,6 +22,7 @@ import com.fh.taolijie.domain.quest.*;
 import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.PermissionException;
+import com.fh.taolijie.exception.checked.ScheduleException;
 import com.fh.taolijie.exception.checked.acc.BalanceNotEnoughException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.acc.OrderNotFoundException;
@@ -33,6 +34,7 @@ import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestTargetService;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.ScheduleUtils;
 import com.fh.taolijie.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,9 @@ import java.util.stream.Collectors;
 @Service
 public class DefaultQuestService implements QuestService {
     private static Logger logger = LoggerFactory.getLogger(DefaultQuestService.class);
+
+    @Autowired
+    private ScheduleUtils scheduleUtils;
 
     @Autowired
     private QuestModelMapper questMapper;
@@ -183,7 +188,7 @@ public class DefaultQuestService implements QuestService {
 
         // 添加任务对象关联信息
         List<Integer> collList = model.getCollegeIdList();
-        List<Integer> schList = model.getSchoolIdList();
+        //List<Integer> schList = model.getSchoolIdList();
         List<Integer> cityList = model.getCityIdList();
         List<Integer> proList = model.getProvinceIdList();
 
@@ -245,20 +250,13 @@ public class DefaultQuestService implements QuestService {
                     .setParmMap(map)
                     .build();
 
+            // 执行投递操作
+            try {
+                scheduleUtils.postMessage(msg, ScheduleChannel.POST_JOB);
 
-            // 序列化成JSON
-            String json = JSON.toJSONString(msg);
-            if (logger.isDebugEnabled()) {
-                logger.debug("sending message: {}", json);
+            } catch (ScheduleException e) {
+                LogUtils.logException(e);
             }
-
-            // 发布消息
-            Jedis jedis = JedisUtils.getClient(jedisPool);
-            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
-            JedisUtils.returnJedis(jedisPool, jedis);
 
 
         }
