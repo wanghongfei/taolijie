@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.MsgType;
+import com.fh.taolijie.constant.ScheduleAddr;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.acc.OrderStatus;
@@ -236,23 +237,12 @@ public class DefaultQuestService implements QuestService {
             Map<String, String> map = new HashMap<>();
             map.put("taskId", questId.toString());
             map.put("questId", questId.toString());
-
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol.Builder(
-                    MsgType.DATE_STYLE,
-                    "localhost",
-                    8080,
-                    RestScheduleCtr.fullUrl(RestScheduleCtr.URL_QUEST_EXPIRE),
-                    "GET",
-                    // 任务结束后的第25小时执行
-                    TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                    //TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
-                    .setParmMap(map)
-                    .build();
+            // 任务结束后的第25小时执行
+            Date exeAt = TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25);
 
             // 执行投递操作
             try {
-                scheduleUtils.postMessage(msg, ScheduleChannel.POST_JOB);
+                scheduleUtils.postMessage(ScheduleAddr.QUEST_AUTO_EXPIRE.code(), map, ScheduleChannel.POST_JOB, exeAt, null);
 
             } catch (ScheduleException e) {
                 LogUtils.logException(e);
