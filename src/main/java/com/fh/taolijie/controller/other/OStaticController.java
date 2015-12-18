@@ -42,6 +42,9 @@ public class OStaticController {
     public void getPic(@PathVariable int id,
                        HttpServletResponse res) throws IOException {
         ImageModel img = imageService.findImage(id);
+        if (null == img) {
+            return;
+        }
 
         byte[] bytes = img.getBinData();
         String type = "image/"+img.getExtension();
