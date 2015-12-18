@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.constant.MsgType;
+import com.fh.taolijie.constant.ScheduleAddr;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
 import com.fh.taolijie.constant.quest.AssignStatus;
@@ -16,6 +17,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.quest.QuestModel;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
 import com.fh.taolijie.exception.checked.HackException;
+import com.fh.taolijie.exception.checked.ScheduleException;
 import com.fh.taolijie.exception.checked.acc.CashAccNotExistsException;
 import com.fh.taolijie.exception.checked.quest.*;
 import com.fh.taolijie.service.acc.CashAccService;
@@ -24,6 +26,7 @@ import com.fh.taolijie.service.quest.QuestFinishService;
 import com.fh.taolijie.service.quest.TljAuditService;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
+import com.fh.taolijie.utils.ScheduleUtils;
 import com.fh.taolijie.utils.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +77,9 @@ public class DefaultQuestFinishService implements QuestFinishService {
     @Autowired
     private QuestCategoryModelMapper questCateMapper;
 
+    @Autowired
+    private ScheduleUtils scheduleUtils;
+
 
     @Autowired
     private JedisPool jedisPool;
@@ -122,32 +128,16 @@ public class DefaultQuestFinishService implements QuestFinishService {
         Map<String, String> parmMap = new HashMap<>();
         parmMap.put("taskId", reqId.toString());
         parmMap.put("reqId", reqId.toString());
-
-        // 构造消息体
-        MsgProtocol msg = new MsgProtocol.Builder(
-                MsgType.DATE_STYLE,
-                "localhost",
-                8080,
-                RestScheduleCtr.fullUrl(RestScheduleCtr.URL_AUTO_AUDIT),
-                "GET",
-                TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24)
-        ).setParmMap(parmMap)
-                .build();
+        Date exeAt = TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 24);
 
 
-        // 序列化成JSON
-        String json = JSON.toJSONString(msg);
-        if (logger.isDebugEnabled()) {
-            logger.debug("sending message: {}", json);
+        try {
+            scheduleUtils.postMessage(ScheduleAddr.QUEST_AUTO_AUDIT.code(), parmMap, ScheduleChannel.POST_JOB, exeAt, null);
+
+        } catch (ScheduleException ex) {
+            LogUtils.logException(ex);
         }
 
-        // 发布消息
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-        if (recvAmt.longValue() <= 0 ) {
-            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-        }
-        JedisUtils.returnJedis(jedisPool, jedis);
 
     }
 

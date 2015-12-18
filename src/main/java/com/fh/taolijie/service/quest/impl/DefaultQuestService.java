@@ -63,8 +63,6 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private QuestModelMapper questMapper;
 
-    @Autowired
-    private SysConfigModelMapper configMapper;
 
     @Autowired
     private FeeCalculator feeCal;
@@ -381,35 +379,15 @@ public class DefaultQuestService implements QuestService {
             map.put("taskId", questId.toString());
             map.put("questId", questId.toString());
 
-            // 构造消息体
-            MsgProtocol msg = new MsgProtocol.Builder(
-                    MsgType.DATE_STYLE,
-                    "localhost",
-                    8080,
-                    RestScheduleCtr.fullUrl(RestScheduleCtr.URL_QUEST_EXPIRE),
-                    "GET",
-                    // 任务结束后的第25小时执行
-                    TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25))
-                    //TimeUtil.calculateDate(new Date(), Calendar.SECOND, 20))
-                    .setParmMap(map)
-                    .build();
 
+            Date exeAt = TimeUtil.calculateDate(model.getEndTime(), Calendar.HOUR_OF_DAY, 25);
 
-            // 序列化成JSON
-            String json = JSON.toJSONString(msg);
-            if (logger.isDebugEnabled()) {
-                logger.debug("sending message: {}", json);
+            try {
+                scheduleUtils.postMessage(ScheduleAddr.QUEST_EXPIRE.code(), map, ScheduleChannel.POST_JOB, exeAt, null);
+
+            } catch (ScheduleException e) {
+                LogUtils.logException(e);
             }
-
-            // 发布消息
-            Jedis jedis = JedisUtils.getClient(jedisPool);
-            Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-            if (recvAmt.longValue() <= 0) {
-                LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-            }
-
-            JedisUtils.returnJedis(jedisPool, jedis);
-
         }
 
         // 修改状态值
@@ -519,37 +497,18 @@ public class DefaultQuestService implements QuestService {
         // 任务剩余数量减少1
         questMapper.decreaseLeftAmount(questId);
 
-        // todo 投递定时任务请求
         // 构造参数列表
         Map<String, String> map = new HashMap<>();
         map.put("taskId", String.valueOf(assignId));
         map.put("assignId", String.valueOf(assignId));
+        Date exeAt = TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2);
 
-        // 构造消息体
-        MsgProtocol msg = new MsgProtocol.Builder(
-                MsgType.DATE_STYLE,
-                "localhost",
-                8080,
-                RestScheduleCtr.fullUrl(RestScheduleCtr.URL_AUTO_EXPIRE),
-                "GET",
-                TimeUtil.calculateDate(new Date(), Calendar.HOUR_OF_DAY, 2))
-                .setParmMap(map)
-                .build();
+        try {
+            scheduleUtils.postMessage(ScheduleAddr.QUEST_AUTO_EXPIRE.code(), map, ScheduleChannel.POST_JOB, exeAt, null);
 
-
-        // 序列化成JSON
-        String json = JSON.toJSONString(msg);
-        if (logger.isDebugEnabled()) {
-            logger.debug("sending message: {}", json);
+        } catch (ScheduleException ex) {
+            LogUtils.logException(ex);;
         }
-
-        // 发布消息
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-        Long recvAmt = jedis.publish(ScheduleChannel.POST_JOB.code(), json);
-        if (recvAmt.longValue() <= 0) {
-            LogUtils.getErrorLogger().error("schedule center failed to receive task!");
-        }
-        JedisUtils.returnJedis(jedisPool, jedis);
 
 
         // 方法结束 == 事务结束，行锁释放
