@@ -48,7 +48,7 @@ public class RestUserAdminController {
      * @return
      */
     @RequestMapping(value = "/{id}/pwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText resetPwd(@RequestParam("id") Integer userId,
+    public ResponseText resetPwd(@PathVariable("id") Integer userId,
                                  @RequestParam String newPwd) {
         // 参数验证
         int LEN = newPwd.length();
