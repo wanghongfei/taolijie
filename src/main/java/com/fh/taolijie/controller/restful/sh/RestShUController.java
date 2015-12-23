@@ -174,10 +174,15 @@ public class RestShUController {
                                HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
+
+        boolean admin = SessionUtils.isAdmin(credential);
+
         // 检查是不是本用户发布的信息
         SHPostModel sh = shPostService.findPost(shId);
-        if (null == sh || false == sh.getMemberId().equals(credential.getId())) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        if (false == admin) {
+            if (null == sh || false == sh.getMemberId().equals(credential.getId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
         }
 
 
@@ -205,7 +210,10 @@ public class RestShUController {
                                 @RequestParam(required = false) String ids,
                                 HttpServletRequest req) {
 
-        Integer uid = SessionUtils.getCredential(req).getId();
+        Credential credential = SessionUtils.getCredential(req);
+        Integer uid = credential.getId();
+
+        boolean admin = SessionUtils.isAdmin(credential);
 
         String [] delIds = { String.valueOf(id) };
 
@@ -224,8 +232,10 @@ public class RestShUController {
                 return new ResponseText(ErrorCode.NOT_FOUND);
             }
 
-            if(false == sh.getMember().getId().equals(uid)) {
-                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            if (false == admin) {
+                if(false == sh.getMember().getId().equals(uid)) {
+                    return new ResponseText(ErrorCode.PERMISSION_ERROR);
+                }
             }
 
             //删除兼职
