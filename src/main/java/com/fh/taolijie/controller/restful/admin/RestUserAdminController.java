@@ -12,6 +12,8 @@ import com.fh.taolijie.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.rtf.RTFEditorKit;
+
 /**
  * 只有管理员可调用，与账号相关操作接口
  * Created by whf on 8/22/15.
@@ -70,9 +72,21 @@ public class RestUserAdminController {
      * 封号
      * @return
      */
-    @RequestMapping(value = "/block/{id}", produces = Constants.Produce.JSON)
-    public ResponseText getList(@PathVariable("id") Integer memId) {
+    @RequestMapping(value = "/block/{id}", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText block(@PathVariable("id") Integer memId) {
         accService.invalidAccount(memId);
+
+        return ResponseText.getSuccessResponseText();
+    }
+
+    /**
+     * 解封
+     * @param memId
+     * @return
+     */
+    @RequestMapping(value = "/block/{id}", method = RequestMethod.DELETE, produces = Constants.Produce.JSON)
+    public ResponseText unblock(@PathVariable("id") Integer memId) {
+        accService.validateAccount(memId);
 
         return ResponseText.getSuccessResponseText();
     }
