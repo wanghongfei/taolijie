@@ -1,4 +1,4 @@
-package com.fh.taolijie.controller.restful;
+package com.fh.taolijie.controller.restful.acc;
 
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;

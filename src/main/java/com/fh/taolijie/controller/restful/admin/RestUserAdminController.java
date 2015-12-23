@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
+ * 只有管理员可调用，与账号相关操作接口
  * Created by whf on 8/22/15.
  */
 @RestController
@@ -25,30 +26,6 @@ public class RestUserAdminController {
     UserService userService;
 
 
-    /**
-     * 给后台提供的登陆接口
-     * @return
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText login(@RequestParam String username,
-                              @RequestParam String password) {
-        if (null == password) {
-            return new ResponseText(ErrorCode.BAD_PASSWORD);
-        }
-
-        MemberModel mem = accService.findMember(username, true);
-        if (null == mem) {
-            return new ResponseText(ErrorCode.USER_NOT_EXIST);
-        }
-
-        String hashPwd = CredentialUtils.sha(password);
-        if (false == hashPwd.equals(mem.getPassword())) {
-            return new ResponseText(ErrorCode.BAD_PASSWORD);
-
-        }
-
-        return new ResponseText(mem);
-    }
 
     /**
      * 查询所有用户
@@ -64,6 +41,29 @@ public class RestUserAdminController {
 
         ListResult<MemberModel> list = accService.getMemberList(pageNumber, pageSize);
         return new ResponseText(list);
+    }
+
+    /**
+     * 重置用户密码
+     * @return
+     */
+    @RequestMapping(value = "/{id}/pwd", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
+    public ResponseText resetPwd(@RequestParam("id") Integer userId,
+                                 @RequestParam String newPwd) {
+        // 参数验证
+        int LEN = newPwd.length();
+        if (LEN <= 0 || LEN >= 30) {
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
+        }
+
+
+        // 无条件更新密码
+        MemberModel cmd = new MemberModel();
+        cmd.setId(userId);
+        cmd.setPassword(CredentialUtils.sha(newPwd));
+        int rows = accService.updateMember(cmd);
+
+        return rows > 0 ? ResponseText.getSuccessResponseText() : new ResponseText(ErrorCode.NOT_FOUND);
     }
 
     /**
