@@ -75,22 +75,6 @@ public class RestUserController {
         return new ResponseText(info);
     }
 
-    /**
-     * @deprecated
-     * 查询所有用户
-     * @param pageNumber
-     * @param pageSize
-     * @return
-     */
-    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
-    public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,
-                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
-
-        pageNumber = PageUtils.getFirstResult(pageNumber, pageSize);
-
-        ListResult<MemberModel> list = accService.getMemberList(pageNumber, pageSize);
-        return new ResponseText(list);
-    }
 
     /**
      * 更新用户基本信息
