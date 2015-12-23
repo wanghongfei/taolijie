@@ -139,7 +139,15 @@ public class RestJobUController {
                                 @RequestParam(required = false) String ids,
                                 HttpServletRequest req) {
 
-        int uid = SessionUtils.getCredential(req).getId();
+        Credential credential = SessionUtils.getCredential(req);
+
+        // 判断是不是管理员
+        boolean admin = false;
+        if (SessionUtils.isAdmin(credential)) {
+            admin = true;
+        }
+
+        int uid = credential.getId();
 
         String[] delIds = { String.valueOf(id) };
 
@@ -156,9 +164,14 @@ public class RestJobUController {
                 return new ResponseText(ErrorCode.NOT_FOUND);
             }
 
-            // 判断是不是当前用户发布的
-            if(job.getMember().getId()!=uid){
-                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            // 当前用户如果是管理员
+            // 不进行权限检查
+            if (false == admin) {
+                // 判断是不是当前用户发布的
+                if (job.getMember().getId() != uid ) {
+                    return new ResponseText(ErrorCode.PERMISSION_ERROR);
+                }
+
             }
 
             //删除兼职
@@ -250,12 +263,19 @@ public class RestJobUController {
 
         Credential credential = SessionUtils.getCredential(req);
 
+        boolean admin = false;
+        if (SessionUtils.isAdmin(credential)) {
+            admin = true;
+        }
 
         // 检查是不是本用户发布的信息
         jobPostModel.setId(jobId);
         JobPostModel job = jobPostService.findJobPost(jobPostModel.getId());
-        if (null == job || false == job.getMemberId().equals(credential.getId())) {
-            return new ResponseText(ErrorCode.PERMISSION_ERROR);
+        // 如果是管理员则不进行权限检查
+        if (false == admin) {
+            if (null == job || false == job.getMemberId().equals(credential.getId())) {
+                return new ResponseText(ErrorCode.PERMISSION_ERROR);
+            }
         }
 
         // 更新信息
