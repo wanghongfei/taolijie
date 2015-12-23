@@ -57,6 +57,8 @@ public class MemberModel extends Pageable implements Serializable {
 
     private String companyAddr;
 
+    private String companyDesp;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     private Boolean valid;
@@ -753,6 +755,14 @@ public class MemberModel extends Pageable implements Serializable {
 
     public void setCompanyAddr(String companyAddr) {
         this.companyAddr = companyAddr;
+    }
+
+    public String getCompanyDesp() {
+        return companyDesp;
+    }
+
+    public void setCompanyDesp(String companyDesp) {
+        this.companyDesp = companyDesp;
     }
 
     public void setCredits(Integer credits) {

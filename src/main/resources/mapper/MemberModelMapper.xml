@@ -22,8 +22,11 @@
         <result column="mem_phone" property="phone" jdbcType="VARCHAR"/>
         <result column="mem_qq" property="qq" jdbcType="VARCHAR"/>
         <result column="mem_age" property="age" jdbcType="INTEGER"/>
+
         <result column="mem_company_name" property="companyName" jdbcType="VARCHAR"/>
         <result column="mem_company_addr" property="companyAddr" jdbcType="VARCHAR"/>
+        <result column="mem_company_desp" property="companyDesp" jdbcType="VARCHAR"/>
+
         <result column="mem_created_time" property="createdTime" jdbcType="TIMESTAMP"/>
         <result column="mem_valid" property="valid" jdbcType="BIT"/>
         <result column="mem_complaint" property="complaint" jdbcType="INTEGER"/>
@@ -71,7 +74,7 @@
     <sql id="Base_Column_List">
         id AS mem_id, username AS mem_username, password AS mem_password, email AS mem_email, name AS mem_name, gender AS mem_gender,
         id_certi AS mem_id_certi, stu_certi AS mem_stu_certi, emp_certi AS mem_emp_certi, profile_photo_path AS mem_profile_photo_path, phone AS mem_phone,
-        qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, comp_addr AS mem_company_addr, created_time AS mem_created_time,
+        qq AS mem_qq, age AS mem_age, company_name AS mem_company_name, comp_addr AS mem_company_addr, comp_desp AS mem_company_desp, created_time AS mem_created_time,
         valid AS mem_valid, complaint AS mem_complaint, profile_photo_id AS mem_profile_photo_id, auto_login_identifier AS mem_auto_login_identifier,
         last_post_time AS mem_last_post_time, reset_password_token AS mem_reset_password_token, last_token_date AS mem_last_token_date, school_organization AS mem_school_organization, credits AS mem_credits,
         student_id AS mem_student_id, block_list AS mem_block_list, applied_job_ids AS mem_applied_job_ids, liked_job_ids AS mem_liked_job_ids, liked_sh_ids AS mem_liked_sh_ids,
@@ -93,7 +96,7 @@
         mem.id AS mem_id, mem.username AS mem_username, mem.password AS mem_password, mem.email AS mem_email, mem.name AS mem_name,
         mem.gender AS mem_gender, mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi, mem.emp_certi AS mem_emp_certi,
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
-        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.comp_addr AS mem_company_addr,
+        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.comp_addr AS mem_company_addr, mem.comp_desp AS mem_company_desp,
         mem.created_time AS mem_created_time, mem.valid AS mem_valid, mem.complaint AS mem_complaint,
         mem.profile_photo_id AS mem_profile_photo_id, mem.auto_login_identifier AS mem_auto_login_identifier,
         mem.last_post_time AS mem_last_post_time, mem.reset_password_token AS mem_reset_password_token,
@@ -121,7 +124,7 @@
         mem.email AS mem_email, mem.name AS mem_name, mem.gender AS mem_gender,
         mem.id_certi AS mem_id_certi, mem.stu_certi AS mem_stu_certi, mem.emp_certi AS mem_emp_certi,
         mem.profile_photo_path AS mem_profile_photo_path, mem.phone AS mem_phone,
-        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.comp_addr AS mem_company_addr,
+        mem.qq AS mem_qq, mem.age AS mem_age, mem.company_name AS mem_company_name, mem.comp_addr AS mem_company_addr, mem.comp_desp AS mem_company_desp,
         mem.created_time AS mem_created_time, mem.valid AS mem_valid,
         mem.complaint AS mem_complaint, mem.profile_photo_id AS mem_profile_photo_id,
         mem.last_post_time AS mem_last_post_time, mem.school_organization AS mem_school_organization, mem.credits AS mem_credits,
@@ -190,7 +193,8 @@
         reg_type,
         wechat_token,
         stu_certi,
-        emp_certi)
+        emp_certi,
+        comp_desp)
         VALUES (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
         #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR},
         #{idCerti}, #{profilePhotoPath,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
@@ -205,7 +209,8 @@
         #{regType},
         #{wechatToken},
         #{stuCerti},
-        #{empCerti})
+        #{empCerti},
+        #{companyDesp})
     </insert>
     <insert id="insertSelective">
         <!--
@@ -308,6 +313,8 @@
 
             <if test="stuCerti != null" >stu_certi,</if>
             <if test="empCerti != null" >emp_certi,</if>
+
+            <if test="companyDesp != null" >comp_desp,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
@@ -404,6 +411,8 @@
 
             <if test="stuCerti != null" >#{stuCerti},</if>
             <if test="empCerti != null" >#{empCerti},</if>
+
+            <if test="companyDesp != null" >#{companyDesp},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective">
@@ -507,6 +516,9 @@
 
             <if test="stuCerti != null" >stu_certi = #{stuCerti},</if>
             <if test="empCerti != null" >emp_certi = #{empCerti},</if>
+
+            <if test="companyDesp != null" >comp_desp = #{companyDesp},</if>
+            <if test="companyAddr != null" >comp_addr = #{companyAddr},</if>
         </set>
         where id = #{id}
     </update>
@@ -551,7 +563,8 @@
         reg_type = #{regType},
         wechat_token = #{wechatToken},
         stu_certi = #{stuCerti},
-        emp_certi = #{empCerti}
+        emp_certi = #{empCerti},
+        comp_desp = #{companyDesp}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 

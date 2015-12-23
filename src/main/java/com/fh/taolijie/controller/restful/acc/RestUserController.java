@@ -76,6 +76,7 @@ public class RestUserController {
     }
 
     /**
+     * @deprecated
      * 查询所有用户
      * @param pageNumber
      * @param pageSize
@@ -92,7 +93,7 @@ public class RestUserController {
     }
 
     /**
-     * 更新用户信息
+     * 更新用户基本信息
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
@@ -142,9 +143,10 @@ public class RestUserController {
      * 完善企业信息
      */
     @RequestMapping(value = "/emp", method = RequestMethod.PUT, produces = Constants.Produce.JSON)
-    public ResponseText updateProfile(@RequestParam String compName,
-                                      @RequestParam String compAddr,
-                                      HttpServletRequest req) {
+    public ResponseText completeCompanyInfo(@RequestParam String compName,
+                                            @RequestParam String compAddr,
+                                            @RequestParam String compDesp,
+                                            HttpServletRequest req) {
 
         Credential credential = SessionUtils.getCredential(req);
 
@@ -152,6 +154,7 @@ public class RestUserController {
         user.setId(credential.getId());
         user.setCompanyName(compName);
         user.setCompanyAddr(compAddr);
+        user.setCompanyDesp(compDesp);
 
         accService.updateMember(user);
         return ResponseText.getSuccessResponseText();

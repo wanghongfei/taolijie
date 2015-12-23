@@ -1,0 +1,1 @@
+alter table taolijie.member add column comp_desp varchar(50);
