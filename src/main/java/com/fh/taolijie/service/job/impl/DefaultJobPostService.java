@@ -322,6 +322,12 @@ public class DefaultJobPostService implements JobPostService {
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public boolean undeleteJobPost(Integer postId) {
+        return postMapper.setDeleted(postId, false) <= 0 ? false : true;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean checkExist(Integer postId) {
         return postMapper.checkExist(postId);

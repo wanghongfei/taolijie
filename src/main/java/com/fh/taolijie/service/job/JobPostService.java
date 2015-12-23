@@ -169,5 +169,12 @@ public interface JobPostService extends PageService {
      */
     boolean deleteJobPost(Integer postId);
 
+    /**
+     * 取消删除兼职
+     * @param postId
+     * @return
+     */
+    boolean undeleteJobPost(Integer postId);
+
     boolean checkExist(Integer postId);
 }
