@@ -1,0 +1,25 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- 定义根节点 -->
+    <xs:element name="security">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="login-page" type="xs:string" maxOccurs="1" />
+                <xs:element name="rules">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="request" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="path" use="required" />
+                                    <xs:attribute name="roles" use="required" />
+                                    <xs:attribute name="method" use="optional" default="GET" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

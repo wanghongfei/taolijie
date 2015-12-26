@@ -43,7 +43,7 @@
         <Logger name="com.fh.taolijie" level="debug">
         </Logger>
 
-        <Logger name="cn.fh.security" level="info">
+        <Logger name="cn.fh.security" level="debug">
         </Logger>
 
         <!-- 3rdparty Loggers -->
