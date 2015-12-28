@@ -184,6 +184,11 @@ public class HAuthController {
 
         /*获取用户信息和用户权限*/
         MemberModel mem = accountService.findMember(login.getUsername(), true);
+        // 如果不是管理员用户
+        if ( false == mem.getRoleList().stream().anyMatch( role -> role.getRolename().equals("ADMIN") )) {
+            // 返回权限错误
+            return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
+        }
 
 
         String sid = RandomStringUtils.randomAlphabetic(30);
