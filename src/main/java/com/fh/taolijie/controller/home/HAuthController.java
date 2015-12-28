@@ -159,7 +159,7 @@ public class HAuthController {
      * 管理员后台登陆
      */
     @RequestMapping(value = "login/admin", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public @ResponseBody String AdminLogin(@Valid LoginDto login,
+    public @ResponseBody ResponseText AdminLogin(@Valid LoginDto login,
                       BindingResult result,
                       HttpServletRequest req,
                       HttpServletResponse res) {
@@ -167,18 +167,21 @@ public class HAuthController {
         int cookieExpireTime = (int) TimeUnit.DAYS.toSeconds(1); // 一天
 
         if (result.hasErrors()) {
-            return new JsonWrapper(false, result.getAllErrors()).getAjaxMessage();
+            return new ResponseText(ErrorCode.INVALID_PARAMETER);
         }
 
         /*验证登陆*/
         try {
             accountService.login(login.getUsername(), login.getPassword());
+
         } catch (UserNotExistsException e) {
-            return new JsonWrapper(false, ErrorCode.USER_NOT_EXIST).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_NOT_EXIST);
+
         } catch (PasswordIncorrectException e) {
-            return new JsonWrapper(false, ErrorCode.BAD_PASSWORD).getAjaxMessage();
+            return new ResponseText(ErrorCode.BAD_PASSWORD);
+
         } catch (UserInvalidException e) {
-            return new JsonWrapper(false, ErrorCode.USER_INVALID).getAjaxMessage();
+            return new ResponseText(ErrorCode.USER_INVALID);
         }
 
         /*获取用户信息和用户权限*/
@@ -186,7 +189,7 @@ public class HAuthController {
         // 如果不是管理员用户
         if ( false == mem.getRoleList().stream().anyMatch( role -> role.getRolename().equals("ADMIN") )) {
             // 返回权限错误
-            return new JsonWrapper(false, ErrorCode.PERMISSION_ERROR).getAjaxMessage();
+            return new ResponseText(ErrorCode.PERMISSION_ERROR);
         }
 
 
@@ -210,7 +213,15 @@ public class HAuthController {
             res.addCookie(usernameCookie);
         }
 
-        return new JsonWrapper(true, ErrorCode.SUCCESS).getAjaxMessage();
+        LoginRespDto respDto = new LoginRespDto();
+        respDto.setId(mem.getId());
+        respDto.setSid(sid);
+        respDto.setGender(mem.getGender());
+        respDto.setNickname(mem.getName());
+        respDto.setPhotoPath(mem.getProfilePhotoPath());
+        respDto.setRole(mem.getRoleList().get(0).getRolename());
+        respDto.setUsername(mem.getUsername());
+        return new ResponseText(respDto);
     }
 
     /**
