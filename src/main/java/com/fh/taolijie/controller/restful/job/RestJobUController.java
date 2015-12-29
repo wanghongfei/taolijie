@@ -115,6 +115,11 @@ public class RestJobUController {
         String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
+        // 检查是否封号
+        if (false == mem.getValid()) {
+            return new ResponseText(ErrorCode.USER_INVALID);
+        }
+
 
         // 检查发送时间间隔
         if (false == icService.checkInterval(mem.getId(), mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {

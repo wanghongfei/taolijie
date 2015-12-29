@@ -138,6 +138,10 @@ public class RestShUController {
         String username = SessionUtils.getCredential(req).getUsername();
         mem = accountService.findMember(username, false);
 
+        // 检查是否封号
+        if (false == mem.getValid()) {
+            return new ResponseText(ErrorCode.USER_INVALID);
+        }
 
         // 查检发布时间间隔
         if (false == icService.checkInterval(mem.getId(), mem.getLastShDate(), 1, TimeUnit.MINUTES)) {
