@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
@@ -126,7 +127,8 @@ public class RestShUController {
     public ResponseText postSh(@RequestParam String picIds,
                                @Valid SHPostModel shDto,
                                BindingResult result,
-                               HttpServletRequest req) {
+                               HttpServletRequest req,
+                               HttpServletResponse resp) {
         MemberModel mem = null;
 
         // 参数检查
@@ -138,6 +140,15 @@ public class RestShUController {
         String username = SessionUtils.getCredential(req).getUsername();
         mem = accountService.findMember(username, false);
 
+        // 检查是否封号
+        if (false == mem.getValid()) {
+            // 已经封号了
+            // T出登陆
+            SessionUtils.logout(resp);
+            accountService.deleteRedisSession(SessionUtils.getSid(req));
+
+            return new ResponseText(ErrorCode.USER_INVALID);
+        }
 
         // 查检发布时间间隔
         if (false == icService.checkInterval(mem.getLastShDate(), 1, TimeUnit.MINUTES)) {

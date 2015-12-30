@@ -109,6 +109,19 @@ public class HJobController {
             return "redirect:/404";
         }
 
+        // 检查是不是已经删除
+        if (true == job.isDeleted()) {
+            // 如果是已经删除
+            // 只有管理员用户可以访问
+            Credential credential = SessionUtils.getCredential(req);
+            // 未登陆或不是管理员
+            if (null == credential || false == SessionUtils.isAdmin(credential)) {
+                // 返回404
+                return "redirect:/404";
+            }
+        }
+
+
         MemberModel poster = accountService.findMember(job.getMemberId());
         RoleModel role = poster.getRoleList().iterator().next();
 

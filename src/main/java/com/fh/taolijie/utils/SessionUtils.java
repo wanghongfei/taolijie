@@ -1,9 +1,11 @@
 package com.fh.taolijie.utils;
 
 import cn.fh.security.credential.Credential;
+import com.fh.taolijie.constant.RequestParamName;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,8 +16,56 @@ import java.util.TreeMap;
 public class SessionUtils {
     private SessionUtils() {}
 
+    /**
+     * 从请求对象中取出Credential
+     * @param req
+     * @return
+     */
     public static Credential getCredential(HttpServletRequest req) {
         return (Credential) req.getAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE);
+    }
+
+    public static String getSid(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+
+
+        return findSidCookie(cookies).getValue();
+    }
+
+    /**
+     * 将当前用户取消登陆. (清除Cookie)
+     * @param resp
+     */
+    public static boolean logout(HttpServletResponse resp) {
+        // 删除cookie
+        Cookie co = new Cookie(RequestParamName.SESSION_ID.toString(), "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+        co = new Cookie(RequestParamName.APP_TOKEN.toString(), "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+
+        co = new Cookie(RequestParamName.USERNAME.toString(), "");
+        co.setMaxAge(0);
+        resp.addCookie(co);
+
+        return true;
+    }
+
+    private static Cookie findSidCookie(Cookie[] cookies) {
+        if (null == cookies) {
+            return null;
+        }
+
+        int LEN = cookies.length;
+        for (int ix = 0 ; ix < LEN ; ++ix) {
+            Cookie cookie = cookies[ix];
+            if (cookie.getName().endsWith(RequestParamName.SESSION_ID.toString())) {
+                return cookie;
+            }
+        }
+
+        return null;
     }
 
     /**

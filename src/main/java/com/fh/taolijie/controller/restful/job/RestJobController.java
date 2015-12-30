@@ -1,5 +1,6 @@
 package com.fh.taolijie.controller.restful.job;
 
+import cn.fh.security.credential.Credential;
 import com.fh.taolijie.component.ListResult;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
@@ -150,9 +151,22 @@ public class RestJobController {
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = Constants.Produce.JSON)
-    public ResponseText getPostById(@PathVariable(value = "id") Integer postId) {
+    public ResponseText getPostById(@PathVariable(value = "id") Integer postId,
+                                    HttpServletRequest req) {
 
         JobPostModel model = jobService.findJobPostWithPV(postId);
+        // 检查是不是已经删除
+        if (true == model.isDeleted()) {
+            // 如果是已经删除
+            // 只有管理员用户可以访问
+            Credential credential = SessionUtils.getCredential(req);
+            // 未登陆或不是管理员
+            if (null == credential || false == SessionUtils.isAdmin(credential)) {
+                // 返回错误信息
+                return new ResponseText(ErrorCode.NOT_FOUND);
+            }
+        }
+
         jobService.checkExpired(Arrays.asList(model));
 
         return new ResponseText(model);

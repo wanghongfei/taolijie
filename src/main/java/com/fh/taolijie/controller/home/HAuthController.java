@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.RegType;
+import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.acc.RoleModel;
@@ -235,19 +236,12 @@ public class HAuthController {
                          HttpServletResponse resp) throws IOException {
 
         // 删除cookie
-        Cookie co = new Cookie("sid", "");
-        co.setMaxAge(0);
-        resp.addCookie(co);
-        co = new Cookie("token", "");
-        co.setMaxAge(0);
-        resp.addCookie(co);
+        SessionUtils.logout(resp);
 
-        co = new Cookie("un", "");
-        co.setMaxAge(0);
-        resp.addCookie(co);
 
+        // 删除Redis中的session
         Credential credential = SessionUtils.getCredential(req);
-        String sid = SessionUtils.getFromCookie(req, "sid");
+        String sid = SessionUtils.getFromCookie(req, RequestParamName.SESSION_ID.toString());
         accountService.deleteRedisSession(sid);
 
         // 判断是否是app
