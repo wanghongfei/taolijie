@@ -46,6 +46,26 @@ public class RestUserAdminController {
     }
 
     /**
+     * 根据用户名精确查询用户
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText getByUsername(@RequestParam String username) {
+
+        MemberModel mem = accService.findMember(username, true);
+        if (null == mem) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
+        mem.setPassword(null);
+        //mem.setAppToken(null);
+        mem.setResetPasswordToken(null);
+
+        return new ResponseText(mem);
+    }
+
+    /**
      * 重置用户密码
      * @return
      */

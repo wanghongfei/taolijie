@@ -30,18 +30,6 @@ public class RestUserController {
     @Autowired
     UserService userService;
 
-/*    @RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
-    public ResponseText getByUsername(@RequestParam String username) {
-        MemberModel mem = accService.findMember(username, true);
-        if (null == mem) {
-            return new ResponseText(ErrorCode.NOT_FOUND);
-        }
-        mem.setPassword(null);
-        mem.setAppToken(null);
-        mem.setResetPasswordToken(null);
-
-        return new ResponseText(mem);
-    }*/
 
     /**
      * 根据id查询用户
