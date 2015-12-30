@@ -28,6 +28,22 @@ public class RestUserAdminController {
     UserService userService;
 
 
+    /**
+     * 根据用户名模糊查询
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText searchByName(@RequestParam String username,
+                                     @RequestParam(defaultValue = "0") int pn,
+                                     @RequestParam(defaultValue = Constants.PAGE_CAP) int ps) {
+
+        pn = PageUtils.getFirstResult(pn, ps);
+        ListResult<MemberModel> lr = accService.searchMember(username, pn, ps);
+
+        return new ResponseText(lr);
+    }
+
 
     /**
      * 查询所有用户
@@ -35,7 +51,7 @@ public class RestUserAdminController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/list", produces = Constants.Produce.JSON)
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,
                                 @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int pageSize) {
 

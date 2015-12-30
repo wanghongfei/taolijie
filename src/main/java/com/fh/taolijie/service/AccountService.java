@@ -57,7 +57,19 @@ public interface AccountService {
      */
     public ListResult<MemberModel> getMemberList(int firstResult, int capacity);
 
+    /**
+     * 根据id查询用户
+     * @param memId
+     * @return
+     */
     MemberModel findMember(Integer memId);
+
+    /**
+     * 根据用户名模糊查询用户
+     * @param name
+     * @return
+     */
+    ListResult<MemberModel> searchMember(String name, int pn, int ps);
 
     /**
      * 得到当前已注册用户的数量

@@ -585,6 +585,34 @@
         WHERE mem.id = info.id
     </select>
 
+    <select id="searchMember" resultMap="BaseResultMap">
+        SELECT
+            <include refid="member_column"/>,
+            r.*
+        FROM (
+                SELECT id
+                FROM member
+                WHERE username LIKE CONCAT('%', #{username}, '%')
+                LIMIT
+                    #{pn}, #{ps}
+        ) info, member mem
+        LEFT JOIN role r
+            ON r.rid IN
+                (SELECT role_rid
+                FROM member_role
+                WHERE member_id = info.id)
+        WHERE mem.id = info.id
+
+    </select>
+
+    <select id="countSearchMember" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            member
+        WHERE username LIKE CONCAT('%', #{username}, '%')
+    </select>
+
     <select id="getMemberAmount" resultType="java.lang.Long">
         SELECT COUNT(*)
         FROM member

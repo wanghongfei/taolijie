@@ -25,6 +25,14 @@ public interface MemberModelMapper {
 
     MemberModel selectByUsername(String username);
 
+    /**
+     * 根据用户名模糊查询用户
+     * @param username
+     * @return
+     */
+    List<MemberModel> searchMember(@Param("username") String username, @Param("pn") int pn, @Param("ps") int ps);
+    long countSearchMember(String username);
+
 
     MemberModel selectByAppToken(String token);
     void updateAppToken(@Param("memId") Integer memId, @Param("token") String token);
