@@ -54,7 +54,19 @@ public class RestUserController {
 
         Credential credential = SessionUtils.getCredential(req);
 
-        MemberModel mem = accService.findMember(credential.getId());
+        // 管理员可查询任何用户
+        MemberModel mem = null;
+        if (SessionUtils.isAdmin(credential)) {
+            mem = accService.findMember(id);
+        } else {
+            // 其它用户只能查询自己
+            mem = accService.findMember(credential.getId());
+        }
+
+        if (null == mem) {
+            return new ResponseText(ErrorCode.NOT_FOUND);
+        }
+
         mem.setPassword(null);
         mem.setAppToken(null);
         mem.setResetPasswordToken(null);
