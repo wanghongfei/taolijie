@@ -28,11 +28,12 @@ public class RestUserController {
     UserService userService;
 
     /**
+     * @deprecated
      * 根据用户名查询用户
      * @param username
      * @return
      */
-    @RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    //@RequestMapping(value = "/name", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText getByUsername(@RequestParam String username) {
         MemberModel mem = accService.findMember(username, true);
         if (null == mem) {
@@ -51,8 +52,12 @@ public class RestUserController {
      * @return
      */
     @RequestMapping(value = "/{id}", produces = Constants.Produce.JSON)
-    public ResponseText getById(@PathVariable Integer id) {
-        MemberModel mem = accService.findMember(id);
+    public ResponseText getById(@PathVariable Integer id,
+                                HttpServletRequest req) {
+
+        Credential credential = SessionUtils.getCredential(req);
+
+        MemberModel mem = accService.findMember(credential.getId());
         mem.setPassword(null);
         mem.setAppToken(null);
         mem.setResetPasswordToken(null);
