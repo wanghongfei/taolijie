@@ -7,11 +7,15 @@ public enum RequestParamName {
     APP_TOKEN,
     HEADER_APP_TOKEN,
     WECHAT_TOKEN,
+    USERNAME,
     SESSION_ID;
 
     @Override
     public String toString() {
         switch (this) {
+            case USERNAME:
+                return "un";
+
             case APP_TOKEN:
                 return "appToken";
 
