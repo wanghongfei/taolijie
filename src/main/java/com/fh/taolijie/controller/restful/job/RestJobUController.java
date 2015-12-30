@@ -103,8 +103,9 @@ public class RestJobUController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText post(@Valid JobPostModel job,
-                                     BindingResult result,
-                                     HttpServletRequest req) {
+                             BindingResult result,
+                             HttpServletRequest req,
+                             HttpServletResponse resp) {
 
         if (result.hasErrors()) {
             log.warn("[validation failed] {}", result.getAllErrors());
@@ -117,6 +118,11 @@ public class RestJobUController {
 
         // 检查是否封号
         if (false == mem.getValid()) {
+            // 已经封号了
+            // T出登陆
+            SessionUtils.logout(resp);
+            accountService.deleteRedisSession(SessionUtils.getSid(req));
+
             return new ResponseText(ErrorCode.USER_INVALID);
         }
 

@@ -14,8 +14,20 @@ import javax.servlet.http.HttpSession;
 public class SessionUtils {
     private SessionUtils() {}
 
+    /**
+     * 从请求对象中取出Credential
+     * @param req
+     * @return
+     */
     public static Credential getCredential(HttpServletRequest req) {
         return (Credential) req.getAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE);
+    }
+
+    public static String getSid(HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+
+
+        return findSidCookie(cookies).getValue();
     }
 
     /**
