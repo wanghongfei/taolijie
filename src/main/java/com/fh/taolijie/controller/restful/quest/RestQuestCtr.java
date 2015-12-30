@@ -461,6 +461,7 @@ public class RestQuestCtr {
     public ResponseText queryPublishQuests(@RequestParam(required = false, defaultValue = "0") int pn,
                                            @RequestParam(required = false, defaultValue = Constants.PAGE_CAP) int ps,
                                            @RequestParam Integer status, // 根据状态筛选
+                                           @RequestParam(required = false) Integer memId, // 可查询任务用户的发布, 只有管理员可用
                                            HttpServletRequest req) {
 
         // 验证status参数
@@ -472,13 +473,19 @@ public class RestQuestCtr {
         Credential credential = SessionUtils.getCredential(req);
 
         pn = PageUtils.getFirstResult(pn, ps);
-        //ListResult<QuestModel> lr = questService.findByMember(credential.getId(), pn, ps);
         QuestModel cmd = new QuestModel(pn, ps);
         cmd.setMemberId(credential.getId());
+
         if (EmpQuestStatus.ENDED == empStatus) {
             cmd.setEnded(true);
         } else {
             cmd.setEmpStatus(status);
+        }
+
+        // 如果是管理员
+        if (SessionUtils.isAdmin(credential)) {
+            // 使用memId参数查询
+            cmd.setMemberId(memId);
         }
 
         ListResult<QuestModel> lr = questService.findBy(cmd);
