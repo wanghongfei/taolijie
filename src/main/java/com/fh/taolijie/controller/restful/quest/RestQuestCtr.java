@@ -89,6 +89,8 @@ public class RestQuestCtr {
                                      // coupon信息
                                      @RequestParam(required = false) String couponTitle,
                                      @RequestParam(required = false) String couponDesp,
+                                     @RequestParam(required = false) String storeName,
+                                     @RequestParam(required = false) String storeAddr,
                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date expiredTime,
                                      @RequestParam(required = false) String logo,
                                      @RequestParam(required = false) Integer couponAmt,
@@ -180,6 +182,8 @@ public class RestQuestCtr {
             couponModel.setLogoPath(logo);
             couponModel.setExpiredTime(expiredTime);
             couponModel.setAmt(couponAmt);
+            couponModel.setStoreName(storeName);
+            couponModel.setStoreAddr(storeAddr);
 
             questService.publishQuest(accId, model, orderId, couponModel, save);
         } else {
