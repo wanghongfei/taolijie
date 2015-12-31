@@ -18,6 +18,10 @@ public class CouponModel extends Pageable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date acquireTime;
 
+    private String storeName;
+
+    private String storeAddr;
+
     private Integer empId;
 
     private Integer memId;
@@ -339,6 +343,22 @@ public class CouponModel extends Pageable {
      */
     public Integer getStatus() {
         return status;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getStoreAddr() {
+        return storeAddr;
+    }
+
+    public void setStoreAddr(String storeAddr) {
+        this.storeAddr = storeAddr;
     }
 
     /**
