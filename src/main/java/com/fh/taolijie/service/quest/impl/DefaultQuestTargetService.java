@@ -59,6 +59,11 @@ public class DefaultQuestTargetService implements QuestTargetService {
 
         // 查询学生的认证信息
         StuCertiModel certi = stuService.findDoneByMember(memId);
+        if (null == certi) {
+            // 未通过学生认证
+            log.error("lack student verification");
+            return false;
+        }
 
         Integer questId = quest.getId();
 

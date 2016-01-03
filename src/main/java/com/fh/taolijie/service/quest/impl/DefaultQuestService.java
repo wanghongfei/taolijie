@@ -1,9 +1,6 @@
 package com.fh.taolijie.service.quest.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.fh.taolijie.cache.message.model.MsgProtocol;
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.constant.MsgType;
 import com.fh.taolijie.constant.ScheduleAddr;
 import com.fh.taolijie.constant.ScheduleChannel;
 import com.fh.taolijie.constant.acc.AccFlow;
@@ -11,14 +8,10 @@ import com.fh.taolijie.constant.acc.OrderStatus;
 import com.fh.taolijie.constant.acc.OrderType;
 import com.fh.taolijie.constant.quest.AssignStatus;
 import com.fh.taolijie.constant.quest.EmpQuestStatus;
-import com.fh.taolijie.constant.quest.RequestStatus;
-import com.fh.taolijie.controller.restful.acc.RestCertiAdminCtr;
-import com.fh.taolijie.controller.restful.schedule.RestScheduleCtr;
 import com.fh.taolijie.dao.mapper.*;
 import com.fh.taolijie.domain.*;
 import com.fh.taolijie.domain.acc.CashAccModel;
 import com.fh.taolijie.domain.acc.MemberModel;
-import com.fh.taolijie.domain.order.PayOrderModel;
 import com.fh.taolijie.domain.quest.*;
 import com.fh.taolijie.exception.checked.FinalStatusException;
 import com.fh.taolijie.exception.checked.GeneralCheckedException;
@@ -33,7 +26,6 @@ import com.fh.taolijie.service.acc.OrderService;
 import com.fh.taolijie.service.quest.CouponService;
 import com.fh.taolijie.service.quest.QuestService;
 import com.fh.taolijie.service.quest.QuestTargetService;
-import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.ScheduleUtils;
 import com.fh.taolijie.utils.TimeUtil;
@@ -42,8 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -92,8 +82,6 @@ public class DefaultQuestService implements QuestService {
     @Autowired
     private CouponService couponService;
 
-    @Autowired
-    private JedisPool jedisPool;
 
     @Autowired
     private OrderService orderService;
