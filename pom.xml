@@ -22,6 +22,14 @@
         </developer>
     </developers>
 
+    <repositories>
+        <repository>
+            <id>taolijie</id>
+            <name>Taolijie Repository</name>
+            <url>http://182.92.153.221:8081/nexus/content/groups/taolijie/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <java-version>1.8</java-version>
         <java-mail-version>1.4.7</java-mail-version>
@@ -31,7 +39,7 @@
 
 
         <junit-version>4.12</junit-version>
-        <web-security-version>2.2.0.SNAPSHOT</web-security-version>
+        <web-security-version>2.2.0.RELEASE</web-security-version>
 
         <el-api-version>3.0.0</el-api-version>
         <el-impl-version>2.2</el-impl-version>
