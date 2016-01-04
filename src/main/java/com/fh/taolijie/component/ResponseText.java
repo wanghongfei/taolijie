@@ -1,5 +1,6 @@
 package com.fh.taolijie.component;
 
+import com.alibaba.fastjson.JSON;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.utils.Constants;
 
@@ -65,6 +66,14 @@ public class ResponseText {
         this.isOk = false;
         this.message = errorCode.toString();
         this.code = errorCode.value();
+    }
+
+    /**
+     * 将对象转换为JSON字符串
+     * @return
+     */
+    public String toJson() {
+        return JSON.toJSONString(this);
     }
 
     public Object getData() {
