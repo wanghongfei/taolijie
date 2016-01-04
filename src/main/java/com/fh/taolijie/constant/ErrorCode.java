@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     SUCCESS(0, "success"),
     FAILED(-1, "failed"),
+    INTERNAL_ERROR(-3, "internal server error"),
 
     TOO_FREQUENT(1, "too frequent"),
     BAD_USERNAME(2, "bad username"),

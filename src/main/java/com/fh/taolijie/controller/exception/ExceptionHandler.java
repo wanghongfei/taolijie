@@ -5,6 +5,7 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.*;
+import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
 import org.springframework.aop.interceptor.PerformanceMonitorInterceptor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,18 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 
             // 置HTTP状态码为500
             resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+            // 如果是掊调用报错
+            if (isApiRequest(req)) {
+                // 返回JSON信息,而不是HTTP页面
+                ResponseText rt = new ResponseText(ErrorCode.INTERNAL_ERROR);
+                String json = JSON.toJSONString(rt);
+                req.setAttribute("json", json);
+
+                return new ModelAndView("rest-page");
+            }
+
+
             return new ModelAndView("pc/500");
         }
 
@@ -63,6 +76,12 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         // 将错误信息写入日志
         LogUtils.getErrorLogger().error(trace);
 
+    }
+
+    private boolean isApiRequest(HttpServletRequest req) {
+        String uri = req.getRequestURI();
+
+        return uri.startsWith(Constants.URL_API);
     }
 
 }

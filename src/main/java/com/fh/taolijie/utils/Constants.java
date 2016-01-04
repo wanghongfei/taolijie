@@ -14,6 +14,8 @@ public class Constants {
     public static final String CLIENT_MOBILE = "1";
     public static final String CLIENT_PC = "0";
 
+    public static final String URL_API = "/api";
+
     /**
      * 缓存过期时间: 30min
      */
