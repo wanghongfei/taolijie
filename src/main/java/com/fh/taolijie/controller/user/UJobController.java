@@ -3,6 +3,7 @@ package com.fh.taolijie.controller.user;
 import cn.fh.security.credential.Credential;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
+import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.constant.PostType;
 import com.fh.taolijie.domain.*;
@@ -176,13 +177,13 @@ public class UJobController {
      * 发布兼职信息 post ajax
      *
      * @param job
-     * @param session
      * @return
      */
     @RequestMapping(value = "/post", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public @ResponseBody String post(@Valid JobPostModel job,
-                BindingResult result,
-                HttpServletRequest req) {
+                                     BindingResult result,
+                                     HttpServletRequest req,
+                                     HttpServletResponse resp) {
 
         if (result.hasErrors()) {
             JsonWrapper jw = new JsonWrapper(false, result.getAllErrors());
@@ -193,6 +194,15 @@ public class UJobController {
         String username = credential.getUsername();
         MemberModel mem = accountService.findMember(username, false);
 
+        // 检查是否封号
+        if (false == mem.getValid()) {
+            // 已经封号了
+            // T出登陆
+            SessionUtils.logout(resp);
+            accountService.deleteRedisSession(SessionUtils.getSid(req));
+
+            return new ResponseText(ErrorCode.USER_INVALID).toJson();
+        }
 
         // 检查发送时间间隔
         if (false == icService.checkInterval(mem.getLastJobDate(), 1, TimeUnit.MINUTES)) {
