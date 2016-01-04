@@ -126,6 +126,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
                 HttpServletResponse resp = (HttpServletResponse) servletResponse;
                 String respStr = JSON.toJSONString(new ResponseText(ErrorCode.NOT_LOGGED_IN));
                 // 返回错误JSON
+                resp.setContentType(Constants.Produce.JSON);
                 resp.getOutputStream().write(respStr.getBytes());
                 resp.getOutputStream().flush();
 

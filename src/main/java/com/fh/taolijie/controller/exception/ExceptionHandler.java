@@ -38,6 +38,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
                 ResponseText rt = new ResponseText(ErrorCode.INTERNAL_ERROR);
                 String json = JSON.toJSONString(rt);
                 req.setAttribute("json", json);
+                resp.setContentType(Constants.Produce.JSON);
 
                 return new ModelAndView("rest-page");
             }
@@ -55,6 +56,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
             ResponseText rt = new ResponseText(gex.getCode());
             String json = JSON.toJSONString(rt);
             req.setAttribute("json", json);
+            resp.setContentType(Constants.Produce.JSON);
 
             return new ModelAndView("rest-page");
         }
