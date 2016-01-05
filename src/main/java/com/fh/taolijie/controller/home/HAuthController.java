@@ -103,9 +103,7 @@ public class HAuthController {
         /*获取用户信息和用户权限*/
 
         MemberModel mem = accountService.findMember(loginDto.getUsername(), true);
-        RoleModel role = mem.getRoleList().iterator().next();
-        String sid = RandomStringUtils.randomAlphabetic(30);
-        accountService.createRedisSession(mem, sid);
+        String sid = accountService.createRedisSession(mem);
 
 /*        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
@@ -194,8 +192,7 @@ public class HAuthController {
         }
 
 
-        String sid = RandomStringUtils.randomAlphabetic(30);
-        accountService.createRedisSession(mem, sid);
+        String sid = accountService.createRedisSession(mem);
 
 
         Cookie nameCookie = new Cookie("un", mem.getUsername());

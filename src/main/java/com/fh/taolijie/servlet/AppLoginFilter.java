@@ -101,26 +101,20 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         // 是否是wechat端登陆
         String wechat = req.getParameter(RequestParamName.WECHAT_TOKEN.toString());
         if (null != appToken || null != wechat) {
-            if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("token found:{}", appToken == null ? wechat : appToken);
-            }
+            infoLogger.debug("token found:{}", appToken == null ? wechat : appToken);
 
-            if (null == accountService) {
-                accountService = retrieveService("defaultAccountService");
-            }
+            AccountService accService = retrieveService();
 
             // 根据token查询用户
             MemberModel mem = null;
             if (null != appToken) {
-                mem = accountService.selectByAppToken(appToken);
+                mem = accService.selectByAppToken(appToken);
             } else if (null != wechat) {
-                mem = accountService.selectByWechatToken(wechat);
+                mem = accService.selectByWechatToken(wechat);
             }
 
             if (null == mem) {
-                if (infoLogger.isDebugEnabled()) {
-                    infoLogger.debug("invalid appToken:{}", appToken);
-                }
+                infoLogger.debug("invalid appToken:{}", appToken);
 
                 // 没查到说明用户已经退出了登陆
                 HttpServletResponse resp = (HttpServletResponse) servletResponse;
@@ -142,9 +136,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
             req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);
 
-            if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("appToken[{}] login succeeded for user:{}", appToken, mem.getUsername());
-            }
+            infoLogger.debug("appToken[{}] login succeeded for user:{}", appToken, mem.getUsername());
         }
 
 
@@ -177,16 +169,14 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // cookie和session中都没有
         if (null == sid) {
-            if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("sid not found");
-            }
+            infoLogger.debug("sid not found");
 
             return false;
         }
 
 
         // 根据sid向redis中查询用户信息
-        String key = RedisKey.SESSION.toString() + sid;
+        String key = retrieveService().genRedisKey4Session(sid);
 
         JedisPool pool = retrieveRedis("jedisPool");
         Jedis jedis = JedisUtils.getClient(pool);
@@ -195,9 +185,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
         // 没查到表示已经过期或者未登陆
         if (null == map || map.isEmpty()) {
-            if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("trying to log with sid failed: no session found for key:{}", key);
-            }
+            infoLogger.debug("trying to log with sid failed: no session found for key:{}", key);
             return false;
         }
 
@@ -234,9 +222,9 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         return null;
     }
 
-    private AccountService retrieveService(String beanName) {
+    private AccountService retrieveService() {
         if (null == accountService) {
-            accountService = (AccountService) applicationContext.getBean(beanName);
+            accountService = (AccountService) applicationContext.getBean("defaultAccountService");
         }
 
         return accountService;

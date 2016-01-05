@@ -17,6 +17,16 @@ public class Constants {
     public static final String URL_API = "/api";
 
     /**
+     * sid长度
+     */
+    public static final int SID_LENGTH = 22;
+
+    /**
+     * 保存session的redis key日期前缀的格式
+     */
+    public static final String DATE_FORMAT_FOR_SESSION = "yyyyMMdd";
+
+    /**
      * 缓存过期时间: 30min
      */
     public static final long HASH_EXPIRE_TIME = TimeUnit.MINUTES.toSeconds(30);
