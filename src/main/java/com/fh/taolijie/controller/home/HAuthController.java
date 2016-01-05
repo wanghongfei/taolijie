@@ -21,6 +21,7 @@ import com.fh.taolijie.exception.checked.code.SMSIntervalException;
 import com.fh.taolijie.exception.checked.code.SMSVendorException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.impl.CodeService;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -51,7 +52,10 @@ public class HAuthController {
     private static Logger logger = LoggerFactory.getLogger(HAuthController.class);
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
+
+    @Autowired
+    private SessionServ sessionServ;
 
     @Autowired
     private CodeService codeService;
@@ -103,7 +107,9 @@ public class HAuthController {
         /*获取用户信息和用户权限*/
 
         MemberModel mem = accountService.findMember(loginDto.getUsername(), true);
-        String sid = accountService.createRedisSession(mem);
+        //String sid = accountService.createRedisSession(mem);
+        String sid = sessionServ.createSession(mem);
+
 
 /*        Credential credential = new TaolijieCredential(mem.getId(), mem.getUsername());
         credential.addRole(role.getRolename());
@@ -192,7 +198,8 @@ public class HAuthController {
         }
 
 
-        String sid = accountService.createRedisSession(mem);
+        //String sid = accountService.createRedisSession(mem);
+        String sid = sessionServ.createSession(mem);
 
 
         Cookie nameCookie = new Cookie("un", mem.getUsername());
@@ -239,7 +246,8 @@ public class HAuthController {
         // 删除Redis中的session
         Credential credential = SessionUtils.getCredential(req);
         String sid = SessionUtils.getFromCookie(req, RequestParamName.SESSION_ID.toString());
-        accountService.deleteRedisSession(sid);
+        //accountService.deleteRedisSession(sid);
+        sessionServ.deleteSession(sid);
 
         // 判断是否是app
         if (null != m && m.equals(Constants.CLIENT_MOBILE)) {

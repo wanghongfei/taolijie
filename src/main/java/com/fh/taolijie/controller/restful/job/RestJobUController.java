@@ -9,6 +9,7 @@ import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.exception.checked.JobNotFoundException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
@@ -43,6 +44,9 @@ public class RestJobUController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    private SessionServ sessionServ;
 
     @Autowired
     private IntervalCheckService icService;
@@ -121,7 +125,7 @@ public class RestJobUController {
             // 已经封号了
             // T出登陆
             SessionUtils.logout(resp);
-            accountService.deleteRedisSession(SessionUtils.getSid(req));
+            sessionServ.deleteSession(SessionUtils.getSid(req));
 
             return new ResponseText(ErrorCode.USER_INVALID);
         }

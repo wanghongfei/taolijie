@@ -219,27 +219,7 @@ public interface AccountService {
      */
     void sendResetPasswordEmail(String username);
 
-    /**
-     * 在Redis中保存session信息
-     * @param mem
-     * @return sid字符串
-     */
-    String createRedisSession(MemberModel mem);
 
-    /**
-     * 生成sid
-     * @return
-     */
-    String genSid();
-
-    /**
-     * 生成sid对应于redis中的key值
-     * @param sid
-     * @return
-     */
-    String genRedisKey4Session(String sid);
-
-    void deleteRedisSession(String sid);
 
     /**
      * 根据手机验证码修改手机号

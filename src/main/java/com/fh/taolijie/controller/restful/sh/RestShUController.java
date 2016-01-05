@@ -8,6 +8,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.sh.SHPostModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.UserService;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.sh.ShPostService;
 import com.fh.taolijie.utils.Constants;
@@ -43,6 +44,9 @@ public class RestShUController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private SessionServ sessionServ;
 
     @Autowired
     private ShPostService shPostService;
@@ -145,7 +149,8 @@ public class RestShUController {
             // 已经封号了
             // T出登陆
             SessionUtils.logout(resp);
-            accountService.deleteRedisSession(SessionUtils.getSid(req));
+            sessionServ.deleteSession(SessionUtils.getSid(req));
+
 
             return new ResponseText(ErrorCode.USER_INVALID);
         }

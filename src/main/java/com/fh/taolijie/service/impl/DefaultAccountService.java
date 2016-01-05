@@ -399,49 +399,6 @@ public class DefaultAccountService implements AccountService, AuthLogic {
         mail.sendMailAsync("token:\n" + token, Constants.MailType.RESET_PASSWORD, mem.getEmail());
     }
 
-    @Override
-    public String createRedisSession(MemberModel mem) {
-        String sid = genSid();
-        String key = RedisKey.SESSION.toString() + sid;
-
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-        Pipeline pip = jedis.pipelined();
-        pip.hset(key, "id", mem.getId().toString());
-        pip.hset(key, "username", mem.getUsername());
-        pip.hset(key, "role", mem.getRoleList().get(0).getRolename());
-        pip.expire(key, (int)TimeUnit.DAYS.toSeconds(30));
-        pip.sync();
-
-        JedisUtils.returnJedis(jedisPool, jedis);
-
-        return sid;
-    }
-
-    @Override
-    public String genRedisKey4Session(String sid) {
-        return StringUtils.concat(37, RedisKey.SESSION.toString(), sid);
-    }
-
-    @Override
-    public String genSid() {
-        String random = RandomStringUtils.randomAlphabetic(22);
-
-        return StringUtils.concat(
-                30,
-                TimeUtil.date2String(new Date(), Constants.DATE_FORMAT_FOR_SESSION),
-                random
-        );
-    }
-
-    @Override
-    public void deleteRedisSession(String sid) {
-        String key = RedisKey.SESSION.toString() + sid;
-
-        Jedis jedis = JedisUtils.getClient(jedisPool);
-        jedis.del(key);
-        JedisUtils.returnJedis(jedisPool, jedis);
-
-    }
 
     @Override
     public Map<String, Object> loginByToken(String s) {

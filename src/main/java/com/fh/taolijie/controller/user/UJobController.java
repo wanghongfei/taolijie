@@ -11,6 +11,7 @@ import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.domain.job.JobPostCategoryModel;
 import com.fh.taolijie.domain.job.JobPostModel;
 import com.fh.taolijie.service.*;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.service.impl.IntervalCheckService;
 import com.fh.taolijie.service.job.JobPostCateService;
 import com.fh.taolijie.service.job.JobPostService;
@@ -43,6 +44,9 @@ public class UJobController {
     JobPostService jobPostService;
     @Autowired
     JobPostCateService jobPostCateService;
+
+    @Autowired
+    private SessionServ sessionServ;
     @Autowired
     AccountService accountService;
 
@@ -61,7 +65,6 @@ public class UJobController {
     /**
      * 我的发布 GET
      *
-     * @param session 用户的角色
      * @return
      */
     @RequestMapping(value = "mypost", method = RequestMethod.GET)
@@ -199,7 +202,7 @@ public class UJobController {
             // 已经封号了
             // T出登陆
             SessionUtils.logout(resp);
-            accountService.deleteRedisSession(SessionUtils.getSid(req));
+            sessionServ.deleteSession(SessionUtils.getSid(req));
 
             return new ResponseText(ErrorCode.USER_INVALID).toJson();
         }
@@ -337,7 +340,6 @@ public class UJobController {
     /**
      * 赞
      * @param jobId
-     * @param session
      * @return
      */
     @RequestMapping(value = "/{id}/like", method = RequestMethod.POST, produces = Constants.Produce.JSON)
@@ -469,7 +471,6 @@ public class UJobController {
      * 更新一下posttime
      *
      * @param id      兼职的id
-     * @param session 用户的信息
      */
     @RequestMapping(value = "refresh/{id}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public

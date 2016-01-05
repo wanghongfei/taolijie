@@ -10,6 +10,7 @@ import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.LogUtils;
@@ -45,6 +46,8 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     private static AccountService accountService;
+
+    private static SessionServ sessionServ;
 
     private static JedisPool jedisPool;
 
@@ -103,7 +106,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         if (null != appToken || null != wechat) {
             infoLogger.debug("token found:{}", appToken == null ? wechat : appToken);
 
-            AccountService accService = retrieveService();
+            AccountService accService = retrieveAccService();
 
             // 根据token查询用户
             MemberModel mem = null;
@@ -176,7 +179,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
 
 
         // 根据sid向redis中查询用户信息
-        String key = retrieveService().genRedisKey4Session(sid);
+        String key = retrieveSessionService().genRedisKey4Session(sid);
 
         JedisPool pool = retrieveRedis("jedisPool");
         Jedis jedis = JedisUtils.getClient(pool);
@@ -222,12 +225,20 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         return null;
     }
 
-    private AccountService retrieveService() {
+    private AccountService retrieveAccService() {
         if (null == accountService) {
             accountService = (AccountService) applicationContext.getBean("defaultAccountService");
         }
 
         return accountService;
+    }
+
+    private SessionServ retrieveSessionService() {
+        if (null == sessionServ) {
+            sessionServ = (SessionServ) applicationContext.getBean("sessionServ");
+        }
+
+        return sessionServ;
     }
 
     private JedisPool retrieveRedis(String beanName) {
