@@ -9,6 +9,7 @@ import com.fh.taolijie.service.prop.IdAware;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -21,9 +22,11 @@ public class QuestModel extends Pageable implements IdAware {
     @NotNull
     private String title;
 
+    @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
+    @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date flushTime;
 
@@ -40,18 +43,22 @@ public class QuestModel extends Pageable implements IdAware {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
+    @Null
     private Integer limitTime;
 
     @NotNull
     private Integer totalAmt;
 
+    @Null
     private Integer leftAmt;
 
     @NotNull
     private BigDecimal award;
 
+    @Null
     private Integer memberId;
 
+    @Null
     private BigDecimal finalAward;
 
     @NotNull
@@ -72,6 +79,7 @@ public class QuestModel extends Pageable implements IdAware {
 
     private Boolean offline;
 
+    @Null
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date tagExpireTime;
 
@@ -88,6 +96,7 @@ public class QuestModel extends Pageable implements IdAware {
     /**
      * 商家在我的发布中看到的状态
      */
+    @Null
     private Integer empStatus;
 
     // ********* 查询使用 ***********
