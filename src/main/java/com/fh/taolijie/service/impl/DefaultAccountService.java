@@ -419,7 +419,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     public String genRedisKey4Session(String sid) {
-        return StringUtils.concat(RedisKey.SESSION.toString(), sid);
+        return StringUtils.concat(37, RedisKey.SESSION.toString(), sid);
     }
 
     @Override
@@ -427,6 +427,7 @@ public class DefaultAccountService implements AccountService, AuthLogic {
         String random = RandomStringUtils.randomAlphabetic(22);
 
         return StringUtils.concat(
+                30,
                 TimeUtil.date2String(new Date(), Constants.DATE_FORMAT_FOR_SESSION),
                 random
         );
