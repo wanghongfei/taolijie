@@ -91,5 +91,8 @@
         <mapper resource="mapper/OffQuestModelMapper.xml" />
         <mapper resource="mapper/OffCateModelMapper.xml" />
 
+
+        <mapper resource="mapper/MemSessionModelMapper.xml" />
+
     </mappers>
 </configuration>
