@@ -52,4 +52,7 @@ public interface MemSessionModelMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(MemSessionModel record);
+
+
+    int deleteBySid(String sid);
 }

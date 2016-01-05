@@ -122,4 +122,11 @@
         flush_time = #{flushTime,jdbcType=TIMESTAMP}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <delete id="deleteBySid">
+        DELETE FROM
+            mem_session
+        WHERE
+            sid = #{sid}
+    </delete>
 </mapper>
