@@ -23,6 +23,7 @@ import com.fh.taolijie.service.acc.SeQuestionService;
 import com.fh.taolijie.service.acc.impl.CodeService;
 import com.fh.taolijie.service.quest.QuestionService;
 import com.fh.taolijie.utils.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
+import sun.jvmstat.perfdata.monitor.CountedTimerTaskUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -337,7 +339,8 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     }
 
     @Override
-    public void createRedisSession(MemberModel mem, String sid) {
+    public String createRedisSession(MemberModel mem) {
+        String sid = genSid();
         String key = RedisKey.SESSION.toString() + sid;
 
         Jedis jedis = JedisUtils.getClient(jedisPool);
@@ -349,6 +352,23 @@ public class DefaultAccountService implements AccountService, AuthLogic {
         pip.sync();
 
         JedisUtils.returnJedis(jedisPool, jedis);
+
+        return sid;
+    }
+
+    @Override
+    public String genRedisKey4Session(String sid) {
+        return StringUtils.concat(RedisKey.SESSION.toString(), sid);
+    }
+
+    @Override
+    public String genSid() {
+        String random = RandomStringUtils.randomAlphabetic(22);
+
+        return StringUtils.concat(
+                TimeUtil.date2String(new Date(), Constants.DATE_FORMAT_FOR_SESSION),
+                random
+        );
     }
 
     @Override
