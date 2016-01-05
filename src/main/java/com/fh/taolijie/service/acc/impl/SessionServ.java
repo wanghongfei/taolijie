@@ -9,13 +9,17 @@ import com.fh.taolijie.utils.JedisUtils;
 import com.fh.taolijie.utils.StringUtils;
 import com.fh.taolijie.utils.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SessionServ {
+    private static Logger log = LoggerFactory.getLogger(SessionServ.class);
+
     @Autowired
     private JedisPool jedisPool;
 
@@ -77,6 +83,84 @@ public class SessionServ {
 
         // 删除数据库中的session记录
         sessionMapper.deleteBySid(sid);
+    }
+
+    /**
+     * 删除指定用户的所有session
+     * @param memId
+     */
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public void deleteSession(Integer memId) {
+        // 查询数据库中的session记录
+        List<MemSessionModel> sList = getSessionListByUser(memId, false);
+
+        // 清除对应redis中的session信息
+        JedisUtils.performOnce( jedisPool, jedis -> {
+            Pipeline pipeline = jedis.pipelined();
+            sList.forEach( session -> {
+                String key = genRedisKey4Session(session.getSid());
+                pipeline.del(key);
+            });
+            pipeline.sync();
+
+            return null;
+        });
+
+
+        // 删除数据库中的session记录
+        sessionMapper.deleteByMember(memId);
+    }
+
+    /**
+     * 得到指定用户所有session记录
+     * @param memId
+     * @return
+     */
+    @Transactional(readOnly = false, rollbackFor = Throwable.class)
+    public List<MemSessionModel> getSessionListByUser(Integer memId, boolean checkValid) {
+        MemSessionModel cmd = new MemSessionModel();
+        cmd.setMemId(memId);
+        List<MemSessionModel> sList = sessionMapper.findBy(cmd);
+
+
+        if (checkValid) {
+            // 除掉已经过期的sid
+            // 查一次redis, 把所有不存在的sid一次性返回
+            List<Object> surviveStatus = JedisUtils.performOnce(jedisPool, jedis -> {
+                Pipeline pipeline = jedis.pipelined();
+
+                sList.forEach(session -> {
+                    pipeline.exists(session.getSid());
+                });
+
+                return pipeline.exec().get();
+            });
+
+            log.debug("sid survival status = {}", surviveStatus);
+
+
+            // 得到失效的sid List
+            int LEN = sList.size();
+            if (LEN > 0) {
+                List<String> invalidSidList = new ArrayList<>(LEN / 2);
+                for (int ix = 0; ix < LEN; ix++) {
+                    Boolean exist = (Boolean) surviveStatus.get(ix);
+                    if (exist.equals(Boolean.FALSE)) {
+                        invalidSidList.add(sList.get(ix).getSid());
+                    }
+                }
+
+                log.debug("invalid sid list = {}", invalidSidList);
+
+                // 从数据库中删除失效的sid
+                sessionMapper.deleteBySidInBatch(invalidSidList);
+
+                return sessionMapper.findBy(cmd);
+            }
+
+        }
+
+        return sList;
     }
 
     /**

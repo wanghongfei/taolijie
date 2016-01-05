@@ -11,10 +11,7 @@ import com.fh.taolijie.constant.RequestParamName;
 import com.fh.taolijie.domain.acc.MemberModel;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.impl.SessionServ;
-import com.fh.taolijie.utils.Constants;
-import com.fh.taolijie.utils.JedisUtils;
-import com.fh.taolijie.utils.LogUtils;
-import com.fh.taolijie.utils.StringUtils;
+import com.fh.taolijie.utils.*;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,11 +80,10 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         // *************** DEBUG *******************
 
         // 先尝试通过sid登陆
-        if (loginBySid(req)) {
-            if (infoLogger.isDebugEnabled()) {
-                infoLogger.debug("trying to log with sid succeeded");
-            }
+        if (loginBySid(req, response)) {
+            infoLogger.debug("trying to log with sid succeeded");
             filterChain.doFilter(servletRequest, servletResponse);
+
             return;
 
         }
@@ -151,7 +147,7 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
      * @param req
      * @return
      */
-    private boolean loginBySid(HttpServletRequest req) {
+    private boolean loginBySid(HttpServletRequest req, HttpServletResponse resp) {
         if (infoLogger.isDebugEnabled()) {
             infoLogger.debug("trying to log with sid...");
         }
@@ -189,6 +185,8 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         // 没查到表示已经过期或者未登陆
         if (null == map || map.isEmpty()) {
             infoLogger.debug("trying to log with sid failed: no session found for key:{}", key);
+            SessionUtils.logout(resp);
+
             return false;
         }
 

@@ -3,7 +3,6 @@ package com.fh.taolijie.service.impl;
 import cn.fh.security.credential.AuthLogic;
 import cn.fh.security.utils.CredentialUtils;
 import com.fh.taolijie.component.ListResult;
-import com.fh.taolijie.constant.RedisKey;
 import com.fh.taolijie.constant.RegType;
 import com.fh.taolijie.constant.certi.CertiStatus;
 import com.fh.taolijie.dao.mapper.MemberModelMapper;
@@ -21,6 +20,7 @@ import com.fh.taolijie.exception.checked.code.SMSCodeMismatchException;
 import com.fh.taolijie.service.AccountService;
 import com.fh.taolijie.service.acc.SeQuestionService;
 import com.fh.taolijie.service.acc.impl.CodeService;
+import com.fh.taolijie.service.acc.impl.SessionServ;
 import com.fh.taolijie.service.certi.EmpCertiService;
 import com.fh.taolijie.service.certi.IdCertiService;
 import com.fh.taolijie.service.certi.StuCertiService;
@@ -31,9 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Pipeline;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -56,6 +54,9 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Autowired
     RoleModelMapper roleMapper;
+
+    @Autowired
+    private SessionServ sessionServ;
 
     @Autowired
     private JedisPool jedisPool;
@@ -281,6 +282,10 @@ public class DefaultAccountService implements AccountService, AuthLogic {
     @Override
     @Transactional(readOnly = false, rollbackFor = Throwable.class)
     public void invalidAccount(Integer memId) {
+        // 删除mem_session表中用户对应的所有session
+        sessionServ.deleteSession(memId);
+
+        // 标记用户为封号
         memMapper.validMemberById(memId, false);
     }
 

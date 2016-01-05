@@ -143,7 +143,7 @@ public interface AccountService {
     public boolean addRole(RoleModel model);
 
     /**
-     * 封号
+     * 封号, 同时清除session
      * @param memId
      */
     void invalidAccount(Integer memId);

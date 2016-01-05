@@ -129,4 +129,41 @@
         WHERE
             sid = #{sid}
     </delete>
+
+    <delete id="deleteByMember">
+        DELETE FROM
+            mem_session
+        WHERE
+            mem_id = #{memId}
+    </delete>
+
+    <delete id="deleteBySidInBatch">
+        DELETE FROM
+            mem_session
+        WHERE
+            sid IN <foreach collection="list" open="(" close=")" separator="," item="_sid">#{_sid}</foreach>
+    </delete>
+
+    <select id="findBy" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM
+            mem_session
+        <where>
+            <if test="sid != null">
+                sid = #{sid,jdbcType=VARCHAR}
+            </if>
+            <if test="memId != null">
+                AND mem_id = #{memId,jdbcType=INTEGER}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="flushTime != null">
+                AND flush_time = #{flushTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER BY
+            created_time DESC
+    </select>
 </mapper>

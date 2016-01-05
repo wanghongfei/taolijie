@@ -1,7 +1,10 @@
 package com.fh.taolijie.dao.mapper;
 
 import com.fh.taolijie.domain.MemSessionModel;
+import com.fh.taolijie.service.impl.IntervalCheckService;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface MemSessionModelMapper {
@@ -55,4 +58,10 @@ public interface MemSessionModelMapper {
 
 
     int deleteBySid(String sid);
+
+    int deleteBySidInBatch(List<String> sidList);
+
+    int deleteByMember(Integer memId);
+
+    List<MemSessionModel> findBy(MemSessionModel cmd);
 }
