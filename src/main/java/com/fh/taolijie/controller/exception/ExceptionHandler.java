@@ -7,6 +7,8 @@ import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.*;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.PerformanceMonitorInterceptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -21,9 +23,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class ExceptionHandler implements HandlerExceptionResolver {
+    private static Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
 
     @Override
     public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
+        log.info("got exception: {}", ex.getClass());
+
         // 运行时异常
         // 报500
         if (ex instanceof RuntimeException) {
@@ -57,6 +62,8 @@ public class ExceptionHandler implements HandlerExceptionResolver {
             String json = JSON.toJSONString(rt);
             req.setAttribute("json", json);
             resp.setContentType(Constants.Produce.JSON);
+
+            log.info("return = {}", json);
 
             return new ModelAndView("rest-page");
         }
