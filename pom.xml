@@ -22,6 +22,21 @@
         </developer>
     </developers>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+
+        <repository>
+            <id>taolijie</id>
+            <name>Taolijie Repository</name>
+            <url>http://182.92.153.221:8081/nexus/content/groups/taolijie/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <java-version>1.8</java-version>
         <java-mail-version>1.4.7</java-mail-version>
