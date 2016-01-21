@@ -5,11 +5,13 @@ import com.fh.taolijie.component.ResponseText;
 import com.fh.taolijie.constant.ErrorCode;
 import com.fh.taolijie.exception.checked.*;
 import com.fh.taolijie.exception.checked.acc.*;
+import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.Constants;
 import com.fh.taolijie.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.PerformanceMonitorInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -25,6 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ExceptionHandler implements HandlerExceptionResolver {
     private static Logger log = LoggerFactory.getLogger(ExceptionHandler.class);
 
+    @Autowired
+    private Mail mail;
+
     @Override
     public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
         log.info("got exception: {}", ex.getClass());
@@ -32,12 +37,14 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         // 运行时异常
         // 报500
         if (ex instanceof RuntimeException) {
-            logException(ex);
+            String stackInfo = logException(ex);
+            // 发邮件
+            mail.sendMailAsync(stackInfo, Constants.MailType.ERROR, "wang_hong_fei@outlook.com");
 
             // 置HTTP状态码为500
             resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
-            // 如果是掊调用报错
+            // 如果是接口调用报错
             if (isApiRequest(req)) {
                 // 返回JSON信息,而不是HTTP页面
                 ResponseText rt = new ResponseText(ErrorCode.INTERNAL_ERROR);
@@ -76,7 +83,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 
     }
 
-    private void logException(Exception ex) {
+    private String logException(Exception ex) {
         // 捕获错误信息
         String trace = LogUtils.getStackTrace(ex);
         System.err.println(trace);
@@ -85,6 +92,7 @@ public class ExceptionHandler implements HandlerExceptionResolver {
         // 将错误信息写入日志
         LogUtils.getErrorLogger().error(trace);
 
+        return trace;
     }
 
     private boolean isApiRequest(HttpServletRequest req) {
