@@ -166,6 +166,15 @@ public class DefaultAccountService implements AccountService, AuthLogic {
 
     @Override
     @Transactional(readOnly = true)
+    public ListResult<MemberModel> findBy(MemberModel cmd) {
+        List<MemberModel> list = memMapper.findBy(cmd);
+        long tot = 10L;
+
+        return new ListResult<>(list, tot);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ListResult<MemberModel> searchMember(String name, int pn, int ps) {
         List<MemberModel> list = memMapper.searchMember(name, pn, ps);
         long tot = memMapper.countSearchMember(name);

@@ -23,6 +23,8 @@ public interface MemberModelMapper {
 
     int updateByPrimaryKey(MemberModel record);
 
+    List<MemberModel> findBy(MemberModel example);
+
     MemberModel selectByUsername(String username);
 
     /**

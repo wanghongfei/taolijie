@@ -47,9 +47,6 @@ public class RestUserAdminController {
 
     /**
      * 查询所有用户
-     * @param pageNumber
-     * @param pageSize
-     * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText getList(@RequestParam(defaultValue = "0") int pageNumber,
@@ -59,6 +56,24 @@ public class RestUserAdminController {
 
         ListResult<MemberModel> list = accService.getMemberList(pageNumber, pageSize);
         return new ResponseText(list);
+    }
+
+    /**
+     * 过虑查询用户
+     */
+    @RequestMapping(value = "/filter", method = RequestMethod.POST, produces = Constants.Produce.JSON)
+    public ResponseText filter(@RequestParam(defaultValue = "0") int pn,
+                               @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int ps,
+                               @RequestParam(required = false, value = "un") String username) {
+
+        pn = PageUtils.getFirstResult(pn, ps);
+
+        MemberModel cmd = new MemberModel(pn, ps);
+        cmd.setUsername(username);
+
+        ListResult<MemberModel> lr = accService.findBy(cmd);
+
+        return new ResponseText(lr);
     }
 
     /**

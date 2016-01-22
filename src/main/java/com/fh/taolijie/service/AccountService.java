@@ -64,6 +64,8 @@ public interface AccountService {
      */
     MemberModel findMember(Integer memId);
 
+    ListResult<MemberModel> findBy(MemberModel cmd);
+
     /**
      * 根据用户名模糊查询用户
      * @param name
