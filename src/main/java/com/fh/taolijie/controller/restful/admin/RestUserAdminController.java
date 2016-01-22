@@ -64,12 +64,20 @@ public class RestUserAdminController {
     @RequestMapping(value = "/filter", method = RequestMethod.POST, produces = Constants.Produce.JSON)
     public ResponseText filter(@RequestParam(defaultValue = "0") int pn,
                                @RequestParam(defaultValue = Constants.PAGE_CAPACITY + "") int ps,
-                               @RequestParam(required = false, value = "un") String username) {
+
+                               // 过虑条件
+                               @RequestParam(required = false, value = "un") String username,
+                               @RequestParam(required = false, value = "valid") Integer valid,
+                               @RequestParam(required = false, value = "role") String rolename) {
 
         pn = PageUtils.getFirstResult(pn, ps);
 
         MemberModel cmd = new MemberModel(pn, ps);
         cmd.setUsername(username);
+        if (null != valid) {
+            cmd.setValid(valid == 1);
+        }
+        cmd.setRolename(rolename);
 
         ListResult<MemberModel> lr = accService.findBy(cmd);
 

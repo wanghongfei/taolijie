@@ -24,6 +24,7 @@ public interface MemberModelMapper {
     int updateByPrimaryKey(MemberModel record);
 
     List<MemberModel> findBy(MemberModel example);
+    long countFindBy(MemberModel example);
 
     MemberModel selectByUsername(String username);
 

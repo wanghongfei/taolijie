@@ -96,6 +96,13 @@ public class MemberModel extends Pageable implements Serializable {
 
     private List<RoleModel> roleList;
 
+    // ******* 仅查询使用 **** //
+    /**
+     * 角色名
+     */
+    private String rolename;
+    // ******* 仅查询使用 **** //
+
     public MemberModel(int pn, int ps) {
         super(pn, ps);
     }
@@ -769,6 +776,14 @@ public class MemberModel extends Pageable implements Serializable {
 
     public void setCompanyDesp(String companyDesp) {
         this.companyDesp = companyDesp;
+    }
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
     }
 
     public void setCredits(Integer credits) {

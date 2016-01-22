@@ -676,9 +676,132 @@
             <if test="companyDesp != null" >AND comp_desp = #{companyDesp}</if>
             <if test="companyAddr != null" >AND comp_addr = #{companyAddr}</if>
 
+            <!-- 根据角色类型过虑 -->
+            <if test="rolename != null">
+                AND r.rolename = #{rolename}
+            </if>
+
         </where>
         LIMIT
             #{pageNumber}, #{pageSize}
+    </select>
+
+    <select id="countFindBy" resultType="long">
+        SELECT
+            COUNT(*)
+        FROM
+            member mem
+        <if test="rolename != null">
+            LEFT JOIN
+                role r ON r.rid IN
+                (SELECT role_rid FROM member_role WHERE member_id = mem.id)
+        </if>
+        <where>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null">
+                AND password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null">
+                AND email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="name != null">
+                AND name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender,jdbcType=VARCHAR}
+            </if>
+            <if test="idCerti != null">
+                AND id_certi = #{idCerti}
+            </if>
+            <if test="profilePhotoPath != null">
+                AND profile_photo_path = #{profilePhotoPath,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null">
+                AND phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="qq != null">
+                AND qq = #{qq,jdbcType=VARCHAR}
+            </if>
+            <if test="age != null">
+                AND age = #{age,jdbcType=INTEGER}
+            </if>
+            <if test="companyName != null">
+                AND company_name = #{companyName,jdbcType=VARCHAR}
+            </if>
+            <if test="createdTime != null">
+                AND created_time = #{createdTime}
+            </if>
+            <if test="valid != null">
+                AND valid = #{valid,jdbcType=BIT}
+            </if>
+            <if test="complaint != null">
+                AND complaint = #{complaint,jdbcType=INTEGER}
+            </if>
+            <if test="profilePhotoId != null">
+                AND profile_photo_id = #{profilePhotoId,jdbcType=INTEGER}
+            </if>
+            <if test="autoLoginIdentifier != null">
+                AND auto_login_identifier = #{autoLoginIdentifier,jdbcType=VARCHAR}
+            </if>
+            <if test="lastPostTime != null">
+                AND last_post_time = #{lastPostTime,jdbcType=DATE}
+            </if>
+            <if test="resetPasswordToken != null">
+                AND reset_password_token = #{resetPasswordToken,jdbcType=VARCHAR}
+            </if>
+            <if test="lastTokenDate != null">
+                AND last_token_date = #{lastTokenDate,jdbcType=DATE}
+            </if>
+            <if test="schoolOrganization != null">
+                AND school_organization = #{schoolOrganization,jdbcType=VARCHAR}
+            </if>
+            <if test="credits != null">
+                AND credits = #{credits,jdbcType=INTEGER}
+            </if>
+            <if test="studentId != null">
+                AND student_id = #{studentId,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="blockList != null">
+                AND block_list = #{blockList,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="appliedJobIds != null">
+                AND applied_job_ids = #{appliedJobIds,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="likedJobIds != null">
+                AND liked_job_ids = #{likedJobIds,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="likedShIds != null">
+                AND liked_sh_ids = #{likedShIds,jdbcType=LONGVARCHAR}
+            </if>
+            <if test="readSysNotificationIds != null" >
+                AND read_global_noti_ids = #{readSysNotificationIds}
+            </if>
+
+            <if test="appToken != null" >
+                AND app_token = #{appToken}
+            </if>
+
+            <if test="lastJobDate != null" > AND last_job_date = #{lastJobDate}</if>
+            <if test="lastShDate != null" >AND last_sh_date = #{lastShDate}</if>
+
+            <if test="regType != null" >AND reg_type = #{regType}</if>
+            <if test="wechatToken != null" >AND wechat_token = #{wechatToken}</if>
+
+            <if test="stuCerti != null" >AND stu_certi = #{stuCerti}</if>
+            <if test="empCerti != null" >AND emp_certi = #{empCerti}</if>
+
+            <if test="companyDesp != null" >AND comp_desp = #{companyDesp}</if>
+            <if test="companyAddr != null" >AND comp_addr = #{companyAddr}</if>
+
+            <!-- 根据角色类型过虑 -->
+            <if test="rolename != null">
+                AND r.rolename = #{rolename}
+            </if>
+
+        </where>
+
     </select>
 
     <select id="selectByUsername" resultMap="BaseResultMap">
