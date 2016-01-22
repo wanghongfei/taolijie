@@ -157,14 +157,14 @@ public class Constants {
             String str = null;
             switch (this) {
                 case ERROR:
-                    str = "服务器出错";
+                    str = "500 ERROR";
                     break;
                 case FEEDBACK:
-                    str = "用户反馈";
+                    str = "Feedback";
                     break;
 
                 case RESET_PASSWORD:
-                    str = "密码重置";
+                    str = "Password Reset";
                     break;
 
                 default:
