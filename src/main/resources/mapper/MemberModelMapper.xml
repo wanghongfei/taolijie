@@ -654,10 +654,11 @@
             <include refid="member_column_without_password" />,
             r.*
         FROM
-            member mem,
-            (SELECT role_rid AS role_id FROM member_role) info
+            member mem
         LEFT JOIN
-            role r ON r.rid = info.role_id
+            role r ON r.rid IN
+                (SELECT role_rid FROM member_role WHERE member_id = mem.id)
+
         LIMIT #{pageNumber}, #{pageSize}
     </select>
     <select id="countGetMemberList" resultType="long">
