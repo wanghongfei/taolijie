@@ -38,6 +38,8 @@ public class DefaultPayService implements PayService {
     public static final String ALIPAY_GATEWAY = "https://mapi.alipay.com/gateway.do";
     public static final String ALIPAY_VERIFY_SERV_NAME = "notify_verify";
 
+    public static final String ALIPAY_ORDER_EXPIRE_TIME = "30m";
+
     @Autowired
     private JedisPool jedisPool;
 
@@ -70,6 +72,8 @@ public class DefaultPayService implements PayService {
             sortedMap.put("_input_charset", StringUtils.surroundQuotation(charset));
             sortedMap.put("notify_url", StringUtils.surroundQuotation(url));
             sortedMap.put("seller_id", StringUtils.surroundQuotation(acc));
+            // 支付过期时间
+            sortedMap.put("it_b_pay", StringUtils.surroundQuotation(ALIPAY_ORDER_EXPIRE_TIME));
 
             sortedMap.putAll(map);
 
