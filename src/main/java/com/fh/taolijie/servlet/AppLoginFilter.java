@@ -199,7 +199,8 @@ public class AppLoginFilter implements Filter, ApplicationContextAware {
         req.setAttribute("user", username);
         req.setAttribute("role", role);
 
-        Credential credential = new DefaultCredential(Integer.valueOf(id), username);
+        //Credential credential = new DefaultCredential(Integer.valueOf(id), username);
+        Credential credential = new StatefulCredential(Integer.valueOf(id), username);
         credential.addRole(role);
 
         req.setAttribute(Credential.CREDENTIAL_CONTEXT_ATTRIBUTE, credential);

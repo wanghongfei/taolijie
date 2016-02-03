@@ -12,6 +12,7 @@ import com.fh.taolijie.service.ImageService;
 import com.fh.taolijie.service.impl.Mail;
 import com.fh.taolijie.utils.LogUtils;
 import com.fh.taolijie.utils.SessionUtils;
+import com.fh.taolijie.utils.StatefulCredential;
 import com.fh.taolijie.utils.UploadUtil;
 import com.fh.taolijie.utils.json.JsonWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,11 @@ public class UIndexController {
         }
         MemberModel memberDto = accountService.findMember(credential.getUsername(), false);
         model.addAttribute("user", memberDto);
-//        long notifaicationNum = notificationService.getNotificationAmount(credential.getId(),false);
-//        model.addAttribute("notificationNum",notifaicationNum);
         model.addAttribute("role",credential.getRoleList().iterator().next());
+
+        // for test purpose only
+        //StatefulCredential statefulCredential = (StatefulCredential) credential;
+        //statefulCredential.setParameter("name", "wanghongfei");
 
         return "pc/user/profile";
 

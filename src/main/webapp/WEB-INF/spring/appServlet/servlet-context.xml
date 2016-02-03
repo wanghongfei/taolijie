@@ -104,6 +104,19 @@
             <bean class="com.fh.taolijie.interceptor.CommonInterceptor"></bean>
         </mvc:interceptor>
 
+        <!-- Redis Session同步拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+
+            <mvc:exclude-mapping path="/static/**" />
+            <mvc:exclude-mapping path="/images/**" />
+            <mvc:exclude-mapping path="/scripts/**" />
+            <mvc:exclude-mapping path="/styles/**" />
+            <mvc:exclude-mapping path="/fonts/**" />
+            <mvc:exclude-mapping path="/about/**" />
+
+            <bean class="com.fh.taolijie.interceptor.RedisSessionInterceptor" />
+        </mvc:interceptor>
 
         <!-- 访问统计拦截器， 依赖于redis -->
         <mvc:interceptor>
