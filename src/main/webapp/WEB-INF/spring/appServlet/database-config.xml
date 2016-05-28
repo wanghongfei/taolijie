@@ -27,7 +27,6 @@
 
     <!-- 注册动态数据源 -->
     <bean id="dynamicDataSource" class="com.fh.taolijie.component.ds.DynamicDataSource">
-        <property name="pooledDataSource" ref="dataSource" />
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry value-ref="dataSource" key="r1"></entry>
