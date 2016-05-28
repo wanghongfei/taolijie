@@ -27,6 +27,8 @@
 
     <!-- 注册动态数据源 -->
     <bean id="dynamicDataSource" class="com.fh.taolijie.component.ds.DynamicDataSource">
+        <property name="dataSourceEntry" ref="dataSourceEntry" />
+
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry value-ref="dataSource" key="r1"></entry>
@@ -48,7 +50,7 @@
     <!-- myBatis配置 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="configLocation" value="classpath:mybatis-config.xml" />
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dynamicDataSource" />
 
 <!--        <property name="mapperLocations"
                   value="classpath:mapper/*.xml" />-->

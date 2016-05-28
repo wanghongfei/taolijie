@@ -8,7 +8,6 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * Created by whf on 5/28/16.
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
-    @Autowired
     private DataSourceEntry dataSourceEntry;
 
 
@@ -18,4 +17,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return dataSourceEntry.get();
     }
 
+    public void setDataSourceEntry(DataSourceEntry dataSourceEntry) {
+        this.dataSourceEntry = dataSourceEntry;
+    }
 }
