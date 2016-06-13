@@ -48,8 +48,9 @@ $('#login-form').submit(function(e) {
     var form = $form[0];
     var formdata = $form.serialize();
     $.tlj.post('/login', formdata, function(data) {
-        if(data.result == false) {
-            $.tlj.notify(errorCode[data.message]);
+        if(data.ok == false) {
+            //$.tlj.notify(errorCode[data.code]);
+            $.tlj.notify(errorCode[data.code + '']);
         }else {
             //location.go(-1);
             window.location.href ="/";
