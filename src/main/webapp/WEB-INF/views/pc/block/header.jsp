@@ -7,6 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="false" %>
+<style>
+    .header-content .search-bar .search-right:hover{
+        margin-left: -60px;
+        width:174px;
+    }
+</style>
 
 <!-- 头部 -->
 <div class="header">
@@ -24,12 +30,12 @@
       <input type="hidden" value="0" name="type" id="search-type"/>
       <div class="search-right">
         搜索
-        <div class="active-text jianzhi">
+        <div class="active-text">
           <span id="search-job">兼职</span>
         </div>
-        <div class="active-text">
+        <%--<div class="active-text">
           <span id="search-sh">二手</span>
-        </div>
+        </div>--%>
       </div>
     </div>
     </form>
