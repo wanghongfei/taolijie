@@ -104,6 +104,7 @@ public class SHPostModel extends Pageable implements PVable {
     private Integer rangeQuery = 0; //是否根据价格范围查询. 0:否, 1:是
     private Integer minPrice;
     private Integer maxPrice;
+    private String content;
 
 
 
@@ -359,6 +360,14 @@ public class SHPostModel extends Pageable implements PVable {
 
     public void setPv(String pv) {
         this.pv = pv;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public void setTradePlace(String tradePlace) {

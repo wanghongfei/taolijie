@@ -90,9 +90,11 @@ public interface ShPostModelMapper {
     long countGetByMember(@Param("memberId") Integer memberId, @Param("filtered") boolean filtered);
 
 
-    @RedisCache(SHPostModel.class)
+    //@RedisCache(SHPostModel.class)
+    @NoCache
     List<SHPostModel> searchBy(SHPostModel model);
-    @RedisCache(SHPostModel.class)
+    //@RedisCache(SHPostModel.class)
+    @NoCache
     long countSearchBy(SHPostModel model);
 
 

@@ -43,7 +43,6 @@ public class HIndexController {
 
     /**
      * 显示主页
-     * @param session
      * @param model
      * @return
      */
@@ -136,6 +135,7 @@ public class HIndexController {
 
             model.addAttribute("shs", list.getList());
             model.addAttribute("page", page);
+            model.addAttribute("fromSearch", "true");
             return "pc/shlist";
         }
 

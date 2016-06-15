@@ -140,6 +140,8 @@ public class RestShController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = Constants.Produce.JSON)
     public ResponseText search(SHPostModel model) {
+        // bug临时解决方案
+        model.setTitle(model.getContent());
 
         ListResult<SHPostModel> shList = shService.runSearch(model);
         shService.checkExpired(shList.getList());

@@ -132,6 +132,8 @@
             </li>
         </div>
     </div>
+
+    <div id="search-flag" class="hidden">${fromSearch}</div>
 </div>
 
 <%--脚部--%>
